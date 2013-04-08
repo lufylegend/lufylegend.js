@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>beginBitmapFill</title>
+		<script type="text/javascript" src="../lufylegend-1.7.0.js"></script>
+	</head>
+	<body>
+			<div id="legend"></div>
+			<script>
+				init(50,"legend",800,600,main);
+				
+				var vertices;
+				var indices;
+				var uvtData;
+				var backLayer;
+				var bitmapData,earthBitmapData;
+				var rows=20,cols=20;
+				var mi=0;
+				var imgData = [
+					{name:"face",path:"face.jpg"}
+				];
+				var imglist;
+				function main(){
+					LLoadManage.load(imgData,null,gameInit);
+				}
+				function gameInit(result){
+					LGlobal.setDebug(true);
+					imglist = result;
+					bitmapData = new LBitmapData(imglist["face"]);
+					earthBitmapData = new LBitmapData(imglist["earth"]);
+					
+					
+					backLayer = new LSprite();
+					addChild(backLayer);
+					backLayer.graphics.beginBitmapFill(bitmapData);
+					backLayer.graphics.drawArc(1,"#000",[150,50,50,0,Math.PI*2]);
+									
+					backLayer = new LSprite();
+					addChild(backLayer);
+					backLayer.graphics.clear();
+					backLayer.graphics.beginBitmapFill(bitmapData);
+					backLayer.graphics.drawRect(1,"#000",[10,100,70,100]);
+					
+					backLayer = new LSprite();
+					addChild(backLayer);
+					backLayer.graphics.clear();
+					backLayer.graphics.beginBitmapFill(bitmapData);
+					backLayer.graphics.drawVertices(1,"#000",[[120,100],[100,200],[200,150]]);
+					
+					
+					vertices = new Array();
+					//在位图上定义了6个点
+					vertices.push(0, 0);
+					vertices.push(-40, 90);
+					vertices.push(0, 200);
+					vertices.push(80, 0);
+					vertices.push(90, 30);
+					vertices.push(70,200);
+					vertices.push(130, 10);
+					vertices.push(140, 40);
+					vertices.push(120,220);
+					indices = new Array();
+					//这里用之前的6个点将图形分成4个三角形
+					indices.push(0, 3, 1);
+					indices.push(3, 1, 4);
+					indices.push(1, 4, 2);
+					indices.push(4, 2, 5);
+					indices.push(3, 6, 4);
+					indices.push(6, 4, 7);
+					indices.push(4, 7, 5);
+					indices.push(7, 5, 8);
+					uvtData = new Array();
+					//这里是定义6各点原来应在的位置
+					uvtData.push(0, 0);
+					uvtData.push(0, 0.5);
+					uvtData.push(0, 1);
+					uvtData.push(0.5, 0);
+					uvtData.push(0.5, 0.5);
+					uvtData.push(0.5, 1);
+					uvtData.push(1, 0);
+					uvtData.push(1, 0.5);
+					uvtData.push(1, 1);
+					backLayer = new LSprite();
+					backLayer.x=200;
+					addChild(backLayer);
+					backLayer.graphics.clear();
+					backLayer.graphics.beginBitmapFill(bitmapData);
+					backLayer.graphics.drawTriangles(vertices, indices, uvtData);
+				}
+			</script>
+			
+			
+			
+	</body>
+</html>
