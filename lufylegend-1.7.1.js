@@ -2240,7 +2240,7 @@ function LTextField(){
 	s.textBaseline = "top";
 	s.lineWidth = 1;
 	s.width = 150;
-	//s.height = 20;
+	s.height = s.size;
 	s.stroke = false;
 	s.visible=true;
 	s.scaleX=1;
@@ -2312,6 +2312,7 @@ p = {
 			    		parseFloat(cood.y) + parseFloat(s.y) + m*s.wordHeight,
 			    		c.measureText(s.text).width);
 		    	}
+			s.height = m*s.wordHeight;
 		    }else{
 	    		c.strokeText(s.text,parseFloat(cood.x) + parseFloat(s.x),
 		    		parseFloat(cood.y) + parseFloat(s.y),
@@ -2332,6 +2333,7 @@ p = {
 			    		parseFloat(cood.y) + parseFloat(s.y) + m*s.wordHeight,
 			    		c.measureText(s.text).width);
 		    	}
+			s.height = m*s.wordHeight;
 		    }else{
 	    		c.fillText(s.text,parseFloat(cood.x) + parseFloat(s.x),
 		    		parseFloat(cood.y) + parseFloat(s.y),
@@ -2385,6 +2387,11 @@ p = {
 		if(s.wordWrap)return s.width;
 		LGlobal.canvas.font = s.size+"pt "+s.font;
 		return LGlobal.canvas.measureText(s.text).width;
+	},
+	getHeight:function(){
+		var s = this;
+		if(s.wordWrap)return s.height;
+		return s.size;
 	},
 	wind:function(listener){
 		var s = this;
