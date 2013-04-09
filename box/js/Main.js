@@ -52,7 +52,6 @@ var player,box;
 
 /**数组变量*/
 var imgData = [
-{path:"../jquery.js",type:"js"},
 {path:"./js/Character.js",type:"js"},
 {path:"./js/Stage.js",type:"js"},
 {path:"./js/GameLogo.js",type:"js"},

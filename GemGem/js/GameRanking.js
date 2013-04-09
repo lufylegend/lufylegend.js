@@ -83,27 +83,11 @@ function GameRanking(){
 		target.getChildAt(0).text = "上传中...";
 		//这里开始是上传代码
 		//具体方法略
-		$.post("/game/set_global_ranking/",
-			{
-				game_name:"gemgem",
-				name:nameText.text,
-				stage:0,
-				value01:point.num,
-				com01:">"
-			},
-			function(data){
-				btn_update.getChildAt(0).text = "上传结束";
-				getRank();
-			}
-		);
 	});
 	
 };
 function getRank(){
 	rankingLayer.removeAllChild();
-	$.post("/game/get_global_ranking/",
-		{game_name:"gemgem",stage:0,"sort":"value01-desc"},rankShow
-	);
 }
 function rankShow(data){
 	data = eval('(' + data + ')');

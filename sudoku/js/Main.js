@@ -79,7 +79,7 @@ function main(){
 	);
 }
 function gameInit(result){
-	LGlobal.setDebug(true);
+	//LGlobal.setDebug(true);
 	imglist = result;
 	removeChild(loadingLayer);
 	loadingLayer = null;

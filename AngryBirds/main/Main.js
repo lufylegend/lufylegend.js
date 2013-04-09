@@ -5,7 +5,7 @@ var bird,centerlayer;
 var bitmap,slingshotJoin;
 var imglist = {};
 var imgData = new Array(
-		{type:"js",path:"./main/Box2dWeb-2.1.a.3.min.js"},
+		{type:"js",path:"../Box2dWeb-2.1.a.3.min.js"},
 		{type:"js",path:"./main/Bird.js"},
 		{type:"js",path:"./main/Pig.js"},
 		{type:"js",path:"./main/Stage.js"},
@@ -28,7 +28,7 @@ var imgData = new Array(
 		);
 var startX,startY;
 function main(){
-	LGlobal.setDebug(true);
+	//LGlobal.setDebug(true);
 	backLayer = new LSprite();	
 	addChild(backLayer);	
 	

@@ -637,7 +637,7 @@ p = {
 			var script = document.createElement("script");
 			script.onload = function (){
 				if(s.oncomplete)s.oncomplete({});
-			}
+			};
 			script.src = u;
 			script.type = "text/javascript";
 			document.querySelector('head').appendChild(script);
@@ -1207,7 +1207,6 @@ p = {
 			}
 			var cx=cood.x,cy=cood.y;
 			c.beginPath();
-			//c.rect((pa[0]+cx),(pa[1]+cy),pa[2],pa[3]);
 			c.moveTo(pa[0]+cx+pa[4],pa[1]+cy);
 			c.lineTo(pa[0]+cx+pa[2]-pa[4],pa[1]+cy);
 			c.arcTo(pa[0]+cx+pa[2],pa[1]+cy,pa[0]+cx+pa[2],pa[1]+cy+pa[4],pa[4]);
@@ -3328,7 +3327,7 @@ $Ajax.prototype = {
 				}
 	 		}
 		};
-		if(d && d.length > 0){
+		if(d){
 			for(k in d){
 				data += (a+k+"="+d[k]);
 				a="&";	

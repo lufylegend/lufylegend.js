@@ -29,7 +29,6 @@ var bulletLayer;
 var getLayer;
 var rankingLayer;
 var loadData = [
-{path:"../jquery.js",type:"js"},
 {path:"./js/share.js",type:"js"},
 {path:"./js/Social.js",type:"js"},
 {path:"./js/GameRanking.js",type:"js"},
