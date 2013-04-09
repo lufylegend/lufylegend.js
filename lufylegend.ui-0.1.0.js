@@ -64,7 +64,7 @@ LButtonSample1.prototype._onDraw = function(s){
 	s.bitmap_up.back.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
 	s.bitmap_over.graphics.drawRect(1,s.backgroundCorl,[0,0,s.width,s.height],true,grd);
 	s.bitmap_over.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
-}
+};
 function LButtonSample2(name,size,font,color){
 	var s = this;
 	base(s,LButtonSample1,[name,size,font,color]);
@@ -86,7 +86,7 @@ LButtonSample2.prototype._onDraw = function(s){
 	s.bitmap_up.back.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
 	s.bitmap_over.graphics.drawRoundRect(1,s.backgroundCorl,[0,0,s.width,s.height,s.height*0.1],true,grd);
 	s.bitmap_over.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
-}
+};
 function LRadioChild(value,layer,layerSelect){
 	var s = this;
 	base(s,LSprite,[]);
@@ -110,10 +110,10 @@ function LRadioChild(value,layer,layerSelect){
 }
 LRadioChild.prototype._onChange = function(e,s){
 	s.parent.setValue(s.value);
-}
+};
 LRadioChild.prototype.setChecked = function(v){
 	this.layerSelect.visible = this.checked = v;
-}
+};
 function LRadio(){
 	base(this,LSprite,[]);
 }
@@ -123,10 +123,10 @@ LRadio.prototype.setChildRadio = function(value,x,y,layer,layerSelect){
 	child.x = x;
 	child.y = y;
 	s.addChild(child);
-}
+};
 LRadio.prototype.push = function(value){
 	this.addChild(value);
-}
+};
 LRadio.prototype.setValue = function(value){
     var s=this,child,k;
     for(k in s.childList){
@@ -137,7 +137,7 @@ LRadio.prototype.setValue = function(value){
         	child.setChecked(true);
         }
     }
-}
+};
 
 function LCheckBox(layer,layerSelect){
 	var s = this;
@@ -162,7 +162,11 @@ function LCheckBox(layer,layerSelect){
 LCheckBox.prototype._onChange = function(e,s){
 	s.checked = !s.checked;
 	s.layerSelect.visible = s.checked;
-}
+};
+LCheckBox.prototype.setChecked = function(value){
+	s.checked = value;
+	s.layerSelect.visible = s.checked;
+};
 function LComboBox(size,color,font,layer,layerUp,layerDown){
 	var s = this;
 	base(s,LSprite,[]);
@@ -226,7 +230,7 @@ LComboBox.prototype.refresh = function(){
 	s.layerDown.y = s.size;
 	s.layerDown.graphics.drawRect(2,"#000000",[0,0,s.size*2,s.size]);
 	s.layerDown.graphics.drawVertices(2,"#000000",[[s.size*0.5*2,s.size*0.8],[s.size*0.2*2,s.size*0.2],[s.size*0.8*2,s.size*0.2]],true,"#000000");
-}
+};
 LComboBox.prototype.setChild = function(child){
 	var s = this;
 	if(!child || !child.value || !child.label)trace("the child must be an object like:{label:a,value:b}");
@@ -245,7 +249,7 @@ LComboBox.prototype.setChild = function(child){
 	s.selectWidth = 100;
 	s.refresh();
 	
-}
+};
 LComboBox.prototype._onChangeDown = function(e,b){
 	var s = b.parent;
 	if(s.runing)return;
@@ -265,14 +269,14 @@ LComboBox.prototype._onChangeDown = function(e,b){
 		layer.mask = null;
 		s.runing = false;
 		s.refresh();
-	}
+	};
 	LTweenLite.to(s.textLayer,0.3,
 	{ 
 		y:my,
 		onComplete:fun,
 		ease:Strong.easeOut
 	});
-}
+};
 LComboBox.prototype._onChangeUp = function(e,b){
 	var s = b.parent;
 	if(s.runing)return;
@@ -292,14 +296,14 @@ LComboBox.prototype._onChangeUp = function(e,b){
 		layer.mask = null;
 		s.runing = false;
 		s.refresh();
-	}
+	};
 	LTweenLite.to(s.textLayer,0.3,
 	{ 
 		y:my,
 		onComplete:fun,
 		ease:Strong.easeOut
 	});
-}
+};
 function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible){
 	var s = this;
 	base(s,LSprite,[]);
@@ -350,7 +354,7 @@ LScrollbar.prototype.onFrame = function(s){
 	if(s._key["right"]){
 		s.moveRight();
 	}
-}
+};
 
 LScrollbar.prototype.resizeWidth = function(value){
 	var s = this;
@@ -366,7 +370,7 @@ LScrollbar.prototype.resizeWidth = function(value){
 	var i;
 	if(s._scroll_w_bar == null){
 		if(s._key == null)s._key = [];
-		s._scroll_w = new LSprite()
+		s._scroll_w = new LSprite();
 		s._scroll_w_bar = new LSprite();
 		s.addChild(s._scroll_w);
 		s.addChild(s._scroll_w_bar);
@@ -400,7 +404,7 @@ LScrollbar.prototype.resizeWidth = function(value){
 		}
     		if(!mouseDownHave)s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 	}
-}
+};
 LScrollbar.prototype.resizeHeight = function(value){
 	var s = this;
 	if(!value){
@@ -415,7 +419,7 @@ LScrollbar.prototype.resizeHeight = function(value){
 	var i;
 	if(s._scroll_h_bar == null){
 		if(s._key == null)s._key = [];
-		s._scroll_h = new LSprite()
+		s._scroll_h = new LSprite();
 		s._scroll_h_bar = new LSprite();
 		s.addChild(s._scroll_h);
 		s.addChild(s._scroll_h_bar);
@@ -451,7 +455,7 @@ LScrollbar.prototype.resizeHeight = function(value){
 			s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 		}
 	}
-}
+};
 LScrollbar.prototype.moveLeft = function(){
 	var s = this;
 	if(!s._key["Dkey"] && s._showObject.x >= s._tager.x){
@@ -468,7 +472,7 @@ LScrollbar.prototype.moveLeft = function(){
 	s._showObject.x += s._speed;
 	s.setScroll_w();
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.setScroll_h = function(){
 	var s = this;
 	var sy = (s._mask.getHeight() - s._scrollWidth*3.5)*s._showObject.y/(s._mask.getHeight() - s._showObject.getHeight());
@@ -476,7 +480,7 @@ LScrollbar.prototype.setScroll_h = function(){
 		s._scroll_h_bar.x = s._mask.getWidth();
 		s._scroll_h_bar.y = s._scrollWidth + sy;
 	}
-}
+};
 LScrollbar.prototype.setScroll_w = function(){
 	var s = this;
 	var sx = (s._mask.getWidth() - s._scrollWidth*3.5)*s._showObject.x/(s._mask.getWidth() - s._showObject.getWidth());
@@ -484,7 +488,7 @@ LScrollbar.prototype.setScroll_w = function(){
 		s._scroll_w_bar.x = s._scrollWidth + sx;
 		s._scroll_w_bar.y = s._mask.getHeight();
 	}
-}
+};
 LScrollbar.prototype.moveUp = function(){
 	var s = this;
 	if(!s._key["Dkey"] && s._showObject.y >= s._tager.y){
@@ -501,7 +505,7 @@ LScrollbar.prototype.moveUp = function(){
 	s._showObject.y += s._speed;
 	s.setScroll_h();
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.moveDown = function(){
 	var s = this;
 	if(!s._key["Dkey"] && s._showObject.y <= s._tager.y){
@@ -518,32 +522,39 @@ LScrollbar.prototype.moveDown = function(){
 	s._showObject.y -= s._speed;
 	s.setScroll_h();
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.getScrollY = function(){
 	return this._showObject.y;
-}
+};
 LScrollbar.prototype.setScrollY = function(value){
 	this._showObject.y = value;
 	this.setScroll_h();
-}
+};
+LScrollbar.prototype.getScrollX = function(){
+	return this._showObject.x;
+};
+LScrollbar.prototype.setScrollX = function(value){
+	this._showObject.x = value;
+	this.setScroll_w();
+};
 LScrollbar.prototype.scrollToTop = function(){
 	this._showObject.y = 0;
 	this.setScroll_h();
-}
+};
 LScrollbar.prototype.scrollToBottom = function(){
 	var s = this;
 	s._showObject.y = s._showObject.getHeight()>s._mask.getHeight()?s._mask.getHeight()-s._showObject.getHeight():0;
 	s.setScroll_h();
-}
+};
 LScrollbar.prototype.scrollToLeft = function(){
 	this._showObject.x = 0;
 	this.setScroll_w();
-}
+};
 LScrollbar.prototype.scrollToRight = function(){
 	var s = this;
 	s._showObject.x = s._showObject.getWidth()>s._mask.getWidth()?s._mask.getWidth()-s._showObject.getWidth():0;
 	s.setScroll_w();
-}
+};
 LScrollbar.prototype.moveRight = function(){
 	var s = this;
 	if(!s._key["Dkey"] && s._showObject.x <= s._tager.x){
@@ -560,7 +571,7 @@ LScrollbar.prototype.moveRight = function(){
 	s._showObject.x -= s._speed;
 	s.setScroll_w();
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.mouseDown = function(event,s){
 	if(s._scroll_h != null && event.selfX >= s._scroll_h.x && event.selfX <= s._scroll_h.x + s._scrollWidth){
 		s.mouseDownH(event,s);
@@ -568,7 +579,7 @@ LScrollbar.prototype.mouseDown = function(event,s){
 	if(s._scroll_w != null && event.selfY >= s._scroll_w.y && event.selfY <= s._scroll_w.y + s._scrollWidth){
 		s.mouseDownW(event,s);
 	}
-}
+};
 LScrollbar.prototype.mouseMoveH = function(event,s){
 	if(event.selfY < s._scrollWidth || event.selfY > s._mask.getHeight())return;
 	var mx = event.selfY - s._key["scroll_y"];
@@ -582,7 +593,7 @@ LScrollbar.prototype.mouseMoveH = function(event,s){
 	}
 	s._speed = Math.abs(s._tager.y - s._showObject.y);
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.mouseUpH = function(event,s){
 	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
 	if(s._key["Dkey"]){
@@ -591,7 +602,7 @@ LScrollbar.prototype.mouseUpH = function(event,s){
 		s.removeEventListener(LMouseEvent.MOUSE_MOVE,s.mouseMoveH);
 		if(s._key["scroll_h"])s._key["scroll_h"] = false;
 	}
-}
+};
 LScrollbar.prototype.mouseUpW = function(event,s){
 	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
 	if(s._key["Dkey"]){
@@ -600,7 +611,7 @@ LScrollbar.prototype.mouseUpW = function(event,s){
 		s.removeEventListener(LMouseEvent.MOUSE_MOVE,s.mouseMoveW);
 		if(s._key["scroll_w"])s._key["scroll_w"] = false;
 	}
-}
+};
 LScrollbar.prototype.mouseMoveW = function(event,s){
 	if(event.selfX < s._scrollWidth || event.selfX > s._mask.getWidth())return;
 	var my = event.selfX - s._key["scroll_x"];
@@ -614,12 +625,12 @@ LScrollbar.prototype.mouseMoveW = function(event,s){
 	}
 	s._speed = Math.abs(s._tager.x - s._showObject.x);
 	s.setSpeed();
-}
+};
 LScrollbar.prototype.setSpeed = function(){
 	var s = this;
 	s._speed = Math.floor(s._speed/2);
 	if(s._speed == 0)s._speed = 1;
-}
+};
 LScrollbar.prototype.mouseDownW = function(event,s){
 	if(event.selfX >= 0 && event.selfX <= s._scrollWidth){
 		if(s._showObject.x >= 0 || s._key["left"])return;
@@ -661,7 +672,7 @@ LScrollbar.prototype.mouseDownW = function(event,s){
 		s._speed = Math.abs(s._tager.x - s._showObject.x);
 		s.setSpeed();
 	}
-}
+};
 LScrollbar.prototype.mouseDownH = function(event,s){
 	if(event.selfY >= 0 && event.selfY <= s._scrollWidth){
 		if(s._showObject.y >= 0)return;
@@ -703,4 +714,4 @@ LScrollbar.prototype.mouseDownH = function(event,s){
 		s._speed = Math.abs(s._tager.y - s._showObject.y);
 		s.setSpeed();
 	}
-}
+};

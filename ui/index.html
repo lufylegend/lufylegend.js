@@ -3,13 +3,11 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../lufylegend-1.7.1.js"></script>
-	<script type="text/javascript" src="../lufylegend.ui-0.1.0.js"></script>
+	<script type="text/javascript" src="../lufylegend-1.7.1.min.js"></script>
+	<script type="text/javascript" src="../lufylegend.ui-0.1.0.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
-		<!--	<input type="radio"  style="position:absolute;top:400px;"/>
-			<input type="checkbox"  style="position:absolute;top:450px;"/> -->
 <script>
 init(50,"legend",800,450,main);
 var layer;
@@ -37,23 +35,6 @@ function main(){
 	sc.x = 450;
 	sc.y = 20;
 	layer.addChild(sc);
-	/*var t = new LTextField();
-	t.y = 300;
-	t.text = "あいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてと";
-	t.width = 300;
-	t.stroke = true;
-	t.size = 30;
-	//t.setWordWrap(true,35);
-	layer.addChild(t);*/
-	//layer.graphics.drawRoundRect(2,"#000000",[300,300,100,30,5],true,"#ff0000");
-	/*
-	var button01 = new LButtonSample1("测试按钮1");
-	button01.x = 50;
-	button01.y = 250;
-	layer.addChild(button01);
-	button01.addEventListener(LMouseEvent.MOUSE_UP,function(e){
-		trace(radio.getValue());
-	});*/
 }
 function addComboBox(){
 	var com = new LComboBox(20);
