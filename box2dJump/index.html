@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>jump</title>
 <script type="text/javascript" src="../Box2dWeb-2.1.a.3.min.js"></script> 
-<script type="text/javascript" src="../lufylegend-1.7.1.min.js"></script>
+<script type="text/javascript" src="../lufylegend-1.7.4.min.js"></script>
 </head>
 <body>
 <div id="mylegend">loading……</div>
@@ -189,7 +189,7 @@ function onframe(){
 		point = Math.floor((hero.x - 250)*0.1);
 
 		var rank = new GameRanking();
-		backLayer.addChild(rank);
+		stageLayer.addChild(rank);
 	}
 }
 function onup(event){	
