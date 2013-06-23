@@ -603,6 +603,7 @@ function base(d,b,a){
  **/
 function LObject(){
 	this.objectIndex = ++LGlobal.objectIndex;
+	this.objectindex = this.objectIndex;
 }
 LObject.prototype = {};
 /*
