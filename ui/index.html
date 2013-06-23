@@ -3,14 +3,14 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../lufylegend-1.7.1.min.js"></script>
-	<script type="text/javascript" src="../lufylegend.ui-0.1.0.min.js"></script>
+	<script type="text/javascript" src="../lufylegend-1.7.7.min.js"></script>
+	<script type="text/javascript" src="../lufylegend.ui-0.1.1.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
 <script>
 init(50,"legend",800,450,main);
-var layer;
+var layer,button;
 function main(){
 	LGlobal.setDebug(true);
 	layer = new LSprite();
@@ -35,6 +35,9 @@ function main(){
 	sc.x = 450;
 	sc.y = 20;
 	layer.addChild(sc);
+	layer.addEventListener(LMouseEvent.MOUSE_UP,function(e){
+	button.y += 10;
+	});
 }
 function addComboBox(){
 	var com = new LComboBox(20);
@@ -100,6 +103,7 @@ function addButton(){
 	button06.x = 260;
 	button06.y = 70;
 	layer.addChild(button06);
+	button = button06;
 }
 </script>
 	</body>
