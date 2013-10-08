@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>td</title>
+<script>
+function doScroll() {
+	if(window.pageYOffset === 0) {
+		window.scrollTo(0, 1);
+	}
+}
+window.onload = function() {
+	setTimeout(doScroll, 100);
+}
+// iPhoneを回転させた場合にもアドレスバーを消す。
+window.onorientationchange = function() {
+	setTimeout(doScroll, 100);
+};
+// Androidを回転させた場合にもアドレスバーを消す。
+window.onresize = function() {
+	setTimeout(doScroll, 100);
+}
+</script>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+	<script type="text/javascript" src="../../lufylegend-1.8.0.min.js"></script>
+<script type="text/javascript" src="./js/Enemy.js"></script> 
+<script type="text/javascript" src="./js/AttackChara.js"></script> 
+<script type="text/javascript" src="./js/Main.js"></script> 
+</body>
+</html>
