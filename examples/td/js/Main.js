@@ -1,3 +1,7 @@
+if(LGlobal.canTouch){
+	LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+	LSystem.screen(LStage.FULL_SCREEN);
+}
 init(50,"mylegend",800,480,main);
 /**
  * 层变量
@@ -139,7 +143,7 @@ function gameInit(event){
 	startBtn = addButton("開始",20);
 	startBtn.x = 710;
 	startBtn.y = 150;
-	charaMenuLayer.addChild(startBtn);
+	addChild(startBtn);
 	//点击按钮，则开始添加敌人
 	startBtn.addEventListener(LMouseEvent.MOUSE_DOWN, startAddEnemy);
 	

@@ -24,9 +24,9 @@ function removeChild(o){
 function init(s,c,w,h,f,t){
 	LGlobal.speed = s;
 	var _f = function (){
-		if(LGlobal.canTouch && LGlobal.width > LGlobal.height && w < window.innerHeight){
+		if(LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight){
 			LGlobal.horizontalError();
-		}else if(LGlobal.canTouch && LGlobal.width < LGlobal.height && w > window.innerHeight){
+		}else if(LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight){
 			LGlobal.verticalError();
 		}else{
 			f();
@@ -46,7 +46,6 @@ function init(s,c,w,h,f,t){
 }
 function base(d,b,a){
 	var p=null,o=d.constructor.prototype,h={};
-	var vaa = d.constructor.toString();
 	for(p in o)h[p]=1;
 	b.apply(d,a);
 	for(p in b.prototype){

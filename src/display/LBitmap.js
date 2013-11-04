@@ -60,6 +60,12 @@ p = {
 			s.x,s.y,
 			s.bitmapData.width,s.bitmapData.height);
 	},
+	clone:function(){
+		var s = this,a = new LBitmap(s.bitmapData.cline());
+		a.copyProperty(s);
+		a.rotateCenter = s.rotateCenter;
+		return a;
+	},
 	ismouseon:function(e,cood){
 		var s = this;
 		if(e==null || e == UNDEFINED)return false;

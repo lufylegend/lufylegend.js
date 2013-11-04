@@ -11,14 +11,17 @@ function doScroll() {
 }
 window.onload = function() {
 	setTimeout(doScroll, 100);
-	LSystem.screen(LStage.FULL_SCREEN);
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
 	init(30,"mylegend",320,480,main,LEvent.INIT);
 }
 </script>
 </head>
 <body>
 <div id="mylegend">loading……</div>
-	<script type="text/javascript" src="../../lufylegend-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.2.min.js"></script>
 <script type="text/javascript">
 /**数组变量*/
 //图片path数组

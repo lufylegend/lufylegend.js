@@ -3,10 +3,13 @@
     <head>
         <meta charset="utf-8" />
         <title>beginBitmapFill</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.0.simple.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.2.simple.min.js"></script>
         </script>
         <script type="text/javascript">
-            LSystem.screen(LStage.FULL_SCREEN);
+		if(LGlobal.canTouch){
+			LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+			LSystem.screen(LStage.FULL_SCREEN);
+		}
         </script>
     </head>
     <body>

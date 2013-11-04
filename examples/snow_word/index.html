@@ -3,12 +3,15 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>lufylegend.js demo</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.2.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
 			<script>
-				LSystem.screen(LStage.FULL_SCREEN);
+				if(LGlobal.canTouch){
+					LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+					LSystem.screen(LStage.FULL_SCREEN);
+				}
 				init(50,"legend",800,400,main);
 				
 				var backLayer;

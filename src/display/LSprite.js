@@ -81,38 +81,48 @@ p = {
 		left = s.graphics.startX(),right = left + s.graphics.getWidth();
 		for(i=0,l=s.childList.length;i<l;i++){
 			o = s.childList[i];
+			if(typeof o.visible == UNDEFINED || !o.visible)continue;
 			a = o.x;
-			if(typeof o.startX == "function")a=o.startX();
+			if(typeof o._startX == "function")a=o._startX();
 			b = a + o.getWidth();
 			if(a < left)left = a;
 			if(b > right)right = b;
 		}
 		s.left = s.x + left;
-		return right - left;
+		return (right - left)*s.scaleX;
 	},
 	getHeight:function(){
 		var s=this,i,l,o,a,b,
 		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
 		for(i=0,l=s.childList.length;i<l;i++){
 			o = s.childList[i];
+			if(typeof o.visible == UNDEFINED || !o.visible)continue;
 			a = o.y;
-			if(typeof o.startY == "function")a=o.startY();
+			if(typeof o._startY == "function")a=o._startY();
 			b = a + o.getHeight();
 			if(a < top)top = a;
 			if(b > bottom)bottom = b;
 		}
 		s.top = s.y + top;
-		return bottom - top;
+		return (bottom - top)*s.scaleY;
 	},
-	startX:function(){
+	_startX:function(){
 		var s = this;
 		s.getWidth();
 		return s.left;
 	},
-	startY:function(){
+	startX:function(){
+		var s = this;
+		return s._startX()*s.scaleX;
+	},
+	_startY:function(){
 		var s = this;
 		s.getHeight();
 		return s.top;
+	},
+	startY:function(){
+		var s = this;
+		return s._startY()*s.scaleY;
 	},
 	loopframe:function (){
 		var s = this;
@@ -201,56 +211,82 @@ p = {
 		s.width = 0;
 		s.height = 0;
 	},
+	clone:function(){
+		var s = this,a = new LSprite(),c,o;
+		a.copyProperty(s);
+		a.graphics = s.graphics.clone();
+		a.graphics.parent = a;
+		for(var i=0,l=s.childList.length;i<l;i++){
+			c = s.childList[i];
+			if(c.clone){
+				o = c.clone();
+				o.parent = a;
+				a.childList.push(o);
+			}
+		}
+		return a;
+	},
+	_mevent:function(type){
+		var s = this;
+		for(k=0;k<s.mouseList.length;k++){
+			var o = s.mouseList[k];
+			if(o.type == type){
+				return true;
+			}
+		}
+		return false;
+	},
 	mouseEvent:function (e,type,cd){
-		if(e==null || e == UNDEFINED)return false;
+		if(!e)return false;
 		var s = this;
 		if(!s.mouseChildren || !s.visible)return false;
 		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
 		var i,k,ox,oy;
-		if(e.offsetX == UNDEFINED){
+		if(typeof e.offsetX == UNDEFINED){
 			ox = e.touches[0].pageX;
 			oy = e.touches[0].pageY;
 		}else{
 			ox = e.offsetX;
 			oy = e.offsetY;
 		}
-		var mc = {x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		for(k=s.childList.length-1;k>=0;k--){
-			if(s.childList[k].mouseEvent){
-				i = s.childList[k].mouseEvent(e,type,mc);
-				if(i)return true;
-			}
-		}
-		if(s.mouseList.length == 0){
-			return false;
-		}
-		var i = s.ismouseon(e, cd);
-		if(i){
-			for(k=0;k<s.mouseList.length;k++){
-				var o = s.mouseList[k];
-				if(o.type == type){
-					e.selfX = ox - (s.x+cd.x);
-					e.selfY = oy - (s.y+cd.y);
-					e.clickTarget = s;
-					o.listener(e,s);
-					return true;
+		var on = s.ismouseon(e,cd);
+		if(on){
+			if(s._mevent(type)){
+				for(k=0;k<s.mouseList.length;k++){
+					var o = s.mouseList[k];
+					if(o.type == type){
+						e.selfX = ox - (s.x+cd.x);
+						e.selfY = oy - (s.y+cd.y);
+						e.clickTarget = s;
+						o.listener(e,s);
+						return true;
+					}
+				}
+			}else{
+				var mc = {x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				for(k=s.childList.length-1;k>=0;k--){
+					if(s.childList[k].mouseEvent){
+						i = s.childList[k].mouseEvent(e,type,mc);
+						if(i)return true;
+					}
 				}
 			}
-			return false;
-		}else{
-			return false;
+			return true;
 		}
+		return false;
 	},
 	ismouseon:function(e,cd){
 		var s = this;
 		if(!s.visible || e==null)return false;
 		var k = null,i=false,l=s.childList;
-		var sc={x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY,alpha:cd.alpha*s.alpha};
-		for(k=l.length-1;k>=0;k--){
-			if(l[k].ismouseon)i = l[k].ismouseon(e,sc);
-			if(i)break;
+		var sc={x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+		if(s.graphics)i = s.graphics.ismouseon(e,sc);
+		if(!i){
+			for(k=l.length-1;k>=0;k--){
+				if(l[k].ismouseon)i = l[k].ismouseon(e,sc);
+				if(i)break;
+			}
 		}
-		if(!i && s.graphics)i = s.graphics.ismouseon(e,sc);
 		return i;
 	},
 	die:function (){

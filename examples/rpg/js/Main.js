@@ -117,8 +117,6 @@ function gameInit(event){
 	ctrlLayer.addChild(bitmap);
 	ctrlLayer.x = 40;
 	ctrlLayer.y = 160;
-	testLayer.x = ctrlLayer.x+50;
-	testLayer.y = ctrlLayer.y;
 	//添加点击控制事件
 	backLayer.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
 	backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);

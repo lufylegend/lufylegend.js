@@ -20,6 +20,22 @@ p = {
 			s.setList[k]();
 		}
 	},
+	clone:function(){
+		var s = this,a = new LGraphics(),i,l,c;
+		a.color = s.color;
+		a.i = s.i;
+		a.alpha = s.alpha;
+		a.bitmap = s.bitmap;
+		for(i=0,l=s.setList.length;i<l;i++){
+			c = s.setList[i];
+			a.setList.push(c);
+		}
+		for(i=0,l=s.showList.length;i<l;i++){
+			c = s.showList[i];
+			a.showList.push(c);
+		}
+		return a;
+	},
 	lineWidth:function (t){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.lineWidth = t;});
@@ -327,10 +343,11 @@ p = {
 		});
 	},
 	lineStyle:function (tn,co){
-		var s = this,c=LGlobal.canvas;
-		if(color==null)co=s.color;
+		var s = this,c;
+		if(co==null)co=s.color;
 		s.color = co;
 		s.setList.push(function(){
+			c=LGlobal.canvas;
 			c.lineWidth = tn;
 			c.strokeStyle = co;
 		});

@@ -8,6 +8,7 @@ var LGlobal = function (){throw "LGlobal cannot be instantiated";};
 LGlobal.FULL_SCREEN="full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
+LGlobal.aspectRatio = NONE;
 LGlobal.script = null;
 LGlobal.stage = null;
 LGlobal.canvas = null;

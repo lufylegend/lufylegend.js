@@ -30,6 +30,12 @@ LAnimation.prototype.setAction = function (rowIndex,colIndex,mode,isMirror){
 		}
 	}
 };
+LAnimation.prototype.clone = function (){
+	var s = this,cB = s.bitmap.bitmapData.clone(),cI = s.imageArray.slice(0),
+	a = new LAnimation(null,cB,cI);
+	a.copyProperty(s);
+	return a;
+};
 LAnimation.prototype.getAction = function (){
 	var s = this;
 	return [s.rowIndex,s.colIndex,s.mode,s.isMirror];

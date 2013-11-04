@@ -1,4 +1,9 @@
 var LEasing = {
+	None:{
+		easeIn:function(t,b,c,d){
+			return b+t*c/d;
+		}
+	},
 	Quad: {
 		easeIn: function(t,b,c,d){
 			return c*(t/=d)*t + b;

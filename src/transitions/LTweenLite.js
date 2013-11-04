@@ -15,7 +15,7 @@ $LTweenLiteChild.prototype = {
 		s.varsto={};
 		s.varsfrom={};
 		if (typeof(s.vars.ease) != "function") {
-			s.vars.ease = Quad.easeOut;
+			s.vars.ease = LEasing.None.easeIn;
 		}
 		s.ease = s.vars.ease;
 		delete s.vars.ease;

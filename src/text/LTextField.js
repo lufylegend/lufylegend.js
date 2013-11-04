@@ -59,10 +59,10 @@ p = {
 				s.inputBackLayer.show();
 			}
 			var rc = s.getRootCoordinate();
-		    	if(LGlobal.inputBox.name == "input"+s.objectIndex){
-		    		LGlobal.inputBox.style.marginTop = (rc.y) + "px";
-		    		LGlobal.inputBox.style.marginLeft = (rc.x) + "px";
-		    	}
+		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
+		    	LGlobal.inputBox.style.marginTop = (rc.y) + "px";
+		    	LGlobal.inputBox.style.marginLeft = (rc.x) + "px";
+		    }
 		}
 		var lbl = s.text;
 		if(s.displayAsPassword){
@@ -139,6 +139,38 @@ p = {
 			s.inputBackLayer = null;
 		}
 		s.texttype = type;
+	},
+	ismouseon:function(e,cood){
+		var s = this,ox,oy;
+		if(e==null || e == UNDEFINED)return false;
+		if(!s.visible)return false;
+		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
+		cood={x:s.x+cood.x,y:s.y+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY};
+		if(s.inputBackLayer){
+			return s.inputBackLayer.ismouseon(e,cood);
+		}
+		if(e.offsetX == UNDEFINED){
+			ox = e.touches[0].pageX;
+			oy = e.touches[0].pageY;
+		}else{
+			ox = e.offsetX;
+			oy = e.offsetY;
+		}
+		if(ox >= s.x + cood.x && ox <= s.x + cood.x + s.getWidth()*s.scaleX*cood.scaleX && 
+			oy >= s.y + cood.y && oy <= s.y + cood.y + s.getHeight()*s.scaleY*cood.scaleY){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	clone:function(){
+		var s = this,a = new LTextField();
+		a.copyProperty(s);
+		a.texttype = null;
+		if(s.texttype ==  LTextFieldType.INPUT){
+			a.setType( LTextFieldType.INPUT);
+		}
+		return a;
 	},
 	mouseEvent:function (event,type,cood){
 		if(cood==null)cood={x:0,y:0};
