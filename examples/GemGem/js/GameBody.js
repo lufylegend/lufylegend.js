@@ -11,11 +11,13 @@ function addGameLogo(){
 }
 function addGameClear(){
 	stageLayer.removeAllChild();
+	stageLayer.die();
 	var layer = new GameClear();
 	stageLayer.addChild(layer);
 }
 function gameStart(){
 	stageLayer.removeAllChild();
+	stageLayer.die();
 	var clearList,i,g,num;
 	backLayer = new LSprite();
 	stageLayer.addChild(backLayer);
@@ -55,9 +57,9 @@ function gameStart(){
 	clock.y = 700;
 	backLayer.addChild(clock);
 	
-	backLayer.addEventListener(LMouseEvent.MOUSE_DOWN,onDown);
-	backLayer.addEventListener(LMouseEvent.MOUSE_UP,onUp);
-	backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+	stageLayer.addEventListener(LMouseEvent.MOUSE_DOWN,onDown);
+	stageLayer.addEventListener(LMouseEvent.MOUSE_UP,onUp);
+	stageLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 }
 function addGem(){
 	stage.setStage(stage.num + 1);

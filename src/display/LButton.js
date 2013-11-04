@@ -17,6 +17,11 @@ function LButton(d_up,d_over){
 	s.bitmap_up.visible = true;
 	LGlobal.buttonList.push(s);
 }
+LButton.prototype.clone = function (){
+	var s = this,d_up = s.bitmap_up.clone(),d_over = s.bitmap_over.clone(),
+	a = new LButton(d_up,d_over);
+	return a;
+};
 LButton.prototype.buttonModeChange = function (){
 	var s = this;
 	var cood={x:0,y:0,scaleX:1,scaleY:1,alpha:1,rotate:0};

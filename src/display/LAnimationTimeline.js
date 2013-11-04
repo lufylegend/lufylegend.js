@@ -10,6 +10,16 @@ function LAnimationTimeline(data,list){
 	s.labelList = {};
 	s.addEventListener(LEvent.ENTER_FRAME,s._onframe);
 };
+LAnimationTimeline.prototype.clone = function (){
+	var s = this,k,o,cB = s.bitmap.bitmapData.clone(),cI = s.imageArray.slice(0),
+	a = new LAnimationTimeline(cB,cI);
+	a.copyProperty(s);
+	for(k in s.labelList){
+		o = s.labelList[k];
+		a.labelList[k] = {rowIndex:o.rowIndex,colIndex:o.colIndex,mode:o.mode,isMirror:o.isMirror};
+	}
+	return a;
+};
 LAnimationTimeline.prototype._onframe = function (event){
 	var self = event.target;
 	if(self._speedIndex++<self.speed)return;

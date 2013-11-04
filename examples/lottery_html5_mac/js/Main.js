@@ -1,3 +1,8 @@
+
+if(LGlobal.canTouch){
+	LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+	LSystem.screen(LStage.FULL_SCREEN);
+}
 init(50,"mylegend",960,500,main);
 
 var loadingLayer;

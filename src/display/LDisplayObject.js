@@ -37,6 +37,15 @@ p = {
 		scaleObj.d = s.scaleY;
 		scaleObj.transform(c).setTo(1,0,0,1,-scaleObj.tx,-scaleObj.ty).transform(c);
 	},
+	copyProperty:function(a){
+		var s = this;
+		for(var k in a){
+			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
+				s[k] = a[k];
+			}
+		}
+		if(a.mask)s.mask = a.mask.clone();
+	},
 	getRootCoordinate:function(){
 		var s = this;
 		var sx=s.x,sy=s.y;

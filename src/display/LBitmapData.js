@@ -37,11 +37,16 @@ p = {
 		s.width = width;
 		s.height = height;
 		s.resize();
-	},
-	setCoordinate:function (x,y){
+	}
+	,setCoordinate:function (x,y){
 		var s = this;
 		s.x = x;
 		s.y = y;
+		s.resize();
+	}
+	,clone:function(){
+		var s = this;
+		return new LBitmapData(s.image,s.x,s.y,s.width,s.height);
 	}
 	,ready:function(){
 		var s = this;
