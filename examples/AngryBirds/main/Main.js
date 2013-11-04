@@ -168,7 +168,7 @@ function postSolve(contact, impulse){
 }
 function start(){
 	LGlobal.box2d.setEvent(LEvent.POST_SOLVE,postSolve);
-	bird.x = 200,bird.y = 320;console.log("a");
+	bird.x = 200,bird.y = 320;
 	backLayer.addEventListener(LMouseEvent.MOUSE_DOWN,downStart);
 	startX = bird.x + bird.getWidth()*0.5;
 	startY = bird.y + bird.getHeight()*0.5;
