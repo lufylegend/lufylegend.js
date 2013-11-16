@@ -4,7 +4,11 @@
  * @blog http://blog.csdn.net/lufy_Legend
  * @email lufy.legend@gmail.com
  **/
-LSystem.screen(LStage.FULL_SCREEN);
+
+if(LGlobal.canTouch){
+	LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+	LSystem.screen(LStage.FULL_SCREEN);
+}
 
 function doScroll() {
 	if(window.pageYOffset === 0) {

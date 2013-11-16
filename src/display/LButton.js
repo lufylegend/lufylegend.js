@@ -26,7 +26,7 @@ LButton.prototype.buttonModeChange = function (){
 	var s = this;
 	var cood={x:0,y:0,scaleX:1,scaleY:1,alpha:1,rotate:0};
 	var parent = s.parent;
-	while(parent != "root"){
+	while(parent && parent != "root"){
 		cood.x += parent.x;
 		cood.y += parent.y;
 		parent = parent.parent;
@@ -41,7 +41,12 @@ LButton.prototype.buttonModeChange = function (){
 };
 LButton.prototype.die = function (){
 	var s = this;
-	arguments.callee[SUPER].die.call(this);
+	s.graphics.clear();
+	s.removeAllEventListener();
+	if(s.box2dBody)s.clearBody();
+	for(var i=0,c=s.childList,l=c.length;i<l;i++){
+		if(c[i].die)c[i].die();
+	}
 	for(var i=0,b=LGlobal.buttonList,l=b.length;i<l;i++){
 		if(b[i].objectIndex == s.objectIndex){
 			LGlobal.buttonList.splice(i,1);

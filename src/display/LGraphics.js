@@ -370,14 +370,14 @@ p = {
 		}
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(ox >= s.showList[k].value[0] + co.x && ox <= s.showList[k].value[0] + co.x + s.showList[k].value[2] && 
-					oy >= s.showList[k].value[1] + co.y && oy <= s.showList[k].value[1] + co.y + s.showList[k].value[3]){
+				if(ox >= (s.showList[k].value[0] + co.x)*co.scaleX && ox <= (s.showList[k].value[0] + co.x + s.showList[k].value[2])*co.scaleX && 
+					oy >= (s.showList[k].value[1] + co.y)*co.scaleY && oy <= (s.showList[k].value[1] + co.y + s.showList[k].value[3])*co.scaleY){
 					return true;
 				}
 			}else if(s.showList[k].type == "arc"){
-				var xl = s.showList[k].value[0] + co.x - ox;
-				var yl = s.showList[k].value[1] + co.y - oy;
-				return xl*xl+yl*yl <= s.showList[k].value[2]*s.showList[k].value[2];
+				var xl = (s.showList[k].value[0] + co.x - ox)*co.scaleX;
+				var yl = (s.showList[k].value[1] + co.y - oy)*co.scaleY;
+				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
 			}
 		}		
 		return false;

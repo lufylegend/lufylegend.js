@@ -63,8 +63,11 @@ var imageArray;
 var stage;
 
 function main(){
-LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
-LSystem.screen(LStage.FULL_SCREEN);
+
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
 	//准备读取图片
 	imgData.push({type:"js",path:"./js/Map.js"});
 	imgData.push({type:"js",path:"./js/Talk.js"});

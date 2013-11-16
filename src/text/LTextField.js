@@ -88,7 +88,7 @@ p = {
 				}
 				d.apply(c,[lbl.substr(i,1),j,m*s.wordHeight,c.measureText(lbl).width]);
 			}
-			s.height = m*s.wordHeight;
+			s.height = (m+1)*s.wordHeight;
 		}else{
 			d.apply(c,[lbl,0,0,c.measureText(lbl).width]);
 		}
@@ -106,6 +106,7 @@ p = {
 				s.wordWrap = false;
 				s.wordHeight = s.getHeight();
 			}
+			s.height = 0;
 		}
 		s.wordWrap = v;
 	},
@@ -156,8 +157,8 @@ p = {
 			ox = e.offsetX;
 			oy = e.offsetY;
 		}
-		if(ox >= s.x + cood.x && ox <= s.x + cood.x + s.getWidth()*s.scaleX*cood.scaleX && 
-			oy >= s.y + cood.y && oy <= s.y + cood.y + s.getHeight()*s.scaleY*cood.scaleY){
+		if(ox >= (s.x + cood.x)*cood.scaleX && ox <= (s.x + cood.x + s.getWidth()*s.scaleX)*cood.scaleX && 
+			oy >= (s.y + cood.y)*cood.scaleY && oy <= (s.y + cood.y + s.getHeight()*s.scaleY)*cood.scaleY){
 			return true;
 		}else{
 			return false;
@@ -186,7 +187,22 @@ p = {
 	},
 	getHeight:function(){
 		var s = this,c = LGlobal.canvas;
-		if(s.wordWrap)return s.height;
+		if(s.wordWrap){
+			c.font = s.weight + " " + s.size+"pt "+s.font;
+			if(s.height == 0){  
+				var i,l,j=0,k=0,m=0;
+				for(i=0,l=s.text.length;i<l;i++){
+					j = c.measureText(s.text.substr(k,i-k)).width;
+					if(j > s.width){
+						j = 0;
+						k = i;
+						m++;
+					}
+				}
+				s.height = (m+1)*s.wordHeight;
+			}
+			return s.height;
+		}
 		c.font = s.weight + " " + s.size+"pt "+s.font; 
 		return c.measureText("O").width*1.2;
 	},

@@ -79,8 +79,8 @@ p = {
 			ox = e.offsetX;
 			oy = e.offsetY;
 		}
-		if(ox >= s.x + cood.x && ox <= s.x + cood.x + s.bitmapData.width*s.scaleX*cood.scaleX && 
-			oy >= s.y + cood.y && oy <= s.y + cood.y + s.bitmapData.height*s.scaleY*cood.scaleY){
+		if(ox >= (s.x + cood.x)*cood.scaleX && ox <= (s.x + cood.x + s.bitmapData.width*s.scaleX)*cood.scaleX && 
+			oy >= (s.y + cood.y)*cood.scaleY && oy <= (s.y + cood.y + s.bitmapData.height*s.scaleY)*cood.scaleY){
 			return true;
 		}else{
 			return false;

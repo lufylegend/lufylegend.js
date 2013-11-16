@@ -37,12 +37,8 @@ $LoadManage.prototype={
 		}
 		if(s.index >= s.list.length){
 			s.loader = null;
-			s.oncomplete(s.result);
-			s.result = null;
-			s.list = null;
-			s.onupdate = null;
-			s.oncomplete = null;
-			s.loader = null;
+			var r = s.result;
+			s.oncomplete(r);
 		}
 	},
 	url:function(u){

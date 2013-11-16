@@ -28,7 +28,7 @@ LGlobal.ios = false;
 LGlobal.android = false;
 LGlobal.android_new = false;
 LGlobal.backgroundColor = null;
-LGlobal.destroy = false;
+LGlobal.destroy = true;
 LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 (function(n){
 	if (n.indexOf(OS_IPHONE) > 0) {

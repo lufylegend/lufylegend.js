@@ -148,7 +148,7 @@ p = {
 		if(i < 0 || i > s.childList.length){
 			return;
 		}
-		d.remove();
+		if(typeof d.remove == "function")d.remove();
 		d.parent = s;
 		s.childList.splice(i,0,d);
 	},
@@ -161,6 +161,7 @@ p = {
 				break;
 			}
 		}
+		delete d.parent;
 		s.resize();
 	},
 	getChildAt:function(i){

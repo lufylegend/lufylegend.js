@@ -209,6 +209,7 @@ LCheckBox.prototype._onChange = function(e,s){
 	s.layerSelect.visible = s.checked;
 };
 LCheckBox.prototype.setChecked = function(value){
+	var s=this;
 	s.checked = value;
 	s.layerSelect.visible = s.checked;
 };
