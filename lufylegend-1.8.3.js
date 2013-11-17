@@ -2160,23 +2160,6 @@ p = {
 			}else{
 				s.inputBackLayer = inputBackLayer;
 			}
-			s.inputBackLayer.addEventListener(LMouseEvent.MOUSE_DOWN, function(){
-				if(s.texttype != LTextFieldType.INPUT)return;
-				LGlobal.inputBox.style.display = "";
-				LGlobal.inputBox.name = "input"+s.objectIndex;
-				LGlobal.inputTextField = s;
-				LGlobal.inputTextBoxObj.style.display = NONE;
-				LGlobal.passwordBoxObj.style.display = NONE;
-				if(s.displayAsPassword){
-					LGlobal.inputTextBox = LGlobal.passwordBoxObj;
-				}else{
-					LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
-				}
-				LGlobal.inputTextBox.style.display = "";
-				LGlobal.inputTextBox.value = s.text;
-				LGlobal.inputTextBox.style.height = s.height+"px";
-				LGlobal.inputTextBox.style.width = s.width+"px";
-			});
 		}else{
 			s.inputBackLayer = null;
 		}
@@ -2215,10 +2198,25 @@ p = {
 		return a;
 	},
 	mouseEvent:function (event,type,cood){
-		if(cood==null)cood={x:0,y:0};
 		var s = this;
 		if(s.inputBackLayer == null)return;
-		s.inputBackLayer.mouseEvent(event,type,{x:s.x+cood.x,y:s.y+cood.y});
+		var on = s.ismouseon(event,cood);
+		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
+		
+		LGlobal.inputBox.style.display = "";
+		LGlobal.inputBox.name = "input"+s.objectIndex;
+		LGlobal.inputTextField = s;
+		LGlobal.inputTextBoxObj.style.display = NONE;
+		LGlobal.passwordBoxObj.style.display = NONE;
+		if(s.displayAsPassword){
+			LGlobal.inputTextBox = LGlobal.passwordBoxObj;
+		}else{
+			LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
+		}
+		LGlobal.inputTextBox.style.display = "";
+		LGlobal.inputTextBox.value = s.text;
+		LGlobal.inputTextBox.style.height = s.height+"px";
+		LGlobal.inputTextBox.style.width = s.width+"px";
 	},
 	getWidth:function(){
 		var s = this;
