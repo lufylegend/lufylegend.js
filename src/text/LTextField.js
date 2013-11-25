@@ -60,8 +60,8 @@ p = {
 			}
 			var rc = s.getRootCoordinate();
 		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
-		    	LGlobal.inputBox.style.marginTop = (rc.y) + "px";
-		    	LGlobal.inputBox.style.marginLeft = (rc.x) + "px";
+		    	LGlobal.inputBox.style.marginTop = ((rc.y*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0) + "px";
+		    	LGlobal.inputBox.style.marginLeft = ((rc.x*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0) + "px";
 		    }
 		}
 		var lbl = s.text;
