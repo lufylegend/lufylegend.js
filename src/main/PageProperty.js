@@ -47,11 +47,11 @@ function init(s,c,w,h,f,t){
 function base(d,b,a){
 	var p=null,o=d.constructor.prototype,h={};
 	for(p in o)h[p]=1;
-	b.apply(d,a);
 	for(p in b.prototype){
 		if(!h[p])o[p] = b.prototype[p];
 		o[p][SUPER] = b.prototype;
 	}
+	b.apply(d,a);
 	if(Object.prototype.callParent){
 		delete Object.prototype.callParent;
 	}

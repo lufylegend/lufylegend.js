@@ -28,7 +28,7 @@ var imgData = new Array(
 		);
 var startX,startY;
 function main(){
-	LGlobal.setDebug(true);
+	//LGlobal.setDebug(true);
 	backLayer = new LSprite();	
 	addChild(backLayer);	
 	
