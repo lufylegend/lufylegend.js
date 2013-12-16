@@ -28,6 +28,9 @@ var imgData = new Array(
 		);
 var startX,startY;
 function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	//LGlobal.setDebug(true);
 	backLayer = new LSprite();	
 	addChild(backLayer);	

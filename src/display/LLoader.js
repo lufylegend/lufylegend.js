@@ -31,9 +31,6 @@ p = {
 			};
 			s.content.src = u; 
 		}
-	},
-	toString:function(){
-		return "[LLoader]";
 	}
 };
 for(var k in p)LLoader.prototype[k]=p[k];

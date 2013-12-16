@@ -44,6 +44,9 @@ var barrageSpeed = [5,10];
 var enemys = new Array();
 
 function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	//准备读取图片
 	imgData.push({type:"js",path:"./js/Global.js"});
 	imgData.push({type:"js",path:"./js/Bullet.js"});

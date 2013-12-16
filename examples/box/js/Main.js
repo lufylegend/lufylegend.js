@@ -82,6 +82,10 @@ var startTime,stages = 0,steps = 0,times = 0;
 var btnReplayStage,btnReturn;
 
 function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	
 	loadingLayer = new LoadingSample3();
 	addChild(loadingLayer);	
 	LLoadManage.load(

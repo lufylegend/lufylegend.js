@@ -87,7 +87,7 @@ LRectangle.prototype = {
 	},
 	toString:function(){
 		var s = this;
-		return "[LRectangle("+s.x+","+s.y+","+s.width+","+s.height+")]";
+		return "[object LRectangle("+s.x+","+s.y+","+s.width+","+s.height+")]";
 	},
 	union:function(t){
 		var s=this;

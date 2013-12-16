@@ -31,6 +31,7 @@ function init(s,c,w,h,f,t){
 		}else{
 			f();
 		}
+		LGlobal.startTimer = (new Date()).getTime();
 	};
 	if(t != null && t == LEvent.INIT){
 		LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
@@ -55,6 +56,9 @@ function base(d,b,a){
 	if(Object.prototype.callParent){
 		delete Object.prototype.callParent;
 	}
+}
+function getTimer(){
+	return (new Date()).getTime() - LGlobal.startTimer;
 }
 if (!Array.prototype.indexOf){
 	Array.prototype.indexOf = function(elt){

@@ -55,6 +55,3 @@ LAnimationTimeline.prototype.removeFrameScript = function (name){
 	var l = this.labelList[name];
 	this.imageArray[l.rowIndex][l.colIndex].script = null;
 };
-LAnimationTimeline.prototype.toString = function(){
-	return "[LAnimationTimeline]";
-};

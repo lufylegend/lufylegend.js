@@ -38,8 +38,5 @@ LDropShadowFilter.prototype = {
 	},
 	setBlur:function(blur){
 		this.shadowBlur=blur;
-	},
-	toString:function(){
-		return "[LDropShadowFilter]";
 	}
 };

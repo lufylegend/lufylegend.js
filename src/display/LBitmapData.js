@@ -102,9 +102,6 @@ p = {
 		var s = this,w=s.image.width-s.x,h=s.image.height-s.y;
 		s.width = s.width<w?s.width:w;
 		s.height = s.height<h?s.height:h;
-	},
-	toString:function(){
-		return "[LBitmapData]";
 	}
 };
 for(var k in p)LBitmapData.prototype[k]=p[k];

@@ -85,8 +85,8 @@ GameMenu.prototype.stageVsMenu = function(obj){
 		
 		menuButton = new LButton(btn_up,btn_down);
 		menuButton.obj = obj;
-		menuButton.addEventListener(LMouseEvent.MOUSE_UP,function(event,self){
-			gameStart(self.obj.index);
+		menuButton.addEventListener(LMouseEvent.MOUSE_UP,function(event){
+			gameStart(event.clickTarget.obj.index);
 		});
 	}else{
 		btn_up = new LSprite();

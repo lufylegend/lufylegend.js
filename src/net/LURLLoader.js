@@ -37,9 +37,6 @@ p = {
 			script.type = "text/javascript";
 			document.querySelector('head').appendChild(script);
 		}
-	},
-	toString:function(){
-		return "[LURLLoader]";
 	}
 };
 for(var k in p)LURLLoader.prototype[k]=p[k];

@@ -1,5 +1,6 @@
 function LStageWebView(){
 	var s = this;
+	base(s,LObject,[]);
 	s.display = document.createElement("div");
 	s.iframe = document.createElement("iframe");
 	s.display.style.position = "absolute";
@@ -25,8 +26,5 @@ LStageWebView.prototype = {
 		s.display.style.marginLeft = r.x+"px";
 		s.display.style.width = r.width+"px";
 		s.display.style.height = r.height+"px";
-	},
-	toString:function(){
-		return "[LStageWebView]";
 	}
 };

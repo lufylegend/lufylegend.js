@@ -11,6 +11,3 @@ function LSound(u){
 	s.data.autoplay = false;
 	if(u)s.load(u);
 }
-LSound.prototype.toString = function(){
-	return "[LSound]";
-};

@@ -2,12 +2,10 @@
 * LTextField.js
 **/
 function LTextField(){
-	base(this,LDisplayObject,[]);
 	var s = this;
+	base(s,LDisplayObject,[]);
 	s.type = "LTextField";
 	s.texttype = null;
-	s.x = 0;
-	s.y = 0;
 	s.text = "";
 	s.font = "utf-8";
 	s.size = "11";
@@ -19,41 +17,19 @@ function LTextField(){
 	s.width = 150;
 	s.height = s.size;
 	s.stroke = false;
-	s.visible=true;
-	s.scaleX=1;
-	s.scaleY=1;
-	s.alpha=1;
-	s.rotate=0;
 	s.displayAsPassword = false;
 	s.wordWrap=false;
 }
 p = {
-	show:function (){
-		var s = this,c = LGlobal.canvas;
-		if(!s.visible)return;
-		c.save();
+	_showReady:function(c){
+		var s = this;
 		c.font = s.weight + " " + s.size+"pt "+s.font;  
 		c.textAlign = s.textAlign;
 		c.textBaseline = s.textBaseline;
 		c.lineWidth = s.lineWidth;  
-		if(s.filters){
-			s.setShadow();
-		}
-		if(s.alpha < 1){
-			c.globalAlpha = s.alpha;
-		}
-		if(s.mask != null && s.mask.show){
-			s.mask.show();
-			c.clip();
-		}
-		if(s.blendMode){
-			c.globalCompositeOperation = s.blendMode;
-		}
-		//scale
-		s._transformScale();
-		//rotate
-		s._transformRotate();
-		if(s.x != 0 || s.y != 0)c.transform(1,0,0,1,s.x,s.y);
+	},
+	_show:function (c){
+		var s = this;
 		if(s.texttype == LTextFieldType.INPUT){
 			if(s.x != 0 || s.y != 0){
 				s.inputBackLayer.show();
@@ -95,7 +71,6 @@ p = {
 		if(s.wind_flag){
 			s.windRun();
 		}
-		c.restore();
 	},
 	setWordWrap:function(v,h){
 		var s = this;
@@ -222,9 +197,7 @@ p = {
 		s.text = s.wind_text.substring(0,s.wind_length);
 		s.wind_length++;
 	},
-	toString:function(){
-		return "[LTextField]";
-	}
+	die:function(){}
 };
 for(var k in p)LTextField.prototype[k]=p[k];
 /*

@@ -48,6 +48,10 @@ $LTweenLiteChild.prototype = {
 			var v = s.ease(etime,s.varsfrom[tweentype],s.varsto[tweentype]-s.varsfrom[tweentype],s.duration);
 			s.target[tweentype] = v;
 		}
+		if(s.onStart){
+			s.onStart(s.target);
+			delete s.onStart;
+		}
 		if (etime >= s.duration){
 			for(tweentype in s.varsto)s.target[tweentype] = s.varsto[tweentype];
 			if(s.onComplete)s.onComplete(s.target);

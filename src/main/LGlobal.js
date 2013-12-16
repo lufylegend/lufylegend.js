@@ -30,6 +30,8 @@ LGlobal.android_new = false;
 LGlobal.backgroundColor = null;
 LGlobal.destroy = true;
 LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
+LGlobal.startTimer = 0;
+LGlobal.mouseEventContainer = {};
 (function(n){
 	if (n.indexOf(OS_IPHONE) > 0) {
 		LGlobal.os = OS_IPHONE;
@@ -64,13 +66,6 @@ LGlobal.setCanvas = function (id,w,h){
 	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0px 0px 0px 0px;width:'+w+'px;height:'+h+'px;">'+
 	'<div id="noCanvas">'+
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
-	'<p>'+
-		'To play this game you need a good Browser, like'+ 
-		'<a href="http://www.opera.com/">Opera</a>,'+ 
-		'<a href="http://www.google.com/chrome">Chrome</a>,'+ 
-		'<a href="http://www.mozilla.com/firefox/">Firefox</a> or'+ 
-		'<a href="http://www.apple.com/safari/">Safari</a>.'+ 
-	'</p>'+  
 	'</div>'+  
 	'</canvas></div>'+
 	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0px 0px 0px 0px;z-index:10;display:none;"><textarea rows="1" id="' + LGlobal.id + '_InputTextBox"></textarea><input type="password" id="' + LGlobal.id + '_passwordBox" /></div>';
@@ -104,8 +99,8 @@ LGlobal.setCanvas = function (id,w,h){
 			,offsetY:(event.touches[0].pageY - canvasY)};
 			eve.offsetX = LGlobal.scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.scaleY(eve.offsetY);
-			LGlobal.offsetX = eve.offsetX;
-			LGlobal.offsetY = eve.offsetY;
+			mouseX = LGlobal.offsetX = eve.offsetX;
+			mouseY = LGlobal.offsetY = eve.offsetY;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
 			LGlobal.IS_MOUSE_DOWN = true;
@@ -151,7 +146,7 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 				LGlobal.inputBox.style.display = NONE;
 			}
-			var event = {};
+			var event = {button:e.button};
 			event.offsetX = LGlobal.scaleX(e.offsetX);
 			event.offsetY = LGlobal.scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_DOWN);
@@ -181,7 +176,7 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetX = e.layerX;
 				e.offsetY = e.layerY;
 			}
-			var event = {};
+			var event = {button:e.button};
 			event.offsetX = LGlobal.scaleX(e.offsetX);
 			event.offsetY = LGlobal.scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_UP);
@@ -213,10 +208,13 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
-	var k = null;
-	for(k in LGlobal.childList){
-		if(LGlobal.childList[k].mouseEvent){
-			LGlobal.childList[k].mouseEvent(e,t);
+	if(LGlobal.mouseEventContainer[t]){
+		LMouseEventContainer.dispatchMouseEvent(e,t);
+		return;
+	}
+    for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
+		if(LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e,t)){
+			break;
 		}
 	}
 };

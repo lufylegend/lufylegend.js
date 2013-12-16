@@ -2,10 +2,59 @@
  * LDisplayObject.js
  **/
 function LDisplayObject(){
-	base(this,LEventDispatcher,[]);
-	this.blendMode = null;
+	var s = this;
+	base(s,LEventDispatcher,[]);
+	s.x = 0;  
+	s.y = 0;  
+	s.width = 0;  
+	s.height = 0;  
+	s.scaleX=1;
+	s.scaleY=1;
+	s.alpha = 1;
+	s.visible=true;
+	s.rotate = 0;
+	s.mask = null;
+	s.blendMode = null;
 }
 p = {
+	show:function (){
+		var s = this,c = LGlobal.canvas;
+		if(!s._canShow())return;
+		c.save();
+		s._showReady(c);
+		if(s.blendMode){
+			c.globalCompositeOperation = s.blendMode;
+		}
+		if(s.filters){
+			s.setShadow();
+		}
+		s._rotateReady();
+		if(s.mask != null && s.mask.show){
+			s.mask.show();
+			c.clip();
+		}
+		//rotate
+		s._transformRotate();
+		//scale
+		s._transformScale();
+		//x,y
+		s._coordinate(c);
+		if(s.alpha < 1){
+			c.globalAlpha = s.alpha;
+		}
+		s._show(c);
+		c.restore();
+		s.loopframe();
+	},
+	_canShow:function(){return this.visible;},
+	_coordinate:function(c){
+		var s = this;
+		if(s.x != 0 || s.y != 0)c.transform(1,0,0,1,s.x,s.y);
+	},
+	_rotateReady:function(){},
+	_showReady:function(c){},
+	_show:function(c){},
+	loopframe:function(){},
 	setShadow:function(){
 		var s=this,f=s.filters;
 		if(!f)return;
@@ -51,6 +100,8 @@ p = {
 		var sx=s.x,sy=s.y;
 		var p = s.parent;
 		while(p != "root"){
+	        sx *= p.scaleX;
+	        sy *= p.scaleY;
 			sx += p.x;
 			sy += p.y;
 			p = p.parent;
@@ -89,8 +140,10 @@ p = {
 		LGlobal.canvas = c;
 		return data;
 	},
-	toString:function(){
-		return "[LDisplayObject]";
+	remove:function(){
+		var s = this;
+		if(!s.parent)return;
+		s.parent.removeChild(s);
 	}
 };
 for(var k in p)LDisplayObject.prototype[k]=p[k];

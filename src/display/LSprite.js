@@ -5,22 +5,12 @@ function LSprite(){
 	var s = this;
 	base(s,LInteractiveObject,[]);
 	s.type = "LSprite";
-	s.x = 0;
-	s.y = 0;
 	s.rotatex;
 	s.rotatey;
-	s.rotate = 0;
-	s.alpha = 1;
-	s.visible=true;
 	s.childList = new Array();
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
-	s.width = 0;
-	s.height = 0;
-	s.scaleX=1;
-	s.scaleY=1;
 	s.box2d = null;
-	s.mask = null;
 }
 p = {
 	setRotate:function (angle){
@@ -31,16 +21,8 @@ p = {
 			s.rotate = angle;
 		}
 	},
-	show:function (){
-		var s = this,c = LGlobal.canvas;
-		if(!s.visible)return;
-		c.save();
-		if(s.blendMode){
-			c.globalCompositeOperation = s.blendMode;
-		}
-		if(s.filters){
-			s.setShadow();
-		}
+	_rotateReady:function(){
+		var s = this;
 		if(s.box2dBody){
 			if((typeof s.rotatex) == "undefined"){
 				s.getRotateXY();
@@ -49,23 +31,11 @@ p = {
 			s.y = s.box2dBody.GetPosition().y * LGlobal.box2d.drawScale - s.parent.y - s.rotatey;
 			s.rotate = s.box2dBody.GetAngle();
 		}
-		if(s.mask != null && s.mask.show){
-			s.mask.show();
-			c.clip();
-		}
-		//rotate
-		s._transformRotate();
-		//scale
-		s._transformScale();
-		//x,y
-		if(s.x != 0 || s.y != 0)c.transform(1,0,0,1,s.x,s.y);
-		if(s.alpha < 1){
-			c.globalAlpha = s.alpha;
-		}
+	},
+	_show:function(c){
+		var s = this;
 		s.graphics.show();
 		LGlobal.show(s.childList);
-		c.restore();
-		s.loopframe();
 	},
 	getRotateXY:function(w,h){
 		var s = this;
@@ -281,6 +251,7 @@ p = {
 		if(!s.visible || e==null)return false;
 		var k = null,i=false,l=s.childList;
 		var sc={x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+		if(s.mask && !s.mask.ismouseon(e,sc))return false;
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
 		if(!i){
 			for(k=l.length-1;k>=0;k--){
@@ -298,9 +269,6 @@ p = {
 		for(var i=0,c=s.childList,l=c.length;i<l;i++){
 			if(c[i].die)c[i].die();
 		}
-	},
-	toString:function(){
-		return "[LSprite]";
 	}
 };
 for(var k in p)LSprite.prototype[k]=p[k];

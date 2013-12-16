@@ -50,9 +50,6 @@ p = {
 	},
 	getHeight:function(){
 		return this.data.height;
-	},
-	toString:function(){
-		return "[LVideo]";
 	}
 };
 for(var k in p)LVideo.prototype[k]=p[k];
