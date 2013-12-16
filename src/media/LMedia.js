@@ -3,7 +3,7 @@
  **/
 function LMedia(){
 	var s = this;
-	base(this,LDisplayObject,[]);
+	base(s,LDisplayObject,[]);
 	s.length=0;
 	s.loopIndex=0;
 	s.loopLength = 1;

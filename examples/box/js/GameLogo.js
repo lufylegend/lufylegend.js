@@ -92,6 +92,5 @@ function GameLogo(){
 	labelText.y = 410;
 	labelText.text = "http://www.lufylegend.com/lufylegend";
 	self.addChild(labelText);
-	
 	self.addEventListener(LMouseEvent.MOUSE_UP,menuShow);
 };

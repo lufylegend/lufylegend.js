@@ -12,6 +12,6 @@ LObject.prototype = {
 		return args.callee[SUPER][f_n].apply(this,args);
 	},
 	toString:function(){
-		return "[LObject]";
+		return "[object "+this.type+"]";
 	}
 };

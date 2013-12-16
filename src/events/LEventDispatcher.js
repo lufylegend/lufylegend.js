@@ -41,9 +41,6 @@ p = {
 			if(type == s._eventList[i].type)return true;
 		}
 		return false;
-	},
-	toString:function(){
-		return "[LEventDispatcher]";
 	}
 };
 for(var k in p)LEventDispatcher.prototype[k]=p[k];

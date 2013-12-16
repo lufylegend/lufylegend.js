@@ -14,9 +14,9 @@ function LGraphics(){
 }
 p = {
 	show:function (){
-		var s = this,k=null;
-		if(s.setList.length == 0)return;
-		for(k in s.setList){
+		var s = this,k,l=s.setList.length;
+		if(l == 0)return;
+		for(k=0;k<l;k++){
 			s.setList[k]();
 		}
 	},
@@ -133,7 +133,7 @@ p = {
 				c.save();
 				c.clip();
 				c.drawImage(s.bitmap.image,
-						0,0,
+						s.bitmap.x,s.bitmap.y,
 						s.bitmap.width,s.bitmap.height,
 						0,0,
 						s.bitmap.width,s.bitmap.height);
@@ -435,9 +435,6 @@ p = {
 		var s=this;
 		s.getHeight();
 		return s.top;
-	},
-	toString:function(){
-		return "[LGraphics]";
 	}
 };
 for(var k in p)LGraphics.prototype[k]=p[k];

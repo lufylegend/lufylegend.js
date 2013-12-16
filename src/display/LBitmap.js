@@ -5,15 +5,6 @@ function LBitmap(bitmapdata){
 	base(this,LDisplayObject,[]);
 	var s = this;
 	s.type = "LBitmap";
-	s.x = 0;  
-	s.y = 0;  
-	s.width = 0;  
-	s.height = 0;  
-	s.scaleX=1;
-	s.scaleY=1;
-	s.alpha = 1;
-	s.visible=true;
-	s.rotate = 0;
 	s.rotateCenter = true;
 	s.bitmapData = bitmapdata; 
 	if(s.bitmapData){
@@ -22,35 +13,19 @@ function LBitmap(bitmapdata){
 	}
 }
 p = {
-	show:function (){
-		var s = this,c = LGlobal.canvas;
-		if(!s.visible || !s.bitmapData)return;
-		c.save();
-		if(s.blendMode){
-			c.globalCompositeOperation = s.blendMode;
-		}
-		if(s.filters){
-			s.setShadow();
-		}
-		if(s.alpha < 1){
-			c.globalAlpha = s.alpha;
-		}
-		if(s.mask != null && s.mask.show){
-			s.mask.show();
-			c.clip();
-		}
-		//scale
-		s._transformScale();
-		//rotate
+	_canShow:function(){return (this.visible && this.bitmapData);},
+	_rotateReady:function(){
+		var s = this;
 		if(s.rotate != 0 && s.rotateCenter){
 			s.rotatex = s.getWidth()*0.5;
 			s.rotatey = s.getHeight()*0.5;
 		}else{
 			s.rotatex = s.rotatey = 0;
 		}
-		s._transformRotate();
-		s.draw();
-		c.restore(); 
+	},
+	_coordinate:function(c){},
+	_show:function(){
+		this.draw();
 	},
 	draw:function(){
 		var s=this;
@@ -100,8 +75,6 @@ p = {
 	startY:function(){
 		return this.y;
 	},
-	toString:function(){
-		return "[LBitmap]";
-	}
+	die:function(){}
 };
 for(var k in p)LBitmap.prototype[k]=p[k];

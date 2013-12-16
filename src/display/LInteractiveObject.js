@@ -15,9 +15,13 @@ p = {
 		if(type == LEvent.ENTER_FRAME){
 			s.frameList.push(listener);
 		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
+			if(LGlobal.mouseEventContainer[type]){
+				LMouseEventContainer.addMouseEvent(s,type,listener);
+				return;
+			}
 			s.mouseList.push({listener:listener,type:type});
 		}else{
-			this._eventList.push({listener:listener,type:type});
+			s._eventList.push({listener:listener,type:type});
 		}
 	},
 	removeEventListener:function(type,listener){
@@ -31,6 +35,10 @@ p = {
 				}
 			}
 		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
+			if(LGlobal.mouseEventContainer[type]){
+				LMouseEventContainer.removeMouseEvent(s,type,listener);
+				return;
+			}
 			length = s.mouseList.length;
 			for(i=0;i<length;i++){
 				if(type == s.mouseList[i].type && s.mouseList[i].listener == listener){
@@ -53,6 +61,15 @@ p = {
 		s.frameList.length = 0;
 		s.mouseList.length = 0;
 		s._eventList.length = 0;
+		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]){
+			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_DOWN);
+		}
+		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_UP]){
+			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_UP);
+		}
+		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]){
+			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_MOVE);
+		}
 	},
 	hasEventListener:function(type){
 		var s = this,i,length;
@@ -69,9 +86,6 @@ p = {
 			}
 		}
 		return false;
-	},
-	toString:function(){
-		return "[LInteractiveObject]";
 	}
 };
 for(var k in p)LInteractiveObject.prototype[k]=p[k];

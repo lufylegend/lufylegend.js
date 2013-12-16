@@ -66,6 +66,9 @@ var getpointNum = 60;
 var hpNum = 10;
 var hp;
 function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	//实例化进度条层
 	loadingLayer = new LSprite();
 	loadingLayer.graphics.drawRect(1,"black",[200, 200, 400, 20],true,"#ffffff");

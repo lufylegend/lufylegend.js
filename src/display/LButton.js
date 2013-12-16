@@ -54,6 +54,3 @@ LButton.prototype.die = function (){
 		}
 	}
 };
-LButton.prototype.toString = function(){
-	return "[LButton]";
-};

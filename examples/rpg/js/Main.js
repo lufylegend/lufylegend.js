@@ -120,6 +120,8 @@ function gameInit(event){
 	ctrlLayer.addChild(bitmap);
 	ctrlLayer.x = 40;
 	ctrlLayer.y = 160;
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
 	//添加点击控制事件
 	backLayer.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
 	backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);
@@ -224,6 +226,7 @@ function addChara(){
 	}
 }
 function ondown(event){
+	console.log("ondown",event.offsetX+">="+(ctrlLayer.x + 40) + "&&"+event.offsetX + "<="+(ctrlLayer.x+80));
 	//根据点击位置，判断移动方向
 	if(event.offsetX >= ctrlLayer.x + 40 && event.offsetX <= ctrlLayer.x+80){
 		if(event.offsetY >= ctrlLayer.y && event.offsetY <= ctrlLayer.y+40){

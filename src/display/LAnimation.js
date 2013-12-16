@@ -53,6 +53,3 @@ LAnimation.prototype.onframe = function (){
 		s.dispatchEvent(LEvent.COMPLETE);
 	}
 };
-LAnimation.prototype.toString = function(){
-	return "[LAnimation]";
-};

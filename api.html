@@ -630,7 +630,12 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('LBitmap_LBitmap')">LBitmap()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LBitmap_getWidth')">getWidth()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LBitmap_getHeight')">getHeight()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LBitmap_remove')">remove()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LBitmap_clone')">clone()</a><br>
+</div>
+<div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LShape')" style='font-weight:bold;'>LShape</a></div>
+<div id="LShape" style="display:none;" class="menu_message">
+<a href="javascript:void(0)" onclick="closeMenu('LShape_LShape')">LShape()</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LSprite')" style='font-weight:bold;'>LSprite</a></div>
 <div id="LSprite" style="display:none;" class="menu_message">
@@ -653,6 +658,7 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_setBodyMouseJoint')">setBodyMouseJoint()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_setRotate')">setRotate()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_clone')">clone()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LSprite_remove')">remove()</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LBlendMode')" style='font-weight:bold;'>LBlendMode</a></div>
 <div id="LBlendMode" style="display:none;" class="menu_message">
@@ -685,6 +691,7 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('LTextField_getHeight')">getHeight()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LTextField_wind')">wind()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LTextField_clone')">clone()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LTextField_remove')">remove()</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LDropShadowFilter')" style='font-weight:bold;'>LDropShadowFilter</a></div>
 <div id="LDropShadowFilter" style="display:none;" class="menu_message">
@@ -761,6 +768,19 @@ function returnMenu(){
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LPoint')" style='font-weight:bold;'>LPoint</a></div>
 <div id="LPoint" style="display:none;" class="menu_message">
 <a href="javascript:void(0)" onclick="closeMenu('LPoint_LPoint')">LPoint()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_distance')">distance()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_distance2')">distance2()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_interpolate')">interpolate()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_polar')">polar()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_length')">length()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_add')">add()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_clone')">clone()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_setTo')">setTo()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_copyFrom')">copyFrom()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_equals')">equals()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_normalize')">normalize()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_offset')">offset()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LPoint_subtract')">subtract()</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LMath')" style='font-weight:bold;'>LMath</a></div>
 <div id="LMath" style="display:none;" class="menu_message">
@@ -794,6 +814,7 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_DOWN')">MOUSE_DOWN</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_UP')">MOUSE_UP</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_MOVE')">MOUSE_MOVE</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_LMouseEventContainer')">鼠标容器</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LKeyboardEvent')" style='font-weight:bold;'>键盘事件</a></div>
 <div id="LKeyboardEvent" style="display:none;" class="menu_message">
@@ -2428,6 +2449,15 @@ function loadBitmapdata(event){
 <p>无</p>
 </div>
 <!-- LBitmap_clone end -->
+<!-- LBitmap_remove start -->
+<div id="LBitmap_remove" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LBitmap</a></div>
+<h2>remove()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>从父容器中移除自己。</p>
+</div>
+<!-- LBitmap_remove end -->
 
 <!-- LBlendMode_LBlendMode start -->
 <div id="LBlendMode_LBlendMode" style="display:none;">
@@ -2473,6 +2503,29 @@ img.blendMode = LBlendMode.LIGHTER;
 </div>
 <!-- LBlendMode_LBlendMode end -->
 
+<!-- LShape_LShape start -->
+<div id="LShape_LShape" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LShape</a></div>
+<h2>LShape<br /><br />→<a class="chapter" href="javascript:void(0)" onclick="closeMenu('LDisplayObject_LDisplayObject')">LDisplayObject</a><br /><br />→<a class="chapter" href="javascript:void(0)" onclick="closeMenu('LEventDispatcher_LEventDispatcher')">LEventDispatcher</a>→<a class="chapter" href="javascript:void(0)" onclick="closeMenu('LObject_LObject')">LObject</a></h2>
+<h2>LShape()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>此类用于创建简单形状。LShape 类包括 graphics 属性，该属性使您可以从 LGraphics 类访问方法。LSprite 类也包括 graphics 属性，LShape 对象会比包含相同图形的 LSprite 对象消耗的内存少。</p>
+<div class="hr"></div>
+<h3>■可用属性：</h3>
+<p>type:类型</p>
+<p>x:坐标x</p>
+<p>y:坐标y</p>
+<p>scaleX:X坐标方向上的缩放比例</p>
+<p>scaleY:Y坐标方向上的缩放比例</p>
+<p>alpha:透明度</p>
+<p>rotate:旋转角度</p>
+<p>visible:是否可见，当设为false的时候，该LBitmap对象不可视，且内部所有处理都将停止</p>
+<p>graphics:指定属于此 LSprite 的 LGraphics 对象，在此 LSprite 中可执行矢量绘图命令。</p>
+<p>mask:遮罩</p>
+<p>filters:光晕效果，具体可参照LDropShadowFilter类的介绍</p>
+</div>
+<!-- LShape_LShape end -->
 <!-- LSprite_LSprite start -->
 <div id="LSprite_LSprite" style="display:none;">
 <div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LSprite</a></div>
@@ -2981,6 +3034,15 @@ cLayer.addBodyVertices(shapeArray,27,27,1,.5,.4,.5);
 <p>无</p>
 </div>
 <!-- LSprite_clone end -->
+<!-- LSprite_remove start -->
+<div id="LSprite_remove" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LSprite</a></div>
+<h2>remove()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>从父容器中移除自己。</p>
+</div>
+<!-- LSprite_remove end -->
 
 <!-- LGraphics_LGraphics start -->
 <div id="LGraphics_LGraphics" style="display:none;">
@@ -3576,6 +3638,15 @@ function isover(){
 <p>无</p>
 </div>
 <!-- LTextField_clone end -->
+<!-- LTextField_remove start -->
+<div id="LTextField_remove" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LTextField</a></div>
+<h2>remove()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>从父容器中移除自己。</p>
+</div>
+<!-- LTextField_remove end -->
 
 <!-- LDropShadowFilter_LDropShadowFilter start -->
 <div id="LDropShadowFilter_LDropShadowFilter" style="display:none;">
@@ -5743,6 +5814,21 @@ function onmousemove(event){
 </div>
 <!-- L_MOUSE_MOVE end -->
 
+<!-- L_MOUSE_LMouseEventContainer start -->
+<div id="L_MOUSE_LMouseEventContainer" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>鼠标事件(LMouseEvent)</a></div>
+<h2>LMouseEventContainer</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>LMouseEventContainer是一个鼠标容器，一般的鼠标事件需要遍历所有的可视对象，对程序消耗比较大，此对象可以降低鼠标的消耗，但是，缺点是无法使用显示对象对鼠标事件进行遮挡。</p>
+<div class="hr"></div>
+<h3>■详细说明：</h3>
+<p>下面的代码可以开启相应的鼠标容器，如果开启了鼠标容器，在添加相应的鼠标事件的时候，会将鼠标事件添加到鼠标容器中，来降低鼠标事件对程序的消耗。开发过程中，可以根据需要来使用鼠标容器。</p>
+<p>LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);使用鼠标容器来添加MOUSE_DOWN事件。</p>
+<p>LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);使用鼠标容器来添加MOUSE_UP事件。</p>
+<p>LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);使用鼠标容器来添加MOUSE_MOVE事件。</p>
+</div>
+<!-- L_MOUSE_LMouseEventContainer end -->
 
 <!-- L_KEY_DOWN start -->
 <div id="L_KEY_DOWN" style="display:none;">
@@ -5856,6 +5942,7 @@ function onframe(DisplayObject){
 <p>scaleX:x轴缩放</p>
 <p>scaleY:y轴缩放</p>
 <p>ease:缓动函数</p>
+<p>onStart:缓动开始时调用的函数(onStart可以使用参数，参数为操作缓动的对象)</p>
 <p>onUpdate:缓动过程中调用的函数(onUpdate可以使用参数，参数为操作缓动的对象)</p>
 <p>onComplete:缓动结束后调用的函数(onComplete可以使用参数，参数为操作缓动的对象)</p>
 <p>ease缓动函数： o.easeIn,o.easeOut,o.easeInOut</p>
@@ -5975,6 +6062,165 @@ function main(){
 <p>y：y 坐标</p>
 </div>
 <!-- LPoint_LPoint end -->
+<!-- LPoint_distance start -->
+<div id="LPoint_distance" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>LPoint.distance(pt1,pt1)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>[静态] 返回 pt1 和 pt2 之间的距离。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>pt1：第一个点</p>
+<p>pt2：第二个点</p>
+</div>
+<!-- LPoint_distance end -->
+<!-- LPoint_distance2 start -->
+<div id="LPoint_distance2" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>LPoint.distance2(x1,y1,x2,y2)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>[静态] 返回 (x1,y1) 和 (x2,y2) 之间的距离。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>x1：点1的x座标</p>
+<p>y1：点1的y座标</p>
+<p>x2：点2的x座标</p>
+<p>y2：点2的y座标</p>
+</div>
+<!-- LPoint_distance2 end -->
+<!-- LPoint_interpolate start -->
+<div id="LPoint_interpolate" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>LPoint.interpolate(pt1,pt2,f)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>[静态] 确定两个指定点之间的点。参数 f 确定新的内插点相对于参数 pt1 和 pt2 指定的两个端点所处的位置。参数 f 的值越接近 1.0，则内插点就越接近第一个点（参数 pt1）。参数 f 的值越接近 0，则内插点就越接近第二个点（参数 pt2）。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>pt1：第一个点</p>
+<p>pt2：第二个点</p>
+<p>f：两个点之间的内插级别。表示新点将位于 pt1 和 pt2 连成的直线上的什么位置。如果 f=1，则返回 pt1；如果 f=0，则返回 pt2。</p>
+</div>
+<!-- LPoint_interpolate end -->
+<!-- LPoint_polar start -->
+<div id="LPoint_polar" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>LPoint.polar(len,angle)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>[静态] 将一对极坐标转换为笛卡尔点坐标。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>len：极坐标对的长度。</p>
+<p>angle：极坐标对的角度（以弧度表示）。</p>
+</div>
+<!-- LPoint_polar end -->
+<!-- LPoint_length start -->
+<div id="LPoint_length" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>length()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>从 (0,0) 到此点的线段长度。</p>
+</div>
+<!-- LPoint_length end -->
+<!-- LPoint_add start -->
+<div id="LPoint_add" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>add(v)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>将另一个点的坐标添加到此点的坐标以创建一个新点。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>v：要添加的点。</p>
+</div>
+<!-- LPoint_add end -->
+<!-- LPoint_clone start -->
+<div id="LPoint_clone" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>clone()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>创建此 Point 对象的副本。</p>
+</div>
+<!-- LPoint_clone end -->
+<!-- LPoint_setTo start -->
+<div id="LPoint_setTo" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>setTo(xa,ya)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>将 Point 的成员设置为指定值。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>xa：要将 Point 设置为的值。</p>
+<p>ya：要将 Point 设置为的值。</p>
+</div>
+<!-- LPoint_setTo end -->
+<!-- LPoint_copyFrom start -->
+<div id="LPoint_copyFrom" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>copyFrom(sourcePoint)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>将源 Point 对象中的所有点数据复制到调用方 Point 对象中。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>sourcePoint：要从中复制数据的 Point 对象。</p>
+</div>
+<!-- LPoint_copyFrom end -->
+<!-- LPoint_equals start -->
+<div id="LPoint_equals" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>equals(toCompare)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>确定两个点是否相同。如果两个点具有相同的 x 和 y 值，则它们是相同的点。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>toCompare：要比较的点。</p>
+</div>
+<!-- LPoint_equals end -->
+<!-- LPoint_normalize start -->
+<div id="LPoint_normalize" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>normalize(thickness)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>将 (0,0) 和当前点之间的线段缩放为设定的长度。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>thickness：缩放值。例如，如果当前点为 (0,5) 并且您将它规范化为 1，则返回的点位于 (0,1) 处。</p>
+</div>
+<!-- LPoint_normalize end -->
+<!-- LPoint_offset start -->
+<div id="LPoint_offset" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>offset(dx,dy)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>按指定量偏移 LPoint 对象。dx 的值将添加到 x 的原始值中以创建新的 x 值。dy 的值将添加到 y 的原始值中以创建新的 y 值。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>dx：水平坐标 x 的偏移量。</p>
+<p>dy：垂直坐标 y 的偏移量。</p>
+</div>
+<!-- LPoint_offset end -->
+<!-- LPoint_subtract start -->
+<div id="LPoint_subtract" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LPoint</a></div>
+<h2>subtract(v)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>从此点的坐标中减去另一个点的坐标以创建一个新点。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>v：要减去的点。</p>
+</div>
+<!-- LPoint_subtract end -->
 
 <!-- LTransitionManager_LTransitionManager start -->
 <div id="LTransitionManager_LTransitionManager" style="display:none;">
