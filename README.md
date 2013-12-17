@@ -11,7 +11,7 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 
 2.修正了当LDisplayObject对象缩放的时候，getRootCoordinate函数得不到正确坐标的bug
 
-3. 修改了引擎中的一些for循环，提高了效率
+3.修改了引擎中的一些for循环，提高了效率
 
 4.为LTextField和LBitmap对象提供了remove函数，LSprite对象中已有此函数，该函数从父容器中移除自己
 
