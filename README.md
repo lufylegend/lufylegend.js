@@ -15,6 +15,8 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 
 4.增加了游戏全屏时画面的algin属性
 
+5.增加了两个loading效果（由网友yorhomwang提供，在此表示感谢）
+
 新增功能的具体用法请看最新版的API文档
 
 =============
