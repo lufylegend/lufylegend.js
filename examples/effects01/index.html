@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8" />
 	<title>effects01</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.5.simple.min.js"></script>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="../../lufylegend-1.8.6.simple.min.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.LoadingSample4-0.1.0.min.js"></script>
 </head>
 <body style="margin:0px 0px 0px 0px;">
@@ -467,10 +468,8 @@ function Title(bitmapData){
  * */
 Title.prototype.run = function(){
 	var self = this;
-	LTweenLite.to(self.bitmap,1,{alpha:0.4,ease:Quad.easeInOut}).
-	to(self.bitmap,1,{alpha:1,ease:Quad.easeInOut,onComplete:function(obj){
-		obj.parent.run();
-	}});
+	LTweenLite.to(self.bitmap,1,{alpha:0.4,ease:Quad.easeInOut,loop:true}).
+	to(self.bitmap,1,{alpha:1,ease:Quad.easeInOut});
 }
 /**
  * 战舰
@@ -504,26 +503,22 @@ function Warship(shipData,shotData){
  * */
 Warship.prototype.run = function(){
 	var self = this;
-	LTweenLite.to(self.bitmapShip,1,{y:5,ease:Quad.easeInOut}).
-	to(self.bitmapShip,1,{y:0,ease:Quad.easeInOut,onComplete:function(){
-		self.run();
-	}});
+	LTweenLite.to(self.bitmapShip,1,{y:5,ease:Quad.easeInOut,loop:true}).
+	to(self.bitmapShip,1,{y:0,ease:Quad.easeInOut});
 }
 /**
  * 让战舰开火发炮
  * */
 Warship.prototype.shot = function(){
 	var self = this;
-	LTweenLite.to(self.bitmapShot,0.1,{delay:1.5,alpha:1,ease:Quad.easeInOut,onUpdate:function(obj){
+	LTweenLite.to(self.bitmapShot,0.1,{loop:true,delay:1.5,alpha:1,ease:Quad.easeInOut,onUpdate:function(obj){
 		obj.y = obj.parent.bitmapShip.y + 123;
 	}})
 	.to(self.bitmapShot,0.1,{alpha:0,ease:Quad.easeInOut})
 	.to(self.bitmapShot02,0.1,{delay:0.5,alpha:1,ease:Quad.easeInOut,onUpdate:function(obj){
 		obj.y = obj.parent.bitmapShip.y + 220;
 	}})
-	.to(self.bitmapShot02,0.1,{alpha:0,ease:Quad.easeInOut,onComplete:function(){
-		self.shot();
-	}});
+	.to(self.bitmapShot02,0.1,{alpha:0,ease:Quad.easeInOut});
 }
 /**
  * 背景
@@ -542,10 +537,8 @@ function BackGround(bg01,bg02){
  * */
 BackGround.prototype.run = function(){
 	var self = this;
-	var tween = LTweenLite.to(self.bitmapBG02,0.5,{alpha:0,ease:Bounce.easeIn}).
-	to(self.bitmapBG02,0.5,{alpha:1,ease:Bounce.easeIn,onComplete:function(){
-		self.run();
-	}});
+	var tween = LTweenLite.to(self.bitmapBG02,0.5,{alpha:0,ease:Bounce.easeIn,loop:true}).
+	to(self.bitmapBG02,0.5,{alpha:1,ease:Bounce.easeIn});
 }
 
 </script>

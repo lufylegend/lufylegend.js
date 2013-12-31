@@ -70,6 +70,12 @@ $LTweenLiteChild.prototype = {
 		var s = this;
 		if(s.toNew.length > 0){
 			var t = s.toNew.shift();
+			if(t.vars.loop)s.loop = true;
+			if(s.loop){
+				var vs = {},k;
+				for(k in t.vars)vs[k]=t.vars[k];
+				s.to(t.target,t.duration,vs);
+			}
 			s.init(t.target,t.duration,t.vars);
 			return true;
 		}
@@ -96,9 +102,10 @@ $LTweenLite.prototype = {
 	to:function($target,$duration,$vars){
 		if(!$target)return;
 		var s = this;
-		var tween = new $LTweenLiteChild($target,$duration,$vars);
+		var tween = new $LTweenLiteChild({},0,{});
 		s.tweens.push(tween);
 		s.show = s.frame;
+		tween.to($target,$duration,$vars);
 		return tween;
 	},
 	add:function(tween){

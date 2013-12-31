@@ -22,6 +22,7 @@ LGlobal.preventDefault = true;
 LGlobal.childList = new Array();
 LGlobal.buttonList = new Array();
 LGlobal.stageScale = "noScale";
+LGlobal.align = "M";
 LGlobal.canTouch = false;
 LGlobal.os = OS_PC;
 LGlobal.ios = false;
@@ -93,8 +94,8 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 				LGlobal.inputBox.style.display = NONE;
 			}
-			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left),
-			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top),eve;
+			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
+			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve;
 			eve = {offsetX:(event.touches[0].pageX - canvasX)
 			,offsetY:(event.touches[0].pageY - canvasY)};
 			eve.offsetX = LGlobal.scaleX(eve.offsetX);
@@ -121,8 +122,8 @@ LGlobal.setCanvas = function (id,w,h){
 			}
 		});
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE,function(e){
-			var cX = parseInt(STR_ZERO+LGlobal.object.style.left),
-			cY = parseInt(STR_ZERO+LGlobal.object.style.top),
+			var cX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
+			cY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),
 			eve,h,w,de,db,mX,mY;
 			eve = {offsetX:(e.touches[0].pageX - cX),offsetY:(e.touches[0].pageY - cY)};
 			eve.offsetX = LGlobal.scaleX(eve.offsetX);
@@ -251,10 +252,10 @@ LGlobal.onShow = function (){
 	if(LGlobal.box2d != null){
 		LGlobal.box2d.show();
 		if(!LGlobal.traceDebug){
-			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
 	}else{
-		LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+		LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		if(LGlobal.backgroundColor !== null){
 			LGlobal.canvas.fillStyle=LGlobal.backgroundColor;
 			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
@@ -363,10 +364,50 @@ LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasObj.style.height = h+"px";
 };
 LGlobal.resize = function(){
-	if(LGlobal.stageScale == LStageScaleMode.EXACT_FIT){
-		LGlobal.setStageSize(window.innerWidth,window.innerHeight);
-	}else if(LGlobal.stageScale == LStageScaleMode.SHOW_ALL){
-		LGlobal.setStageSize(window.innerWidth,LGlobal.height*window.innerWidth/LGlobal.width);
+	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
+	switch(LGlobal.stageScale){
+		case "exactFit":
+			w = ww;
+			h = wh;
+			break;
+		case "noBorder":
+			w = ww;
+			h = LGlobal.height*ww/LGlobal.width;
+			break;
+		case "showAll":
+			if(ww/wh > LGlobal.width/LGlobal.height){
+				h = wh;
+				w = LGlobal.width*wh/LGlobal.height;
+			}else{
+				w = ww;
+				h = LGlobal.height*ww/LGlobal.width;
+			}
+		default:
+			switch(LGlobal.align){
+				case LStageAlign.BOTTOM:
+				case LStageAlign.BOTTOM_LEFT:
+					t = wh - h;
+					break;
+				case LStageAlign.RIGHT:
+				case LStageAlign.TOP_RIGHT:
+					l = ww - w;
+					break;
+				case LStageAlign.BOTTOM_RIGHT:
+					t = wh - h;
+					l = ww - w;
+					break;
+				case LStageAlign.MIDDLE:
+					t = (wh - h)*0.5;
+					l = (ww - w)*0.5;
+					break;
+				case LStageAlign.TOP:
+				case LStageAlign.LEFT:
+				case LStageAlign.TOP_LEFT:
+				default:
+			}
+			LGlobal.canvasObj.style.marginTop = t + "px";
+			LGlobal.canvasObj.style.marginLeft = l + "px";
 	}
+	LGlobal.setStageSize(w,h);
 };
 var LStage = LGlobal;

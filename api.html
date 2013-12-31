@@ -555,6 +555,7 @@ function returnMenu(){
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('FULL_SCREEN')" style='font-weight:bold;'>全屏设置</a></div>
 <div id="FULL_SCREEN" style="display:none;" class="menu_message">
 <a href="javascript:void(0)" onclick="closeMenu('LStage_FULL_SCREEN')" >全屏设置</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LStageAlign_LStageAlign')" >LStageAlign</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LSystem')" style='font-weight:bold;'>LSystem</a></div>
 <div id="LSystem" style="display:none;" class="menu_message">
@@ -1419,7 +1420,7 @@ function onframe(){
 </div>
 <!-- resize end -->
 
-<!-- resize start -->
+<!-- LStage_FULL_SCREEN start -->
 <div id="LStage_FULL_SCREEN" style="display:none;">
 <div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>全屏设置</a></div>
 <h2>全屏设置</h2>
@@ -1457,7 +1458,24 @@ function main(){
 </pre>
 </p>
 </div>
-<!-- resize end -->
+<!-- LStage_FULL_SCREEN end -->
+
+<!-- LStageAlign_LStageAlign start -->
+<div id="LStageAlign_LStageAlign" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>全屏设置</a></div>
+<h2>LStageAlign</h2>
+<div class="hr"></div>
+<p>当设置舞台的缩放模式LGlobal.stageScale为LStageScaleMode.SHOW_ALL的时候，可以设置LGlobal.algin属性为下面中的任意一种：</p>
+<p>LStageAlign.TOP:[静态] 指定舞台靠顶部对齐。</p>
+<p>LStageAlign.TOP_LEFT:[静态] 指定舞台靠左上角对齐。</p>
+<p>LStageAlign.TOP_RIGHT:[静态] 指定舞台靠右上角对齐。</p>
+<p>LStageAlign.BOTTOM:[静态] 指定舞台靠底部对齐。</p>
+<p>LStageAlign.BOTTOM_LEFT:[静态] 指定舞台靠左下角对齐。</p>
+<p>LStageAlign.BOTTOM_RIGHT:[静态] 指定舞台靠右下角对齐。</p>
+<p>LStageAlign.LEFT:[静态] 指定舞台靠左对齐。</p>
+<p>LStageAlign.RIGHT:[静态] 指定舞台靠右对齐。</p>
+</div>
+<!-- LStageAlign_LStageAlign end -->
 
 
 <!-- LLoader_load start -->
@@ -5941,6 +5959,7 @@ function onframe(DisplayObject){
 <p>alpha:透明度</p>
 <p>scaleX:x轴缩放</p>
 <p>scaleY:y轴缩放</p>
+<p>loop:缓动是否循环</p>
 <p>ease:缓动函数</p>
 <p>onStart:缓动开始时调用的函数(onStart可以使用参数，参数为操作缓动的对象)</p>
 <p>onUpdate:缓动过程中调用的函数(onUpdate可以使用参数，参数为操作缓动的对象)</p>
