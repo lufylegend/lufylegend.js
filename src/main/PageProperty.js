@@ -47,15 +47,15 @@ function init(s,c,w,h,f,t){
 }
 function base(d,b,a){
 	var p=null,o=d.constructor.prototype,h={};
+	if(d.constructor.name == "Object"){
+		throw "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.";
+	}
 	for(p in o)h[p]=1;
 	for(p in b.prototype){
 		if(!h[p])o[p] = b.prototype[p];
 		o[p][SUPER] = b.prototype;
 	}
 	b.apply(d,a);
-	if(Object.prototype.callParent){
-		delete Object.prototype.callParent;
-	}
 }
 function getTimer(){
 	return (new Date()).getTime() - LGlobal.startTimer;

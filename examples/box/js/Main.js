@@ -4,9 +4,8 @@
  * @blog http://blog.csdn.net/lufy_Legend
  * @email lufy.legend@gmail.com
  **/
-
 if(LGlobal.canTouch){
-	LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+	LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
 	LSystem.screen(LStage.FULL_SCREEN);
 }
 
@@ -86,7 +85,7 @@ function main(){
 	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	
-	loadingLayer = new LoadingSample3();
+	loadingLayer = new LoadingSample5();
 	addChild(loadingLayer);	
 	LLoadManage.load(
 		imgData,

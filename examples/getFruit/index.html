@@ -3,10 +3,14 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>html5 game</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.5.simple.min.js"></script>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="../../lufylegend-1.8.6.simple.min.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.LoadingSample3-0.1.0.min.js"></script>
 	<script type="text/javascript">
+if(LGlobal.canTouch){
+LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
 LSystem.screen(LStage.FULL_SCREEN);
+}
 function doScroll() {
 	if(window.pageYOffset === 0) {
 		window.scrollTo(0, 1);
@@ -25,7 +29,7 @@ window.onresize = function() {
 }
 	</script>
 	</head>
-	<body>
+	<body style="margin:0px 0px 0px 0px;">
 			<div id="legend"></div>
 			<script>
 				init(50,"legend",800,450,main);

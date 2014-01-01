@@ -86,6 +86,7 @@ $LMouseEventContainer.prototype = {
 		var self = this,sp,co,st=[],o;
 		for(var i=0,l=list.length;i<l;i++){
 			sp = list[i].container;
+            if(!sp.mouseChildren || !sp.visible)continue;
 			co = sp.getRootCoordinate();
 			if(co.x <= event.offsetX && event.offsetX <= co.x + sp.getWidth() && co.y <= event.offsetY && event.offsetY <= co.y + sp.getHeight()){
 				st.push({sp:sp,co:co,listener:list[i].listener});

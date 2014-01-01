@@ -3,12 +3,14 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.5.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.6.min.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.ui-0.4.0.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
 <script>
+	LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	LSystem.screen(LStage.FULL_SCREEN);
 init(50,"legend",800,450,main);
 var layer,button;
 function main(){
