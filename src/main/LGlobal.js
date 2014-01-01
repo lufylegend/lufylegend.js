@@ -63,7 +63,7 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
 	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
-	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:hidden;z-index:0;">'+
+	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
 	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0px 0px 0px 0px;width:'+w+'px;height:'+h+'px;">'+
 	'<div id="noCanvas">'+
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 

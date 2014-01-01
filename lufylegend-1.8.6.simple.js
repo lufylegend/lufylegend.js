@@ -313,7 +313,7 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
 	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
-	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:hidden;z-index:0;">'+
+	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
 	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0px 0px 0px 0px;width:'+w+'px;height:'+h+'px;">'+
 	'<div id="noCanvas">'+
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
@@ -2447,8 +2447,8 @@ p = {
 			}
 			var rc = s.getRootCoordinate();
 		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
-		    	LGlobal.inputBox.style.marginTop = ((rc.y*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0) + "px";
-		    	LGlobal.inputBox.style.marginLeft = ((rc.x*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0) + "px";
+		    	LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + ((rc.y*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0)) + "px";
+		    	LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + ((rc.x*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0)) + "px";
 		    }
 		}
 		var lbl = s.text;
