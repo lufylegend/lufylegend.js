@@ -11,6 +11,8 @@ LEvent.PRE_SOLVE = "preSolve",
 LEvent.POST_SOLVE = "postSolve",
 LEvent.BEGIN_CONTACT = "beginContact";
 LEvent.currentTarget = null;
+LEvent.ADDED_TO_STAGE = "added_to_stage";
+LEvent.REMOVED_FROM_STAGE = "removed_from_stage";
 LEvent.addEventListener = function (n, t, f,b){
 	if(b==null)b=false;
 	if(n.addEventListener){
