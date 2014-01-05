@@ -112,6 +112,7 @@ p = {
 		d.parent = s;
 		s.childList.push(d);
 		s.resize();
+		d.dispatchEvent(LEvent.ADDED_TO_STAGE);
 	},
 	addChildAt:function(d, i){
 		var s = this;
@@ -121,11 +122,13 @@ p = {
 		if(typeof d.remove == "function")d.remove();
 		d.parent = s;
 		s.childList.splice(i,0,d);
+		d.dispatchEvent(LEvent.ADDED_TO_STAGE);
 	},
 	removeChild:function(d){
 		var s  = this,c = s.childList;
 		for(var i=0,l=c.length;i<l;i++){
 			if(d.objectIndex == c[i].objectIndex){
+				d.dispatchEvent(LEvent.REMOVED_FROM_STAGE);
 				if(LGlobal.destroy && d.die)d.die();
 				s.childList.splice(i,1);
 				break;
@@ -142,6 +145,7 @@ p = {
 	removeChildAt:function(i){
 		var s  = this,c=s.childList;
 		if(c.length <= i)return;
+		s.childList[i].dispatchEvent(LEvent.REMOVED_FROM_STAGE);
 		if(LGlobal.destroy && c[i].die)c[i].die();
 		s.childList.splice(i,1);
 		s.resize();
@@ -176,6 +180,7 @@ p = {
 	removeAllChild:function(){
 		var s  = this,c=s.childList;
 		for(var i=0,l=c.length;i<l;i++){
+			c[i].dispatchEvent(LEvent.REMOVED_FROM_STAGE);
 			if(LGlobal.destroy && c[i].die)c[i].die();
 		}
 		s.childList.length = 0;
