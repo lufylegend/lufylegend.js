@@ -295,6 +295,36 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
+LGlobal.hitTestRectArc = function(rectObj,arcObj,rectVec,arcR){
+	var rw = rectObj.getWidth()
+	,rh = rectObj.getHeight()
+	,ar = arcObj.getWidth()*0.5
+	,rx = rectObj.x
+	,ry = rectObj.y
+	,ax = arcObj.x
+	,ay = arcObj.y;
+	
+	if(typeof rectVec != UNDEFINED){
+		rx += (rw - rectVec[0])*0.5;
+		ry += (rh - rectVec[1])*0.5;
+		rw = rectVec[0];
+		rh = rectVec[1];
+	}
+	if(typeof arcR != UNDEFINED){
+		ax += (ar - arcR);
+		ay += (ar - arcR);
+		ar = arcR;
+	}
+	var rcx = rx+rw*0.5,rcy = ry+rh*0.5;
+	var distanceX = Math.abs(ax-rx-rcx);
+	var distanceY = Math.abs(ay-ry-rcy);
+	if(distanceX > (rcx + ar))return false;
+	if(distanceY > (rcy + ar))return false;
+	if(distanceX <= rcx)return true;
+	if(distanceY <= rcy)return true;
+	var sq = (distanceX-rcx)*(distanceX-rcx) + (distanceY-rcy)*(distanceY-rcy); 
+	return (sq <= ar*ar); 
+};
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
 	,rB = objB.getWidth()*0.5
