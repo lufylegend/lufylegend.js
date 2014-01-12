@@ -295,6 +295,73 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
+LGlobal.hitTestRectArc = function(rectObj,arcObj,rectVec,arcR){
+	var rw = rectObj.getWidth()
+	,rh = rectObj.getHeight()
+	,ar = arcObj.getWidth()*0.5
+	,rx = rectObj.x
+	,ry = rectObj.y
+	,ax = arcObj.x
+	,ay = arcObj.y;
+	
+	if(typeof rectVec != UNDEFINED){
+		rx += (rw - rectVec[0])*0.5;
+		ry += (rh - rectVec[1])*0.5;
+		rw = rectVec[0];
+		rh = rectVec[1];
+	}
+	if(typeof arcR != UNDEFINED){
+		ax += (ar - arcR);
+		ay += (ar - arcR);
+		ar = arcR;
+	}
+	
+	var rcx = rx+rw*0.5,rcy = ry+rh*0.5;
+	var rltx = rx
+	,rlty = ry
+	,rlbx = rx
+	,rlby = ry+rh
+	,rrtx = rx+rw
+	,rrty = ry
+	,rrbx = rx+rw
+	,rrby = ry+rh;
+	
+	if(
+		LMath.isSameQuadrant(
+			new LPoint(ax,ay),
+			new LPoint(rltx,rlty),
+			new LPoint(rrbx,rrby)
+		)
+	){
+		var dX1 = Math.abs(ax-rltx),dY1 = Math.abs(ay-rlty);
+		var dX2 = Math.abs(ax-rlbx),dY2 = Math.abs(ay-rlby);
+		var dX3 = Math.abs(ax-rrtx),dY3 = Math.abs(ay-rrty);
+		var dX4 = Math.abs(ax-rrbx),dY4 = Math.abs(ay-rrby);
+
+		if(
+			(((dX1*dX1) + (dY1*dY1)) <= ar*ar)
+			||(((dX2*dX2) + (dY2*dY2)) <= ar*ar)
+			||(((dX3*dX3) + (dY3*dY3)) <= ar*ar)
+			||(((dX4*dX4) + (dY4*dY4)) <= ar*ar)
+		){
+			return true;
+		}
+		return false;
+	}else{
+		var cloneRect = new LShape();
+		cloneRect.x = rx;
+		cloneRect.y = ry;
+		cloneRect.graphics.drawRect(0,"",[0,0,rw,rh],true,"transparent");
+		
+		var cloneArcToRect = new LShape();
+		cloneArcToRect.x = ax-ar;
+		cloneArcToRect.y = ay-ar;
+		cloneArcToRect.graphics.drawRect(0,"",[0,0,ar*2,ar*2],true,"transparent");
+		
+		var result = LGlobal.hitTestRect(cloneRect,cloneArcToRect);
+		return result;
+	}
+};
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
 	,rB = objB.getWidth()*0.5
