@@ -64,7 +64,7 @@ p = {
 		var s = this;
 		if(s.rotate == 0)return;
 		var c = LGlobal.canvas,rotateFlag = Math.PI / 180,rotateObj = new LMatrix();
-		if((typeof s.rotatex) == "undefined"){
+		if((typeof s.rotatex) == UNDEFINED){
 			s.rotatex=s.rotatey=0;
 		}
 		if(s.box2dBody)rotateFlag=1;
@@ -90,10 +90,22 @@ p = {
 		var s = this;
 		for(var k in a){
 			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
+				if(k == "objectindex" || k == "objectIndex"){continue;}
 				s[k] = a[k];
 			}
 		}
 		if(a.mask)s.mask = a.mask.clone();
+	},
+	getAbsoluteScale:function(){
+		var s = this;
+		var sX=s.scaleX,sY=s.scaleY;
+		var p = s.parent;
+		while(p != "root"){
+	        sX *= p.scaleX;
+	        sY *= p.scaleY;
+			p = p.parent;
+		}
+		return {scaleX:sX,scaleY:sY};
 	},
 	getRootCoordinate:function(){
 		var s = this;

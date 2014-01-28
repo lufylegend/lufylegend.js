@@ -23,11 +23,11 @@ LRectangle.prototype = {
 	},
 	contains:function(x, y){
 		var s = this;
-		return x>=s.x && x <= s.right && y>= s.y && y <= s.bootom;
+		return x>=s.x && x <= s.right && y>= s.y && y <= s.bottom;
 	},
 	containsRect:function(rect){
 		var s = this;
-		return rect.x>=s.x && rect.right <= s.right && rect.y>= s.y && rect.bootom <= s.bootom;
+		return rect.x>=s.x && rect.right <= s.right && rect.y>= s.y && rect.bottom <= s.bottom;
 	},
 	equals:function(v){
 		var s = this;

@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<title>sound audio</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<script type="text/javascript" src="../../lufylegend-1.8.6.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.7.min.js"></script>
 </head>
 <body>
 	<div id="legend"></div>
@@ -17,12 +17,24 @@ function main(){
 	LGlobal.setDebug(true);
 	sound = new LSound();
 	sound.addEventListener(LEvent.COMPLETE,gameInit);
+	backLayer = new LSprite();
+	addChild(backLayer);
+	if(LGlobal.ios && LGlobal.canTouch){
+		var button01 = new LButtonSample1("点击开始读取音乐文件");
+		button01.x = 10;
+		button01.y = 10;
+		backLayer.addChild(button01);
+		button01.addEventListener(LMouseEvent.MOUSE_UP,onloadSound);
+	}else{
+		onloadSound(null);
+	}
+}
+function onloadSound(e){
+	backLayer.removeAllChild();
 	var url = "http://lufylegend.com/media/LSound/kfighter.";
 	sound.load(url+"mp3,"+url+"wav,"+url+"ogg");
 }
 function gameInit(e){
-	backLayer = new LSprite();
-	addChild(backLayer);
 	nowTime = new LTextField();
 	nowTime.x = 100;
 	nowTime.y = 50;
@@ -42,6 +54,7 @@ function onup(e){
 		sound.setVolume((e.offsetX - 200)/150);
 	}
 }
+var xe = 0;
 function onframe(){
 	backLayer.graphics.clear();
 	backLayer.graphics.drawRect(2,"#000000",[20,0,440,100]);

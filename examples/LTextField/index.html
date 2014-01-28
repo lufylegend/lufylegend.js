@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>LTextField</title>
+	<script type="text/javascript" src="../../lufylegend-1.8.7.min.js"></script>
+	</head>
+	<body style="padding:0; margin:0;">
+			<div id="legend"></div>
+<script>
+init(50,"legend",800,450,main);
+function main(){
+    LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+    LSystem.screen(LStage.FULL_SCREEN);
+    
+	var backLayer = new LSprite();
+	addChild(backLayer);
+	
+	var textLabel;
+	textLabel = new LTextField();
+	textLabel.x = 10;
+	textLabel.y = 10;
+	textLabel.text = "这是一个单行输入框";
+	backLayer.addChild(textLabel);
+
+	var inputOne = new LTextField();
+	inputOne.x = 10;
+	inputOne.y = 40;
+	inputOne.setType(LTextFieldType.INPUT);
+	backLayer.addChild(inputOne);
+	
+	textLabel = new LTextField();
+	textLabel.x = 10;
+	textLabel.y = 80;
+	textLabel.text = "这是一个密码输入框";
+	backLayer.addChild(textLabel);
+
+	var inputPass = new LTextField();
+	inputPass.x = 10;
+	inputPass.y = 110;
+	inputPass.setType(LTextFieldType.INPUT);
+	inputPass.displayAsPassword = true;
+	backLayer.addChild(inputPass);
+	
+	textLabel = new LTextField();
+	textLabel.x = 10;
+	textLabel.y = 150;
+	textLabel.text = "这是一个多行输入框";
+	backLayer.addChild(textLabel);
+
+	var inputLayer = new LSprite();
+	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 200]);
+	var inputTwo = new LTextField();
+	inputTwo.x = 10;
+	inputTwo.y = 180;
+	inputTwo.setType(LTextFieldType.INPUT,inputLayer);
+	inputTwo.setMultiline(true);
+	backLayer.addChild(inputTwo);
+}
+</script>
+	</body>
+</html>

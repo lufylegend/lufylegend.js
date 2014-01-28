@@ -3,19 +3,22 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.6.min.js"></script>
-	<script type="text/javascript" src="../../lib/lufylegend.ui-0.4.0.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.7.min.js"></script>
+	<script type="text/javascript" src="../../lib/lufylegend.ui-0.5.0.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
 <script>
-	LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
-	LSystem.screen(LStage.FULL_SCREEN);
 init(50,"legend",800,450,main);
 var layer,button;
 function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	LGlobal.setDebug(true);
 	layer = new LSprite();
+	layer.x = 40;
+	layer.y = 90;
 	addChild(layer);
 	addButton();
 	addRadio();
@@ -24,6 +27,32 @@ function main(){
 	addScrollbar();
 	addRange();
 	addWindow();
+}
+function addButton(){
+	var button01 = new LButtonSample1("测试按钮1");
+	button01.x = 10;
+	button01.y = 10;
+	layer.addChild(button01);
+	
+	var button02 = new LButtonSample1("测试按钮2",12);
+	button02.backgroundCorl = "#008800";
+	button02.x = 150;
+	button02.y = 10;
+	layer.addChild(button02);
+	button02.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("a");});
+	
+	var button03 = new LButtonSample2("测试按钮4");
+	button03.backgroundCorl = "blue";
+	button03.x = 10;
+	button03.y = 70;
+	layer.addChild(button03);
+	
+	var button04 = new LButtonSample2("测试按钮5",20);
+	button04.backgroundCorl = "purple";
+	button04.x = 150;
+	button04.y = 70;
+	layer.addChild(button04);
+	
 }
 function addRange(){
 	var r = new LRange(200);
@@ -37,7 +66,7 @@ function addScrollbar(){
 	var t = new LTextField();
 	//t.y = 300;
 	t.color = "#000000";
-	t.text = "あいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてと";
+	t.text = "あいう\nえおか\nきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてとあいうえおかきくけこさしすせそたちつてと";
 	t.width = 300;
 	t.stroke = true;
 	t.size = 30;
@@ -67,7 +96,7 @@ function addWindow(){
 	nameLabel.y = 70;
 	myWindow.layer.addChild(nameLabel);
 	var name = new LTextField();
-	name.x = 150;
+	name.x = 150;name.setWordWrap(true);
 	name.y = 70;
 	name.setType(LTextFieldType.INPUT);
 	myWindow.layer.addChild(name);
@@ -91,7 +120,6 @@ function addWindow(){
 	button02.x = 200;
 	button02.y = 150;
 	myWindow.layer.addChild(button02);
-
 }
 function addComboBox(){
 	var com = new LComboBox(20);
@@ -121,31 +149,6 @@ function addRadio(){
 	radio.setChildRadio(2,50,0);
 	radio.setChildRadio(3,100,0);
 	layer.addChild(radio);
-}
-function addButton(){
-	var button01 = new LButtonSample1("测试按钮1");
-	button01.x = 10;
-	button01.y = 10;
-	layer.addChild(button01);
-	
-	var button02 = new LButtonSample1("测试按钮2",12);
-	button02.backgroundCorl = "#008800";
-	button02.x = 150;
-	button02.y = 10;
-	layer.addChild(button02);
-	
-	var button03 = new LButtonSample2("测试按钮4");
-	button03.backgroundCorl = "blue";
-	button03.x = 10;
-	button03.y = 70;
-	layer.addChild(button03);
-	
-	var button04 = new LButtonSample2("测试按钮5",20);
-	button04.backgroundCorl = "purple";
-	button04.x = 150;
-	button04.y = 70;
-	layer.addChild(button04);
-	
 }
 </script>
 	</body>

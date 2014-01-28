@@ -359,24 +359,17 @@ p = {
 		var s = this;
 		var k = null;
 		if(e==null || e == UNDEFINED)return false;
-		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1,alpha:1,rotate:0};
-		var ox,oy;
-		if(e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
+		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1};
+		var ox = e.offsetX,oy = e.offsetY;
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(ox >= (s.showList[k].value[0] + co.x)*co.scaleX && ox <= (s.showList[k].value[0] + co.x + s.showList[k].value[2])*co.scaleX && 
-					oy >= (s.showList[k].value[1] + co.y)*co.scaleY && oy <= (s.showList[k].value[1] + co.y + s.showList[k].value[3])*co.scaleY){
+				if(ox >= co.x + s.showList[k].value[0]*co.scaleX && ox <= co.x + (s.showList[k].value[0] + s.showList[k].value[2])*co.scaleX && 
+					oy >= co.y + s.showList[k].value[1]*co.scaleY && oy <= co.y + (s.showList[k].value[1] + s.showList[k].value[3])*co.scaleY){
 					return true;
 				}
 			}else if(s.showList[k].type == "arc"){
-				var xl = (s.showList[k].value[0] + co.x - ox)*co.scaleX;
-				var yl = (s.showList[k].value[1] + co.y - oy)*co.scaleY;
+				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
+				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
 				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
 			}
 		}		

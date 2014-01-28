@@ -31,7 +31,7 @@ p = {
 	},
 	onload:function(){
 		var s=this;
-		if(s.data.readyState || (LGlobal.ios && LGlobal.canTouch)){
+		if(s.data.readyState){
 			s.length=s.data.duration;
 			if(s.oncomplete){
 				s.event.currentTarget = s;

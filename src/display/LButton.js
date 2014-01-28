@@ -24,9 +24,13 @@ LButton.prototype.clone = function (){
 };
 LButton.prototype.buttonModeChange = function (){
 	var s = this;
-	var cood={x:0,y:0,scaleX:1,scaleY:1,alpha:1,rotate:0};
+	var cood={x:0,y:0,scaleX:1,scaleY:1};
 	var parent = s.parent;
 	while(parent && parent != "root"){
+		cood.scaleX *= parent.scaleX;
+		cood.scaleY *= parent.scaleY;
+		cood.x *= parent.scaleX;
+		cood.y *= parent.scaleY;
 		cood.x += parent.x;
 		cood.y += parent.y;
 		parent = parent.parent;
