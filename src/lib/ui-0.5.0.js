@@ -138,7 +138,8 @@ LRadioChild.prototype.clone = function(){
 	a.copyProperty(s);
 	return a;
 };
-LRadioChild.prototype._onChange = function(e,s){
+LRadioChild.prototype._onChange = function(e){
+	var s = e.clickTarget;
 	s.parent.setValue(s.value);
 };
 LRadioChild.prototype.setChecked = function(v){
@@ -204,7 +205,8 @@ function LCheckBox(layer,layerSelect){
 	s.layerSelect.visible = s.checked = false;
 	s.addEventListener(LMouseEvent.MOUSE_UP,s._onChange);
 }
-LCheckBox.prototype._onChange = function(e,s){
+LCheckBox.prototype._onChange = function(e){
+	var s = e.clickTarget;
 	s.checked = !s.checked;
 	s.layerSelect.visible = s.checked;
 };
@@ -306,8 +308,8 @@ LComboBox.prototype.setChild = function(child){
 	s.refresh();
 	
 };
-LComboBox.prototype._onChangeDown = function(e,b){
-	var s = b.parent;
+LComboBox.prototype._onChangeDown = function(e){
+	var b = e.clickTarget,s = b.parent;
 	if(s.runing)return;
 	if(s.selectIndex >= s.list.length - 1)return;
 	s.runing = true;
@@ -334,8 +336,8 @@ LComboBox.prototype._onChangeDown = function(e,b){
 		ease:Strong.easeOut
 	});
 };
-LComboBox.prototype._onChangeUp = function(e,b){
-	var s = b.parent;
+LComboBox.prototype._onChangeUp = function(e){
+	var b = e.clickTarget,s = b.parent;
 	if(s.runing)return;
 	if(s.selectIndex <= 0)return;
 	s.runing = true;
@@ -661,7 +663,8 @@ LScrollbar.prototype.moveRight = function(){
 	s.setScroll_w();
 	s.setSpeed();
 };
-LScrollbar.prototype.mouseDown = function(event,s){
+LScrollbar.prototype.mouseDown = function(event){
+	var s = event.clickTarget;
 	if(s._scroll_h != null && event.selfX >= s._scroll_h.x && event.selfX <= s._scroll_h.x + s._scrollWidth){
 		s.mouseDownH(event,s);
 	}
@@ -669,7 +672,8 @@ LScrollbar.prototype.mouseDown = function(event,s){
 		s.mouseDownW(event,s);
 	}
 };
-LScrollbar.prototype.mouseMoveH = function(event,s){
+LScrollbar.prototype.mouseMoveH = function(event){
+	var s = event.clickTarget;
 	if(event.selfY < s._scrollWidth || event.selfY > s._mask.getHeight())return;
 	var mx = event.selfY - s._key["scroll_y"];
 	s._key["up"] = false;
@@ -683,7 +687,8 @@ LScrollbar.prototype.mouseMoveH = function(event,s){
 	s._speed = Math.abs(s._tager.y - s._showObject.y);
 	s.setSpeed();
 };
-LScrollbar.prototype.mouseUpH = function(event,s){
+LScrollbar.prototype.mouseUpH = function(event){
+	var s = event.clickTarget;
 	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
 	if(s._key["Dkey"]){
 		s._key["Dkey"] = false;
@@ -692,7 +697,8 @@ LScrollbar.prototype.mouseUpH = function(event,s){
 		if(s._key["scroll_h"])s._key["scroll_h"] = false;
 	}
 };
-LScrollbar.prototype.mouseUpW = function(event,s){
+LScrollbar.prototype.mouseUpW = function(event){
+	var s = event.clickTarget;
 	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
 	if(s._key["Dkey"]){
 		s._key["Dkey"] = false;
@@ -701,7 +707,8 @@ LScrollbar.prototype.mouseUpW = function(event,s){
 		if(s._key["scroll_w"])s._key["scroll_w"] = false;
 	}
 };
-LScrollbar.prototype.mouseMoveW = function(event,s){
+LScrollbar.prototype.mouseMoveW = function(event){
+	var s = event.clickTarget;
 	if(event.selfX < s._scrollWidth || event.selfX > s._mask.getWidth())return;
 	var my = event.selfX - s._key["scroll_x"];
 	s._key["left"] = false;
@@ -720,7 +727,8 @@ LScrollbar.prototype.setSpeed = function(){
 	s._speed = Math.floor(s._speed/2);
 	if(s._speed == 0)s._speed = 1;
 };
-LScrollbar.prototype.mouseDownW = function(event,s){
+LScrollbar.prototype.mouseDownW = function(event){
+	var s = event.clickTarget;
 	if(event.selfX >= 0 && event.selfX <= s._scrollWidth){
 		if(s._showObject.x >= 0 || s._key["left"])return;
 		s._distance = 10;
@@ -762,7 +770,8 @@ LScrollbar.prototype.mouseDownW = function(event,s){
 		s.setSpeed();
 	}
 };
-LScrollbar.prototype.mouseDownH = function(event,s){
+LScrollbar.prototype.mouseDownH = function(event){
+	var s = event.clickTarget;
 	if(event.selfY >= 0 && event.selfY <= s._scrollWidth){
 		if(s._showObject.y >= 0)return;
 		s._distance = 10;
@@ -901,8 +910,9 @@ LWindow.prototype._onBarDown = function(event){
 };
 LWindow.prototype._onBarMove = function(event){
 	var s = event.clickTarget.parent;
-	s.x = s.barDownX + event.offsetX - s.barOffsetX;
-	s.y = s.barDownY + event.offsetY - s.barOffsetY;
+	var scale = s.getAbsoluteScale();
+	s.x = s.barDownX + (event.offsetX - s.barOffsetX)/scale.scaleX;
+	s.y = s.barDownY + (event.offsetY - s.barOffsetY)/scale.scaleY;
 };
 LWindow.prototype._onBarUp = function(event){
 	var s = event.clickTarget.parent;
@@ -944,7 +954,7 @@ LRange.prototype._onDown = function(event){
 	if(s.sign.x < -s.sign.getWidth()*0.5)s.sign.x = -s.sign.getWidth()*0.5;
 	if(s.sign.x > s.w-s.sign.getWidth()*0.5)s.sign.x = s.w-s.sign.getWidth()*0.5;
 	s._DownX = s.sign.x;
-	s._OffsetX = event.offsetX;
+	s._OffsetX = event.selfX;
 	s._getValue();
 	s.addEventListener(LMouseEvent.MOUSE_MOVE,s._onMove);
 	s.addEventListener(LMouseEvent.MOUSE_UP,s._onUp);
@@ -955,7 +965,7 @@ LRange.prototype._getValue = function(){
 };
 LRange.prototype._onMove = function(event){
 	var s = event.clickTarget;
-	s.sign.x = s._DownX + event.offsetX - s._OffsetX;
+	s.sign.x = s._DownX + event.selfX - s._OffsetX;
 	if(s.sign.x < -s.sign.getWidth()*0.5)s.sign.x = -s.sign.getWidth()*0.5;
 	if(s.sign.x > s.w-s.sign.getWidth()*0.5)s.sign.x = s.w-s.sign.getWidth()*0.5;
 	s._getValue();

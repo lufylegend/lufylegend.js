@@ -48,7 +48,7 @@ function init(s,c,w,h,f,t){
 function base(d,b,a){
 	var p=null,o=d.constructor.prototype,h={};
 	if(d.constructor.name == "Object"){
-		throw "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.";
+		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
 	for(p in o)h[p]=1;
 	for(p in b.prototype){

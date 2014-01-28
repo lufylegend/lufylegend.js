@@ -82,7 +82,7 @@ function gameInit(event){
 	_spriteImage.addEventListener(LEvent.ENTER_FRAME, onFrame);
 	_spriteImage.addEventListener(LMouseEvent.MOUSE_UP,onUp);
 }
-function onUp(event){	
+function onUp(event){
 	if(windowOver != null){
 		setMapArr();
 		_spriteImage.removeChild(windowOver);
@@ -95,8 +95,8 @@ function onUp(event){
 	for(i=0;i<_mapR;i++){
 		for(j=0;j<_mapC;j++){
 			checkImg = _boxArr[i+1][j+1];
-			if(checkImg._index > 0 && event.offsetX >= checkImg.x && event.offsetX < checkImg.x + checkImg.width && 
-					event.offsetY >= checkImg.y && event.offsetY < checkImg.y + checkImg.height){
+			if(checkImg._index > 0 && event.offsetX >= checkImg.x && event.offsetX < checkImg.x + checkImg.getWidth() && 
+					event.offsetY >= checkImg.y && event.offsetY < checkImg.y + checkImg.getHeight()){
 				if(_clickArr.length > 0 && _clickArr[0].objectindex == checkImg.objectindex)return;
 				checkImg.alpha = 0.3;
 				_clickArr.push(checkImg);

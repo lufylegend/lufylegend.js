@@ -6,9 +6,26 @@ function $LMouseEventContainer(){
 	s.mouseDownContainer = [];
 	s.mouseUpContainer = [];
 	s.mouseMoveContainer = [];
+	s.textFieldInputContainer = [];
 };
 $LMouseEventContainer.prototype = {
-	addEvent:function(o,list,f){
+	pushInputBox:function(d){
+		var s  = this,c = s.textFieldInputContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex)return;
+		}
+		s.textFieldInputContainer.push(d);
+	}
+	,removeInputBox:function(d){
+		var s  = this,c = s.textFieldInputContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex){
+				s.textFieldInputContainer.splice(i,1);
+				break;
+			}
+		}
+	}
+	,addEvent:function(o,list,f){
 		var s = this;
 		if(s.hasEvent(o,list))return;
 		list.push({container:o,listener:f});
@@ -76,21 +93,39 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		if(type == LMouseEvent.MOUSE_DOWN){
 			s.dispatchEvent(event,s.mouseDownContainer,LMouseEvent.MOUSE_DOWN);
+			s.dispatchEvent(event,s.textFieldInputContainer);
 		}else if(type == LMouseEvent.MOUSE_UP){
 			s.dispatchEvent(event,s.mouseUpContainer,LMouseEvent.MOUSE_UP);
 		}else{
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
 	}
+    ,getRootParams:function(s){
+		var p = s.parent,r = {x:0,y:0,scaleX:1,scaleY:1};
+		while(p != "root"){
+			r.x *= p.scaleX;
+			r.y *= p.scaleY;
+			r.x += p.x;
+			r.y += p.y;
+			r.scaleX *= p.scaleX;
+			r.scaleY *= p.scaleY;
+			p = p.parent;
+		}
+		return r;
+    }
 	,dispatchEvent:function(event,list,type){
 		var self = this,sp,co,st=[],o;
 		for(var i=0,l=list.length;i<l;i++){
-			sp = list[i].container;
-            if(!sp.mouseChildren || !sp.visible)continue;
-			co = sp.getRootCoordinate();
-			if(co.x <= event.offsetX && event.offsetX <= co.x + sp.getWidth() && co.y <= event.offsetY && event.offsetY <= co.y + sp.getHeight()){
-				st.push({sp:sp,co:co,listener:list[i].listener});
-			}
+			sp = list[i].container || list[i];
+            if(!sp || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
+            var co = self.getRootParams(sp);
+            if(!type && sp.mouseEvent){
+				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);
+            	continue;
+            }
+            if(sp.ismouseon(event,co)){
+            	st.push({sp:sp,co:co,listener:list[i].listener});
+            }
 		}
 		if(st.length == 0)return;
 		if(st.length > 1){
@@ -99,8 +134,8 @@ $LMouseEventContainer.prototype = {
 		o = st[0];
 		event.clickTarget = o.sp;
 		event.event_type = type;
-		event.selfX = event.offsetX - o.co.x;
-		event.selfY = event.offsetY - o.co.y;
+		event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
+		event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
 		o.listener(event);
 	}
 	,set:function(t,v){

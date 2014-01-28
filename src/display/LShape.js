@@ -3,7 +3,7 @@
 **/
 function LShape(){
 	var s = this;
-	base(s,LDisplayObject,[]);
+	base(s,LInteractiveObject,[]);
 	s.type = "LShape";
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
@@ -68,35 +68,20 @@ p = {
 	mouseEvent:function (e,type,cd){
 		if(!e)return false;
 		var s = this;
-		if(!s.mouseChildren || !s.visible)return false;
+		if(!s.visible)return false;
 		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
-		var i,k,ox,oy;
-		if(typeof e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
+		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
 			if(s._mevent(type)){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
-						e.selfX = ox - (s.x+cd.x);
-						e.selfY = oy - (s.y+cd.y);
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
 						e.clickTarget = s;
 						o.listener(e,s);
 						return true;
-					}
-				}
-			}else{
-				var mc = {x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-				for(k=s.childList.length-1;k>=0;k--){
-					if(s.childList[k].mouseEvent){
-						i = s.childList[k].mouseEvent(e,type,mc);
-						if(i)return true;
 					}
 				}
 			}
@@ -107,16 +92,10 @@ p = {
 	ismouseon:function(e,cd){
 		var s = this;
 		if(!s.visible || e==null)return false;
-		var k = null,i=false,l=s.childList;
-		var sc={x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+		var k = null,i=false;
+		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.mask && !s.mask.ismouseon(e,sc))return false;
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
-		if(!i){
-			for(k=l.length-1;k>=0;k--){
-				if(l[k].ismouseon)i = l[k].ismouseon(e,sc);
-				if(i)break;
-			}
-		}
 		return i;
 	},
 	die:function (){

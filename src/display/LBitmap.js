@@ -36,7 +36,7 @@ p = {
 			s.bitmapData.width,s.bitmapData.height);
 	},
 	clone:function(){
-		var s = this,a = new LBitmap(s.bitmapData.cline());
+		var s = this,a = new LBitmap(s.bitmapData.clone());
 		a.copyProperty(s);
 		a.rotateCenter = s.rotateCenter;
 		return a;
@@ -46,16 +46,9 @@ p = {
 		if(e==null || e == UNDEFINED)return false;
 		if(!s.visible || !s.bitmapData)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		var ox,oy;
-		if(e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
-		if(ox >= (s.x + cood.x)*cood.scaleX && ox <= (s.x + cood.x + s.bitmapData.width*s.scaleX)*cood.scaleX && 
-			oy >= (s.y + cood.y)*cood.scaleY && oy <= (s.y + cood.y + s.bitmapData.height*s.scaleY)*cood.scaleY){
+		var ox = e.offsetX,oy = e.offsetY;
+		if(ox >= cood.x + s.x*cood.scaleX && ox <= cood.x + (s.x + s.bitmapData.width)*cood.scaleX*s.scaleX && 
+			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + (s.y + s.bitmapData.height)*cood.scaleY*s.scaleY){
 			return true;
 		}else{
 			return false;

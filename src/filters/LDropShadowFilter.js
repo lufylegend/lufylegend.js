@@ -11,7 +11,7 @@ function LDropShadowFilter(distance,angle,color,blur){
 	s.shadowBlur=blur?blur:20;
 	s.setShadowOffset();
 }
-LDropShadowFilter.prototype = {
+p = {
 	setShadowOffset:function(){
 		var s = this;
 		var a = s.angle*Math.PI/180;
@@ -40,3 +40,4 @@ LDropShadowFilter.prototype = {
 		this.shadowBlur=blur;
 	}
 };
+for(var k in p)LDropShadowFilter.prototype[k]=p[k];

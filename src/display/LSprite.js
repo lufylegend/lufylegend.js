@@ -111,7 +111,6 @@ p = {
 		var s  = this;
 		d.parent = s;
 		s.childList.push(d);
-		s.resize();
 	},
 	addChildAt:function(d, i){
 		var s = this;
@@ -132,7 +131,6 @@ p = {
 			}
 		}
 		delete d.parent;
-		s.resize();
 	},
 	getChildAt:function(i){
 		var s  = this,c=s.childList;
@@ -144,7 +142,6 @@ p = {
 		if(c.length <= i)return;
 		if(LGlobal.destroy && c[i].die)c[i].die();
 		s.childList.splice(i,1);
-		s.resize();
 	},
 	getChildIndex:function(child){
 		var s = this,c=s.childList,i,l=c.length;
@@ -212,29 +209,22 @@ p = {
 		var s = this;
 		if(!s.mouseChildren || !s.visible)return false;
 		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
-		var i,k,ox,oy;
-		if(typeof e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
+		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
 			if(s._mevent(type)){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
-						e.selfX = ox - (s.x+cd.x);
-						e.selfY = oy - (s.y+cd.y);
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
 						e.clickTarget = s;
 						o.listener(e,s);
 						return true;
 					}
 				}
 			}else{
-				var mc = {x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 				for(k=s.childList.length-1;k>=0;k--){
 					if(s.childList[k].mouseEvent){
 						i = s.childList[k].mouseEvent(e,type,mc);
@@ -250,7 +240,7 @@ p = {
 		var s = this;
 		if(!s.visible || e==null)return false;
 		var k = null,i=false,l=s.childList;
-		var sc={x:s.x+cd.x,y:s.y+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.mask && !s.mask.ismouseon(e,sc))return false;
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
 		if(!i){
