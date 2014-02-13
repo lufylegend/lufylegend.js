@@ -122,6 +122,36 @@ p = {
 		});
 		s.showList.push({type:"arc",value:pa});
 	},
+	drawSector = function(tn,lco,pa,isf,co){
+		var s = this;
+		s.setList.push(function(){
+			c=LGlobal.canvas;
+			c.beginPath();
+			c.moveTo(pa[0],pa[1]);
+			c.arc(pa[0],pa[1],pa[2],pa[3],pa[4],pa[5]);
+			c.lineTo(pa[0],pa[1]);
+			if(s.bitmap){
+				c.save();
+				c.clip();
+				c.drawImage(s.bitmap.image,
+						s.bitmap.x,s.bitmap.y,s.bitmap.width,s.bitmap.height,
+						0,0,s.bitmap.width,s.bitmap.height);
+				c.restore(); 
+				s.bitmap=null;
+				return;
+			}
+			if(isf){
+				c.fillStyle = co;
+				c.fill();
+			}
+			if(tn>0){
+				c.lineWidth = tn;
+				c.strokeStyle = lco;
+				c.stroke();
+			}
+		});
+		s.showList.push({type:"sector",value:pa});
+	},
 	drawRect:function (tn,lco,pa,isf,co){
 		var s = this,c;
 		s.setList.push(function(){
