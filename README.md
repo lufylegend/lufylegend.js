@@ -5,6 +5,9 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 
 
 =============
+开源协议 <a target='_blank' href="http://en.wikipedia.org/wiki/MIT_License">MIT License</a>
+=============
+
 ※1.8.7版更新内容
 
 1.修正了LBitmap对象clone的bug
