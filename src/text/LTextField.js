@@ -179,7 +179,7 @@ p = {
 				var i,l,j=0,k=0,m=0;
 				for(i=0,l=s.text.length;i<l;i++){
 					j = c.measureText(s.text.substr(k,i-k)).width;
-					var enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i,1));
+					var enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i,1));
 					if((s.wordWrap && j > s.width) || enter){
 						j = 0;
 						k = i;
