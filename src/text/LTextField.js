@@ -179,10 +179,12 @@ p = {
 				var i,l,j=0,k=0,m=0;
 				for(i=0,l=s.text.length;i<l;i++){
 					j = c.measureText(s.text.substr(k,i-k)).width;
-					if(j > s.width){
+					var enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i,1));
+					if((s.wordWrap && j > s.width) || enter){
 						j = 0;
 						k = i;
 						m++;
+						if(enter)k++;
 					}
 				}
 				s.height = (m+1)*s.wordHeight;

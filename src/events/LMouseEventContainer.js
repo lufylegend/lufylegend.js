@@ -3,6 +3,7 @@
  **/
 function $LMouseEventContainer(){
 	var s = this;
+	s.dispatchAllEvent = false;
 	s.mouseDownContainer = [];
 	s.mouseUpContainer = [];
 	s.mouseMoveContainer = [];
@@ -114,8 +115,8 @@ $LMouseEventContainer.prototype = {
 		return r;
     }
 	,dispatchEvent:function(event,list,type){
-		var self = this,sp,co,st=[],o;
-		for(var i=0,l=list.length;i<l;i++){
+		var self = this,sp,co,st=[],o,i,l;
+		for(i=0,l=list.length;i<l;i++){
 			sp = list[i].container || list[i];
             if(!sp || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
             var co = self.getRootParams(sp);
@@ -131,12 +132,15 @@ $LMouseEventContainer.prototype = {
 		if(st.length > 1){
 			st = st.sort(self._sort);
 		}
-		o = st[0];
-		event.clickTarget = o.sp;
-		event.event_type = type;
-		event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
-		event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
-		o.listener(event);
+		l = self.dispatchAllEvent?st.length:1;
+		for(i=0;i<l;i++){
+			o = st[i];
+			event.clickTarget = o.sp;
+			event.event_type = type;
+			event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
+			event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
+			o.listener(event);
+		}
 	}
 	,set:function(t,v){
 		LGlobal.mouseEventContainer[t] = v;

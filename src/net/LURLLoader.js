@@ -31,7 +31,8 @@ p = {
 		}else if(t=="js"){
 			var script = document.createElement("script");
 			script.onload = function (){
-				if(s.oncomplete)s.oncomplete({});
+				s.event.target = s;
+				if(s.oncomplete)s.oncomplete(s.event);
 			};
 			script.src = u;
 			script.type = "text/javascript";
