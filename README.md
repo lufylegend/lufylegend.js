@@ -8,6 +8,18 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 开源协议 <a target='_blank' href="http://en.wikipedia.org/wiki/MIT_License">MIT License</a>
 =============
 
+※1.8.8版更新内容
+
+1，扩展了LGraphics部分功能
+
+2，鼠标容器，添加变量LMouseEventContainer.dispatchAllEvent控制是否触发所有事件
+
+3，修正了box2d浮力部分无法随着镜头移动的bug
+
+4，为了防止LLoadManage由于网络原因而发生文件读取失败，对LLoadManage进行了优化
+
+=============
+
 ※1.8.7版更新内容
 
 1.修正了LBitmap对象clone的bug
