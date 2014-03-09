@@ -1031,7 +1031,7 @@ function main(){
 <p>库件初始化</p>
 <div class="hr"></div>
 <h3>■参数：</h3>
-<p>speed:游戏速度设定</p>
+<p>speed:游戏速度设定,每次页面刷新间隔（单位毫秒）</p>
 <p>divid:传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部</p>
 <p>width:游戏界面宽</p>
 <p>height:游戏界面高</p>
@@ -3139,7 +3139,7 @@ backLayer.graphics.drawLine(2,"#ff0000",[10,10,100,50]);
 <h3>■参数：</h3>
 <p>thickness：边缘线粗</p>
 <p>lineColor：边缘线颜色</p>
-<p>pointArray：数组元素依次为arc的所有参数，[圆心坐标x,圆心坐标y,半径r,起始角度sAngle,结束角度eAngle,顺逆时针aClockwise]</p>
+<p>pointArray：数组元素依次为arc的所有参数，[圆心坐标x,圆心坐标y,半径r,起始角度sAngle,结束角度eAngle,顺逆时针aClockwise,是否画扇形isSector]</p>
 <p>isfill：是否实心图形</p>
 <p>color：实心颜色</p>
 <div class="hr"></div>
@@ -5891,6 +5891,8 @@ function onmousemove(event){
 <p>LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);使用鼠标容器来添加MOUSE_DOWN事件。</p>
 <p>LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);使用鼠标容器来添加MOUSE_UP事件。</p>
 <p>LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);使用鼠标容器来添加MOUSE_MOVE事件。</p>
+<div class="hr"></div>
+<p>LMouseEventContainer.dispatchAllEvent：设定鼠标事件是否触发所有事件。默认值为flash，即不支持触发所有事件。</p>
 </div>
 <!-- L_MOUSE_LMouseEventContainer end -->
 

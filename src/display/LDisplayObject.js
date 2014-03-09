@@ -17,7 +17,14 @@ function LDisplayObject(){
 	s.blendMode = null;
 }
 p = {
-	show:function (){
+	_createCanvas:function(){
+		var s = this;
+		if(!s._canvas){
+			s._canvas = document.createElement("canvas");
+			s._context = s._canvas.getContext("2d");
+		}
+	}
+	,show:function (){
 		var s = this,c = LGlobal.canvas;
 		if(!s._canShow())return;
 		c.save();
@@ -133,24 +140,28 @@ p = {
 		if(d.getHeight)h=d.getHeight();
 		return new LRectangle(x,y,w,h);
 	},
-	getDataURL:function(){
+	getDataCanvas:function(){
 		var s = this,_o,o,_c,c;
+		s._createCanvas();
 		o = LGlobal.canvasObj,c = LGlobal.canvas;
-		_o = LGlobal._canvas,_c = LGlobal._context;
+		_o = s._canvas,_c = s._context;
 		s.width = s.getWidth();
 		s.height = s.getHeight();
 		_o.width = s.width;
 		_o.height = s.height;
 		_c.clearRect(0,0,s.width,s.height);
-		LGlobal.canvasObj = LGlobal._canvas;
-		LGlobal.canvas = LGlobal._context;
+		LGlobal.canvasObj = s._canvas;
+		LGlobal.canvas = s._context;
 		s.show();
-		var data = LGlobal.canvasObj.toDataURL();
-		LGlobal._canvas = _o;
-		LGlobal._context = _c;
+		s._canvas = _o;
+		s._context = _c;
 		LGlobal.canvasObj = o;
 		LGlobal.canvas = c;
-		return data;
+		return s._canvas;
+	},
+	getDataURL:function(){
+		var s = this,r = s.getDataCanvas();
+		return r.toDataURL();
 	},
 	remove:function(){
 		var s = this;

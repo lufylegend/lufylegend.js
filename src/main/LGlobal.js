@@ -76,6 +76,9 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.canvasObj = document.getElementById(LGlobal.id+"_canvas");
 	LGlobal._canvas=document.createElement("canvas");
 	LGlobal._context=LGlobal._canvas.getContext("2d");
+	if(LGlobal._context){
+		LGlobal.canvasObj.innerHTML="";
+	}
 	LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
 	LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
 	LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
