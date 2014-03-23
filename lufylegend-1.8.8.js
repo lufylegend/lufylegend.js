@@ -64,6 +64,7 @@ function $LMouseEventContainer(){
 	s.mouseDownContainer = [];
 	s.mouseUpContainer = [];
 	s.mouseMoveContainer = [];
+	s.mouseOutContainer = [];
 	s.textFieldInputContainer = [];
 };
 $LMouseEventContainer.prototype = {
@@ -105,6 +106,10 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.addEvent(o,s.mouseUpContainer,f);
 	}
+	,addMouseOutEvent:function(o,f){
+		var s = this;
+		s.addEvent(o,s.mouseOutContainer,f);
+	}
 	,addMouseMoveEvent:function(o,f){
 		var s = this;
 		s.addEvent(o,s.mouseMoveContainer,f);
@@ -115,6 +120,8 @@ $LMouseEventContainer.prototype = {
 			s.addMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.addMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.addMouseOutEvent(o,f);
 		}else{
 			s.addMouseMoveEvent(o,f);
 		}
@@ -137,12 +144,18 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.removeEvent(o,s.mouseMoveContainer,f);
 	}
+	,removeMouseOutEvent:function(o,f){
+		var s = this;
+		s.removeEvent(o,s.mouseOutContainer,f);
+	}
 	,removeMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
 			s.removeMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.removeMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.removeMouseOutEvent(o,f);
 		}else{
 			s.removeMouseMoveEvent(o,f);
 		}
@@ -154,6 +167,8 @@ $LMouseEventContainer.prototype = {
 			s.dispatchEvent(event,s.textFieldInputContainer);
 		}else if(type == LMouseEvent.MOUSE_UP){
 			s.dispatchEvent(event,s.mouseUpContainer,LMouseEvent.MOUSE_UP);
+		}else if(type == LMouseEvent.MOUSE_OUT){
+			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
 		}else{
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
@@ -181,8 +196,11 @@ $LMouseEventContainer.prototype = {
 				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);
             	continue;
             }
-            if(sp.ismouseon(event,co)){
+            var on = sp.ismouseon(event,co);
+            if(on && type != LMouseEvent.MOUSE_OUT){
             	st.push({sp:sp,co:co,listener:list[i].listener});
+            }else if(type == LMouseEvent.MOUSE_OUT){
+            	if(!on)st.push({sp:sp,co:co,listener:list[i].listener});
             }
 		}
 		if(st.length == 0)return;
@@ -430,6 +448,7 @@ LGlobal.setCanvas = function (id,w,h){
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_OUT);
 			LGlobal.touchHandler(e);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
 				LGlobal.mouseJoint_move(eve);
@@ -466,6 +485,7 @@ LGlobal.setCanvas = function (id,w,h){
 			mouseX = LGlobal.offsetX = event.offsetX;
 			mouseY = LGlobal.offsetY = event.offsetY;
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_MOVE);
+			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_OUT);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
 				LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
 			}
@@ -497,7 +517,8 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.IS_MOUSE_DOWN = false;
 		});
 	}
-} ;
+};
+
 LGlobal.touchHandler = function(e){
 	e.stopPropagation();
 	if(LGlobal.preventDefault)e.preventDefault();
@@ -2137,7 +2158,7 @@ p = {
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
-			if(s._mevent(type)){
+			if(s._mevent(type) && type != LMouseEvent.MOUSE_OUT){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
@@ -2150,6 +2171,19 @@ p = {
 				}
 			}
 			return true;
+		}else{
+			if(s._mevent(type)){
+				for(k=0;k<s.mouseList.length;k++){
+					var o = s.mouseList[k];
+					if(o.type == type){
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
+						e.clickTarget = s;
+						o.listener(e,s);
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	},
@@ -2383,7 +2417,7 @@ p = {
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
-			if(s._mevent(type)){
+			if(s._mevent(type) && type != LMouseEvent.MOUSE_OUT){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
@@ -2404,6 +2438,27 @@ p = {
 				}
 			}
 			return true;
+		}else{
+			if(s._mevent(type)){
+				for(k=0;k<s.mouseList.length;k++){
+					var o = s.mouseList[k];
+					if(o.type == type){
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
+						e.clickTarget = s;
+						o.listener(e,s);
+						return true;
+					}
+				}
+			}else{
+				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				for(k=s.childList.length-1;k>=0;k--){
+					if(s.childList[k].mouseEvent){
+						i = s.childList[k].mouseEvent(e,type,mc);
+						if(i)return true;
+					}
+				}
+			}
 		}
 		return false;
 	},
