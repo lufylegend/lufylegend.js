@@ -212,7 +212,7 @@ p = {
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
-			if(s._mevent(type)){
+			if(s._mevent(type) && type != LMouseEvent.MOUSE_OUT){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
@@ -233,6 +233,27 @@ p = {
 				}
 			}
 			return true;
+		}else{
+			if(s._mevent(type)){
+				for(k=0;k<s.mouseList.length;k++){
+					var o = s.mouseList[k];
+					if(o.type == type){
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
+						e.clickTarget = s;
+						o.listener(e,s);
+						return true;
+					}
+				}
+			}else{
+				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				for(k=s.childList.length-1;k>=0;k--){
+					if(s.childList[k].mouseEvent){
+						i = s.childList[k].mouseEvent(e,type,mc);
+						if(i)return true;
+					}
+				}
+			}
 		}
 		return false;
 	},
