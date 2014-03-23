@@ -139,6 +139,7 @@ LGlobal.setCanvas = function (id,w,h){
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_OUT);
 			LGlobal.touchHandler(e);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
 				LGlobal.mouseJoint_move(eve);
@@ -175,6 +176,7 @@ LGlobal.setCanvas = function (id,w,h){
 			mouseX = LGlobal.offsetX = event.offsetX;
 			mouseY = LGlobal.offsetY = event.offsetY;
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_MOVE);
+			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_OUT);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
 				LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
 			}
@@ -206,7 +208,7 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.IS_MOUSE_DOWN = false;
 		});
 	}
-} ;
+};
 LGlobal.touchHandler = function(e){
 	e.stopPropagation();
 	if(LGlobal.preventDefault)e.preventDefault();

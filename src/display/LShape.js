@@ -73,7 +73,7 @@ p = {
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
-			if(s._mevent(type)){
+			if(s._mevent(type) && type != LMouseEvent.MOUSE_OUT){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
 					if(o.type == type){
@@ -86,6 +86,19 @@ p = {
 				}
 			}
 			return true;
+		}else{
+			if(s._mevent(type)){
+				for(k=0;k<s.mouseList.length;k++){
+					var o = s.mouseList[k];
+					if(o.type == type){
+						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
+						e.clickTarget = s;
+						o.listener(e,s);
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	},

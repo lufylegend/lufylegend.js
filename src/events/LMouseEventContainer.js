@@ -7,6 +7,7 @@ function $LMouseEventContainer(){
 	s.mouseDownContainer = [];
 	s.mouseUpContainer = [];
 	s.mouseMoveContainer = [];
+	s.mouseOutContainer = [];
 	s.textFieldInputContainer = [];
 };
 $LMouseEventContainer.prototype = {
@@ -48,6 +49,10 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.addEvent(o,s.mouseUpContainer,f);
 	}
+	,addMouseOutEvent:function(o,f){
+		var s = this;
+		s.addEvent(o,s.mouseOutContainer,f);
+	}
 	,addMouseMoveEvent:function(o,f){
 		var s = this;
 		s.addEvent(o,s.mouseMoveContainer,f);
@@ -58,6 +63,8 @@ $LMouseEventContainer.prototype = {
 			s.addMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.addMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.addMouseOutEvent(o,f);
 		}else{
 			s.addMouseMoveEvent(o,f);
 		}
@@ -80,12 +87,18 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.removeEvent(o,s.mouseMoveContainer,f);
 	}
+	,removeMouseOutEvent:function(o,f){
+		var s = this;
+		s.removeEvent(o,s.mouseOutContainer,f);
+	}
 	,removeMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
 			s.removeMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.removeMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.removeMouseOutEvent(o,f);
 		}else{
 			s.removeMouseMoveEvent(o,f);
 		}
@@ -97,6 +110,8 @@ $LMouseEventContainer.prototype = {
 			s.dispatchEvent(event,s.textFieldInputContainer);
 		}else if(type == LMouseEvent.MOUSE_UP){
 			s.dispatchEvent(event,s.mouseUpContainer,LMouseEvent.MOUSE_UP);
+		}else if(type == LMouseEvent.MOUSE_OUT){
+			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
 		}else{
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
@@ -124,8 +139,11 @@ $LMouseEventContainer.prototype = {
 				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);
             	continue;
             }
-            if(sp.ismouseon(event,co)){
+            var on = sp.ismouseon(event,co);
+            if(on && type != LMouseEvent.MOUSE_OUT){
             	st.push({sp:sp,co:co,listener:list[i].listener});
+            }else if(type == LMouseEvent.MOUSE_OUT){
+            	if(!on)st.push({sp:sp,co:co,listener:list[i].listener});
             }
 		}
 		if(st.length == 0)return;
