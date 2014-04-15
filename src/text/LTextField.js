@@ -7,7 +7,7 @@ function LTextField(){
 	s.type = "LTextField";
 	s.texttype = null;
 	s.text = "";
-	s.font = "utf-8";
+	s.font = "Arial";
 	s.size = "11";
 	s.color = "#000000";
 	s.weight = "normal";
@@ -19,6 +19,8 @@ function LTextField(){
 	s.stroke = false;
 	s.displayAsPassword = false;
 	s.wordWrap=false;
+	s.multiline = false;
+	s.numLines = 1;
 }
 p = {
 	_showReady:function(c){
@@ -31,13 +33,11 @@ p = {
 	_show:function (c){
 		var s = this;
 		if(s.texttype == LTextFieldType.INPUT){
-			if(s.x != 0 || s.y != 0){
-				s.inputBackLayer.show();
-			}
+			s.inputBackLayer.show();
 			var rc = s.getRootCoordinate();
 		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
-		    	LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + ((rc.y*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0)) + "px";
-		    	LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + ((rc.x*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0)) + "px";
+		    	LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY())*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0)) + "px";
+		    	LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX())*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0)) + "px";
 		    }
 		}
 		var lbl = s.text;
@@ -53,36 +53,47 @@ p = {
 			c.fillStyle = s.color;
 			d = c.fillText;
 		}
-		if(s.wordWrap){
-			var i,l,j=0,k=0,m=0;
+		if(s.wordWrap || s.multiline){
+			var i,l,j=0,k=0,m=0,b=0;
 			for(i=0,l=s.text.length;i<l;i++){
 				j = c.measureText(s.text.substr(k,i-k)).width;
-				if(j > s.width){
+				var enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i,1));
+				if((s.wordWrap && j > s.width) || enter){
 					j = 0;
 					k = i;
 					m++;
+					if(enter)k++;
 				}
-				d.apply(c,[lbl.substr(i,1),j,m*s.wordHeight,c.measureText(lbl).width]);
+				if(!enter)d.apply(c,[lbl.substr(i,1),j,m*s.wordHeight,c.measureText(lbl).width]);
+				s.numLines = m;
 			}
 			s.height = (m+1)*s.wordHeight;
 		}else{
+			s.numLines = 1;
 			d.apply(c,[lbl,0,0,c.measureText(lbl).width]);
 		}
 		if(s.wind_flag){
 			s.windRun();
 		}
 	},
+	_wordHeight:function(h){
+		var s = this;
+		if(h>0){
+			s.wordHeight = h;
+		}else{
+			s.wordWrap = false;
+			s.wordHeight = s.getHeight();
+		}
+		s.height = 0;
+	},
+	setMultiline:function(v,h){
+		var s = this;
+		if(v){s._wordHeight(h);}
+		s.multiline = v;
+	},
 	setWordWrap:function(v,h){
 		var s = this;
-		if(v){
-			if(h>0){
-				s.wordHeight = h;
-			}else{
-				s.wordWrap = false;
-				s.wordHeight = s.getHeight();
-			}
-			s.height = 0;
-		}
+		if(v){s._wordHeight(h);}
 		s.wordWrap = v;
 	},
 	setType:function(type,inputBackLayer){
@@ -94,8 +105,10 @@ p = {
 			}else{
 				s.inputBackLayer = inputBackLayer;
 			}
+			if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN])LMouseEventContainer.pushInputBox(s);
 		}else{
 			s.inputBackLayer = null;
+			LMouseEventContainer.removeInputBox(s);
 		}
 		s.texttype = type;
 	},
@@ -104,19 +117,14 @@ p = {
 		if(e==null || e == UNDEFINED)return false;
 		if(!s.visible)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		cood={x:s.x+cood.x,y:s.y+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY};
+		var co={x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY};
 		if(s.inputBackLayer){
-			return s.inputBackLayer.ismouseon(e,cood);
+			return s.inputBackLayer.ismouseon(e,co);
 		}
-		if(e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
-		if(ox >= (s.x + cood.x)*cood.scaleX && ox <= (s.x + cood.x + s.getWidth()*s.scaleX)*cood.scaleX && 
-			oy >= (s.y + cood.y)*cood.scaleY && oy <= (s.y + cood.y + s.getHeight()*s.scaleY)*cood.scaleY){
+		ox = e.offsetX;
+		oy = e.offsetY;
+		if(ox >=  cood.x + s.x*cood.scaleX && ox <= cood.x + (s.x + s.getWidth())*cood.scaleX*s.scaleX && 
+			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + (s.y + s.getHeight())*cood.scaleY*s.scaleY){
 			return true;
 		}else{
 			return false;
@@ -136,21 +144,26 @@ p = {
 		if(s.inputBackLayer == null)return;
 		var on = s.ismouseon(event,cood);
 		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
-		
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
 		LGlobal.inputTextField = s;
+		LGlobal.inputTextareaBoxObj.style.display = NONE;
 		LGlobal.inputTextBoxObj.style.display = NONE;
 		LGlobal.passwordBoxObj.style.display = NONE;
 		if(s.displayAsPassword){
 			LGlobal.inputTextBox = LGlobal.passwordBoxObj;
+		}else if(s.multiline){
+			LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
 		}else{
 			LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
 		}
+		var sx = parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width,sy = parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height;
 		LGlobal.inputTextBox.style.display = "";
 		LGlobal.inputTextBox.value = s.text;
-		LGlobal.inputTextBox.style.height = s.height+"px";
-		LGlobal.inputTextBox.style.width = s.width+"px";
+		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*cood.scaleY*s.scaleY*sy+"px";
+		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*cood.scaleX*s.scaleX*sx+"px";
+		s.text = "";
+		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},
 	getWidth:function(){
 		var s = this;
@@ -166,10 +179,12 @@ p = {
 				var i,l,j=0,k=0,m=0;
 				for(i=0,l=s.text.length;i<l;i++){
 					j = c.measureText(s.text.substr(k,i-k)).width;
-					if(j > s.width){
+					var enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i,1));
+					if((s.wordWrap && j > s.width) || enter){
 						j = 0;
 						k = i;
 						m++;
+						if(enter)k++;
 					}
 				}
 				s.height = (m+1)*s.wordHeight;
@@ -197,7 +212,9 @@ p = {
 		s.text = s.wind_text.substring(0,s.wind_length);
 		s.wind_length++;
 	},
-	die:function(){}
+	die:function(){
+		LMouseEventContainer.removeInputBox(this);
+	}
 };
 for(var k in p)LTextField.prototype[k]=p[k];
 /*

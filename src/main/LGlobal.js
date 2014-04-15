@@ -33,6 +33,7 @@ LGlobal.destroy = true;
 LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 LGlobal.startTimer = 0;
 LGlobal.mouseEventContainer = {};
+LGlobal.keepClear = true;
 (function(n){
 	if (n.indexOf(OS_IPHONE) > 0) {
 		LGlobal.os = OS_IPHONE;
@@ -69,11 +70,17 @@ LGlobal.setCanvas = function (id,w,h){
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
 	'</div>'+  
 	'</canvas></div>'+
-	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0px 0px 0px 0px;z-index:10;display:none;"><textarea rows="1" id="' + LGlobal.id + '_InputTextBox"></textarea><input type="password" id="' + LGlobal.id + '_passwordBox" /></div>';
+	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0px 0px 0px 0px;z-index:10;display:none;">'+
+	'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>'+
+	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" /><input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
 	LGlobal.canvasObj = document.getElementById(LGlobal.id+"_canvas");
 	LGlobal._canvas=document.createElement("canvas");
 	LGlobal._context=LGlobal._canvas.getContext("2d");
+	if(LGlobal._context){
+		LGlobal.canvasObj.innerHTML="";
+	}
 	LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
+	LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
 	LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
 	LGlobal.passwordBoxObj = document.getElementById(LGlobal.id + '_passwordBox');
 	LGlobal.inputTextField = null;
@@ -255,7 +262,7 @@ LGlobal.onShow = function (){
 			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
 	}else{
-		LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
+		if(LGlobal.keepClear){LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);}
 		if(LGlobal.backgroundColor !== null){
 			LGlobal.canvas.fillStyle=LGlobal.backgroundColor;
 			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
@@ -346,6 +353,7 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 LGlobal.hitTest = LGlobal.hitTestRect;
 LGlobal.setFrameRate = function(s){
 	if(LGlobal.frameRate)clearInterval(LGlobal.frameRate);
+	LGlobal.speed = s;
 	LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
 };
 LGlobal.scaleX = function(v){
@@ -392,9 +400,16 @@ LGlobal.resize = function(){
 				case LStageAlign.TOP_RIGHT:
 					l = ww - w;
 					break;
+				case LStageAlign.TOP_MIDDLE:
+					l = (ww - w)*0.5;
+					break;
 				case LStageAlign.BOTTOM_RIGHT:
 					t = wh - h;
 					l = ww - w;
+					break;
+				case LStageAlign.BOTTOM_MIDDLE:
+					t = wh - h;
+					l = (ww - w)*0.5;
 					break;
 				case LStageAlign.MIDDLE:
 					t = (wh - h)*0.5;

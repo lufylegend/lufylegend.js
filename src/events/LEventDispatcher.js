@@ -31,7 +31,6 @@ p = {
 				s.target = s;
 				s.event_type = type;
 				s._eventList[i].listener(s);
-				return;
 			}
 		}
 	},

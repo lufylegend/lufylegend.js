@@ -36,6 +36,14 @@ p = {
 		}
 		return a;
 	},
+	lineCap:function (t){
+		var s = this;
+		s.setList.push(function(){LGlobal.canvas.lineCap = t;});
+	},
+	lineJoin:function (t){
+		var s = this;
+		s.setList.push(function(){LGlobal.canvas.lineJoin = t;});
+	},
 	lineWidth:function (t){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.lineWidth = t;});
@@ -94,12 +102,61 @@ p = {
 			s.bitmap=b;
 		});
 	},
+	drawEllipse:function(tn,lco,pa,isf,co){
+		var s = this,c,x,y,w,h,k,ox,oy,xe,ye,xm,ym;
+		s.setList.push(function(){
+			c=LGlobal.canvas;
+			c.beginPath();
+			k = 0.5522848;
+			x = pa[0];
+			y = pa[1];
+			w = pa[2];
+			h = pa[3];
+			ox = (w / 2) * k;
+			oy = (h / 2) * k;
+			xe = x + w;
+			ye = y + h;
+			xm = x + w / 2;
+			ym = y + h / 2;
+			c.moveTo(x, ym);
+			c.bezierCurveTo(x, ym-oy, xm-ox, y, xm, y);
+			c.bezierCurveTo(xm+ox, y, xe, ym-oy, xe, ym);
+			c.bezierCurveTo(xe, ym+oy, xm+ox, ye, xm, ye);
+			c.bezierCurveTo(xm-ox, ye, x, ym+oy, x, ym);
+			if(s.bitmap){
+				c.save();
+				c.clip();
+				c.drawImage(s.bitmap.image,
+						s.bitmap.x,s.bitmap.y,s.bitmap.width,s.bitmap.height,
+						0,0,s.bitmap.width,s.bitmap.height);
+				c.restore(); 
+				s.bitmap=null;
+				return;
+			}
+			if(isf){
+				c.fillStyle = co;
+				c.fill();
+			}
+			if(tn>0){
+				c.lineWidth = tn;
+				c.strokeStyle = lco;
+				c.stroke();
+			}
+		});
+		s.showList.push({type:"ellipse",value:pa});
+	},
 	drawArc:function(tn,lco,pa,isf,co){
 		var s = this,c;
 		s.setList.push(function(){
 			c=LGlobal.canvas;
 			c.beginPath();
+			if(pa.length > 6 && pa[6]){
+				c.moveTo(pa[0],pa[1]);
+			}
 			c.arc(pa[0],pa[1],pa[2],pa[3],pa[4],pa[5]);
+			if(pa.length > 6 && pa[6]){
+				c.lineTo(pa[0],pa[1]);
+			}
 			if(s.bitmap){
 				c.save();
 				c.clip();
@@ -359,24 +416,17 @@ p = {
 		var s = this;
 		var k = null;
 		if(e==null || e == UNDEFINED)return false;
-		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1,alpha:1,rotate:0};
-		var ox,oy;
-		if(e.offsetX == UNDEFINED){
-			ox = e.touches[0].pageX;
-			oy = e.touches[0].pageY;
-		}else{
-			ox = e.offsetX;
-			oy = e.offsetY;
-		}
+		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1};
+		var ox = e.offsetX,oy = e.offsetY;
 		for(k in s.showList){
-			if(s.showList[k].type == "rect"){
-				if(ox >= (s.showList[k].value[0] + co.x)*co.scaleX && ox <= (s.showList[k].value[0] + co.x + s.showList[k].value[2])*co.scaleX && 
-					oy >= (s.showList[k].value[1] + co.y)*co.scaleY && oy <= (s.showList[k].value[1] + co.y + s.showList[k].value[3])*co.scaleY){
+			if(s.showList[k].type == "rect" || s.showList[k].type == "ellipse"){
+				if(ox >= co.x + s.showList[k].value[0]*co.scaleX && ox <= co.x + (s.showList[k].value[0] + s.showList[k].value[2])*co.scaleX && 
+					oy >= co.y + s.showList[k].value[1]*co.scaleY && oy <= co.y + (s.showList[k].value[1] + s.showList[k].value[3])*co.scaleY){
 					return true;
 				}
 			}else if(s.showList[k].type == "arc"){
-				var xl = (s.showList[k].value[0] + co.x - ox)*co.scaleX;
-				var yl = (s.showList[k].value[1] + co.y - oy)*co.scaleY;
+				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
+				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
 				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
 			}
 		}		

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>粒子</title>
+	<script type="text/javascript" src="../../lufylegend-1.8.8.min.js"></script>
+    <script type="text/javascript">
+var loadData = [{name : "forcemap",path : "forcemap.jpg"}];
+var dataList,bmd,forcemap;
+var NUM_PARTICLE = 10000;
+var particles = [];
+
+function Particle(x, y, ax, ay, sx, sy) {
+	this.x = x;
+	this.y = y;
+	this.ax = ax;
+	this.ay = ay;
+	this.sx = sx;
+	this.sy = sy;
+}
+
+init(1000/60, "legend", 465, 465, main);
+		
+var channelX = 0;
+var channelY = 0;
+var old ;
+var rect;
+function main() {
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
+	LLoadManage.load(loadData,null,imgLoadComplete);
+}
+function imgLoadComplete(result){
+	dataList = result;
+	forcemap = new LBitmapData(dataList["forcemap"],0,0,465,465,LBitmapData.DATA_CANVAS);
+	bmd = new LBitmapData(null,0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);
+	rect = new LRectangle(0,0,465,465);
+	for (var i = 0, l = NUM_PARTICLE; i < l; i++) {
+		var x = Math.random() * LGlobal.width >> 0;
+		var y = Math.random() * LGlobal.height >> 0;
+		particles[i] = new Particle(x, y, 0, 0, 0, 0);
+	}
+	forcemap.lock();
+	var back = new LSprite();
+	addChild(back);
+	var bitmap = new LBitmap(bmd);
+	back.addChild(bitmap);
+	
+	bitmap = new LBitmap(bmd);
+	bitmap.blendMode = LBlendMode.LIGHTER;
+	bitmap.scaleX = bitmap.scaleY = 3;
+	bitmap.x = (LGlobal.width - bitmap.getWidth())*0.5;
+	bitmap.y = (LGlobal.height - bitmap.getHeight())*0.5;
+	back.addChild(bitmap);
+	
+	var fps = new FPS();
+	addChild(fps);
+	old = -1000;
+	
+	back.addEventListener(LEvent.ENTER_FRAME,onframe);
+}
+function onframe(){
+	var n = new Date().getTime();
+	if(n - old > 1000){
+		channelX = ((Math.random() * 3) >> 0) * 8;
+		channelY = ((Math.random() * 3) >> 0) * 8;
+		old=n;
+	}
+	bmd.lock();
+	bmd.setPixels(rect,0x000000);
+	for (var i = 0, l = particles.length; i < l; i++) {
+		var p = particles[i];
+		var color = forcemap.getPixel(p.x, p.y,"number");
+		var cx = color >> channelX & 0xFF;
+		var cy = color >> channelY & 0xFF;
+		p.ax += (cx - 128) * 0.0005;
+		p.ay += (cy - 128) * 0.0005;
+		p.sx += p.ax;
+		p.sy += p.ay;
+		p.x += p.sx;
+		p.y += p.sy;
+		p.ax *= 0.96;
+		p.ay *= 0.96;
+		p.sx *= 0.92;
+		p.sy *= 0.92;
+		if (p.x < 0) {
+			p.x = LGlobal.width - 1;
+		} else if (LGlobal.width <= p.x) {
+			p.x = 0;
+		}
+		if (p.y < 0) {
+			p.y = LGlobal.height - 1;
+		} else if (LGlobal.height <= p.y) {
+			p.y = 0;
+		}
+		
+		bmd.setPixel(p.x, p.y, 0x0099FF);
+		particles[i] = p;
+	}
+	bmd.unlock();
+}
+    </script>
+</head>
+    <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;background-color:#000000;">
+        <div id="legend">loading</div>
+    </body>
+</html>

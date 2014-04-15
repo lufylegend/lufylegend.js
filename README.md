@@ -5,6 +5,48 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 
 
 =============
+开源协议 <a target='_blank' href="http://en.wikipedia.org/wiki/MIT_License">MIT License</a>
+=============
+
+※1.8.8版更新内容
+
+1，扩展了LGraphics部分功能
+
+2，鼠标容器，添加变量LMouseEventContainer.dispatchAllEvent控制是否触发所有事件
+
+3，修正了box2d浮力部分无法随着镜头移动的bug
+
+4，为了防止LLoadManage由于网络原因而发生文件读取失败，对LLoadManage进行了优化
+
+=============
+
+※1.8.7版更新内容
+
+1.修正了LBitmap对象clone的bug
+
+2.修正了对象clone时，objectIndex也一起被复制的bug
+
+3.修正了矩形LRectangle相交判定的bug
+
+4.修正了使用鼠标容器后，lufylegend.ui无法正常使用的bug
+
+5.修正了使用鼠标容器后，LTextField对象无法变输入框的bug
+
+6.修正了LShape被加载后出现的bug
+
+7.修正了LButton的父容器缩放后，鼠标点击和状态切换失效的bug
+
+8.扩展了align，增加了TOP_MIDDLE和BOTTOM_MIDDLE
+
+9.为LTextField增加了换行符
+
+10.优化了LTextField的输入框的显示，增加了是否支持多行输入设定
+
+11.增加了是否每贞刷新页面的设定
+
+12.LStageWebView的显示位置修正
+
+=============
 ※1.8.6版更新内容
 
 1.修改了三星等部分手机卡死的bug

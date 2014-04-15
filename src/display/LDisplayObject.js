@@ -17,7 +17,14 @@ function LDisplayObject(){
 	s.blendMode = null;
 }
 p = {
-	show:function (){
+	_createCanvas:function(){
+		var s = this;
+		if(!s._canvas){
+			s._canvas = document.createElement("canvas");
+			s._context = s._canvas.getContext("2d");
+		}
+	}
+	,show:function (){
 		var s = this,c = LGlobal.canvas;
 		if(!s._canShow())return;
 		c.save();
@@ -64,7 +71,7 @@ p = {
 		var s = this;
 		if(s.rotate == 0)return;
 		var c = LGlobal.canvas,rotateFlag = Math.PI / 180,rotateObj = new LMatrix();
-		if((typeof s.rotatex) == "undefined"){
+		if((typeof s.rotatex) == UNDEFINED){
 			s.rotatex=s.rotatey=0;
 		}
 		if(s.box2dBody)rotateFlag=1;
@@ -90,10 +97,22 @@ p = {
 		var s = this;
 		for(var k in a){
 			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
+				if(k == "objectindex" || k == "objectIndex"){continue;}
 				s[k] = a[k];
 			}
 		}
 		if(a.mask)s.mask = a.mask.clone();
+	},
+	getAbsoluteScale:function(){
+		var s = this;
+		var sX=s.scaleX,sY=s.scaleY;
+		var p = s.parent;
+		while(p != "root"){
+	        sX *= p.scaleX;
+	        sY *= p.scaleY;
+			p = p.parent;
+		}
+		return {scaleX:sX,scaleY:sY};
 	},
 	getRootCoordinate:function(){
 		var s = this;
@@ -121,24 +140,28 @@ p = {
 		if(d.getHeight)h=d.getHeight();
 		return new LRectangle(x,y,w,h);
 	},
-	getDataURL:function(){
+	getDataCanvas:function(){
 		var s = this,_o,o,_c,c;
+		s._createCanvas();
 		o = LGlobal.canvasObj,c = LGlobal.canvas;
-		_o = LGlobal._canvas,_c = LGlobal._context;
+		_o = s._canvas,_c = s._context;
 		s.width = s.getWidth();
 		s.height = s.getHeight();
 		_o.width = s.width;
 		_o.height = s.height;
 		_c.clearRect(0,0,s.width,s.height);
-		LGlobal.canvasObj = LGlobal._canvas;
-		LGlobal.canvas = LGlobal._context;
+		LGlobal.canvasObj = s._canvas;
+		LGlobal.canvas = s._context;
 		s.show();
-		var data = LGlobal.canvasObj.toDataURL();
-		LGlobal._canvas = _o;
-		LGlobal._context = _c;
+		s._canvas = _o;
+		s._context = _c;
 		LGlobal.canvasObj = o;
 		LGlobal.canvas = c;
-		return data;
+		return s._canvas;
+	},
+	getDataURL:function(){
+		var s = this,r = s.getDataCanvas();
+		return r.toDataURL();
 	},
 	remove:function(){
 		var s = this;
