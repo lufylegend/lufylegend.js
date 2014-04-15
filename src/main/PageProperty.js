@@ -72,3 +72,23 @@ if (!Array.prototype.indexOf){
 		return -1;
 	};
 }
+
+function hitPolygon(list,x,y){
+	var c = 0,p,p1,p2,i,l,a,b;
+	for(i=0,l=list.length;i<l;i++){
+		p1 = list[i];
+		p2 = list[i+1 == list.length ? 0 : i+1];
+		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
+		if(p1[0] > p2[0]){
+			p = p1;
+			p1 = p2;
+			p2 = p;
+		}
+		if(p1[0]<x && x < p2[0]){
+			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
+			b = p1[1] - a*p1[0];
+			if(a*x + b < y)c++;
+		}
+	}
+	return c % 2 == 1;
+}

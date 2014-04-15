@@ -34,7 +34,10 @@ LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 LGlobal.startTimer = 0;
 LGlobal.mouseEventContainer = {};
 LGlobal.keepClear = true;
+LGlobal.top = 0;
+LGlobal.left = 0;
 (function(n){
+	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') != -1);
 	if (n.indexOf(OS_IPHONE) > 0) {
 		LGlobal.os = OS_IPHONE;
 		LGlobal.canTouch = true;
@@ -88,6 +91,8 @@ LGlobal.setCanvas = function (id,w,h){
 	if(h){LGlobal.canvasObj.height = h;}
 	LGlobal.width = LGlobal.canvasObj.width;
 	LGlobal.height = LGlobal.canvasObj.height;
+	LGlobal.canvasStyleWidth = LGlobal.width;
+	LGlobal.canvasStyleHeight = LGlobal.height;
 	LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
 	LGlobal.offsetX = 0;
 	LGlobal.offsetY = 0;
@@ -357,12 +362,10 @@ LGlobal.setFrameRate = function(s){
 	LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
 };
 LGlobal.scaleX = function(v){
-	var w = parseInt(LGlobal.canvasObj.style.width);
-	return v*LGlobal.canvasObj.width/w;
+	return (v - LGlobal.left)*LGlobal.width/LGlobal.canvasStyleWidth;
 };
 LGlobal.scaleY = function(v){
-	var h = parseInt(LGlobal.canvasObj.style.height);
-	return v*LGlobal.canvasObj.height/h;
+	return (v - LGlobal.top)*LGlobal.height/LGlobal.canvasStyleHeight;
 };
 /*
 将canvas缩放为规定大小
@@ -370,6 +373,8 @@ LGlobal.scaleY = function(v){
 LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasObj.style.width = w+"px";
 	LGlobal.canvasObj.style.height = h+"px";
+	LGlobal.canvasStyleWidth = w;
+	LGlobal.canvasStyleHeight = h;
 };
 LGlobal.resize = function(){
 	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
@@ -422,6 +427,10 @@ LGlobal.resize = function(){
 			}
 			LGlobal.canvasObj.style.marginTop = t + "px";
 			LGlobal.canvasObj.style.marginLeft = l + "px";
+			if(LGloal.isFirefox){
+				LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
+				LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
+			}
 	}
 	LGlobal.setStageSize(w,h);
 };
