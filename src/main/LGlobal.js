@@ -37,7 +37,7 @@ LGlobal.keepClear = true;
 LGlobal.top = 0;
 LGlobal.left = 0;
 (function(n){
-	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') != -1);
+	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
 	if (n.indexOf(OS_IPHONE) > 0) {
 		LGlobal.os = OS_IPHONE;
 		LGlobal.canTouch = true;
