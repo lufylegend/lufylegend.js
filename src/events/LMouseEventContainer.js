@@ -118,7 +118,7 @@ $LMouseEventContainer.prototype = {
 		var self = this,sp,co,st=[],o,i,l;
 		for(i=0,l=list.length;i<l;i++){
 			sp = list[i].container || list[i];
-            if(!sp || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
+            if(!sp || !sp.parent || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
             var co = self.getRootParams(sp);
             if(!type && sp.mouseEvent){
 				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);

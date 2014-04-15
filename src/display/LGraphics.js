@@ -428,6 +428,10 @@ p = {
 				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
 				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
 				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
+			}else if(s.showList[k].type == "vertices"){
+				var xl = co.x - ox;
+				var yl = co.y - oy;
+				return hitPolygon(s.showList[k].value,xl,yl);
 			}
 		}		
 		return false;

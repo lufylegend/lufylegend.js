@@ -1,9 +1,12 @@
-function $LoadManage(){this.llname="ll.file.";}
+function $LoadManage(){
+	this.llname="ll.file.";
+	this.llload="ll.load.";
+}
 $LoadManage.prototype={
 	load:function(l,u,c){
 		var s = this;
 		s.list=l,s.onupdate=u,s.oncomplete=c;
-		s.loader=s,s.index=0,s.loadIndex=0,s.result=[];
+		s.loader=s,s.index=0,s.loadIndex=0,s.result=[],s.lresult=[];
 		s.loadInit();
 	},
 	loadInit:function(){
@@ -22,7 +25,7 @@ $LoadManage.prototype={
 		if(!d.name){
 			d.name = s.llname+s.loadIndex;
 		}
-		if(!s.result[d.name]){
+		if(!s.lresult[s.llload+d.name]){
 			if(d["type"] == "text" || d["type"] == "js"){
 				s.loader = new LURLLoader();
 				s.loader.name = d.name;
@@ -49,10 +52,11 @@ $LoadManage.prototype={
 			if(e.target.name.indexOf(s.llname) >= 0){
 				e.currentTarget = 1;
 			}
-			if(s.result[e.target.name]){
+			if(s.lresult[s.llload+e.target.name]){
 				return;
 			}
 			s.result[e.target.name] = e.currentTarget;
+			s.lresult[s.llload+e.target.name] = 1;
 		}
 		s.index++;
 		if(s.onupdate){
