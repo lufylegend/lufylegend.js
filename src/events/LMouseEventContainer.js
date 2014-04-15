@@ -28,7 +28,6 @@ $LMouseEventContainer.prototype = {
 	}
 	,addEvent:function(o,list,f){
 		var s = this;
-		if(s.hasEvent(o,list))return;
 		list.push({container:o,listener:f});
 	}
 	,removeEvent:function(o,list,f){
@@ -133,13 +132,17 @@ $LMouseEventContainer.prototype = {
 			st = st.sort(self._sort);
 		}
 		l = self.dispatchAllEvent?st.length:1;
-		for(i=0;i<l;i++){
+		for(i=0;i<l&&i<st.length;i++){
 			o = st[i];
 			event.clickTarget = o.sp;
 			event.event_type = type;
 			event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
 			event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
 			o.listener(event);
+			if(l==1 && i<st.length-1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
+				st.splice(i,1);
+				i--;
+			}
 		}
 	}
 	,set:function(t,v){
