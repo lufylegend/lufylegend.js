@@ -378,6 +378,10 @@ LGlobal.setStageSize = function(w,h){
 };
 LGlobal.resize = function(){
 	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
+	if(LGlobal.stageScale == "noScale"){
+		w = LGlobal.width;
+		h = LGlobal.height;
+	}
 	switch(LGlobal.stageScale){
 		case "exactFit":
 			w = ww;
@@ -395,6 +399,7 @@ LGlobal.resize = function(){
 				w = ww;
 				h = LGlobal.height*ww/LGlobal.width;
 			}
+		case "noScale":
 		default:
 			switch(LGlobal.align){
 				case LStageAlign.BOTTOM:
@@ -427,7 +432,7 @@ LGlobal.resize = function(){
 			}
 			LGlobal.canvasObj.style.marginTop = t + "px";
 			LGlobal.canvasObj.style.marginLeft = l + "px";
-			if(LGloal.isFirefox){
+			if(LGlobal.isFirefox){
 				LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
 				LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
 			}
