@@ -21,6 +21,7 @@ LGlobal.objectIndex = 0;
 LGlobal.preventDefault = true;
 LGlobal.childList = new Array();
 LGlobal.buttonList = new Array();
+LGlobal.dragList = new Array();
 LGlobal.stageScale = "noScale";
 LGlobal.align = "M";
 LGlobal.canTouch = false;
@@ -221,6 +222,7 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
+	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler();
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
@@ -229,6 +231,15 @@ LGlobal.mouseEvent = function(e,t){
 		if(LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e,t)){
 			break;
 		}
+	}
+};
+LGlobal.dragHandler = function(){
+	var i,s,c,d = LGlobal.dragList;
+    for(i = d.length - 1; i >= 0; i--) {
+		s = d[i];
+		c = s.getAbsoluteScale();
+		s.x = s.ll_dragStartX + (mouseX - s.ll_dragMX)/c.scaleX;
+		s.y = s.ll_dragStartY + (mouseY - s.ll_dragMY)/c.scaleY;
 	}
 };
 LGlobal.horizontalError = function(){
