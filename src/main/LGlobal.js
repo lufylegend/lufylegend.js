@@ -227,7 +227,7 @@ LGlobal.mouseEvent = function(e,t){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
 	}
-    for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
+	for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
 		if(LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e,t)){
 			break;
 		}
@@ -235,11 +235,11 @@ LGlobal.mouseEvent = function(e,t){
 };
 LGlobal.dragHandler = function(){
 	var i,s,c,d = LGlobal.dragList;
-    for(i = d.length - 1; i >= 0; i--) {
+	for(i = d.length - 1; i >= 0; i--) {
 		s = d[i];
 		c = s.getAbsoluteScale();
-		s.x = s.ll_dragStartX + (mouseX - s.ll_dragMX)/c.scaleX;
-		s.y = s.ll_dragStartY + (mouseY - s.ll_dragMY)/c.scaleY;
+		s.x = s.ll_dragStartX + (mouseX - s.ll_dragMX)*s.scaleX/c.scaleX;
+		s.y = s.ll_dragStartY + (mouseY - s.ll_dragMY)*s.scaleY/c.scaleY;
 	}
 };
 LGlobal.horizontalError = function(){

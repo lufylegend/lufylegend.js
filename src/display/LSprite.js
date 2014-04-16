@@ -37,12 +37,9 @@ p = {
 		s.graphics.show();
 		LGlobal.show(s.childList);
 	},
-	startDrag:function(lockCenter){
-		var s = this,r;
+	startDrag:function(){
+		var s = this,r,c;
 		if(s.ll_dragStart)return;
-		if(lockCenter){
-			
-		}
 		s.ll_dragStartX = s.x;
 		s.ll_dragStartY = s.y;
 		s.ll_dragMX = mouseX;
