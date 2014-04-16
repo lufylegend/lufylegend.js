@@ -32,9 +32,9 @@ p = {
 			s.rotate = s.box2dBody.GetAngle();
 		}
 	},
-	_show:function(c){
+	_ll_show:function(c){
 		var s = this;
-		s.graphics.show();
+		s.graphics.ll_show();
 		LGlobal.show(s.childList);
 	},
 	startDrag:function(){

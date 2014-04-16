@@ -13,7 +13,7 @@ function LGraphics(){
 	s.showList = new Array();
 }
 p = {
-	show:function (){
+	ll_show:function (){
 		var s = this,k,l=s.setList.length;
 		if(l == 0)return;
 		for(k=0;k<l;k++){

@@ -22,7 +22,7 @@ function LVideo(u){
 	if(u)s.load(u);
 }
 p = {
-	show:function (){
+	ll_show:function (){
 		var s=this,c=LGlobal.canvas;
 		if(!s.visible)return;
 		c.save();
@@ -33,8 +33,8 @@ p = {
 		s._transformScale();
 		//rotate
 		s._transformRotate();
-		if(s.mask != null && s.mask.show){
-			s.mask.show();
+		if(s.mask != null && s.mask.ll_show){
+			s.mask.ll_show();
 			c.clip();
 		}
 		c.drawImage(s.data,s.x,s.y);
