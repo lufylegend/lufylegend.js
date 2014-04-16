@@ -899,25 +899,12 @@ LWindow.prototype._onDraw = function(event){
 };
 LWindow.prototype._onBarDown = function(event){
 	var s = event.clickTarget.parent;
-	if(s.bar.down)return;
-	s.bar.down = true;
-	s.barDownX = s.x;
-	s.barDownY = s.y;
-	s.barOffsetX = event.offsetX;
-	s.barOffsetY = event.offsetY;
-	s.bar.addEventListener(LMouseEvent.MOUSE_MOVE,s._onBarMove);
 	s.bar.addEventListener(LMouseEvent.MOUSE_UP,s._onBarUp);
-};
-LWindow.prototype._onBarMove = function(event){
-	var s = event.clickTarget.parent;
-	var scale = s.getAbsoluteScale();
-	s.x = s.barDownX + (event.offsetX - s.barOffsetX)/scale.scaleX;
-	s.y = s.barDownY + (event.offsetY - s.barOffsetY)/scale.scaleY;
+	s.startDrag();
 };
 LWindow.prototype._onBarUp = function(event){
 	var s = event.clickTarget.parent;
-	s.bar.down = false;
-	s.bar.removeEventListener(LMouseEvent.MOUSE_MOVE,s._onBarMove);
+	s.stopDrag();
 	s.bar.removeEventListener(LMouseEvent.MOUSE_UP,s._onBarUp);
 };
 LWindow.prototype.toString = function(){
