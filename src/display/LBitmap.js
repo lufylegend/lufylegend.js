@@ -24,10 +24,10 @@ p = {
 		}
 	},
 	_coordinate:function(c){},
-	_show:function(){
-		this.draw();
+	_ll_show:function(){
+		this.ll_draw();
 	},
-	draw:function(){
+	ll_draw:function(){
 		var s=this;
 		LGlobal.canvas.drawImage(s.bitmapData.image,
 			s.bitmapData.x,s.bitmapData.y,

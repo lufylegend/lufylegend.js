@@ -9,9 +9,9 @@ function LShape(){
 	s.graphics.parent = s;
 }
 p = {
-	_show:function(c){
+	_ll_show:function(c){
 		var s = this;
-		s.graphics.show();
+		s.graphics.ll_show();
 	},
 	getWidth:function(){
 		var s=this,

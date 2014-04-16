@@ -247,7 +247,7 @@ LBox2d.prototype = {
 		}
 		return true;
 	},
-	show:function(){
+	ll_show:function(){
 		var s = this,k=null;
 		for(k in s.removeList){
 			s.world.DestroyBody(s.removeList[k]);

@@ -294,7 +294,7 @@ LGlobal.buttonShow = function(b){
 };
 LGlobal.show = function(s){
 	for(var i=0,l=s.length;i<l;i++){
-		if(s[i].show)s[i].show();
+		if(s[i].ll_show)s[i].ll_show();
 	}
 };
 LGlobal.divideCoordinate = function (w,h,row,col){

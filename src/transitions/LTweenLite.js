@@ -85,7 +85,7 @@ $LTweenLiteChild.prototype = {
 function $LTweenLite(){}
 $LTweenLite.prototype = {
 	tweens:[],
-	show:null,
+	ll_show:null,
 	frame:function(){
 		var s = this;
 		var i,length=s.tweens.length,t;
@@ -97,14 +97,14 @@ $LTweenLite.prototype = {
 				if(t.keep())s.add(t);
 			}
 		}
-		if(s.tweens.length == 0)s.show = null;
+		if(s.tweens.length == 0)s.ll_show = null;
 	},
 	to:function($target,$duration,$vars){
 		if(!$target)return;
 		var s = this;
 		var tween = new $LTweenLiteChild({},0,{});
 		s.tweens.push(tween);
-		s.show = s.frame;
+		s.ll_show = s.frame;
 		tween.to($target,$duration,$vars);
 		return tween;
 	},
