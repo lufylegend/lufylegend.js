@@ -37,6 +37,29 @@ p = {
 		s.graphics.show();
 		LGlobal.show(s.childList);
 	},
+	startDrag:function(lockCenter){
+		var s = this,r;
+		if(s.ll_dragStart)return;
+		if(lockCenter){
+			
+		}
+		s.ll_dragStartX = s.x;
+		s.ll_dragStartY = s.y;
+		s.ll_dragMX = mouseX;
+		s.ll_dragMY = mouseY;
+		s.ll_dragStart = true;
+		LGlobal.dragList.push(s);
+	},
+	stopDrag:function(){
+		var s = this,i,l;
+		for(i=0,l=LGlobal.dragList.length;i<l;i++){
+			if(s.objectIndex == LGlobal.dragList[i].objectIndex){
+				s.ll_dragStart = false;
+				LGlobal.dragList.splice(i,1);
+				break;
+			}
+		}
+	},
 	getRotateXY:function(w,h){
 		var s = this;
 		if(!w || !h){
