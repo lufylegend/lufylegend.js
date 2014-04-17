@@ -78,7 +78,7 @@ p = {
 			if(a < left)left = a;
 			if(b > right)right = b;
 		}
-		s.left = s.x + left;
+		s.ll_left = s.x + left;
 		return (right - left)*s.scaleX;
 	},
 	getHeight:function(){
@@ -93,13 +93,13 @@ p = {
 			if(a < top)top = a;
 			if(b > bottom)bottom = b;
 		}
-		s.top = s.y + top;
+		s.ll_top = s.y + top;
 		return (bottom - top)*s.scaleY;
 	},
 	_startX:function(){
 		var s = this;
 		s.getWidth();
-		return s.left;
+		return s.ll_left;
 	},
 	startX:function(){
 		var s = this;
@@ -108,7 +108,7 @@ p = {
 	_startY:function(){
 		var s = this;
 		s.getHeight();
-		return s.top;
+		return s.ll_top;
 	},
 	startY:function(){
 		var s = this;

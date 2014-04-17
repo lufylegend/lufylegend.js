@@ -273,7 +273,7 @@ LGlobal.verticalError = function(){
 LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
 	if(LGlobal.box2d != null){
-		LGlobal.box2d.show();
+		LGlobal.box2d.ll_show();
 		if(!LGlobal.traceDebug){
 			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
