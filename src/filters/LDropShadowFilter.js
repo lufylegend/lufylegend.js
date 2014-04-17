@@ -18,7 +18,7 @@ p = {
 		s.shadowOffsetX=s.distance*Math.cos(a);
 		s.shadowOffsetY=s.distance*Math.sin(a);
 	},
-	show:function(){
+	ll_show:function(){
 		var s = this,c = LGlobal.canvas;
 		c.shadowColor=s.shadowColor;
 		c.shadowBlur=s.shadowBlur;

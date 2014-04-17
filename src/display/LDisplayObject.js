@@ -65,7 +65,7 @@ p = {
 	setShadow:function(){
 		var s=this,f=s.filters;
 		if(!f)return;
-		for(var i=0,l=f.length;i<l;i++)f[i].show();
+		for(var i=0,l=f.length;i<l;i++)f[i].ll_show();
 	},
 	_transformRotate:function(){
 		var s = this;
@@ -152,7 +152,7 @@ p = {
 		_c.clearRect(0,0,s.width,s.height);
 		LGlobal.canvasObj = s._canvas;
 		LGlobal.canvas = s._context;
-		s.show();
+		s.ll_show();
 		s._canvas = _o;
 		s._context = _c;
 		LGlobal.canvasObj = o;
