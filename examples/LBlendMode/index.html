@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8" />
 	<title>LTransitionManager</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.8.simple.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.9.simple.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.LoadingSample1-0.1.0.min.js"></script>
-	<script type="text/javascript" src="../../lib/lufylegend.ui-0.5.0.min.js"></script>
+	<script type="text/javascript" src="../../lib/lufylegend.ui-0.6.0.min.js"></script>
 </head>
 <body>
 	<div id="legend"></div>
@@ -28,7 +28,10 @@ function main(){
 		},gameInit);
 }
 function gameInit(result){
-	LGlobal.setDebug(true);
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
 	dataList = result;
 	removeChild(loadingLayer);
 	loadingLayer = null;
@@ -42,8 +45,8 @@ function gameInit(result){
 	back.x = -480;
 	imgLayer.addChild(back);
 	img = new LBitmap(new LBitmapData(dataList["img"]));
-	img.x = 100;
-	img.y = -20;
+	img.x = 150;
+	img.y = -100;
 	imgLayer.addChild(img);
 
 	ctrlLayer = new LSprite();
