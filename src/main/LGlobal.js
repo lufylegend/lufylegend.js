@@ -164,7 +164,7 @@ LGlobal.setCanvas = function (id,w,h){
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE,function(e){
 			var cX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
 			cY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),
-			eve,l,ll;
+			eve,l,ll=e.touches.length;
 			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
 				ll = 1;
 			}
@@ -175,6 +175,7 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.buttonStatusEvent = eve;
 				mouseX = LGlobal.offsetX = eve.offsetX;
 				mouseY = LGlobal.offsetY = eve.offsetY;
+				LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 				LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
 			}
 			LGlobal.touchHandler(e);

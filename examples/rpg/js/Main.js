@@ -45,36 +45,7 @@ var imgData = new Array();
 var imglist = {};
 var imageArray;
 var stage;
-
-LGlobal.onShow = function (){
-	if(LGlobal.canvas == null)return;
-	if(LGlobal.box2d != null){
-		LGlobal.box2d.ll_show();
-		if(!LGlobal.traceDebug){
-			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
-		}
-	}else{
-		if(LGlobal.keepClear){
-			LGlobal.canvas.setTransform(1, 0, 0, 1, 0, 0);
-    var m = (LGlobal.width+255) >> 8;
-    var n = (LGlobal.height+255) >> 8;
-    for (var i = 0; i < m; ++i) {
-        for (var j = 0; j < n; ++j) {
-            LGlobal.canvas.clearRect(i << 8, j << 8, 256, 256);
-        }
-    }
-			//LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
-			}
-		if(LGlobal.backgroundColor !== null){
-			LGlobal.canvas.fillStyle=LGlobal.backgroundColor;
-			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
-		}
-	}
-	LGlobal.buttonShow(LGlobal.buttonList);
-	LGlobal.show(LGlobal.childList);
-};
 function main(){
-
 	if(LGlobal.canTouch){
 		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
 		LSystem.screen(LStage.FULL_SCREEN);
