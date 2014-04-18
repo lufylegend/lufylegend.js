@@ -29,7 +29,7 @@ function init(s,c,w,h,f,t){
 		}else if(LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight){
 			LGlobal.verticalError();
 		}else{
-			f();
+			setTimeout(f,100);
 		}
 		LGlobal.startTimer = (new Date()).getTime();
 	};

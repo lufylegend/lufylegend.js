@@ -4,28 +4,12 @@
 	<meta charset="utf-8" />
 	<title>html5 game</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<script type="text/javascript" src="../../lufylegend-1.8.8.simple.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.9.simple.min.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.LoadingSample3-0.1.0.min.js"></script>
 	<script type="text/javascript">
 if(LGlobal.canTouch){
 LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
 LSystem.screen(LStage.FULL_SCREEN);
-}
-function doScroll() {
-	if(window.pageYOffset === 0) {
-		window.scrollTo(0, 1);
-	}
-}
-window.onload = function() {
-	setTimeout(doScroll, 100);
-}
-// iPhoneを回転させた場合にもアドレスバーを消す。
-window.onorientationchange = function() {
-	setTimeout(doScroll, 100);
-};
-// Androidを回転させた場合にもアドレスバーを消す。
-window.onresize = function() {
-	setTimeout(doScroll, 100);
 }
 	</script>
 	</head>

@@ -3,27 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>是男人就坚持20秒</title>
-<script>
-function doScroll() {
-	if(window.pageYOffset === 0) {
-		window.scrollTo(0, 1);
-	}
-}
-window.onload = function() {
-	setTimeout(doScroll, 100);
-	if(LGlobal.canTouch){
-		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
-		LSystem.screen(LStage.FULL_SCREEN);
-	}
-	init(30,"mylegend",320,480,main,LEvent.INIT);
-}
-</script>
 </head>
 <body>
 <div id="mylegend">loading……</div>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<script type="text/javascript" src="../../lufylegend-1.8.8.min.js"></script>
+<script type="text/javascript" src="../../lufylegend-1.8.9.min.js"></script>
 <script type="text/javascript">
+init(30,"mylegend",320,480,main);
 /**数组变量*/
 //图片path数组
 var imgData = new Array();
@@ -32,7 +18,10 @@ var imglist = {};
 var back,sky,player,ctrl,x=0,y=0,step=2,
 mode="",count=100,overmenu,time,timeText;
 function main(){
-	LGlobal.setDebug(true);
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
 	imgData.push({name:"player",path:"./player.png"});
 	imgData.push({name:"s",path:"./s.png"});
 	LLoadManage.load(

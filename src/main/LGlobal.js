@@ -108,13 +108,20 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.inputBox.style.display = NONE;
 			}
 			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
-			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve;
-			eve = {offsetX:(event.touches[0].pageX - canvasX)
-			,offsetY:(event.touches[0].pageY - canvasY)};
+			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve,k,i,eveIndex;
+			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
+				eveIndex = 0;
+			}else if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
+				eveIndex = event.touches.length - 1;
+			}
+			eve = {offsetX:(event.touches[eveIndex].pageX - canvasX)
+			,offsetY:(event.touches[eveIndex].pageY - canvasY)
+			,touchPointID:event.touches[eveIndex].identifier};
 			eve.offsetX = LGlobal.scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.scaleY(eve.offsetY);
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
+			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
 			LGlobal.IS_MOUSE_DOWN = true;
@@ -124,7 +131,27 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.touchHandler(event);
 		});
 		LEvent.addEventListener(document,LMouseEvent.TOUCH_END,function(event){
-			var eve = {offsetX:LGlobal.offsetX,offsetY:LGlobal.offsetY};
+			var e,eve,k,i,l,h;
+			if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
+				for(k in LMultitouch.touchs){
+					e = LMultitouch.touchs[k];
+					h = false;
+					for(i=0,l=event.touches.length;i<l;i++){
+						if(event.touches[i].identifier == e.touchPointID){
+							h = true;
+							break;
+						}
+					}
+					if(!h){
+						eve = e;
+						delete LMultitouch.touchs[k];
+						break;
+					}
+				}
+			}
+			if(!eve){
+				eve = {offsetX:LGlobal.offsetX,offsetY:LGlobal.offsetY};
+			}
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_UP);
 			LGlobal.touchHandler(event);
 			LGlobal.IS_MOUSE_DOWN = false;
@@ -137,14 +164,19 @@ LGlobal.setCanvas = function (id,w,h){
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE,function(e){
 			var cX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
 			cY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),
-			eve,h,w,de,db,mX,mY;
-			eve = {offsetX:(e.touches[0].pageX - cX),offsetY:(e.touches[0].pageY - cY)};
-			eve.offsetX = LGlobal.scaleX(eve.offsetX);
-			eve.offsetY = LGlobal.scaleY(eve.offsetY);
-			LGlobal.buttonStatusEvent = eve;
-			mouseX = LGlobal.offsetX = eve.offsetX;
-			mouseY = LGlobal.offsetY = eve.offsetY;
-			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			eve,l,ll;
+			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
+				ll = 1;
+			}
+			for(i=0,l=e.touches.length;i<l && i<ll;i++){
+				eve = {offsetX:(e.touches[i].pageX - cX),offsetY:(e.touches[i].pageY - cY),touchPointID:e.touches[i].identifier};
+				eve.offsetX = LGlobal.scaleX(eve.offsetX);
+				eve.offsetY = LGlobal.scaleY(eve.offsetY);
+				LGlobal.buttonStatusEvent = eve;
+				mouseX = LGlobal.offsetX = eve.offsetX;
+				mouseY = LGlobal.offsetY = eve.offsetY;
+				LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			}
 			LGlobal.touchHandler(e);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
 				LGlobal.mouseJoint_move(eve);
