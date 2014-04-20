@@ -2105,8 +2105,8 @@ p = {
 				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
 				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
 			}else if(s.showList[k].type == "vertices"){
-				var xl = co.x - ox;
-				var yl = co.y - oy;
+				var xl = ox - co.x;
+				var yl = oy - co.y;
 				return LGlobal.hitPolygon(s.showList[k].value,xl,yl);
 			}
 		}		
