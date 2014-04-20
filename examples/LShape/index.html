@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<title>LShape</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<script type="text/javascript" src="../../lufylegend-1.8.8.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.9.min.js"></script>
 	</head>
 	<body style="margin:0px 0px 0px 0px;">
 			<div id="legend"></div>
@@ -14,6 +14,10 @@
 					var backLayer = new LShape();
 					addChild(backLayer);
 					backLayer.graphics.drawRect(2,"#ff0000",[10,10,50,100],true,"#880088");
+					backLayer.graphics.drawRoundRect(2,"#ff0000",[170,10,50,100,10],true,"#880088");
+					
+					backLayer.graphics.drawVertices(2,"#ff0000",[[250,10],[290,100],[340,70]],true,"#880088");
+					
 					backLayer.graphics.drawArc(2,"#000000",[100,100,50,0,2*Math.PI],true,"#888000");
 					backLayer.graphics.drawLine(2,"#00ff00",[10,10,100,50]);
 					

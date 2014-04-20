@@ -569,6 +569,7 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_hitTestArc')" >hitTestArc()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_hitTestRect')" >hitTestRect()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_hitTest')" >hitTest()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LGlobal_hitPolygon')" >hitPolygon()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_setFrameRate')" >setFrameRate()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_setStageSize')" >setStageSize()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LGlobal_resize')" >resize()</a><br>
@@ -660,6 +661,8 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_setRotate')">setRotate()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_clone')">clone()</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('LSprite_remove')">remove()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LSprite_startDrag')">startDrag()</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('LSprite_stopDrag')">stopDrag()</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LBlendMode')" style='font-weight:bold;'>LBlendMode</a></div>
 <div id="LBlendMode" style="display:none;" class="menu_message">
@@ -817,6 +820,7 @@ function returnMenu(){
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_UP')">MOUSE_UP</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_MOVE')">MOUSE_MOVE</a><br>
 <a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_LMouseEventContainer')">鼠标容器</a><br>
+<a href="javascript:void(0)" onclick="closeMenu('L_MOUSE_LMultitouch')">多点触摸</a><br>
 </div>
 <div class="menu_title"><a href="javascript:void(0)" onclick="openMenu('LKeyboardEvent')" style='font-weight:bold;'>键盘事件</a></div>
 <div id="LKeyboardEvent" style="display:none;" class="menu_message">
@@ -1406,6 +1410,48 @@ function onframe(){
 <p><b>※</b>函数 <b> hitTest </b> 和 函数 <b> hitTestRect </b>完全一样</p>
 </div>
 <!-- hitTest end -->
+
+
+<!-- LGlobal_hitPolygon start -->
+<div id="LGlobal_hitPolygon" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LGlobal</a></div>
+<h2>LGlobal.hitPolygon(list,x,y)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>检测点和多边形是否发生碰撞</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>list:要检测的多边形的顶点数组</p>
+<p>x:点的x坐标</p>
+<p>y:点的y坐标</p>
+<div class="hr"></div>
+<h3>■使用举例：</h3>
+<p>
+<pre  class='brush: javascript' style="background:#ffffff;">
+init(50,"legend",480,288,main);
+var vertices = [[10,10],[50,100],[100,70]];
+function main(){ 
+	LGlobal.setDebug(true);
+	var baseLayer = new LSprite();
+	addChild(baseLayer);
+	baseLayer.graphics.drawRect(1,"#ffffff",[0,0,LGlobal.width,LGlobal.height],true,"#ffffff");
+	baseLayer.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+	
+	var backLayer = new LSprite();
+	baseLayer.addChild(backLayer);
+	backLayer.graphics.drawVertices(1,"#ff0000",vertices,true,"#880088");	
+}  
+function ondown(e){
+	if(LGlobal.hitPolygon(vertices,e.offsetX,e.offsetY)){
+		trace("OK");
+	}else{
+		trace("NO");
+	}
+}
+</pre>
+</p>
+</div>
+<!-- LGlobal_hitPolygon end -->
 
 
 <!-- setFrameRate start -->
@@ -3071,6 +3117,27 @@ cLayer.addBodyVertices(shapeArray,27,27,1,.5,.4,.5);
 <p>从父容器中移除自己。</p>
 </div>
 <!-- LSprite_remove end -->
+<!-- LSprite_startDrag start -->
+<div id="LSprite_startDrag" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LSprite</a></div>
+<h2>startDrag(touchPointID)</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>允许用户拖动指定的 LSprite。</p>
+<div class="hr"></div>
+<h3>■参数：</h3>
+<p>touchPointID：分配给触摸点的整数。</p>
+</div>
+<!-- LSprite_startDrag end -->
+<!-- LSprite_stopDrag start -->
+<div id="LSprite_stopDrag" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LSprite</a></div>
+<h2>stopDrag()</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>结束 startDrag() 方法。</p>
+</div>
+<!-- LSprite_stopDrag end -->
 
 <!-- LGraphics_LGraphics start -->
 <div id="LGraphics_LGraphics" style="display:none;">
@@ -5895,6 +5962,39 @@ function onmousemove(event){
 <p>LMouseEventContainer.dispatchAllEvent：设定鼠标事件是否触发所有事件。默认值为false，即不支持触发所有事件。</p>
 </div>
 <!-- L_MOUSE_LMouseEventContainer end -->
+
+<!-- L_MOUSE_LMultitouch start -->
+<div id="L_MOUSE_LMultitouch" style="display:none;">
+<div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>鼠标事件(LMouseEvent)</a></div>
+<h2>LMultitouch</h2>
+<div class="hr"></div>
+<h3>■作用：</h3>
+<p>多点触屏</p>
+<div class="hr"></div>
+<h3>■详细说明：</h3>
+<p>使用多点触屏，需要提前进行以下设定</p>
+<pre  class='brush: javascript' style="background:#ffffff;">
+LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+</pre>
+<p>然后可以通过event.touchPointID来确定触屏的ID了。</p>
+<div class="hr"></div>
+<h3>■使用举例：</h3>
+<p>
+<pre  class='brush: javascript' style="background:#ffffff;">
+LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+layer.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+function ondown(event){ 
+	console.log("id：" + event.touchPointID);
+	console.log("x：" + event.offsetX);
+	console.log("y：" + event.offsetY);
+}
+</pre>
+</p>
+<div class="hr"></div>
+<h3>■测试连接：</h3>
+<p><a href="http://lufylegend.com/demo/examples/LMultitouch.html" target="_blank">http://lufylegend.com/demo/examples/LMultitouch.html</a></p>
+</div>
+<!-- L_MOUSE_LMultitouch end -->
 
 <!-- L_KEY_DOWN start -->
 <div id="L_KEY_DOWN" style="display:none;">

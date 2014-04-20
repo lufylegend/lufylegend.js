@@ -4,23 +4,7 @@
  * @blog http://blog.csdn.net/lufy_Legend
  * @email lufy.legend@gmail.com
  **/
-function doScroll() {
-	if(window.pageYOffset === 0) {
-		window.scrollTo(0, 1);
-	}
-}
-window.onload = function() {
-	setTimeout(doScroll, 100);
-	init(50,"mylegend",480,288,main,LEvent.INIT);
-}
-// iPhoneを回転させた場合にもアドレスバーを消す。
-window.onorientationchange = function() {
-	setTimeout(doScroll, 100);
-};
-// Androidを回転させた場合にもアドレスバーを消す。
-window.onresize = function() {
-	setTimeout(doScroll, 100);
-}
+init(50,"mylegend",480,288,main);
 /**层变量*/
 //显示进度条所用层
 var loadingLayer;
@@ -61,9 +45,7 @@ var imgData = new Array();
 var imglist = {};
 var imageArray;
 var stage;
-
 function main(){
-
 	if(LGlobal.canTouch){
 		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
 		LSystem.screen(LStage.FULL_SCREEN);

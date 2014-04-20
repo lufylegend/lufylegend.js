@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>LDropShadowFilter</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.8.simple.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.9.simple.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
@@ -47,7 +47,6 @@ function main(){
 	var title = new LTextField();
 	title.x = 50;
 	title.y = 190;
-	addChild(title);
 	title.size = 25;
 	title.stroke=true;
 	title.lineWidth = 2;
@@ -56,7 +55,8 @@ function main(){
 	var shadow = new LDropShadowFilter(5,45,"#000000");
 	title.filters = [shadow];
 	layer.filters = [shadow];
-	//setTimeout(function() {window.open(LGlobal.canvasObj.toDataURL());}, 100);
+
+	addChild(title);
 }
 function drawFloor(layer,x1,y1){return;
 	var step = 10;

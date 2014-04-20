@@ -32,10 +32,31 @@ p = {
 			s.rotate = s.box2dBody.GetAngle();
 		}
 	},
-	_show:function(c){
+	_ll_show:function(c){
 		var s = this;
-		s.graphics.show();
+		s.graphics.ll_show();
 		LGlobal.show(s.childList);
+	},
+	startDrag:function(touchPointID){
+		var s = this,r,c;
+		if(s.ll_dragStart)return;
+		s.ll_touchPointID = touchPointID;
+		s.ll_dragStartX = s.x;
+		s.ll_dragStartY = s.y;
+		s.ll_dragMX = mouseX;
+		s.ll_dragMY = mouseY;
+		s.ll_dragStart = true;
+		LGlobal.dragList.push(s);
+	},
+	stopDrag:function(){
+		var s = this,i,l;
+		for(i=0,l=LGlobal.dragList.length;i<l;i++){
+			if(s.objectIndex == LGlobal.dragList[i].objectIndex){
+				s.ll_dragStart = false;
+				LGlobal.dragList.splice(i,1);
+				break;
+			}
+		}
 	},
 	getRotateXY:function(w,h){
 		var s = this;
@@ -58,7 +79,7 @@ p = {
 			if(a < left)left = a;
 			if(b > right)right = b;
 		}
-		s.left = s.x + left;
+		s.ll_left = s.x + left;
 		return (right - left)*s.scaleX;
 	},
 	getHeight:function(){
@@ -73,13 +94,13 @@ p = {
 			if(a < top)top = a;
 			if(b > bottom)bottom = b;
 		}
-		s.top = s.y + top;
+		s.ll_top = s.y + top;
 		return (bottom - top)*s.scaleY;
 	},
 	_startX:function(){
 		var s = this;
 		s.getWidth();
-		return s.left;
+		return s.ll_left;
 	},
 	startX:function(){
 		var s = this;
@@ -88,7 +109,7 @@ p = {
 	_startY:function(){
 		var s = this;
 		s.getHeight();
-		return s.top;
+		return s.ll_top;
 	},
 	startY:function(){
 		var s = this;
@@ -212,6 +233,13 @@ p = {
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
+			var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+			for(k=s.childList.length-1;k>=0;k--){
+				if(s.childList[k].mouseEvent){
+					i = s.childList[k].mouseEvent(e,type,mc);
+					if(i)break;
+				}
+			}
 			if(s._mevent(type)){
 				for(k=0;k<s.mouseList.length;k++){
 					var o = s.mouseList[k];
@@ -220,15 +248,6 @@ p = {
 						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
 						e.clickTarget = s;
 						o.listener(e,s);
-						return true;
-					}
-				}
-			}else{
-				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-				for(k=s.childList.length-1;k>=0;k--){
-					if(s.childList[k].mouseEvent){
-						i = s.childList[k].mouseEvent(e,type,mc);
-						if(i)return true;
 					}
 				}
 			}

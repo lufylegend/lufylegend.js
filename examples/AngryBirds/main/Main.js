@@ -28,6 +28,10 @@ var imgData = new Array(
 		);
 var startX,startY;
 function main(){
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
 	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);

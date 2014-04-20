@@ -30,10 +30,10 @@ p = {
 		c.textBaseline = s.textBaseline;
 		c.lineWidth = s.lineWidth;  
 	},
-	_show:function (c){
+	_ll_show:function (c){
 		var s = this;
 		if(s.texttype == LTextFieldType.INPUT){
-			s.inputBackLayer.show();
+			s.inputBackLayer.ll_show();
 			var rc = s.getRootCoordinate();
 		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
 		    	LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY())*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0)) + "px";

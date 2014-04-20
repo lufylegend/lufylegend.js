@@ -4,28 +4,10 @@
 <meta charset="UTF-8">
 <title>td</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<script type="text/javascript" src="../../lufylegend-1.8.8.min.js"></script>
+<script type="text/javascript" src="../../lufylegend-1.8.9.min.js"></script>
 <script type="text/javascript" src="./js/Enemy.js"></script> 
 <script type="text/javascript" src="./js/AttackChara.js"></script> 
 <script type="text/javascript" src="./js/Main.js"></script> 
-<script>
-function doScroll() {
-	if(window.pageYOffset === 0) {
-		window.scrollTo(0, 1);
-	}
-}
-window.onload = function() {
-	setTimeout(doScroll, 100);
-}
-// iPhoneを回転させた場合にもアドレスバーを消す。
-window.onorientationchange = function() {
-	setTimeout(doScroll, 100);
-};
-// Androidを回転させた場合にもアドレスバーを消す。
-window.onresize = function() {
-	setTimeout(doScroll, 100);
-}
-</script>
 </head>
 <body style="margin:0px 0px 0px 0px;">
 <div id="mylegend">loading……</div>

@@ -21,6 +21,7 @@ LGlobal.objectIndex = 0;
 LGlobal.preventDefault = true;
 LGlobal.childList = new Array();
 LGlobal.buttonList = new Array();
+LGlobal.dragList = new Array();
 LGlobal.stageScale = "noScale";
 LGlobal.align = "M";
 LGlobal.canTouch = false;
@@ -34,7 +35,10 @@ LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 LGlobal.startTimer = 0;
 LGlobal.mouseEventContainer = {};
 LGlobal.keepClear = true;
+LGlobal.top = 0;
+LGlobal.left = 0;
 (function(n){
+	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
 	if (n.indexOf(OS_IPHONE) > 0) {
 		LGlobal.os = OS_IPHONE;
 		LGlobal.canTouch = true;
@@ -88,6 +92,8 @@ LGlobal.setCanvas = function (id,w,h){
 	if(h){LGlobal.canvasObj.height = h;}
 	LGlobal.width = LGlobal.canvasObj.width;
 	LGlobal.height = LGlobal.canvasObj.height;
+	LGlobal.canvasStyleWidth = LGlobal.width;
+	LGlobal.canvasStyleHeight = LGlobal.height;
 	LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
 	LGlobal.offsetX = 0;
 	LGlobal.offsetY = 0;
@@ -102,13 +108,20 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.inputBox.style.display = NONE;
 			}
 			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
-			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve;
-			eve = {offsetX:(event.touches[0].pageX - canvasX)
-			,offsetY:(event.touches[0].pageY - canvasY)};
+			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve,k,i,eveIndex;
+			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
+				eveIndex = 0;
+			}else if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
+				eveIndex = event.touches.length - 1;
+			}
+			eve = {offsetX:(event.touches[eveIndex].pageX - canvasX)
+			,offsetY:(event.touches[eveIndex].pageY - canvasY)
+			,touchPointID:event.touches[eveIndex].identifier};
 			eve.offsetX = LGlobal.scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.scaleY(eve.offsetY);
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
+			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
 			LGlobal.IS_MOUSE_DOWN = true;
@@ -118,7 +131,27 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.touchHandler(event);
 		});
 		LEvent.addEventListener(document,LMouseEvent.TOUCH_END,function(event){
-			var eve = {offsetX:LGlobal.offsetX,offsetY:LGlobal.offsetY};
+			var e,eve,k,i,l,h;
+			if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
+				for(k in LMultitouch.touchs){
+					e = LMultitouch.touchs[k];
+					h = false;
+					for(i=0,l=event.touches.length;i<l;i++){
+						if(event.touches[i].identifier == e.touchPointID){
+							h = true;
+							break;
+						}
+					}
+					if(!h){
+						eve = e;
+						delete LMultitouch.touchs[k];
+						break;
+					}
+				}
+			}
+			if(!eve){
+				eve = {offsetX:LGlobal.offsetX,offsetY:LGlobal.offsetY};
+			}
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_UP);
 			LGlobal.touchHandler(event);
 			LGlobal.IS_MOUSE_DOWN = false;
@@ -131,14 +164,25 @@ LGlobal.setCanvas = function (id,w,h){
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE,function(e){
 			var cX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
 			cY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),
-			eve,h,w,de,db,mX,mY;
-			eve = {offsetX:(e.touches[0].pageX - cX),offsetY:(e.touches[0].pageY - cY)};
-			eve.offsetX = LGlobal.scaleX(eve.offsetX);
-			eve.offsetY = LGlobal.scaleY(eve.offsetY);
-			LGlobal.buttonStatusEvent = eve;
-			mouseX = LGlobal.offsetX = eve.offsetX;
-			mouseY = LGlobal.offsetY = eve.offsetY;
-			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			eve,l,ll=e.touches.length;
+			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
+				ll = 1;
+			}
+			for(i=0,l=e.touches.length;i<l && i<ll;i++){
+				eve = {offsetX:(e.touches[i].pageX - cX),offsetY:(e.touches[i].pageY - cY),touchPointID:e.touches[i].identifier};
+				eve.offsetX = LGlobal.scaleX(eve.offsetX);
+				eve.offsetY = LGlobal.scaleY(eve.offsetY);
+				mouseX = LGlobal.offsetX = eve.offsetX;
+				mouseY = LGlobal.offsetY = eve.offsetY;
+				if(LMultitouch.touchs["touch"+eve.touchPointID] && 
+					LMultitouch.touchs["touch"+eve.touchPointID].offsetX == eve.offsetX && 
+					LMultitouch.touchs["touch"+eve.touchPointID].offsetY == eve.offsetY){
+					continue;	
+				}
+				LGlobal.buttonStatusEvent = eve;
+				LMultitouch.touchs["touch"+eve.touchPointID] = eve;
+				LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
+			}
 			LGlobal.touchHandler(e);
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
 				LGlobal.mouseJoint_move(eve);
@@ -216,14 +260,26 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
+	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler(e);
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
 	}
-    for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
+	for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
 		if(LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e,t)){
 			break;
 		}
+	}
+};
+LGlobal.dragHandler = function(e){
+	var i,s,c,d = LGlobal.dragList;
+	for(i = d.length - 1; i >= 0; i--) {
+		s = d[i];
+		if(LGlobal.canTouch && s.ll_touchPointID != e.touchPointID)continue;
+		c = s.getAbsoluteScale();
+		s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX)*s.scaleX/c.scaleX;
+		s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY)*s.scaleY/c.scaleY;
+		break;
 	}
 };
 LGlobal.horizontalError = function(){
@@ -257,7 +313,7 @@ LGlobal.verticalError = function(){
 LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
 	if(LGlobal.box2d != null){
-		LGlobal.box2d.show();
+		LGlobal.box2d.ll_show();
 		if(!LGlobal.traceDebug){
 			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
@@ -278,7 +334,7 @@ LGlobal.buttonShow = function(b){
 };
 LGlobal.show = function(s){
 	for(var i=0,l=s.length;i<l;i++){
-		if(s[i].show)s[i].show();
+		if(s[i].ll_show)s[i].ll_show();
 	}
 };
 LGlobal.divideCoordinate = function (w,h,row,col){
@@ -301,6 +357,25 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(0.8, "blue");  
 	co.addColorStop(1, "violet");  
 	return co;
+};
+LGlobal.hitPolygon = function(list,x,y){
+	var c = 0,p,p1,p2,i,l,a,b;
+	for(i=0,l=list.length;i<l;i++){
+		p1 = list[i];
+		p2 = list[i+1 == list.length ? 0 : i+1];
+		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
+		if(p1[0] > p2[0]){
+			p = p1;
+			p1 = p2;
+			p2 = p;
+		}
+		if(p1[0]<x && x < p2[0]){
+			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
+			b = p1[1] - a*p1[0];
+			if(a*x + b < y)c++;
+		}
+	}
+	return c % 2 == 1;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
@@ -328,10 +403,10 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 	,wB = objB.getWidth()
 	,hA = objA.getHeight()
 	,hB = objB.getHeight()
-	,xA = objA.x
-	,xB = objB.x
-	,yA = objA.y
-	,yB = objB.y;
+	,xA = objA.startX()
+	,xB = objB.startX()
+	,yA = objA.startY()
+	,yB = objB.startY();
 	if(typeof vecA != UNDEFINED){
 		xA += (wA - vecA[0])*0.5;
 		yA += (hA - vecA[1])*0.5;
@@ -357,12 +432,10 @@ LGlobal.setFrameRate = function(s){
 	LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
 };
 LGlobal.scaleX = function(v){
-	var w = parseInt(LGlobal.canvasObj.style.width);
-	return v*LGlobal.canvasObj.width/w;
+	return (v - LGlobal.left)*LGlobal.width/LGlobal.canvasStyleWidth;
 };
 LGlobal.scaleY = function(v){
-	var h = parseInt(LGlobal.canvasObj.style.height);
-	return v*LGlobal.canvasObj.height/h;
+	return (v - LGlobal.top)*LGlobal.height/LGlobal.canvasStyleHeight;
 };
 /*
 将canvas缩放为规定大小
@@ -370,9 +443,15 @@ LGlobal.scaleY = function(v){
 LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasObj.style.width = w+"px";
 	LGlobal.canvasObj.style.height = h+"px";
+	LGlobal.canvasStyleWidth = w;
+	LGlobal.canvasStyleHeight = h;
 };
 LGlobal.resize = function(){
 	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
+	if(LGlobal.stageScale == "noScale"){
+		w = LGlobal.width;
+		h = LGlobal.height;
+	}
 	switch(LGlobal.stageScale){
 		case "exactFit":
 			w = ww;
@@ -390,6 +469,7 @@ LGlobal.resize = function(){
 				w = ww;
 				h = LGlobal.height*ww/LGlobal.width;
 			}
+		case "noScale":
 		default:
 			switch(LGlobal.align){
 				case LStageAlign.BOTTOM:
@@ -422,6 +502,10 @@ LGlobal.resize = function(){
 			}
 			LGlobal.canvasObj.style.marginTop = t + "px";
 			LGlobal.canvasObj.style.marginLeft = l + "px";
+			if(LGlobal.isFirefox){
+				LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
+				LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
+			}
 	}
 	LGlobal.setStageSize(w,h);
 };

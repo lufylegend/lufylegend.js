@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <title>jump</title>
 <script type="text/javascript" src="../../lib/Box2dWeb-2.1.a.3.min.js"></script> 
-<script type="text/javascript" src="../../lufylegend-1.8.8.simple.min.js"></script>
-<script type="text/javascript" src="../../lib/lufylegend.LBox2d-0.2.0.min.js"></script>
+<script type="text/javascript" src="../../lufylegend-1.8.9.simple.min.js"></script>
+<script type="text/javascript" src="../../lib/lufylegend.LBox2d-0.3.0.min.js"></script>
 </head>
 <body style="margin:0px 0px 0px 0px;">
 <div id="mylegend">loading……</div>
@@ -107,9 +107,8 @@ function gameInit(){
 		name = name.replace(/<*/g,'');
 		name = name.replace(/>*/g,'');
 		if(window.localStorage)window.localStorage.setItem("box2d_jump_name", name);
-		gameStart();
+		setTimeout(gameStart,100);
 	});
-	//gameStart();
 }
 function gameStart(){
 	backLayer.removeAllChild();

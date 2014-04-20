@@ -13,7 +13,7 @@ function LGraphics(){
 	s.showList = new Array();
 }
 p = {
-	show:function (){
+	ll_show:function (){
 		var s = this,k,l=s.setList.length;
 		if(l == 0)return;
 		for(k=0;k<l;k++){
@@ -428,6 +428,10 @@ p = {
 				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
 				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
 				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
+			}else if(s.showList[k].type == "vertices"){
+				var xl = ox - co.x;
+				var yl = oy - co.y;
+				return LGlobal.hitPolygon(s.showList[k].value,xl,yl);
 			}
 		}		
 		return false;

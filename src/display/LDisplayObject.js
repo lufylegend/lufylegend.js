@@ -24,7 +24,7 @@ p = {
 			s._context = s._canvas.getContext("2d");
 		}
 	}
-	,show:function (){
+	,ll_show:function (){
 		var s = this,c = LGlobal.canvas;
 		if(!s._canShow())return;
 		c.save();
@@ -36,8 +36,8 @@ p = {
 			s.setShadow();
 		}
 		s._rotateReady();
-		if(s.mask != null && s.mask.show){
-			s.mask.show();
+		if(s.mask != null && s.mask.ll_show){
+			s.mask.ll_show();
 			c.clip();
 		}
 		//rotate
@@ -49,7 +49,7 @@ p = {
 		if(s.alpha < 1){
 			c.globalAlpha = s.alpha;
 		}
-		s._show(c);
+		s._ll_show(c);
 		c.restore();
 		s.loopframe();
 	},
@@ -60,12 +60,12 @@ p = {
 	},
 	_rotateReady:function(){},
 	_showReady:function(c){},
-	_show:function(c){},
+	_ll_show:function(c){},
 	loopframe:function(){},
 	setShadow:function(){
 		var s=this,f=s.filters;
 		if(!f)return;
-		for(var i=0,l=f.length;i<l;i++)f[i].show();
+		for(var i=0,l=f.length;i<l;i++)f[i].ll_show();
 	},
 	_transformRotate:function(){
 		var s = this;
@@ -99,6 +99,8 @@ p = {
 			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
 				if(k == "objectindex" || k == "objectIndex"){continue;}
 				s[k] = a[k];
+			}else if(Object.prototype.toString.apply(a[k]) == '[object Array]'){
+				s[k] = a[k].slice();
 			}
 		}
 		if(a.mask)s.mask = a.mask.clone();
@@ -152,7 +154,7 @@ p = {
 		_c.clearRect(0,0,s.width,s.height);
 		LGlobal.canvasObj = s._canvas;
 		LGlobal.canvas = s._context;
-		s.show();
+		s.ll_show();
 		s._canvas = _o;
 		s._context = _c;
 		LGlobal.canvasObj = o;
