@@ -472,9 +472,14 @@ LGlobal.setCanvas = function (id,w,h){
 				eve = {offsetX:(e.touches[i].pageX - cX),offsetY:(e.touches[i].pageY - cY),touchPointID:e.touches[i].identifier};
 				eve.offsetX = LGlobal.scaleX(eve.offsetX);
 				eve.offsetY = LGlobal.scaleY(eve.offsetY);
-				LGlobal.buttonStatusEvent = eve;
 				mouseX = LGlobal.offsetX = eve.offsetX;
 				mouseY = LGlobal.offsetY = eve.offsetY;
+				if(LMultitouch.touchs["touch"+eve.touchPointID] && 
+					LMultitouch.touchs["touch"+eve.touchPointID].offsetX == eve.offsetX && 
+					LMultitouch.touchs["touch"+eve.touchPointID].offsetY == eve.offsetY){
+					continue;	
+				}
+				LGlobal.buttonStatusEvent = eve;
 				LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 				LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
 			}
@@ -555,7 +560,7 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
-	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler();
+	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler(e);
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
@@ -566,13 +571,15 @@ LGlobal.mouseEvent = function(e,t){
 		}
 	}
 };
-LGlobal.dragHandler = function(){
+LGlobal.dragHandler = function(e){
 	var i,s,c,d = LGlobal.dragList;
 	for(i = d.length - 1; i >= 0; i--) {
 		s = d[i];
+		if(LGlobal.canTouch && s.ll_touchPointID != e.touchPointID)continue;
 		c = s.getAbsoluteScale();
-		s.x = s.ll_dragStartX + (mouseX - s.ll_dragMX)*s.scaleX/c.scaleX;
-		s.y = s.ll_dragStartY + (mouseY - s.ll_dragMY)*s.scaleY/c.scaleY;
+		s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX)*s.scaleX/c.scaleX;
+		s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY)*s.scaleY/c.scaleY;
+		break;
 	}
 };
 LGlobal.horizontalError = function(){
@@ -651,6 +658,25 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
+LGlobal.hitPolygon = function(list,x,y){
+	var c = 0,p,p1,p2,i,l,a,b;
+	for(i=0,l=list.length;i<l;i++){
+		p1 = list[i];
+		p2 = list[i+1 == list.length ? 0 : i+1];
+		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
+		if(p1[0] > p2[0]){
+			p = p1;
+			p1 = p2;
+			p2 = p;
+		}
+		if(p1[0]<x && x < p2[0]){
+			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
+			b = p1[1] - a*p1[0];
+			if(a*x + b < y)c++;
+		}
+	}
+	return c % 2 == 1;
+};
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
 	,rB = objB.getWidth()*0.5
@@ -677,10 +703,10 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 	,wB = objB.getWidth()
 	,hA = objA.getHeight()
 	,hB = objB.getHeight()
-	,xA = objA.x
-	,xB = objB.x
-	,yA = objA.y
-	,yB = objB.y;
+	,xA = objA.startX()
+	,xB = objB.startX()
+	,yA = objA.startY()
+	,yB = objB.startY();
 	if(typeof vecA != UNDEFINED){
 		xA += (wA - vecA[0])*0.5;
 		yA += (hA - vecA[1])*0.5;
@@ -869,26 +895,6 @@ if (!Array.prototype.indexOf){
 		}
 		return -1;
 	};
-}
-
-function hitPolygon(list,x,y){
-	var c = 0,p,p1,p2,i,l,a,b;
-	for(i=0,l=list.length;i<l;i++){
-		p1 = list[i];
-		p2 = list[i+1 == list.length ? 0 : i+1];
-		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
-		if(p1[0] > p2[0]){
-			p = p1;
-			p1 = p2;
-			p2 = p;
-		}
-		if(p1[0]<x && x < p2[0]){
-			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
-			b = p1[1] - a*p1[0];
-			if(a*x + b < y)c++;
-		}
-	}
-	return c % 2 == 1;
 }
 
 /*
@@ -1093,6 +1099,8 @@ p = {
 			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
 				if(k == "objectindex" || k == "objectIndex"){continue;}
 				s[k] = a[k];
+			}else if(Object.prototype.toString.apply(a[k]) == '[object Array]'){
+				s[k] = a[k].slice();
 			}
 		}
 		if(a.mask)s.mask = a.mask.clone();
@@ -2092,7 +2100,7 @@ p = {
 			}else if(s.showList[k].type == "vertices"){
 				var xl = co.x - ox;
 				var yl = co.y - oy;
-				return hitPolygon(s.showList[k].value,xl,yl);
+				return LGlobal.hitPolygon(s.showList[k].value,xl,yl);
 			}
 		}		
 		return false;
@@ -2299,9 +2307,10 @@ p = {
 		s.graphics.ll_show();
 		LGlobal.show(s.childList);
 	},
-	startDrag:function(){
+	startDrag:function(touchPointID){
 		var s = this,r,c;
 		if(s.ll_dragStart)return;
+		s.ll_touchPointID = touchPointID;
 		s.ll_dragStartX = s.x;
 		s.ll_dragStartY = s.y;
 		s.ll_dragMX = mouseX;

@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<title>test</title>
+	<title>LMultitouch</title>
 	<script type="text/javascript" src="../../lufylegend-1.8.9.min.js"></script>
 	</head>
 	<body>
@@ -17,9 +17,6 @@ function main(){
 		LSystem.screen(LStage.FULL_SCREEN);
 	}
 	LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
-	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
-	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 
 	layer = new LSprite();
 	layer.graphics.drawRect(2,"#ffffff",[0,0,LGlobal.width,LGlobal.height],true,"#ffffff");
@@ -27,25 +24,21 @@ function main(){
 	back = new LSprite();
 	back.y = 50;
 	layer.addChild(back);
-		tt = new LTextField();
-		tt.text = "";
-		tt.size = 18;
-		tt.x = 10;
-		tt.y = 5;
-		layer.addChild(tt);
+	tt = new LTextField();
+	tt.size = 18;
+	tt.x = 10;
+	tt.y = 5;
+	layer.addChild(tt);
+	if(!LGlobal.canTouch){
+		tt.text = "多点触屏测试：请用手机或平板电脑测试";
+	}else{
+		tt.text = "多点触屏测试：请点击屏幕进行测试";
+	}
 	layer.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
 	layer.addEventListener(LMouseEvent.MOUSE_MOVE,onmove);
+	layer.addEventListener(LMouseEvent.MOUSE_UP,onup);
 }
-function setTTT(e){
-	var f = false;
-	for(var i=0;i<txt.length;i++){
-		if(txt[i].touchPointID == e.touchPointID){
-			txt[i] = e;
-			f = true;
-			break;
-		}
-	}
-	if(!f)txt.push(e);
+function draw(){
 	back.removeAllChild();
 	for(var i=0;i<txt.length;i++){
 		var eve = txt[i];
@@ -57,12 +50,32 @@ function setTTT(e){
 		back.addChild(title);
 	}
 }
+function setTTT(e){
+	var f = false;
+	for(var i=0;i<txt.length;i++){
+		if(txt[i].touchPointID == e.touchPointID){
+			txt[i] = e;
+			f = true;
+			break;
+		}
+	}
+	if(!f)txt.push(e);
+	draw();
+}
 function ondown(e){
 	setTTT(e);
 }
 function onmove(e){
-	tt.text = "" + (new Date()).getTime() + " ; " + "id:"+e.touchPointID+","+e.offsetX+","+e.offsetY;
 	setTTT(e);
+}
+function onup(e){
+	for(var i=0;i<txt.length;i++){
+		if(txt[i].touchPointID == e.touchPointID){
+			txt.splice(i,1);
+			break;
+		}
+	}
+	draw();
 }
 </script>
 	</body>
