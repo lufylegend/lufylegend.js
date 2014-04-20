@@ -31,6 +31,7 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 10，修正了无法使用多点触摸的问题
 
 11，修正了DisplayObject及其子对象的数组属性无法clone的bug
+
 =============
 
 ※1.8.8版更新内容
