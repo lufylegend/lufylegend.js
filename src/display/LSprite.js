@@ -37,9 +37,10 @@ p = {
 		s.graphics.ll_show();
 		LGlobal.show(s.childList);
 	},
-	startDrag:function(){
+	startDrag:function(touchPointID){
 		var s = this,r,c;
 		if(s.ll_dragStart)return;
+		s.ll_touchPointID = touchPointID;
 		s.ll_dragStartX = s.x;
 		s.ll_dragStartY = s.y;
 		s.ll_dragMX = mouseX;

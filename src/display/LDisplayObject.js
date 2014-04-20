@@ -99,6 +99,8 @@ p = {
 			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
 				if(k == "objectindex" || k == "objectIndex"){continue;}
 				s[k] = a[k];
+			}else if(Object.prototype.toString.apply(a[k]) == '[object Array]'){
+				s[k] = a[k].slice();
 			}
 		}
 		if(a.mask)s.mask = a.mask.clone();
