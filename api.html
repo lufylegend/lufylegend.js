@@ -1068,7 +1068,7 @@ LTweenLite, LEGEND_FILE_PHP, OS_PC, OS_IPHONE, OS_IPOD, OS_IPAD, OS_ANDROID, STR
 <p>LGlobal.canvas：canvas标签的getContext("2d")</p>
 <p>LGlobal.width：canvas的宽</p>
 <p>LGlobal.height：canvas的高</p>
-<p>LGlobal.canTouch：是否为平板电脑或只能手机</p>
+<p>LGlobal.canTouch：是否为平板电脑或智能手机</p>
 <p>LGlobal.os：当前的OS，它的值可以是OS_IPHONE，OS_IPOD，OS_IPAD，OS_ANDROID，OS_PC</p>
 <p>LGlobal.ios：是否为ios系列</p>
 <p>LGlobal.android：是否为android系列</p>
@@ -1085,7 +1085,7 @@ LTweenLite, LEGEND_FILE_PHP, OS_PC, OS_IPHONE, OS_IPOD, OS_IPAD, OS_ANDROID, STR
 <p>LGlobal.backgroundColor：舞台的背景色，默认为透明。</p>
 <p>LGlobal.aspectRatio：该属性只适用于移动端，用于限制横屏LANDSCAPE或者竖屏PORTRAIT， 默认值为NONE，该属性的设定必须在init函数被调用之前。</p>
 <p>LGlobal.destroy：LGlobal.destroy的值为true的时候，在使用removeChild函数的时候会自动清空对象本身，false的时候，在使用removeChild函数的时候则不会自动清空对象本身，为了更好的内存回收，1.8.3版将LGlobal.destroy的值默认设置为true。</p>
-<p>LGlobal.keepClear：是否每贞清除整个画面后再重绘，默认值为true，设置为falsh后可以在一定程度上提高效率。</p>
+<p>LGlobal.keepClear：是否每贞清除整个画面后再重绘，默认值为true，设置为false后可以在一定程度上提高效率。</p>
 </div>
 <!-- readandwrite end -->
 
@@ -2093,7 +2093,7 @@ function loadBitmapdata(event){
 <!-- LBitmapData_getPixel start -->
 <div id="LBitmapData_getPixel" style="display:none;">
 <div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LBitmapData</a></div>
-<h2>getPixel(x,y)</h2>
+<h2>getPixel(x,y,colorType)</h2>
 <div class="hr"></div>
 <h3>■作用：</h3>
 <p>返回一个表示 BitmapData 对象中在某个特定点 (x, y) 处的 RGB 像素值的数组。</p>
@@ -2101,6 +2101,7 @@ function loadBitmapdata(event){
 <h3>■参数：</h3>
 <p>x:像素的x坐标</p>
 <p>y:像素的y坐标</p>
+<p>colorType:需要获取的像素数据的格式，默认为像素数组，当设置成字符串"number"的时候，返回number型的像素</p>
 <div class="hr"></div>
 <h3>■返回：</h3>
 <p> Array— 一个表示 RGB 像素值的数组。</p>
@@ -2219,7 +2220,7 @@ function gameInit(result){
 <h3>■参数：</h3>
 <p>x:像素的x坐标</p>
 <p>y:像素的y坐标</p>
-<p>data:像素值</p>
+<p>data:像素值(支持像素数组，#FF0000,0xFF000等三种格式)</p>
 <div class="hr"></div>
 <h3>■使用举例：</h3>
 <p>
@@ -2275,14 +2276,14 @@ function gameInit(result){
 <!-- LBitmapData_setPixels start -->
 <div id="LBitmapData_setPixels" style="display:none;">
 <div class="prev"><a class="chapter" href="javascript:void(0)" onclick="returnMenu()">返回>>LBitmapData</a></div>
-<h2>setPixels(rect, img)</h2>
+<h2>setPixels(rect, data)</h2>
 <div class="hr"></div>
 <h3>■作用：</h3>
-<p>将像素数据数组转换为像素数据的矩形区域。</p>
+<p>将像素数据数组转换粘贴到指定的矩形区域。</p>
 <div class="hr"></div>
 <h3>■参数：</h3>
 <p>rect:LRectangle对象，像素区域</p>
-<p>img:像素数据数组</p>
+<p>data:像素数据(支持像素数组，#FF0000,0xFF000等三种格式)</p>
 <div class="hr"></div>
 <h3>■使用举例：</h3>
 <p>
