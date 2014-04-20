@@ -14,6 +14,7 @@ p = {
 		var s = this,i,length;
 		length = s._eventList.length;
 		for(i=0;i<length;i++){
+			if(!s._eventList[i])continue;
 			if(type == s._eventList[i].type && s._eventList[i].listener == listener){
 				s._eventList.splice(i,1);
 				return;
@@ -27,6 +28,7 @@ p = {
 		var s = this;
 		var i,length = s._eventList.length;
 		for(i=0;i<length;i++){
+			if(!s._eventList[i])continue;
 			if(type == s._eventList[i].type){
 				s.target = s;
 				s.event_type = type;
@@ -37,6 +39,7 @@ p = {
 	hasEventListener:function(type){
 		var s = this,i,length = s._eventList.length;
 		for(i=0;i<length;i++){
+			if(!s._eventList[i])continue;
 			if(type == s._eventList[i].type)return true;
 		}
 		return false;

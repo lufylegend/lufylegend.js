@@ -41,6 +41,7 @@ p = {
 			}
 			length = s.mouseList.length;
 			for(i=0;i<length;i++){
+				if(!s.mouseList[i])continue;
 				if(type == s.mouseList[i].type && s.mouseList[i].listener == listener){
 					s.mouseList.splice(i,1);
 					return;
@@ -49,6 +50,7 @@ p = {
 		}else{
 			length = s._eventList.length;
 			for(i=0;i<length;i++){
+				if(!s._eventList[i])continue;
 				if(type == s._eventList[i].type && s._eventList[i].listener == listener){
 					s._eventList.splice(i,1);
 					return;
@@ -77,11 +79,13 @@ p = {
 		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
 			length = s.mouseList.length;
 			for(i=0;i<length;i++){
+				if(!s.mouseList[i])continue;
 				if(type == s.mouseList[i].type)return true;
 			}
 		}else{
 			length = s._eventList.length;
 			for(i=0;i<length;i++){
+				if(!s._eventList[i])continue;
 				if(type == s._eventList[i].type)return true;
 			}
 		}
