@@ -359,23 +359,23 @@ LGlobal._create_loading_color = function(){
 	return co;
 };
 LGlobal.hitPolygon = function(list,x,y){
-	var c = 0,p,p1,p2,i,l,a,b;
-	for(i=0,l=list.length;i<l;i++){
-		p1 = list[i];
-		p2 = list[i+1 == list.length ? 0 : i+1];
-		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
-		if(p1[0] > p2[0]){
-			p = p1;
-			p1 = p2;
-			p2 = p;
+	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+	for(i=1,l=list.length;i<l+1;i++){
+		p1 = list[i%l];
+		b1x = (x <= p1[0]);
+		b1y = (y <= p1[1]);
+		if( b0y != b1y ){
+			if( b0x == b1x ){
+				if( b0x )c += (b0y ? -1 : 1);
+			}else{
+				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+			}
 		}
-		if(p1[0]<x && x < p2[0]){
-			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
-			b = p1[1] - a*p1[0];
-			if(a*x + b < y)c++;
-		}
+		p0 = p1;
+		b0x = b1x;
+		b0y = b1y;
 	}
-	return c % 2 == 1;
+	return 0 != c;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
