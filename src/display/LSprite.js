@@ -123,11 +123,6 @@ p = {
 			s.frameList[k](s);
 		}
 	},
-	remove:function(){
-		var s = this;
-		if(!s.parent || s.parent == "root")return;
-		s.parent.removeChild(s);
-	},
 	addChild:function (d){
 		var s  = this;
 		d.parent = s;
@@ -148,6 +143,7 @@ p = {
 			if(d.objectIndex == c[i].objectIndex){
 				if(LGlobal.destroy && d.die)d.die();
 				s.childList.splice(i,1);
+				s.ll_cr = true;
 				break;
 			}
 		}
@@ -163,6 +159,7 @@ p = {
 		if(c.length <= i)return;
 		if(LGlobal.destroy && c[i].die)c[i].die();
 		s.childList.splice(i,1);
+		s.ll_cr = true;
 	},
 	getChildIndex:function(child){
 		var s = this,c=s.childList,i,l=c.length;
@@ -199,6 +196,7 @@ p = {
 		s.childList.length = 0;
 		s.width = 0;
 		s.height = 0;
+		s.ll_cr = true;
 	},
 	clone:function(){
 		var s = this,a = new LSprite(),c,o;

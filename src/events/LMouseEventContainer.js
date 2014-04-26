@@ -7,6 +7,8 @@ function $LMouseEventContainer(){
 	s.mouseDownContainer = [];
 	s.mouseUpContainer = [];
 	s.mouseMoveContainer = [];
+	s.mouseOverContainer = [];
+	s.mouseOutContainer = [];
 	s.textFieldInputContainer = [];
 };
 $LMouseEventContainer.prototype = {
@@ -51,12 +53,24 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.addEvent(o,s.mouseMoveContainer,f);
 	}
+	,addMouseOverEvent:function(o,f){
+		var s = this;
+		s.addEvent(o,s.mouseOverContainer,f);
+	}
+	,addMouseOutEvent:function(o,f){
+		var s = this;
+		s.addEvent(o,s.mouseOutContainer,f);
+	}
 	,addMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
 			s.addMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.addMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OVER){
+			s.addMouseOverEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.addMouseOutEvent(o,f);
 		}else{
 			s.addMouseMoveEvent(o,f);
 		}
@@ -79,12 +93,24 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.removeEvent(o,s.mouseMoveContainer,f);
 	}
+	,removeMouseOverEvent:function(o,f){
+		var s = this;
+		s.removeEvent(o,s.mouseOverContainer,f);
+	}
+	,removeMouseOutEvent:function(o,f){
+		var s = this;
+		s.removeEvent(o,s.mouseOutContainer,f);
+	}
 	,removeMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
 			s.removeMouseDownEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_UP){
 			s.removeMouseUpEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OVER){
+			s.removeMouseOverEvent(o,f);
+		}else if(t == LMouseEvent.MOUSE_OUT){
+			s.removeMouseOutEvent(o,f);
 		}else{
 			s.removeMouseMoveEvent(o,f);
 		}
@@ -98,6 +124,8 @@ $LMouseEventContainer.prototype = {
 			s.dispatchEvent(event,s.mouseUpContainer,LMouseEvent.MOUSE_UP);
 		}else{
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
+			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
+			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
 		}
 	}
     ,getRootParams:function(s){
@@ -118,12 +146,30 @@ $LMouseEventContainer.prototype = {
 		for(i=0,l=list.length;i<l;i++){
 			sp = list[i].container || list[i];
             if(!sp || !sp.parent || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
-            var co = self.getRootParams(sp);
+            co = self.getRootParams(sp);
             if(!type && sp.mouseEvent){
 				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);
             	continue;
             }
             if(sp.ismouseon(event,co)){
+            	if(type == LMouseEvent.MOUSE_OUT){
+            		continue;
+            	}
+            	if(type==LMouseEvent.MOUSE_OVER){
+            		if(sp.ll_mousein){
+            			continue;
+            		}
+            		sp.ll_mousein = true;
+            	}
+            	st.push({sp:sp,co:co,listener:list[i].listener});
+            }else{
+            	if(type != LMouseEvent.MOUSE_OUT){
+            		continue;
+            	}
+            	if(!sp.ll_mousein){
+            		continue;
+            	}
+            	sp.ll_mousein = false;
             	st.push({sp:sp,co:co,listener:list[i].listener});
             }
 		}

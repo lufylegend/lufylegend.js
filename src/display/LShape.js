@@ -43,11 +43,6 @@ p = {
 		var s = this;
 		return s._startY()*s.scaleY;
 	},
-	remove:function(){
-		var s = this;
-		if(!s.parent || s.parent == "root")return;
-		s.parent.removeChild(s);
-	},
 	clone:function(){
 		var s = this,a = new LShape(),c,o;
 		a.copyProperty(s);
