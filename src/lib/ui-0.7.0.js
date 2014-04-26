@@ -14,7 +14,7 @@ function LButtonSample1(name,size,font,color){
 	if(!size)size=16;
 	if(!color)color = "white";
 	if(!font)font = "黑体";
-	s.backgroundCorl = "black";
+	s.backgroundColor = "black";
 	var btn_up = new LSprite();
 	btn_up.shadow = new LSprite();
 	btn_up.back = new LSprite();
@@ -52,27 +52,27 @@ function LButtonSample1(name,size,font,color){
 LButtonSample1.prototype.clone = function(){
 	var s = this,name = s.labelText.text,size = s.labelText.size,font = s.labelText.font,color = s.labelText.color,
 	a = new LButtonSample1(name,size,font,color);
-	a.backgroundCorl = s.backgroundCorl;
+	a.backgroundColor = s.backgroundColor;
 	return a;
 };
 LButtonSample1.prototype._onDraw = function(s){
 	var co = s.getRootCoordinate();
-	if(s.backgroundSet == s.backgroundCorl)return;
-	s.backgroundSet = s.backgroundCorl;
+	if(s.backgroundSet == s.backgroundColor)return;
+	s.backgroundSet = s.backgroundColor;
 	s.xSet = co.x;
 	s.ySet = co.y;
 	var grd=LGlobal.canvas.createLinearGradient(0,-s.height*0.5,0,s.height*2);
 	grd.addColorStop(0,"white");
-	grd.addColorStop(1,s.backgroundCorl);
+	grd.addColorStop(1,s.backgroundColor);
 	var grd2=LGlobal.canvas.createLinearGradient(0,-s.height,0,s.height*2);
 	grd2.addColorStop(0,"white");
-	grd2.addColorStop(1,s.backgroundCorl);
+	grd2.addColorStop(1,s.backgroundColor);
 	s.bitmap_up.back.graphics.clear();
 	s.bitmap_over.graphics.clear();
-	s.bitmap_up.back.graphics.drawRect(1,s.backgroundCorl,[0,0,s.width,s.height],true,grd);
-	s.bitmap_up.back.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
-	s.bitmap_over.graphics.drawRect(1,s.backgroundCorl,[0,0,s.width,s.height],true,grd);
-	s.bitmap_over.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
+	s.bitmap_up.back.graphics.drawRect(1,s.backgroundColor,[0,0,s.width,s.height],true,grd);
+	s.bitmap_up.back.graphics.drawRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
+	s.bitmap_over.graphics.drawRect(1,s.backgroundColor,[0,0,s.width,s.height],true,grd);
+	s.bitmap_over.graphics.drawRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
 };
 LButtonSample1.prototype.toString = function(){
 	return "[LButtonSample1]";
@@ -84,29 +84,29 @@ function LButtonSample2(name,size,font,color){
 LButtonSample2.prototype.clone = function(){
 	var s = this,name = s.labelText.text,size = s.labelText.size,font = s.labelText.font,color = s.labelText.color,
 	a = new LButtonSample2(name,size,font,color);
-	a.backgroundCorl = s.backgroundCorl;
+	a.backgroundColor = s.backgroundColor;
 	return a;
 };
 LButtonSample2.prototype._onDraw = function(s){
 	var co = s.getRootCoordinate();
-	if(s.backgroundSet == s.backgroundCorl)return;
-	s.backgroundSet = s.backgroundCorl;
+	if(s.backgroundSet == s.backgroundColor)return;
+	s.backgroundSet = s.backgroundColor;
 	s.xSet = co.x;
 	s.ySet = co.y;
 	var grd=LGlobal.canvas.createLinearGradient(0,-s.height*0.5,0,s.height*2);
 	grd.addColorStop(0,"white");
-	grd.addColorStop(1,s.backgroundCorl);
+	grd.addColorStop(1,s.backgroundColor);
 	
 	var grd2=LGlobal.canvas.createLinearGradient(0,-s.height,0,s.height*2);
 	grd2.addColorStop(0,"white");
-	grd2.addColorStop(1,s.backgroundCorl);
+	grd2.addColorStop(1,s.backgroundColor);
 	
 	s.bitmap_up.back.graphics.clear();
 	s.bitmap_over.graphics.clear();
-	s.bitmap_up.back.graphics.drawRoundRect(1,s.backgroundCorl,[0,0,s.width,s.height,s.height*0.1],true,grd);
-	s.bitmap_up.back.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
-	s.bitmap_over.graphics.drawRoundRect(1,s.backgroundCorl,[0,0,s.width,s.height,s.height*0.1],true,grd);
-	s.bitmap_over.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
+	s.bitmap_up.back.graphics.drawRoundRect(1,s.backgroundColor,[0,0,s.width,s.height,s.height*0.1],true,grd);
+	s.bitmap_up.back.graphics.drawRoundRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
+	s.bitmap_over.graphics.drawRoundRect(1,s.backgroundColor,[0,0,s.width,s.height,s.height*0.1],true,grd);
+	s.bitmap_over.graphics.drawRoundRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
 };
 LButtonSample2.prototype.toString = function(){
 	return "[LButtonSample2]";

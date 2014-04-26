@@ -8,6 +8,7 @@ LMouseEvent.TOUCH_START = "touchstart";
 LMouseEvent.TOUCH_MOVE = "touchmove";
 LMouseEvent.TOUCH_END = "touchend";
 LMouseEvent.MOUSE_MOVE = "mousemove";
+LMouseEvent.MOUSE_OVER = "mouseover";
 LMouseEvent.MOUSE_OUT = "mouseout";
 LMouseEvent.DOUBLE_CLICK = "dblclick";
 
