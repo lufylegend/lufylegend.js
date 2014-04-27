@@ -175,6 +175,10 @@ function onframe(){
 	for(key in charaLayer.childList){
 		charaLayer.childList[key].onframe();
 	}
+	/*
+	for(var i=0,l=charaLayer.childList.length;i<l;i++){
+		charaLayer.childList[i].onframe();
+	}*/
 }
 function addEnemy(){
 	if(enemy_list.length == 0)return;

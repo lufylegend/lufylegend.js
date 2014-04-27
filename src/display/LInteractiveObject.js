@@ -5,6 +5,7 @@ function LInteractiveObject(){
 	var s = this;
 	base(s,LDisplayObject,[]);
 	s.type = "LInteractiveObject";
+	s.mouseEnabled = true;
 	s.mouseChildren = true;
 	s.frameList = new Array();
 	s.mouseList = new Array();
@@ -15,7 +16,7 @@ p = {
 		if(type == LEvent.ENTER_FRAME){
 			s.frameList.push(listener);
 		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
-			if(LGlobal.mouseEventContainer[type]){
+			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.addMouseEvent(s,type,listener);
 				return;
 			}
@@ -35,7 +36,7 @@ p = {
 				}
 			}
 		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
-			if(LGlobal.mouseEventContainer[type]){
+			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.removeMouseEvent(s,type,listener);
 				return;
 			}
@@ -71,6 +72,8 @@ p = {
 		}
 		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]){
 			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_MOVE);
+			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_OVER);
+			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_OUT);
 		}
 	},
 	hasEventListener:function(type){

@@ -68,15 +68,16 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
 	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
-	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
-	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0px 0px 0px 0px;width:'+w+'px;height:'+h+'px;">'+
+	LGlobal.object.innerHTML='<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
+	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
 	'<div id="noCanvas">'+
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
 	'</div>'+  
 	'</canvas></div>'+
-	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0px 0px 0px 0px;z-index:10;display:none;">'+
+	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">'+
 	'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>'+
-	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" /><input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
+	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />'+
+	'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
 	LGlobal.canvasObj = document.getElementById(LGlobal.id+"_canvas");
 	LGlobal._canvas=document.createElement("canvas");
 	LGlobal._context=LGlobal._canvas.getContext("2d");
@@ -314,7 +315,7 @@ LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
 	if(LGlobal.box2d != null){
 		LGlobal.box2d.ll_show();
-		if(!LGlobal.traceDebug){
+		if(!LGlobal.traceDebug && LGlobal.keepClear){
 			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
 	}else{
@@ -333,9 +334,16 @@ LGlobal.buttonShow = function(b){
 	}
 };
 LGlobal.show = function(s){
+	s.ll_cr = false;
 	for(var i=0,l=s.length;i<l;i++){
 		if(s[i].ll_show)s[i].ll_show();
+		if(s.ll_cr){
+			i--;
+			l--;
+			s.ll_cr =false;
+		}
 	}
+	delete s.ll_cr;
 };
 LGlobal.divideCoordinate = function (w,h,row,col){
 	var i,j,cw = w/col,ch = h/row,r = [];
@@ -359,23 +367,23 @@ LGlobal._create_loading_color = function(){
 	return co;
 };
 LGlobal.hitPolygon = function(list,x,y){
-	var c = 0,p,p1,p2,i,l,a,b;
-	for(i=0,l=list.length;i<l;i++){
-		p1 = list[i];
-		p2 = list[i+1 == list.length ? 0 : i+1];
-		if((p1[0] == x && p1[1] ==y) || (p2[0] == x && p2[1] == y))return true;
-		if(p1[0] > p2[0]){
-			p = p1;
-			p1 = p2;
-			p2 = p;
+	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+	for(i=1,l=list.length;i<l+1;i++){
+		p1 = list[i%l];
+		b1x = (x <= p1[0]);
+		b1y = (y <= p1[1]);
+		if( b0y != b1y ){
+			if( b0x == b1x ){
+				if( b0x )c += (b0y ? -1 : 1);
+			}else{
+				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+			}
 		}
-		if(p1[0]<x && x < p2[0]){
-			a = (p1[1]-p2[1])/(p1[0]-p2[0]);
-			b = p1[1] - a*p1[0];
-			if(a*x + b < y)c++;
-		}
+		p0 = p1;
+		b0x = b1x;
+		b0y = b1y;
 	}
-	return c % 2 == 1;
+	return 0 != c;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
