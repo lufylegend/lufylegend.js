@@ -9,7 +9,7 @@ function LStageWebView(){
 	s.display.style.zIndex = 11;
 	s.display.appendChild(s.iframe);
 }
-LStageWebView.prototype = {
+p = {
 	loadURL:function(u){
 		this.iframe.src=u;
 	},
@@ -27,3 +27,4 @@ LStageWebView.prototype = {
 		s.iframe.style.height = s.display.style.height = (r.height*sy >>> 0)+"px";
 	}
 };
+for(var k in p)LStageWebView.prototype[k]=p[k];

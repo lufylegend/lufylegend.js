@@ -17,7 +17,7 @@ function doScroll() {
 }
 window.onload = function() {
 	setTimeout(doScroll, 100);
-	init(50,"legend",480,800,main,LEvent.INIT);
+	init(20,"legend",480,800,main,LEvent.INIT);
 }
 window.onorientationchange = function() {
 	setTimeout(doScroll, 100);
