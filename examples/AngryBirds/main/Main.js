@@ -159,7 +159,6 @@ function downOver(event){
 	var force = 70;
 	var vec = new LGlobal.box2d.b2Vec2(-force*r*Math.cos(angle),-force*r*Math.sin(angle));
 	bird.box2dBody.ApplyForce(vec, bird.box2dBody.GetWorldCenter());
-	
 	backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 }
 function downMove(event){

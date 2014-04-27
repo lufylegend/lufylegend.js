@@ -88,10 +88,12 @@ $LTweenLite.prototype = {
 	ll_show:null,
 	frame:function(){
 		var s = this;
-		for(i=s.tweens.length-1;i >= 0;i--){
+		var i,length=s.tweens.length,t;
+		for(i=0;i < length;i++){
 			t = s.tweens[i];
-			if(t.tween()){
+			if(t && t.tween && t.tween()){
 				s.tweens.splice(i,1);
+				i--,length=s.tweens.length;
 				if(t.keep())s.add(t);
 			}
 		}

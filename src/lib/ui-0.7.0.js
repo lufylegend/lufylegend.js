@@ -999,12 +999,20 @@ function LMenubar(list,style){
 	s.back = back;
 	s.back.root = s;
 	s.back.mainMenu = true;
+	s.back.background = true;
 	s.back.addEventListener(LMouseEvent.MOUSE_UP,function(e){});
 	s.back.addEventListener(LMouseEvent.MOUSE_MOVE,function(e){});
 	s.back.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
 		var root = e.clickTarget.root;
 		for(var j=0;j<root.childList.length;j++){
-			if(root.childList[j].mainMenu)continue;
+			if(root.childList[j].mainMenu){
+				if(root.childList[j].background)continue;
+				var rW = root.childList[j].getWidth();
+				var rH = root.childList[j].getHeight();
+				root.childList[j].graphics.clear();
+				root.childList[j].graphics.drawRect(0,root.style.lineColor,[0,0,rW,rH],true,root.style.backgroundColor);
+				continue;
+			}
 			root.childList[j].visible = false;
 		}
 		root.open = false;

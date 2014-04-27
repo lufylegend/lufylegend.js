@@ -68,15 +68,16 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
 	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
-	LGlobal.object.innerHTML='<div style="position:absolute;margin:0px 0px 0px 0px;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
-	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0px 0px 0px 0px;width:'+w+'px;height:'+h+'px;">'+
+	LGlobal.object.innerHTML='<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
+	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
 	'<div id="noCanvas">'+
 	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
 	'</div>'+  
 	'</canvas></div>'+
-	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0px 0px 0px 0px;z-index:10;display:none;">'+
+	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">'+
 	'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>'+
-	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" /><input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
+	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />'+
+	'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
 	LGlobal.canvasObj = document.getElementById(LGlobal.id+"_canvas");
 	LGlobal._canvas=document.createElement("canvas");
 	LGlobal._context=LGlobal._canvas.getContext("2d");
@@ -342,6 +343,7 @@ LGlobal.show = function(s){
 			s.ll_cr =false;
 		}
 	}
+	delete s.ll_cr;
 };
 LGlobal.divideCoordinate = function (w,h,row,col){
 	var i,j,cw = w/col,ch = h/row,r = [];
