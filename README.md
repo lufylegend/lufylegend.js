@@ -11,26 +11,22 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 官网 <a target='_blank' href="http://lufylegend.com/lufylegend">http://lufylegend.com/lufylegend</a>
 =============
 
-※1.8.9版更新内容
+※1.8.10版更新内容
 
-1，修正了对象没有显示时鼠标容器报错的bug（感谢Yorhom提供bug）
+1，多边形检测改善
 
-2，修正了LLoadManage读取文件时，无法使用数组关键字作为名字的bug
+2，为LSprite对象增加了MOUSE_OUT,MOUSE_OVER事件
 
-3，修正了游戏居中全屏显示后Firefox浏览器鼠标失效的bug
+3，优化了手机全屏的css设置
 
-4，扩展了鼠标事件部分，支持多次加载同类型事件
+4，解决了显示和缓动对象在某些情况下将自身移除时会破坏显示和缓动列表的问题
 
-5，扩展了鼠标事件部分，扩展后，即使父容器注册了事件，子对象的事件监听依然有效（感谢张晓龙帮助修改）。（注：该扩展对鼠标容器无效）
+5，修正了ui组件中按钮背景颜色单词的拼写错误，修正后为backgroundColor
 
-6，提供了多边形检测，修正了绘制的多边形无法响应鼠标事件的bug
+6，LButtonSample1和LButtonSample2增加宽度和高度设定
 
-7，为LSprite增加拖拽功能startDrag和stopDrag，优化了ui组建中LWindow的拖拽
+7，ui增加LMenubar
 
-8，修正了不全屏无法居中的问题
+8，按钮增加buttonMode控制按钮状态是否可用
 
-9，修改了内部比较敏感的函数名
-
-10，修正了无法使用多点触摸的问题
-
-11，修正了DisplayObject及其子对象的数组属性无法clone的bug
+9，修正了LSprite对象的mouseEnabled和mouseChildren属性，mouseEnabled指定此对象是否接收鼠标，mouseChildren指定对象的子级是否支持鼠标
