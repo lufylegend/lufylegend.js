@@ -167,8 +167,9 @@ p = {
 	},
 	remove:function(){
 		var s = this;
-		if(!s.parent)return;
+		if(!s.parent || s.parent == "root")return;
 		s.parent.removeChild(s);
+		s.parent.ll_cr = true;
 	}
 };
 for(var k in p)LDisplayObject.prototype[k]=p[k];

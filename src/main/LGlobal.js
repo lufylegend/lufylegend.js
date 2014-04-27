@@ -314,7 +314,7 @@ LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
 	if(LGlobal.box2d != null){
 		LGlobal.box2d.ll_show();
-		if(!LGlobal.traceDebug){
+		if(!LGlobal.traceDebug && LGlobal.keepClear){
 			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
 		}
 	}else{
@@ -333,8 +333,14 @@ LGlobal.buttonShow = function(b){
 	}
 };
 LGlobal.show = function(s){
+	s.ll_cr = false;
 	for(var i=0,l=s.length;i<l;i++){
 		if(s[i].ll_show)s[i].ll_show();
+		if(s.ll_cr){
+			i--;
+			l--;
+			s.ll_cr =false;
+		}
 	}
 };
 LGlobal.divideCoordinate = function (w,h,row,col){

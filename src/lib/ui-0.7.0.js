@@ -14,7 +14,7 @@ function LButtonSample1(name,size,font,color){
 	if(!size)size=16;
 	if(!color)color = "white";
 	if(!font)font = "黑体";
-	s.backgroundCorl = "black";
+	s.backgroundColor = "black";
 	var btn_up = new LSprite();
 	btn_up.shadow = new LSprite();
 	btn_up.back = new LSprite();
@@ -31,7 +31,6 @@ function LButtonSample1(name,size,font,color){
 	btn_up.back.addChild(labelText);
 	var shadow = new LDropShadowFilter(4,45,"#000000",10);
 	btn_up.shadow.filters = [shadow];
-
 	var btn_down = new LSprite();
 	btn_down.x = btn_down.y = 1;
 	labelText = new LTextField();
@@ -43,36 +42,51 @@ function LButtonSample1(name,size,font,color){
 	labelText.text = name;
 	btn_down.addChild(labelText);
 	base(s,LButton,[btn_up,btn_down]);
-	s.width = labelText.getWidth() + size;
-	s.height = 2.2*size;
+	s.baseWidth = s.width = labelText.getWidth() + size;
+	s.baseHeight = s.height = 2.2*size;
 	s.backgroundSet = null;
-	btn_up.shadow.graphics.drawRoundRect(0,"#000000",[1,1,s.width-2,s.height-2,s.height*0.1],true,"#000000");
+	s.widthSet = null;
+	s.heightSet = null;
+	s.xSet = null;
+	s.ySet = null;
 	s.addEventListener(LEvent.ENTER_FRAME,s._onDraw);
 }
 LButtonSample1.prototype.clone = function(){
 	var s = this,name = s.labelText.text,size = s.labelText.size,font = s.labelText.font,color = s.labelText.color,
 	a = new LButtonSample1(name,size,font,color);
-	a.backgroundCorl = s.backgroundCorl;
+	a.backgroundColor = s.backgroundColor;
 	return a;
 };
 LButtonSample1.prototype._onDraw = function(s){
-	var co = s.getRootCoordinate();
-	if(s.backgroundSet == s.backgroundCorl)return;
-	s.backgroundSet = s.backgroundCorl;
+	var co = s.getRootCoordinate(),labelText;
+	if(s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y)return;
+	s.backgroundSet = s.backgroundColor;
+	s.widthSet = s.width>s.baseWidth?s.width:s.baseWidth;
+	s.heightSet = s.height>s.baseHeight?s.height:s.baseHeight;
+	s.width = s.widthSet;
+	s.height = s.heightSet;
 	s.xSet = co.x;
 	s.ySet = co.y;
+	labelText = s.bitmap_up.back.getChildAt(0);
+	labelText.x = (s.width - s.baseWidth + labelText.size)*0.5;
+	labelText.y = (s.height - s.baseHeight + labelText.size)*0.5;
+	labelText = s.bitmap_over.getChildAt(0);
+	labelText.x = (s.width - s.baseWidth + labelText.size)*0.5;
+	labelText.y = (s.height - s.baseHeight + labelText.size)*0.5;
 	var grd=LGlobal.canvas.createLinearGradient(0,-s.height*0.5,0,s.height*2);
 	grd.addColorStop(0,"white");
-	grd.addColorStop(1,s.backgroundCorl);
+	grd.addColorStop(1,s.backgroundColor);
 	var grd2=LGlobal.canvas.createLinearGradient(0,-s.height,0,s.height*2);
 	grd2.addColorStop(0,"white");
-	grd2.addColorStop(1,s.backgroundCorl);
+	grd2.addColorStop(1,s.backgroundColor);
 	s.bitmap_up.back.graphics.clear();
 	s.bitmap_over.graphics.clear();
-	s.bitmap_up.back.graphics.drawRect(1,s.backgroundCorl,[0,0,s.width,s.height],true,grd);
-	s.bitmap_up.back.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
-	s.bitmap_over.graphics.drawRect(1,s.backgroundCorl,[0,0,s.width,s.height],true,grd);
-	s.bitmap_over.graphics.drawRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1],true,grd2);
+	s.bitmap_up.shadow.graphics.clear();
+	s.bitmap_up.shadow.graphics.drawRoundRect(0,"#000000",[1,1,s.widthSet-2,s.heightSet-2,s.heightSet*0.1],true,"#000000");
+	s.bitmap_up.back.graphics.drawRect(1,s.backgroundColor,[0,0,s.widthSet,s.heightSet],true,grd);
+	s.bitmap_up.back.graphics.drawRect(0,s.backgroundColor,[1,s.heightSet*0.5,s.widthSet-2,s.heightSet*0.5-1],true,grd2);
+	s.bitmap_over.graphics.drawRect(1,s.backgroundColor,[0,0,s.widthSet,s.heightSet],true,grd);
+	s.bitmap_over.graphics.drawRect(0,s.backgroundColor,[1,s.heightSet*0.5,s.widthSet-2,s.heightSet*0.5-1],true,grd2);
 };
 LButtonSample1.prototype.toString = function(){
 	return "[LButtonSample1]";
@@ -84,29 +98,29 @@ function LButtonSample2(name,size,font,color){
 LButtonSample2.prototype.clone = function(){
 	var s = this,name = s.labelText.text,size = s.labelText.size,font = s.labelText.font,color = s.labelText.color,
 	a = new LButtonSample2(name,size,font,color);
-	a.backgroundCorl = s.backgroundCorl;
+	a.backgroundColor = s.backgroundColor;
 	return a;
 };
 LButtonSample2.prototype._onDraw = function(s){
 	var co = s.getRootCoordinate();
-	if(s.backgroundSet == s.backgroundCorl)return;
-	s.backgroundSet = s.backgroundCorl;
+	if(s.backgroundSet == s.backgroundColor)return;
+	s.backgroundSet = s.backgroundColor;
 	s.xSet = co.x;
 	s.ySet = co.y;
 	var grd=LGlobal.canvas.createLinearGradient(0,-s.height*0.5,0,s.height*2);
 	grd.addColorStop(0,"white");
-	grd.addColorStop(1,s.backgroundCorl);
+	grd.addColorStop(1,s.backgroundColor);
 	
 	var grd2=LGlobal.canvas.createLinearGradient(0,-s.height,0,s.height*2);
 	grd2.addColorStop(0,"white");
-	grd2.addColorStop(1,s.backgroundCorl);
+	grd2.addColorStop(1,s.backgroundColor);
 	
 	s.bitmap_up.back.graphics.clear();
 	s.bitmap_over.graphics.clear();
-	s.bitmap_up.back.graphics.drawRoundRect(1,s.backgroundCorl,[0,0,s.width,s.height,s.height*0.1],true,grd);
-	s.bitmap_up.back.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
-	s.bitmap_over.graphics.drawRoundRect(1,s.backgroundCorl,[0,0,s.width,s.height,s.height*0.1],true,grd);
-	s.bitmap_over.graphics.drawRoundRect(0,s.backgroundCorl,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
+	s.bitmap_up.back.graphics.drawRoundRect(1,s.backgroundColor,[0,0,s.width,s.height,s.height*0.1],true,grd);
+	s.bitmap_up.back.graphics.drawRoundRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
+	s.bitmap_over.graphics.drawRoundRect(1,s.backgroundColor,[0,0,s.width,s.height,s.height*0.1],true,grd);
+	s.bitmap_over.graphics.drawRoundRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
 };
 LButtonSample2.prototype.toString = function(){
 	return "[LButtonSample2]";
@@ -165,7 +179,7 @@ LRadio.prototype.setValue = function(value){
     var s=this,child,k=null;
     for(k in s.childList){
     	child = s.childList[k];
-        child.setChecked(false);
+        if(child.setChecked)child.setChecked(false);
         if(child.value == value){
         	s.value = value;
         	child.setChecked(true);
@@ -965,4 +979,200 @@ LRange.prototype._onUp = function(event){
 };
 LRange.prototype.toString = function(){
 	return "[LRange]";
+};
+
+function LMenubar(list,style){
+	var s = this;
+	base(s,LSprite,[]);
+	if(!style)style={};
+	if(!style.textSize)style.textSize=20;
+	if(!style.spaceHorizontal)style.spaceHorizontal=10;
+	if(!style.spaceVertical)style.spaceVertical=5;
+	if(!style.textColor)style.textColor="#000000";
+	if(!style.lineColor)style.lineColor="#CCCCCC";
+	if(!style.backgroundColor)style.backgroundColor="#FFFFFF";
+	if(!style.selectColor)style.selectColor="#1E90FF";
+	s.style = style;
+	var back = new LSprite();
+	back.graphics.drawRect(0,"#ffffff",[-LGlobal.width,-LGlobal.height,LGlobal.width*2,LGlobal.height*2]);
+	s.addChild(back);
+	s.back = back;
+	s.back.root = s;
+	s.back.mainMenu = true;
+	s.back.addEventListener(LMouseEvent.MOUSE_UP,function(e){});
+	s.back.addEventListener(LMouseEvent.MOUSE_MOVE,function(e){});
+	s.back.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		var root = e.clickTarget.root;
+		for(var j=0;j<root.childList.length;j++){
+			if(root.childList[j].mainMenu)continue;
+			root.childList[j].visible = false;
+		}
+		root.open = false;
+		setTimeout(function(){
+			root.back.visible = false;
+		},100);
+	});
+	s.back.visible = false;
+	s.setList(s,list,0,0,0);
+}
+LMenubar.prototype.setList = function(layer,list,depth,sx,sy){
+	var s = this,w=0,h=0,menuList=[];
+	layer.childWidth = 0;
+	layer.childHeight = 0;
+	for(var i=0;i<list.length;i++){
+		var child = list[i];
+		var menu = new LSprite();
+		menu.depth = depth;
+		menuList.push(menu);
+		var label = new LTextField();
+		menu.root = s;
+		menu.upper = layer;
+		menu.click = child.click;
+		label.size = s.style.textSize;
+		label.color = s.style.textColor;
+		label.text = child.label;
+		label.x = s.style.spaceHorizontal;
+		label.y = s.style.spaceVertical;
+		menu.addChild(label);
+		menu.graphics.drawRect(0,s.style.backgroundColor,[0,0,label.getWidth()+s.style.textSize,label.getHeight()+s.style.textSize],true,s.style.backgroundColor);
+		menu.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+			var target = e.clickTarget;
+			var root = target.root;
+			if(target.mainMenu){
+				if(root.open)return;
+				root.open = true;
+				root.back.visible = true;
+				root.select = target;
+				var sW = target.getWidth();
+				var sH = target.getHeight();
+				target.graphics.clear();
+				target.graphics.drawRect(0,root.style.selectColor,[0,0,sW,sH],true,root.style.selectColor);
+				
+				if(target.menuList && target.menuList.length){
+					for(var j=0;j<target.menuList.length;j++){
+						target.menuList[j].visible = true;
+						target.menuList[j].graphics.clear();
+						target.menuList[j].graphics.drawRect(1,root.style.lineColor,[0,0,target.childWidth,target.childHeight],true,root.style.backgroundColor);
+						if(target.menuList[j].arrow){
+							target.menuList[j].arrow.x = target.childWidth - s.style.spaceHorizontal*2;
+						}
+					}
+				}
+				return;
+			}
+			if(!target.menuList){
+				if(target.click){
+					target.click();
+					root.open = false;
+					setTimeout(function(){
+						root.back.visible = false;
+					},100);
+				}
+				for(var j=0;j<root.childList.length;j++){
+					if(root.childList[j].mainMenu)continue;
+					root.childList[j].visible = false;
+				}
+			}
+		});
+		menu.addEventListener(LMouseEvent.MOUSE_MOVE,function(e){
+			var target = e.clickTarget;
+			var root = target.root;
+			if(!root.open)return;
+			if(root.select && root.select.objectIndex == target.objectIndex){
+				return;
+			}
+			if(root.select){
+				var rW = root.select.getWidth();
+				var rH = root.select.getHeight();
+				root.select.graphics.clear();
+				root.select.graphics.drawRect(root.select.mainMenu ? 0 : 1,root.style.lineColor,[0,0,rW,rH],true,root.style.backgroundColor);
+				
+			}
+			var sW = target.getWidth();
+			var sH = target.getHeight();
+			target.graphics.clear();
+			target.graphics.drawRect(target.mainMenu ? 0 : 1,root.style.lineColor,[0,0,sW,sH],true,root.style.backgroundColor);
+			target.graphics.drawRect(0,root.style.selectColor,[0,root.style.spaceVertical,sW,sH-root.style.spaceVertical*2],true,root.style.selectColor);
+			
+			if(target.mainMenu){
+				for(var j=0;j<root.childList.length;j++){
+					if(root.childList[j].mainMenu)continue;
+					root.childList[j].visible = false;
+				}
+			}else if(root.select.depth == target.depth){
+				if(root.select.menuList && root.select.menuList.length){
+					for(var j=0;j<root.select.menuList.length;j++){
+						root.select.menuList[j].visible = false;
+					}
+				}
+			}else if(root.select.depth > target.depth){
+				if(root.select.upper.menuList && root.select.upper.menuList.length){
+					for(var j=0;j<root.select.upper.menuList.length;j++){
+						root.select.upper.menuList[j].visible = false;
+					}
+				}
+			}
+			
+			if(target.menuList && target.menuList.length){
+				for(var j=0;j<target.menuList.length;j++){
+					target.menuList[j].visible = true;
+					target.menuList[j].graphics.clear();
+					target.menuList[j].graphics.drawRect(1,root.style.lineColor,[0,0,target.childWidth,target.childHeight],true,root.style.backgroundColor);
+						
+					if(!target.mainMenu){
+						target.menuList[j].x = target.x + target.getWidth();
+					}
+					if(target.menuList[j].arrow){
+						target.menuList[j].arrow.x = target.childWidth - s.style.spaceHorizontal*2;
+					}
+				}
+			}
+				
+			root.select = target;
+		});
+		if(s.objectIndex == layer.objectIndex){
+			menu.x = w + sx;
+			menu.y = 0 + sy;
+			menu.mainMenu = true;
+			w += label.getWidth()+s.style.spaceHorizontal*2;
+			h = label.getHeight()+s.style.spaceVertical*2;
+			if(layer.childWidth < label.getWidth()+s.style.spaceHorizontal*2){
+				layer.childWidth = label.getWidth()+s.style.spaceHorizontal*2;
+			}
+			if(layer.childHeight < label.getHeight()+s.style.spaceVertical*2){
+				layer.childHeight = label.getHeight()+s.style.spaceVertical*2;
+			}
+		}else{
+			menu.x = 0 + sx;
+			menu.y = h + sy;
+			w = w > label.getWidth()+s.style.spaceHorizontal*4 ? w : label.getWidth()+s.style.spaceHorizontal*4;
+			h += label.getHeight()+s.style.spaceVertical*2;
+			if(layer.childWidth < label.getWidth()+s.style.spaceHorizontal*4){
+				layer.childWidth = label.getWidth()+s.style.spaceHorizontal*4;
+			}
+			if(layer.childHeight < label.getHeight()+s.style.spaceVertical*2){
+				layer.childHeight = label.getHeight()+s.style.spaceVertical*2;
+			}
+		}
+		s.addChild(menu);
+		if(child.list && child.list.length > 0){
+			if(s.objectIndex == layer.objectIndex){
+				s.setList(menu,child.list,depth+1,menu.x,menu.y + menu.getHeight());
+			}else{
+				
+				var arrow = new LSprite();
+				menu.arrow = arrow;
+				menu.addChild(arrow);
+				arrow.x = label.getWidth()+s.style.spaceHorizontal*2;
+				arrow.y = label.y;
+				arrow.graphics.drawVertices(0,s.style.textColor,[[0,0],[0,label.getHeight()],[s.style.spaceHorizontal,label.getHeight()*0.5]],true,s.style.textColor);
+				
+				s.setList(menu,child.list,depth+1,menu.x+menu.getWidth()+s.style.spaceHorizontal*2,menu.y);
+			}
+		}
+		if(s.objectIndex != layer.objectIndex){
+			menu.visible = false;
+		}
+	}
+	layer.menuList = menuList;
 };

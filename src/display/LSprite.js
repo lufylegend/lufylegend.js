@@ -11,6 +11,7 @@ function LSprite(){
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
 	s.box2d = null;
+	s.buttonMode = true;
 }
 p = {
 	setRotate:function (angle){
@@ -123,11 +124,6 @@ p = {
 			s.frameList[k](s);
 		}
 	},
-	remove:function(){
-		var s = this;
-		if(!s.parent || s.parent == "root")return;
-		s.parent.removeChild(s);
-	},
 	addChild:function (d){
 		var s  = this;
 		d.parent = s;
@@ -148,6 +144,7 @@ p = {
 			if(d.objectIndex == c[i].objectIndex){
 				if(LGlobal.destroy && d.die)d.die();
 				s.childList.splice(i,1);
+				s.ll_cr = true;
 				break;
 			}
 		}
@@ -163,6 +160,7 @@ p = {
 		if(c.length <= i)return;
 		if(LGlobal.destroy && c[i].die)c[i].die();
 		s.childList.splice(i,1);
+		s.ll_cr = true;
 	},
 	getChildIndex:function(child){
 		var s = this,c=s.childList,i,l=c.length;
@@ -199,6 +197,7 @@ p = {
 		s.childList.length = 0;
 		s.width = 0;
 		s.height = 0;
+		s.ll_cr = true;
 	},
 	clone:function(){
 		var s = this,a = new LSprite(),c,o;
@@ -225,33 +224,52 @@ p = {
 		}
 		return false;
 	},
+	ll_dispatchMouseEvent:function(type,e,cd,ox,oy){
+		var s = this;
+		for(k=0;k<s.mouseList.length;k++){
+			var o = s.mouseList[k];
+			if(o.type == type){
+				e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
+				e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
+				e.clickTarget = s;
+				o.listener(e,s);
+			}
+		}
+	},
 	mouseEvent:function (e,type,cd){
 		if(!e)return false;
 		var s = this;
-		if(!s.mouseChildren || !s.visible)return false;
+		if(!s.mouseEnabled || !s.visible)return false;
 		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
 		if(on){
-			var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-			for(k=s.childList.length-1;k>=0;k--){
-				if(s.childList[k].mouseEvent){
-					i = s.childList[k].mouseEvent(e,type,mc);
-					if(i)break;
+			if(type==LMouseEvent.MOUSE_MOVE && !s.ll_mousein){
+				s.ll_mousein = true;
+				if(s._mevent(LMouseEvent.MOUSE_OVER)){
+					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER,e,cd,ox,oy);
 				}
 			}
-			if(s._mevent(type)){
-				for(k=0;k<s.mouseList.length;k++){
-					var o = s.mouseList[k];
-					if(o.type == type){
-						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
-						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
-						e.clickTarget = s;
-						o.listener(e,s);
+			if(s.mouseChildren){
+				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				for(k=s.childList.length-1;k>=0;k--){
+					if(s.childList[k].mouseEvent){
+						i = s.childList[k].mouseEvent(e,type,mc);
+						if(i)break;
 					}
+				}
+				if(s._mevent(type)){
+					s.ll_dispatchMouseEvent(type,e,cd,ox,oy);
 				}
 			}
 			return true;
+		}else{
+			if(type==LMouseEvent.MOUSE_MOVE && s.ll_mousein){
+				s.ll_mousein = false;
+				if(s._mevent(LMouseEvent.MOUSE_OUT)){
+					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT,e,cd,ox,oy);
+				}
+			}
 		}
 		return false;
 	},

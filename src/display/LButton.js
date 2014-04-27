@@ -35,7 +35,7 @@ LButton.prototype.buttonModeChange = function (){
 		cood.y += parent.y;
 		parent = parent.parent;
 	}
-	if(s.ismouseon(LGlobal.buttonStatusEvent,cood)){
+	if(s.buttonMode && s.ismouseon(LGlobal.buttonStatusEvent,cood)){
 		s.bitmap_up.visible = false;
 		s.bitmap_over.visible = true;
 	}else{
