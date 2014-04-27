@@ -11,6 +11,7 @@ function LSprite(){
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
 	s.box2d = null;
+	s.buttonMode = true;
 }
 p = {
 	setRotate:function (angle){
@@ -238,7 +239,7 @@ p = {
 	mouseEvent:function (e,type,cd){
 		if(!e)return false;
 		var s = this;
-		if(!s.mouseChildren || !s.visible)return false;
+		if(!s.mouseEnabled || !s.visible)return false;
 		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
 		var i,k,ox = e.offsetX,oy = e.offsetY;
 		var on = s.ismouseon(e,cd);
@@ -249,15 +250,17 @@ p = {
 					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER,e,cd,ox,oy);
 				}
 			}
-			var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-			for(k=s.childList.length-1;k>=0;k--){
-				if(s.childList[k].mouseEvent){
-					i = s.childList[k].mouseEvent(e,type,mc);
-					if(i)break;
+			if(s.mouseChildren){
+				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
+				for(k=s.childList.length-1;k>=0;k--){
+					if(s.childList[k].mouseEvent){
+						i = s.childList[k].mouseEvent(e,type,mc);
+						if(i)break;
+					}
 				}
-			}
-			if(s._mevent(type)){
-				s.ll_dispatchMouseEvent(type,e,cd,ox,oy);
+				if(s._mevent(type)){
+					s.ll_dispatchMouseEvent(type,e,cd,ox,oy);
+				}
 			}
 			return true;
 		}else{

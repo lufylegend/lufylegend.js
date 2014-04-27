@@ -5,6 +5,7 @@ function LInteractiveObject(){
 	var s = this;
 	base(s,LDisplayObject,[]);
 	s.type = "LInteractiveObject";
+	s.mouseEnabled = true;
 	s.mouseChildren = true;
 	s.frameList = new Array();
 	s.mouseList = new Array();

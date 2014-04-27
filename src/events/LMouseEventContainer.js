@@ -141,11 +141,27 @@ $LMouseEventContainer.prototype = {
 		}
 		return r;
     }
+    ,_mouseEnabled:function(sp){
+    	var self = this;
+    	if(!sp || !sp.parent || sp.parent == "root"){
+    		return false;
+    	}
+    	if(!sp.visible || (typeof sp.mouseEnabled != UNDEFINED && !sp.mouseEnabled)){
+    		return false;
+    	}
+    	var p = sp.parent;
+		while(p != "root"){
+			if(!p.mouseEnabled || !p.mouseChildren)return false;
+			p = p.parent;
+			if(!p)return false;
+		}
+		return true;
+    }
 	,dispatchEvent:function(event,list,type){
 		var self = this,sp,co,st=[],o,i,l;
 		for(i=0,l=list.length;i<l;i++){
 			sp = list[i].container || list[i];
-            if(!sp || !sp.parent || (typeof sp.mouseChildren != UNDEFINED && !sp.mouseChildren) || !sp.visible)continue;
+			if(!self._mouseEnabled(sp))continue;
             co = self.getRootParams(sp);
             if(!type && sp.mouseEvent){
 				sp.mouseEvent(event,LMouseEvent.MOUSE_DOWN,co);
