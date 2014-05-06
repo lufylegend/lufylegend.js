@@ -102,6 +102,7 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.stage.parent = "root";
 	LGlobal.childList.push(LGlobal.stage);
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
+	
 	if(LGlobal.canTouch){
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
 			if(LGlobal.inputBox.style.display != NONE){
@@ -190,6 +191,16 @@ LGlobal.setCanvas = function (id,w,h){
 			}
 		});
 	}else{
+		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK,function(e){
+			if(e.offsetX == null && e.layerX != null){
+				e.offsetX = e.layerX;
+				e.offsetY = e.layerY;
+			}
+			var event = {button:e.button};
+			event.offsetX = LGlobal.scaleX(e.offsetX);
+			event.offsetY = LGlobal.scaleY(e.offsetY);
+			LGlobal.mouseEvent(event,LMouseEvent.DOUBLE_CLICK);
+		});
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN,function(e){
 			if(e.offsetX == null && e.layerX != null){
 				e.offsetX = e.layerX;
