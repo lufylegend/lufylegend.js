@@ -138,8 +138,8 @@ $LMouseEventContainer.prototype = {
 		}else if(type == LMouseEvent.DOUBLE_CLICK){
 			s.dispatchEvent(event,s.mouseDblContainer,LMouseEvent.DOUBLE_CLICK);
 		}else{
-			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
+			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
 	}
