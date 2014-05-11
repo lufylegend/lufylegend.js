@@ -204,6 +204,7 @@ p = {
 		a.copyProperty(s);
 		a.graphics = s.graphics.clone();
 		a.graphics.parent = a;
+		a.childList.length=0;
 		for(var i=0,l=s.childList.length;i<l;i++){
 			c = s.childList[i];
 			if(c.clone){

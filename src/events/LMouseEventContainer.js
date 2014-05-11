@@ -138,9 +138,9 @@ $LMouseEventContainer.prototype = {
 		}else if(type == LMouseEvent.DOUBLE_CLICK){
 			s.dispatchEvent(event,s.mouseDblContainer,LMouseEvent.DOUBLE_CLICK);
 		}else{
-			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
+			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
 	}
     ,getRootParams:function(s){
@@ -190,11 +190,13 @@ $LMouseEventContainer.prototype = {
             		if(sp.ll_mousein){
             			continue;
             		}
+            	}
+            	if(type != LMouseEvent.MOUSE_UP){
             		sp.ll_mousein = true;
             	}
             	st.push({sp:sp,co:co,listener:list[i].listener});
             }else{
-            	if(type != LMouseEvent.MOUSE_OUT){
+            	if(type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER){
             		continue;
             	}
             	if(!sp.ll_mousein){
