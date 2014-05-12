@@ -104,6 +104,8 @@ LGlobal.setCanvas = function (id,w,h){
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
 	
 	if(LGlobal.canTouch){
+		LGlobal.ll_clicks = 0;
+		LGlobal.ll_prev_clickTime = 0;
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
 			if(LGlobal.inputBox.style.display != NONE){
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
@@ -126,6 +128,14 @@ LGlobal.setCanvas = function (id,w,h){
 			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
+			var date = new Date();
+			var clickTIme = date.getTime();
+			LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
+			LGlobal.ll_prev_clickTime = clickTIme;
+			if(LGlobal.ll_clicks === 2){
+				LGlobal.mouseEvent(eve,LMouseEvent.DOUBLE_CLICK);
+				LGlobal.ll_clicks = 0;
+			}
 			LGlobal.IS_MOUSE_DOWN = true;
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start){
 				LGlobal.mouseJoint_start(eve);
