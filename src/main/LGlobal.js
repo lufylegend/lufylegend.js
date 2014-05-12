@@ -129,9 +129,9 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
 			var date = new Date();
-			var clickTIme = date.getTime();
+			var clickTime = date.getTime();
 			LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
-			LGlobal.ll_prev_clickTime = clickTIme;
+			LGlobal.ll_prev_clickTime = clickTime;
 			if(LGlobal.ll_clicks === 2){
 				LGlobal.mouseEvent(eve,LMouseEvent.DOUBLE_CLICK);
 				LGlobal.ll_clicks = 0;
