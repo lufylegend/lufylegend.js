@@ -3,8 +3,8 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.10.min.js"></script>
-	<script type="text/javascript" src="../../lib/lufylegend.ui-0.7.0.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.11.min.js"></script>
+	<script type="text/javascript" src="../../lib/lufylegend.ui-0.8.0.min.js"></script>
 	</head>
 	<body style="margin:0;padding:0;">
 			<div id="legend"></div>
@@ -165,6 +165,12 @@ function addWindow(){
 	button01.x = 100;
 	button01.y = 150;
 	myWindow.layer.addChild(button01);
+	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){
+		LMessageBox.show({
+			title:"message",
+			message:"点击了登陆按钮"
+		});
+	});
 	var button02 = new LButtonSample1("注册");
 	button02.x = 200;
 	button02.y = 150;

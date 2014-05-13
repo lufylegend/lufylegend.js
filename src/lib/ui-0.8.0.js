@@ -845,7 +845,7 @@ function LWindow(width,height,title){
 	s.title = new LTextField();
 	s.title.x = s.title.y = 3;
 	s.title.size = 16;
-	s.title.text = title;
+	s.title.text = title?title:"";
 	s.bar.addChild(s.title);
 	
 	s.close = new LSprite();

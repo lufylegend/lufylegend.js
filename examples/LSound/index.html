@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<title>sound audio</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<script type="text/javascript" src="../../lufylegend-1.8.10.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.11.min.js"></script>
 </head>
 <body>
 	<div id="legend"></div>
@@ -35,6 +35,7 @@ function onloadSound(e){
 	sound.load(url+"mp3,"+url+"wav,"+url+"ogg");
 }
 function gameInit(e){
+	sound.removeEventListener(LEvent.COMPLETE,gameInit);
 	nowTime = new LTextField();
 	nowTime.x = 100;
 	nowTime.y = 50;

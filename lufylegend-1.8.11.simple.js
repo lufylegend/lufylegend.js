@@ -789,10 +789,10 @@ LGlobal.hitPolygon = function(list,x,y){
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
 	,rB = objB.getWidth()*0.5
-	,xA = objA._startX()
-	,xB = objB._startX()
-	,yA = objA._startY()
-	,yB = objB._startY();
+	,xA = objA._startX?objA._startX():objA.startX()
+	,xB = objB._startX?objB._startX():objB.startX()
+	,yA = objA._startY?objA._startY():objA.startY()
+	,yB = objB._startY?objB._startY():objB.startY();
 	if(typeof objAR != UNDEFINED){
 		xA += (rA - objAR);
 		yA += (rA - objAR);
@@ -812,10 +812,10 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 	,wB = objB.getWidth()
 	,hA = objA.getHeight()
 	,hB = objB.getHeight()
-	,xA = objA._startX()
-	,xB = objB._startX()
-	,yA = objA._startY()
-	,yB = objB._startY();
+	,xA = objA._startX?objA._startX():objA.startX()
+	,xB = objB._startX?objB._startX():objB.startX()
+	,yA = objA._startY?objA._startY():objA.startY()
+	,yB = objB._startY?objB._startY():objB.startY();
 	if(typeof vecA != UNDEFINED){
 		xA += (wA - vecA[0])*0.5;
 		yA += (hA - vecA[1])*0.5;
@@ -3331,6 +3331,8 @@ function LAnimation(layer,data,list){
 	s.imageArray = list;
 	s.addChild(s.bitmap);
 	if(layer != null)layer.addChild(s);
+	s.onframe();
+	s.colIndex = 0;
 };
 LAnimation.prototype.setAction = function (rowIndex,colIndex,mode,isMirror){
 	var s = this;
@@ -3360,8 +3362,19 @@ LAnimation.prototype.getAction = function (){
 };
 LAnimation.prototype.onframe = function (){
 	var s = this;
+	s.bitmap.x = s.bitmap.y = 0;
 	var arr = s.imageArray[s.rowIndex][s.colIndex];
-	s.bitmap.bitmapData.setCoordinate(arr.x,arr.y);
+	if(typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED){
+		s.bitmap.bitmapData.setProperties(arr.x,arr.y,arr.width,arr.height);
+	}else{
+		s.bitmap.bitmapData.setCoordinate(arr.x,arr.y);
+	}
+	if(typeof arr.sx != UNDEFINED){
+		s.bitmap.x = arr.sx;
+	}
+	if(typeof arr.sy != UNDEFINED){
+		s.bitmap.y = arr.sy;
+	}
 	if(typeof arr.script == "function"){
 		arr.script(s,arr.params);
 	}

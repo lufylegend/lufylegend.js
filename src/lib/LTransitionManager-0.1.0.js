@@ -693,4 +693,4 @@ LTransitionManager.start = function(displayObject,transObj){
 	var trans = new LTransition(displayObject,transObj);
 	trans.startTransition();
 	return trans;
-}
+};

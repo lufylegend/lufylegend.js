@@ -1,5 +1,5 @@
 var loadingLayer;
-var backLayer;
+var backgroundLayer,backLayer;
 var wallLayer;
 var bird,centerlayer;
 var bitmap,slingshotJoin;
@@ -10,6 +10,7 @@ var imgData = new Array(
 		{type:"js",path:"./main/Pig.js"},
 		{type:"js",path:"./main/Stage.js"},
 		{type:"js",path:"./main/RemoveObject.js"},
+		{name:"back",path:"./images/back.png"},
 		{name:"bird1",path:"./images/bird1.png"},
 		{name:"slingshot1",path:"./images/slingshot1.png"},
 		{name:"slingshot2",path:"./images/slingshot2.png"},
@@ -36,6 +37,8 @@ function main(){
 	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	//LGlobal.setDebug(true);
+	backgroundLayer = new LSprite();	
+	addChild(backgroundLayer);	
 	backLayer = new LSprite();	
 	addChild(backLayer);	
 	
@@ -56,10 +59,12 @@ function main(){
 }
 function gameInit(event){
 	LGlobal.box2d = new LBox2d();
-	var back = new LSprite();
-	back.alpha = 0.1;
-	backLayer.addChild(back);
-	back.graphics.drawRect(1,"#ffffff",[0, 0, 1600, 480]);
+	var back = new LBitmap(new LBitmapData(imglist["back"]));
+	back.scaleX = LGlobal.width/back.getWidth();
+	back.scaleY = LGlobal.height/back.getHeight();
+	backgroundLayer.addChild(back);
+
+	backLayer.graphics.drawRect(0,"#ffffff",[0, 0, 1600, 480]);
 	
 	wallLayer = new LSprite();
 	wallLayer.y = 480;
