@@ -13,6 +13,8 @@ function LAnimation(layer,data,list){
 	s.imageArray = list;
 	s.addChild(s.bitmap);
 	if(layer != null)layer.addChild(s);
+	s.onframe();
+	s.colIndex = 0;
 };
 LAnimation.prototype.setAction = function (rowIndex,colIndex,mode,isMirror){
 	var s = this;
@@ -42,8 +44,19 @@ LAnimation.prototype.getAction = function (){
 };
 LAnimation.prototype.onframe = function (){
 	var s = this;
+	s.bitmap.x = s.bitmap.y = 0;
 	var arr = s.imageArray[s.rowIndex][s.colIndex];
-	s.bitmap.bitmapData.setCoordinate(arr.x,arr.y);
+	if(typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED){
+		s.bitmap.bitmapData.setProperties(arr.x,arr.y,arr.width,arr.height);
+	}else{
+		s.bitmap.bitmapData.setCoordinate(arr.x,arr.y);
+	}
+	if(typeof arr.sx != UNDEFINED){
+		s.bitmap.x = arr.sx;
+	}
+	if(typeof arr.sy != UNDEFINED){
+		s.bitmap.y = arr.sy;
+	}
 	if(typeof arr.script == "function"){
 		arr.script(s,arr.params);
 	}

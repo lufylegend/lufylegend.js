@@ -1,4 +1,4 @@
-function LBox2d(){
+function LBox2d(gravity,doSleep,drawScale){
 	var s = this;
 	Box2D.Dynamics.b2World.prototype.LAddController=Box2D.Dynamics.b2World.prototype.AddController;
 	Box2D.Dynamics.b2World.prototype.AddController=function(c){
@@ -13,12 +13,23 @@ function LBox2d(){
 	a=[b.Collision,b.Common,b.Common.Math,
 	b.Dynamics,b.Dynamics.Contacts,b.Dynamics.Controllers,b.Dynamics.Joints,b.Collision.Shapes];
 	for(i in a)for(j in a[i])s[j]=a[i][j];
+	if(typeof drawScale == UNDEFINED){
+		drawScale = 30;
+	}
 	s.drawScale = 30;
 	s.selectedBody = null;
 	s.mouseJoint = null;
 	s.mousePVec = null;
 	s.contactListener = null;
-	s.world = new s.b2World(new s.b2Vec2(0, 9.8),true);
+	if(typeof gravity == UNDEFINED){
+		gravity = new s.b2Vec2(0, 9.8);
+	}else{
+		gravity = new s.b2Vec2(gravity[0],gravity[1]);
+	}
+	if(typeof doSleep == UNDEFINED){
+		doSleep = true;
+	}
+	s.world = new s.b2World(gravity,doSleep);
 	s.removeList = new Array();
 	if(LGlobal.traceDebug){
 		d = new s.b2DebugDraw();
@@ -35,6 +46,10 @@ function LBox2d(){
 LBox2d.prototype = {
 	setEvent:function(t_v,f_v){
 		var s = this;
+		if(t_v == LEvent.ENTER_FRAME){
+			s.ll_enterFrame = f_v;
+			return;
+		}
 		if(!s.contactListener){
 			s.contactListener = new s.b2ContactListener();
 			s.world.SetContactListener(s.contactListener);
@@ -253,6 +268,7 @@ LBox2d.prototype = {
 			s.world.DestroyBody(s.removeList[k]);
 		}
 		s.removeList.splice(0,s.removeList.length);
+		if(s.ll_enterFrame)s.ll_enterFrame({target:s});
 		s.world.Step(1 / 30,10,10);
 		s.world.ClearForces();
 		if(LGlobal.traceDebug){

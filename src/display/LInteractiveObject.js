@@ -15,7 +15,7 @@ p = {
 		var s = this;
 		if(type == LEvent.ENTER_FRAME){
 			s.frameList.push(listener);
-		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
+		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.addMouseEvent(s,type,listener);
 				return;
@@ -35,7 +35,7 @@ p = {
 					return;
 				}
 			}
-		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
+		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.removeMouseEvent(s,type,listener);
 				return;
@@ -79,7 +79,7 @@ p = {
 	hasEventListener:function(type){
 		var s = this,i,length;
 		if(type == LEvent.ENTER_FRAME && s.frameList.length > 0)return true;
-		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0){
+		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			length = s.mouseList.length;
 			for(i=0;i<length;i++){
 				if(!s.mouseList[i])continue;

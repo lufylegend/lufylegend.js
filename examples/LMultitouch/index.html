@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<title>LMultitouch</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.10.min.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.11.min.js"></script>
 	</head>
 	<body>
 			<div id="legend"></div>
@@ -46,7 +46,7 @@ function draw(){
 		title.text = "id:"+eve.touchPointID+","+eve.offsetX+","+eve.offsetY;
 		title.size = 18;
 		title.x = 10;
-		title.y = eve.touchPointID*23;
+		title.y = i*23;
 		back.addChild(title);
 	}
 }
