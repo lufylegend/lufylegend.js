@@ -102,7 +102,10 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.stage.parent = "root";
 	LGlobal.childList.push(LGlobal.stage);
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
+	
 	if(LGlobal.canTouch){
+		LGlobal.ll_clicks = 0;
+		LGlobal.ll_prev_clickTime = 0;
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
 			if(LGlobal.inputBox.style.display != NONE){
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
@@ -125,6 +128,14 @@ LGlobal.setCanvas = function (id,w,h){
 			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
 			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
 			LGlobal.buttonStatusEvent = eve;
+			var date = new Date();
+			var clickTime = date.getTime();
+			LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
+			LGlobal.ll_prev_clickTime = clickTime;
+			if(LGlobal.ll_clicks === 2){
+				LGlobal.mouseEvent(eve,LMouseEvent.DOUBLE_CLICK);
+				LGlobal.ll_clicks = 0;
+			}
 			LGlobal.IS_MOUSE_DOWN = true;
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start){
 				LGlobal.mouseJoint_start(eve);
@@ -190,6 +201,16 @@ LGlobal.setCanvas = function (id,w,h){
 			}
 		});
 	}else{
+		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK,function(e){
+			if(e.offsetX == null && e.layerX != null){
+				e.offsetX = e.layerX;
+				e.offsetY = e.layerY;
+			}
+			var event = {button:e.button};
+			event.offsetX = LGlobal.scaleX(e.offsetX);
+			event.offsetY = LGlobal.scaleY(e.offsetY);
+			LGlobal.mouseEvent(event,LMouseEvent.DOUBLE_CLICK);
+		});
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN,function(e){
 			if(e.offsetX == null && e.layerX != null){
 				e.offsetX = e.layerX;
@@ -388,10 +409,10 @@ LGlobal.hitPolygon = function(list,x,y){
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
 	,rB = objB.getWidth()*0.5
-	,xA = objA.startX()
-	,xB = objB.startX()
-	,yA = objA.startY()
-	,yB = objB.startY();
+	,xA = objA._startX?objA._startX():objA.startX()
+	,xB = objB._startX?objB._startX():objB.startX()
+	,yA = objA._startY?objA._startY():objA.startY()
+	,yB = objB._startY?objB._startY():objB.startY();
 	if(typeof objAR != UNDEFINED){
 		xA += (rA - objAR);
 		yA += (rA - objAR);
@@ -411,10 +432,10 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 	,wB = objB.getWidth()
 	,hA = objA.getHeight()
 	,hB = objB.getHeight()
-	,xA = objA.startX()
-	,xB = objB.startX()
-	,yA = objA.startY()
-	,yB = objB.startY();
+	,xA = objA._startX?objA._startX():objA.startX()
+	,xB = objB._startX?objB._startX():objB.startX()
+	,yA = objA._startY?objA._startY():objA.startY()
+	,yB = objB._startY?objB._startY():objB.startY();
 	if(typeof vecA != UNDEFINED){
 		xA += (wA - vecA[0])*0.5;
 		yA += (hA - vecA[1])*0.5;

@@ -9,6 +9,7 @@ function $LMouseEventContainer(){
 	s.mouseMoveContainer = [];
 	s.mouseOverContainer = [];
 	s.mouseOutContainer = [];
+	s.mouseDblContainer = [];
 	s.textFieldInputContainer = [];
 };
 $LMouseEventContainer.prototype = {
@@ -61,6 +62,10 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.addEvent(o,s.mouseOutContainer,f);
 	}
+	,addMouseDblEvent:function(o,f){
+		var s = this;
+		s.addEvent(o,s.mouseDblContainer,f);
+	}
 	,addMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
@@ -71,8 +76,10 @@ $LMouseEventContainer.prototype = {
 			s.addMouseOverEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_OUT){
 			s.addMouseOutEvent(o,f);
-		}else{
+		}else if(t == LMouseEvent.MOUSE_MOVE){
 			s.addMouseMoveEvent(o,f);
+		}else{
+			s.addMouseDblEvent(o,f);
 		}
 	}
 	,hasEvent:function(o,list){
@@ -101,6 +108,10 @@ $LMouseEventContainer.prototype = {
 		var s = this;
 		s.removeEvent(o,s.mouseOutContainer,f);
 	}
+	,removeMouseDblEvent:function(o,f){
+		var s = this;
+		s.removeEvent(o,s.mouseDblContainer,f);
+	}
 	,removeMouseEvent:function(o,t,f){
 		var s = this;
 		if(t == LMouseEvent.MOUSE_DOWN){
@@ -111,8 +122,10 @@ $LMouseEventContainer.prototype = {
 			s.removeMouseOverEvent(o,f);
 		}else if(t == LMouseEvent.MOUSE_OUT){
 			s.removeMouseOutEvent(o,f);
-		}else{
+		}else if(t == LMouseEvent.MOUSE_MOVE){
 			s.removeMouseMoveEvent(o,f);
+		}else{
+			s.removeMouseDblEvent(o,f);
 		}
 	}
 	,dispatchMouseEvent:function(event,type){
@@ -122,10 +135,12 @@ $LMouseEventContainer.prototype = {
 			s.dispatchEvent(event,s.textFieldInputContainer);
 		}else if(type == LMouseEvent.MOUSE_UP){
 			s.dispatchEvent(event,s.mouseUpContainer,LMouseEvent.MOUSE_UP);
+		}else if(type == LMouseEvent.DOUBLE_CLICK){
+			s.dispatchEvent(event,s.mouseDblContainer,LMouseEvent.DOUBLE_CLICK);
 		}else{
-			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
-			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
+			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
+			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
 		}
 	}
     ,getRootParams:function(s){
@@ -175,11 +190,13 @@ $LMouseEventContainer.prototype = {
             		if(sp.ll_mousein){
             			continue;
             		}
+            	}
+            	if(type != LMouseEvent.MOUSE_UP){
             		sp.ll_mousein = true;
             	}
             	st.push({sp:sp,co:co,listener:list[i].listener});
             }else{
-            	if(type != LMouseEvent.MOUSE_OUT){
+            	if(type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER){
             		continue;
             	}
             	if(!sp.ll_mousein){
