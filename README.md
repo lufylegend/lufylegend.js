@@ -11,18 +11,8 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 官网 <a target='_blank' href="http://lufylegend.com/lufylegend">http://lufylegend.com/lufylegend</a>
 =============
 
-※1.8.11版更新内容
+※1.8.12版更新内容
 
-1，修正了hitTest，hitTestRect和hitTestArc函数在对象缩放时检测会出现误差的bug。
+1，修正了LBitmap对象缩放时鼠标事件失效的bug(感谢网友↙`ゞ☆记忆提供bug报告)
 
-2，修正了使用鼠标容器时无法单独添加MOUSE_OVER和MOUSE_OUT的bug。
-
-3，修正了LSprite对象clone的时候，子对象重复复制的bug。
-
-4，增加鼠标双击事件。
-
-5，lufylegend.ui中追加了LMessageBox，类似于alert可用于弹出提示信息。
-
-6，增加了对adobe flash cs导出纹理以及自设纹理的支持。
-
-7，LBox2d提供消除重力和自由设定重力功能。
+2，修正了LTextField对象缩放时鼠标事失效的bug
