@@ -123,8 +123,8 @@ p = {
 		}
 		ox = e.offsetX;
 		oy = e.offsetY;
-		if(ox >=  cood.x + s.x*cood.scaleX && ox <= cood.x + (s.x + s.getWidth())*cood.scaleX*s.scaleX && 
-			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + (s.y + s.getHeight())*cood.scaleY*s.scaleY){
+		if(ox >=  cood.x + s.x*cood.scaleX && ox <= cood.x + s.x*cood.scaleX + s.getWidth()*cood.scaleX*s.scaleX && 
+			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + s.y*cood.scaleY + s.getHeight()*cood.scaleY*s.scaleY){
 			return true;
 		}else{
 			return false;

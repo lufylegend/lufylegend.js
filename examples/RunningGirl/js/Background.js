@@ -18,6 +18,7 @@ Background.prototype.init = function(){
 Background.prototype.onframe = function(event){
 	var self = event.target;
 	if(gameBody.isStop())return;
+	
 	self.backX += MOVE_STEP*0.1;
 	if(self.backX > LGlobal.width){
 		self.backX -= LGlobal.width;

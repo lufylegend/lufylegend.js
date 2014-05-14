@@ -23,7 +23,6 @@ LogoController.prototype.playBackMusic = function(event){
 LogoController.prototype.checkAuth=function(obj){
 	var self = obj.parent.controller;
 	self.model.getStatus(self.addEvent);
-	self.view.addEventListener(LMouseEvent.MOUSE_UP, self.onClick);
 };
 LogoController.prototype.addEvent=function(){
 	var self = this;
