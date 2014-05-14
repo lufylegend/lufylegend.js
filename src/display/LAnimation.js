@@ -44,7 +44,6 @@ LAnimation.prototype.getAction = function (){
 };
 LAnimation.prototype.onframe = function (){
 	var s = this;
-	s.bitmap.x = s.bitmap.y = 0;
 	var arr = s.imageArray[s.rowIndex][s.colIndex];
 	if(typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED){
 		s.bitmap.bitmapData.setProperties(arr.x,arr.y,arr.width,arr.height);

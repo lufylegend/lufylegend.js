@@ -47,8 +47,8 @@ p = {
 		if(!s.visible || !s.bitmapData)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
 		var ox = e.offsetX,oy = e.offsetY;
-		if(ox >= cood.x + s.x*cood.scaleX && ox <= cood.x + (s.x + s.bitmapData.width)*cood.scaleX*s.scaleX && 
-			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + (s.y + s.bitmapData.height)*cood.scaleY*s.scaleY){
+		if(ox >= cood.x + s.x*cood.scaleX && ox <= cood.x + s.x*cood.scaleX + s.bitmapData.width*cood.scaleX*s.scaleX && 
+			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + s.y*cood.scaleY + s.bitmapData.height*cood.scaleY*s.scaleY){
 			return true;
 		}else{
 			return false;
