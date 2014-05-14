@@ -12,6 +12,7 @@ function LSprite(){
 	s.graphics.parent = s;
 	s.box2d = null;
 	s.buttonMode = true;
+	s.shapes = new Array();
 }
 p = {
 	setRotate:function (angle){
@@ -122,6 +123,16 @@ p = {
 			s.target = s;
 			s.event_type = LEvent.ENTER_FRAME;
 			s.frameList[k](s);
+		}
+	},
+	addShape:function(_type,arg){
+		var s = this;
+		if(_type=="arc"){
+			
+		}else if(_type=="rect"){
+			
+		}else if(_type=="vertices"){
+			
 		}
 	},
 	addChild:function (d){
