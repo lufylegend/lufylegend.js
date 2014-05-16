@@ -127,13 +127,15 @@ p = {
 	},
 	addShape:function(_type,arg){
 		var s = this;
-		if(_type=="arc"){
-			
+		if(_type=="arc" || _type=="vertices"){
+			s.shapes.push({"type":_type,"arg":arg});
 		}else if(_type=="rect"){
-			
-		}else if(_type=="vertices"){
-			
+			s.shapes.push({"type":"vertices","arg":[[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]]});
 		}
+	},
+	clearShape:function(){
+		var s = this;
+		s.shapes.length=0;
 	},
 	addChild:function (d){
 		var s  = this;
@@ -288,6 +290,32 @@ p = {
 	ismouseon:function(e,cd){
 		var s = this;
 		if(!s.visible || e==null)return false;
+		if(s.shapes && s.shapes.length > 0){
+			var a = new LSprite();
+			addChild(a);
+			var parent = s;
+			var m = new LMatrix();
+			while(parent && parent != "root"){
+				m.scale(parent.scaleX,parent.scaleY);
+				m.translate(parent.x,parent.y);
+				m.rotate(parent.rotate);
+				parent = parent.parent;
+			}
+			for(var j=s.shapes.length-1;j>=0;j--){
+				var v = s.shapes[j].arg.slice();
+				if(s.shapes[j].type == "arc"){
+					var ss =m.toArray([v[0],v[1],1]);
+					a.graphics.drawArc(1,"#FF0000",[ss[0],ss[1],50*cd.scaleX,0,Math.PI*2]);
+				}else if(s.shapes[j].type == "vertices"){
+					for(var i=0;i<v.length;i++){
+						v[i]=m.toArray([v[i][0],v[i][1],1]);
+					}
+					a.graphics.drawVertices(1,"#FF0000",v);
+					if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+				}
+			}
+			return false;
+		}
 		var k = null,i=false,l=s.childList;
 		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.mask && !s.mask.ismouseon(e,sc))return false;
