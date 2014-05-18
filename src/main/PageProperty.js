@@ -72,3 +72,8 @@ if (!Array.prototype.indexOf){
 		return -1;
 	};
 }
+if (!Array.isArray){
+	Array.isArray = function(value){
+		return Object.prototype.toString.apply(value) == '[object Array]';
+	};
+}

@@ -115,9 +115,3 @@ LMatrix.prototype = {
 		return new LMatrix(s.a,s.b,s.c,s.d,s.tx,s.ty,s.u,s.v,s.w);
 	}
 };
-
-if (!Array.isArray){
-	Array.isArray = function(value){
-		return Object.prototype.toString.apply(value) == '[object Array]';
-	};
-}

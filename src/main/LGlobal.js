@@ -387,24 +387,60 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
-LGlobal.hitPolygon = function(list,x,y){
-	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
-	for(i=1,l=list.length;i<l+1;i++){
-		p1 = list[i%l];
-		b1x = (x <= p1[0]);
-		b1y = (y <= p1[1]);
-		if( b0y != b1y ){
-			if( b0x == b1x ){
-				if( b0x )c += (b0y ? -1 : 1);
-			}else{
-				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+LGlobal.hitPolygon = function(){
+	var args = LGlobal.hitPolygon.arguments;
+	if(args.length == 3){
+		var list = args[0],x=args[1],y=args[2];
+		var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+		for(i=1,l=list.length;i<l+1;i++){
+			p1 = list[i%l];
+			b1x = (x <= p1[0]);
+			b1y = (y <= p1[1]);
+			if( b0y != b1y ){
+				if( b0x == b1x ){
+					if( b0x )c += (b0y ? -1 : 1);
+				}else{
+					if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+				}
 			}
+			p0 = p1;
+			b0x = b1x;
+			b0y = b1y;
 		}
-		p0 = p1;
-		b0x = b1x;
-		b0y = b1y;
+		return 0 != c;
+	}else{
+		var listA = args[0],listB=args[1],i,j,a,b,c,n,dn,cn,min,max;
+		for(i=listA.length-1;i>0;i--){
+			a = listA[i],b=listA[i-1];
+			nx = (b.y - a.y), ny = (a.x - b.x);
+			dn = nx * a.x + ny * a.y;
+			min="null",max="null";
+			for(j=listA.length-1;j>=0;j--){
+				if(j==i || j==i-1){
+					continue;
+				}
+				c=listA[j];
+				cn = nx * c.x + ny * c.y-dn;
+				if(min=="null" || cn < min){
+					min = cn;
+				}
+				if(max=="null" || cn > max){
+					max = cn;
+				}
+			}
+			var ck=false;
+			for(j=listB.length-1;j>=0;j--){
+				c = listB[j];
+				cn = nx * c.x + ny * c.y-dn;
+				if(cn >= min && cn <= max){
+					ck=true;
+					break;
+				}
+			}
+			if(!ck)return false;
+		}
+		return true;
 	}
-	return 0 != c;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5

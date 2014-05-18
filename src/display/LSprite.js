@@ -125,13 +125,10 @@ p = {
 			s.frameList[k](s);
 		}
 	},
-	addShape:function(_type,arg){
+	addShape:function(arg){
+		if(arg.length<3){return;}
 		var s = this;
-		if(_type=="arc" || _type=="vertices"){
-			s.shapes.push({"type":_type,"arg":arg});
-		}else if(_type=="rect"){
-			s.shapes.push({"type":"vertices","arg":[[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]]});
-		}
+		s.shapes.push(arg);
 	},
 	clearShape:function(){
 		var s = this;
@@ -287,32 +284,82 @@ p = {
 		}
 		return false;
 	},
-	ismouseon:function(e,cd){
+	hitTestPoint:function(x,y){
 		var s = this;
+		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		var parent = s;
+		var m = new LMatrix();
+		while(parent && parent != "root"){
+			m.scale(parent.scaleX,parent.scaleY);
+			m.rotate(parent.rotate);
+			m.translate(parent.x,parent.y);
+			parent = parent.parent;
+		}
+		for(var j=s.shapes.length-1;j>=0;j--){
+			var v = s.shapes[j];
+			var v1 = [];
+			for(var i=0;i<v.length;i++){
+				v1[i]=m.toArray([v[i][0],v[i][1],1]);
+			}
+			if(LGlobal.hitPolygon(v1,x,y))return true;
+		}
+		return false;
+	},
+	hitTestObject:function(obj){
+		var s = this,shapes,coor;
+		shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		coor = s.getRootCoordinate();
+		//console.log("shapes=",shapes);
+		//console.log("coor=",coor);
+		var list = [];
+		for(var i=0;i<shapes.length;i++){
+			var v = shapes[i];
+			var v1 = [];
+			for(var j=0;j<v.length;j++){
+				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			}
+			list.push(v1);
+		}
+		
+		//console.log("list=",list);
+		shapes = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
+		coor = obj.getRootCoordinate();
+		var objList = [];
+		for(var i=0;i<shapes.length;i++){
+			var v = shapes[i];
+			var v1 = [];
+			for(var j=0;j<v.length;j++){
+				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			}
+			objList.push(v1);
+			for(var j=0;j<list.length;j++){
+				//console.log("v1,list["+j+"]",v1,list[j]);
+				if(LGlobal.hitPolygon(v1,list[j]))return true;
+			}
+		}
+		return false;
+	},
+	ismouseon:function(e,cd){
+		var s = this;return;
 		if(!s.visible || e==null)return false;
 		if(s.shapes && s.shapes.length > 0){
-			var a = new LSprite();
-			addChild(a);
+			//var a = new LSprite();
+			//addChild(a);
 			var parent = s;
 			var m = new LMatrix();
 			while(parent && parent != "root"){
 				m.scale(parent.scaleX,parent.scaleY);
-				m.translate(parent.x,parent.y);
 				m.rotate(parent.rotate);
+				m.translate(parent.x,parent.y);
 				parent = parent.parent;
 			}
 			for(var j=s.shapes.length-1;j>=0;j--){
-				var v = s.shapes[j].arg.slice();
-				if(s.shapes[j].type == "arc"){
-					var ss =m.toArray([v[0],v[1],1]);
-					a.graphics.drawArc(1,"#FF0000",[ss[0],ss[1],50*cd.scaleX,0,Math.PI*2]);
-				}else if(s.shapes[j].type == "vertices"){
-					for(var i=0;i<v.length;i++){
-						v[i]=m.toArray([v[i][0],v[i][1],1]);
-					}
-					a.graphics.drawVertices(1,"#FF0000",v);
-					if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+				var v = s.shapes[j].slice();
+				for(var i=0;i<v.length;i++){
+					v[i]=m.toArray([v[i][0],v[i][1],1]);
 				}
+				//a.graphics.drawVertices(1,"#FF0000",v);
+				if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
 			}
 			return false;
 		}
