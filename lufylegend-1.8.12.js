@@ -767,24 +767,49 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
-LGlobal.hitPolygon = function(list,x,y){
-	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
-	for(i=1,l=list.length;i<l+1;i++){
-		p1 = list[i%l];
-		b1x = (x <= p1[0]);
-		b1y = (y <= p1[1]);
-		if( b0y != b1y ){
-			if( b0x == b1x ){
-				if( b0x )c += (b0y ? -1 : 1);
-			}else{
-				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+LGlobal.hitPolygon = function(){
+	var args = LGlobal.hitPolygon.arguments;
+	if(args.length == 3){
+		var list = args[0],x=args[1],y=args[2];
+		var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+		for(i=1,l=list.length;i<l+1;i++){
+			p1 = list[i%l];
+			b1x = (x <= p1[0]);
+			b1y = (y <= p1[1]);
+			if( b0y != b1y ){
+				if( b0x == b1x ){
+					if( b0x )c += (b0y ? -1 : 1);
+				}else{
+					if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+				}
+			}
+			p0 = p1;
+			b0x = b1x;
+			b0y = b1y;
+		}
+		return 0 != c;
+	}else{
+		var i,j,l,listA,normals,vecs,list=[[args[0],[],[]],[args[1],[],[]]];
+		for(j=0;j<list.length;j++){
+			listA = list[j][0],normals = list[j][1];
+			for(i=0,l=listA.length;i<l;i++){
+				list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
+				if(i<l-1){
+					normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
+				}
+			}
+			normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
+		}
+		for(j=0;j<list.length;j++){
+			normals = list[j][1];
+			for(i=0,l=normals.length;i<l;i++){
+				var r1 = LVec2.getMinMax(list[0][2],normals[i]);
+				var r2 = LVec2.getMinMax(list[1][2],normals[i]);
+				if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
 			}
 		}
-		p0 = p1;
-		b0x = b1x;
-		b0y = b1y;
+		return true;
 	}
-	return 0 != c;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
@@ -938,14 +963,17 @@ function trace(){
 	if(!LGlobal.traceDebug)return;
 	var t = document.getElementById("traceObject"),i;
 	if(trace.arguments.length > 0 && t == null){
-		t = document.createElement("div");
+		t = document.createElement("TEXTAREA");
 		t.id = "traceObject";
 		t.style.position = "absolute";
 		t.style.top = (LGlobal.height + 20) + "px";
+		t.style.width = LGlobal.width+"px";
+		t.style.height = "200px";
 		document.body.appendChild(t);
 	}
 	for(i=0; i < trace.arguments.length; i++){
-		t.innerHTML=t.innerHTML+trace.arguments[i] + "<br />";
+		t.value=t.value+trace.arguments[i] + "\r\n";
+		t.scrollTop = t.scrollHeight;
 	}
 }
 function addChild(o){
@@ -1005,6 +1033,11 @@ if (!Array.prototype.indexOf){
 		return -1;
 	};
 }
+if (!Array.isArray){
+	Array.isArray = function(value){
+		return Object.prototype.toString.apply(value) == '[object Array]';
+	};
+}
 
 /*
  * LObject.js
@@ -1023,23 +1056,29 @@ LObject.prototype = {
 		return "[object "+this.type+"]";
 	}
 };
-function LMatrix(a,b,c,d,tx,ty){
+function LMatrix(a,b,c,d,tx,ty,u,v,w){
 	var s = this;
+	s.a=1;
+	s.b=0;
+	s.u=0;
+	s.c=0;
+	s.d=1;
+	s.v=0;
+	s.tx=0;
+	s.ty=0;
+	s.w=1;
 	if(typeof a != UNDEFINED)s.a = a;
 	if(typeof b != UNDEFINED)s.b = b;
 	if(typeof c != UNDEFINED)s.c = c;
 	if(typeof d != UNDEFINED)s.d = d;
 	if(typeof tx != UNDEFINED)s.tx = tx;
 	if(typeof ty != UNDEFINED)s.ty = ty;
+	if(typeof u != UNDEFINED)s.u = u;
+	if(typeof v != UNDEFINED)s.v = v;
+	if(typeof w != UNDEFINED)s.w = w;
 }
 LMatrix.prototype = {
-	a:1,
-	b:0,
-	c:0,
-	d:1,
-	tx:0,
-	ty:0,
-	setTo:function(a,b,c,d,tx,ty){
+	setTo:function(a,b,c,d,tx,ty,u,v,w){
 		var s = this;
 		if(typeof a != UNDEFINED)s.a = a;
 		if(typeof b != UNDEFINED)s.b = b;
@@ -1047,11 +1086,14 @@ LMatrix.prototype = {
 		if(typeof d != UNDEFINED)s.d = d;
 		if(typeof tx != UNDEFINED)s.tx = tx;
 		if(typeof ty != UNDEFINED)s.ty = ty;
+		if(typeof u != UNDEFINED)s.u = u;
+		if(typeof v != UNDEFINED)s.v = v;
+		if(typeof w != UNDEFINED)s.w = w;
 		return s;
 	},
 	isIdentity:function(){
 		var s = this;
-		return (s.a == 1 && s.b == 0 && s.c == 0 && s.d == 1 && s.tx == 0 && s.ty == 0);
+		return (s.a == 1 && s.b == 0 && s.c == 0 && s.d == 1 && s.tx == 0 && s.ty == 0 && u == 0 && v == 0 && w == 1);
 	},
 	transform:function(c){
 		var s = this;
@@ -1060,7 +1102,121 @@ LMatrix.prototype = {
 	},
 	toString:function(){
 		return "[LMatrix]";
+	},
+	identity:function(){
+		this.setTo(1,0,0,1,0,0,0,0,1);
+	},
+	rotate:function(q){
+		var s = this,
+		radian = q * Math.PI / 180,
+        cos = Math.cos(radian),
+        sin = Math.sin(radian),
+        mtx = new LMatrix(cos,sin,-sin,cos,0,0,0,0,1);
+        s.add(mtx);
+	},
+	scale:function(sx, sy){
+		var s = this,
+		mtx = new LMatrix(sx,0,0,sy,0,0,0,0,1);
+        s.add(mtx);
+	},
+	translate:function(tx, ty){
+		var s = this,
+		mtx = new LMatrix(1,0,0,1,tx,ty,0,0,1);
+        s.add(mtx);
+	},
+	skew:function(kx,ky){
+		mtx = new LMatrix(0,ky,kx,0,0,0,0,0,1);
+        s.add(mtx);
+	},
+	add:function(mtx){
+		var s = this,a,b,c,d,tx,ty,u,v,w;
+		
+		a = s.a*mtx.a + s.b*mtx.c + s.u*mtx.tx;
+		b = s.a*mtx.b + s.b*mtx.d + s.u*mtx.ty;
+		u = s.a*mtx.u + s.b*mtx.v + s.u*mtx.w;
+		
+		c = s.c*mtx.a + s.d*mtx.c + s.v*mtx.tx;
+		d = s.c*mtx.b + s.d*mtx.d + s.v*mtx.ty;
+		v = s.c*mtx.u + s.d*mtx.v + s.v*mtx.w;
+		
+		tx = s.tx*mtx.a + s.ty*mtx.c + s.w*mtx.tx;
+		ty = s.tx*mtx.b + s.ty*mtx.d + s.w*mtx.ty;
+		w = s.tx*mtx.u + s.ty*mtx.v + s.w*mtx.w;
+		s.setTo(a,b,c,d,tx,ty,u,v,w);
+	},
+	toArray:function(mtx){
+		var s = this;
+		if(Array.isArray(mtx) && mtx.length == 3){
+			var m = mtx[0]*s.a + mtx[1]*s.c + mtx[2]*s.tx,
+			n = mtx[0]*s.b + mtx[1]*s.d + mtx[2]*s.ty,
+			k = mtx[0]*s.u + mtx[1]*s.v + mtx[2]*s.w;
+			return [m,n,k];
+		}else{
+			var a = s.a*mtx.a + s.b*mtx.c + s.u*mtx.tx,
+			b = s.a*mtx.b + s.b*mtx.d + s.u*mtx.ty,
+			u = s.a*mtx.u + s.b*mtx.v + s.u*mtx.w,
+			
+			c = s.c*mtx.a + s.d*mtx.c + s.v*mtx.tx,
+			d = s.c*mtx.b + s.d*mtx.d + s.v*mtx.ty,
+			v = s.c*mtx.u + s.d*mtx.v + s.v*mtx.w,
+			
+			tx = s.tx*mtx.a + s.ty*mtx.c + s.w*mtx.tx,
+			ty = s.tx*mtx.b + s.ty*mtx.d + s.w*mtx.ty,
+			w = s.tx*mtx.u + s.ty*mtx.v + s.w*mtx.w;
+			return [a,b,c,d,tx,ty,u,v,w];
+		}
+	},
+	clone:function(){
+		var s = this;
+		return new LMatrix(s.a,s.b,s.c,s.d,s.tx,s.ty,s.u,s.v,s.w);
 	}
+};
+
+function LVec2(x,y){
+	this.x = x?x:0;
+	this.y = y?y:0;
+}
+LVec2.prototype.length = function(){
+	var s = this;
+	return Math.sqrt(s.x * s.x + s.y * s.y);
+};
+
+LVec2.prototype.normR = function(){
+	return new LVec2(-this.y,this.x);
+};
+LVec2.prototype.normL = function(){
+	return new LVec2(this.y,-this.x);
+};
+
+LVec2.dot = function(a,b){
+	return a.x * b.x + a.y * b.y;
+};
+
+LVec2.cross = function(a,b){
+	return a.x * b.y - a.y * b.x;
+};
+LVec2.distance = function(a,b){
+	var x = a.x - b.x;
+	var y = a.y - b.y;
+	return Math.sqrt(x * x + y * y);
+};
+LVec2.getMinMax = function(vecs,axis){
+	var min_o = LVec2.dot(vecs[0],axis);
+	var max_o = LVec2.dot(vecs[0],axis);
+	var min_i = 0;
+	var max_i = 0;
+	for(var i=1;i<vecs.length;i++){
+		var this_o = LVec2.dot(vecs[i],axis);
+		if(min_o > this_o){
+			min_o = this_o;
+			min_i = i;
+		}
+		if(max_o < this_o){
+			max_o = this_o;
+			max_i = i;
+		}
+	}
+	return {"min_o":min_o,"min_i":min_i,"max_o":max_o,"max_i":max_i};
 };
 /*
  * LEventDispatcher.js
@@ -2397,6 +2553,7 @@ function LSprite(){
 	s.graphics.parent = s;
 	s.box2d = null;
 	s.buttonMode = true;
+	s.shapes = new Array();
 }
 p = {
 	setRotate:function (angle){
@@ -2508,6 +2665,15 @@ p = {
 			s.event_type = LEvent.ENTER_FRAME;
 			s.frameList[k](s);
 		}
+	},
+	addShape:function(arg){
+		if(arg.length<3){return;}
+		var s = this;
+		s.shapes.push(arg);
+	},
+	clearShape:function(){
+		var s = this;
+		s.shapes.length=0;
 	},
 	addChild:function (d){
 		var s  = this;
@@ -2659,9 +2825,85 @@ p = {
 		}
 		return false;
 	},
-	ismouseon:function(e,cd){
+	hitTestPoint:function(x,y){
 		var s = this;
+		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		var parent = s;
+		var m = new LMatrix();
+		while(parent && parent != "root"){
+			m.scale(parent.scaleX,parent.scaleY);
+			m.rotate(parent.rotate);
+			m.translate(parent.x,parent.y);
+			parent = parent.parent;
+		}
+		for(var j=s.shapes.length-1;j>=0;j--){
+			var v = s.shapes[j];
+			var v1 = [];
+			for(var i=0;i<v.length;i++){
+				v1[i]=m.toArray([v[i][0],v[i][1],1]);
+			}
+			if(LGlobal.hitPolygon(v1,x,y))return true;
+		}
+		return false;
+	},
+	hitTestObject:function(obj){
+		var s = this,shapes,coor;
+		shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		coor = s.getRootCoordinate();
+
+
+		var list = [];
+		for(var i=0;i<shapes.length;i++){
+			var v = shapes[i];
+			var v1 = [];
+			for(var j=0;j<v.length;j++){
+				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			}
+			list.push(v1);
+		}
+		
+
+		shapes = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
+		coor = obj.getRootCoordinate();
+		var objList = [];
+		for(var i=0;i<shapes.length;i++){
+			var v = shapes[i];
+			var v1 = [];
+			for(var j=0;j<v.length;j++){
+				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			}
+			objList.push(v1);
+			for(var j=0;j<list.length;j++){
+
+				if(LGlobal.hitPolygon(v1,list[j]))return true;
+			}
+		}
+		return false;
+	},
+	ismouseon:function(e,cd){
+		var s = this;return;
 		if(!s.visible || e==null)return false;
+		if(s.shapes && s.shapes.length > 0){
+
+
+			var parent = s;
+			var m = new LMatrix();
+			while(parent && parent != "root"){
+				m.scale(parent.scaleX,parent.scaleY);
+				m.rotate(parent.rotate);
+				m.translate(parent.x,parent.y);
+				parent = parent.parent;
+			}
+			for(var j=s.shapes.length-1;j>=0;j--){
+				var v = s.shapes[j].slice();
+				for(var i=0;i<v.length;i++){
+					v[i]=m.toArray([v[i][0],v[i][1],1]);
+				}
+
+				if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+			}
+			return false;
+		}
 		var k = null,i=false,l=s.childList;
 		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.mask && !s.mask.ismouseon(e,sc))return false;
