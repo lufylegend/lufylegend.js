@@ -409,35 +409,24 @@ LGlobal.hitPolygon = function(){
 		}
 		return 0 != c;
 	}else{
-		var listA = args[0],listB=args[1],i,j,a,b,c,n,dn,cn,min,max;
-		for(i=listA.length-1;i>0;i--){
-			a = listA[i],b=listA[i-1];
-			nx = (b.y - a.y), ny = (a.x - b.x);
-			dn = nx * a.x + ny * a.y;
-			min="null",max="null";
-			for(j=listA.length-1;j>=0;j--){
-				if(j==i || j==i-1){
-					continue;
-				}
-				c=listA[j];
-				cn = nx * c.x + ny * c.y-dn;
-				if(min=="null" || cn < min){
-					min = cn;
-				}
-				if(max=="null" || cn > max){
-					max = cn;
+		var i,j,l,listA,normals,vecs,list=[[args[0],[],[]],[args[1],[],[]]];
+		for(j=0;j<list.length;j++){
+			listA = list[j][0],normals = list[j][1];
+			for(i=0,l=listA.length;i<l;i++){
+				list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
+				if(i<l-1){
+					normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
 				}
 			}
-			var ck=false;
-			for(j=listB.length-1;j>=0;j--){
-				c = listB[j];
-				cn = nx * c.x + ny * c.y-dn;
-				if(cn >= min && cn <= max){
-					ck=true;
-					break;
-				}
+			normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
+		}
+		for(j=0;j<list.length;j++){
+			normals = list[j][1];
+			for(i=0,l=normals.length;i<l;i++){
+				var r1 = LVec2.getMinMax(list[0][2],normals[i]);
+				var r2 = LVec2.getMinMax(list[1][2],normals[i]);
+				if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
 			}
-			if(!ck)return false;
 		}
 		return true;
 	}

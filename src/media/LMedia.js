@@ -15,28 +15,11 @@ function LMedia(){
 LMedia.CANPLAYTHROUGH_EVENT = "canplaythrough";
 LMedia.ENDED_EVENT = "ended";
 p = {
-	addEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = l;
-		}else if(t == LEvent.SOUND_COMPLETE){
-			this.onsoundcomplete = l;
-		}
-	},
-	removeEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = null;
-		}else if(t == LEvent.SOUND_COMPLETE){
-			this.onsoundcomplete = null;
-		}
-	},
 	onload:function(){
 		var s=this;
 		if(s.data.readyState){
 			s.length=s.data.duration;
-			if(s.oncomplete){
-				s.event.currentTarget = s;
-				s.oncomplete(s.event);
-			}
+			s.dispatchEvent(LEvent.COMPLETE);
 			return;
 		}
 		s.data.addEventListener(LMedia.CANPLAYTHROUGH_EVENT, function () {
@@ -46,7 +29,7 @@ p = {
 	_onended:function(){
 		var s=this;
 		if(s.data.ended){
-			if(s.onsoundcomplete)s.onsoundcomplete();
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if(++s.loopIndex < s.loopLength){
 				s.data.currentTime=0;
 				s.data.play();

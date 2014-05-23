@@ -5,14 +5,17 @@ function trace(){
 	if(!LGlobal.traceDebug)return;
 	var t = document.getElementById("traceObject"),i;
 	if(trace.arguments.length > 0 && t == null){
-		t = document.createElement("div");
+		t = document.createElement("TEXTAREA");
 		t.id = "traceObject";
 		t.style.position = "absolute";
 		t.style.top = (LGlobal.height + 20) + "px";
+		t.style.width = LGlobal.width+"px";
+		t.style.height = "200px";
 		document.body.appendChild(t);
 	}
 	for(i=0; i < trace.arguments.length; i++){
-		t.innerHTML=t.innerHTML+trace.arguments[i] + "<br />";
+		t.value=t.value+trace.arguments[i] + "\r\n";
+		t.scrollTop = t.scrollHeight;
 	}
 }
 function addChild(o){

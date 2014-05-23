@@ -57,6 +57,12 @@ LButtonSample1.prototype.clone = function(){
 	a.backgroundColor = s.backgroundColor;
 	return a;
 };
+LButtonSample1.prototype.setLabel = function(text){
+	var s = this;
+	s.bitmap_over.getChildAt(0).text = s.bitmap_up.back.getChildAt(0).text = text;
+	s.baseWidth = s.width = s.bitmap_up.back.getChildAt(0).getWidth() + s.bitmap_up.back.getChildAt(0).size;
+	s.backgroundSet = null;
+};
 LButtonSample1.prototype._onDraw = function(s){
 	var co = s.getRootCoordinate(),labelText;
 	if(s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y)return;

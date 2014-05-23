@@ -1,6 +1,6 @@
 function LStageWebView(){
 	var s = this;
-	base(s,LObject,[]);
+	base(s,LEventDispatcher,[]);
 	s.display = document.createElement("div");
 	s.iframe = document.createElement("iframe");
 	s.display.style.position = "absolute";
@@ -11,7 +11,11 @@ function LStageWebView(){
 }
 p = {
 	loadURL:function(u){
-		this.iframe.src=u;
+		var s = this;
+		s.iframe.src=u;
+		s.iframe.onload=function(){
+			s.dispatchEvent(LEvent.COMPLETE);
+		};
 	},
 	show:function(){
 		LGlobal.object.appendChild(this.display);
