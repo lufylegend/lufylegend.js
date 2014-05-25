@@ -355,16 +355,9 @@ LGlobal.buttonShow = function(b){
 	}
 };
 LGlobal.show = function(s){
-	s.ll_cr = false;
 	for(var i=0,l=s.length;i<l;i++){
-		if(s[i].ll_show)s[i].ll_show();
-		if(s.ll_cr){
-			i--;
-			l--;
-			s.ll_cr =false;
-		}
+		if(s[i] && s[i].ll_show)s[i].ll_show();
 	}
-	delete s.ll_cr;
 };
 LGlobal.divideCoordinate = function (w,h,row,col){
 	var i,j,cw = w/col,ch = h/row,r = [];

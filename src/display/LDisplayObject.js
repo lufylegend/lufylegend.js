@@ -169,7 +169,6 @@ p = {
 		var s = this,p = s.parent;
 		if(!p || p == "root")return;
 		p.removeChild(s);
-		if(typeof p.ll_cr != UNDEFINED)p.ll_cr = true;
 	}
 };
 for(var k in p)LDisplayObject.prototype[k]=p[k];

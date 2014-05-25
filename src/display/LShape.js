@@ -8,6 +8,9 @@ function LShape(){
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
 }
+LShape.ARC = "arc";
+LShape.RECT = "rect";
+LShape.VERTICES = "vertices";
 p = {
 	_ll_show:function(c){
 		var s = this;
