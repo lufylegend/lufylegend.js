@@ -273,69 +273,75 @@ p = {
 		}
 		return false;
 	},
+	getRootMatrix:function(){
+		var parent = this;
+		var m = new LMatrix();
+		while(parent && parent != "root"){
+			if(parent.scaleX != 1 || parent.scaleY != 1)m.scale(parent.scaleX,parent.scaleY);
+			if(parent.rotate != 0)m.rotate(parent.rotate);
+			if(parent.x != 0 || parent.y != 0)m.translate(parent.x,parent.y);
+			parent = parent.parent;
+		}
+		return m;
+	},
+	_changeShape:function(child,m){
+		var v,arg = child.arg,r2;
+		if(child.type == LShape.VERTICES){
+			v = [];
+			for(var i=0;i<v.length;i++){
+				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
+			}
+		}else if(child.type == LShape.RECT){
+			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
+			for(var i=0;i<v.length;i++){
+				v[i]=m.toArray([v[i][0],v[i][1],1]);
+			}
+		}else if(child.type == LShape.ARC){
+			v = [m.toArray([arg[0],arg[1]],1),m.toArray([arg[0]+arg[2],arg[1]],1)];
+			r2 = (v[0][0] - v[1][0])*(v[0][0] - v[1][0]) + (v[0][1] - v[1][1])*(v[0][1] - v[1][1]);
+			v = [v[0][0],v[0][1],Math.sqrt(r2),r2];
+		}
+		return {"type":child.type,"arg":v};
+	},
 	hitTestPoint:function(x,y){
 		var s = this;
 		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		var parent = s;
-		var m = new LMatrix();
-		while(parent && parent != "root"){
-			m.scale(parent.scaleX,parent.scaleY);
-			m.rotate(parent.rotate);
-			m.translate(parent.x,parent.y);
-			parent = parent.parent;
-		}
-		for(var j=s.shapes.length-1;j>=0;j--){
-			var v = s.shapes[j];
-			var v1 = [];
-			for(var i=0;i<v.length;i++){
-				v1[i]=m.toArray([v[i][0],v[i][1],1]);
-			}
-			if(LGlobal.hitPolygon(v1,x,y))return true;
-		}
-		return false;
+		return s.ismouseonShapes(shapes,x,y);
 	},
 	hitTestObject:function(obj){
-		var s = this,shapes,coor;
-		shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		coor = s.getRootCoordinate();
-		var list = [];
-		for(var i=0;i<shapes.length;i++){
-			var v = shapes[i];
-			var v1 = [];
-			for(var j=0;j<v.length;j++){
-				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
-			}
-			list.push(v1);
-		}
-		
-		shapes = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
-		coor = obj.getRootCoordinate();
-		var objList = [];
-		for(var i=0;i<shapes.length;i++){
-			var v = shapes[i];
-			var v1 = [];
-			for(var j=0;j<v.length;j++){
-				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
-			}
-			objList.push(v1);
-			for(var j=0;j<list.length;j++){
-				if(LGlobal.hitTestPolygon(v1,list[j]))return true;
+		var s = this;
+		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		var shapes1 = obj.shapes1?obj.shapes1:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
+		var m = s.getRootMatrix();
+		var m1 = obj.getRootMatrix();
+		for(var j=shapes.length-1;j>=0;j--){
+			var child = shapes[j];
+			var v1 = s._changeShape(child.arg,m);
+			for(var j1=obj.shapes.length-1;j>=0;j--){
+				var child1 = shapes1[j];
+				var vo1 = obj._changeShape(child.arg,m);
+				if(child.type == LShape.VERTICES || child.type == LShape.RECT){
+					if(child2.type == LShape.VERTICES || child2.type == LShape.RECT){
+						if(LGlobal.hitTestPolygon(v1,vo1))return true;
+					}else if(child.type == LShape.ARC){
+						if(LGlobal.hitTestPolygonArc(v1,vo1))return true;
+					}
+				}else{
+					if(child2.type == LShape.VERTICES || child2.type == LShape.RECT){
+						if(LGlobal.hitTestPolygonArc(vo1,v1))return true;
+					}else if(child.type == LShape.ARC){
+						if(Math.sqrt((v1[0]-vo1[0])*(v1[0]-vo1[0]) + (v1[1]-vo1[1])*(v1[1]-vo1[1])) < v1[2]+vo1[2])return true;
+					}
+				}
+				
 			}
 		}
 		return false;
 	},
 	addShape:function(type,arg){
 		var s = this;
+		if(type == LShape.VERTICES && arg.length<3){return;}
 		s.shapes.push({"type":type,"arg":arg});
-		return;
-		if(type == LShape.ARC){
-			
-		}else if(type == LShape.RECT){
-			
-		}else if(type == LShape.VERTICES){
-			if(arg.length<3){return;}
-			s.shapes.push({"type":type,"arg":arg});
-		}
 	},
 	clearShape:function(){
 		var s = this;
@@ -352,32 +358,16 @@ p = {
 		if(typeof shapes == UNDEFINED){
 			shapes = s.shapes;
 		}
-		var m = new LMatrix();
-		while(parent && parent != "root"){
-			m.scale(parent.scaleX,parent.scaleY);
-			m.rotate(parent.rotate);
-			m.translate(parent.x,parent.y);
-			parent = parent.parent;
-		}
+		var m = s.getRootMatrix();
 		for(var j=shapes.length-1;j>=0;j--){
-			var child = shapes[j],v;
-			if(child == LShape.VERTICES){
-				v = child.arg.slice();
-				for(var i=0;i<v.length;i++){
-					v[i]=m.toArray([v[i][0],v[i][1],1]);
-				}
+			var child = shapes[j],v,arg = child.arg;
+			v = s._changeShape(arg,m);
+			if(child.type == LShape.VERTICES){
 				if(LGlobal.hitPolygon(v,mx,my))return true;
-			}else if(child == LShape.RECT){
-				var arg = child.arg;
-				v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
-				for(var i=0;i<v.length;i++){
-					v[i]=m.toArray([v[i][0],v[i][1],1]);
-				}
+			}else if(child.type == LShape.RECT){
 				if(LGlobal.hitPolygon(v,mx,my))return true;
-			}else if(child == LShape.ARC){
-				var arg = child.arg;
-				v = [m.toArray([arg[0],arg[1]],1),m.toArray([arg[0]+arg[2],arg[1]],1)];
-				if((v[0][0] - mx)*(v[0][0] - mx) + (v[0][1] - my)*(v[0][1] - my) < (v[0][0] - v[1][0])*(v[0][0] - v[1][0])*(v[0][1] - v[1][1])*(v[0][1] - v[1][1]))return true;
+			}else if(child.type == LShape.ARC){
+				if((v[0] - mx)*(v[0] - mx) + (v[1] - my)*(v[1] - my) < v[3])return true;
 			}
 		}
 		return false;
