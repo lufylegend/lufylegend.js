@@ -380,49 +380,70 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
-LGlobal.hitPolygon = function(){
-	var args = LGlobal.hitPolygon.arguments;
-	if(args.length == 3){
-		var list = args[0],x=args[1],y=args[2];
-		var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
-		for(i=1,l=list.length;i<l+1;i++){
-			p1 = list[i%l];
-			b1x = (x <= p1[0]);
-			b1y = (y <= p1[1]);
-			if( b0y != b1y ){
-				if( b0x == b1x ){
-					if( b0x )c += (b0y ? -1 : 1);
-				}else{
-					if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
-				}
-			}
-			p0 = p1;
-			b0x = b1x;
-			b0y = b1y;
-		}
-		return 0 != c;
-	}else{
-		var i,j,l,listA,normals,vecs,list=[[args[0],[],[]],[args[1],[],[]]];
-		for(j=0;j<list.length;j++){
-			listA = list[j][0],normals = list[j][1];
-			for(i=0,l=listA.length;i<l;i++){
-				list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
-				if(i<l-1){
-					normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
-				}
-			}
-			normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
-		}
-		for(j=0;j<list.length;j++){
-			normals = list[j][1];
-			for(i=0,l=normals.length;i<l;i++){
-				var r1 = LVec2.getMinMax(list[0][2],normals[i]);
-				var r2 = LVec2.getMinMax(list[1][2],normals[i]);
-				if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
+LGlobal.hitPolygon = function(list,x,y){
+	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+	for(i=1,l=list.length;i<l+1;i++){
+		p1 = list[i%l];
+		b1x = (x <= p1[0]);
+		b1y = (y <= p1[1]);
+		if( b0y != b1y ){
+			if( b0x == b1x ){
+				if( b0x )c += (b0y ? -1 : 1);
+			}else{
+				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
 			}
 		}
+		p0 = p1;
+		b0x = b1x;
+		b0y = b1y;
+	}
+	return 0 != c;
+};
+LGlobal.hitTestPolygon = function(p1,p2){
+	var i,j,l,listA,normals,vecs,list=[[p1,[],[]],[p2,[],[]]];
+	for(j=0;j<list.length;j++){
+		listA = list[j][0],normals = list[j][1];
+		for(i=0,l=listA.length;i<l;i++){
+			list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
+			if(i<l-1){
+				normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
+			}
+		}
+		normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
+	}
+	for(j=0;j<list.length;j++){
+		normals = list[j][1];
+		for(i=0,l=normals.length;i<l;i++){
+			var r1 = LVec2.getMinMax(list[0][2],normals[i]);
+			var r2 = LVec2.getMinMax(list[1][2],normals[i]);
+			if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
+		}
+	}
+	return true;
+};
+LGlobal.hitTestPolygonArc = function(vs,arc){
+	if(LGlobal.hitTestPolygon(vs,arc[0],arc[1])){
 		return true;
 	}
+	var i,j,l,p1,p2,v1,v2,e,ext,inn,le,r=arc[2];
+	for(i=0,l=vs.length;i<l;i++){
+		j=i<l-1?i+1:0;
+		p1 = vs[i],p2 = vs[j];
+		v1 = new LVec2(arc[0]-p1[0],arc[1]-p1[1]),v2 = new LVec2(p2[0]-p1[0],p2[1]-p1[1]);
+		le = v2.length(),e = new LVec2(v2.x/le,v2.y/le);
+		inn = LVec2.dot(v1,e);
+		if(inn <= 0){
+			if(v1.x*v1.x + v1.y*v1.y < r*r){
+				return true;
+			}
+		}else if(inn < v2.x*v2.x + v2.y*v2.y){
+			ext = LVec2.cross(v1,e);
+			if(ext*ext < r*r){
+				return true;
+			}
+		}
+	}
+	return false;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5

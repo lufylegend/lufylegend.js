@@ -319,7 +319,7 @@ p = {
 			}
 			objList.push(v1);
 			for(var j=0;j<list.length;j++){
-				if(LGlobal.hitPolygon(v1,list[j]))return true;
+				if(LGlobal.hitTestPolygon(v1,list[j]))return true;
 			}
 		}
 		return false;
@@ -346,7 +346,7 @@ p = {
 		if(!LGlobal.traceDebug || s.shapes.length == 0)return;
 		
 	},
-	ismouseonShapes:function(shapes){
+	ismouseonShapes:function(shapes,mx,my){
 		var s = this;
 		var parent = s;
 		if(typeof shapes == UNDEFINED){
@@ -366,18 +366,18 @@ p = {
 				for(var i=0;i<v.length;i++){
 					v[i]=m.toArray([v[i][0],v[i][1],1]);
 				}
-				if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+				if(LGlobal.hitPolygon(v,mx,my))return true;
 			}else if(child == LShape.RECT){
 				var arg = child.arg;
 				v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
 				for(var i=0;i<v.length;i++){
 					v[i]=m.toArray([v[i][0],v[i][1],1]);
 				}
-				if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+				if(LGlobal.hitPolygon(v,mx,my))return true;
 			}else if(child == LShape.ARC){
 				var arg = child.arg;
-				v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]]];
-				if((v[0][0] - e.offsetX)*(v[0][1] - e.offsetX) < (v[0][0] - v[1][0])*(v[0][1] - v[1][1]))return true;
+				v = [m.toArray([arg[0],arg[1]],1),m.toArray([arg[0]+arg[2],arg[1]],1)];
+				if((v[0][0] - mx)*(v[0][0] - mx) + (v[0][1] - my)*(v[0][1] - my) < (v[0][0] - v[1][0])*(v[0][0] - v[1][0])*(v[0][1] - v[1][1])*(v[0][1] - v[1][1]))return true;
 			}
 		}
 		return false;
