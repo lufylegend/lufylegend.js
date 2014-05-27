@@ -3,8 +3,8 @@
 	<head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<title>hitTestPoint</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.12.js"></script>
+	<title>hitTestObject</title>
+	<script type="text/javascript" src="../../lufylegend-1.8.12.simple.min.js"></script>
 	</head>
 	<body>
 			<div id="legend">
@@ -20,19 +20,25 @@ init(1000/50,"legend",800,450,main);
 function main(){
 	backLayer = new LSprite();
 	addChild(backLayer);
-	backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 	title = new LTextField();
 	title.size = 18;
 	title.x = 10;
 	title.y = 5;
-	title.text = "hitTestPoint:false";
-	
+	title.text = "用鼠标拖动对象进行碰撞检测";
 	addChild(title);
+	
+	title = new LTextField();
+	title.size = 18;
+	title.x = 10;
+	title.y = 35;
+	title.text = "hitTestObject:false";
+	addChild(title);
+	
 	backLayer.x = 20;
 	backLayer.y = 30;
 	backLayer.scaleX = 1.2;
 	backLayer.scaleY = 1.2;
-	backLayer.rotate = 10;
+	
 	layer = new LSprite();
 	layer.x = 20;
 	layer.y = 50;
@@ -41,6 +47,9 @@ function main(){
 	layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
 	layer.addShape(LShape.RECT,[0,0,100,40]);
 	backLayer.addChild(layer);
+	layer.addEventListener(LMouseEvent.MOUSE_DOWN,down);
+	layer.addEventListener(LMouseEvent.MOUSE_UP,up);
+	
 	
 	layer = new LSprite();
 	layer.x = 200;
@@ -48,24 +57,41 @@ function main(){
 	layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
 	layer.addShape(LShape.ARC,[0,0,30]);
 	backLayer.addChild(layer);
+	layer.addEventListener(LMouseEvent.MOUSE_DOWN,down);
+	layer.addEventListener(LMouseEvent.MOUSE_UP,up);
+	
 	
 	layer = new LSprite();
 	layer.x = 120;
 	layer.y = 150;
 	layer.rotate = 10;
-	layer.scaleX = 2;
 	layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
 	layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
 	backLayer.addChild(layer);
+	
+	layer.addEventListener(LMouseEvent.MOUSE_DOWN,down);
+	layer.addEventListener(LMouseEvent.MOUSE_UP,up);
+	
+	backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 }
 function onframe(e){
-	for(var i=0;i<backLayer.childList.length;i++){
-		if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-			title.text = "hitTestPoint:true";
-			return;
+	for(var i=0;i<backLayer.childList.length-1;i++){
+		var o1 = backLayer.getChildAt(i);
+		for(var j=i+1;j<backLayer.childList.length;j++){
+			var o2 = backLayer.getChildAt(j);
+			if(o1.hitTestObject(o2)){
+				title.text = "hitTestObject:true";
+				return;
+			}
 		}
 	}
-	title.text = "hitTestPoint:false";
+	title.text = "hitTestObject:false";
+}
+function down(e){
+	e.clickTarget.startDrag();
+}
+function up(e){
+	e.clickTarget.stopDrag();
 }
 </script>
 	</body>

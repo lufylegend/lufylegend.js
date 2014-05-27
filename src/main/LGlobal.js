@@ -422,23 +422,23 @@ LGlobal.hitTestPolygon = function(p1,p2){
 	return true;
 };
 LGlobal.hitTestPolygonArc = function(vs,arc){
-	if(LGlobal.hitTestPolygon(vs,arc[0],arc[1])){
+	if(LGlobal.hitPolygon(vs,arc[0],arc[1])){
 		return true;
-	}
-	var i,j,l,p1,p2,v1,v2,e,ext,inn,le,r=arc[2];
+	}	
+	var i,j,l,p1,p2,v1,v2,ext,inn,l2;
 	for(i=0,l=vs.length;i<l;i++){
 		j=i<l-1?i+1:0;
 		p1 = vs[i],p2 = vs[j];
 		v1 = new LVec2(arc[0]-p1[0],arc[1]-p1[1]),v2 = new LVec2(p2[0]-p1[0],p2[1]-p1[1]);
-		le = v2.length(),e = new LVec2(v2.x/le,v2.y/le);
-		inn = LVec2.dot(v1,e);
+		l2 = v2.normalize();
+		inn = LVec2.dot(v1,l2);
 		if(inn <= 0){
-			if(v1.x*v1.x + v1.y*v1.y < r*r){
+			if(v1.x*v1.x + v1.y*v1.y < arc[3]){
 				return true;
 			}
-		}else if(inn < v2.x*v2.x + v2.y*v2.y){
-			ext = LVec2.cross(v1,e);
-			if(ext*ext < r*r){
+		}else if(inn*inn < v2.x*v2.x + v2.y*v2.y){
+			ext = LVec2.cross(v1,l2);
+			if(ext*ext < arc[3]){
 				return true;
 			}
 		}

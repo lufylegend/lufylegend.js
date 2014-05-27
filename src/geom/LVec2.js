@@ -6,6 +6,10 @@ LVec2.prototype.length = function(){
 	var s = this;
 	return Math.sqrt(s.x * s.x + s.y * s.y);
 };
+LVec2.prototype.normalize = function(){
+	var s = this,l=s.length();
+	return new LVec2(s.x/l,s.y/l);
+};
 //[x*cosA-y*sinA  x*sinA+y*cosA] 
 LVec2.prototype.normR = function(){
 	return new LVec2(-this.y,this.x);

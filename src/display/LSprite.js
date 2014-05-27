@@ -301,7 +301,7 @@ p = {
 			r2 = (v1[0] - v2[0])*(v1[0] - v2[0]) + (v1[1] - v2[1])*(v1[1] - v2[1]);
 			v = [v1[0],v1[1],Math.sqrt(r2),r2];
 		}
-		return {"type":type,"arg":v};
+		return v;
 	},
 	hitTestPoint:function(x,y){
 		var s = this;
@@ -314,29 +314,28 @@ p = {
 	hitTestObject:function(obj){
 		var s = this;
 		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		var shapes1 = obj.shapes1?obj.shapes1:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
+		var shapes1 = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
 		var m = s.getRootMatrix();
 		var m1 = obj.getRootMatrix();
 		for(var j=shapes.length-1;j>=0;j--){
 			var child = shapes[j];
-			var v1 = s._changeShape(child.arg,m);
+			var v1 = s._changeShape(child.type,child.arg,m);
 			for(var j1=obj.shapes.length-1;j>=0;j--){
 				var child1 = shapes1[j];
-				var vo1 = obj._changeShape(child.arg,m);
+				var vo1 = obj._changeShape(child1.type,child1.arg,m1);
 				if(child.type == LShape.VERTICES || child.type == LShape.RECT){
-					if(child2.type == LShape.VERTICES || child2.type == LShape.RECT){
+					if(child1.type == LShape.VERTICES || child1.type == LShape.RECT){
 						if(LGlobal.hitTestPolygon(v1,vo1))return true;
-					}else if(child.type == LShape.ARC){
+					}else if(child1.type == LShape.ARC){
 						if(LGlobal.hitTestPolygonArc(v1,vo1))return true;
 					}
 				}else{
-					if(child2.type == LShape.VERTICES || child2.type == LShape.RECT){
+					if(child1.type == LShape.VERTICES || child1.type == LShape.RECT){
 						if(LGlobal.hitTestPolygonArc(vo1,v1))return true;
-					}else if(child.type == LShape.ARC){
+					}else if(child1.type == LShape.ARC){
 						if(Math.sqrt((v1[0]-vo1[0])*(v1[0]-vo1[0]) + (v1[1]-vo1[1])*(v1[1]-vo1[1])) < v1[2]+vo1[2])return true;
 					}
 				}
-				
 			}
 		}
 		return false;
@@ -365,7 +364,6 @@ p = {
 		for(var j=shapes.length-1;j>=0;j--){
 			var child = shapes[j],v,arg = child.arg;
 			v = s._changeShape(child.type,arg,m);
-			v = v.arg;
 			if(child.type == LShape.VERTICES){
 				if(LGlobal.hitPolygon(v,mx,my))return true;
 			}else if(child.type == LShape.RECT){
@@ -379,12 +377,12 @@ p = {
 	ismouseon:function(e,cd){
 		var s = this;
 		if(!s.visible || e==null)return false;
+		if(s.mask && !s.mask.ismouseon(e,cd))return false;
 		if(s.shapes && s.shapes.length > 0){
 			return s.ismouseonShapes(s.shapes,e.offsetX,e.offsetY);
 		}
 		var k = null,i=false,l=s.childList;
 		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		if(s.mask && !s.mask.ismouseon(e,sc))return false;
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
 		if(!i){
 			for(k=l.length-1;k>=0;k--){

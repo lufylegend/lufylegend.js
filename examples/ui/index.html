@@ -4,8 +4,7 @@
 	<meta charset="utf-8" />
 	<title>UI</title>
 	<script type="text/javascript" src="../../lufylegend-1.8.12.js"></script>
-	<script type="text/javascript" src="../../lib/lufylegend.ui-0.8.0.min.js"></script>
-	<script type="text/javascript" src="../../src/display/LSprite.js"></script>
+	<script type="text/javascript" src="../../lib/lufylegend.ui-0.9.0.min.js"></script>
 	</head>
 	<body style="margin:0;padding:0;">
 			<div id="legend"></div>
@@ -122,6 +121,7 @@ function addScrollbar(){
 	t.size = 30;
 	t.setWordWrap(true,35);
 	showObject.addChild(t);
+	showObject.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("showObject click");});
 	var sc = new LScrollbar(showObject,200,200);
 	sc.x = 450;
 	sc.y = 20;
