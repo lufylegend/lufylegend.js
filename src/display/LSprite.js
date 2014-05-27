@@ -284,28 +284,31 @@ p = {
 		}
 		return m;
 	},
-	_changeShape:function(child,m){
-		var v,arg = child.arg,r2;
-		if(child.type == LShape.VERTICES){
+	_changeShape:function(type,arg,m){
+		var v,arg = arg,r2;
+		if(type == LShape.VERTICES){
 			v = [];
-			for(var i=0;i<v.length;i++){
+			for(var i=0;i<arg.length;i++){
 				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
 			}
-		}else if(child.type == LShape.RECT){
+		}else if(type == LShape.RECT){
 			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
-			for(var i=0;i<v.length;i++){
+			for(var i=0;i<arg.length;i++){
 				v[i]=m.toArray([v[i][0],v[i][1],1]);
 			}
-		}else if(child.type == LShape.ARC){
-			v = [m.toArray([arg[0],arg[1]],1),m.toArray([arg[0]+arg[2],arg[1]],1)];
-			r2 = (v[0][0] - v[1][0])*(v[0][0] - v[1][0]) + (v[0][1] - v[1][1])*(v[0][1] - v[1][1]);
-			v = [v[0][0],v[0][1],Math.sqrt(r2),r2];
+		}else if(type == LShape.ARC){
+			var v1 = m.toArray([arg[0],arg[1],1]),v2 = m.toArray([arg[0]+arg[2],arg[1],1]);
+			r2 = (v1[0] - v2[0])*(v1[0] - v2[0]) + (v1[1] - v2[1])*(v1[1] - v2[1]);
+			v = [v1[0],v1[1],Math.sqrt(r2),r2];
 		}
-		return {"type":child.type,"arg":v};
+		return {"type":type,"arg":v};
 	},
 	hitTestPoint:function(x,y){
 		var s = this;
-		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
+		var shapes = s.shapes;
+		if(!shapes){
+			shapes = {"type":"rect","arg":[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]]};
+		}
 		return s.ismouseonShapes(shapes,x,y);
 	},
 	hitTestObject:function(obj){
@@ -361,7 +364,8 @@ p = {
 		var m = s.getRootMatrix();
 		for(var j=shapes.length-1;j>=0;j--){
 			var child = shapes[j],v,arg = child.arg;
-			v = s._changeShape(arg,m);
+			v = s._changeShape(child.type,arg,m);
+			v = v.arg;
 			if(child.type == LShape.VERTICES){
 				if(LGlobal.hitPolygon(v,mx,my))return true;
 			}else if(child.type == LShape.RECT){
@@ -376,7 +380,7 @@ p = {
 		var s = this;
 		if(!s.visible || e==null)return false;
 		if(s.shapes && s.shapes.length > 0){
-			return s.ismouseonShapes();
+			return s.ismouseonShapes(s.shapes,e.offsetX,e.offsetY);
 		}
 		var k = null,i=false,l=s.childList;
 		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
