@@ -22,6 +22,7 @@ LButton.prototype.clone = function (){
 	a = new LButton(d_up,d_over);
 	return a;
 };
+//改用内部事件类型
 LButton.prototype.buttonModeChange = function (){
 	var s = this;
 	var cood={x:0,y:0,scaleX:1,scaleY:1};

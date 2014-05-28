@@ -282,7 +282,10 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
-	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler(e);
+	if(t == LMouseEvent.MOUSE_MOVE){
+		LGlobal.dragHandler(e);
+	}
+	LGlobal.buttonShow(LGlobal.buttonList,t);
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
@@ -346,12 +349,11 @@ LGlobal.onShow = function (){
 			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
 		}
 	}
-	LGlobal.buttonShow(LGlobal.buttonList);
 	LGlobal.show(LGlobal.childList);
 };
-LGlobal.buttonShow = function(b){
+LGlobal.buttonShow = function(b,t){
 	for(var i=0,l=b.length;i<l;i++){
-		if(b[i].buttonModeChange)b[i].buttonModeChange();
+		if(b[i].buttonModeChange)b[i].buttonModeChange(t);
 	}
 };
 LGlobal.show = function(s){
@@ -509,6 +511,8 @@ LGlobal.scaleY = function(v){
 将canvas缩放为规定大小
 */
 LGlobal.setStageSize = function(w,h){
+	w =  Math.ceil(w);
+	h =  Math.ceil(h);
 	LGlobal.canvasObj.style.width = w+"px";
 	LGlobal.canvasObj.style.height = h+"px";
 	LGlobal.canvasStyleWidth = w;
