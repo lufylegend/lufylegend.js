@@ -3,13 +3,13 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.12.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.12.min.js"></script>
 	<script type="text/javascript" src="../../lib/lufylegend.ui-0.9.0.min.js"></script>
 	</head>
 	<body style="margin:0;padding:0;">
 			<div id="legend"></div>
 <script>
-init(50,"legend",800,450,main);
+init(20,"legend",800,450,main);
 var layer,button;
 
 function main(){
@@ -68,40 +68,12 @@ function main(){
 	addChild(menu);
 }
 function addButton(){
-	var button01 = new LButtonSample1("测试按钮1");
-	button01.x = 10;
-	button01.y = 10;
-	button01.buttonMode = false;
+	var button01 = new LButtonSample1("测试按钮",20);
+	button01.x = 20;
+	button01.y = 20;
+	button01.backgroundColor = "#008800";
 	layer.addChild(button01);
-	/*
-	button01.addEventListener(LMouseEvent.MOUSE_OVER,
-		function(){trace("测试按钮1 MOUSE_OVER");}
-	);
-	button01.addEventListener(LMouseEvent.MOUSE_OUT,
-		function(){trace("测试按钮1 MOUSE_OUT");}
-	);*/
-	
-	var button02 = new LButtonSample1("测试按钮2",12);
-	button02.backgroundColor = "#008800";
-	button02.width = 250;
-	button02.height = 50;
-	button02.x = 150;
-	button02.y = 10;
-	layer.addChild(button02);
-	button02.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("测试按钮2 click");});
-	
-	var button03 = new LButtonSample2("测试按钮4");
-	button03.backgroundColor = "blue";
-	button03.x = 10;
-	button03.y = 70;
-	layer.addChild(button03);
-	
-	var button04 = new LButtonSample2("测试按钮5",20);
-	button04.backgroundColor = "purple";
-	button04.x = 150;
-	button04.y = 70;
-	layer.addChild(button04);
-	
+	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("测试按钮 click");});
 }
 function addRange(){
 	var r = new LRange(200);

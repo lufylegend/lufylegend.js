@@ -20,7 +20,6 @@ LGlobal.IS_MOUSE_DOWN = false;
 LGlobal.objectIndex = 0;
 LGlobal.preventDefault = true;
 LGlobal.childList = new Array();
-LGlobal.buttonList = new Array();
 LGlobal.dragList = new Array();
 LGlobal.stageScale = "noScale";
 LGlobal.align = "M";
@@ -285,7 +284,6 @@ LGlobal.mouseEvent = function(e,t){
 	if(t == LMouseEvent.MOUSE_MOVE){
 		LGlobal.dragHandler(e);
 	}
-	LGlobal.buttonShow(LGlobal.buttonList,t);
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
@@ -350,11 +348,6 @@ LGlobal.onShow = function (){
 		}
 	}
 	LGlobal.show(LGlobal.childList);
-};
-LGlobal.buttonShow = function(b,t){
-	for(var i=0,l=b.length;i<l;i++){
-		if(b[i].buttonModeChange)b[i].buttonModeChange(t);
-	}
 };
 LGlobal.show = function(s){
 	for(var i=0,l=s.length;i<l;i++){

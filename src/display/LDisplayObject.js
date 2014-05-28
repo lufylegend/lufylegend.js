@@ -165,6 +165,56 @@ p = {
 		var s = this,r = s.getDataCanvas();
 		return r.toDataURL();
 	},
+	ismouseonShapes:function(shapes,mx,my){
+		var s = this;
+		var parent = s;
+		if(typeof shapes == UNDEFINED){
+			shapes = s.shapes;
+		}
+		var m = s.getRootMatrix();
+		for(var j=shapes.length-1;j>=0;j--){
+			var child = shapes[j],v,arg = child.arg;
+			v = s._changeShape(child.type,arg,m);
+			if(child.type == LShape.VERTICES){
+				if(LGlobal.hitPolygon(v,mx,my))return true;
+			}else if(child.type == LShape.RECT){
+				if(LGlobal.hitPolygon(v,mx,my))return true;
+			}else if(child.type == LShape.ARC){
+				if((v[0] - mx)*(v[0] - mx) + (v[1] - my)*(v[1] - my) < v[3])return true;
+			}
+		}
+		return false;
+	},
+	_changeShape:function(type,arg,m){
+		var v,arg = arg,r2;
+		if(type == LShape.VERTICES){
+			v = [];
+			for(var i=0;i<arg.length;i++){
+				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
+			}
+		}else if(type == LShape.RECT){
+			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
+			for(var i=0;i<arg.length;i++){
+				v[i]=m.toArray([v[i][0],v[i][1],1]);
+			}
+		}else if(type == LShape.ARC){
+			var v1 = m.toArray([arg[0],arg[1],1]),v2 = m.toArray([arg[0]+arg[2],arg[1],1]);
+			r2 = (v1[0] - v2[0])*(v1[0] - v2[0]) + (v1[1] - v2[1])*(v1[1] - v2[1]);
+			v = [v1[0],v1[1],Math.sqrt(r2),r2];
+		}
+		return v;
+	},
+	getRootMatrix:function(){
+		var parent = this;
+		var m = new LMatrix();
+		while(parent && parent != "root"){
+			if(parent.scaleX != 1 || parent.scaleY != 1)m.scale(parent.scaleX,parent.scaleY);
+			if(parent.rotate != 0)m.rotate(parent.rotate);
+			if(parent.x != 0 || parent.y != 0)m.translate(parent.x,parent.y);
+			parent = parent.parent;
+		}
+		return m;
+	},
 	remove:function(){
 		var s = this,p = s.parent;
 		if(!p || p == "root")return;

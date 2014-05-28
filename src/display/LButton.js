@@ -1,61 +1,94 @@
 /*
 * LButton.js
 **/
-function LButton(d_up,d_over){
+function LButton(upState,overState,downState){
 	base(this,LSprite,[]);
 	var s = this;
 	s.type = "LButton";
-	s.bitmap_up = d_up;
-	s.addChild(d_up);
-	if(d_over == null){
-		d_over = d_up;
+	s.addChild(upState);
+	if(overState == null){
+		overState = upState;
 	}else{
-		s.addChild(d_over);
+		s.addChild(overState);
 	}
-	s.bitmap_over = d_over;
-	s.bitmap_over.visible = false;
-	s.bitmap_up.visible = true;
-	LGlobal.buttonList.push(s);
+	if(downState == null){
+		downState = overState;
+	}else{
+		s.addChild(downState);
+	}
+	s.upState = s.bitmap_up = upState;
+	s.overState = s.bitmap_over = overState;
+	s.downState = downState;
+	
+	s.overState.visible = false;
+	s.downState.visible = false;
+	s.upState.visible = true;
+	s.staticMode = false;
+	
+	s.addEventListener(LMouseEvent.MOUSE_OVER,s.ll_modeOver);
+	s.addEventListener(LMouseEvent.MOUSE_OUT,s.ll_modeOut);
+	s.addEventListener(LMouseEvent.MOUSE_DOWN,s.ll_modeDown);
 }
-LButton.prototype.clone = function (){
-	var s = this,d_up = s.bitmap_up.clone(),d_over = s.bitmap_over.clone(),
-	a = new LButton(d_up,d_over);
-	return a;
-};
-//改用内部事件类型
-LButton.prototype.buttonModeChange = function (){
-	var s = this;
-	var cood={x:0,y:0,scaleX:1,scaleY:1};
-	var parent = s.parent;
-	while(parent && parent != "root"){
-		cood.scaleX *= parent.scaleX;
-		cood.scaleY *= parent.scaleY;
-		cood.x *= parent.scaleX;
-		cood.y *= parent.scaleY;
-		cood.x += parent.x;
-		cood.y += parent.y;
-		parent = parent.parent;
+LButton.prototype.ll_modeDown = function (e){
+	var s = e.clickTarget,w,h,tw,th,x,y,tx,ty,onComplete;
+	if(!s.buttonMode || s.tween){
+		return;
 	}
-	if(s.buttonMode && s.ismouseon(LGlobal.buttonStatusEvent,cood)){
-		s.bitmap_up.visible = false;
-		s.bitmap_over.visible = true;
+	s.upState.visible = false;
+	s.overState.visible = false;
+	s.downState.visible = true;
+	
+	s._tweenOver = s.ll_modeOver;
+	onComplete = function(obj){
+		var s = obj.parent;
+		delete s.tween;
+		s._tweenOver({clickTarget:s});
+		delete s._tweenOver;
+	};
+	if(s.staticMode){
+		s.tween = LTweenLite.to(s.downState,0.3,{})
+		.to(s.downState,0.1,{onComplete:onComplete});
 	}else{
-		s.bitmap_over.visible = false;
-		s.bitmap_up.visible = true;
+		w = s.downState.getWidth();
+		h = s.downState.getHeight();
+		tw = w*1.1;
+		th = h*1.1;
+		x = s.downState.x;
+		y = s.downState.y;
+		tx = x+(w - tw)*0.5;
+		ty = y+(h - th)*0.5;
+		s.tween = LTweenLite.to(s.downState,0.3,{x:tx,y:ty,scaleX:1.1,scaleY:1.1,ease:Quart.easeOut})
+		.to(s.downState,0.1,{x:x,y:y,scaleX:1,scaleY:1,ease:Quart.easeOut,onComplete:onComplete});
 	}
 };
-LButton.prototype.die = function (){
-	var s = this;
-	s.graphics.clear();
-	s.removeAllEventListener();
-	if(s.box2dBody)s.clearBody();
-	for(var i=0,c=s.childList,l=c.length;i<l;i++){
-		if(c[i].die)c[i].die();
+LButton.prototype.ll_modeOver = function (e){
+	var s = e.clickTarget;
+	if(!s.buttonMode){
+		return;
 	}
-	for(var i=0,b=LGlobal.buttonList,l=b.length;i<l;i++){
-		if(b[i].objectIndex == s.objectIndex){
-			LGlobal.buttonList.splice(i,1);
-			break;
-		}
+	if(s.tween){
+		s._tweenOver = s.ll_modeOver;
+		return;
 	}
+	s.upState.visible = false;
+	s.downState.visible = false;
+	s.overState.visible = true;
+};
+LButton.prototype.ll_modeOut = function (e){
+	var s = e.clickTarget;
+	if(!s.buttonMode){
+		return;
+	}
+	if(s.tween){
+		s._tweenOver = s.ll_modeOut;
+		return;
+	}
+	s.overState.visible = false;
+	s.downState.visible = false;
+	s.upState.visible = true;
+};
+LButton.prototype.clone = function (){
+	var s = this,upState = s.upState.clone(),overState = s.overState.clone(),downState = s.downState.clone(),
+	a = new LButton(upState,overState,downState);
+	return a;
 };
