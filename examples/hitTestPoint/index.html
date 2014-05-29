@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<title>hitTestPoint</title>
-	<script type="text/javascript" src="../../lufylegend-1.8.12.js"></script>
+	<script type="text/javascript" src="../../lufylegend-1.8.12.min.js"></script>
 	</head>
 	<body>
 			<div id="legend">
@@ -18,6 +18,7 @@ init(1000/50,"legend",800,450,main);
 
 
 function main(){
+	LGlobal.setDebug(true);
 	backLayer = new LSprite();
 	addChild(backLayer);
 	backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
@@ -39,14 +40,14 @@ function main(){
 	layer.scaleX = 0.7;
 	layer.rotate = 10;
 	layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-	layer.addShape(LShape.RECT,[0,0,100,40]);
+	//layer.addShape(LShape.RECT,[0,0,100,40]);
 	backLayer.addChild(layer);
 	
 	layer = new LSprite();
 	layer.x = 200;
 	layer.y = 100;
 	layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-	layer.addShape(LShape.ARC,[0,0,30]);
+	//layer.addShape(LShape.ARC,[0,0,30]);
 	backLayer.addChild(layer);
 	
 	layer = new LSprite();
@@ -55,7 +56,7 @@ function main(){
 	layer.rotate = 10;
 	layer.scaleX = 2;
 	layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-	layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+	//layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
 	backLayer.addChild(layer);
 }
 function onframe(e){

@@ -83,6 +83,7 @@ p = {
 			if(b > right)right = b;
 		}
 		s.ll_left = s.x + left;
+		s.ll_right = s.x + right;
 		return (right - left)*s.scaleX;
 	},
 	getHeight:function(){
@@ -98,6 +99,7 @@ p = {
 			if(b > bottom)bottom = b;
 		}
 		s.ll_top = s.y + top;
+		s.ll_bottom = s.y + bottom;
 		return (bottom - top)*s.scaleY;
 	},
 	_startX:function(){
@@ -276,15 +278,24 @@ p = {
 	hitTestPoint:function(x,y){
 		var s = this;
 		var shapes = s.shapes;
-		if(!shapes){
-			shapes = {"type":"rect","arg":[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]]};
+		if(!shapes || shapes.length == 0){
+			s.getWidth(),s.getHeight();
+			shapes = [{"type":"rect","arg":[s.ll_left-s.x,s.ll_top-s.y,s.ll_right - s.ll_left,s.ll_bottom - s.ll_top]}];
 		}
 		return s.ismouseonShapes(shapes,x,y);
 	},
 	hitTestObject:function(obj){
 		var s = this;
-		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		var shapes1 = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
+		var shapes = s.shapes;
+		if(!shapes || shapes.length == 0){
+			s.getWidth(),s.getHeight();
+			shapes = [{"type":"rect","arg":[s.ll_left-s.x,s.ll_top-s.y,s.ll_right - s.ll_left,s.ll_bottom - s.ll_top]}];
+		}
+		var shapes1 = obj.shapes;
+		if(!shapes1 || shapes1.length == 0){
+			obj.getWidth(),obj.getHeight();
+			shapes1 = [{"type":"rect","arg":[obj.ll_left-obj.x,obj.ll_top-obj.y,obj.ll_right - obj.ll_left,obj.ll_bottom - obj.ll_top]}];
+		}
 		var m = s.getRootMatrix();
 		var m1 = obj.getRootMatrix();
 		for(var j=shapes.length-1;j>=0;j--){
@@ -322,7 +333,25 @@ p = {
 	debugShape:function(){
 		var s = this;
 		if(!LGlobal.traceDebug || s.shapes.length == 0)return;
-		
+		for(var i=0,l=s.shapes.length;i<l;i++){
+			var child = s.shapes[i];
+			var c=LGlobal.canvas,arg = child.arg;
+			c.beginPath();
+			if(child.type == LShape.RECT){
+				c.rect(arg[0],arg[1],arg[2],arg[3]);
+			}else if(child.type == LShape.ARC){
+				c.arc(arg[0],arg[1],arg[2],0,2*Math.PI);
+			}else if(child.type == LShape.VERTICES){
+				c.moveTo(arg[0][0],arg[0][1]);
+				for(var j=1,ll = arg.length;j<ll;j++){
+					c.lineTo(arg[j][0],arg[j][1]);
+				};
+				c.lineTo(arg[0][0],arg[0][1]);
+			}
+			c.closePath();
+			c.strokeStyle = "#00FF00";
+			c.stroke();
+		}
 	},
 	ismouseon:function(e,cd){
 		var s = this;

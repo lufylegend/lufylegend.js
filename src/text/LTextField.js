@@ -117,18 +117,11 @@ p = {
 		if(e==null || e == UNDEFINED)return false;
 		if(!s.visible)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		var co={x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY};
+		if(s.mask && !s.mask.ismouseon(e,cd))return false;
 		if(s.inputBackLayer){
-			return s.inputBackLayer.ismouseon(e,co);
+			return s.inputBackLayer.ismouseon(e,{x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY});
 		}
-		ox = e.offsetX;
-		oy = e.offsetY;
-		if(ox >=  cood.x + s.x*cood.scaleX && ox <= cood.x + s.x*cood.scaleX + s.getWidth()*cood.scaleX*s.scaleX && 
-			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + s.y*cood.scaleY + s.getHeight()*cood.scaleY*s.scaleY){
-			return true;
-		}else{
-			return false;
-		}
+		return s.ismouseonShapes([{type:LShape.RECT,arg:[0,0,s._getWidth(),s._getHeight()]}],e.offsetX,e.offsetY);
 	},
 	clone:function(){
 		var s = this,a = new LTextField();
@@ -165,13 +158,17 @@ p = {
 		s.text = "";
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},
-	getWidth:function(){
+	_getWidth:function(){
 		var s = this;
 		if(s.wordWrap)return s.width;
 		LGlobal.canvas.font = s.size+"pt "+s.font;
 		return LGlobal.canvas.measureText(s.text).width;
 	},
-	getHeight:function(){
+	getWidth:function(){
+		var s = this;
+		return s._getWidth()*s.scaleX;
+	},
+	_getHeight:function(){
 		var s = this,c = LGlobal.canvas;
 		if(s.wordWrap){
 			c.font = s.weight + " " + s.size+"pt "+s.font;
@@ -193,6 +190,10 @@ p = {
 		}
 		c.font = s.weight + " " + s.size+"pt "+s.font; 
 		return c.measureText("O").width*1.2;
+	},
+	getHeight:function(){
+		var s = this;
+		return s._getHeight()*s.scaleY;
 	},
 	wind:function(listener){
 		var s = this;
