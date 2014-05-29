@@ -75,8 +75,8 @@ p = {
 	clear:function (){
 		var s = this;
 		s.bitmap = null;
-		s.setList.splice(0,s.setList.length);
-		s.showList.splice(0,s.showList.length);
+		s.setList.length = 0;
+		s.showList.length = 0;
 	},
 	rect:function (x,y,w,h){
 		var s = this;
@@ -143,7 +143,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"ellipse",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawArc:function(tn,lco,pa,isf,co){
 		var s = this,c;
@@ -177,7 +177,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"arc",value:pa});
+		s.showList.push({type:"arc",arg:pa});
 	},
 	drawRect:function (tn,lco,pa,isf,co){
 		var s = this,c;
@@ -208,7 +208,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"rect",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawRoundRect:function(tn,lco,pa,isf,co){
 		var s = this,c;
@@ -247,7 +247,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"rect",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawVertices:function(tn,lco,v,isf,co){
 		var s = this,c;
@@ -284,7 +284,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"vertices",value:v});
+		s.showList.push({type:"vertices",arg:v});
 	},
 	drawTriangles:function(ve, ind, u ,tn,lco){
 		var s = this;
@@ -415,26 +415,8 @@ p = {
 	ismouseon:function(e,co){
 		var s = this;
 		var k = null;
-		if(e==null || e == UNDEFINED)return false;
-		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1};
-		var ox = e.offsetX,oy = e.offsetY;
-		for(k in s.showList){
-			if(s.showList[k].type == "rect" || s.showList[k].type == "ellipse"){
-				if(ox >= co.x + s.showList[k].value[0]*co.scaleX && ox <= co.x + (s.showList[k].value[0] + s.showList[k].value[2])*co.scaleX && 
-					oy >= co.y + s.showList[k].value[1]*co.scaleY && oy <= co.y + (s.showList[k].value[1] + s.showList[k].value[3])*co.scaleY){
-					return true;
-				}
-			}else if(s.showList[k].type == "arc"){
-				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
-				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
-				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
-			}else if(s.showList[k].type == "vertices"){
-				var xl = ox - co.x;
-				var yl = oy - co.y;
-				return LGlobal.hitPolygon(s.showList[k].value,xl,yl);
-			}
-		}		
-		return false;
+		if(e==null || e == UNDEFINED || s.showList.length == 0)return false;
+		return s.parent.ismouseonShapes(s.showList,e.offsetX,e.offsetY);
 	},
 	getWidth:function(){
 		var s = this;
@@ -442,14 +424,14 @@ p = {
 		var min = 0,max = 0,v;
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(min > s.showList[k].value[0])min = s.showList[k].value[0];
-				if(max < s.showList[k].value[0] + s.showList[k].value[2])max = s.showList[k].value[0] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[0])min = s.showList[k].arg[0];
+				if(max < s.showList[k].arg[0] + s.showList[k].arg[2])max = s.showList[k].arg[0] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "arc"){
-				if(min > s.showList[k].value[0] - s.showList[k].value[2])min = s.showList[k].value[0] - s.showList[k].value[2];
-				if(max < s.showList[k].value[0] + s.showList[k].value[2])max = s.showList[k].value[0] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[0] - s.showList[k].arg[2])min = s.showList[k].arg[0] - s.showList[k].arg[2];
+				if(max < s.showList[k].arg[0] + s.showList[k].arg[2])max = s.showList[k].arg[0] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "vertices"){
-				for(k1 in s.showList[k].value){
-					v = s.showList[k].value[k1];
+				for(k1 in s.showList[k].arg){
+					v = s.showList[k].arg[k1];
 					if(min > v[0])min = v[0];
 					if(max < v[0])max = v[0];
 				}
@@ -464,14 +446,14 @@ p = {
 		var min = 0,max = 0,v;
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(min > s.showList[k].value[1])min = s.showList[k].value[1];
-				if(max < s.showList[k].value[1] + s.showList[k].value[3])max = s.showList[k].value[1] + s.showList[k].value[3];
+				if(min > s.showList[k].arg[1])min = s.showList[k].arg[1];
+				if(max < s.showList[k].arg[1] + s.showList[k].arg[3])max = s.showList[k].arg[1] + s.showList[k].arg[3];
 			}else if(s.showList[k].type == "arc"){
-				if(min > s.showList[k].value[1] - s.showList[k].value[2])min = s.showList[k].value[1] - s.showList[k].value[2];
-				if(max < s.showList[k].value[1] + s.showList[k].value[2])max = s.showList[k].value[1] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[1] - s.showList[k].arg[2])min = s.showList[k].arg[1] - s.showList[k].arg[2];
+				if(max < s.showList[k].arg[1] + s.showList[k].arg[2])max = s.showList[k].arg[1] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "vertices"){
-				for(k1 in s.showList[k].value){
-					v = s.showList[k].value[k1];
+				for(k1 in s.showList[k].arg){
+					v = s.showList[k].arg[k1];
 					if(min > v[1])min = v[1];
 					if(max < v[1])max = v[1];
 				}
