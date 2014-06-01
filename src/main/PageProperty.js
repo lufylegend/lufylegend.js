@@ -221,7 +221,7 @@ function init (s, c, w, h, f, t) {
 		});
 	}
 }
-var Linit = init;
+var LInit = init;
 
 /** @language chinese
  * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
@@ -272,7 +272,7 @@ function base (d, b, a) {
 	}
 	b.apply(d, a);
 }
-var Lextends = base;
+var LExtends = base;
 
 /** @language chinese
  * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。

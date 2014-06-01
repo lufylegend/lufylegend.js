@@ -2,9 +2,10 @@
 * LButton.js
 **/
 function LButton(upState,overState,downState){
-	base(this,LSprite,[]);
 	var s = this;
+	base(s,LSprite,[]);
 	s.type = "LButton";
+	s.buttonMode = true;
 	s.addChild(upState);
 	if(overState == null){
 		overState = upState;

@@ -88,11 +88,17 @@ p = {
 		return false;
 	},
 	ismouseon:function(e,cd){
-		var s = this;
+		var s = this,i=false,sc;
 		if(!s.visible || e==null)return false;
-		var k = null,i=false;
-		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		if(s.mask && !s.mask.ismouseon(e,sc))return false;
+		if(s.mask){
+			if(!s.mask.parent){
+				s.mask.parent = s.parent;
+			}
+			if(!s.mask.ismouseon(e,cd)){
+				return false;
+			}
+		}
+		sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
 		return i;
 	},

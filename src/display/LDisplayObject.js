@@ -189,12 +189,12 @@ p = {
 		var v,arg = arg,r2;
 		if(type == LShape.VERTICES){
 			v = [];
-			for(var i=0;i<arg.length;i++){
+			for(var i=0,l=arg.length;i<l;i++){
 				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
 			}
 		}else if(type == LShape.RECT){
 			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
-			for(var i=0;i<arg.length;i++){
+			for(var i=0,l=v.length;i<l;i++){
 				v[i]=m.toArray([v[i][0],v[i][1],1]);
 			}
 		}else if(type == LShape.ARC){

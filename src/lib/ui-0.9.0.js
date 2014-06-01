@@ -838,7 +838,7 @@ LScrollbar.prototype.toString = function(){
 };
 function LWindow(width,height,title){
 	var s = this;
-	base(s,LSprite);
+	base(s,LSprite,[]);
 	s.w = width;
 	s.h = height;
 	s.bar = new LSprite();
@@ -859,7 +859,7 @@ function LWindow(width,height,title){
 	s.close.w = 50;
 	s.close.h = 25;
 	s.addChild(s.close);
-	s.close.addEventListener(LMouseEvent.MOUSE_DOWN,s._onClose);
+	s.close.addEventListener(LMouseEvent.MOUSE_UP,s._onClose);
 	s.sign = new LSprite();
 	s.signColor = "#FFFFFF";
 	s.addChild(s.sign);
@@ -874,6 +874,11 @@ function LWindow(width,height,title){
 	s.layer.mask = g;
 	s.graphics.drawRect(1,s.barColor,[0,s.bar.h,s.w,s.layer.h],true,s.layerColor);
 
+	s.addEventListener(LMouseEvent.MOUSE_UP,function(e){});
+	s.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){});
+	s.addEventListener(LMouseEvent.MOUSE_MOVE,function(e){});
+	s.addEventListener(LMouseEvent.MOUSE_OVER,function(e){});
+	s.addEventListener(LMouseEvent.MOUSE_OUT,function(e){});
 	s.addEventListener(LEvent.ENTER_FRAME,s._onDraw);
 }
 LWindow.CLOSE = "close";
@@ -893,7 +898,7 @@ LWindow.prototype.clone = function(){
 	a.layer = s.layer.clone();
 	a.addChild(a.layer);
 	a.bar.addEventListener(LMouseEvent.MOUSE_DOWN,a._onBarDown);
-	a.close.addEventListener(LMouseEvent.MOUSE_DOWN,a._onClose);
+	a.close.addEventListener(LMouseEvent.MOUSE_UP,a._onClose);
 	return a;
 };
 LWindow.prototype._onClose = function(event){

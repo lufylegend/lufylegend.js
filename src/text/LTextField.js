@@ -105,6 +105,7 @@ p = {
 			}else{
 				s.inputBackLayer = inputBackLayer;
 			}
+			s.inputBackLayer.parent = s;
 			if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN])LMouseEventContainer.pushInputBox(s);
 		}else{
 			s.inputBackLayer = null;
@@ -117,7 +118,14 @@ p = {
 		if(e==null || e == UNDEFINED)return false;
 		if(!s.visible)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		if(s.mask && !s.mask.ismouseon(e,cd))return false;
+		if(s.mask){
+			if(!s.mask.parent){
+				s.mask.parent = s.parent;
+			}
+			if(!s.mask.ismouseon(e,cd)){
+				return false;
+			}
+		}
 		if(s.inputBackLayer){
 			return s.inputBackLayer.ismouseon(e,{x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY});
 		}

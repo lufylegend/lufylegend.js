@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.8.12
+* @version 1.9.0
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -24,13 +24,14 @@ LAjax,LTweenLite,LLoadManage,p,mouseX,mouseY;
  * LEvent.js
  **/
 var LEvent = function (){throw "LEvent cannot be instantiated";};
-LEvent.INIT = "init",
-LEvent.COMPLETE = "complete",
-LEvent.ENTER_FRAME = "enter_frame",
-LEvent.SOUND_COMPLETE = "sound_complete",
-LEvent.END_CONTACT = "endContact",
-LEvent.PRE_SOLVE = "preSolve",
-LEvent.POST_SOLVE = "postSolve",
+LEvent.INIT = "init";
+LEvent.COMPLETE = "complete";
+LEvent.ENTER_FRAME = "enter_frame";
+LEvent.WINDOW_RESIZE = "resize";
+LEvent.SOUND_COMPLETE = "sound_complete";
+LEvent.END_CONTACT = "endContact";
+LEvent.PRE_SOLVE = "preSolve";
+LEvent.POST_SOLVE = "postSolve";
 LEvent.BEGIN_CONTACT = "beginContact";
 LEvent.currentTarget = null;
 LEvent.addEventListener = function (n, t, f,b){
@@ -41,6 +42,16 @@ LEvent.addEventListener = function (n, t, f,b){
 		n["e" + t + f] = f;
 		n[t + f] = function(){n["e" + t + f]();};
 		n.attachEvent("on" + t, n[t + f]);
+	}
+};
+LEvent.removeEventListener = function (n, t, f,b){
+	if(b==null)b=false;
+	if(n.removeEventListener){
+		n.removeEventListener(t, f, b);
+	}else if(n.detachEvent){
+		n["e" + t + f] = f;
+		n[t + f] = function(){n["e" + t + f]();};
+		n.detachEvent("on" + t, n[t + f]);
 	}
 };
 /*
@@ -400,7 +411,6 @@ LGlobal.IS_MOUSE_DOWN = false;
 LGlobal.objectIndex = 0;
 LGlobal.preventDefault = true;
 LGlobal.childList = new Array();
-LGlobal.buttonList = new Array();
 LGlobal.dragList = new Array();
 LGlobal.stageScale = "noScale";
 LGlobal.align = "M";
@@ -417,6 +427,7 @@ LGlobal.mouseEventContainer = {};
 LGlobal.keepClear = true;
 LGlobal.top = 0;
 LGlobal.left = 0;
+LGlobal.window = window;
 (function(n){
 	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
 	if (n.indexOf(OS_IPHONE) > 0) {
@@ -446,7 +457,6 @@ LGlobal.setDebug = function (v){
 };
 LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
-	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
 	LGlobal.object.innerHTML='<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
 	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
@@ -481,6 +491,32 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.stage = new LSprite();
 	LGlobal.stage.parent = "root";
 	LGlobal.childList.push(LGlobal.stage);
+	LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
+	LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
+	LGlobal.stage.addEventListener = function(type,listener){
+		if(type == LEvent.WINDOW_RESIZE){
+			LGlobal.stage.onresizeListener = listener;
+			LGlobal.stage.onresize = function(e){
+				LGlobal.stage.onresizeEvent = e;
+			};
+			LEvent.addEventListener(LGlobal.window,type,LGlobal.stage.onresize);
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+			LEvent.addEventListener(LGlobal.window,type,listener);
+		}else{
+			LGlobal.stage.baseAddEvent(type,listener);
+		}
+	};
+	LGlobal.stage.removeEventListener = function(type,listener){
+		if(type == LEvent.WINDOW_RESIZE){
+			LEvent.removeEventListener(LGlobal.window,LEvent.WINDOW_RESIZE,LGlobal.stage.onresize);
+			delete LGlobal.stage.onresize;
+			delete LGlobal.stage.onresizeListener;
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+			LEvent.removeEventListener(LGlobal.window,type,listener);
+		}else{
+			LGlobal.stage.baseRemoveEvent(type,listener);
+		}
+	};
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
 	
 	if(LGlobal.canTouch){
@@ -662,7 +698,9 @@ LGlobal.touchHandler = function(e){
 	return e;
 };
 LGlobal.mouseEvent = function(e,t){
-	if(t == LMouseEvent.MOUSE_MOVE)LGlobal.dragHandler(e);
+	if(t == LMouseEvent.MOUSE_MOVE){
+		LGlobal.dragHandler(e);
+	}
 	if(LGlobal.mouseEventContainer[t]){
 		LMouseEventContainer.dispatchMouseEvent(e,t);
 		return;
@@ -714,6 +752,10 @@ LGlobal.verticalError = function(){
 };
 LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
+	if(LGlobal.stage.onresizeEvent){
+		LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
+		delete LGlobal.stage.onresizeEvent;
+	}
 	if(LGlobal.box2d != null){
 		LGlobal.box2d.ll_show();
 		if(!LGlobal.traceDebug && LGlobal.keepClear){
@@ -726,25 +768,12 @@ LGlobal.onShow = function (){
 			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
 		}
 	}
-	LGlobal.buttonShow(LGlobal.buttonList);
 	LGlobal.show(LGlobal.childList);
 };
-LGlobal.buttonShow = function(b){
-	for(var i=0,l=b.length;i<l;i++){
-		if(b[i].buttonModeChange)b[i].buttonModeChange();
-	}
-};
 LGlobal.show = function(s){
-	s.ll_cr = false;
 	for(var i=0,l=s.length;i<l;i++){
-		if(s[i].ll_show)s[i].ll_show();
-		if(s.ll_cr){
-			i--;
-			l--;
-			s.ll_cr =false;
-		}
+		if(s[i] && s[i].ll_show)s[i].ll_show();
 	}
-	delete s.ll_cr;
 };
 LGlobal.divideCoordinate = function (w,h,row,col){
 	var i,j,cw = w/col,ch = h/row,r = [];
@@ -767,49 +796,70 @@ LGlobal._create_loading_color = function(){
 	co.addColorStop(1, "violet");  
 	return co;
 };
-LGlobal.hitPolygon = function(){
-	var args = LGlobal.hitPolygon.arguments;
-	if(args.length == 3){
-		var list = args[0],x=args[1],y=args[2];
-		var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
-		for(i=1,l=list.length;i<l+1;i++){
-			p1 = list[i%l];
-			b1x = (x <= p1[0]);
-			b1y = (y <= p1[1]);
-			if( b0y != b1y ){
-				if( b0x == b1x ){
-					if( b0x )c += (b0y ? -1 : 1);
-				}else{
-					if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
-				}
-			}
-			p0 = p1;
-			b0x = b1x;
-			b0y = b1y;
-		}
-		return 0 != c;
-	}else{
-		var i,j,l,listA,normals,vecs,list=[[args[0],[],[]],[args[1],[],[]]];
-		for(j=0;j<list.length;j++){
-			listA = list[j][0],normals = list[j][1];
-			for(i=0,l=listA.length;i<l;i++){
-				list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
-				if(i<l-1){
-					normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
-				}
-			}
-			normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
-		}
-		for(j=0;j<list.length;j++){
-			normals = list[j][1];
-			for(i=0,l=normals.length;i<l;i++){
-				var r1 = LVec2.getMinMax(list[0][2],normals[i]);
-				var r2 = LVec2.getMinMax(list[1][2],normals[i]);
-				if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
+LGlobal.hitPolygon = function(list,x,y){
+	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
+	for(i=1,l=list.length;i<l+1;i++){
+		p1 = list[i%l];
+		b1x = (x <= p1[0]);
+		b1y = (y <= p1[1]);
+		if( b0y != b1y ){
+			if( b0x == b1x ){
+				if( b0x )c += (b0y ? -1 : 1);
+			}else{
+				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
 			}
 		}
-		return true;
+		p0 = p1;
+		b0x = b1x;
+		b0y = b1y;
 	}
+	return 0 != c;
+};
+LGlobal.hitTestPolygon = function(p1,p2){
+	var i,j,l,listA,normals,vecs,list=[[p1,[],[]],[p2,[],[]]];
+	for(j=0;j<list.length;j++){
+		listA = list[j][0],normals = list[j][1];
+		for(i=0,l=listA.length;i<l;i++){
+			list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
+			if(i<l-1){
+				normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
+			}
+		}
+		normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
+	}
+	for(j=0;j<list.length;j++){
+		normals = list[j][1];
+		for(i=0,l=normals.length;i<l;i++){
+			var r1 = LVec2.getMinMax(list[0][2],normals[i]);
+			var r2 = LVec2.getMinMax(list[1][2],normals[i]);
+			if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
+		}
+	}
+	return true;
+};
+LGlobal.hitTestPolygonArc = function(vs,arc){
+	if(LGlobal.hitPolygon(vs,arc[0],arc[1])){
+		return true;
+	}	
+	var i,j,l,p1,p2,v1,v2,ext,inn,l2;
+	for(i=0,l=vs.length;i<l;i++){
+		j=i<l-1?i+1:0;
+		p1 = vs[i],p2 = vs[j];
+		v1 = new LVec2(arc[0]-p1[0],arc[1]-p1[1]),v2 = new LVec2(p2[0]-p1[0],p2[1]-p1[1]);
+		l2 = v2.normalize();
+		inn = LVec2.dot(v1,l2);
+		if(inn <= 0){
+			if(v1.x*v1.x + v1.y*v1.y < arc[3]){
+				return true;
+			}
+		}else if(inn*inn < v2.x*v2.x + v2.y*v2.y){
+			ext = LVec2.cross(v1,l2);
+			if(ext*ext < arc[3]){
+				return true;
+			}
+		}
+	}
+	return false;
 };
 LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
 	var rA = objA.getWidth()*0.5
@@ -875,6 +925,8 @@ LGlobal.scaleY = function(v){
 将canvas缩放为规定大小
 */
 LGlobal.setStageSize = function(w,h){
+	w =  Math.ceil(w);
+	h =  Math.ceil(h);
 	LGlobal.canvasObj.style.width = w+"px";
 	LGlobal.canvasObj.style.height = h+"px";
 	LGlobal.canvasStyleWidth = w;
@@ -956,79 +1008,23 @@ var LSystem = {
 		if(LGlobal.stage){LGlobal.resize();}
 	}
 };
-/*
-* PageProperty.js
-**/
-function trace(){
-	if(!LGlobal.traceDebug)return;
-	var t = document.getElementById("traceObject"),i;
-	if(trace.arguments.length > 0 && t == null){
-		t = document.createElement("TEXTAREA");
-		t.id = "traceObject";
-		t.style.position = "absolute";
-		t.style.top = (LGlobal.height + 20) + "px";
-		t.style.width = LGlobal.width+"px";
-		t.style.height = "200px";
-		document.body.appendChild(t);
-	}
-	for(i=0; i < trace.arguments.length; i++){
-		t.value=t.value+trace.arguments[i] + "\r\n";
-		t.scrollTop = t.scrollHeight;
-	}
-}
-function addChild(o){
-	LGlobal.stage.addChild(o);
-}
-function removeChild(o){
-	LGlobal.stage.removeChild(o);
-}
-function init(s,c,w,h,f,t){
-	LGlobal.speed = s;
-	var _f = function (){
-		if(LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight){
-			LGlobal.horizontalError();
-		}else if(LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight){
-			LGlobal.verticalError();
-		}else{
-			setTimeout(f,100);
-		}
-		LGlobal.startTimer = (new Date()).getTime();
-	};
-	if(t != null && t == LEvent.INIT){
-		LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
-		LGlobal.setCanvas(c,w,h);
-		_f();
-	}else{
-		LEvent.addEventListener(window,"load",function(){
-			LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
-			LGlobal.setCanvas(c,w,h);
-			_f();
-		});
-	}
-}
-function base(d,b,a){
-	var p=null,o=d.constructor.prototype,h={};
-	if(d.constructor.name == "Object"){
-		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
-	}
-	for(p in o)h[p]=1;
-	for(p in b.prototype){
-		if(!h[p])o[p] = b.prototype[p];
-		o[p][SUPER] = b.prototype;
-	}
-	b.apply(d,a);
-}
-function getTimer(){
-	return (new Date()).getTime() - LGlobal.startTimer;
-}
-if (!Array.prototype.indexOf){
-	Array.prototype.indexOf = function(elt){
+/** @language chinese
+ * PageProperty
+ * @class 全局函数
+ */
+
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function (elt) {
 		var len = this.length >>> 0;
 		var from = Number(arguments[1]) || 0;
 		from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-		if (from < 0)from += len;
+		if (from < 0) {
+			from += len;
+		}
 		for (; from < len; from++){
-			if (from in this && this[from] === elt)return from;
+			if (from in this && this[from] === elt) {
+				return from;
+			}
 		}
 		return -1;
 	};
@@ -1037,6 +1033,292 @@ if (!Array.isArray){
 	Array.isArray = function(value){
 		return Object.prototype.toString.apply(value) == '[object Array]';
 	};
+}
+
+/** @language chinese
+ * 您可以在测试环境下捕获来自 trace() 函数的输出并显示结果。如果 trace 语句中的任何参数包含 String 之外的数据类型，则 trace 函数将调用与该数据类型关联的 toString() 方法。例如，如果该参数是一个布尔值，则跟踪函数将调用 Boolean.toString() 并显示返回值。
+ * @method trace
+ * @param {Object} expression 要计算的表达式。expression 参数的值显示在"输出"面板中。
+ * @example
+ * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @since 1.0.0
+ * @public
+*/
+/** @language english
+ * You can use Debug Mode to capture output from the trace() function and display the result. If any argument in a trace statement includes a data type other than a String, the trace function invokes the associated toString() method for that data type. For example, if the argument is a Boolean value the trace function invokes Boolean.toString() and displays the return value.
+ * @method trace
+ * @param {Object} expression An expression to evaluate. the value of the expression parameter is displayed in the Output panel.
+ * @example
+ * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Debugモード を使用すると、trace() 関数の出力を取得し、その結果を表示できます。trace ステートメント内の引数に String 以外のデータ型が含まれる場合、trace 関数はそのデータ型に関連した toString() メソッドを呼び出します。たとえば、引数がブール値の場合、trace 関数は Boolean.toString() を呼び出して戻り値を表示します。
+ * @method trace
+ * @param {Object} expression 評価する式。expression パラメータの値が [出力] パネルに表示されます。
+ * @example
+ * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @since 1.0.0
+ * @public
+ */
+function trace() {
+	if (!LGlobal.traceDebug) return;
+	var t = document.getElementById("traceObject"), i;
+	if (trace.arguments.length > 0 && t == null) {
+		t = document.createElement("TEXTAREA");
+		t.id = "traceObject";
+		t.style.position = "absolute";
+		t.style.top = (LGlobal.height + 20) + "px";
+		t.style.width = LGlobal.width + "px";
+		t.style.height = "200px";
+		document.body.appendChild(t);
+	}
+	for (i = 0; i < trace.arguments.length; i++) {
+		t.value = t.value + trace.arguments[i] + "\r\n";
+		t.scrollTop = t.scrollHeight;
+	}
+}
+
+/** @language chinese
+ * 将一个 DisplayObject 子实例添加到Stage。
+ * @method addChild
+ * @param {LDisplayObject} child 要添加的 DisplayObject 实例。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Adds a child DisplayObject instance to the Stage.
+ * @method addChild
+ * @param {Object} expression The DisplayObject instance that you pass in the child parameter.
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Stageに子 DisplayObject インスタンスを追加します。
+ * @method addChild
+ * @param {Object} expression 追加される DisplayObject インスタンスです。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+function addChild (o) {
+	LGlobal.stage.addChild(o);
+}
+
+/** @language chinese
+ * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
+ * @method removeChild
+ * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
+ * @method removeChild
+ * @param {Object} expression The DisplayObject instance to remove.
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
+ * @method removeChild
+ * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+function removeChild (o) {
+	LGlobal.stage.removeChild(o);
+}
+
+/** @language chinese
+ * 引擎初始化函数。别名init
+ * @method Linit
+ * @param {Number} speed 游戏速度设定,每次页面刷新间隔（单位毫秒）。
+ * @param {String} divid 传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部。
+ * @param {int} width 游戏界面宽。
+ * @param {int} height 游戏界面高。
+ * @param {Function} callback 游戏初始化后，调用此函数。
+ * @param {String} type 当为null时，会先进行页面的onload操作，如果你的init函数调用是在onload之后，那么需要将此参数设为LEvent.INIT。
+ * @example
+ * 	<!DOCTYPE html>
+ * 	<html>
+ * 	<head>
+ * 	<meta charset="UTF-8">
+ * 	<title>demo</title>
+ * 	</head>
+ * 	<body>
+ * 	<div id="mylegend">loading……</div>
+ * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
+ * 	<script>
+ * 	Linit(50,"mylegend",800,480,main);
+ * 	function main(){
+ * 	    alert("感谢您使用lufylegend库件");
+ * 	}
+ * 	</script>
+ * 	</body>
+ * 	</html>
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
+ * @method Linit
+ * @param {Object} expression The DisplayObject instance to remove.
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
+ * @method Linit
+ * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+function init (s, c, w, h, f, t) {
+	LGlobal.speed = s;
+	var _f = function () {
+		if (LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight) {
+			LGlobal.horizontalError();
+		} else if (LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight) {
+			LGlobal.verticalError();
+		} else {
+			setTimeout(f, 100);
+		}
+		LGlobal.startTimer = (new Date()).getTime();
+	};
+	if (t != null && t == LEvent.INIT) {
+		LGlobal.frameRate = setInterval(function () {
+			LGlobal.onShow();
+		}, s);
+		LGlobal.setCanvas(c, w, h);
+		_f();
+	}else{
+		LEvent.addEventListener(window, "load", function () {
+			LGlobal.frameRate = setInterval(function () {
+				LGlobal.onShow();
+			}, s);
+			LGlobal.setCanvas(c, w, h);
+			_f();
+		});
+	}
+}
+var LInit = init;
+
+/** @language chinese
+ * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
+ * @method Lextends
+ * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
+ * @method Lextends
+ * @param {Object} expression The DisplayObject instance to remove.
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
+ * @method Lextends
+ * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+function base (d, b, a) {
+	var p = null, o = d.constructor.prototype, h = {};
+	if(d.constructor.name == "Object"){
+		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
+	}
+	for (p in o) {
+		h[p] = 1;
+	}
+	for (p in b.prototype) {
+		if (!h[p]) {
+			o[p] = b.prototype[p];
+		}
+		o[p][SUPER] = b.prototype;
+	}
+	b.apply(d, a);
+}
+var LExtends = base;
+
+/** @language chinese
+ * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
+ * @method getTimer
+ * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
+ * @method getTimer
+ * @param {Object} expression The DisplayObject instance to remove.
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
+ * @method getTimer
+ * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * @example
+ * 	var backLayer = LSprite();
+ * 	addChild(backLayer);
+ * 	removeChild(backLayer);
+ * @since 1.0.0
+ * @public
+ */
+function getTimer () {
+	return (new Date()).getTime() - LGlobal.startTimer;
 }
 
 /*
@@ -1179,6 +1461,10 @@ function LVec2(x,y){
 LVec2.prototype.length = function(){
 	var s = this;
 	return Math.sqrt(s.x * s.x + s.y * s.y);
+};
+LVec2.prototype.normalize = function(){
+	var s = this,l=s.length();
+	return new LVec2(s.x/l,s.y/l);
 };
 
 LVec2.prototype.normR = function(){
@@ -1433,11 +1719,60 @@ p = {
 		var s = this,r = s.getDataCanvas();
 		return r.toDataURL();
 	},
+	ismouseonShapes:function(shapes,mx,my){
+		var s = this;
+		var parent = s;
+		if(typeof shapes == UNDEFINED){
+			shapes = s.shapes;
+		}
+		var m = s.getRootMatrix();
+		for(var j=shapes.length-1;j>=0;j--){
+			var child = shapes[j],v,arg = child.arg;
+			v = s._changeShape(child.type,arg,m);
+			if(child.type == LShape.VERTICES){
+				if(LGlobal.hitPolygon(v,mx,my))return true;
+			}else if(child.type == LShape.RECT){
+				if(LGlobal.hitPolygon(v,mx,my))return true;
+			}else if(child.type == LShape.ARC){
+				if((v[0] - mx)*(v[0] - mx) + (v[1] - my)*(v[1] - my) < v[3])return true;
+			}
+		}
+		return false;
+	},
+	_changeShape:function(type,arg,m){
+		var v,arg = arg,r2;
+		if(type == LShape.VERTICES){
+			v = [];
+			for(var i=0,l=arg.length;i<l;i++){
+				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
+			}
+		}else if(type == LShape.RECT){
+			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
+			for(var i=0,l=v.length;i<l;i++){
+				v[i]=m.toArray([v[i][0],v[i][1],1]);
+			}
+		}else if(type == LShape.ARC){
+			var v1 = m.toArray([arg[0],arg[1],1]),v2 = m.toArray([arg[0]+arg[2],arg[1],1]);
+			r2 = (v1[0] - v2[0])*(v1[0] - v2[0]) + (v1[1] - v2[1])*(v1[1] - v2[1]);
+			v = [v1[0],v1[1],Math.sqrt(r2),r2];
+		}
+		return v;
+	},
+	getRootMatrix:function(){
+		var parent = this;
+		var m = new LMatrix();
+		while(parent && parent != "root"){
+			if(parent.scaleX != 1 || parent.scaleY != 1)m.scale(parent.scaleX,parent.scaleY);
+			if(parent.rotate != 0)m.rotate(parent.rotate);
+			if(parent.x != 0 || parent.y != 0)m.translate(parent.x,parent.y);
+			parent = parent.parent;
+		}
+		return m;
+	},
 	remove:function(){
 		var s = this,p = s.parent;
 		if(!p || p == "root")return;
 		p.removeChild(s);
-		if(typeof p.ll_cr != UNDEFINED)p.ll_cr = true;
 	}
 };
 for(var k in p)LDisplayObject.prototype[k]=p[k];
@@ -1635,28 +1970,11 @@ function LMedia(){
 LMedia.CANPLAYTHROUGH_EVENT = "canplaythrough";
 LMedia.ENDED_EVENT = "ended";
 p = {
-	addEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = l;
-		}else if(t == LEvent.SOUND_COMPLETE){
-			this.onsoundcomplete = l;
-		}
-	},
-	removeEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = null;
-		}else if(t == LEvent.SOUND_COMPLETE){
-			this.onsoundcomplete = null;
-		}
-	},
 	onload:function(){
 		var s=this;
 		if(s.data.readyState){
 			s.length=s.data.duration;
-			if(s.oncomplete){
-				s.event.currentTarget = s;
-				s.oncomplete(s.event);
-			}
+			s.dispatchEvent(LEvent.COMPLETE);
 			return;
 		}
 		s.data.addEventListener(LMedia.CANPLAYTHROUGH_EVENT, function () {
@@ -1666,7 +1984,7 @@ p = {
 	_onended:function(){
 		var s=this;
 		if(s.data.ended){
-			if(s.onsoundcomplete)s.onsoundcomplete();
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if(++s.loopIndex < s.loopLength){
 				s.data.currentTime=0;
 				s.data.play();
@@ -2020,13 +2338,13 @@ p = {
 	clear:function (){
 		var s = this;
 		s.bitmap = null;
-		s.setList.splice(0,s.setList.length);
-		s.showList.splice(0,s.showList.length);
+		s.setList.length = 0;
+		s.showList.length = 0;
 	},
 	rect:function (x,y,w,h){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.rect(x, y, w, h);});
-		s.showList.push({type:"rect",value:[x,y,w,h]});
+		s.showList.push({type:"rect",arg:[x,y,w,h]});
 	},
 	fillStyle:function (co){
 		var s = this;
@@ -2039,7 +2357,7 @@ p = {
 	arc:function(x,y,r,sa,ea,aw){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.arc(x,y,r,sa,ea,aw);});
-		s.showList.push({type:"arc",value:sa});
+		s.showList.push({type:"arc",arg:sa});
 	},
 	beginBitmapFill:function(b){
 		var s = this;
@@ -2088,7 +2406,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"ellipse",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawArc:function(tn,lco,pa,isf,co){
 		var s = this,c;
@@ -2122,7 +2440,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"arc",value:pa});
+		s.showList.push({type:"arc",arg:pa});
 	},
 	drawRect:function (tn,lco,pa,isf,co){
 		var s = this,c;
@@ -2153,7 +2471,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"rect",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawRoundRect:function(tn,lco,pa,isf,co){
 		var s = this,c;
@@ -2192,7 +2510,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"rect",value:pa});
+		s.showList.push({type:"rect",arg:pa});
 	},
 	drawVertices:function(tn,lco,v,isf,co){
 		var s = this,c;
@@ -2229,7 +2547,7 @@ p = {
 				c.stroke();
 			}
 		});
-		s.showList.push({type:"vertices",value:v});
+		s.showList.push({type:"vertices",arg:v});
 	},
 	drawTriangles:function(ve, ind, u ,tn,lco){
 		var s = this;
@@ -2360,26 +2678,8 @@ p = {
 	ismouseon:function(e,co){
 		var s = this;
 		var k = null;
-		if(e==null || e == UNDEFINED)return false;
-		if(co==null)co={x:0,y:0,scaleX:1,scaleY:1};
-		var ox = e.offsetX,oy = e.offsetY;
-		for(k in s.showList){
-			if(s.showList[k].type == "rect" || s.showList[k].type == "ellipse"){
-				if(ox >= co.x + s.showList[k].value[0]*co.scaleX && ox <= co.x + (s.showList[k].value[0] + s.showList[k].value[2])*co.scaleX && 
-					oy >= co.y + s.showList[k].value[1]*co.scaleY && oy <= co.y + (s.showList[k].value[1] + s.showList[k].value[3])*co.scaleY){
-					return true;
-				}
-			}else if(s.showList[k].type == "arc"){
-				var xl = co.x + (s.showList[k].value[0])*co.scaleX - ox;
-				var yl = co.y + (s.showList[k].value[1])*co.scaleY - oy;
-				return xl*xl+yl*yl <= s.showList[k].value[2]*co.scaleX*s.showList[k].value[2]*co.scaleY;
-			}else if(s.showList[k].type == "vertices"){
-				var xl = ox - co.x;
-				var yl = oy - co.y;
-				return LGlobal.hitPolygon(s.showList[k].value,xl,yl);
-			}
-		}		
-		return false;
+		if(e==null || e == UNDEFINED || s.showList.length == 0 || !s.parent)return false;
+		return s.parent.ismouseonShapes(s.showList,e.offsetX,e.offsetY);
 	},
 	getWidth:function(){
 		var s = this;
@@ -2387,14 +2687,14 @@ p = {
 		var min = 0,max = 0,v;
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(min > s.showList[k].value[0])min = s.showList[k].value[0];
-				if(max < s.showList[k].value[0] + s.showList[k].value[2])max = s.showList[k].value[0] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[0])min = s.showList[k].arg[0];
+				if(max < s.showList[k].arg[0] + s.showList[k].arg[2])max = s.showList[k].arg[0] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "arc"){
-				if(min > s.showList[k].value[0] - s.showList[k].value[2])min = s.showList[k].value[0] - s.showList[k].value[2];
-				if(max < s.showList[k].value[0] + s.showList[k].value[2])max = s.showList[k].value[0] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[0] - s.showList[k].arg[2])min = s.showList[k].arg[0] - s.showList[k].arg[2];
+				if(max < s.showList[k].arg[0] + s.showList[k].arg[2])max = s.showList[k].arg[0] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "vertices"){
-				for(k1 in s.showList[k].value){
-					v = s.showList[k].value[k1];
+				for(k1 in s.showList[k].arg){
+					v = s.showList[k].arg[k1];
 					if(min > v[0])min = v[0];
 					if(max < v[0])max = v[0];
 				}
@@ -2409,14 +2709,14 @@ p = {
 		var min = 0,max = 0,v;
 		for(k in s.showList){
 			if(s.showList[k].type == "rect"){
-				if(min > s.showList[k].value[1])min = s.showList[k].value[1];
-				if(max < s.showList[k].value[1] + s.showList[k].value[3])max = s.showList[k].value[1] + s.showList[k].value[3];
+				if(min > s.showList[k].arg[1])min = s.showList[k].arg[1];
+				if(max < s.showList[k].arg[1] + s.showList[k].arg[3])max = s.showList[k].arg[1] + s.showList[k].arg[3];
 			}else if(s.showList[k].type == "arc"){
-				if(min > s.showList[k].value[1] - s.showList[k].value[2])min = s.showList[k].value[1] - s.showList[k].value[2];
-				if(max < s.showList[k].value[1] + s.showList[k].value[2])max = s.showList[k].value[1] + s.showList[k].value[2];
+				if(min > s.showList[k].arg[1] - s.showList[k].arg[2])min = s.showList[k].arg[1] - s.showList[k].arg[2];
+				if(max < s.showList[k].arg[1] + s.showList[k].arg[2])max = s.showList[k].arg[1] + s.showList[k].arg[2];
 			}else if(s.showList[k].type == "vertices"){
-				for(k1 in s.showList[k].value){
-					v = s.showList[k].value[k1];
+				for(k1 in s.showList[k].arg){
+					v = s.showList[k].arg[k1];
 					if(min > v[1])min = v[1];
 					if(max < v[1])max = v[1];
 				}
@@ -2447,6 +2747,9 @@ function LShape(){
 	s.graphics = new LGraphics();
 	s.graphics.parent = s;
 }
+LShape.ARC = "arc";
+LShape.RECT = "rect";
+LShape.VERTICES = "vertices";
 p = {
 	_ll_show:function(c){
 		var s = this;
@@ -2524,11 +2827,17 @@ p = {
 		return false;
 	},
 	ismouseon:function(e,cd){
-		var s = this;
+		var s = this,i=false,sc;
 		if(!s.visible || e==null)return false;
-		var k = null,i=false;
-		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		if(s.mask && !s.mask.ismouseon(e,sc))return false;
+		if(s.mask){
+			if(!s.mask.parent){
+				s.mask.parent = s.parent;
+			}
+			if(!s.mask.ismouseon(e,cd)){
+				return false;
+			}
+		}
+		sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
 		if(s.graphics)i = s.graphics.ismouseon(e,sc);
 		return i;
 	},
@@ -2539,453 +2848,716 @@ p = {
 	}
 };
 for(var k in p)LShape.prototype[k]=p[k];
-/*
-* LSprite.js
-**/
-function LSprite(){
-	var s = this;
-	base(s,LInteractiveObject,[]);
-	s.type = "LSprite";
-	s.rotatex;
-	s.rotatey;
-	s.childList = new Array();
-	s.graphics = new LGraphics();
-	s.graphics.parent = s;
-	s.box2d = null;
-	s.buttonMode = true;
-	s.shapes = new Array();
-}
-p = {
-	setRotate:function (angle){
+/** @language chinese
+ * 创建一个新的 LSprite 实例。
+ * LSprite 类是基本显示列表构造块：一个可显示图形并且也可包含子项的显示列表节点。
+ * @class LSprite
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  LInit(50, "legend", 800, 480, main);
+ *  function main () {
+ *  	var layer = new LSprite();
+ *  	addChild(layer);
+ *  	
+ *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ *  	var bm = new LBitmap(bmd);
+ *  	layer.addChild(bm);
+ *  }
+ * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">测试链接</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Creates a new LSprite instance.
+ * The LSprite class is a basic display list building block: a display list node that can display graphics and can also contain children.
+ * @class LSprite
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  LInit(50, "legend", 800, 480, main);
+ *  function main () {
+ *  	var layer = new LSprite();
+ *  	addChild(layer);
+ *  	
+ *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ *  	var bm = new LBitmap(bmd);
+ *  	layer.addChild(bm);
+ *  }
+ * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">Try it »</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * 新しい LSprite インスタンスを作成します。
+ * LSprite クラスは、表示リストの基本的要素です。つまり、グラフィックを表示でき、子を持つこともできる表示リストノードです。
+ * @class LSprite
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  LInit(50, "legend", 800, 480, main);
+ *  function main () {
+ *  	var layer = new LSprite();
+ *  	addChild(layer);
+ *  	
+ *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ *  	var bm = new LBitmap(bmd);
+ *  	layer.addChild(bm);
+ *  }
+ * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @since 1.0.0
+ * @public
+ */
+var LSprite = (function () {
+	function LSprite () {
 		var s = this;
-		if(s.box2dBody){
-			s.box2dBody.SetAngle(angle);
-		}else{
-			s.rotate = angle;
-		}
-	},
-	_rotateReady:function(){
-		var s = this;
-		if(s.box2dBody){
-			if((typeof s.rotatex) == "undefined"){
-				s.getRotateXY();
+		LExtends(s, LInteractiveObject, []);
+		/** @language chinese
+		 * 对象的类型
+		 * @property type
+		 * @type String
+		 * @default LSprite
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property type
+		 * @type String
+		 * @default LSprite
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property type
+		 * @type String
+		 * @default LSprite
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.type = "LSprite";
+		s.rotatex;
+		s.rotatey;
+		/** @language chinese
+		 * 子对象列表
+		 * @property childList
+		 * @type Array
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * the child display object list
+		 * @property childList
+		 * @type Array
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * 子表示オブジェクトのリスト
+		 * @property childList
+		 * @type Array
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.childList = new Array();
+		/** @language chinese
+		 * [只读] 指定属于此 sprite 的 Graphics 对象，在此 sprite 中可执行矢量绘图命令。
+		 * @property graphics
+		 * @type LGraphics
+		 * @since 1.0.0
+		 * @example
+		 *  var layer = new LSprite();
+		 *  addChild(layer);
+		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * [read-only] Specifies the Graphics object that belongs to this sprite where vector drawing commands can occur.
+		 * @property graphics
+		 * @type LGraphics
+		 * @since 1.0.0
+		 * @example
+		 *  var layer = new LSprite();
+		 *  addChild(layer);
+		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * [読み取り専用] ベクターの描画コマンドが発生するこのスプライトに属する Graphics オブジェクトを指定します。
+		 * @property graphics
+		 * @type LGraphics
+		 * @since 1.0.0
+		 * @example
+		 *  var layer = new LSprite();
+		 *  addChild(layer);
+		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.graphics = new LGraphics();
+		s.graphics.parent = s;
+		s.box2dBody = null;
+		/** @language chinese
+		 * 用于碰撞的形状列表
+		 * @property graphics
+		 * @type Array
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language english
+		 * The collider’s shape list
+		 * @property graphics
+		 * @type Array
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * [読み取り専用] ベクターの描画コマンドが発生するこのスプライトに属する Graphics オブジェクトを指定します。
+		 * @property graphics
+		 * @type Array
+		 * @since 1.9.0
+		 * @public
+		 */
+		s.shapes = new Array();
+	}
+	var p = {
+		setRotate : function (angle) {
+			var s = this;
+			if (s.box2dBody) {
+				s.box2dBody.SetAngle(angle);
+			} else {
+				s.rotate = angle;
 			}
-			s.x = s.box2dBody.GetPosition().x * LGlobal.box2d.drawScale - s.parent.x - s.rotatex;
-			s.y = s.box2dBody.GetPosition().y * LGlobal.box2d.drawScale - s.parent.y - s.rotatey;
-			s.rotate = s.box2dBody.GetAngle();
-		}
-	},
-	_ll_show:function(c){
-		var s = this;
-		s.graphics.ll_show();
-		LGlobal.show(s.childList);
-	},
-	startDrag:function(touchPointID){
-		var s = this,r,c;
-		if(s.ll_dragStart)return;
-		s.ll_touchPointID = touchPointID;
-		s.ll_dragStartX = s.x;
-		s.ll_dragStartY = s.y;
-		s.ll_dragMX = mouseX;
-		s.ll_dragMY = mouseY;
-		s.ll_dragStart = true;
-		LGlobal.dragList.push(s);
-	},
-	stopDrag:function(){
-		var s = this,i,l;
-		for(i=0,l=LGlobal.dragList.length;i<l;i++){
-			if(s.objectIndex == LGlobal.dragList[i].objectIndex){
-				s.ll_dragStart = false;
-				LGlobal.dragList.splice(i,1);
-				break;
+		},
+		_rotateReady : function () {
+			var s = this;
+			if (s.box2dBody) {
+				if ((typeof s.rotatex) == UNDEFINED) {
+					s.getRotateXY();
+				}
+				s.x = s.box2dBody.GetPosition().x * LGlobal.box2d.drawScale - s.parent.x - s.rotatex;
+				s.y = s.box2dBody.GetPosition().y * LGlobal.box2d.drawScale - s.parent.y - s.rotatey;
+				s.rotate = s.box2dBody.GetAngle();
 			}
-		}
-	},
-	getRotateXY:function(w,h){
-		var s = this;
-		if(!w || !h){
-			w=s.getWidth();
-			h=s.getHeight();
-		}
-		s.rotatex = w/2;
-		s.rotatey = h/2;
-	},
-	getWidth:function(){
-		var s=this,i,l,o,a,b,
-		left = s.graphics.startX(),right = left + s.graphics.getWidth();
-		for(i=0,l=s.childList.length;i<l;i++){
-			o = s.childList[i];
-			if(typeof o.visible == UNDEFINED || !o.visible)continue;
-			a = o.x;
-			if(typeof o._startX == "function")a=o._startX();
-			b = a + o.getWidth();
-			if(a < left)left = a;
-			if(b > right)right = b;
-		}
-		s.ll_left = s.x + left;
-		return (right - left)*s.scaleX;
-	},
-	getHeight:function(){
-		var s=this,i,l,o,a,b,
-		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
-		for(i=0,l=s.childList.length;i<l;i++){
-			o = s.childList[i];
-			if(typeof o.visible == UNDEFINED || !o.visible)continue;
-			a = o.y;
-			if(typeof o._startY == "function")a=o._startY();
-			b = a + o.getHeight();
-			if(a < top)top = a;
-			if(b > bottom)bottom = b;
-		}
-		s.ll_top = s.y + top;
-		return (bottom - top)*s.scaleY;
-	},
-	_startX:function(){
-		var s = this;
-		s.getWidth();
-		return s.ll_left;
-	},
-	startX:function(){
-		var s = this;
-		return s._startX()*s.scaleX;
-	},
-	_startY:function(){
-		var s = this;
-		s.getHeight();
-		return s.ll_top;
-	},
-	startY:function(){
-		var s = this;
-		return s._startY()*s.scaleY;
-	},
-	loopframe:function (){
-		var s = this;
-		for(var k=0,l=s.frameList.length;k<l;k++){
-			s.target = s;
-			s.event_type = LEvent.ENTER_FRAME;
-			s.frameList[k](s);
-		}
-	},
-	addShape:function(arg){
-		if(arg.length<3){return;}
-		var s = this;
-		s.shapes.push(arg);
-	},
-	clearShape:function(){
-		var s = this;
-		s.shapes.length=0;
-	},
-	addChild:function (d){
-		var s  = this;
-		d.parent = s;
-		s.childList.push(d);
-	},
-	addChildAt:function(d, i){
-		var s = this;
-		if(i < 0 || i > s.childList.length){
-			return;
-		}
-		if(typeof d.remove == "function")d.remove();
-		d.parent = s;
-		s.childList.splice(i,0,d);
-	},
-	removeChild:function(d){
-		var s  = this,c = s.childList;
-		for(var i=0,l=c.length;i<l;i++){
-			if(d.objectIndex == c[i].objectIndex){
-				if(LGlobal.destroy && d.die)d.die();
-				s.childList.splice(i,1);
-				if(typeof s.ll_cr != UNDEFINED)s.ll_cr = true;
-				break;
+		},
+		_ll_show : function (c) {
+			var s = this;
+			s.graphics.ll_show();
+			LGlobal.show(s.childList);
+			s.debugShape();
+		},
+		startDrag : function (touchPointID) {
+			var s = this, r, c;
+			if (s.ll_dragStart) {
+				return;
 			}
-		}
-		delete d.parent;
-	},
-	getChildAt:function(i){
-		var s  = this,c=s.childList;
-		if(c.length == 0 || c.length <= i)return null;
-		return c[i];
-	},
-	removeChildAt:function(i){
-		var s  = this,c=s.childList;
-		if(c.length <= i)return;
-		if(LGlobal.destroy && c[i].die)c[i].die();
-		s.childList.splice(i,1);
-		if(typeof s.ll_cr != UNDEFINED)s.ll_cr = true;
-	},
-	getChildIndex:function(child){
-		var s = this,c=s.childList,i,l=c.length;
-		for(i=0;i<l;i++){
-			if(c[i].objectIndex == child.objectIndex){
-				return i;
-			}
-		}
-		return -1;
-	},
-	setChildIndex:function(child, index){
-		var s = this,c=s.childList,i,l=c.length;
-		if(child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l){
-			return;
-		}
-		for(i=0;i<l;i++){
-			if(c[i].objectIndex == child.objectIndex){
-				break;
-			}
-		}
-		s.childList.splice(i,1);
-		s.childList.splice(index,0,child);
-	},
-	resize:function(){
-		var s  = this;
-		s.width = s.getWidth();
-		s.height = s.getHeight();
-	},
-	removeAllChild:function(){
-		var s  = this,c=s.childList;
-		for(var i=0,l=c.length;i<l;i++){
-			if(LGlobal.destroy && c[i].die)c[i].die();
-		}
-		s.childList.length = 0;
-		s.width = 0;
-		s.height = 0;
-		if(typeof s.ll_cr != UNDEFINED)s.ll_cr = true;
-	},
-	clone:function(){
-		var s = this,a = new LSprite(),c,o;
-		a.copyProperty(s);
-		a.graphics = s.graphics.clone();
-		a.graphics.parent = a;
-		a.childList.length=0;
-		for(var i=0,l=s.childList.length;i<l;i++){
-			c = s.childList[i];
-			if(c.clone){
-				o = c.clone();
-				o.parent = a;
-				a.childList.push(o);
-			}
-		}
-		return a;
-	},
-	_mevent:function(type){
-		var s = this;
-		for(k=0;k<s.mouseList.length;k++){
-			var o = s.mouseList[k];
-			if(o.type == type){
-				return true;
-			}
-		}
-		return false;
-	},
-	ll_dispatchMouseEvent:function(type,e,cd,ox,oy){
-		var s = this;
-		for(k=0;k<s.mouseList.length;k++){
-			var o = s.mouseList[k];
-			if(o.type == type){
-				e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
-				e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
-				e.clickTarget = s;
-				o.listener(e,s);
-			}
-		}
-	},
-	mouseEvent:function (e,type,cd){
-		if(!e)return false;
-		var s = this;
-		if(!s.mouseEnabled || !s.visible)return false;
-		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
-		var i,k,ox = e.offsetX,oy = e.offsetY;
-		var on = s.ismouseon(e,cd);
-		if(on){
-			if(type==LMouseEvent.MOUSE_MOVE && !s.ll_mousein){
-				s.ll_mousein = true;
-				if(s._mevent(LMouseEvent.MOUSE_OVER)){
-					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER,e,cd,ox,oy);
+			s.ll_touchPointID = touchPointID;
+			s.ll_dragStartX = s.x;
+			s.ll_dragStartY = s.y;
+			s.ll_dragMX = mouseX;
+			s.ll_dragMY = mouseY;
+			s.ll_dragStart = true;
+			LGlobal.dragList.push(s);
+		},
+		stopDrag : function () {
+			var s = this, i, l;
+			for (i = 0, l = LGlobal.dragList.length; i < l; i++) {
+				if (s.objectIndex == LGlobal.dragList[i].objectIndex) {
+					s.ll_dragStart = false;
+					LGlobal.dragList.splice(i, 1);
+					break;
 				}
 			}
-			if(s.mouseChildren){
-				var mc = {x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-				for(k=s.childList.length-1;k>=0;k--){
-					if(s.childList[k].mouseEvent){
-						i = s.childList[k].mouseEvent(e,type,mc);
-						if(i)break;
+		},
+		getRotateXY : function (w, h) {
+			var s = this;
+			if (!w || !h) {
+				w = s.getWidth();
+				h = s.getHeight();
+			}
+			s.rotatex = w / 2;
+			s.rotatey = h / 2;
+		},
+		getWidth : function () {
+			var s = this, i, l, o, a, b,
+			left = s.graphics.startX(), right = left + s.graphics.getWidth();
+			for (i = 0, l = s.childList.length; i < l; i++) {
+				o = s.childList[i];
+				if (typeof o.visible == UNDEFINED || !o.visible) {
+					continue;
+				}
+				a = o.x;
+				if (typeof o._startX == "function") {
+					a=o._startX();
+				}
+				b = a + o.getWidth();
+				if (a < left) {
+					left = a;
+				}
+				if (b > right) {
+					right = b;
+				}
+			}
+			s.ll_left = s.x + left;
+			s.ll_right = s.x + right;
+			return (right - left) * s.scaleX;
+		},
+		getHeight : function () {
+			var s = this, i, l, o, a, b,
+			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
+			for (i = 0, l = s.childList.length; i < l; i++) {
+				o = s.childList[i];
+				if (typeof o.visible == UNDEFINED || !o.visible) {
+					continue;
+				}
+				a = o.y;
+				if (typeof o._startY == "function") {
+					a=o._startY();
+				}
+				b = a + o.getHeight();
+				if (a < top) {
+					top = a;
+				}
+				if (b > bottom) {
+					bottom = b;
+				}
+			}
+			s.ll_top = s.y + top;
+			s.ll_bottom = s.y + bottom;
+			return (bottom - top) * s.scaleY;
+		},
+		_startX : function () {
+			var s = this;
+			s.getWidth();
+			return s.ll_left;
+		},
+		startX : function () {
+			var s = this;
+			return s._startX() * s.scaleX;
+		},
+		_startY : function () {
+			var s = this;
+			s.getHeight();
+			return s.ll_top;
+		},
+		startY : function () {
+			var s = this;
+			return s._startY() * s.scaleY;
+		},
+		loopframe : function () {
+			var s = this, k, l;
+			for (k = 0, l = s.frameList.length; k < l; k++) {
+				s.target = s;
+				s.event_type = LEvent.ENTER_FRAME;
+				s.frameList[k](s);
+			}
+		},
+		addChild : function (d) {
+			var s  = this;
+			d.parent = s;
+			s.childList.push(d);
+		},
+		addChildAt : function (d, i) {
+			var s = this;
+			if (i < 0 || i > s.childList.length) {
+				return;
+			}
+			if (typeof d.remove == "function") {
+				d.remove();
+			}
+			d.parent = s;
+			s.childList.splice(i, 0, d);
+		},
+		removeChild : function (d) {
+			var s  = this, c = s.childList, i, l;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (d.objectIndex == c[i].objectIndex) {
+					if (LGlobal.destroy && d.die) {
+						d.die();
 					}
-				}
-				if(s._mevent(type)){
-					s.ll_dispatchMouseEvent(type,e,cd,ox,oy);
-				}
-			}
-			return true;
-		}else{
-			if(type==LMouseEvent.MOUSE_MOVE && s.ll_mousein){
-				s.ll_mousein = false;
-				if(s._mevent(LMouseEvent.MOUSE_OUT)){
-					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT,e,cd,ox,oy);
+					s.childList.splice(i, 1);
+					break;
 				}
 			}
-		}
-		return false;
-	},
-	hitTestPoint:function(x,y){
-		var s = this;
-		var shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		var parent = s;
-		var m = new LMatrix();
-		while(parent && parent != "root"){
-			m.scale(parent.scaleX,parent.scaleY);
-			m.rotate(parent.rotate);
-			m.translate(parent.x,parent.y);
-			parent = parent.parent;
-		}
-		for(var j=s.shapes.length-1;j>=0;j--){
-			var v = s.shapes[j];
-			var v1 = [];
-			for(var i=0;i<v.length;i++){
-				v1[i]=m.toArray([v[i][0],v[i][1],1]);
+			delete d.parent;
+		},
+		getChildAt : function (i) {
+			var s  = this, c = s.childList;
+			if (c.length == 0 || c.length <= i) {
+				return null;
 			}
-			if(LGlobal.hitPolygon(v1,x,y))return true;
-		}
-		return false;
-	},
-	hitTestObject:function(obj){
-		var s = this,shapes,coor;
-		shapes = s.shapes?s.shapes:[[[0,0],[s.getWidth(),0],[s.getWidth(),s.getHeight()],[0,s.getHeight()]]];
-		coor = s.getRootCoordinate();
-
-
-		var list = [];
-		for(var i=0;i<shapes.length;i++){
-			var v = shapes[i];
-			var v1 = [];
-			for(var j=0;j<v.length;j++){
-				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			return c[i];
+		},
+		removeChildAt : function (i) {
+			var s  = this, c = s.childList;
+			if (c.length <= i) {
+				return;
 			}
-			list.push(v1);
-		}
-		
-
-		shapes = obj.shapes?obj.shapes:[[[0,0],[obj.getWidth(),0],[obj.getWidth(),obj.getHeight()],[0,obj.getHeight()]]];
-		coor = obj.getRootCoordinate();
-		var objList = [];
-		for(var i=0;i<shapes.length;i++){
-			var v = shapes[i];
-			var v1 = [];
-			for(var j=0;j<v.length;j++){
-				v1[j]=[v[j][0] + coor.x,v[j][1] + coor.y];
+			if (LGlobal.destroy && c[i].die) {
+				c[i].die();
 			}
-			objList.push(v1);
-			for(var j=0;j<list.length;j++){
-
-				if(LGlobal.hitPolygon(v1,list[j]))return true;
-			}
-		}
-		return false;
-	},
-	ismouseon:function(e,cd){
-		var s = this;return;
-		if(!s.visible || e==null)return false;
-		if(s.shapes && s.shapes.length > 0){
-
-
-			var parent = s;
-			var m = new LMatrix();
-			while(parent && parent != "root"){
-				m.scale(parent.scaleX,parent.scaleY);
-				m.rotate(parent.rotate);
-				m.translate(parent.x,parent.y);
-				parent = parent.parent;
-			}
-			for(var j=s.shapes.length-1;j>=0;j--){
-				var v = s.shapes[j].slice();
-				for(var i=0;i<v.length;i++){
-					v[i]=m.toArray([v[i][0],v[i][1],1]);
+			s.childList.splice(i, 1);
+		},
+		getChildIndex : function (child) {
+			var s = this, c = s.childList, i, l = c.length;
+			for (i = 0; i < l; i++) {
+				if (c[i].objectIndex == child.objectIndex) {
+					return i;
 				}
-
-				if(LGlobal.hitPolygon(v,e.offsetX,e.offsetY))return true;
+			}
+			return -1;
+		},
+		setChildIndex : function (child, index) {
+			var s = this, c = s.childList, i, l = c.length;
+			if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
+				return;
+			}
+			for (i = 0; i < l; i++) {
+				if(c[i].objectIndex == child.objectIndex){
+					break;
+				}
+			}
+			s.childList.splice(i,1);
+			s.childList.splice(index, 0, child);
+		},
+		resize : function () {
+			var s  = this;
+			s.width = s.getWidth();
+			s.height = s.getHeight();
+		},
+		removeAllChild : function () {
+			var s  = this, c = s.childList, i, l;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (LGlobal.destroy && c[i].die) {
+					c[i].die();
+				}
+			}
+			s.childList.length = 0;
+			s.width = 0;
+			s.height = 0;
+		},
+		clone : function () {
+			var s = this, a = new LSprite(), c, o, i, l;
+			a.copyProperty(s);
+			a.graphics = s.graphics.clone();
+			a.graphics.parent = a;
+			a.childList.length = 0;
+			for (i = 0, l = s.childList.length; i < l; i++) {
+				c = s.childList[i];
+				if (c.clone) {
+					o = c.clone();
+					o.parent = a;
+					a.childList.push(o);
+				}
+			}
+			return a;
+		},
+		_mevent : function (type) {
+			var s = this, k;
+			for (k = 0; k < s.mouseList.length; k++) {
+				var o = s.mouseList[k];
+				if (o.type == type) {
+					return true;
+				}
 			}
 			return false;
-		}
-		var k = null,i=false,l=s.childList;
-		var sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		if(s.mask && !s.mask.ismouseon(e,sc))return false;
-		if(s.graphics)i = s.graphics.ismouseon(e,sc);
-		if(!i){
-			for(k=l.length-1;k>=0;k--){
-				if(l[k].ismouseon)i = l[k].ismouseon(e,sc);
-				if(i)break;
+		},
+		ll_dispatchMouseEvent : function (type, e, cd, ox, oy) {
+			var s = this;
+			for (k = 0; k < s.mouseList.length; k++) {
+				var o = s.mouseList[k];
+				if (o.type == type) {
+					e.selfX = (ox - (s.x * cd.scaleX + cd.x)) / (cd.scaleX * s.scaleX);
+					e.selfY = (oy - (s.y * cd.scaleY + cd.y)) / (cd.scaleY * s.scaleY);
+					e.clickTarget = s;
+					o.listener(e, s);
+				}
+			}
+		},
+		mouseEvent : function (e, type, cd) {
+			if (!e) {
+				return false;
+			}
+			var s = this, i, k, ox = e.offsetX, oy = e.offsetY, on, mc;
+			if (!s.mouseEnabled || !s.visible) {
+				return false;
+			}
+			if (cd == null) {
+				cd = {x : 0, y : 0, scaleX : 1, scaleY : 1};
+			}
+			on = s.ismouseon(e, cd);
+			if (on) {
+				if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
+					s.ll_mousein = true;
+					if (s._mevent(LMouseEvent.MOUSE_OVER)) {
+						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER, e, cd, ox, oy);
+					}
+				}
+				if (s.mouseChildren) {
+					mc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
+					for (k = s.childList.length - 1; k >= 0; k--) {
+						if (s.childList[k].mouseEvent) {
+							i = s.childList[k].mouseEvent(e, type, mc);
+							if (i) {
+								break;
+							}
+						}
+					}
+					if (s._mevent(type)) {
+						s.ll_dispatchMouseEvent(type, e, cd, ox, oy);
+					}
+				}
+				return true;
+			} else {
+				if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
+					s.ll_mousein = false;
+					if (s._mevent(LMouseEvent.MOUSE_OUT)) {
+						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
+					}
+				}
+			}
+			return false;
+		},
+		hitTestPoint : function (x, y) {
+			var s = this, shapes = s.shapes;
+			if (!shapes || shapes.length == 0) {
+				s.getWidth();
+				s.getHeight();
+				shapes = [{"type" : "rect", "arg" : [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top]}];
+			}
+			return s.ismouseonShapes(shapes, x, y);
+		},
+		hitTestObject : function (obj) {
+			var s = this, shapes = s.shapes, shapes1 = obj.shapes, m, m1, j, child, j1, child1, vo1, v1;
+			if (!shapes || shapes.length == 0) {
+				s.getWidth();
+				s.getHeight();
+				shapes = [{"type" : "rect", "arg" : [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top]}];
+			}
+			if (!shapes1 || shapes1.length == 0) {
+				obj.getWidth();
+				obj.getHeight();
+				shapes1 = [{"type" : "rect", "arg" : [obj.ll_left - obj.x, obj.ll_top - obj.y, obj.ll_right - obj.ll_left, obj.ll_bottom - obj.ll_top]}];
+			}
+			m = s.getRootMatrix();
+			m1 = obj.getRootMatrix();
+			for (j = shapes.length - 1; j >= 0; j--) {
+				child = shapes[j];
+				v1 = s._changeShape(child.type, child.arg, m);
+				for (j1 = obj.shapes.length - 1; j1 >= 0; j1--) {
+					child1 = shapes1[j1];
+					vo1 = obj._changeShape(child1.type, child1.arg, m1);
+					if (child.type == LShape.VERTICES || child.type == LShape.RECT) {
+						if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
+							if (LGlobal.hitTestPolygon(v1, vo1)) {
+								return true;
+							}
+						} else if (child1.type == LShape.ARC) {
+							if(LGlobal.hitTestPolygonArc(v1, vo1)) {
+								return true;
+							}
+						}
+					} else {
+						if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
+							if (LGlobal.hitTestPolygonArc(vo1, v1)) {
+								return true;
+							}
+						} else if (child1.type == LShape.ARC) {
+							if (Math.sqrt((v1[0] - vo1[0]) * (v1[0] - vo1[0]) + (v1[1] - vo1[1]) * (v1[1] - vo1[1])) < v1[2] + vo1[2]) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+			return false;
+		},
+		addShape : function (type, arg) {
+			var s = this;
+			if (type == LShape.VERTICES && arg.length < 3) {
+				return;
+			}
+			s.shapes.push({"type" : type, "arg" : arg});
+		},
+		clearShape : function () {
+			var s = this;
+			s.shapes.length = 0;
+		},
+		debugShape : function () {
+			var s = this, i, l, child, c, arg, j, ll;
+			if (!LGlobal.traceDebug || s.shapes.length == 0) {
+				return;
+			}
+			for (i = 0, l = s.shapes.length; i < l; i++) {
+				child = s.shapes[i];
+				c = LGlobal.canvas;
+				arg = child.arg;
+				c.beginPath();
+				if (child.type == LShape.RECT) {
+					c.rect(arg[0], arg[1], arg[2], arg[3]);
+				}else if (child.type == LShape.ARC) {
+					c.arc(arg[0], arg[1], arg[2], 0, 2*Math.PI);
+				}else if (child.type == LShape.VERTICES) {
+					c.moveTo(arg[0][0], arg[0][1]);
+					for (j = 1, ll = arg.length; j < ll; j++) {
+						c.lineTo(arg[j][0], arg[j][1]);
+					};
+					c.lineTo(arg[0][0], arg[0][1]);
+				}
+				c.closePath();
+				c.strokeStyle = "#00FF00";
+				c.stroke();
+			}
+		},
+		ismouseon : function (e, cd) {
+			var s = this;
+			if (!s.visible || e==null) {
+				return false;
+			}
+			if(s.mask){
+				if(!s.mask.parent){
+					s.mask.parent = s.parent;
+				}
+				if(!s.mask.ismouseon(e,cd)){
+					return false;
+				}
+			}
+			if(s.shapes && s.shapes.length > 0){
+				return s.ismouseonShapes(s.shapes,e.offsetX,e.offsetY);
+			}
+			var k, i = false, l = s.childList, sc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
+			if (s.graphics) {
+				i = s.graphics.ismouseon(e, sc);
+			}
+			if (!i) {
+				for (k = l.length - 1; k >= 0; k--) {
+					if (l[k].ismouseon) {
+						i = l[k].ismouseon(e, sc);
+					}
+					if (i) {
+						break;
+					}
+				}
+			}
+			return i;
+		},
+		die : function () {
+			var s = this, i, c, l;
+			s.graphics.clear();
+			s.removeAllEventListener();
+			s.stopDrag();
+			if (s.box2dBody) {
+				s.clearBody();
+			}
+			for (i = 0, c = s.childList, l = c.length; i < l; i++) {
+				if (c[i].die) {
+					c[i].die();
+				}
 			}
 		}
-		return i;
-	},
-	die:function (){
-		var s = this;
-		s.graphics.clear();
-		s.removeAllEventListener();
-		if(s.box2dBody)s.clearBody();
-		for(var i=0,c=s.childList,l=c.length;i<l;i++){
-			if(c[i].die)c[i].die();
-		}
+	};
+	for (var k in p) {
+		LSprite.prototype[k] = p[k];
 	}
-};
-for(var k in p)LSprite.prototype[k]=p[k];
+	return LSprite;
+})();
 /*
 * LButton.js
 **/
-function LButton(d_up,d_over){
-	base(this,LSprite,[]);
+function LButton(upState,overState,downState){
 	var s = this;
+	base(s,LSprite,[]);
 	s.type = "LButton";
-	s.bitmap_up = d_up;
-	s.addChild(d_up);
-	if(d_over == null){
-		d_over = d_up;
+	s.buttonMode = true;
+	s.addChild(upState);
+	if(overState == null){
+		overState = upState;
 	}else{
-		s.addChild(d_over);
+		s.addChild(overState);
 	}
-	s.bitmap_over = d_over;
-	s.bitmap_over.visible = false;
-	s.bitmap_up.visible = true;
-	LGlobal.buttonList.push(s);
+	if(downState == null){
+		downState = overState;
+	}else{
+		s.addChild(downState);
+	}
+	s.upState = s.bitmap_up = upState;
+	s.overState = s.bitmap_over = overState;
+	s.downState = downState;
+	
+	s.overState.visible = false;
+	s.downState.visible = false;
+	s.upState.visible = true;
+	s.staticMode = false;
+	
+	s.addEventListener(LMouseEvent.MOUSE_OVER,s.ll_modeOver);
+	s.addEventListener(LMouseEvent.MOUSE_OUT,s.ll_modeOut);
+	s.addEventListener(LMouseEvent.MOUSE_DOWN,s.ll_modeDown);
 }
-LButton.prototype.clone = function (){
-	var s = this,d_up = s.bitmap_up.clone(),d_over = s.bitmap_over.clone(),
-	a = new LButton(d_up,d_over);
-	return a;
-};
-LButton.prototype.buttonModeChange = function (){
-	var s = this;
-	var cood={x:0,y:0,scaleX:1,scaleY:1};
-	var parent = s.parent;
-	while(parent && parent != "root"){
-		cood.scaleX *= parent.scaleX;
-		cood.scaleY *= parent.scaleY;
-		cood.x *= parent.scaleX;
-		cood.y *= parent.scaleY;
-		cood.x += parent.x;
-		cood.y += parent.y;
-		parent = parent.parent;
+LButton.prototype.ll_modeDown = function (e){
+	var s = e.clickTarget,w,h,tw,th,x,y,tx,ty,onComplete;
+	if(!s.buttonMode || s.tween){
+		return;
 	}
-	if(s.buttonMode && s.ismouseon(LGlobal.buttonStatusEvent,cood)){
-		s.bitmap_up.visible = false;
-		s.bitmap_over.visible = true;
+	s.upState.visible = false;
+	s.overState.visible = false;
+	s.downState.visible = true;
+	
+	s._tweenOver = s.ll_modeOver;
+	onComplete = function(obj){
+		var s = obj.parent;
+		delete s.tween;
+		s._tweenOver({clickTarget:s});
+		delete s._tweenOver;
+	};
+	if(s.staticMode){
+		s.tween = LTweenLite.to(s.downState,0.3,{})
+		.to(s.downState,0.1,{onComplete:onComplete});
 	}else{
-		s.bitmap_over.visible = false;
-		s.bitmap_up.visible = true;
+		w = s.downState.getWidth();
+		h = s.downState.getHeight();
+		tw = w*1.1;
+		th = h*1.1;
+		x = s.downState.x;
+		y = s.downState.y;
+		tx = x+(w - tw)*0.5;
+		ty = y+(h - th)*0.5;
+		s.tween = LTweenLite.to(s.downState,0.3,{x:tx,y:ty,scaleX:1.1,scaleY:1.1,ease:Quart.easeOut})
+		.to(s.downState,0.1,{x:x,y:y,scaleX:1,scaleY:1,ease:Quart.easeOut,onComplete:onComplete});
 	}
 };
-LButton.prototype.die = function (){
-	var s = this;
-	s.graphics.clear();
-	s.removeAllEventListener();
-	if(s.box2dBody)s.clearBody();
-	for(var i=0,c=s.childList,l=c.length;i<l;i++){
-		if(c[i].die)c[i].die();
+LButton.prototype.ll_modeOver = function (e){
+	var s = e.clickTarget;
+	if(!s.buttonMode){
+		return;
 	}
-	for(var i=0,b=LGlobal.buttonList,l=b.length;i<l;i++){
-		if(b[i].objectIndex == s.objectIndex){
-			LGlobal.buttonList.splice(i,1);
-			break;
-		}
+	if(s.tween){
+		s._tweenOver = s.ll_modeOver;
+		return;
 	}
+	s.upState.visible = false;
+	s.downState.visible = false;
+	s.overState.visible = true;
+};
+LButton.prototype.ll_modeOut = function (e){
+	var s = e.clickTarget;
+	if(!s.buttonMode){
+		return;
+	}
+	if(s.tween){
+		s._tweenOver = s.ll_modeOut;
+		return;
+	}
+	s.overState.visible = false;
+	s.downState.visible = false;
+	s.upState.visible = true;
+};
+LButton.prototype.clone = function (){
+	var s = this,upState = s.upState.clone(),overState = s.overState.clone(),downState = s.downState.clone(),
+	a = new LButton(upState,overState,downState);
+	return a;
 };
 function LBlendMode(){throw "LBlendMode cannot be instantiated";}
 LBlendMode.SOURCE_OVER = "source-over";
@@ -3113,6 +3685,7 @@ p = {
 			}else{
 				s.inputBackLayer = inputBackLayer;
 			}
+			s.inputBackLayer.parent = s;
 			if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN])LMouseEventContainer.pushInputBox(s);
 		}else{
 			s.inputBackLayer = null;
@@ -3125,18 +3698,18 @@ p = {
 		if(e==null || e == UNDEFINED)return false;
 		if(!s.visible)return false;
 		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		var co={x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY};
+		if(s.mask){
+			if(!s.mask.parent){
+				s.mask.parent = s.parent;
+			}
+			if(!s.mask.ismouseon(e,cd)){
+				return false;
+			}
+		}
 		if(s.inputBackLayer){
-			return s.inputBackLayer.ismouseon(e,co);
+			return s.inputBackLayer.ismouseon(e,{x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY});
 		}
-		ox = e.offsetX;
-		oy = e.offsetY;
-		if(ox >=  cood.x + s.x*cood.scaleX && ox <= cood.x + s.x*cood.scaleX + s.getWidth()*cood.scaleX*s.scaleX && 
-			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + s.y*cood.scaleY + s.getHeight()*cood.scaleY*s.scaleY){
-			return true;
-		}else{
-			return false;
-		}
+		return s.ismouseonShapes([{type:LShape.RECT,arg:[0,0,s._getWidth(),s._getHeight()]}],e.offsetX,e.offsetY);
 	},
 	clone:function(){
 		var s = this,a = new LTextField();
@@ -3173,13 +3746,17 @@ p = {
 		s.text = "";
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},
-	getWidth:function(){
+	_getWidth:function(){
 		var s = this;
 		if(s.wordWrap)return s.width;
 		LGlobal.canvas.font = s.size+"pt "+s.font;
 		return LGlobal.canvas.measureText(s.text).width;
 	},
-	getHeight:function(){
+	getWidth:function(){
+		var s = this;
+		return s._getWidth()*s.scaleX;
+	},
+	_getHeight:function(){
 		var s = this,c = LGlobal.canvas;
 		if(s.wordWrap){
 			c.font = s.weight + " " + s.size+"pt "+s.font;
@@ -3201,6 +3778,10 @@ p = {
 		}
 		c.font = s.weight + " " + s.size+"pt "+s.font; 
 		return c.measureText("O").width*1.2;
+	},
+	getHeight:function(){
+		var s = this;
+		return s._getHeight()*s.scaleY;
 	},
 	wind:function(listener){
 		var s = this;
@@ -3233,288 +3814,1486 @@ function LLabel(){
 	base(s,LTextField,[]);
 	s.width = LGlobal.width;
 }
-/*
-* LBitmap.js
-**/
-function LBitmap(bitmapdata){
-	base(this,LDisplayObject,[]);
-	var s = this;
-	s.type = "LBitmap";
-	s.rotateCenter = true;
-	s.bitmapData = bitmapdata; 
-	if(s.bitmapData){
-		s.width = s.bitmapData.width;
-		s.height = s.bitmapData.height;
+/** @language chinese
+ * 初始化 LBitmap 对象以引用指定的 LBitmapData 对象。
+ * LBitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 LLoader 类加载的图像，也可以是使用 LBitmap() 构造函数创建的图像。
+ * 利用 LBitmap() 构造函数，可以创建包含对 LBitmapData 对象的引用的 LBitmap 对象。创建了 LBitmap 对象后，使用父实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
+ * 一个 LBitmap 对象可在若干 LBitmap 对象之中共享其 LBitmapData 引用，与转换属性或旋转属性无关。由于能够创建引用相同 LBitmapData 对象的多个 LBitmap 对象，因此，多个显示对象可以使用相同的复杂 LBitmapData 对象，而不会因为每个显示对象实例使用一个 LBitmapData 对象而产生内存开销。
+ * LBitmap 对象可通过以下两种方式之一将 LBitmapData 对象绘制到屏幕上：使用矢量渲染器作为填充位图形状，或使用更快的像素复制例程。像素复制例程的速度比矢量渲染器要快很多。
+ * 注意：LBitmap 类不是 InteractiveObject 类的子类，因此它无法调度鼠标事件。但是，可以使用包含 LBitmap 对象的显示对象容器的 addEventListener() 方法。
+ * @class LBitmap
+ * @extends LDisplayObject
+ * @constructor
+ * @param {LBitmapData} bitmapData 被引用的 LBitmapData 对象。
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">测试链接</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Initializes a LBitmap object to refer to the specified LBitmapData object.
+ * The LBitmap class represents display objects that represent bitmap images. These can be images that you load with the LLoader class, or they can be images that you create with the LBitmap() constructor.
+ * The LBitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object. After you create a LBitmap object, use the addChild() or addChildAt() method of the parent instance to place the bitmap on the display list.
+ * A LBitmap object can share its BitmapData reference among several Bitmap objects, independent of translation or rotation properties. Because you can create multiple LBitmap objects that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object without incurring the memory overhead of a BitmapData object for each display object instance.
+ * A LBitmapData object can be drawn to the screen by a LBitmap object in one of two ways: by using the vector renderer as a fill-bitmap shape, or by using a faster pixel-copying routine. The pixel-copying routine is substantially faster than the vector renderer.
+ * The LBitmap class is not a subclass of the InteractiveObject class, so it cannot dispatch mouse events. However, you can use the addEventListener() method of the display object container that contains the LBitmap object.
+ * @class LBitmap
+ * @extends LDisplayObject
+ * @constructor
+ * @param {LBitmapData} bitmapData The LBitmapData object being referenced.
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">Try it »</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * 指定された LBitmapData オブジェクトを参照するようにビットマップオブジェクトを初期化します。
+ * LBitmap クラスはビットマップイメージを表す表示オブジェクトを表します。これらは LLoader クラスによってロードするイメージか、LBitmap() コンストラクターによって作成するイメージです。
+ * LBitmap() コンストラクターを使用すると、LBitmapData オブジェクトへの参照を含んだビットマップオブジェクトを作成できます。ビットマップオブジェクトの作成後、親 DisplayObjectContainer インスタンスの addChild() メソッドまたは addChildAt() メソッドを使用して表示リスト上にビットマップを配置できます。
+ * LBitmap オブジェクトの BitmapData への参照は、translation プロパティまたは rotation プロパティと関係なく、複数の LBitmap オブジェクトで共有できます。作成した複数のビットマップオブジェクトで同じ LBitmapData オブジェクトを参照することができるため、各表示オブジェクトインスタンスに関する LBitmapData オブジェクトのメモリのオーバーヘッドを避けつつ、複数の表示オブジェクトで同一の複雑な LBitmapData オブジェクトを使用することができます。
+ * LBitmap オブジェクトを使用して LBitmapData オブジェクトを画面に描画するには、ベクターレンダラーをビットマップ塗りつぶしのシェイプとして使用するか、高速なピクセルコピールーチンを使用します。ピクセルコピールーチンはベクターレンダラーよりも高速です。
+ * 注意：LBitmap クラスは InteractiveObject クラスのサブクラスではないため、マウスイベントを送出できません。しかし、ビットマップオブジェクトを格納した表示オブジェクトコンテナの addEventListener() メソッドを使用できます。
+ * @class LBitmap
+ * @extends LDisplayObject
+ * @constructor
+ * @param {LBitmapData} bitmapData LBitmapData オブジェクトが参照されます。
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @since 1.0.0
+ * @public
+ */
+var LBitmap = (function () {
+	function LBitmap (bitmapdata) {
+		var s = this;
+		LExtends(s, LDisplayObject, []);
+		/** @language chinese
+		 * 对象的类型
+		 * @property type
+		 * @type String
+		 * @default LBitmap
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property type
+		 * @type String
+		 * @default LBitmap
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property type
+		 * @type String
+		 * @default LBitmap
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.type = "LBitmap";
+		/** @language chinese
+		 * 对象的类型
+		 * @property rotateCenter
+		 * @type Boolean
+		 * @default true
+		 * @since 1.8.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property rotateCenter
+		 * @type Boolean
+		 * @default true
+		 * @since 1.8.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property rotateCenter
+		 * @type Boolean
+		 * @default true
+		 * @since 1.8.0
+		 * @public
+		 */
+		s.rotateCenter = true;
+		/** @language chinese
+		 * 被引用的 LBitmapData 对象
+		 * @property bitmapData
+		 * @type LBitmapData
+		 * @default true
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * The LBitmapData object being referenced.
+		 * @property bitmapData
+		 * @type LBitmapData
+		 * @default true
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * LBitmapData オブジェクトが参照されます
+		 * @property bitmapData
+		 * @type LBitmapData
+		 * @default true
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.bitmapData = bitmapdata; 
+		if (s.bitmapData) {
+			s.width = s.bitmapData.width;
+			s.height = s.bitmapData.height;
+		}
 	}
-}
-p = {
-	_canShow:function(){return (this.visible && this.bitmapData);},
-	_rotateReady:function(){
-		var s = this;
-		if(s.rotate != 0 && s.rotateCenter){
-			s.rotatex = s.getWidth()*0.5;
-			s.rotatey = s.getHeight()*0.5;
-		}else{
-			s.rotatex = s.rotatey = 0;
+	var p = {
+		_canShow : function () {
+			return (this.visible && this.bitmapData);
 		}
-	},
-	_coordinate:function(c){},
-	_ll_show:function(){
-		this.ll_draw();
-	},
-	ll_draw:function(){
-		var s=this;
-		LGlobal.canvas.drawImage(s.bitmapData.image,
-			s.bitmapData.x,s.bitmapData.y,
-			s.bitmapData.width,s.bitmapData.height,
-			s.x,s.y,
-			s.bitmapData.width,s.bitmapData.height);
-	},
-	clone:function(){
-		var s = this,a = new LBitmap(s.bitmapData.clone());
-		a.copyProperty(s);
-		a.rotateCenter = s.rotateCenter;
-		return a;
-	},
-	ismouseon:function(e,cood){
-		var s = this;
-		if(e==null || e == UNDEFINED)return false;
-		if(!s.visible || !s.bitmapData)return false;
-		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		var ox = e.offsetX,oy = e.offsetY;
-		if(ox >= cood.x + s.x*cood.scaleX && ox <= cood.x + s.x*cood.scaleX + s.bitmapData.width*cood.scaleX*s.scaleX && 
-			oy >= cood.y + s.y*cood.scaleY && oy <= cood.y + s.y*cood.scaleY + s.bitmapData.height*cood.scaleY*s.scaleY){
-			return true;
-		}else{
-			return false;
-		}
-	},
-	getWidth:function(){
-		var s = this;
-		return s.bitmapData != null?s.bitmapData.width*(s.scaleX>0?s.scaleX:-s.scaleX):0;
-	},
-	getHeight:function(){
-		var s = this;
-		return s.bitmapData != null?s.bitmapData.height*(s.scaleY>0?s.scaleY:-s.scaleY):0;
-	},
-	startX:function(){
-		return this.x;
-	},
-	startY:function(){
-		return this.y;
-	},
-	die:function(){}
-};
-for(var k in p)LBitmap.prototype[k]=p[k];
-/*
-* LBitmapData.js
-**/
-function LBitmapData(image,x,y,width,height,dataType){
-	base(this,LObject,[]);
-	var s = this;
-	s.type = "LBitmapData";
-	if(typeof dataType == UNDEFINED){
-		dataType = LBitmapData.DATA_IMAGE;
-	}
-	s.oncomplete = null;
-	s._locked=false;
-	s._setPixel=false;
-	s.x = (x==null?0:x);  
-	s.y = (y==null?0:y);
-	if(image && typeof image == "object"){
-		s.image = image; 
-		s.dataType = LBitmapData.DATA_IMAGE;
-		s.width = (width==null?s.image.width:width);  
-		s.height = (height==null?s.image.height:height);
-		s.setDataType(dataType);
-	}else{
-		s._createCanvas();
-		s.dataType = LBitmapData.DATA_CANVAS;
-		s._canvas.width = s.width = (width==null?1:width); 
-		s._canvas.height = s.height = (height==null?1:height);
-		var d = s._context.createImageData(s.width,s.height);
-		if(typeof image == "string"){
-			image = parseInt(image.replace("#","0x"));
-		}
-		if(typeof image == "number"){
-			for (var i=0;i<d.data.length;i+=4){
-				d.data[i+0]=image>>16 & 0xFF;;
-				d.data[i+1]=image>>8 & 0xFF;
-				d.data[i+2]=image & 0xFF;
-				d.data[i+3]=255;
+		, _rotateReady : function () {
+			var s = this;
+			if (s.rotate != 0 && s.rotateCenter) {
+				s.rotatex = s.getWidth() * 0.5;
+				s.rotatey = s.getHeight() * 0.5;
+			} else {
+				s.rotatex = s.rotatey = 0;
 			}
-		}
-		s._context.putImageData(d,0,0);
-		s.image = s._canvas;
-		if(dataType == LBitmapData.DATA_IMAGE){
-			s.setDataType(dataType);
-		}
+		},
+		_coordinate : function (c) {},
+		_ll_show : function () {
+			this.ll_draw();
+		},
+		ll_draw : function () {
+			var s = this;
+			LGlobal.canvas.drawImage(s.bitmapData.image,
+				s.bitmapData.x,
+				s.bitmapData.y,
+				s.bitmapData.width,
+				s.bitmapData.height,
+				s.x,
+				s.y,
+				s.bitmapData.width,
+				s.bitmapData.height
+			);
+		},
+		/** @language chinese
+		 * 返回一个LBitmap的克隆对象。
+		 * @method clone
+		 * @return {LBitmap} 一个新的 LBitmap 对象，它与原始对象相同.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bm2 = bm1.clone();
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
+		 * @method clone
+		 * @return {LBitmap} A new Bitmap object that is identical to the original.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bm2 = bm1.clone();
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 新しい LBitmap オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
+		 * @method clone
+		 * @return {LBitmap} 元のオブジェクトと同一の新しい LBitmap オブジェクトです。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bm2 = bm1.clone();
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		clone : function () {
+			var s = this, a = new LBitmap(s.bitmapData.clone());
+			a.copyProperty(s);
+			a.rotateCenter = s.rotateCenter;
+			return a;
+		},
+		ismouseon : function (e, cood) {
+			var s = this;
+			if (e == null || e == UNDEFINED) {
+				return false;
+			}
+			if (!s.visible || !s.bitmapData) {
+				return false;
+			}
+			if (s.mask) {
+				if (!s.mask.parent) {
+					s.mask.parent = s.parent;
+				}
+				if (!s.mask.ismouseon(e, cd)) {
+					return false;
+				}
+			}
+			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s.bitmapData.width, s.bitmapData.height]}], e.offsetX, e.offsetY);
+		},
+		/** @language chinese
+		 * 获取显示对象的宽度，以像素为单位。
+		 * @method getWidth
+		 * @return {float} 显示对象的宽度。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("width : " + bitmap.getWidth());
+		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get the width of the display object, in pixels.
+		 * @method getWidth
+		 * @return {float} the width of the display object.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("width : " + bitmap.getWidth());
+		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
+		 * @method getWidth
+		 * @return @return {float} オブジェクトの幅。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("width : " + bitmap.getWidth());
+		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		getWidth : function () {
+			var s = this;
+			return s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+		},
+		/** @language chinese
+		 * 获取显示对象的高度，以像素为单位。
+		 * @method getHeight
+		 * @return {float} 显示对象的高度。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("height : " + bitmap.getHeight());
+		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get the height of the display object, in pixels.
+		 * @method getHeight
+		 * @return {float} the height of the display object.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("height : " + bitmap.getHeight());
+		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
+		 * @method getHeight
+		 * @return @return {float} オブジェクトの高さ。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	addChild(bitmap);
+		 *  trace("height : " + bitmap.getHeight());
+		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		getHeight : function () {
+			var s = this;
+			return s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+		},
+		startX : function () {
+			return this.x;
+		},
+		startY : function () {
+			return this.y;
+		},
+		die : function () {}
+	};
+	for (var k in p) {
+		LBitmap.prototype[k] = p[k];
 	}
-	s.resize();
-}
-LBitmapData.DATA_IMAGE = "data_image";
-LBitmapData.DATA_CANVAS = "data_canvas";
-p = {
-	setDataType:function(dataType){
+	return LBitmap;
+})();
+
+/** @language chinese
+ * <p>创建一个具有指定的宽度和高度的 LBitmapData 对象。</p>
+ * <p>使用 LBitmapData 类，您可以处理 LBitmap 对象的数据（像素）。可以使用 LBitmapData 类的方法创建任意大小的Image对象，并在运行时采用多种方式操作这些图像。也可以访问使用 LLoader 类加载的Image对象。</p>
+ * @class LBitmapData
+ * @extends LObject
+ * @constructor
+ * @param {Image} image 一个Image对象。
+ * @param {float} x Image可视范围x坐标（该参数可省略）。
+ * @param {float} y Image可视范围y坐标（该参数可省略）。
+ * @param {float} width Image可视范围宽（该参数可省略）。
+ * @param {float} height Image可视范围高（该参数可省略）。
+ * @param {String} dataType 指定数据格式，可以使用LBitmapData.DATA_IMAGE（Image对象）和LBitmapData.DATA_CANVAS（Canvas对象）（该参数可省略）。
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 		
+ * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ * 		var bitmap2 = new LBitmap(bitmapdata2);
+ * 		bitmap2.x = 200;
+ * 		addChild(bitmap2);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">测试链接</a></p>
+ * @since 1.0.0
+ * @public
+*/
+/** @language english
+ * Creates a BitmapData object with a specified width and height.
+ * The BitmapData class lets you work with the data (pixels) of a Bitmap object . You can use the methods of the BitmapData class to create arbitrarily sized an Image object. And You can use an Image object with LLoader。
+ * @class LBitmapData
+ * @extends LObject
+ * @constructor
+ * @param {Image} image The Image object。
+ * @param {float} x The x coordinate of the image.(Optional).
+ * @param {float} y The y coordinate of the image.(Optional).
+ * @param {float} width The width of the bitmap image in pixels.(Optional).
+ * @param {float} height The height of the bitmap image in pixels.(Optional).
+ * @param {String} dataType You can use the type with LBitmapData.DATA_IMAGE（Image object）or LBitmapData.DATA_CANVAS（Canvas object）。(Optional).
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 		
+ * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ * 		var bitmap2 = new LBitmap(bitmapdata2);
+ * 		bitmap2.x = 200;
+ * 		addChild(bitmap2);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">Try it »</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * 指定された幅と高さで BitmapData オブジェクトを作成します。
+ * LBitmapData クラスを使用すると、LBitmap オブジェクトのデータ (ピクセル) を処理できます。LBitmapData クラスのメソッドを使用して、任意のサイズのImageを作成し、実行時に様々な方法で操作できます。LLoaderを使ってロードしたImageも利用することができます。
+ * @class LBitmapData
+ * @extends LObject
+ * @constructor
+ * @param {Image} image Image型オブジェクト。
+ * @param {float} x Imageの表示範囲の座標x.(省略可).
+ * @param {float} y Imageの表示範囲の座標y.(省略可).
+ * @param {float} width Imageの表示範囲の幅。(省略可).
+ * @param {float} height Imageの表示範囲の高さ。(省略可).
+ * @param {String} dataType データータイプを指定する，使えるタイプはLBitmapData.DATA_IMAGE（Imageオブジェクト）とLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。(省略可).
+ * @example
+ * 	Linit(50, "mylegend", 800, 480, main);
+ * 	function main () {
+ * 	    var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("lufylegend.js.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata (event) {
+ * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmap = new LBitmap(bitmapdata);
+ * 		addChild(bitmap);
+ * 		
+ * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+ * 		var bitmap2 = new LBitmap(bitmapdata2);
+ * 		bitmap2.x = 200;
+ * 		addChild(bitmap2);
+ * 	}
+ * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @since 1.0.0
+ * @public
+ */
+var LBitmapData = (function () {
+	function LBitmapData (image, x, y, width, height, dataType) {
 		var s = this;
-		if(s.dataType == dataType){
-			return;
+		LExtends (s, LObject, []);
+		s.type = "LBitmapData";
+		if (typeof dataType == UNDEFINED) {
+			dataType = LBitmapData.DATA_IMAGE;
 		}
-		if(dataType == LBitmapData.DATA_CANVAS){
+		s.oncomplete = null;
+		s._locked = false;
+		s._setPixel = false;
+		/** @language chinese
+		 * 位图图像的位置x，以像素为单位。
+		 * @property x
+		 * @type float
+		 * @public
+		 */
+		/** @language english
+		 * The location x of the bitmap image in pixels.
+		 * @property x
+		 * @type float
+		 * @public
+		 */
+		/** @language chinese
+		 * ビットマップイメージの位置x（ピクセル単位）です。
+		 * @property x
+		 * @type float
+		 * @public
+		 */
+		s.x = (x == null ? 0 : x);
+		/** @language chinese
+		 * 位图图像的位置y，以像素为单位。
+		 * @property y
+		 * @type float
+		 * @public
+		 */
+		/** @language english
+		 * The location y of the bitmap image in pixels.
+		 * @property y
+		 * @type float
+		 * @public
+		 */
+		/** @language chinese
+		 * ビットマップイメージの位置y（ピクセル単位）です。
+		 * @property y
+		 * @type float
+		 * @public
+		 */
+		s.y = (y == null ? 0 : y);
+		/** @language chinese
+		 * 位图图像的宽度，以像素为单位。
+		 * @property width
+		 * @type float
+		 * @public
+		 */
+		/** @language english
+		 * The width of the bitmap image in pixels.
+		 * @property width
+		 * @type float
+		 * @public
+		 */
+		/** @language chinese
+		 * ビットマップイメージの幅（ピクセル単位）です。
+		 * @property width
+		 * @type float
+		 * @public
+		 */
+		s.width = 0;
+		/** @language chinese
+		 * 位图图像的高度，以像素为单位。
+		 * @property height
+		 * @type float
+		 * @public
+		 */
+		/** @language english
+		 * The height of the bitmap image in pixels.
+		 * @property height
+		 * @type float
+		 * @public
+		 */
+		/** @language chinese
+		 * ビットマップイメージの高さ（ピクセル単位）です。
+		 * @property height
+		 * @type float
+		 * @public
+		 */
+		s.height = 0;
+		/** @language chinese
+		 * 数据格式，LBitmapData.DATA_IMAGE（Image对象）或者LBitmapData.DATA_CANVAS（Canvas对象）
+		 * @property dataType
+		 * @type String
+		 * @public
+		 */
+		/** @language english
+		 * data type, LBitmapData.DATA_IMAGE（Image object）or LBitmapData.DATA_CANVAS（Canvas object）。
+		 * @property dataType
+		 * @type String
+		 * @public
+		 */
+		/** @language chinese
+		 * データータイプ，値はLBitmapData.DATA_IMAGE（Imageオブジェクト）またはLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。
+		 * @property dataType
+		 * @type String
+		 * @public
+		 */
+		s.dataType = null;
+		if (image && typeof image == "object") {
+			s.image = image;
+			s.dataType = LBitmapData.DATA_IMAGE;
+			s.width = (width == null ? s.image.width : width);  
+			s.height = (height == null ? s.image.height : height);
+			s._setDataType(dataType);
+		} else {
 			s._createCanvas();
-			s._canvas.width = s.image.width;
-			s._canvas.height = s.image.height;
-			s._context.clearRect(0,0,s._canvas.width,s._canvas.height);
-			s._context.drawImage(s.image,0,0);
+			s.dataType = LBitmapData.DATA_CANVAS;
+			s._canvas.width = s.width = (width == null ? 1 : width); 
+			s._canvas.height = s.height = (height == null ? 1 : height);
+			var d = s._context.createImageData(s.width, s.height);
+			if (typeof image == "string") {
+				image = parseInt(image.replace("#","0x"));
+			}
+			if (typeof image == "number") {
+				for (var i = 0; i < d.data.length; i += 4) {
+					d.data[i + 0] = image >> 16 & 0xFF;
+					d.data[i + 1] = image >> 8 & 0xFF;
+					d.data[i + 2] = image & 0xFF;
+					d.data[i + 3] = 255;
+				}
+			}
+			s._context.putImageData(d, 0, 0);
 			s.image = s._canvas;
-		}else if(dataType == LBitmapData.DATA_IMAGE){
-			s.image = new Image();
-			s.image.width = s._canvas.width;
-			s.image.height = s._canvas.height;
-			s.image.src = s._canvas.toDataURL();
-		}
-		s.dataType = dataType;
-	}
-	,_createCanvas:function(){
-		var s = this;
-		if(!s._canvas){
-			s._canvas = document.createElement("canvas");
-			s._context = s._canvas.getContext("2d");
-		}
-	}
-	,setProperties:function (x,y,width,height){
-		var s = this;
-		s.x = x;
-		s.y = y;
-		s.width = width;
-		s.height = height;
-		s.resize();
-	}
-	,setCoordinate:function (x,y){
-		var s = this;
-		s.x = x;
-		s.y = y;
-		s.resize();
-	}
-	,clone:function(){
-		var s = this;
-		return new LBitmapData(s.image,s.x,s.y,s.width,s.height,s.dataType);
-	}
-	,ready:function(){
-		var s = this;
-		s._dataType=s.dataType;
-		s.setDataType(LBitmapData.DATA_CANVAS);
-		s._data = s._context.getImageData(s.x,s.y,s.width,s.height);
-	}
-	,update:function(){
-		var s = this;
-		s._context.putImageData(s._data,s.x,s.y,0,0,s.width,s.height);
-		s.setDataType(s._dataType);
-	}
-	,getPixel:function(x,y,colorType){
-		var s = this,i,d;
-        x = x>>0;
-        y = y>>0;
-		if(!s._locked)s.ready();
-		i = s._canvas.width*4*(s.y + y) + (s.x + x)*4;
-		d = s._data.data;
-		if(!s._locked)s.update();
-		if(colorType == "number"){
-			return d[i]<<16 | d[i+1]<<8 | d[i+2]
-		}else{
-			return [d[i],d[i+1],d[i+2],d[i+3]];
-		}
-	}
-	,getPixels:function(rect){
-		var s = this,r;
-		if(!s._locked)s.ready();
-		r = s._context.getImageData(rect.x,rect.y,rect.width,rect.height);
-		if(!s._locked)s.update();
-		return r;
-	}
-	,lock:function(){
-		var s = this;
-		s._locked=true;
-		s.ready();
-	}
-	,unlock:function(){
-		var s = this;
-		s._locked=false;
-		s.update();
-	}
-	,setPixel:function(x,y,data){
-		var s = this;
-        x = x>>0;
-        y = y>>0;
-		if(!s._locked)s.ready();
-		var d = s._data,i = s._canvas.width*4*(s.y + y) + (s.x + x)*4;
-		if(typeof data == "object"){
-			d.data[i+0]=data[0];
-			d.data[i+1]=data[1];
-			d.data[i+2]=data[2];
-			d.data[i+3]=255;
-		}else{
-			if(typeof data == "string"){
-				data = parseInt(data.replace("#","0x"));
+			if (dataType == LBitmapData.DATA_IMAGE) {
+				s._setDataType(dataType);
 			}
-			d.data[i+0]=data>>16 & 0xFF;;
-			d.data[i+1]=data>>8 & 0xFF;
-			d.data[i+2]=data & 0xFF;
-			d.data[i+3]=255;
 		}
-		if(!s._locked)s.update();
+		s.resize();
 	}
-	,setPixels:function(rect, data){
-		var s = this,i,j,d,w,sd;
-		if(!s._locked)s.ready();
-		d = s._data;
-		if(typeof data == "object"){
-			w = s._canvas.width;
-			for(x = rect.x;x<rect.right;x++){
-				for(y=rect.y;y<rect.bottom;y++){
-					i = w*4*(s.y + y) + (s.x + x)*4;
-					j = data.width*4*(y - rect.y) + (x - rect.x)*4;
-					d.data[i+0]=data.data[j+0];
-					d.data[i+1]=data.data[j+1];
-					d.data[i+2]=data.data[j+2];
-					d.data[i+3]=255;
+	/** @language chinese
+	 * LBitmapData数据保存形式的一种，以Image对象形式保存。
+	 * @property LBitmapData.DATA_IMAGE
+	 * @type String
+	 * @final
+	 * @static
+	 * @readOnly
+	*/
+	/** @language english
+	 * data type of the LBitmapData. Image object。
+	 * @property dataType
+	 * @type String
+	 * @public
+	 */
+	/** @language chinese
+	 * LBitmapDataのデーターの保存形式です，Image オブジェクト。
+	 * @property dataType
+	 * @type String
+	 * @public
+	 */
+	LBitmapData.DATA_IMAGE = "data_image";
+	/** @language chinese
+	 * LBitmapData数据保存形式的一种，以Canvas对象形式保存。
+	 * @property LBitmapData.DATA_CANVAS
+	 * @type String
+	 * @final
+	 * @static
+	 * @readOnly
+	*/
+	/** @language english
+	 * data type of the LBitmapData. Canvas object。
+	 * @property dataType
+	 * @type String
+	 * @public
+	 */
+	/** @language chinese
+	 * LBitmapDataのデーターの保存形式です，Canvas オブジェクト。
+	 * @property dataType
+	 * @type String
+	 * @public
+	 */
+	LBitmapData.DATA_CANVAS = "data_canvas";
+	var p = {
+		_setDataType : function (dataType) {
+			var s = this;
+			if (s.dataType == dataType) {
+				return;
+			}
+			if (dataType == LBitmapData.DATA_CANVAS) {
+				s._createCanvas();
+				s._canvas.width = s.image.width;
+				s._canvas.height = s.image.height;
+				s._context.clearRect(0, 0, s._canvas.width, s._canvas.height);
+				s._context.drawImage(s.image, 0, 0);
+				s.image = s._canvas;
+			} else if (dataType == LBitmapData.DATA_IMAGE) {
+				s.image = new Image();
+				s.image.width = s._canvas.width;
+				s.image.height = s._canvas.height;
+				s.image.src = s._canvas.toDataURL();
+			}
+			s.dataType = dataType;
+		},
+		_createCanvas : function () {
+			var s = this;
+			if (!s._canvas) {
+				s._canvas = document.createElement("canvas");
+				s._context = s._canvas.getContext("2d");
+			}
+		},
+		/** @language chinese
+		 * 用来改变LBitmapData内Image的可视范围
+		 * @method setProperties
+		 * @param {float} x Image可视范围x坐标。
+		 * @param {float} y Image可视范围y坐标。
+		 * @param {float} width Image可视范围宽。
+		 * @param {float} height Image可视范围高。
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 240;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.0.0
+		 */
+		/** @language english
+		 * Change the Image's visual range
+		 * @method setProperties
+		 * @param {float} x The x coordinate of the image.
+		 * @param {float} y The y coordinate of the image.
+		 * @param {float} width The width of the bitmap image in pixels.
+		 * @param {float} height The height of the bitmap image in pixels.
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 240;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">Try it »</a></p>
+		 * @public
+		 * @since 1.0.0
+		 */
+		/** @language japanese
+		 * LBitmapData内のImageの表示範囲を変更する
+		 * @method setProperties
+		 * @param {float} x Imageの表示範囲の座標x.
+		 * @param {float} y Imageの表示範囲の座標y.
+		 * @param {float} width Imageの表示範囲の幅。
+		 * @param {float} height Imageの表示範囲の高さ。
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 240;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 * @since 1.0.0
+		 */
+		setProperties : function (x, y, width, height) {
+			var s = this;
+			s.x = x;
+			s.y = y;
+			s.width = width;
+			s.height = height;
+			s.resize();
+		},
+		/** @language chinese
+		 * 用来改变LBitmapData内Image的可视范围的起点位置坐标
+		 * @method setCoordinate
+		 * @param {float} x Image可视范围x坐标。
+		 * @param {float} y Image可视范围y坐标。
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	bitmapdata2.setCoordinate(100, 100);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 120;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">测试链接</a></p>
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * Change coordinate of the Image's visual range
+		 * @method setCoordinate
+		 * @param {float} x The x coordinate of the image.
+		 * @param {float} y The y coordinate of the image.
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	bitmapdata2.setCoordinate(100, 100);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 120;
+		 * 	addChild(bitmap2);
+		 * @since 1.0.0
+		 * @public
+		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LBitmapData内のImageの表示範囲の座標を変更する
+		 * @method setCoordinate
+		 * @param {float} x Imageの表示範囲の座標x.
+		 * @param {float} y Imageの表示範囲の座標y.
+		 * @example
+		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmap1 = new LBitmap(bitmapdata1);
+		 * 	addChild(bitmap1);
+		 * 	
+		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	bitmapdata2.setCoordinate(100, 100);
+		 * 	var bitmap2 = new LBitmap(bitmapdata2);
+		 * 	bitmap2.x = 120;
+		 * 	addChild(bitmap2);
+		 * @since 1.0.0
+		 * @public
+		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		setCoordinate : function (x, y) {
+			var s = this;
+			s.x = x;
+			s.y = y;
+			s.resize();
+		},
+		/** @language chinese
+		 * 返回一个LBitmapData的克隆对象。
+		 * @method clone
+		 * @return {LBitmapData} 一个新的 LBitmapData 对象，它与原始对象相同.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd1);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bmd2 = bmd1.clone();
+		 * 	var bm2 = new LBitmap(bmd2);
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns a new BitmapData object that is a clone of the original instance with an exact copy of the contained bitmap.
+		 * @method clone
+		 * @return {LBitmapData} A new BitmapData object that is identical to the original.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd1);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bmd2 = bmd1.clone();
+		 * 	var bm2 = new LBitmap(bmd2);
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 新しい BitmapData オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
+		 * @method clone
+		 * @return {LBitmapData} 元のオブジェクトと同一の新しい LBitmapData オブジェクトです。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+		 * 	var bm1 = new LBitmap(bmd1);
+		 * 	addChild(bm1);
+		 * 	
+		 * 	var bmd2 = bmd1.clone();
+		 * 	var bm2 = new LBitmap(bmd2);
+		 * 	bm2.x = 120;
+		 * 	addChild(bm2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		clone : function () {
+			var s = this;
+			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
+		},
+		_ready : function () {
+			var s = this;
+			s._dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			s._data = s._context.getImageData(s.x, s.y, s.width, s.height);
+		},
+		_update : function () {
+			var s = this;
+			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
+			s._setDataType(s._dataType);
+		},
+		/** @language chinese
+		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
+		 * @method getPixel
+		 * @param {int} x 指定坐标点x坐标。
+		 * @param {int} y 指定坐标点y坐标。
+		 * @param {String} colorType 指定获取的颜色种类。[number|array]（可省略）。
+		 * @return {Array} 像素数据。
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns an integer that represents an RGB pixel value from a BitmapData object at a specific point (x, y).
+		 * @method getPixel
+		 * @param {int} x The x position of the pixel.
+		 * @param {int} y The y position of the pixel.
+		 * @param {String} colorType the color type. [number|array].(Optional).
+		 * @return {Array} A array that represents an RGB pixel value.
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LBitmapData オブジェクトの特定ポイント (x, y) の RGB ピクセル値を表す整数を返します。
+		 * @method getPixel
+		 * @param {int} x ピクセルの x 座標です。
+		 * @param {int} y ピクセルの y 座標です。
+		 * @param {String} colorType 取得するカラータイプを指定する。[number|array]（省略可）。
+		 * @return {Array} RGB ピクセル値を表す数値。
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		getPixel : function (x, y, colorType) {
+			var s = this, i, d;
+	        x = x >> 0;
+	        y = y >> 0;
+			if (!s._locked) {
+				s._ready();
+			}
+			i = s._canvas.width * 4 * (s.y + y) + (s.x + x) * 4;
+			d = s._data.data;
+			if (!s._locked) {
+				s._update();
+			}
+			if (colorType == "number") {
+				return d[i] << 16 | d[i + 1] << 8 | d[i + 2];
+			} else {
+				return [d[i], d[i + 1], d[i + 2], d[i + 3]];
+			}
+		},
+		/** @language chinese
+		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
+		 * @method setPixel
+		 * @param {int} x 指定坐标点x坐标。
+		 * @param {int} y 指定坐标点y坐标。
+		 * @param {Array} data 像素数据。
+		 * @return {Array} 像素数据。
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns an integer that represents an RGB pixel value from a BitmapData object at a specific point (x, y).
+		 * @method setPixel
+		 * @param {int} x The x position of the pixel whose value changes.
+		 * @param {int} y The y position of the pixel whose value changes.
+		 * @param {Array} data The resulting pixel data for the pixel.
+		 * @return {Array} A array that represents an RGB pixel value.
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LBitmapData オブジェクトの特定ポイント (x, y) の RGB ピクセル値を表す整数を返します。
+		 * @method setPixel
+		 * @param {int} x 値が変更されるピクセルの x 座標です。
+		 * @param {int} y 値が変更されるピクセルの y 座標です。
+		 * @param {Array} data 結果として生成される、ピクセルの RGB カラーデータです。
+		 * @return {Array} RGB ピクセル値を表す数値。
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img, imgs = [], arr;
+		 *  bitmapData.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	 arr = [];
+		 *  	 for (var j = 0; j < 50; j++) {
+		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
+		 *  		arr.push(img);
+		 *  	}
+		 *  	imgs.push(arr);
+		 *  }
+		 *  bitmapData.unlock();
+		 *  bitmapData2.lock();
+		 *  for (var i = 0; i < 50; i++) {
+		 *  	arr = imgs[i];
+		 *  	for (var j = 0; j < 50; j++) {
+		 *  		img = arr[j];
+		 *  		bitmapData2.setPixel(i, j, img);
+		 *  	}
+		 *  }
+		 *  bitmapData2.unlock();
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.x = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		setPixel : function (x, y, data) {
+			var s = this;
+	        x = x >> 0;
+	        y = y >> 0;
+			if (!s._locked) {
+				s._ready();
+			}
+			var d = s._data, i = s._canvas.width * 4 * (s.y + y) + (s.x + x) * 4;
+			if (typeof data == "object") {
+				d.data[i + 0] = data[0];
+				d.data[i + 1] = data[1];
+				d.data[i + 2] = data[2];
+				d.data[i + 3] = 255;
+			} else {
+				if (typeof data == "string") {
+					data = parseInt(data.replace("#", "0x"));
+				}
+				d.data[i + 0] = data >> 16 & 0xFF;
+				d.data[i + 1] = data >> 8 & 0xFF;
+				d.data[i + 2] = data & 0xFF;
+				d.data[i + 3] = 255;
+			}
+			if (!s._locked) {
+				s._update();
+			}
+		},
+		/** @language chinese
+		 * 返回一个数组，它表示 LBitmapData 对象中在特定矩形区域rect中的像素数据。
+		 * @method getPixels
+		 * @param {LRectangle} rect 指定矩形。
+		 * @return {Array} 返回该矩形区域的像素数据。
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Generates an array from a rectangular region of pixel data.
+		 * @method getPixels
+		 * @param {LRectangle} rect A rectangular area in the current BitmapData object.
+		 * @return {Array} the pixels in the given Rectangle.
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * ピクセルデータの矩形領域からバイト配列を生成します。
+		 * @method getPixels
+		 * @param {LRectangle} rect 現在の BitmapData オブジェクト内の矩形領域です。
+		 * @return {Array} 特定の矩形内のピクセルを表す配列です
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		getPixels : function (rect) {
+			var s = this, r;
+			if (!s._locked) {
+				s._ready();
+			}
+			r = s._context.getImageData(rect.x, rect.y, rect.width, rect.height);
+			if (!s._locked) {
+				s._update();
+			}
+			return r;
+		},
+		/** @language chinese
+		 * 设置 LBitmapData 对象的单个像素数据。
+		 * @method setPixels
+		 * @param {LRectangle} rect 指定矩形。
+		 * @param {Array} data 像素数据。（数组[0, 0, 0, 255, 255, 255] | 字符串"#000000" | 数值0x000000）
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Sets a single pixel of a LBitmapData object.
+		 * @method setPixels
+		 * @param {LRectangle} rect Specifies the rectangular region of the BitmapData object.
+		 * @param {Array} data the values to be used in the rectangular region.(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LBitmapData オブジェクトの 1 つのピクセルを設定します。
+		 * @method setPixels
+		 * @param {LRectangle} rect LBitmapData オブジェクトの矩形領域を指定します。
+		 * @param {Array} data 矩形領域で使用されるピクセル値です。(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 *  var bitmapData = new LBitmapData(event.currentTarget);
+		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData2.lock();
+		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 *  bitmapData2.unlock(); 
+		 *  
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  addChild(bitmap);
+		 *  
+		 *  var bitmap2 = new LBitmap(bitmapData2);
+		 *  bitmap2.y = 250;
+		 *  addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		setPixels : function (rect, data) {
+			var s = this, i, j, d, w, sd, x, y;
+			if (!s._locked) {
+				s._ready();
+			}
+			d = s._data;
+			if (typeof data == "object") {
+				w = s._canvas.width;
+				for (x = rect.x; x < rect.right; x++) {
+					for (y = rect.y; y < rect.bottom; y++) {
+						i = w * 4 * (s.y + y) + (s.x + x) * 4;
+						j = data.width * 4 * (y - rect.y) + (x - rect.x) * 4;
+						d.data[i + 0] = data.data[j + 0];
+						d.data[i + 1] = data.data[j + 1];
+						d.data[i + 2] = data.data[j + 2];
+						d.data[i + 3] = 255;
+					}
+				}
+			} else {
+				if (typeof data == "string") {
+					data = parseInt(data.replace("#", "0x"));
+				}
+				data = [data >> 16 & 0xFF, data >> 8 & 0xFF, data & 0xFF];
+				w = s._canvas.width;
+				for (x = rect.x; x < rect.right; x++) {
+					for (y = rect.y; y < rect.bottom; y++) {
+						i = w * 4 * (s.y + y) + (s.x + x) * 4;
+						d.data[i + 0] = data[0];
+						d.data[i + 1] = data[1];
+						d.data[i + 2] = data[2];
+						d.data[i + 3] = 255;
+					}
 				}
 			}
-		}else{
-			if(typeof data == "string"){
-				data = parseInt(data.replace("#","0x"));
+			if (!s._locked) {
+				s._update();
 			}
-			data = [data>>16 & 0xFF,data>>8 & 0xFF,data & 0xFF];
-			w = s._canvas.width;
-			for(x = rect.x;x<rect.right;x++){
-				for(y=rect.y;y<rect.bottom;y++){
-					i = w*4*(s.y + y) + (s.x + x)*4;
-					d.data[i+0]=data[0];
-					d.data[i+1]=data[1];
-					d.data[i+2]=data[2];
-					d.data[i+3]=255;
-				}
+		},
+		/** @language chinese
+		 * 此函数将操作对象锁定，保证操作对象在另一个临时操作的canvas上只绘制一遍。
+		 * @method lock
+		 * @since 1.5.1
+		 * @public
+		 */
+		/** @language english
+		 * Locks an image so that any objects that reference the BitmapData object, such as Bitmap objects, are not updated when this BitmapData object changes.
+		 * @method lock
+		 * @since 1.5.1
+		 * @public
+		 */
+		/** @language japanese
+		 * ピクセルデータを操作する時、もう一つの非表示canvasを使っています、この関数使うと、LBitmapDataをロックして、一回しか描けないですから、効率が高くすることができます。
+		 * @method lock
+		 * @since 1.5.1
+		 * @public
+		 */
+		lock : function () {
+			var s = this;
+			s._locked = true;
+			s._ready();
+		},
+		/** @language chinese
+		 * 拷贝像素等操作结束后，解除对操作对象的锁定。
+		 * @method unlock
+		 * @since 1.5.1
+		 * @public
+		 */
+		/** @language english
+		 * Unlocks an image so that any objects that reference the BitmapData object, such as Bitmap objects, are updated when this BitmapData object changes.
+		 * @method unlock
+		 * @since 1.5.1
+		 * @public
+		 */
+		/** @language japanese
+		 * ピクセルデータの操作が終わったら、LBitmapDataのロックを解除します。
+		 * @method unlock
+		 * @since 1.5.1
+		 * @public
+		 */
+		unlock : function () {
+			var s = this;
+			s._locked = false;
+			s._update();
+		},
+		/** @language chinese
+		 * 在LBitmapData位图图像上绘制 source 显示对象。
+		 * @method draw
+		 * @param {LDisplayObject} source 要绘制到 LBitmapData 对象的显示对象或 BitmapData 对象。
+		 * @since 1.7.7
+		 * @public
+		 * @example
+		 *  var layer = new LSprite();
+		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 *  addChild(layer);
+		 *  
+		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 *  bitmapData.draw(layer);
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  bitmap.y = 150;
+		 *  addChild(bitmap);
+		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Draws the source display object onto the bitmap image, using the Flash runtime vector renderer.
+		 * @method draw
+		 * @param {LDisplayObject} [source] The display object or BitmapData object to draw to the BitmapData object.
+		 * @since 1.7.7
+		 * @public
+		 * @example
+		 *  var layer = new LSprite();
+		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 *  addChild(layer);
+		 *  
+		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 *  bitmapData.draw(layer);
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  bitmap.y = 150;
+		 *  addChild(bitmap);
+		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * source 表示オブジェクトをビットマップイメージ上に描画します。
+		 * @method draw
+		 * @param {LDisplayObject} [source] LBitmapData オブジェクトに描画される表示オブジェクトまたは BitmapData オブジェクトです。
+		 * @since 1.7.7
+		 * @public
+		 * @example
+		 *  var layer = new LSprite();
+		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 *  addChild(layer);
+		 *  
+		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 *  bitmapData.draw(layer);
+		 *  var bitmap = new LBitmap(bitmapData);
+		 *  bitmap.y = 150;
+		 *  addChild(bitmap);
+		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		draw : function (source) {
+			var s = this;
+			if (s.dataType == LBitmapData.DATA_CANVAS) {
+				s._context.clearRect(0, 0, s.width, s.height);
+				s._context.drawImage(source.getDataCanvas(), 0, 0);
+			} else if (s.dataType == LBitmapData.DATA_IMAGE) {
+				s.image.src = source.getDataURL();
 			}
+			s.resize();
+		},
+		resize : function () {
+			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
+			s.width = s.width < w ? s.width : w;
+			s.height = s.height < h ? s.height : h;
 		}
-		if(!s._locked)s.update();
+	};
+	for (var k in p) {
+		LBitmapData.prototype[k] = p[k];
 	}
-	,draw:function(source){
-		var s = this;
-		if(s.dataType == LBitmapData.DATA_CANVAS){
-			s._context.clearRect(0,0,s.width,s.height);
-			s._context.drawImage(source.getDataCanvas(),0,0);
-		}else if(s.dataType == LBitmapData.DATA_IMAGE){
-			s.image.src = source.getDataURL();
-		}
-		s.resize();
-	},
-	resize:function(){
-		var s = this,w=s.image.width-s.x,h=s.image.height-s.y;
-		s.width = s.width<w?s.width:w;
-		s.height = s.height<h?s.height:h;
-	}
-};
-for(var k in p)LBitmapData.prototype[k]=p[k];
+	return LBitmapData;
+})();
 /*
  * LDropShadowFilter.js
  **/
@@ -4119,7 +5898,7 @@ $Ajax.prototype = {
 };
 function LStageWebView(){
 	var s = this;
-	base(s,LObject,[]);
+	base(s,LEventDispatcher,[]);
 	s.display = document.createElement("div");
 	s.iframe = document.createElement("iframe");
 	s.display.style.position = "absolute";
@@ -4130,7 +5909,11 @@ function LStageWebView(){
 }
 p = {
 	loadURL:function(u){
-		this.iframe.src=u;
+		var s = this;
+		s.iframe.src=u;
+		s.iframe.onload=function(){
+			s.dispatchEvent(LEvent.COMPLETE);
+		};
 	},
 	show:function(){
 		LGlobal.object.appendChild(this.display);

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>clone</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+				var bm1 = new LBitmap(bmd1);
+				addChild(bm1);
+				
+				var bmd2 = bmd1.clone();
+				var bm2 = new LBitmap(bmd2);
+				bm2.x = 120;
+				addChild(bm2);
+			}
+			</script>
+	</body>
+</html>

@@ -36,6 +36,7 @@ LGlobal.mouseEventContainer = {};
 LGlobal.keepClear = true;
 LGlobal.top = 0;
 LGlobal.left = 0;
+LGlobal.window = window;
 (function(n){
 	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
 	if (n.indexOf(OS_IPHONE) > 0) {
@@ -65,7 +66,6 @@ LGlobal.setDebug = function (v){
 };
 LGlobal.setCanvas = function (id,w,h){
 	LGlobal.id = id;
-	LGlobal.window = window;
 	LGlobal.object = document.getElementById(id);
 	LGlobal.object.innerHTML='<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
 	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
@@ -100,6 +100,32 @@ LGlobal.setCanvas = function (id,w,h){
 	LGlobal.stage = new LSprite();
 	LGlobal.stage.parent = "root";
 	LGlobal.childList.push(LGlobal.stage);
+	LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
+	LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
+	LGlobal.stage.addEventListener = function(type,listener){
+		if(type == LEvent.WINDOW_RESIZE){
+			LGlobal.stage.onresizeListener = listener;
+			LGlobal.stage.onresize = function(e){
+				LGlobal.stage.onresizeEvent = e;
+			};
+			LEvent.addEventListener(LGlobal.window,type,LGlobal.stage.onresize);
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+			LEvent.addEventListener(LGlobal.window,type,listener);
+		}else{
+			LGlobal.stage.baseAddEvent(type,listener);
+		}
+	};
+	LGlobal.stage.removeEventListener = function(type,listener){
+		if(type == LEvent.WINDOW_RESIZE){
+			LEvent.removeEventListener(LGlobal.window,LEvent.WINDOW_RESIZE,LGlobal.stage.onresize);
+			delete LGlobal.stage.onresize;
+			delete LGlobal.stage.onresizeListener;
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+			LEvent.removeEventListener(LGlobal.window,type,listener);
+		}else{
+			LGlobal.stage.baseRemoveEvent(type,listener);
+		}
+	};
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
 	
 	if(LGlobal.canTouch){
@@ -335,6 +361,10 @@ LGlobal.verticalError = function(){
 };
 LGlobal.onShow = function (){
 	if(LGlobal.canvas == null)return;
+	if(LGlobal.stage.onresizeEvent){
+		LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
+		delete LGlobal.stage.onresizeEvent;
+	}
 	if(LGlobal.box2d != null){
 		LGlobal.box2d.ll_show();
 		if(!LGlobal.traceDebug && LGlobal.keepClear){

@@ -81,7 +81,7 @@ p = {
 	rect:function (x,y,w,h){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.rect(x, y, w, h);});
-		s.showList.push({type:"rect",value:[x,y,w,h]});
+		s.showList.push({type:"rect",arg:[x,y,w,h]});
 	},
 	fillStyle:function (co){
 		var s = this;
@@ -94,7 +94,7 @@ p = {
 	arc:function(x,y,r,sa,ea,aw){
 		var s = this;
 		s.setList.push(function(){LGlobal.canvas.arc(x,y,r,sa,ea,aw);});
-		s.showList.push({type:"arc",value:sa});
+		s.showList.push({type:"arc",arg:sa});
 	},
 	beginBitmapFill:function(b){
 		var s = this;
@@ -415,7 +415,7 @@ p = {
 	ismouseon:function(e,co){
 		var s = this;
 		var k = null;
-		if(e==null || e == UNDEFINED || s.showList.length == 0)return false;
+		if(e==null || e == UNDEFINED || s.showList.length == 0 || !s.parent)return false;
 		return s.parent.ismouseonShapes(s.showList,e.offsetX,e.offsetY);
 	},
 	getWidth:function(){
