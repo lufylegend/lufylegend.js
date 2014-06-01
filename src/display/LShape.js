@@ -77,7 +77,7 @@ p = {
 					if(o.type == type){
 						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
 						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
-						e.clickTarget = s;
+						e.target = e.clickTarget = s;
 						o.listener(e,s);
 						return true;
 					}

@@ -241,7 +241,6 @@ var LBitmapData = (function () {
 	 * @type String
 	 * @final
 	 * @static
-	 * @readOnly
 	*/
 	/** @language english
 	 * data type of the LBitmapData. Image object。

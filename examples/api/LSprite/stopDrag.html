@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title>startDrag</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend">
+		</div>
+		<script>
+			LInit(1000/50,"legend",800,450,main);
+			function main(){
+				LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+				for(var i=0;i<3;i++){
+					var child = new LSprite();
+					child.x = 250*i;
+					child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
+					child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+					child.addEventListener(LMouseEvent.MOUSE_UP,onup);
+					addChild(child);
+				}
+			}
+			function ondown(e){
+				e.clickTarget.startDrag(e.touchPointID);
+			}
+			function onup(e){
+				e.clickTarget.stopDrag();
+			}
+		</script>
+	</body>
+</html>
