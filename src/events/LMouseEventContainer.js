@@ -213,7 +213,10 @@ $LMouseEventContainer.prototype = {
 		l = self.dispatchAllEvent?st.length:1;
 		for(i=0;i<l&&i<st.length;i++){
 			o = st[i];
-			event.target = event.clickTarget = o.sp;
+			event.currentTarget = event.clickTarget = o.sp;
+			if (!event.target) {
+				event.target = o.sp;
+			}
 			event.event_type = type;
 			event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
 			event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);

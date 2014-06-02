@@ -288,7 +288,10 @@ $LMouseEventContainer.prototype = {
 		l = self.dispatchAllEvent?st.length:1;
 		for(i=0;i<l&&i<st.length;i++){
 			o = st[i];
-			event.target = event.clickTarget = o.sp;
+			event.currentTarget = event.clickTarget = o.sp;
+			if (!event.target) {
+				event.target = o.sp;
+			}
 			event.event_type = type;
 			event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
 			event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
@@ -2962,6 +2965,73 @@ var LSprite = (function () {
 		 */
 		s.childList = new Array();
 		/** @language chinese
+		 * 返回此对象的子项数目。
+		 * @property numChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 *  var container1 = new LSprite();
+		 *  var container2 = new LSprite();
+		 *  var circle1 = new LSprite();
+		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 *  var circle2 = new LSprite();
+		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 *  container2.addChild(container1);
+		 *  container1.addChild(circle1);
+		 *  container1.addChild(circle2);
+
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Returns the number of children of this object.
+		 * @property numChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 *  var container1 = new LSprite();
+		 *  var container2 = new LSprite();
+		 *  var circle1 = new LSprite();
+		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 *  var circle2 = new LSprite();
+		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 *  container2.addChild(container1);
+		 *  container1.addChild(circle1);
+		 *  container1.addChild(circle2);
+
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このオブジェクトの子の数を返します。
+		 * @property numChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 *  var container1 = new LSprite();
+		 *  var container2 = new LSprite();
+		 *  var circle1 = new LSprite();
+		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 *  var circle2 = new LSprite();
+		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 *  container2.addChild(container1);
+		 *  container1.addChild(circle1);
+		 *  container1.addChild(circle2);
+
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.numChildren = 0;
+		/** @language chinese
 		 * [只读] 指定属于此 sprite 的 Graphics 对象，在此 sprite 中可执行矢量绘图命令。
 		 * @property graphics
 		 * @type LGraphics
@@ -3549,6 +3619,7 @@ var LSprite = (function () {
 			}
 			d.parent = s;
 			s.childList.push(d);
+			s.numChildren = s.childList.length;
 			return d;
 		},
 		/** @language chinese
@@ -3621,60 +3692,77 @@ var LSprite = (function () {
 			}
 			d.parent = s;
 			s.childList.splice(i, 0, d);
+			s.numChildren = s.childList.length;
+			return d;
 		},
 		/** @language chinese
 		 * <p>从 LSprite 实例的子列表中删除指定的 child LDisplayObject 实例。将已删除子项的 parent 属性设置为 null；如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。LSprite 中该子项之上的任何显示对象的索引位置都减去 1。</p>
-		 * @method addChild
+		 * @method removeChild
 		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">测试链接</a></p>
+		 * 	function main () {
+		 * 		var container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		event.currentTarget.removeChild(event.target);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
-		 * <p>Adds a child LDisplayObject instance to this LSprite instance. The child is added at the index position specified. An index of 0 represents the back (bottom) of the display list for this LSprite object.</p>
-		 * <p>For example, the following example shows three display objects, labeled a, b, and c, at index positions 0, 2, and 1, respectively:</p>
-		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
-		 * <p>If you add a child object that already has a different display object container as a parent, the object is removed from the child list of the other display object container.</p>
-		 * @method addChild
+		 * <p>Removes the specified child LDisplayObject instance from the child list of the LSprite instance. The parent property of the removed child is set to null , and the object is garbage collected if no other references to the child exist. The index positions of any display objects above the child in the LSprite are decreased by 1.</p>
+		 * @method removeChild
 		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">Try it »</a></p>
+		 * 	function main () {
+		 * 		var container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		event.currentTarget.removeChild(event.target);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
-		 * <p>この DisplayObjectContainer インスタンスに子 LDisplayObject インスタンスを追加します。子インスタンスは、指定されたインデックス位置に追加されます。インデックス 0 は、この LSprite オブジェクトの表示リストの背景または一番下を表します。</p>
-		 * <p>例えば、a、b、c というラベルの 3 個の表示オブジェクトをインデックス位置 0、2、1 にそれぞれ配置すると、以下のようになります。</p>
-		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
-		 * <p>既に異なる表示オブジェクトコンテナを親に持つ子オブジェクトを追加する場合は、もう一方の表示オブジェクトコンテナの子リストからそのオブジェクトが削除されます。</p>
-		 * @method addChild
+		 * <p>LSprite インスタンスの子リストから指定の child LDisplayObject インスタンスを削除します。削除された子の parent プロパティは null に設定されます。その子に対する参照が存在しない場合、そのオブジェクトはガベージコレクションによって収集されます。LSprite の子より上位にある表示オブジェクトのインデックス位置は 1 つ下がります。</p>
+		 * @method removeChild
 		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">実際のサンプルを見る</a></p>
+		 * 	function main () {
+		 * 		var container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		event.currentTarget.removeChild(event.target);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		removeChild : function (d) {
 			var s  = this, c = s.childList, i, l;
@@ -3687,8 +3775,72 @@ var LSprite = (function () {
 					break;
 				}
 			}
+			s.numChildren = s.childList.length;
 			delete d.parent;
 		},
+		/** @language chinese
+		 * 返回位于指定索引处的子显示对象实例。
+		 * @method getChildAt
+		 * @param {int} index 子对象的索引位置。
+		 * @return {LDisplayObject} 位于指定索引位置处的子显示对象。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	var sprite2 = new LSprite();
+		 * 	var sprite3 = new LSprite();
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	container.addChildAt(sprite3, 0);
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns the child display object instance that exists at the specified index.
+		 * @method getChildAt
+		 * @param {int} index The index position of the child object.
+		 * @return {LDisplayObject} The child display object at the specified index position.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	var sprite2 = new LSprite();
+		 * 	var sprite3 = new LSprite();
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	container.addChildAt(sprite3, 0);
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 指定のインデックス位置にある子表示オブジェクトインスタンスを返します。
+		 * @method getChildAt
+		 * @param {int} index 子オブジェクトのインデックス位置です。
+		 * @return {LDisplayObject} 指定されたインデックス位置にある子表示オブジェクトです。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	var sprite2 = new LSprite();
+		 * 	var sprite3 = new LSprite();
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	container.addChildAt(sprite3, 0);
+
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		getChildAt : function (i) {
 			var s  = this, c = s.childList;
 			if (c.length == 0 || c.length <= i) {
@@ -3696,6 +3848,72 @@ var LSprite = (function () {
 			}
 			return c[i];
 		},
+		/** @language chinese
+		 * 从 LSprite 的子列表中指定的 index 位置删除子 LDisplayObject。将已删除子项的 parent 属性设置为 null；如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。LSprite 中该子项之上的任何显示对象的索引位置都减去 1。
+		 * @method removeChildAt
+		 * @param {int} index 要删除的 DisplayObject 的子索引。
+		 * @return {LDisplayObject} 已删除的 DisplayObject 实例。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * 	container.removeChildAt(0); 
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Removes a child LDisplayObject from the specified index position in the child list of the LSprite. The parent property of the removed child is set to null, and the object is garbage collected if no other references to the child exist. The index positions of any display objects above the child in the LSprite are decreased by 1.
+		 * @method removeChildAt
+		 * @param {int} index The child index of the LDisplayObject to remove.
+		 * @return {LDisplayObject} The LDisplayObject instance that was removed.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * 	container.removeChildAt(0); 
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LSprite の子リストの指定された index 位置から子 LDisplayObject を削除します。削除された子の parent プロパティは null に設定されます。その子に対する参照が存在しない場合、そのオブジェクトはガベージコレクションによって収集されます。LSprite の子より上位にある表示オブジェクトのインデックス位置は 1 つ下がります。
+		 * @method removeChildAt
+		 * @param {int} index 削除する LDisplayObject の子インデックスです。
+		 * @return {LDisplayObject} 削除された LDisplayObject インスタンスです。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * 	container.removeChildAt(0); 
+
+
+		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		removeChildAt : function (i) {
 			var s  = this, c = s.childList;
 			if (c.length <= i) {
@@ -3704,8 +3922,67 @@ var LSprite = (function () {
 			if (LGlobal.destroy && c[i].die) {
 				c[i].die();
 			}
-			s.childList.splice(i, 1);
+			var d = s.childList.splice(i, 1);
+			s.numChildren = s.childList.length;
+			return d;
 		},
+		/** @language chinese
+		 * 返回 LDisplayObject 的 child 实例的索引位置。
+		 * @method getChildIndex
+		 * @param {LDisplayObject} child 要标识的 LDisplayObject 实例。
+		 * @return {int} 要标识的子显示对象的索引位置。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns the index position of a child LDisplayObject instance.
+		 * @method getChildIndex
+		 * @param {LDisplayObject} The DisplayObject instance to identify.
+		 * @return {int} The index position of the child display object to identify.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * child LDisplayObject インスタンスのインデックス位置を返します
+		 * @method getChildIndex
+		 * @param {LDisplayObject} 特定する LDisplayObject インスタンスです。
+		 * @return {int} 特定する子表示オブジェクトのインデックス位置です。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+
+		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		getChildIndex : function (child) {
 			var s = this, c = s.childList, i, l = c.length;
 			for (i = 0; i < l; i++) {
@@ -3715,10 +3992,124 @@ var LSprite = (function () {
 			}
 			return -1;
 		},
+		/** @language chinese
+		 * <p>更改现有子项在显示对象容器中的位置。这会影响子对象的分层。例如，下例在索引位置 0、1、2 处分别显示 a、b、c 三个显示对象：</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
+		 * <p>在使用 setChildIndex() 方法并指定一个已经占用的索引位置时，唯一发生更改的位置是显示对象先前的位置和新位置之间的位置。所有其他位置将保持不变。如果将一个子项移动到比它当前的索引更低的索引处，则这两个索引之间的所有子项的索引引用都将增加 1。如果将一个子项移动到比它当前的索引更高的索引处，则这两个索引之间的所有子项的索引引用都将减小 1。例如，如果上例中的显示对象容器名为 container，则可以通过调用以下代码来交换带有 a 和 b 标记的显示对象的位置：</p>
+		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
+		 * <p>该代码产生以下对象排列：</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
+		 * @method setChildIndex
+		 * @param {LDisplayObject} child 要为其更改索引编号的 LDisplayObject 子实例。
+		 * @return {int} 生成的 child 显示对象的索引编号。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	var container;
+		 * 	function main () {
+		 * 		container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
+		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle3 = new LSprite();
+		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
+		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addChild(circle3);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		var circle = event.target;
+		 * 		var topPosition = container.numChildren - 1;
+		 * 		container.setChildIndex(circle, topPosition);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Changes the position of an existing child in the display object container. This affects the layering of child objects. For example, the following example shows three display objects, labeled a, b, and c, at index positions 0, 1, and 2, respectively:</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
+		 * <p>When you use the setChildIndex() method and specify an index position that is already occupied, the only positions that change are those in between the display object's former and new position. All others will stay the same. If a child is moved to an index LOWER than its current index, all children in between will INCREASE by 1 for their index reference. If a child is moved to an index HIGHER than its current index, all children in between will DECREASE by 1 for their index reference. For example, if the display object container in the previous example is named container, you can swap the position of the display objects labeled a and b by calling the following code:</p>
+		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
+		 * <p>This code results in the following arrangement of objects:</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
+		 * @method setChildIndex
+		 * @param {LDisplayObject} child The child LDisplayObject instance for which you want to change the index number.
+		 * @return {int} The resulting index number for the child display object.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	var container;
+		 * 	function main () {
+		 * 		container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
+		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle3 = new LSprite();
+		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
+		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addChild(circle3);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		var circle = event.target;
+		 * 		var topPosition = container.numChildren - 1;
+		 * 		container.setChildIndex(circle, topPosition);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>表示オブジェクトコンテナの既存の子の位置を変更します。これは、子オブジェクトのレイヤーに影響します。例えば、a、b、c というラベルの 3 個の表示オブジェクトをインデックス位置 0、1、2 にそれぞれ配置すると、以下のようになります。</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
+		 * <p>setChildIndex() を使用し、既に占有されているインデックス位置を指定した場合、表示オブジェクトの前の位置と新しい位置の間にある位置だけが変化します。その他は変化しません。現在のインデックスよりも小さいインデックスに子を移動すると、その間のすべての子が、それぞれのインデックス参照について 1 増加します。現在のインデックスよりも大きいインデックスに子を移動すると、その間のすべての子が、それぞれのインデックス参照について 1 減少します。例えば、上記の例の表示オブジェクトコンテナの名前が container である場合、次に示すコードを呼び出すことによって、a および b というラベルが付けられた表示オブジェクトの位置を入れ替えることができます。</p>
+		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
+		 * <p>このコードによって、次に示すようなオブジェクトの配置になります。</p>
+		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
+		 * @method setChildIndex
+		 * @param {LDisplayObject} child インデックス番号を変更する子 LDisplayObject インスタンスです。
+		 * @return {int} child 表示オブジェクトの結果のインデックス番号です。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	var container;
+		 * 	function main () {
+		 * 		container = new LSprite();
+		 * 		addChild(container);
+		 * 		var circle1 = new LSprite();
+		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle2 = new LSprite();
+		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
+		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		var circle3 = new LSprite();
+		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
+		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+		 * 		container.addChild(circle1);
+		 * 		container.addChild(circle2);
+		 * 		container.addChild(circle3);
+		 * 	}
+		 * 	function clicked (event) {
+		 * 		var circle = event.target;
+		 * 		var topPosition = container.numChildren - 1;
+		 * 		container.setChildIndex(circle, topPosition);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		setChildIndex : function (child, index) {
 			var s = this, c = s.childList, i, l = c.length;
 			if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
-				return;
+				return -1;
 			}
 			for (i = 0; i < l; i++) {
 				if(c[i].objectIndex == child.objectIndex){
@@ -3727,6 +4118,7 @@ var LSprite = (function () {
 			}
 			s.childList.splice(i,1);
 			s.childList.splice(index, 0, child);
+			return index;
 		},
 		resize : function () {
 			var s  = this;
@@ -3743,7 +4135,53 @@ var LSprite = (function () {
 			s.childList.length = 0;
 			s.width = 0;
 			s.height = 0;
+			s.numChildren = 0;
 		},
+		/** @language chinese
+		 * 返回一个LSprite的克隆对象。
+		 * @method clone
+		 * @return {LSprite} 一个新的 LSprite 对象，它与原始对象相同.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = circle1.clone();
+		 * 	circle2.y = 120;
+		 * 	addChild(circle1);
+		 * 	addChild(circle2);
+		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns a new LSprite object that is a clone of the original instance with an exact copy of the object.
+		 * @method clone
+		 * @return {LSprite} A new LSprite object that is identical to the original.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = circle1.clone();
+		 * 	circle2.y = 120;
+		 * 	addChild(circle1);
+		 * 	addChild(circle2);
+		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 新しい LSprite オブジェクトとして、元のインスタンスのクローンを返します。オブジェクトはまったく同じコピーになります。
+		 * @method clone
+		 * @return {LSprite} 元のオブジェクトと同一の新しい LSprite オブジェクトです。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = circle1.clone();
+		 * 	circle2.y = 120;
+		 * 	addChild(circle1);
+		 * 	addChild(circle2);
+		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		clone : function () {
 			var s = this, a = new LSprite(), c, o, i, l;
 			a.copyProperty(s);
@@ -3777,7 +4215,10 @@ var LSprite = (function () {
 				if (o.type == type) {
 					e.selfX = (ox - (s.x * cd.scaleX + cd.x)) / (cd.scaleX * s.scaleX);
 					e.selfY = (oy - (s.y * cd.scaleY + cd.y)) / (cd.scaleY * s.scaleY);
-					e.target = e.clickTarget = s;
+					e.currentTarget = e.clickTarget = s;
+					if (!e.target) {
+						e.target = s;
+					}
 					o.listener(e, s);
 				}
 			}
@@ -3807,6 +4248,7 @@ var LSprite = (function () {
 						if (s.childList[k].mouseEvent) {
 							i = s.childList[k].mouseEvent(e, type, mc);
 							if (i) {
+								e.target = s.childList[k];
 								break;
 							}
 						}
@@ -3826,6 +4268,162 @@ var LSprite = (function () {
 			}
 			return false;
 		},
+		/** @language chinese
+		 * 计算显示对象，以确定它是否与 x 和 y 参数指定的点重叠或相交。x 和 y 参数指定舞台的坐标空间中的点，而不是包含显示对象的显示对象容器中的点（除非显示对象容器是舞台）。
+		 * @method hitTestPoint
+		 * @param {float} x 要测试的此对象的 x 坐标。
+		 * @param {float} y 要测试的此对象的 y 坐标。
+		 * @return {Boolean} 如果显示对象与指定的点重叠或相交，则为 true；否则为 false。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Evaluates the display object to see if it overlaps or intersects with the point specified by the x and y parameters. The x and y parameters specify a point in the coordinate space of the Stage, not the display object container that contains the display object (unless that display object container is the Stage).
+		 * @method hitTestPoint
+		 * @param {float} x The x coordinate to test against this object.
+		 * @param {float} y The y coordinate to test against this object.
+		 * @return {Boolean} true if the display object overlaps or intersects with the specified point; false otherwise.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトを評価して、x および y パラメーターで指定されたポイントと重複または交差するかどうかを調べます。x および y パラメーターは、表示オブジェクトが含まれる表示オブジェクトコンテナではなく Stage の座標空間内のポイントを指定します（その表示オブジェクトコンテナが Stage の場合を除く）。
+		 * @method hitTestPoint
+		 * @param {float} x このオブジェクトの検査の基準となる x 座標です。
+		 * @param {float} y このオブジェクトの検査の基準となる y 座標です。
+		 * @return {Boolean} 指定されたポイントと表示オブジェクトが重複または交差する場合は true、そうでなければ false です。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		hitTestPoint : function (x, y) {
 			var s = this, shapes = s.shapes;
 			if (!shapes || shapes.length == 0) {
@@ -3835,6 +4433,159 @@ var LSprite = (function () {
 			}
 			return s.ismouseonShapes(shapes, x, y);
 		},
+		/** @language chinese
+		 * 计算显示对象的边框，以确定它是否与 obj 显示对象的边框重叠或相交。
+		 * @method hitTestObject
+		 * @param {LDisplayObject} obj 要测试的显示对象。
+		 * @return {Boolean} 如果显示对象的边框相交，则为 true；否则为 false。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Evaluates the bounding box of the display object to see if it overlaps or intersects with the bounding box of the obj display object.
+		 * @method hitTestObject
+		 * @param {LDisplayObject} obj The display object to test against.
+		 * @return {Boolean} true if the bounding boxes of the display objects intersect; false if not.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトの境界ボックスを評価して、obj 表示オブジェクトの境界ボックスと重複または交差するかどうかを調べます。
+		 * @method hitTestObject
+		 * @param {LDisplayObject} obj 検査の対象となる表示オブジェクトです。
+		 * @return {Boolean} 表示オブジェクトの境界ボックスが交差する場合は true を返します。交差しない場合は false を返します。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	var backLayer;
+		 * 	var title;
+		 * 	function main(){
+		 * 		backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+		 * 		title = new LTextField();
+		 * 		title.size = 18;
+		 * 		title.x = 10;
+		 * 		title.y = 5;
+		 * 		title.text = "hitTestPoint:false";
+		 * 		addChild(title);
+		 * 		var layer = new LSprite();
+		 * 		layer.x = 20;
+		 * 		layer.y = 50;
+		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
+		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 200;
+		 * 		layer.y = 100;
+		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
+		 * 		layer.addShape(LShape.ARC,[0,0,30]);
+		 * 		backLayer.addChild(layer);
+		 * 		layer = new LSprite();
+		 * 		layer.x = 120;
+		 * 		layer.y = 150;
+		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
+		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
+		 * 		backLayer.addChild(layer);
+		 * 	}
+		 * 	function onframe(e){
+		 * 		for(var i=0;i<backLayer.childList.length;i++){
+		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
+		 * 				title.text = "hitTestPoint:true";
+		 * 				return;
+		 * 			}
+		 * 		}
+		 * 		title.text = "hitTestPoint:false";
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		hitTestObject : function (obj) {
 			var s = this, shapes = s.shapes, shapes1 = obj.shapes, m, m1, j, child, j1, child1, vo1, v1;
 			if (!shapes || shapes.length == 0) {
@@ -3852,7 +4603,7 @@ var LSprite = (function () {
 			for (j = shapes.length - 1; j >= 0; j--) {
 				child = shapes[j];
 				v1 = s._changeShape(child.type, child.arg, m);
-				for (j1 = obj.shapes.length - 1; j1 >= 0; j1--) {
+				for (j1 = shapes1.length - 1; j1 >= 0; j1--) {
 					child1 = shapes1[j1];
 					vo1 = obj._changeShape(child1.type, child1.arg, m1);
 					if (child.type == LShape.VERTICES || child.type == LShape.RECT) {
@@ -3943,6 +4694,7 @@ var LSprite = (function () {
 						i = l[k].ismouseon(e, sc);
 					}
 					if (i) {
+						e.target = s.childList[k];
 						break;
 					}
 				}
@@ -4533,7 +5285,7 @@ var LBitmap = (function () {
 		/** @language english
 		 * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
 		 * @method clone
-		 * @return {LBitmap} A new Bitmap object that is identical to the original.
+		 * @return {LBitmap} A new LSprite object that is identical to the original.
 		 * @since 1.8.2
 		 * @public
 		 * @example

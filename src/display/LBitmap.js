@@ -212,7 +212,7 @@ var LBitmap = (function () {
 		/** @language english
 		 * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
 		 * @method clone
-		 * @return {LBitmap} A new Bitmap object that is identical to the original.
+		 * @return {LBitmap} A new LSprite object that is identical to the original.
 		 * @since 1.8.2
 		 * @public
 		 * @example

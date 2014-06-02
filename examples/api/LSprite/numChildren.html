@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>numChildren</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container1 = new LSprite();
+				var container2 = new LSprite();
+				var circle1 = new LSprite();
+				circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+				var circle2 = new LSprite();
+				circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+				container2.addChild(container1);
+				container1.addChild(circle1);
+				container1.addChild(circle2);
+				trace(container1.numChildren); // 2
+				trace(container2.numChildren); // 1
+				trace(circle1.numChildren); // 0
+				trace(circle2.numChildren); // 0
+			}
+			</script>
+	</body>
+</html>
