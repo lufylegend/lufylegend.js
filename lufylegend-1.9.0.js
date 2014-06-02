@@ -74,6 +74,11 @@ LMultitouch.inputMode = "none";
 LMultitouch.touchs = [];
 
 /*
+ * LTextEvent.js
+ **/
+var LTextEvent = function (){throw "LTextEvent cannot be instantiated";};
+LTextEvent.TEXT_INPUT = "textInput";
+/*
  * LMouseEventContainer.js
  **/
 function $LMouseEventContainer(){
@@ -306,17 +311,16 @@ $LMouseEventContainer.prototype = {
 		LGlobal.mouseEventContainer[t] = v;
 	}
 	,_sort:function(a,b){
-		var s = LMouseEventContainer,o1,o2,p;
+		var s = LMouseEventContainer,o1,o2;
 		var al=s._getSort(a.sp),bl=s._getSort(b.sp);
 		for(var i=0,l1=al.length,l2=bl.length;i<l1 && i<l2;i++){
 			o1 = al[i],o2 = bl[i];
 			if(o1.objectIndex == o2.objectIndex){
-				p = o1;
 				continue;
 			}
-			return o1.parent.getChildIndex(o1) < o2.parent.getChildIndex(o2);
+			return o2.parent.getChildIndex(o2) - o1.parent.getChildIndex(o1);
 		}
-		return al.length < bl.length;
+		return bl.length - al.length;
 	}
 	,_getSort:function(layer){
 		var p = layer.parent,list=[layer];
@@ -4441,47 +4445,24 @@ var LSprite = (function () {
 		 * @since 1.9.0
 		 * @public
 		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
+		 * 	LGlobal.setDebug(true);
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.x = 120;
+		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
+		 * 	var circle3 = new LSprite();
+		 * 	circle3.x = 60;
+		 * 	circle3.y = 60;
+		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
+		 * 	container.addChild(circle1);
+		 * 	container.addChild(circle2);
+		 * 	container.addChild(circle3);
+
+
+
 		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -4492,47 +4473,24 @@ var LSprite = (function () {
 		 * @since 1.9.0
 		 * @public
 		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
+		 * 	LGlobal.setDebug(true);
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.x = 120;
+		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
+		 * 	var circle3 = new LSprite();
+		 * 	circle3.x = 60;
+		 * 	circle3.y = 60;
+		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
+		 * 	container.addChild(circle1);
+		 * 	container.addChild(circle2);
+		 * 	container.addChild(circle3);
+
+
+
 		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -4543,47 +4501,24 @@ var LSprite = (function () {
 		 * @since 1.9.0
 		 * @public
 		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
+		 * 	LGlobal.setDebug(true);
+		 * 	var container = new LSprite();
+		 * 	addChild(container);
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.x = 120;
+		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
+		 * 	var circle3 = new LSprite();
+		 * 	circle3.x = 60;
+		 * 	circle3.y = 60;
+		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
+		 * 	container.addChild(circle1);
+		 * 	container.addChild(circle2);
+		 * 	container.addChild(circle3);
+
+
+
 		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		hitTestObject : function (obj) {
@@ -4724,38 +4659,70 @@ var LSprite = (function () {
 /*
 * LButton.js
 **/
-function LButton(upState,overState,downState){
+function LButton(upState,overState,downState,disableState){
 	var s = this;
 	base(s,LSprite,[]);
 	s.type = "LButton";
 	s.buttonMode = true;
 	s.addChild(upState);
-	if(overState == null){
+	if(!overState){
 		overState = upState;
 	}else{
 		s.addChild(overState);
 	}
-	if(downState == null){
+	if(!downState){
 		downState = overState;
 	}else{
 		s.addChild(downState);
 	}
+	if(!disableState){
+		disableState = upState;
+	}else{
+		s.addChild(disableState);
+	}
 	s.upState = s.bitmap_up = upState;
 	s.overState = s.bitmap_over = overState;
 	s.downState = downState;
+	s.disableState = disableState;
 	
 	s.overState.visible = false;
 	s.downState.visible = false;
 	s.upState.visible = true;
 	s.staticMode = false;
-	
+	s.setState(LButton.STATE_ENABLE);
 	s.addEventListener(LMouseEvent.MOUSE_OVER,s.ll_modeOver);
 	s.addEventListener(LMouseEvent.MOUSE_OUT,s.ll_modeOut);
 	s.addEventListener(LMouseEvent.MOUSE_DOWN,s.ll_modeDown);
 }
+LButton.STATE_DISABLE = "disable";
+LButton.STATE_ENABLE = "enable";
+LButton.prototype.setState = function (state){
+	var s = this;
+	if(state == LButton.STATE_DISABLE){
+		s.upState.visible = false;
+		s.overState.visible = false;
+		s.downState.visible = false;
+		s.disableState.visible = true;
+	}else if(state == LButton.STATE_ENABLE){
+		s.overState.visible = false;
+		s.downState.visible = false;
+		s.disableState.visible = false;
+		s.upState.visible = true;
+	}else{
+		return;
+	}
+	s.state = state;
+};
 LButton.prototype.ll_modeDown = function (e){
 	var s = e.clickTarget,w,h,tw,th,x,y,tx,ty,onComplete;
 	if(!s.buttonMode || s.tween){
+		return;
+	}
+	if(s.state == LButton.STATE_DISABLE){
+		s.upState.visible = false;
+		s.overState.visible = false;
+		s.downState.visible = false;
+		s.disableState.visible = true;
 		return;
 	}
 	s.upState.visible = false;
@@ -4794,6 +4761,13 @@ LButton.prototype.ll_modeOver = function (e){
 		s._tweenOver = s.ll_modeOver;
 		return;
 	}
+	if(s.state == LButton.STATE_DISABLE){
+		s.upState.visible = false;
+		s.overState.visible = false;
+		s.downState.visible = false;
+		s.disableState.visible = true;
+		return;
+	}
 	s.upState.visible = false;
 	s.downState.visible = false;
 	s.overState.visible = true;
@@ -4807,14 +4781,20 @@ LButton.prototype.ll_modeOut = function (e){
 		s._tweenOver = s.ll_modeOut;
 		return;
 	}
+	if(s.state == LButton.STATE_DISABLE){
+		s.upState.visible = false;
+		s.overState.visible = false;
+		s.downState.visible = false;
+		s.disableState.visible = true;
+		return;
+	}
 	s.overState.visible = false;
 	s.downState.visible = false;
 	s.upState.visible = true;
 };
 LButton.prototype.clone = function (){
-	var s = this,upState = s.upState.clone(),overState = s.overState.clone(),downState = s.downState.clone(),
-	a = new LButton(upState,overState,downState);
-	return a;
+	var s = this;
+	return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
 };
 function LBlendMode(){throw "LBlendMode cannot be instantiated";}
 LBlendMode.SOURCE_OVER = "source-over";
@@ -4840,7 +4820,7 @@ LTextFieldType.DYNAMIC = null;
 **/
 function LTextField(){
 	var s = this;
-	base(s,LDisplayObject,[]);
+	base(s,LInteractiveObject,[]);
 	s.type = "LTextField";
 	s.texttype = null;
 	s.text = "";
@@ -4982,6 +4962,14 @@ p = {
 		if(s.inputBackLayer == null)return;
 		var on = s.ismouseon(event,cood);
 		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
+		s.focus();
+	},
+	focus:function(){
+		var s = this;
+		if(!s.parent){
+			return;
+		}
+		var sc = s.getAbsoluteScale();
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
 		LGlobal.inputTextField = s;
@@ -4998,8 +4986,8 @@ p = {
 		var sx = parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width,sy = parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height;
 		LGlobal.inputTextBox.style.display = "";
 		LGlobal.inputTextBox.value = s.text;
-		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*cood.scaleY*s.scaleY*sy+"px";
-		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*cood.scaleX*s.scaleX*sx+"px";
+		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
+		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
 		s.text = "";
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},

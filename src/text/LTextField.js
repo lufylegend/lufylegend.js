@@ -3,7 +3,7 @@
 **/
 function LTextField(){
 	var s = this;
-	base(s,LDisplayObject,[]);
+	base(s,LInteractiveObject,[]);
 	s.type = "LTextField";
 	s.texttype = null;
 	s.text = "";
@@ -145,6 +145,14 @@ p = {
 		if(s.inputBackLayer == null)return;
 		var on = s.ismouseon(event,cood);
 		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
+		s.focus();
+	},
+	focus:function(){
+		var s = this;
+		if(!s.parent){
+			return;
+		}
+		var sc = s.getAbsoluteScale();
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
 		LGlobal.inputTextField = s;
@@ -161,8 +169,8 @@ p = {
 		var sx = parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width,sy = parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height;
 		LGlobal.inputTextBox.style.display = "";
 		LGlobal.inputTextBox.value = s.text;
-		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*cood.scaleY*s.scaleY*sy+"px";
-		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*cood.scaleX*s.scaleX*sx+"px";
+		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
+		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
 		s.text = "";
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},

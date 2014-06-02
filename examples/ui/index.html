@@ -72,8 +72,14 @@ function addButton(){
 	button01.x = 20;
 	button01.y = 20;
 	button01.backgroundColor = "#008800";
+	button01.backgroundColor = "#000000";
 	layer.addChild(button01);
 	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("测试按钮 click");});
+	var button02 = button01.clone();
+	button02.setState(LButton.STATE_DISABLE);
+	button02.x = 200;
+	button02.y = 20;
+	layer.addChild(button02);
 }
 function addRange(){
 	var r = new LRange(200);
@@ -122,6 +128,7 @@ function addWindow(){
 	name.y = 70;
 	name.setType(LTextFieldType.INPUT);
 	myWindow.layer.addChild(name);
+	name.focus();
 	var passLabel = new LTextField();
 	passLabel.text = "密码：";
 	passLabel.x = 80;

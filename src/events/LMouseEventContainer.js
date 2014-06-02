@@ -231,17 +231,16 @@ $LMouseEventContainer.prototype = {
 		LGlobal.mouseEventContainer[t] = v;
 	}
 	,_sort:function(a,b){
-		var s = LMouseEventContainer,o1,o2,p;
+		var s = LMouseEventContainer,o1,o2;
 		var al=s._getSort(a.sp),bl=s._getSort(b.sp);
 		for(var i=0,l1=al.length,l2=bl.length;i<l1 && i<l2;i++){
 			o1 = al[i],o2 = bl[i];
 			if(o1.objectIndex == o2.objectIndex){
-				p = o1;
 				continue;
 			}
-			return o1.parent.getChildIndex(o1) < o2.parent.getChildIndex(o2);
+			return o2.parent.getChildIndex(o2) - o1.parent.getChildIndex(o1);
 		}
-		return al.length < bl.length;
+		return bl.length - al.length;
 	}
 	,_getSort:function(layer){
 		var p = layer.parent,list=[layer];
