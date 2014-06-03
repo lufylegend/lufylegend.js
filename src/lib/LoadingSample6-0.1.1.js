@@ -47,8 +47,10 @@ LoadingSample6.prototype.setProgress = function(value){
 	
 	var sx=self.holeR*2+self.holesx,r=self.holeR;
 	self.progress = value/100;
+
+	var tweenList = new Array();
 	
-	if(Math.floor(self.progress/0.2) > self.step){
+	while(Math.floor(self.progress/0.2) > self.step){
 		var cw = r*2;
 		var ch = cw;
 		
@@ -62,33 +64,38 @@ LoadingSample6.prototype.setProgress = function(value){
 		po.scaleY = 0;
 		po.graphics.drawArc(0,"",[0,0,r,0,2*Math.PI],true,grd);
 		self.progressLayer.addChild(po);
+
+		tweenList.push(po);
 		
-		var completeFunc = function(){
-			var circleObj = new LSprite();
-			circleObj.alpha = 0.9;
-			circleObj.x = po.x;
-			circleObj.graphics.drawArc(1,self.filterColor,[0,0,r,0,2*Math.PI],false);
-			self.progressLayer.addChild(circleObj);
-			
-			var shadow = new LDropShadowFilter(0,5,self.filterColor,10);
-			circleObj.filters = [shadow];
-			
-			LTweenLite.to(circleObj,0.5,{
-				scaleX: 1.7,
-				scaleY: 1.7,
-				alpha: 0,
-				onComplete:function(s){
-					s.parent.removeChild(s);
-				}
-			});
-		};
+		self.step ++;
+	}
+
+	var completeFunc = function(o){
+		var circleObj = new LSprite();
+		circleObj.alpha = 0.9;
+		circleObj.x = o.x;
+		circleObj.graphics.drawArc(1,self.filterColor,[0,0,r,0,2*Math.PI],false);
+		self.progressLayer.addChild(circleObj);
 		
-		LTweenLite.to(po,1,{
+		var shadow = new LDropShadowFilter(0,5,self.filterColor,10);
+		circleObj.filters = [shadow];
+		
+		LTweenLite.to(circleObj,0.5,{
+			scaleX: 1.7,
+			scaleY: 1.7,
+			alpha: 0,
+			onComplete:function(s){
+				s.parent.removeChild(s);
+			}
+		});
+	};
+
+	for(var i=0; i<tweenList.length; i++){
+		var o = tweenList[i];
+		LTweenLite.to(o,1,{
 			scaleX: 1,
 			scaleY: 1,
 			onComplete:completeFunc
 		});
-		
-		self.step ++;
 	}
 };

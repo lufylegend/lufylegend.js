@@ -354,7 +354,7 @@ var LSprite = (function () {
 			var s = this;
 			s.graphics.ll_show();
 			LGlobal.show(s.childList);
-			s.ll_debugShape();
+			s._ll_debugShape();
 		},
 		/** @language chinese
 		 * 允许用户拖动指定的 Sprite。Sprite 将一直保持可拖动，直到通过调用 Sprite.stopDrag() 方法来明确停止。
@@ -592,7 +592,7 @@ var LSprite = (function () {
 		 *  trace("width : " + layer.getWidth());
 		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getWidth : function () {
+		getWidth : function (maskSize) {
 			var s = this, i, l, o, a, b, mx, mw,
 			left = s.graphics.startX(), right = left + s.graphics.getWidth();
 			for (i = 0, l = s.childList.length; i < l; i++) {
@@ -604,7 +604,7 @@ var LSprite = (function () {
 				if (typeof o._startX == "function") {
 					a=o._startX();
 				}
-				b = a + o.getWidth();
+				b = a + o.getWidth(maskSize);
 				if (a < left) {
 					left = a;
 				}
@@ -612,7 +612,7 @@ var LSprite = (function () {
 					right = b;
 				}
 			}
-			if (s.mask) {
+			if (maskSize && s.mask) {
 				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
 				mw = s.mask.getWidth();
 				if (left < mx) {
@@ -671,7 +671,7 @@ var LSprite = (function () {
 		 *  trace("height : " + layer.getHeight());
 		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getHeight : function () {
+		getHeight : function (maskSize) {
 			var s = this, i, l, o, a, b, my, mh,
 			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
 			for (i = 0, l = s.childList.length; i < l; i++) {
@@ -683,7 +683,7 @@ var LSprite = (function () {
 				if (typeof o._startY == "function") {
 					a=o._startY();
 				}
-				b = a + o.getHeight();
+				b = a + o.getHeight(maskSize);
 				if (a < top) {
 					top = a;
 				}
@@ -691,7 +691,7 @@ var LSprite = (function () {
 					bottom = b;
 				}
 			}
-			if (s.mask) {
+			if (maskSize && s.mask) {
 				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
 				mh = s.mask.getHeight();
 				if (top < my) {
@@ -723,13 +723,8 @@ var LSprite = (function () {
 			var s = this;
 			return s._startY() * s.scaleY;
 		},
-		loopframe : function () {
-			var s = this, k, l;
-			for (k = 0, l = s.frameList.length; k < l; k++) {
-				s.target = s;
-				s.event_type = LEvent.ENTER_FRAME;
-				s.frameList[k](s);
-			}
+		_ll_loopframe : function () {
+			this.dispatchEvent(LEvent.ENTER_FRAME);
 		},
 		/** @language chinese
 		 * <p>将一个 DisplayObject 子实例添加到该 LSprite 实例中。子项将被添加到该 LSprite 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）</p>
@@ -1729,6 +1724,156 @@ var LSprite = (function () {
 			}
 			return false;
 		},
+		/** @language chinese
+		 * <p>添加碰撞形状，指定碰撞的范围。如果没有添加碰撞形状，则会默认使用最大矩形范围来碰撞检测。</p>
+		 * <p>添加矩形 : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>添加圆形 : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>添加多边形 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type The shape's type.
+		 * @param {Array} arg The shape's parameters.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+		 * 		trace(layer01.hitTestObject(rect1));//true
+		 * 		trace(layer02.hitTestObject(rect2));//false
+		 * 		trace(layer02.hitTestObject(rect3));//true
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Add a collider’s shape</p>
+		 * <p>a rectangle : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>a circle : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>a polygon : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type The shape's type.
+		 * @param {Array} arg The shape's parameters.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+		 * 		trace(layer01.hitTestObject(rect1));//true
+		 * 		trace(layer02.hitTestObject(rect2));//false
+		 * 		trace(layer02.hitTestObject(rect3));//true
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>衝突の形状を追加します。追加していなければ、最大の矩形を使って、衝突を判定します。</p>
+		 * <p>矩形を追加 : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>円を追加 : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>多边形を追加 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type 衝突の形状。
+		 * @param {Array} arg 具体的なパラメータ。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+		 * 		trace(layer01.hitTestObject(rect1));//true
+		 * 		trace(layer02.hitTestObject(rect2));//false
+		 * 		trace(layer02.hitTestObject(rect3));//true
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		addShape : function (type, arg) {
 			var s = this;
 			if (type == LShape.VERTICES && arg.length < 3) {
@@ -1736,11 +1881,77 @@ var LSprite = (function () {
 			}
 			s.shapes.push({"type" : type, "arg" : arg});
 		},
+		/** @language chinese
+		 * <p>清空所有碰撞形状。</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+		 * 	trace(layer01.hitTestObject(rect1));//false
+		 * 	layer01.clearShape()
+		 * 	trace(layer01.hitTestObject(rect1));//true
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Clear all the collider’s shape</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+		 * 	trace(layer01.hitTestObject(rect1));//false
+		 * 	layer01.clearShape()
+		 * 	trace(layer01.hitTestObject(rect1));//true
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>衝突の形状をクリアする</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+		 * 	trace(layer01.hitTestObject(rect1));//false
+		 * 	layer01.clearShape()
+		 * 	trace(layer01.hitTestObject(rect1));//true
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		clearShape : function () {
 			var s = this;
 			s.shapes.length = 0;
 		},
-		ll_debugShape : function () {
+		_ll_debugShape : function () {
 			var s = this, i, l, child, c, arg, j, ll;
 			if (!LGlobal.traceDebug || s.shapes.length == 0) {
 				return;
@@ -1799,6 +2010,24 @@ var LSprite = (function () {
 			}
 			return i;
 		},
+		/** @language chinese
+		 * <p>清空所有图形以及事件。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language english
+		 * <p>Frees memory that is used.Clear all the shapes and the events</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>全部のベクターシェイプとイベントをクリアする。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
 		die : function () {
 			var s = this, i, c, l;
 			s.graphics.clear();

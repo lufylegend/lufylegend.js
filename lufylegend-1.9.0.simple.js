@@ -1623,7 +1623,7 @@ p = {
 		}
 		s._ll_show(c);
 		c.restore();
-		s.loopframe();
+		if(typeof s._ll_loopframe == "function")s._ll_loopframe();
 	},
 	_canShow:function(){return this.visible;},
 	_coordinate:function(c){
@@ -1633,7 +1633,6 @@ p = {
 	_rotateReady:function(){},
 	_showReady:function(c){},
 	_ll_show:function(c){},
-	loopframe:function(){},
 	setShadow:function(){
 		var s=this,f=s.filters;
 		if(!f)return;
@@ -1803,15 +1802,12 @@ function LInteractiveObject(){
 	s.type = "LInteractiveObject";
 	s.mouseEnabled = true;
 	s.mouseChildren = true;
-	s.frameList = new Array();
 	s.mouseList = new Array();
 }
 p = {
 	addEventListener:function(type,listener){
 		var s = this;
-		if(type == LEvent.ENTER_FRAME){
-			s.frameList.push(listener);
-		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
+		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.addMouseEvent(s,type,listener);
 				return;
@@ -1823,15 +1819,7 @@ p = {
 	},
 	removeEventListener:function(type,listener){
 		var s = this,i,length;
-		if(type == LEvent.ENTER_FRAME){
-			length = s.frameList.length;
-			for(i=0;i<length;i++){
-				if(type == LEvent.ENTER_FRAME && s.frameList[i] == listener){
-					s.frameList.splice(i,1);
-					return;
-				}
-			}
-		}else if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
+		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
 				LMouseEventContainer.removeMouseEvent(s,type,listener);
 				return;
@@ -1857,7 +1845,6 @@ p = {
 	},
 	removeAllEventListener:function (){
 		var s = this;
-		s.frameList.length = 0;
 		s.mouseList.length = 0;
 		s._eventList.length = 0;
 		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]){
@@ -1874,7 +1861,6 @@ p = {
 	},
 	hasEventListener:function(type){
 		var s = this,i,length;
-		if(type == LEvent.ENTER_FRAME && s.frameList.length > 0)return true;
 		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
 			length = s.mouseList.length;
 			for(i=0;i<length;i++){
@@ -2773,22 +2759,44 @@ p = {
 		var s = this;
 		s.graphics.ll_show();
 	},
-	getWidth:function(){
-		var s=this,
+	getWidth:function(maskSize){
+		var s=this, mx, mw,
 		left = s.graphics.startX(),right = left + s.graphics.getWidth();
-		s.left = s.x + left;
+		if (maskSize && s.mask) {
+			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+			mw = s.mask.getWidth();
+			if (left < mx) {
+				left = mx;
+			}
+			if (right > mx + mw) {
+				right = mx + mw;
+			}
+		}
+		s.ll_left = s.x + left;
+		s.ll_right = s.x + right;
 		return (right - left)*s.scaleX;
 	},
-	getHeight:function(){
-		var s=this,
+	getHeight:function(maskSize){
+		var s=this, my, mh,
 		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
-		s.top = s.y + top;
+		if (maskSize && s.mask) {
+			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+			mh = s.mask.getHeight();
+			if (top < my) {
+				top = my;
+			}
+			if (bottom > my + mh) {
+				bottom = my + mh;
+			}
+		}
+		s.ll_top = s.y + top;
+		s.ll_bottom = s.y + bottom;
 		return (bottom - top)*s.scaleY;
 	},
 	_startX:function(){
 		var s = this;
 		s.getWidth();
-		return s.left;
+		return s.ll_left;
 	},
 	startX:function(){
 		var s = this;
@@ -2797,7 +2805,7 @@ p = {
 	_startY:function(){
 		var s = this;
 		s.getHeight();
-		return s.top;
+		return s.ll_top;
 	},
 	startY:function(){
 		var s = this;
@@ -2809,40 +2817,6 @@ p = {
 		a.graphics = s.graphics.clone();
 		a.graphics.parent = a;
 		return a;
-	},
-	_mevent:function(type){
-		var s = this;
-		for(k=0;k<s.mouseList.length;k++){
-			var o = s.mouseList[k];
-			if(o.type == type){
-				return true;
-			}
-		}
-		return false;
-	},
-	mouseEvent:function (e,type,cd){
-		if(!e)return false;
-		var s = this;
-		if(!s.visible)return false;
-		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
-		var i,k,ox = e.offsetX,oy = e.offsetY;
-		var on = s.ismouseon(e,cd);
-		if(on){
-			if(s._mevent(type)){
-				for(k=0;k<s.mouseList.length;k++){
-					var o = s.mouseList[k];
-					if(o.type == type){
-						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
-						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
-						e.target = e.clickTarget = s;
-						o.listener(e,s);
-						return true;
-					}
-				}
-			}
-			return true;
-		}
-		return false;
 	},
 	ismouseon:function(e,cd){
 		var s = this,i=false,sc;
@@ -3460,8 +3434,8 @@ var LSprite = (function () {
 		 *  trace("width : " + layer.getWidth());
 		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getWidth : function () {
-			var s = this, i, l, o, a, b,
+		getWidth : function (maskSize) {
+			var s = this, i, l, o, a, b, mx, mw,
 			left = s.graphics.startX(), right = left + s.graphics.getWidth();
 			for (i = 0, l = s.childList.length; i < l; i++) {
 				o = s.childList[i];
@@ -3472,12 +3446,22 @@ var LSprite = (function () {
 				if (typeof o._startX == "function") {
 					a=o._startX();
 				}
-				b = a + o.getWidth();
+				b = a + o.getWidth(maskSize);
 				if (a < left) {
 					left = a;
 				}
 				if (b > right) {
 					right = b;
+				}
+			}
+			if (maskSize && s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				mw = s.mask.getWidth();
+				if (left < mx) {
+					left = mx;
+				}
+				if (right > mx + mw) {
+					right = mx + mw;
 				}
 			}
 			s.ll_left = s.x + left;
@@ -3529,8 +3513,8 @@ var LSprite = (function () {
 		 *  trace("height : " + layer.getHeight());
 		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getHeight : function () {
-			var s = this, i, l, o, a, b,
+		getHeight : function (maskSize) {
+			var s = this, i, l, o, a, b, my, mh,
 			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
 			for (i = 0, l = s.childList.length; i < l; i++) {
 				o = s.childList[i];
@@ -3541,12 +3525,22 @@ var LSprite = (function () {
 				if (typeof o._startY == "function") {
 					a=o._startY();
 				}
-				b = a + o.getHeight();
+				b = a + o.getHeight(maskSize);
 				if (a < top) {
 					top = a;
 				}
 				if (b > bottom) {
 					bottom = b;
+				}
+			}
+			if (maskSize && s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				mh = s.mask.getHeight();
+				if (top < my) {
+					top = my;
+				}
+				if (bottom > my + mh) {
+					bottom = my + mh;
 				}
 			}
 			s.ll_top = s.y + top;
@@ -3571,13 +3565,8 @@ var LSprite = (function () {
 			var s = this;
 			return s._startY() * s.scaleY;
 		},
-		loopframe : function () {
-			var s = this, k, l;
-			for (k = 0, l = s.frameList.length; k < l; k++) {
-				s.target = s;
-				s.event_type = LEvent.ENTER_FRAME;
-				s.frameList[k](s);
-			}
+		_ll_loopframe : function () {
+			this.dispatchEvent(LEvent.ENTER_FRAME);
 		},
 		/** @language chinese
 		 * <p>将一个 DisplayObject 子实例添加到该 LSprite 实例中。子项将被添加到该 LSprite 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）</p>
@@ -5030,9 +5019,22 @@ p = {
 		LGlobal.canvas.font = s.size+"pt "+s.font;
 		return LGlobal.canvas.measureText(s.text).width;
 	},
-	getWidth:function(){
-		var s = this;
-		return s._getWidth()*s.scaleX;
+	getWidth:function(maskSize){
+		var s = this, w, mx, mw;
+		w = s._getWidth()*s.scaleX;
+		if (maskSize && s.mask) {
+			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+			if (mx > w) {
+				return 0;
+			}
+			mw = s.mask.getWidth();
+			if (mx + mw > w) {
+				return w - mx;
+			}else{
+				return mw;
+			}
+		}
+		return w;
 	},
 	_getHeight:function(){
 		var s = this,c = LGlobal.canvas;
@@ -5057,9 +5059,22 @@ p = {
 		c.font = s.weight + " " + s.size+"pt "+s.font; 
 		return c.measureText("O").width*1.2;
 	},
-	getHeight:function(){
-		var s = this;
-		return s._getHeight()*s.scaleY;
+	getHeight:function(maskSize){
+		var s = this, h, my, mh;
+		h = s._getHeight()*s.scaleY;
+		if (maskSize && s.mask) {
+			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+			if (my > h) {
+				return 0;
+			}
+			mh = s.mask.getHeight();
+			if (my + mh > h) {
+				return h - my;
+			}else{
+				return mh;
+			}
+		}
+		return h;
 	},
 	wind:function(listener){
 		var s = this;
@@ -5398,9 +5413,22 @@ var LBitmap = (function () {
 		 *  trace("width : " + bitmap.getWidth());
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getWidth : function () {
-			var s = this;
-			return s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+		getWidth : function (maskSize) {
+			var s = this, w, mx, mw;
+			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+			if (maskSize && s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				if (mx > w) {
+					return 0;
+				}
+				mw = s.mask.getWidth();
+				if (mx + mw > w) {
+					return w - mx;
+				}else{
+					return mw;
+				}
+			}
+			return w;
 		},
 		/** @language chinese
 		 * 获取显示对象的高度，以像素为单位。
@@ -5441,9 +5469,22 @@ var LBitmap = (function () {
 		 *  trace("height : " + bitmap.getHeight());
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getHeight : function () {
-			var s = this;
-			return s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+		getHeight : function (maskSize) {
+			var s = this, h, my, mh;
+			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+			if (maskSize && s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				if (my > h) {
+					return 0;
+				}
+				mh = s.mask.getHeight();
+				if (my + mh > h) {
+					return h - my;
+				}else{
+					return mh;
+				}
+			}
+			return h;
 		},
 		startX : function () {
 			return this.x;

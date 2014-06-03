@@ -51,7 +51,7 @@ p = {
 		}
 		s._ll_show(c);
 		c.restore();
-		s.loopframe();
+		if(typeof s._ll_loopframe == "function")s._ll_loopframe();
 	},
 	_canShow:function(){return this.visible;},
 	_coordinate:function(c){
@@ -61,7 +61,6 @@ p = {
 	_rotateReady:function(){},
 	_showReady:function(c){},
 	_ll_show:function(c){},
-	loopframe:function(){},
 	setShadow:function(){
 		var s=this,f=s.filters;
 		if(!f)return;

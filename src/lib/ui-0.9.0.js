@@ -522,7 +522,7 @@ LScrollbar.prototype.resizeWidth = function(value){
   				break;
 			}
 		}
-    		if(!mouseDownHave)s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
+    	if(!mouseDownHave)s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 	}
 };
 LScrollbar.prototype.resizeHeight = function(value){

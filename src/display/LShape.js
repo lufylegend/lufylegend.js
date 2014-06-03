@@ -16,10 +16,10 @@ p = {
 		var s = this;
 		s.graphics.ll_show();
 	},
-	getWidth:function(){
+	getWidth:function(maskSize){
 		var s=this, mx, mw,
 		left = s.graphics.startX(),right = left + s.graphics.getWidth();
-		if (s.mask) {
+		if (maskSize && s.mask) {
 			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
 			mw = s.mask.getWidth();
 			if (left < mx) {
@@ -33,10 +33,10 @@ p = {
 		s.ll_right = s.x + right;
 		return (right - left)*s.scaleX;
 	},
-	getHeight:function(){
+	getHeight:function(maskSize){
 		var s=this, my, mh,
 		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
-		if (s.mask) {
+		if (maskSize && s.mask) {
 			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
 			mh = s.mask.getHeight();
 			if (top < my) {

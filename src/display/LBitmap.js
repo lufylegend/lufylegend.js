@@ -304,10 +304,10 @@ var LBitmap = (function () {
 		 *  trace("width : " + bitmap.getWidth());
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getWidth : function () {
+		getWidth : function (maskSize) {
 			var s = this, w, mx, mw;
 			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
-			if (s.mask) {
+			if (maskSize && s.mask) {
 				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
 				if (mx > w) {
 					return 0;
@@ -360,10 +360,10 @@ var LBitmap = (function () {
 		 *  trace("height : " + bitmap.getHeight());
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getHeight : function () {
+		getHeight : function (maskSize) {
 			var s = this, h, my, mh;
 			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
-			if (s.mask) {
+			if (maskSize && s.mask) {
 				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
 				if (my > h) {
 					return 0;
