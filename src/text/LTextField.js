@@ -40,6 +40,9 @@ p = {
 		    	LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX())*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0)) + "px";
 		    }
 		}
+		if(LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex){
+			return;
+		}
 		var lbl = s.text;
 		if(s.displayAsPassword){
 			lbl = '';
@@ -152,11 +155,14 @@ p = {
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 			LEvent.removeEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
 			LGlobal.inputBox.style.display = NONE;
+			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+			LGlobal.inputTextField = null;
 		}
 	},
 	_ll_input:function(e){
 		var event = new LEvent(LTextEvent.TEXT_INPUT);
 		event.keyCode = e.keyCode;
+		LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 		LGlobal.inputTextField.dispatchEvent(event);
 	},
 	focus:function(){
@@ -164,7 +170,10 @@ p = {
 		if(!s.parent){
 			return;
 		}
-		s._ll_getValue();
+		if(LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex){
+			s._ll_getValue();
+		}
+		s.dispatchEvent(LFocusEvent.FOCUS_IN);
 		var sc = s.getAbsoluteScale();
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
@@ -184,7 +193,6 @@ p = {
 		LGlobal.inputTextBox.value = s.text;
 		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
 		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
-		s.text = "";
 		LEvent.addEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},

@@ -31,11 +31,11 @@ p = {
 			if(!s._eventList[i])continue;
 			if(ctype == s._eventList[i].type){
 				if(typeof type == "string"){
-					s.target = s;
+					s.currentTarget = s.target = s;
 					s.eventType = s.event_type = ctype;
 					s._eventList[i].listener(s);
 				}else{
-					type.target = s;
+					type.currentTarget = type.target = s;
 					s._eventList[i].listener(type);
 				}
 			}

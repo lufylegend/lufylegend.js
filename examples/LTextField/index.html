@@ -4,6 +4,7 @@
 	<meta charset="utf-8" />
 	<title>LTextField</title>
 	<script type="text/javascript" src="../../lufylegend-1.9.0.min.js"></script>
+	<script type="text/javascript" src="../../src/text/LTextField.js"></script>
 	</head>
 	<body style="padding:0; margin:0;">
 			<div id="legend"></div>
@@ -41,10 +42,11 @@ function main(){
 	inputPass.setType(LTextFieldType.INPUT);
 	inputPass.displayAsPassword = true;
 	backLayer.addChild(inputPass);
-	inputOne.addEventListener(LTextEvent.TEXT_INPUT,function(e){
-		console.log(e);
+	inputOne.addEventListener(LTextEvent.TEXT_INPUT,function(e){console.log(e);
 		if(e.keyCode == 13){
 			inputPass.focus();
+		}else{
+			inputTwo.text = e.target.text;
 		}
 	});
 	
@@ -62,6 +64,12 @@ function main(){
 	inputTwo.setType(LTextFieldType.INPUT,inputLayer);
 	inputTwo.setMultiline(true);
 	backLayer.addChild(inputTwo);
+	inputPass.addEventListener(LFocusEvent.FOCUS_IN,function(e){
+		console.log(LFocusEvent.FOCUS_IN);
+	});
+	inputPass.addEventListener(LFocusEvent.FOCUS_OUT,function(e){
+		console.log(LFocusEvent.FOCUS_OUT);
+	});
 	
 	
 	textLabel = new LTextField();
