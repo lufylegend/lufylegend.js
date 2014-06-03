@@ -41,6 +41,12 @@ function main(){
 	inputPass.setType(LTextFieldType.INPUT);
 	inputPass.displayAsPassword = true;
 	backLayer.addChild(inputPass);
+	inputOne.addEventListener(LTextEvent.TEXT_INPUT,function(e){
+		console.log(e);
+		if(e.keyCode == 13){
+			inputPass.focus();
+		}
+	});
 	
 	textLabel = new LTextField();
 	textLabel.x = 10;

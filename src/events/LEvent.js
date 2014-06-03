@@ -1,7 +1,9 @@
 /*
  * LEvent.js
  **/
-var LEvent = function (){throw "LEvent cannot be instantiated";};
+function LEvent(type){
+	this.eventType = type;
+};
 LEvent.INIT = "init";
 LEvent.COMPLETE = "complete";
 LEvent.ENTER_FRAME = "enter_frame";

@@ -147,11 +147,24 @@ p = {
 		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
 		s.focus();
 	},
+	_ll_getValue:function (){
+		if(LGlobal.inputBox.style.display != NONE){
+			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+			LEvent.removeEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
+			LGlobal.inputBox.style.display = NONE;
+		}
+	},
+	_ll_input:function(e){
+		var event = new LEvent(LTextEvent.TEXT_INPUT);
+		event.keyCode = e.keyCode;
+		LGlobal.inputTextField.dispatchEvent(event);
+	},
 	focus:function(){
 		var s = this;
 		if(!s.parent){
 			return;
 		}
+		s._ll_getValue();
 		var sc = s.getAbsoluteScale();
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
@@ -172,6 +185,7 @@ p = {
 		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
 		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
 		s.text = "";
+		LEvent.addEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},
 	_getWidth:function(){

@@ -23,7 +23,9 @@ LAjax,LTweenLite,LLoadManage,p,mouseX,mouseY;
 /*
  * LEvent.js
  **/
-var LEvent = function (){throw "LEvent cannot be instantiated";};
+function LEvent(type){
+	this.eventType = type;
+};
 LEvent.INIT = "init";
 LEvent.COMPLETE = "complete";
 LEvent.ENTER_FRAME = "enter_frame";
@@ -531,8 +533,7 @@ LGlobal.setCanvas = function (id,w,h){
 		LGlobal.ll_prev_clickTime = 0;
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
 			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-				LGlobal.inputBox.style.display = NONE;
+				LGlobal.inputTextField._ll_getValue();
 			}
 			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
 			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve,k,i,eveIndex;
@@ -640,8 +641,7 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-				LGlobal.inputBox.style.display = NONE;
+				LGlobal.inputTextField._ll_getValue();
 			}
 			var event = {button:e.button};
 			event.offsetX = LGlobal.scaleX(e.offsetX);
@@ -1539,13 +1539,18 @@ p = {
 	},
 	dispatchEvent:function(type){
 		var s = this;
-		var i,length = s._eventList.length;
+		var i,length = s._eventList.length,ctype = (typeof type == "string") ? type : type.eventType;
 		for(i=0;i<length;i++){
 			if(!s._eventList[i])continue;
-			if(type == s._eventList[i].type){
-				s.target = s;
-				s.event_type = type;
-				s._eventList[i].listener(s);
+			if(ctype == s._eventList[i].type){
+				if(typeof type == "string"){
+					s.target = s;
+					s.eventType = s.event_type = ctype;
+					s._eventList[i].listener(s);
+				}else{
+					type.target = s;
+					s._eventList[i].listener(type);
+				}
 			}
 		}
 	},
@@ -4964,11 +4969,24 @@ p = {
 		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
 		s.focus();
 	},
+	_ll_getValue:function (){
+		if(LGlobal.inputBox.style.display != NONE){
+			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+			LEvent.removeEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
+			LGlobal.inputBox.style.display = NONE;
+		}
+	},
+	_ll_input:function(e){
+		var event = new LEvent(LTextEvent.TEXT_INPUT);
+		event.keyCode = e.keyCode;
+		LGlobal.inputTextField.dispatchEvent(event);
+	},
 	focus:function(){
 		var s = this;
 		if(!s.parent){
 			return;
 		}
+		s._ll_getValue();
 		var sc = s.getAbsoluteScale();
 		LGlobal.inputBox.style.display = "";
 		LGlobal.inputBox.name = "input"+s.objectIndex;
@@ -4989,6 +5007,7 @@ p = {
 		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
 		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
 		s.text = "";
+		LEvent.addEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
 		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
 	},
 	_getWidth:function(){

@@ -133,8 +133,7 @@ LGlobal.setCanvas = function (id,w,h){
 		LGlobal.ll_prev_clickTime = 0;
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
 			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-				LGlobal.inputBox.style.display = NONE;
+				LGlobal.inputTextField._ll_getValue();
 			}
 			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
 			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve,k,i,eveIndex;
@@ -242,8 +241,7 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-				LGlobal.inputBox.style.display = NONE;
+				LGlobal.inputTextField._ll_getValue();
 			}
 			var event = {button:e.button};
 			event.offsetX = LGlobal.scaleX(e.offsetX);

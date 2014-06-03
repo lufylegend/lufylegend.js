@@ -26,13 +26,18 @@ p = {
 	},
 	dispatchEvent:function(type){
 		var s = this;
-		var i,length = s._eventList.length;
+		var i,length = s._eventList.length,ctype = (typeof type == "string") ? type : type.eventType;
 		for(i=0;i<length;i++){
 			if(!s._eventList[i])continue;
-			if(type == s._eventList[i].type){
-				s.target = s;
-				s.event_type = type;
-				s._eventList[i].listener(s);
+			if(ctype == s._eventList[i].type){
+				if(typeof type == "string"){
+					s.target = s;
+					s.eventType = s.event_type = ctype;
+					s._eventList[i].listener(s);
+				}else{
+					type.target = s;
+					s._eventList[i].listener(type);
+				}
 			}
 		}
 	},
