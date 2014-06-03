@@ -593,7 +593,7 @@ var LSprite = (function () {
 		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getWidth : function () {
-			var s = this, i, l, o, a, b,
+			var s = this, i, l, o, a, b, mx, mw,
 			left = s.graphics.startX(), right = left + s.graphics.getWidth();
 			for (i = 0, l = s.childList.length; i < l; i++) {
 				o = s.childList[i];
@@ -610,6 +610,16 @@ var LSprite = (function () {
 				}
 				if (b > right) {
 					right = b;
+				}
+			}
+			if (s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				mw = s.mask.getWidth();
+				if (left < mx) {
+					left = mx;
+				}
+				if (right > mx + mw) {
+					right = mx + mw;
 				}
 			}
 			s.ll_left = s.x + left;
@@ -662,7 +672,7 @@ var LSprite = (function () {
 		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getHeight : function () {
-			var s = this, i, l, o, a, b,
+			var s = this, i, l, o, a, b, my, mh,
 			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
 			for (i = 0, l = s.childList.length; i < l; i++) {
 				o = s.childList[i];
@@ -679,6 +689,16 @@ var LSprite = (function () {
 				}
 				if (b > bottom) {
 					bottom = b;
+				}
+			}
+			if (s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				mh = s.mask.getHeight();
+				if (top < my) {
+					top = my;
+				}
+				if (bottom > my + mh) {
+					bottom = my + mh;
 				}
 			}
 			s.ll_top = s.y + top;

@@ -305,8 +305,21 @@ var LBitmap = (function () {
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getWidth : function () {
-			var s = this;
-			return s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+			var s = this, w, mx, mw;
+			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+			if (s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				if (mx > w) {
+					return 0;
+				}
+				mw = s.mask.getWidth();
+				if (mx + mw > w) {
+					return w - mx;
+				}else{
+					return mw;
+				}
+			}
+			return w;
 		},
 		/** @language chinese
 		 * 获取显示对象的高度，以像素为单位。
@@ -348,8 +361,21 @@ var LBitmap = (function () {
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getHeight : function () {
-			var s = this;
-			return s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+			var s = this, h, my, mh;
+			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+			if (s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				if (my > h) {
+					return 0;
+				}
+				mh = s.mask.getHeight();
+				if (my + mh > h) {
+					return h - my;
+				}else{
+					return mh;
+				}
+			}
+			return h;
 		},
 		startX : function () {
 			return this.x;

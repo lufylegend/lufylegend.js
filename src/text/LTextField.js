@@ -203,8 +203,21 @@ p = {
 		return LGlobal.canvas.measureText(s.text).width;
 	},
 	getWidth:function(){
-		var s = this;
-		return s._getWidth()*s.scaleX;
+		var s = this, w, mx, mw;
+		w = s._getWidth()*s.scaleX;
+		if (s.mask) {
+			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+			if (mx > w) {
+				return 0;
+			}
+			mw = s.mask.getWidth();
+			if (mx + mw > w) {
+				return w - mx;
+			}else{
+				return mw;
+			}
+		}
+		return w;
 	},
 	_getHeight:function(){
 		var s = this,c = LGlobal.canvas;
@@ -230,8 +243,21 @@ p = {
 		return c.measureText("O").width*1.2;
 	},
 	getHeight:function(){
-		var s = this;
-		return s._getHeight()*s.scaleY;
+		var s = this, h, my, mh;
+		h = s._getHeight()*s.scaleY;
+		if (s.mask) {
+			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+			if (my > h) {
+				return 0;
+			}
+			mh = s.mask.getHeight();
+			if (my + mh > h) {
+				return h - my;
+			}else{
+				return mh;
+			}
+		}
+		return h;
 	},
 	wind:function(listener){
 		var s = this;

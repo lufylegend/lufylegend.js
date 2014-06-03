@@ -17,21 +17,43 @@ p = {
 		s.graphics.ll_show();
 	},
 	getWidth:function(){
-		var s=this,
+		var s=this, mx, mw,
 		left = s.graphics.startX(),right = left + s.graphics.getWidth();
-		s.left = s.x + left;
+		if (s.mask) {
+			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+			mw = s.mask.getWidth();
+			if (left < mx) {
+				left = mx;
+			}
+			if (right > mx + mw) {
+				right = mx + mw;
+			}
+		}
+		s.ll_left = s.x + left;
+		s.ll_right = s.x + right;
 		return (right - left)*s.scaleX;
 	},
 	getHeight:function(){
-		var s=this,
+		var s=this, my, mh,
 		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
-		s.top = s.y + top;
+		if (s.mask) {
+			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+			mh = s.mask.getHeight();
+			if (top < my) {
+				top = my;
+			}
+			if (bottom > my + mh) {
+				bottom = my + mh;
+			}
+		}
+		s.ll_top = s.y + top;
+		s.ll_bottom = s.y + bottom;
 		return (bottom - top)*s.scaleY;
 	},
 	_startX:function(){
 		var s = this;
 		s.getWidth();
-		return s.left;
+		return s.ll_left;
 	},
 	startX:function(){
 		var s = this;
@@ -40,7 +62,7 @@ p = {
 	_startY:function(){
 		var s = this;
 		s.getHeight();
-		return s.top;
+		return s.ll_top;
 	},
 	startY:function(){
 		var s = this;
@@ -52,40 +74,6 @@ p = {
 		a.graphics = s.graphics.clone();
 		a.graphics.parent = a;
 		return a;
-	},
-	_mevent:function(type){
-		var s = this;
-		for(k=0;k<s.mouseList.length;k++){
-			var o = s.mouseList[k];
-			if(o.type == type){
-				return true;
-			}
-		}
-		return false;
-	},
-	mouseEvent:function (e,type,cd){
-		if(!e)return false;
-		var s = this;
-		if(!s.visible)return false;
-		if(cd==null)cd={x:0,y:0,scaleX:1,scaleY:1};
-		var i,k,ox = e.offsetX,oy = e.offsetY;
-		var on = s.ismouseon(e,cd);
-		if(on){
-			if(s._mevent(type)){
-				for(k=0;k<s.mouseList.length;k++){
-					var o = s.mouseList[k];
-					if(o.type == type){
-						e.selfX = (ox - (s.x*cd.scaleX+cd.x))/(cd.scaleX*s.scaleX);
-						e.selfY = (oy - (s.y*cd.scaleY+cd.y))/(cd.scaleY*s.scaleY);
-						e.target = e.clickTarget = s;
-						o.listener(e,s);
-						return true;
-					}
-				}
-			}
-			return true;
-		}
-		return false;
 	},
 	ismouseon:function(e,cd){
 		var s = this,i=false,sc;
