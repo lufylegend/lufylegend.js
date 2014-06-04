@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>font</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.text = "font test";
+				theTextField.x = 10;
+				theTextField.y = 10;
+				theTextField.font = "Georgia";
+				addChild(theTextField);
+			}
+			</script>
+	</body>
+</html>

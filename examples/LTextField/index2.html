@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>LTextField</title>
+	<script type="text/javascript" src="../../lufylegend-1.9.0.min.js"></script>
+	<script type="text/javascript" src="../../src/text/LTextField.js"></script>
+	</head>
+	<body style="padding:0; margin:0;">
+			<div id="legend"></div>
+<script>
+init(50,"legend",800,450,main);
+function main(){
+	var textLabel = new LTextField();
+	textLabel.size = 50;
+	textLabel.text = "文字描边功能";
+	textLabel.stroke = true;
+	textLabel.lineWidth = 2;
+	textLabel.lineColor = "#FF0000";
+	addChild(textLabel);
+}
+</script>
+	</body>
+</html>

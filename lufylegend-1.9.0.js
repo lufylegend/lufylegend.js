@@ -3196,7 +3196,7 @@ var LSprite = (function () {
 			var s = this;
 			s.graphics.ll_show();
 			LGlobal.show(s.childList);
-			s.ll_debugShape();
+			s._ll_debugShape();
 		},
 		/** @language chinese
 		 * 允许用户拖动指定的 Sprite。Sprite 将一直保持可拖动，直到通过调用 Sprite.stopDrag() 方法来明确停止。
@@ -4566,6 +4566,156 @@ var LSprite = (function () {
 			}
 			return false;
 		},
+		/** @language chinese
+		 * <p>添加碰撞形状，指定碰撞的范围。如果没有添加碰撞形状，则会默认使用最大矩形范围来碰撞检测。</p>
+		 * <p>添加矩形 : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>添加圆形 : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>添加多边形 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type The shape's type.
+		 * @param {Array} arg The shape's parameters.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+
+
+
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Add a collider’s shape</p>
+		 * <p>a rectangle : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>a circle : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>a polygon : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type The shape's type.
+		 * @param {Array} arg The shape's parameters.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+
+
+
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>衝突の形状を追加します。追加していなければ、最大の矩形を使って、衝突を判定します。</p>
+		 * <p>矩形を追加 : addShape(LShape.RECT,[20,140,200,100])</p>
+		 * <p>円を追加 : addShape(LShape.ARC,[110,80,60])</p>
+		 * <p>多边形を追加 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * @method addShape
+		 * @param {string} type 衝突の形状。
+		 * @param {Array} arg 具体的なパラメータ。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	LInit(20,"legend",800,450,main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+
+		 * 		var bitmap01 = new LBitmap(bitmapData);
+		 * 		var layer01 = new LSprite();
+		 * 		addChild(layer01);
+		 * 		layer01.addChild(bitmap01);
+		 * 		var rect1 = new LSprite();
+		 * 		rect1.x = 180;
+		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect1);
+		 * 		var bitmap02 = new LBitmap(bitmapData);
+		 * 		var layer02 = new LSprite();
+		 * 		layer02.x = 300;
+		 * 		addChild(layer02);
+		 * 		layer02.addChild(bitmap02);
+		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
+		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
+		 * 		var rect2 = new LSprite();
+		 * 		rect2.x = 480;
+		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect2);
+		 * 		var rect3 = new LSprite();
+		 * 		rect3.x = 480;
+		 * 		rect3.y = 120;
+		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 		addChild(rect3);
+
+
+
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		addShape : function (type, arg) {
 			var s = this;
 			if (type == LShape.VERTICES && arg.length < 3) {
@@ -4573,11 +4723,77 @@ var LSprite = (function () {
 			}
 			s.shapes.push({"type" : type, "arg" : arg});
 		},
+		/** @language chinese
+		 * <p>清空所有碰撞形状。</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+
+		 * 	layer01.clearShape()
+
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Clear all the collider’s shape</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+
+		 * 	layer01.clearShape()
+
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>衝突の形状をクリアする</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 * @example
+
+		 * 	var bitmap01 = new LBitmap(bitmapData);
+		 * 	var layer01 = new LSprite();
+		 * 	addChild(layer01);
+		 * 	layer01.addChild(bitmap01);
+		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
+		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
+		 * 	var rect1 = new LSprite();
+		 * 	rect1.x = 180;
+		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+		 * 	addChild(rect1);
+
+		 * 	layer01.clearShape()
+
+		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		clearShape : function () {
 			var s = this;
 			s.shapes.length = 0;
 		},
-		ll_debugShape : function () {
+		_ll_debugShape : function () {
 			var s = this, i, l, child, c, arg, j, ll;
 			if (!LGlobal.traceDebug || s.shapes.length == 0) {
 				return;
@@ -4636,6 +4852,24 @@ var LSprite = (function () {
 			}
 			return i;
 		},
+		/** @language chinese
+		 * <p>清空所有图形以及事件。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language english
+		 * <p>Frees memory that is used.Clear all the shapes and the events</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>全部のベクターシェイプとイベントをクリアする。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
 		die : function () {
 			var s = this, i, c, l;
 			s.graphics.clear();
@@ -4815,298 +5049,842 @@ LBlendMode.NONE = null;
 var LTextFieldType = function (){throw "LTextFieldType cannot be instantiated";};
 LTextFieldType.INPUT = "input";
 LTextFieldType.DYNAMIC = null;
-/*
-* LTextField.js
-**/
-function LTextField(){
-	var s = this;
-	base(s,LInteractiveObject,[]);
-	s.type = "LTextField";
-	s.texttype = null;
-	s.text = "";
-	s.font = "Arial";
-	s.size = "11";
-	s.color = "#000000";
-	s.weight = "normal";
-	s.textAlign = "left";
-	s.textBaseline = "top";
-	s.lineWidth = 1;
-	s.width = 150;
-	s.height = s.size;
-	s.stroke = false;
-	s.displayAsPassword = false;
-	s.wordWrap=false;
-	s.multiline = false;
-	s.numLines = 1;
-}
-p = {
-	_showReady:function(c){
+/** @language chinese
+ * 创建新的 LTextField 实例。在创建 LTextField 实例后，调用父 LSprite 对象的 addChild() 或 addChildAt() 方法可将 LTextField 实例添加到显示列表中。
+ * LTextField 类的方法允许您设置、选择并操作在创作过程中或运行时创建的动态或输入文本字段中的文本。
+ * @class LTextField
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  var theTextField = new LTextField();
+ *  theTextField.setType(LTextFieldType.INPUT);
+ *  theTextField.x = 10;
+ *  theTextField.y = 10;
+ *  addChild(theTextField);
+ * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">测试链接</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Creates a new LTextField instance. After you create the LTextField instance, call the addChild() or addChildAt() method of the parent LSprite object to add the LTextField instance to the display list.
+ * The methods of the LTextField class let you set, select, and manipulate text in a dynamic or input text field that you create during authoring or at runtime.
+ * @class LTextField
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  var theTextField = new LTextField();
+ *  theTextField.setType(LTextFieldType.INPUT);
+ *  theTextField.x = 10;
+ *  theTextField.y = 10;
+ *  addChild(theTextField);
+ * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">Try it »</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * 新しい LTextField インスタンスを作成します。LTextField インスタンスの作成後、親 LSprite オブジェクトの addChild() メソッドまたは addChildAt() メソッドを呼び出し、LTextField インスタンスを表示リストに追加します。
+ * LTextField クラスのメソッドを使用すると、オーサリング時または実行時に作成したダイナミックテキストフィールドやテキスト入力フィールドにテキストを設定、選択、および操作できます。
+ * @class LTextField
+ * @extends LInteractiveObject
+ * @constructor
+ * @example
+ *  var theTextField = new LTextField();
+ *  theTextField.setType(LTextFieldType.INPUT);
+ *  theTextField.x = 10;
+ *  theTextField.y = 10;
+ *  addChild(theTextField);
+ * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @since 1.0.0
+ * @public
+ */
+var LTextField = (function () {
+	function LTextField () {
 		var s = this;
-		c.font = s.weight + " " + s.size+"pt "+s.font;  
-		c.textAlign = s.textAlign;
-		c.textBaseline = s.textBaseline;
-		c.lineWidth = s.lineWidth;  
-	},
-	_ll_show:function (c){
-		var s = this;
-		if(s.texttype == LTextFieldType.INPUT){
-			s.inputBackLayer.ll_show();
-			var rc = s.getRootCoordinate();
-		    if(LGlobal.inputBox.name == "input"+s.objectIndex){
-		    	LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY())*parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height) >>> 0)) + "px";
-		    	LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX())*parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width) >>> 0)) + "px";
-		    }
-		}
-		if(LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex){
-			return;
-		}
-		var lbl = s.text;
-		if(s.displayAsPassword){
-			lbl = '';
-			for(var i=0,l=s.text.length;i<l;i++)lbl+='*';
-		}
-		var d;
-		if(s.stroke){
-			c.strokeStyle = s.color;
-			d = c.strokeText;
-		}else{
-			c.fillStyle = s.color;
-			d = c.fillText;
-		}
-		if(s.wordWrap || s.multiline){
-			var i,l,j=0,k=0,m=0,b=0;
-			for(i=0,l=s.text.length;i<l;i++){
-				j = c.measureText(s.text.substr(k,i-k)).width;
-				var enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i,1));
-				if((s.wordWrap && j > s.width) || enter){
-					j = 0;
-					k = i;
-					m++;
-					if(enter)k++;
+		LExtends(s, LInteractiveObject, []);
+		/** @language chinese
+		 * 对象的类型
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.type = "LTextField";
+		s.texttype = null;
+		/** @language chinese
+		 * 作为文本字段中当前文本的字符串。各行之间用回车符（'\n'）分隔。
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.text = "";
+		/** @language chinese
+		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * The name of the font for text in this text format, as a string. The default value is null, which means that Flash Player uses Times New Roman font for the text.
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このテキストフォーマットでのテキストフォント名を示すストリングです。デフォルト値は null で、Flash Player ではテキストに Times New Roman フォントが使用されます。
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.font = "Arial";
+		/** @language chinese
+		 * 使用此文本格式的文本的大小（以像素为单位）。
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * The size in pixels of text in this text format. 
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このテキストフォーマットのテキストのサイズ（ピクセル単位）です。
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.size = "11";
+		/** @language chinese
+		 * 表示文本的颜色。
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the color of the text. 
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストの色を示します。
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.color = "#000000";
+		/** @language chinese
+		 * 规定字体的粗细。
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Specifies whether the text is boldface.
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストをボールドにするかどうかを指定します。
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.weight = "normal";
+		/** @language chinese
+		 * 表示段落的对齐方式(水平)。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the alignment of the paragraph(竖直).
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
+		/** @language japanese
+		 * 段落の行揃えの設定を示します(水平)。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
+		s.textAlign = "left";
+		/** @language chinese
+		 * 表示段落的对齐方式(竖直)。
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the alignment of the paragraph(竖直).
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
+		/** @language japanese
+		 * 段落の行揃えの設定を示します(垂直)。
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
+		s.textBaseline = "top";
+		/** @language chinese
+		 * 文字描边效果。
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * Text effects of stroke.
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストエフェクト。
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		s.stroke = false;
+		/** @language chinese
+		 * 表示段落的对齐方式。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.lineWidth = 1;
+		s.lineColor = false;
+		/** @language chinese
+		 * 表示显示对象的宽度，以像素为单位。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.width = 150;
+		/** @language chinese
+		 * 表示显示对象的高度，以像素为单位。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.height = s.size;
+		/** @language chinese
+		 * 指定文本字段是否是密码文本字段。如果此属性的值为 true，则文本字段被视为密码文本字段，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，则不会将文本字段视为密码文本字段。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.displayAsPassword = false;
+		/** @language chinese
+		 * [只读]一个布尔值，表示文本字段是否自动换行。修改此属性请使用setWordWrap函数。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.wordWrap = false;
+		/** @language chinese
+		 * [只读]表示字段是否为多行文本字段。修改此属性请使用setMultiline函数。
+		 * @property multiline
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.multiline = false;
+		/** @language chinese
+		 * [只读]定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		s.numLines = 1;
+	}
+	var p = {
+		_showReady : function (c) {
+			var s = this;
+			c.font = s.weight + " " + s.size + "pt " + s.font;  
+			c.textAlign = s.textAlign;
+			c.textBaseline = s.textBaseline;
+		},
+		_ll_show : function (c) {
+			var s = this, d, lbl, i, rc, j, l, k, m, b, enter;
+			if (s.texttype == LTextFieldType.INPUT) {
+				s.inputBackLayer.ll_show();
+				rc = s.getRootCoordinate();
+				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
-				if(!enter)d.apply(c,[lbl.substr(i,1),j,m*s.wordHeight,c.measureText(lbl).width]);
-				s.numLines = m;
 			}
-			s.height = (m+1)*s.wordHeight;
-		}else{
-			s.numLines = 1;
-			d.apply(c,[lbl,0,0,c.measureText(lbl).width]);
-		}
-		if(s.wind_flag){
-			s.windRun();
-		}
-	},
-	_wordHeight:function(h){
-		var s = this;
-		if(h>0){
-			s.wordHeight = h;
-		}else{
-			s.wordWrap = false;
-			s.wordHeight = s.getHeight();
-		}
-		s.height = 0;
-	},
-	setMultiline:function(v,h){
-		var s = this;
-		if(v){s._wordHeight(h);}
-		s.multiline = v;
-	},
-	setWordWrap:function(v,h){
-		var s = this;
-		if(v){s._wordHeight(h);}
-		s.wordWrap = v;
-	},
-	setType:function(type,inputBackLayer){
-		var s = this;
-		if(s.texttype != type && type == LTextFieldType.INPUT){
-			if(inputBackLayer==null || inputBackLayer.type != "LSprite"){
-				s.inputBackLayer = new LSprite();
-				s.inputBackLayer.graphics.drawRect(1,"#000000",[0, -s.getHeight()*0.4, s.width, s.getHeight()*1.5]);
-			}else{
-				s.inputBackLayer = inputBackLayer;
+			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+				return;
 			}
-			s.inputBackLayer.parent = s;
-			if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN])LMouseEventContainer.pushInputBox(s);
-		}else{
-			s.inputBackLayer = null;
-			LMouseEventContainer.removeInputBox(s);
-		}
-		s.texttype = type;
-	},
-	ismouseon:function(e,cood){
-		var s = this,ox,oy;
-		if(e==null || e == UNDEFINED)return false;
-		if(!s.visible)return false;
-		if(cood==null)cood={x:0,y:0,scaleX:1,scaleY:1};
-		if(s.mask){
-			if(!s.mask.parent){
-				s.mask.parent = s.parent;
+			lbl = s.text;
+			if (s.displayAsPassword) {
+				lbl = '';
+				for (i=0, l = s.text.length; i < l; i++) {
+					lbl += '*';
+				}
 			}
-			if(!s.mask.ismouseon(e,cd)){
-				return false;
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
 			}
-		}
-		if(s.inputBackLayer){
-			return s.inputBackLayer.ismouseon(e,{x:s.x*cood.scaleX+cood.x,y:s.y*cood.scaleY+cood.y,scaleX:cood.scaleX*s.scaleX,scaleY:cood.scaleY*s.scaleY});
-		}
-		return s.ismouseonShapes([{type:LShape.RECT,arg:[0,0,s._getWidth(),s._getHeight()]}],e.offsetX,e.offsetY);
-	},
-	clone:function(){
-		var s = this,a = new LTextField();
-		a.copyProperty(s);
-		a.texttype = null;
-		if(s.texttype ==  LTextFieldType.INPUT){
-			a.setType( LTextFieldType.INPUT);
-		}
-		return a;
-	},
-	mouseEvent:function (event,type,cood){
-		var s = this;
-		if(s.inputBackLayer == null)return;
-		var on = s.ismouseon(event,cood);
-		if(type != LMouseEvent.MOUSE_DOWN || !on)return;
-		s.focus();
-	},
-	_ll_getValue:function (){
-		if(LGlobal.inputBox.style.display != NONE){
-			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			LEvent.removeEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
-			LGlobal.inputBox.style.display = NONE;
-			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-			LGlobal.inputTextField = null;
-		}
-	},
-	_ll_input:function(e){
-		var event = new LEvent(LTextEvent.TEXT_INPUT);
-		event.keyCode = e.keyCode;
-		LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-		LGlobal.inputTextField.dispatchEvent(event);
-	},
-	focus:function(){
-		var s = this;
-		if(!s.parent){
-			return;
-		}
-		if(LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex){
-			s._ll_getValue();
-		}
-		s.dispatchEvent(LFocusEvent.FOCUS_IN);
-		var sc = s.getAbsoluteScale();
-		LGlobal.inputBox.style.display = "";
-		LGlobal.inputBox.name = "input"+s.objectIndex;
-		LGlobal.inputTextField = s;
-		LGlobal.inputTextareaBoxObj.style.display = NONE;
-		LGlobal.inputTextBoxObj.style.display = NONE;
-		LGlobal.passwordBoxObj.style.display = NONE;
-		if(s.displayAsPassword){
-			LGlobal.inputTextBox = LGlobal.passwordBoxObj;
-		}else if(s.multiline){
-			LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
-		}else{
-			LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
-		}
-		var sx = parseInt(LGlobal.canvasObj.style.width)/LGlobal.canvasObj.width,sy = parseInt(LGlobal.canvasObj.style.height)/LGlobal.canvasObj.height;
-		LGlobal.inputTextBox.style.display = "";
-		LGlobal.inputTextBox.value = s.text;
-		LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight()*sc.scaleY*s.scaleY*sy+"px";
-		LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth()*sc.scaleX*s.scaleX*sx+"px";
-		LEvent.addEventListener(LGlobal.inputTextBox,LKeyboardEvent.KEY_DOWN,LGlobal.inputTextField._ll_input);
-		setTimeout(function(){LGlobal.inputTextBox.focus();},50);
-	},
-	_getWidth:function(){
-		var s = this;
-		if(s.wordWrap)return s.width;
-		LGlobal.canvas.font = s.size+"pt "+s.font;
-		return LGlobal.canvas.measureText(s.text).width;
-	},
-	getWidth:function(maskSize){
-		var s = this, w, mx, mw;
-		w = s._getWidth()*s.scaleX;
-		if (maskSize && s.mask) {
-			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-			if (mx > w) {
-				return 0;
-			}
-			mw = s.mask.getWidth();
-			if (mx + mw > w) {
-				return w - mx;
-			}else{
-				return mw;
-			}
-		}
-		return w;
-	},
-	_getHeight:function(){
-		var s = this,c = LGlobal.canvas;
-		if(s.wordWrap){
-			c.font = s.weight + " " + s.size+"pt "+s.font;
-			if(s.height == 0){  
-				var i,l,j=0,k=0,m=0;
-				for(i=0,l=s.text.length;i<l;i++){
-					j = c.measureText(s.text.substr(k,i-k)).width;
-					var enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i,1));
-					if((s.wordWrap && j > s.width) || enter){
+			if (s.wordWrap || s.multiline) {
+				j = 0, k = 0, m = 0, b = 0;
+				for (i = 0, l = s.text.length; i < l; i++) {
+					j = c.measureText(s.text.substr(k, i - k)).width;
+					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
+					if ((s.wordWrap && j > s.width) || enter) {
 						j = 0;
 						k = i;
 						m++;
-						if(enter)k++;
+						if (enter) {
+							k++;
+						}
 					}
+					if (!enter) {
+						if (s.stroke) {
+							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+						}
+						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+					}
+					s.numLines = m;
 				}
-				s.height = (m+1)*s.wordHeight;
+				s.height = (m + 1) * s.wordHeight;
+			} else {
+				s.numLines = 1;
+				if (s.stroke) {
+					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
+				}
+				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
 			}
-			return s.height;
-		}
-		c.font = s.weight + " " + s.size+"pt "+s.font; 
-		return c.measureText("O").width*1.2;
-	},
-	getHeight:function(maskSize){
-		var s = this, h, my, mh;
-		h = s._getHeight()*s.scaleY;
-		if (maskSize && s.mask) {
-			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-			if (my > h) {
-				return 0;
+			if (s.wind_flag) {
+				s.windRun();
 			}
-			mh = s.mask.getHeight();
-			if (my + mh > h) {
-				return h - my;
-			}else{
-				return mh;
+		},
+		_wordHeight : function (h) {
+			var s = this;
+			if (h > 0) {
+				s.wordHeight = h;
+			} else {
+				s.wordWrap = false;
+				s.wordHeight = s.getHeight();
 			}
+			s.height = 0;
+		},
+		setMultiline : function (v, h) {
+			var s = this;
+			if (v) {
+				s._wordHeight(h);
+			}
+			s.multiline = v;
+		},
+		setWordWrap : function (v, h) {
+			var s = this;
+			if (v) {
+				s._wordHeight(h);
+			}
+			s.wordWrap = v;
+		},
+		setType : function (type, inputBackLayer) {
+			var s = this;
+			if (s.texttype != type && type == LTextFieldType.INPUT) {
+				if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
+					s.inputBackLayer = new LSprite();
+					s.inputBackLayer.graphics.drawRect(1, "#000000", [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
+				} else {
+					s.inputBackLayer = inputBackLayer;
+				}
+				s.inputBackLayer.parent = s;
+				if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]) {
+					LMouseEventContainer.pushInputBox(s);
+				}
+			} else {
+				s.inputBackLayer = null;
+				LMouseEventContainer.removeInputBox(s);
+			}
+			s.texttype = type;
+		},
+		ismouseon : function (e, cood) {
+			var s = this, ox, oy;
+			if (e==null || e == UNDEFINED) {
+				return false;
+			}
+			if (!s.visible) {
+				return false;
+			}
+			if (cood == null) {
+				cood = {x : 0, y : 0, scaleX : 1, scaleY : 1};
+			}
+			if (s.mask) {
+				if (!s.mask.parent) {
+					s.mask.parent = s.parent;
+				}
+				if (!s.mask.ismouseon(e, cd)) {
+					return false;
+				}
+			}
+			if (s.inputBackLayer) {
+				return s.inputBackLayer.ismouseon(e, {x : s.x * cood.scaleX + cood.x, y : s.y * cood.scaleY + cood.y, scaleX : cood.scaleX * s.scaleX, scaleY : cood.scaleY * s.scaleY});
+			}
+			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s._getWidth(), s._getHeight()]}], e.offsetX, e.offsetY);
+		},
+		clone : function () {
+			var s = this, a = new LTextField();
+			a.copyProperty(s);
+			a.texttype = null;
+			if (s.texttype ==  LTextFieldType.INPUT) {
+				a.setType( LTextFieldType.INPUT);
+			}
+			return a;
+		},
+		mouseEvent : function (event, type, cood) {
+			var s = this, on;
+			if (s.inputBackLayer == null) {
+				return;
+			}
+			on = s.ismouseon(event, cood);
+			if (type != LMouseEvent.MOUSE_DOWN || !on) {
+				return;
+			}
+			s.focus();
+		},
+		_ll_getValue : function () {
+			if (LGlobal.inputBox.style.display != NONE) {
+				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+				LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+				LGlobal.inputBox.style.display = NONE;
+				LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+				LGlobal.inputTextField = null;
+			}
+		},
+		_ll_input : function (e) {
+			var event = new LEvent(LTextEvent.TEXT_INPUT);
+			event.keyCode = e.keyCode;
+			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+			LGlobal.inputTextField.dispatchEvent(event);
+		},
+		focus : function () {
+			var s = this, sc, sx;
+			if (!s.parent) {
+				return;
+			}
+			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
+				s._ll_getValue();
+			}
+			s.dispatchEvent(LFocusEvent.FOCUS_IN);
+			sc = s.getAbsoluteScale();
+			LGlobal.inputBox.style.display = "";
+			LGlobal.inputBox.name = "input" + s.objectIndex;
+			LGlobal.inputTextField = s;
+			LGlobal.inputTextareaBoxObj.style.display = NONE;
+			LGlobal.inputTextBoxObj.style.display = NONE;
+			LGlobal.passwordBoxObj.style.display = NONE;
+			if (s.displayAsPassword) {
+				LGlobal.inputTextBox = LGlobal.passwordBoxObj;
+			} else if (s.multiline) {
+				LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
+			} else {
+				LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
+			}
+			sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width;
+			sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;
+			LGlobal.inputTextBox.style.display = "";
+			LGlobal.inputTextBox.value = s.text;
+			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
+			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+			setTimeout(function () {
+				LGlobal.inputTextBox.focus();
+			}, 50);
+		},
+		_getWidth : function () {
+			var s = this;
+			if (s.wordWrap) {
+				return s.width;
+			}
+			LGlobal.canvas.font = s.size + "pt " + s.font;
+			return LGlobal.canvas.measureText(s.text).width;
+		},
+		getWidth : function (maskSize) {
+			var s = this, w, mx, mw;
+			w = s._getWidth() * s.scaleX;
+			if (maskSize && s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				if (mx > w) {
+					return 0;
+				}
+				mw = s.mask.getWidth();
+				if (mx + mw > w) {
+					return w - mx;
+				} else {
+					return mw;
+				}
+			}
+			return w;
+		},
+		_getHeight : function () {
+			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
+			if (s.wordWrap) {
+				c.font = s.weight + " " + s.size + "pt " + s.font;
+				if (s.height == 0) {
+					j = 0, k = 0, m = 0;
+					for (i = 0, l = s.text.length; i < l; i++) {
+						j = c.measureText(s.text.substr(k, i - k)).width;
+						enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i, 1));
+						if ((s.wordWrap && j > s.width) || enter) {
+							j = 0;
+							k = i;
+							m++;
+							if (enter) {
+								k++;
+							}
+						}
+					}
+					s.height = (m + 1) * s.wordHeight;
+				}
+				return s.height;
+			}
+			c.font = s.weight + " " + s.size + "pt " + s.font; 
+			return c.measureText("O").width * 1.2;
+		},
+		getHeight : function (maskSize) {
+			var s = this, h, my, mh;
+			h = s._getHeight() * s.scaleY;
+			if (maskSize && s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				if (my > h) {
+					return 0;
+				}
+				mh = s.mask.getHeight();
+				if (my + mh > h) {
+					return h - my;
+				} else {
+					return mh;
+				}
+			}
+			return h;
+		},
+		wind : function (listener) {
+			var s = this;
+			s.wind_over_function = listener;
+			s.wind_flag = true;
+			s.wind_text = s.text;
+			s.text = "";
+			s.wind_length = 0;
+		},
+		windRun : function () {
+			var s = this;
+			if (s.wind_length > s.wind_text.length) {
+				s.wind_flag = false;
+				if (s.wind_over_function) {
+					s.wind_over_function();
+				}
+				return;
+			}
+			s.text = s.wind_text.substring(0, s.wind_length);
+			s.wind_length++;
+		},
+		die : function () {
+			LMouseEventContainer.removeInputBox(this);
 		}
-		return h;
-	},
-	wind:function(listener){
-		var s = this;
-		s.wind_over_function = listener;
-		s.wind_flag = true;
-		s.wind_text = s.text;
-		s.text = "";
-		s.wind_length = 0;
-	},
-	windRun:function(){
-		var s = this;
-		if(s.wind_length > s.wind_text.length){
-			s.wind_flag = false;
-			if(s.wind_over_function)s.wind_over_function();
-			return;
-		}
-		s.text = s.wind_text.substring(0,s.wind_length);
-		s.wind_length++;
-	},
-	die:function(){
-		LMouseEventContainer.removeInputBox(this);
+	};
+	for (var k in p) {
+		LTextField.prototype[k] = p[k];
 	}
-};
-for(var k in p)LTextField.prototype[k]=p[k];
-/*
-* LLabel.js
-**/
-function LLabel(){
-	var s = this;
-	base(s,LTextField,[]);
-	s.width = LGlobal.width;
-}
+	return LTextField;
+})();
 /** @language chinese
  * 初始化 LBitmap 对象以引用指定的 LBitmapData 对象。
  * LBitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 LLoader 类加载的图像，也可以是使用 LBitmap() 构造函数创建的图像。

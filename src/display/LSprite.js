@@ -730,6 +730,7 @@ var LSprite = (function () {
 		 * <p>将一个 DisplayObject 子实例添加到该 LSprite 实例中。子项将被添加到该 LSprite 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）</p>
 		 * <p>如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child 要作为该 LSprite 实例的子项添加的 LDisplayObject 实例。
 		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
 		 * @since 1.0.0
 		 * @public
@@ -745,6 +746,7 @@ var LSprite = (function () {
 		 * <p>Adds a child DisplayObject instance to this LSprite instance. The child is added to the front (top) of all other children in this LSprite instance. (To add a child to a specific index position, use the addChildAt() method.)</p>
 		 * <p>If you add a child object that already has a different display object container as a parent, the object is removed from the child list of the other display object container.</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child The LDisplayObject instance to add as a child of this LSprite instance.
 		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
 		 * @since 1.0.0
 		 * @public
@@ -760,6 +762,7 @@ var LSprite = (function () {
 		 * <p>この DisplayObjectContainer インスタンスに子 LSprite インスタンスを追加します。子インスタンスは、この LSprite インスタンスにある他のすべての子の前（上）に追加されます（特定のインデックス位置に子を追加する場合は、addChildAt() メソッドを使用します）。</p>
 		 * <p>既に異なる表示オブジェクトコンテナを親に持つ子オブジェクトを追加する場合は、もう一方の表示オブジェクトコンテナの子リストからそのオブジェクトが削除されます。</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child この LSprite インスタンスの子として追加する LDisplayObject インスタンスです。
 		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
 		 * @since 1.0.0
 		 * @public
@@ -790,6 +793,8 @@ var LSprite = (function () {
 		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
 		 * <p>如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child 要作为该 LSprite 实例的子项添加的 LDisplayObject 实例。
+		 * @param {int} index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
 		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
 		 * @since 1.0.0
 		 * @public
@@ -809,6 +814,8 @@ var LSprite = (function () {
 		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
 		 * <p>If you add a child object that already has a different display object container as a parent, the object is removed from the child list of the other display object container.</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child child The LDisplayObject instance to add as a child of this LSprite instance.
+		 * @param {int} index The index position to which the child is added. If you specify a currently occupied index position, the child object that exists at that position and all higher positions are moved up one position in the child list.
 		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
 		 * @since 1.0.0
 		 * @public
@@ -828,6 +835,8 @@ var LSprite = (function () {
 		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
 		 * <p>既に異なる表示オブジェクトコンテナを親に持つ子オブジェクトを追加する場合は、もう一方の表示オブジェクトコンテナの子リストからそのオブジェクトが削除されます。</p>
 		 * @method addChild
+		 * @param {LDisplayObject} child この LSprite インスタンスの子として追加する LDisplayObject インスタンスです。
+		 * @param {int} index 子を追加するインデックス位置です。既にオブジェクトが置かれているインデックス位置を指定すると、その位置にあるオブジェクトとその上に位置するすべてのオブジェクトが、子リスト内で 1 つ上の位置に移動します。
 		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
 		 * @since 1.0.0
 		 * @public
@@ -860,6 +869,7 @@ var LSprite = (function () {
 		/** @language chinese
 		 * <p>从 LSprite 实例的子列表中删除指定的 child LDisplayObject 实例。将已删除子项的 parent 属性设置为 null；如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。LSprite 中该子项之上的任何显示对象的索引位置都减去 1。</p>
 		 * @method removeChild
+		 * @param {LDisplayObject} child 要删除的 LDisplayObject 实例。
 		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
 		 * @since 1.0.0
 		 * @public
@@ -883,6 +893,7 @@ var LSprite = (function () {
 		/** @language english
 		 * <p>Removes the specified child LDisplayObject instance from the child list of the LSprite instance. The parent property of the removed child is set to null , and the object is garbage collected if no other references to the child exist. The index positions of any display objects above the child in the LSprite are decreased by 1.</p>
 		 * @method removeChild
+		 * @param {LDisplayObject} The LDisplayObject instance to remove.
 		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
 		 * @since 1.0.0
 		 * @public
@@ -906,6 +917,7 @@ var LSprite = (function () {
 		/** @language japanese
 		 * <p>LSprite インスタンスの子リストから指定の child LDisplayObject インスタンスを削除します。削除された子の parent プロパティは null に設定されます。その子に対する参照が存在しない場合、そのオブジェクトはガベージコレクションによって収集されます。LSprite の子より上位にある表示オブジェクトのインデックス位置は 1 つ下がります。</p>
 		 * @method removeChild
+		 * @param {LDisplayObject} child 削除する LDisplayObject インスタンスです。
 		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
 		 * @since 1.0.0
 		 * @public

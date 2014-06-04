@@ -50,22 +50,503 @@ var LTextField = (function () {
 	function LTextField () {
 		var s = this;
 		LExtends(s, LInteractiveObject, []);
+		/** @language chinese
+		 * 对象的类型
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property type
+		 * @type String
+		 * @default LTextField
+		 * @since 1.0.0
+		 * @public
+		 */
 		s.type = "LTextField";
 		s.texttype = null;
+		/** @language chinese
+		 * 作为文本字段中当前文本的字符串。各行之间用回车符（'\n'）分隔。
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
+		 * @property text
+		 * @type String
+		 * @since 1.0.0
+		 * @public
+		 */
 		s.text = "";
+		/** @language chinese
+		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * The name of the font for text in this text format, as a string. The default value is null, which means that Flash Player uses Times New Roman font for the text.
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このテキストフォーマットでのテキストフォント名を示すストリングです。デフォルト値は null で、Flash Player ではテキストに Times New Roman フォントが使用されます。
+		 * @property font
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "font test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.font = "Georgia";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.font = "Arial";
+		/** @language chinese
+		 * 使用此文本格式的文本的大小（以像素为单位）。
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * The size in pixels of text in this text format. 
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このテキストフォーマットのテキストのサイズ（ピクセル単位）です。
+		 * @property size
+		 * @type int
+		 * @since 1.0.0
+		 * @default 11
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "size test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.size = 20;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.size = "11";
+		/** @language chinese
+		 * 表示文本的颜色。
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the color of the text. 
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストの色を示します。
+		 * @property color
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "color test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.color = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.color = "#000000";
+		/** @language chinese
+		 * 规定字体的粗细。
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Specifies whether the text is boldface.
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストをボールドにするかどうかを指定します。
+		 * @property weight
+		 * @type String
+		 * @since 1.0.0
+		 * @default normal
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "weight test";
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.weight = "bolder";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.weight = "normal";
+		/** @language chinese
+		 * 表示段落的对齐方式(水平)。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the alignment of the paragraph(竖直).
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
+		/** @language japanese
+		 * 段落の行揃えの設定を示します(水平)。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default left
+		 * @public
+		 */
 		s.textAlign = "left";
+		/** @language chinese
+		 * 表示段落的对齐方式(竖直)。
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
+		/** @language english
+		 * Indicates the alignment of the paragraph(竖直).
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
+		/** @language japanese
+		 * 段落の行揃えの設定を示します(垂直)。
+		 * @property textBaseline
+		 * @type String
+		 * @since 1.0.0
+		 * @default top
+		 * @public
+		 */
 		s.textBaseline = "top";
+		/** @language chinese
+		 * 文字描边效果。
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "stroke test";
+		 *  theTextField.size = 50;
+		 *  theTextField.stroke = true;
+		 *  theTextField.lineWidth = 2;
+		 *  theTextField.lineColor = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Text effects of stroke.
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "stroke test";
+		 *  theTextField.size = 50;
+		 *  theTextField.stroke = true;
+		 *  theTextField.lineWidth = 2;
+		 *  theTextField.lineColor = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストエフェクト。
+		 * @property stroke
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.text = "stroke test";
+		 *  theTextField.size = 50;
+		 *  theTextField.stroke = true;
+		 *  theTextField.lineWidth = 2;
+		 *  theTextField.lineColor = "#FF0000";
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.stroke = false;
+		/** @language chinese
+		 * 文字描边效果的线宽。
+		 * @property lineWidth
+		 * @type int
+		 * @since 1.0.0
+		 * @default 1
+		 * @public
+		 */
+		/** @language english
+		 * The line's size of stroke.
+		 * @property lineWidth
+		 * @type int
+		 * @since 1.0.0
+		 * @default 1
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストエフェクトの線のサイズ。
+		 * @property lineWidth
+		 * @type int
+		 * @since 1.0.0
+		 * @default 1
+		 * @public
+		 */
 		s.lineWidth = 1;
+		/** @language chinese
+		 * 文字描边效果的线的颜色。
+		 * @property lineColor
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @public
+		 */
+		/** @language english
+		 * The line's color of stroke.
+		 * @property lineColor
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストエフェクトの線の色。
+		 * @property lineColor
+		 * @type String
+		 * @since 1.0.0
+		 * @default "#000000"
+		 * @public
+		 */
+		s.lineColor = "#000000";
+		/** @language chinese
+		 * 当设置换行有效(setWordWrap(true))的时候，可以通过它来设置文字宽度。
+		 * @property width
+		 * @type int
+		 * @since 1.0.0
+		 * @default 150
+		 * @public
+		 */
+		/** @language english
+		 * When  the text field has word wrap , you can set the width of the display object, in pixels.
+		 * @property width
+		 * @type int
+		 * @since 1.0.0
+		 * @default 150
+		 * @public
+		 */
+		/** @language japanese
+		 * 折り返す時、表示オブジェクトの幅を設定することができます。
+		 * @property width
+		 * @type int
+		 * @since 1.0.0
+		 * @default 150
+		 * @public
+		 */
 		s.width = 150;
 		s.height = s.size;
-		s.stroke = false;
+		/** @language chinese
+		 * 指定文本字段是否是密码文本字段。如果此属性的值为 true，则文本字段被视为密码文本字段，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，则不会将文本字段视为密码文本字段。
+		 * @property displayAsPassword
+		 * @type Boolean
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.setType(LTextFieldType.INPUT);
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.displayAsPassword = true;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Specifies whether the text field is a password text field. If the value of this property is true, the text field is treated as a password text field and hides the input characters using asterisks instead of the actual characters. If false, the text field is not treated as a password text field. 
+		 * @property displayAsPassword
+		 * @type Boolean
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.setType(LTextFieldType.INPUT);
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.displayAsPassword = true;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストフィールドがパスワードテキストフィールドであるかどうかを指定します。このプロパティの値が true である場合、テキストフィールドはパスワードテキストフィールドとして扱われ、入力された文字は実際の文字の代わりにアスタリスクで隠されます。false である場合、テキストフィールドはパスワードテキストフィールドとして扱われません。
+		 * @property displayAsPassword
+		 * @type Boolean
+		 * @since 1.0.0
+		 * @default false
+		 * @example
+		 *  var theTextField = new LTextField();
+		 *  theTextField.setType(LTextFieldType.INPUT);
+		 *  theTextField.x = 10;
+		 *  theTextField.y = 10;
+		 *  theTextField.displayAsPassword = true;
+		 *  addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.displayAsPassword = false;
 		s.wordWrap = false;
 		s.multiline = false;
+		/** @language chinese
+		 * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default false
+		 * @public
+		 */
+		/** @language english
+		 * Defines the number of text lines in a multiline text field. If setWordWrap(true), the number of lines increases when text wraps.
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
+		/** @language japanese
+		 * 複数行テキストフィールド内のテキスト行の数を定義します。setWordWrap(true)の場合、テキストが折り返されると行数は増えます。
+		 * @property textAlign
+		 * @type String
+		 * @since 1.0.0
+		 * @default Arial
+		 * @public
+		 */
 		s.numLines = 1;
 	}
 	var p = {
@@ -74,7 +555,6 @@ var LTextField = (function () {
 			c.font = s.weight + " " + s.size + "pt " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
-			c.lineWidth = s.lineWidth;  
 		},
 		_ll_show : function (c) {
 			var s = this, d, lbl, i, rc, j, l, k, m, b, enter;
@@ -96,12 +576,10 @@ var LTextField = (function () {
 					lbl += '*';
 				}
 			}
+			c.fillStyle = s.color;
 			if (s.stroke) {
-				c.strokeStyle = s.color;
-				d = c.strokeText;
-			} else {
-				c.fillStyle = s.color;
-				d = c.fillText;
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
 			}
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
@@ -117,17 +595,23 @@ var LTextField = (function () {
 						}
 					}
 					if (!enter) {
-						d.apply(c, [lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width]);
+						if (s.stroke) {
+							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+						}
+						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
 					}
 					s.numLines = m;
 				}
 				s.height = (m + 1) * s.wordHeight;
 			} else {
 				s.numLines = 1;
-				d.apply(c, [lbl, 0, 0, c.measureText(lbl).width]);
+				if (s.stroke) {
+					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
+				}
+				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
 			}
 			if (s.wind_flag) {
-				s.windRun();
+				s._ll_windRun();
 			}
 		},
 		_wordHeight : function (h) {
@@ -140,6 +624,54 @@ var LTextField = (function () {
 			}
 			s.height = 0;
 		},
+		/** @language chinese
+		 * 设置字段是否为多行文本字段。如果值为 true，则文本字段为多行文本字段；如果值为 false，则文本字段为单行文本字段。在类型为 LTextFieldType.INPUT 的字段中，将确定 Enter 键是否创建新行（如果值为 false，则将忽略 Enter 键）。
+		 * @method setMultiline
+		 * @param {Boolean} value 表示字段是否为多行文本字段.
+		 * @param {int} height 指定一行文本的高度.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 150]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	theTextField.setMultiline(true);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setMultiline.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Indicates whether field is a multiline text field. If the value is true, the text field is multiline; if the value is false, the text field is a single-line text field. In a field of type LTextFieldType.INPUT, determines whether the Enter key creates a new line (a value of false, and the Enter key is ignored).
+		 * @method setMultiline
+		 * @param {Boolean} value Indicates whether field is a multiline text field. If the value is true, the text field is multiline.
+		 * @param {int} height The height of a single-line text field.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 150]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	theTextField.setMultiline(true);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setMultiline.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * フィールドが複数行テキストフィールドであるかどうかを示します。値が true である場合は複数行テキストフィールド、値が false である場合は単一行テキストフィールドです。LTextFieldType.INPUT タイプのフィールドでは、Enter キーで改行されるかどうかが決定されます（値が false の場合 Enter キーは無視されます）。
+		 * @method setMultiline
+		 * @param {Boolean} value フィールドが複数行テキストフィールドであるかどうかを示します。
+		 * @param {int} height 一行のテキストフィールドの高さを設定する.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 150]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	theTextField.setMultiline(true);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setMultiline.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		setMultiline : function (v, h) {
 			var s = this;
 			if (v) {
@@ -147,6 +679,51 @@ var LTextField = (function () {
 			}
 			s.multiline = v;
 		},
+		/** @language chinese
+		 * 表示文本字段是否自动换行。如果设置的值为 true，则该文本字段自动换行；如果值为 false，则该文本字段不自动换行。默认值为 false。
+		 * @method setWordWrap
+		 * @param {Boolean} value 表示文本字段是否自动换行.
+		 * @param {int} height 指定一行文本的高度.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setWordWrap(true);
+		 * 	theTextField.width = 200;
+		 * 	theTextField.text = "text\ntext\ntexttexttexttexttexttexttexttexttexttexttexttexttexttext";
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setWordWrap.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 *  Indicates whether the text field has word wrap. If the value of wordWrap is true, the text field has word wrap; if the value is false, the text field does not have word wrap. The default value is false.
+		 * @method setWordWrap
+		 * @param {Boolean} value Indicates whether the text field has word wrap.
+		 * @param {int} height The height of a single-line text field.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setWordWrap(true);
+		 * 	theTextField.width = 200;
+		 * 	theTextField.text = "text\ntext\ntexttexttexttexttexttexttexttexttexttexttexttexttexttext";
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setWordWrap.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * フテキストフィールドのテキストを折り返すかどうかを示す。値が true である場合は、テキストフィールドのテキストを折り返し、false である場合は折り返しません。デフォルト値は false です。
+		 * @method setWordWrap
+		 * @param {Boolean} value テキストフィールドのテキストを折り返すかどうかを示す。
+		 * @param {int} height 一行のテキストフィールドの高さを設定する.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setWordWrap(true);
+		 * 	theTextField.width = 200;
+		 * 	theTextField.text = "text\ntext\ntexttexttexttexttexttexttexttexttexttexttexttexttexttext";
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setWordWrap.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		setWordWrap : function (v, h) {
 			var s = this;
 			if (v) {
@@ -154,6 +731,51 @@ var LTextField = (function () {
 			}
 			s.wordWrap = v;
 		},
+		/** @language chinese
+		 * 文本字段的类型。以下 LTextFieldType 常量中的任一个：LTextFieldType.DYNAMIC（指定用户无法编辑的动态文本字段），或 LTextFieldType.INPUT（指定用户可以编辑的输入文本字段）。默认值为 dynamic。
+		 * @method setType
+		 * @param {String} type 文本字段的类型。
+		 * @param {LSprite} obj 文本框形状.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 30]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setType.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * The type of the text field. Either one of the following LTextFieldType constants: LTextFieldType.DYNAMIC, which specifies a dynamic text field, which a user cannot edit, or LTextFieldType.INPUT, which specifies an input text field, which a user can edit.The default value is dynamic.
+		 * @method setType
+		 * @param {String} type The type of the text field.
+		 * @param {LSprite} obj The object's shape.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 30]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setType.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * テキストフィールドのタイプです。次の LTextFieldType 定数のいずれかです。LTextFieldType.DYNAMIC はダイナミックテキストフィールドを指定します。このフィールドをユーザーが編集することはできません。LTextFieldType.INPUT はテキスト入力フィールドを指定します。このフィールドはユーザーが編集できます。デフォルト値： dynamic。
+		 * @method setType
+		 * @param {String} type テキストフィールドのタイプです。
+		 * @param {LSprite} obj オブジェクトの形.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var inputLayer = new LSprite();
+		 * 	inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 30]);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT,inputLayer);
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/setType.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		setType : function (type, inputBackLayer) {
 			var s = this;
 			if (s.texttype != type && type == LTextFieldType.INPUT) {
@@ -197,6 +819,51 @@ var LTextField = (function () {
 			}
 			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s._getWidth(), s._getHeight()]}], e.offsetX, e.offsetY);
 		},
+		/** @language chinese
+		 * 返回一个LTextField的克隆对象。
+		 * @method clone
+		 * @return {LTextField} 一个新的 LTextField 对象，它与原始对象相同.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "font test";
+		 * 	addChild(theTextField);
+		 * 	var theTextField2 = theTextField.clone();
+		 * 	theTextField2.y = 50;
+		 * 	addChild(theTextField2);
+		 * @examplelink <p><a href="../../../api/LTextField/clone.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Returns a new LTextField object that is a clone of the original instance with an exact copy of the object.
+		 * @method clone
+		 * @return {LTextField} A new LTextField object that is identical to the original.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = circle1.clone();
+		 * 	circle2.y = 120;
+		 * 	addChild(circle1);
+		 * 	addChild(circle2);
+		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 新しい LTextField オブジェクトとして、元のインスタンスのクローンを返します。オブジェクトはまったく同じコピーになります。
+		 * @method clone
+		 * @return {LTextField} 元のオブジェクトと同一の新しい LTextField オブジェクトです。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+		 * 	var circle2 = circle1.clone();
+		 * 	circle2.y = 120;
+		 * 	addChild(circle1);
+		 * 	addChild(circle2);
+		 * @examplelink <p><a href="../../../api/LTextField/clone.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		clone : function () {
 			var s = this, a = new LTextField();
 			a.copyProperty(s);
@@ -274,6 +941,45 @@ var LTextField = (function () {
 			LGlobal.canvas.font = s.size + "pt " + s.font;
 			return LGlobal.canvas.measureText(s.text).width;
 		},
+		/** @language chinese
+		 * 获取显示对象的宽度，以像素为单位。
+		 * @method getWidth
+		 * @return {float} 显示对象的宽度。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getWidth test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getWidth());
+		 * @examplelink <p><a href="../../../api/LTextField/getWidth.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get the width of the display object, in pixels.
+		 * @method getWidth
+		 * @return {float} the width of the display object.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getWidth test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getWidth());
+		 * @examplelink <p><a href="../../../api/LTextField/getWidth.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
+		 * @method getWidth
+		 * @return @return {float} オブジェクトの幅。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getWidth test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getWidth());
+		 * @examplelink <p><a href="../../../api/LTextField/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		getWidth : function (maskSize) {
 			var s = this, w, mx, mw;
 			w = s._getWidth() * s.scaleX;
@@ -316,6 +1022,45 @@ var LTextField = (function () {
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
 			return c.measureText("O").width * 1.2;
 		},
+		/** @language chinese
+		 * 获取显示对象的高度，以像素为单位。
+		 * @method getHeight
+		 * @return {float} 显示对象的高度。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getHeight test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getHeight());
+		 * @examplelink <p><a href="../../../api/LTextField/getHeight.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get the height of the display object, in pixels.
+		 * @method getHeight
+		 * @return {float} the height of the display object.
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getHeight test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getHeight());
+		 * @examplelink <p><a href="../../../api/LTextField/getHeight.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
+		 * @method getHeight
+		 * @return @return {float} オブジェクトの高さ。
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "getHeight test";
+		 * 	addChild(theTextField);
+		 * 	trace(theTextField.getHeight());
+		 * @examplelink <p><a href="../../../api/LTextField/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		getHeight : function (maskSize) {
 			var s = this, h, my, mh;
 			h = s._getHeight() * s.scaleY;
@@ -341,7 +1086,7 @@ var LTextField = (function () {
 			s.text = "";
 			s.wind_length = 0;
 		},
-		windRun : function () {
+		_ll_windRun : function () {
 			var s = this;
 			if (s.wind_length > s.wind_text.length) {
 				s.wind_flag = false;
