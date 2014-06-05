@@ -1,8 +1,12 @@
 /** @language chinese
- * PageProperty
  * @class 全局函数
  */
-
+/** @language english
+ * @class Global Functions
+ */
+/** @language japanese
+ * @class グローバル関数
+ */
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (elt) {
 		var len = this.length >>> 0;
@@ -142,9 +146,9 @@ function removeChild (o) {
 }
 
 /** @language chinese
- * 引擎初始化函数。别名init
- * @method Linit
- * @param {Number} speed 游戏速度设定,每次页面刷新间隔（单位毫秒）。
+ * 引擎初始化函数。等同于 init。
+ * @method LInit
+ * @param {Number} speed 游戏速度设定,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。
  * @param {String} divid 传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部。
  * @param {int} width 游戏界面宽。
  * @param {int} height 游戏界面高。
@@ -161,7 +165,8 @@ function removeChild (o) {
  * 	<div id="mylegend">loading……</div>
  * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
  * 	<script>
- * 	Linit(50,"mylegend",800,480,main);
+ * 	LInit(50,"mylegend",800,480,main);
+ * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
  * 	function main(){
  * 	    alert("感谢您使用lufylegend库件");
  * 	}
@@ -172,24 +177,64 @@ function removeChild (o) {
  * @public
  */
 /** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method Linit
- * @param {Object} expression The DisplayObject instance to remove.
+ * Engine initialization.Equivalent to init.
+ * @method LInit
+ * @param {Number} speed game speed(milliseconds), FPS = 1000 / speed.
+ * @param {String} divid Specifies a unique id for a div tag.
+ * @param {int} width Game Interface's width.
+ * @param {int} height Game Interface's height.
+ * @param {Function} callback Engine initialization's callback method.
+ * @param {String} type If your init function call is after the onload, then you need to set this parameter to LEvent.INIT.
  * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * 	<!DOCTYPE html>
+ * 	<html>
+ * 	<head>
+ * 	<meta charset="UTF-8">
+ * 	<title>demo</title>
+ * 	</head>
+ * 	<body>
+ * 	<div id="mylegend">loading……</div>
+ * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
+ * 	<script>
+ * 	LInit(50,"mylegend",800,480,main);
+ * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
+ * 	function main(){
+ * 	    alert("感谢您使用lufylegend库件");
+ * 	}
+ * 	</script>
+ * 	</body>
+ * 	</html>
  * @since 1.0.0
  * @public
  */
 /** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method Linit
- * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * ライブラリの初期化。init と同等。
+ * @method LInit
+ * @param {Number} speed ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。
+ * @param {String} divid divタブのid，ライブラリの初期化をする時，自動的にこのdivタブの中にcanvasを生成する。
+ * @param {int} width ゲーム画面の幅。
+ * @param {int} height ゲーム画面の高さ。
+ * @param {Function} callback ライブラリの初期化が終わったら，この関数を呼び出す。
+ * @param {String} type ライブラリの初期化がwindow.onloadの後にしたら，このパラメータをLEvent.INITに設定しなければなりません。
  * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * 	<!DOCTYPE html>
+ * 	<html>
+ * 	<head>
+ * 	<meta charset="UTF-8">
+ * 	<title>demo</title>
+ * 	</head>
+ * 	<body>
+ * 	<div id="mylegend">loading……</div>
+ * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
+ * 	<script>
+ * 	LInit(50,"mylegend",800,480,main);
+ * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
+ * 	function main(){
+ * 	    alert("感谢您使用lufylegend库件");
+ * 	}
+ * 	</script>
+ * 	</body>
+ * 	</html>
  * @since 1.0.0
  * @public
  */
@@ -224,9 +269,11 @@ function init (s, c, w, h, f, t) {
 var LInit = init;
 
 /** @language chinese
- * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
- * @method Lextends
- * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
+ * 对象继承。等同于 base。
+ * @method LExtends
+ * @param {LDisplayObject} child 子对象本身。
+ * @param {Object} parent 父对象。
+ * @param {Array} params 参数。
  * @example
  * 	var backLayer = LSprite();
  * 	addChild(backLayer);
@@ -235,9 +282,11 @@ var LInit = init;
  * @public
  */
 /** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method Lextends
- * @param {Object} expression The DisplayObject instance to remove.
+ * Object Inheritance.Equivalent to base.
+ * @method LExtends
+ * @param {LDisplayObject} child The child。
+ * @param {Object} parent The parent。
+ * @param {Array} params params。
  * @example
  * 	var backLayer = LSprite();
  * 	addChild(backLayer);
@@ -246,9 +295,11 @@ var LInit = init;
  * @public
  */
 /** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method Lextends
- * @param {Object} expression 削除する DisplayObject インスタンスです。
+ * オブジェクトの継承。base と同等。
+ * @method LExtends
+ * @param {LDisplayObject} child 子供オブジェクト。
+ * @param {Object} parent 親オブジェクト。
+ * @param {Array} params パラメータ。
  * @example
  * 	var backLayer = LSprite();
  * 	addChild(backLayer);
@@ -275,35 +326,23 @@ function base (d, b, a) {
 var LExtends = base;
 
 /** @language chinese
- * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
+ * 返回自引擎初始化开始播放时起已经过的毫秒数。
  * @method getTimer
- * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * @return {float} 自引擎初始化开始播放时起已经过的毫秒数。
  * @since 1.0.0
  * @public
  */
 /** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
+ * Returns the number of milliseconds that have elapsed since Engine initialization.
  * @method getTimer
- * @param {Object} expression The DisplayObject instance to remove.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * @return {float} The number of milliseconds that have elapsed since Engine initialization.
  * @since 1.0.0
  * @public
  */
 /** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
+ * ライブラリの初期化終わってからの経過時間をミリ秒単位で返します。
  * @method getTimer
- * @param {Object} expression 削除する DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * @return {float} ライブラリの初期化終わってからの経過時間。
  * @since 1.0.0
  * @public
  */
