@@ -5,11 +5,11 @@
  * @extends LInteractiveObject
  * @constructor
  * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
+ * 	var theTextField = new LTextField();
+ * 	theTextField.setType(LTextFieldType.INPUT);
+ * 	theTextField.x = 10;
+ * 	theTextField.y = 10;
+ * 	addChild(theTextField);
  * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
@@ -21,11 +21,11 @@
  * @extends LInteractiveObject
  * @constructor
  * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
+ * 	var theTextField = new LTextField();
+ * 	theTextField.setType(LTextFieldType.INPUT);
+ * 	theTextField.x = 10;
+ * 	theTextField.y = 10;
+ * 	addChild(theTextField);
  * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">Try it »</a></p>
  * @since 1.0.0
  * @public
@@ -37,11 +37,11 @@
  * @extends LInteractiveObject
  * @constructor
  * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
+ * 	var theTextField = new LTextField();
+ * 	theTextField.setType(LTextFieldType.INPUT);
+ * 	theTextField.x = 10;
+ * 	theTextField.y = 10;
+ * 	addChild(theTextField);
  * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.0.0
  * @public
@@ -105,12 +105,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default Arial
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "font test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.font = "Georgia";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -121,12 +121,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default Arial
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "font test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.font = "Georgia";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -137,12 +137,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default Arial
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "font test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.font = "Georgia";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -154,12 +154,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default 11
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "size test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.size = 20;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -170,12 +170,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default 11
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "size test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.size = 20;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -186,12 +186,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default 11
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "size test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.size = 20;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -203,12 +203,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default "#000000"
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "color test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.color = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -219,12 +219,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default "#000000"
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "color test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.color = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -235,12 +235,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default "#000000"
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "color test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.color = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -252,12 +252,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default normal
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "weight test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.weight = "bolder";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -268,12 +268,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default normal
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "weight test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.weight = "bolder";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -284,12 +284,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default normal
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "weight test";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.weight = "bolder";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -351,13 +351,13 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "stroke test";
-		 *  theTextField.size = 50;
-		 *  theTextField.stroke = true;
-		 *  theTextField.lineWidth = 2;
-		 *  theTextField.lineColor = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "stroke test";
+		 * 	theTextField.size = 50;
+		 * 	theTextField.stroke = true;
+		 * 	theTextField.lineWidth = 2;
+		 * 	theTextField.lineColor = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -368,13 +368,13 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "stroke test";
-		 *  theTextField.size = 50;
-		 *  theTextField.stroke = true;
-		 *  theTextField.lineWidth = 2;
-		 *  theTextField.lineColor = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "stroke test";
+		 * 	theTextField.size = 50;
+		 * 	theTextField.stroke = true;
+		 * 	theTextField.lineWidth = 2;
+		 * 	theTextField.lineColor = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -385,13 +385,13 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "stroke test";
-		 *  theTextField.size = 50;
-		 *  theTextField.stroke = true;
-		 *  theTextField.lineWidth = 2;
-		 *  theTextField.lineColor = "#FF0000";
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.text = "stroke test";
+		 * 	theTextField.size = 50;
+		 * 	theTextField.stroke = true;
+		 * 	theTextField.lineWidth = 2;
+		 * 	theTextField.lineColor = "#FF0000";
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -479,12 +479,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.setType(LTextFieldType.INPUT);
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.displayAsPassword = true;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT);
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.displayAsPassword = true;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -495,12 +495,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.setType(LTextFieldType.INPUT);
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.displayAsPassword = true;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT);
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.displayAsPassword = true;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -511,12 +511,12 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @default false
 		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.setType(LTextFieldType.INPUT);
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.displayAsPassword = true;
-		 *  addChild(theTextField);
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.setType(LTextFieldType.INPUT);
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 10;
+		 * 	theTextField.displayAsPassword = true;
+		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
@@ -610,7 +610,7 @@ var LTextField = (function () {
 				}
 				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
 			}
-			if (s.wind_flag) {
+			if (s.windRunning) {
 				s._ll_windRun();
 			}
 		},
@@ -695,7 +695,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/setWordWrap.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
-		 *  Indicates whether the text field has word wrap. If the value of wordWrap is true, the text field has word wrap; if the value is false, the text field does not have word wrap. The default value is false.
+		 * 	Indicates whether the text field has word wrap. If the value of wordWrap is true, the text field has word wrap; if the value is false, the text field does not have word wrap. The default value is false.
 		 * @method setWordWrap
 		 * @param {Boolean} value Indicates whether the text field has word wrap.
 		 * @param {int} height The height of a single-line text field.
@@ -893,12 +893,228 @@ var LTextField = (function () {
 				LGlobal.inputTextField = null;
 			}
 		},
+		/** @language chinese
+		 * 获取焦点。
+		 * @method focus
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/focus.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get focus.
+		 * @method focus
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LSprite/focus.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * フォーカスを取得。
+		 * @event textInput
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/focus.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		_ll_input : function (e) {
 			var event = new LEvent(LTextEvent.TEXT_INPUT);
 			event.keyCode = e.keyCode;
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 			LGlobal.inputTextField.dispatchEvent(event);
 		},
+		/** @language chinese
+		 * 获取焦点。
+		 * @method focus
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/focus.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Get focus.
+		 * @method focus
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LSprite/focus.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * フォーカスを取得。
+		 * @method focus
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click the Enter Key, please!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField2.focus();
+		 * 		}
+		 * 	});
+		 * 	var theTextField2 = new LTextField();
+		 * 	theTextField2.x = 20;
+		 * 	theTextField2.y = 140;
+		 * 	theTextField2.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField2);
+		 * 	theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			theTextField1.focus();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/focus.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		focus : function () {
 			var s = this, sc, sx;
 			if (!s.parent) {
@@ -970,7 +1186,7 @@ var LTextField = (function () {
 		/** @language japanese
 		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
 		 * @method getWidth
-		 * @return @return {float} オブジェクトの幅。
+		 * @return {float} オブジェクトの幅。
 		 * @since 1.0.0
 		 * @public
 		 * @example
@@ -1051,7 +1267,7 @@ var LTextField = (function () {
 		/** @language japanese
 		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
 		 * @method getHeight
-		 * @return @return {float} オブジェクトの高さ。
+		 * @return {float} オブジェクトの高さ。
 		 * @since 1.0.0
 		 * @public
 		 * @example
@@ -1078,26 +1294,156 @@ var LTextField = (function () {
 			}
 			return h;
 		},
+		/** @language chinese
+		 * 获取显示对象的宽度，以像素为单位。
+		 * @method wind
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Text animation
+		 * @method wind
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * テキストを1文字ずつ画面に表示させる。
+		 * @method wind
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		wind : function (listener) {
 			var s = this;
 			s.wind_over_function = listener;
-			s.wind_flag = true;
-			s.wind_text = s.text;
+			s.windRunning = true;
+			s._ll_wind_text = s.text;
 			s.text = "";
-			s.wind_length = 0;
+			s._ll_wind_length = 0;
 		},
 		_ll_windRun : function () {
 			var s = this;
-			if (s.wind_length > s.wind_text.length) {
-				s.wind_flag = false;
+			if (s._ll_wind_length > s._ll_wind_text.length) {
+				s.windRunning = false;
 				if (s.wind_over_function) {
 					s.wind_over_function();
 				}
+				s.dispatchEvent(LTextEvent.WIND_COMPLETE);
 				return;
 			}
-			s.text = s.wind_text.substring(0, s.wind_length);
-			s.wind_length++;
+			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
+			s._ll_wind_length++;
 		},
+		/** @language chinese
+		 * <p>清空所使用的内存。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language english
+		 * <p>Frees memory that is used.</p>
+		 * @method clearShape
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>使ったメモリをクリアする。</p>
+		 * @method die
+		 * @since 1.9.0
+		 * @public
+		 */
 		die : function () {
 			LMouseEventContainer.removeInputBox(this);
 		}

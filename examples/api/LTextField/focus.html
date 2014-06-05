@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>setType</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.x = 20;
+				theTextField.y = 20;
+				theTextField.text = "Click the Enter Key, please!";
+				addChild(theTextField);
+								
+				var theTextField1 = new LTextField();
+				theTextField1.x = 20;
+				theTextField1.y = 100;
+				theTextField1.setType(LTextFieldType.INPUT);
+				addChild(theTextField1);
+				theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+					if(e.keyCode == 13){
+						theTextField2.focus();
+					}
+				});
+				
+				var theTextField2 = new LTextField();
+				theTextField2.x = 20;
+				theTextField2.y = 140;
+				theTextField2.setType(LTextFieldType.INPUT);
+				addChild(theTextField2);
+				theTextField2.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+					if(e.keyCode == 13){
+						theTextField1.focus();
+					}
+				});
+				
+				setTimeout(function () {
+					theTextField1.focus();
+				}, 200);
+			}
+			</script>
+	</body>
+</html>

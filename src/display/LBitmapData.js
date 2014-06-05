@@ -514,33 +514,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -553,33 +553,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -592,33 +592,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getPixel : function (x, y, colorType) {
@@ -649,33 +649,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -688,33 +688,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -727,33 +727,33 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img, imgs = [], arr;
+		 * 	bitmapData.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		 arr = [];
+		 * 		 for (var j = 0; j < 50; j++) {
+		 * 			img = bitmapData.getPixel(100 + i, 100 + j);
+		 * 			arr.push(img);
+		 * 		}
+		 * 		imgs.push(arr);
+		 * 	}
+		 * 	bitmapData.unlock();
+		 * 	bitmapData2.lock();
+		 * 	for (var i = 0; i < 50; i++) {
+		 * 		arr = imgs[i];
+		 * 		for (var j = 0; j < 50; j++) {
+		 * 			img = arr[j];
+		 * 			bitmapData2.setPixel(i, j, img);
+		 * 		}
+		 * 	}
+		 * 	bitmapData2.unlock();
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.x = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		setPixel : function (x, y, data) {
@@ -790,22 +790,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -816,22 +816,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -842,22 +842,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getPixels : function (rect) {
@@ -879,22 +879,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -905,22 +905,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -931,22 +931,22 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 * 	bitmapData2.lock();
+		 * 	bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+		 * 	bitmapData2.unlock(); 
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		setPixels : function (rect, data) {
@@ -1040,16 +1040,16 @@ var LBitmapData = (function () {
 		 * @since 1.7.7
 		 * @public
 		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
+		 * 	var layer = new LSprite();
+		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 * 	addChild(layer);
+		 * 	
+		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	bitmapData.draw(layer);
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	bitmap.y = 150;
+		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -1059,16 +1059,16 @@ var LBitmapData = (function () {
 		 * @since 1.7.7
 		 * @public
 		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
+		 * 	var layer = new LSprite();
+		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 * 	addChild(layer);
+		 * 	
+		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	bitmapData.draw(layer);
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	bitmap.y = 150;
+		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
@@ -1078,16 +1078,16 @@ var LBitmapData = (function () {
 		 * @since 1.7.7
 		 * @public
 		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
+		 * 	var layer = new LSprite();
+		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+		 * 	addChild(layer);
+		 * 	
+		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+		 * 	bitmapData.draw(layer);
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	bitmap.y = 150;
+		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		draw : function (source) {

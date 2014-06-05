@@ -275,7 +275,7 @@ var LBitmap = (function () {
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
+		 * 	trace("width : " + bitmap.getWidth());
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -288,20 +288,20 @@ var LBitmap = (function () {
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
+		 * 	trace("width : " + bitmap.getWidth());
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
 		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
 		 * @method getWidth
-		 * @return @return {float} オブジェクトの幅。
+		 * @return {float} オブジェクトの幅。
 		 * @since 1.0.0
 		 * @public
 		 * @example
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
+		 * 	trace("width : " + bitmap.getWidth());
 		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getWidth : function (maskSize) {
@@ -331,7 +331,7 @@ var LBitmap = (function () {
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
+		 * 	trace("height : " + bitmap.getHeight());
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -344,20 +344,20 @@ var LBitmap = (function () {
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
+		 * 	trace("height : " + bitmap.getHeight());
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
 		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
 		 * @method getHeight
-		 * @return @return {float} オブジェクトの高さ。
+		 * @return {float} オブジェクトの高さ。
 		 * @since 1.0.0
 		 * @public
 		 * @example
 		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
+		 * 	trace("height : " + bitmap.getHeight());
 		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getHeight : function (maskSize) {

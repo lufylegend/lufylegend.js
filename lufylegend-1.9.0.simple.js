@@ -17,12 +17,9 @@ STR_ZERO = "0",
 NONE = "none",
 SUPER = "super",
 UNDEFINED = "undefined",
-LANDSCAPE = "landscape",/*横向*/
-PORTRAIT = "portrait",/*纵向*/
+LANDSCAPE = "landscape",
+PORTRAIT = "portrait",
 LAjax,LTweenLite,LLoadManage,p,mouseX,mouseY;
-/*
- * LEvent.js
- **/
 function LEvent(type){
 	this.eventType = type;
 };
@@ -56,9 +53,6 @@ LEvent.removeEventListener = function (n, t, f,b){
 		n.detachEvent("on" + t, n[t + f]);
 	}
 };
-/*
- * LMouseEvent.js
- **/
 var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
 LMouseEvent.MOUSE_DOWN = "mousedown";
 LMouseEvent.MOUSE_UP = "mouseup";
@@ -69,26 +63,16 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
 LMouseEvent.MOUSE_OVER = "mouseover";
 LMouseEvent.MOUSE_OUT = "mouseout";
 LMouseEvent.DOUBLE_CLICK = "dblclick";
-
 var LMultitouchInputMode = {"NONE":"none","GESTURE":"gesture","TOUCH_POINT":"touchPoint"};
 var LMultitouch = function (){throw "LMultitouch cannot be instantiated";};
 LMultitouch.inputMode = "none";
 LMultitouch.touchs = [];
-
-/*
- * LTextEvent.js
- **/
 var LTextEvent = function (){throw "LTextEvent cannot be instantiated";};
 LTextEvent.TEXT_INPUT = "textInput";
-/*
- * LFocusEvent.js
- **/
+LTextEvent.WIND_COMPLETE = "wind_complete";
 var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
 LFocusEvent.FOCUS_IN = "focusIn";
 LFocusEvent.FOCUS_OUT = "focusOut";
-/*
- * LMouseEventContainer.js
- **/
 function $LMouseEventContainer(){
 	var s = this;
 	s.dispatchAllEvent = false;
@@ -340,22 +324,12 @@ $LMouseEventContainer.prototype = {
 	}
 };
 var LMouseEventContainer = new $LMouseEventContainer();
-
-/*
- * LKeyboardEvent.js
- **/
 var LKeyboardEvent = function (){throw "LKeyboardEvent cannot be instantiated";};
 LKeyboardEvent.KEY_DOWN = "keydown";
 LKeyboardEvent.KEY_UP = "keyup";
 LKeyboardEvent.KEY_PRESS = "keypress";
-/*
- * LAccelerometerEvent.js
- **/
 var LAccelerometerEvent = function (){throw "LAccelerometerEvent cannot be instantiated";};
 LAccelerometerEvent.DEVICEMOTION = "devicemotion";
-/*
- * LMath.js
- **/
 var LMath = {
 	trim:function (s){
 		return s.replace(/(^\s*)|(\s*$)|(\n)/g, "");
@@ -404,13 +378,7 @@ LStageScaleMode.EXACT_FIT = "exactFit";
 LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
 LStageScaleMode.NO_SCALE = "noScale";
-/*
- * LGlobal.js
- **/
 var LGlobal = function (){throw "LGlobal cannot be instantiated";};
-/*
-设置全屏
-*/
 LGlobal.FULL_SCREEN="full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
@@ -533,7 +501,6 @@ LGlobal.setCanvas = function (id,w,h){
 		}
 	};
 	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
-	
 	if(LGlobal.canTouch){
 		LGlobal.ll_clicks = 0;
 		LGlobal.ll_prev_clickTime = 0;
@@ -934,9 +901,6 @@ LGlobal.scaleX = function(v){
 LGlobal.scaleY = function(v){
 	return (v - LGlobal.top)*LGlobal.height/LGlobal.canvasStyleHeight;
 };
-/*
-将canvas缩放为规定大小
-*/
 LGlobal.setStageSize = function(w,h){
 	w =  Math.ceil(w);
 	h =  Math.ceil(h);
@@ -1009,7 +973,6 @@ LGlobal.resize = function(){
 	LGlobal.setStageSize(w,h);
 };
 var LStage = LGlobal;
-
 var LSystem = {
 	sv:0,
 	sleep:function(s){
@@ -1021,11 +984,6 @@ var LSystem = {
 		if(LGlobal.stage){LGlobal.resize();}
 	}
 };
-/** @language chinese
- * PageProperty
- * @class 全局函数
- */
-
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (elt) {
 		var len = this.length >>> 0;
@@ -1047,34 +1005,6 @@ if (!Array.isArray){
 		return Object.prototype.toString.apply(value) == '[object Array]';
 	};
 }
-
-/** @language chinese
- * 您可以在测试环境下捕获来自 trace() 函数的输出并显示结果。如果 trace 语句中的任何参数包含 String 之外的数据类型，则 trace 函数将调用与该数据类型关联的 toString() 方法。例如，如果该参数是一个布尔值，则跟踪函数将调用 Boolean.toString() 并显示返回值。
- * @method trace
- * @param {Object} expression 要计算的表达式。expression 参数的值显示在"输出"面板中。
- * @example
- * 	trace("debug text 1", "debug text 2", "debug text 3");
- * @since 1.0.0
- * @public
-*/
-/** @language english
- * You can use Debug Mode to capture output from the trace() function and display the result. If any argument in a trace statement includes a data type other than a String, the trace function invokes the associated toString() method for that data type. For example, if the argument is a Boolean value the trace function invokes Boolean.toString() and displays the return value.
- * @method trace
- * @param {Object} expression An expression to evaluate. the value of the expression parameter is displayed in the Output panel.
- * @example
- * 	trace("debug text 1", "debug text 2", "debug text 3");
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Debugモード を使用すると、trace() 関数の出力を取得し、その結果を表示できます。trace ステートメント内の引数に String 以外のデータ型が含まれる場合、trace 関数はそのデータ型に関連した toString() メソッドを呼び出します。たとえば、引数がブール値の場合、trace 関数は Boolean.toString() を呼び出して戻り値を表示します。
- * @method trace
- * @param {Object} expression 評価する式。expression パラメータの値が [出力] パネルに表示されます。
- * @example
- * 	trace("debug text 1", "debug text 2", "debug text 3");
- * @since 1.0.0
- * @public
- */
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -1092,130 +1022,12 @@ function trace() {
 		t.scrollTop = t.scrollHeight;
 	}
 }
-
-/** @language chinese
- * 将一个 DisplayObject 子实例添加到Stage。
- * @method addChild
- * @param {LDisplayObject} child 要添加的 DisplayObject 实例。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Adds a child DisplayObject instance to the Stage.
- * @method addChild
- * @param {Object} expression The DisplayObject instance that you pass in the child parameter.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Stageに子 DisplayObject インスタンスを追加します。
- * @method addChild
- * @param {Object} expression 追加される DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * @since 1.0.0
- * @public
- */
 function addChild (o) {
 	LGlobal.stage.addChild(o);
 }
-
-/** @language chinese
- * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
- * @method removeChild
- * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method removeChild
- * @param {Object} expression The DisplayObject instance to remove.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method removeChild
- * @param {Object} expression 削除する DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
 function removeChild (o) {
 	LGlobal.stage.removeChild(o);
 }
-
-/** @language chinese
- * 引擎初始化函数。别名init
- * @method Linit
- * @param {Number} speed 游戏速度设定,每次页面刷新间隔（单位毫秒）。
- * @param {String} divid 传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部。
- * @param {int} width 游戏界面宽。
- * @param {int} height 游戏界面高。
- * @param {Function} callback 游戏初始化后，调用此函数。
- * @param {String} type 当为null时，会先进行页面的onload操作，如果你的init函数调用是在onload之后，那么需要将此参数设为LEvent.INIT。
- * @example
- * 	<!DOCTYPE html>
- * 	<html>
- * 	<head>
- * 	<meta charset="UTF-8">
- * 	<title>demo</title>
- * 	</head>
- * 	<body>
- * 	<div id="mylegend">loading……</div>
- * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
- * 	<script>
- * 	Linit(50,"mylegend",800,480,main);
- * 	function main(){
- * 	    alert("感谢您使用lufylegend库件");
- * 	}
- * 	</script>
- * 	</body>
- * 	</html>
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method Linit
- * @param {Object} expression The DisplayObject instance to remove.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method Linit
- * @param {Object} expression 削除する DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
 function init (s, c, w, h, f, t) {
 	LGlobal.speed = s;
 	var _f = function () {
@@ -1245,40 +1057,6 @@ function init (s, c, w, h, f, t) {
 	}
 }
 var LInit = init;
-
-/** @language chinese
- * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
- * @method Lextends
- * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method Lextends
- * @param {Object} expression The DisplayObject instance to remove.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method Lextends
- * @param {Object} expression 削除する DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
 function base (d, b, a) {
 	var p = null, o = d.constructor.prototype, h = {};
 	if(d.constructor.name == "Object"){
@@ -1296,47 +1074,9 @@ function base (d, b, a) {
 	b.apply(d, a);
 }
 var LExtends = base;
-
-/** @language chinese
- * 从 Stage 实例的子列表中删除指定的 child DisplayObject 实例。
- * @method getTimer
- * @param {LDisplayObject} child 要删除的 DisplayObject 实例。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Removes the specified child DisplayObject instance from the child list of the Stage instance. 
- * @method getTimer
- * @param {Object} expression The DisplayObject instance to remove.
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * Stage インスタンスの子リストから指定の child DisplayObject インスタンスを削除します。
- * @method getTimer
- * @param {Object} expression 削除する DisplayObject インスタンスです。
- * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
- * @since 1.0.0
- * @public
- */
 function getTimer () {
 	return (new Date()).getTime() - LGlobal.startTimer;
 }
-
-/*
- * LObject.js
- **/
 function LObject(){
 	this.type = "LObject";
 	this.objectIndex = ++LGlobal.objectIndex;
@@ -1425,15 +1165,12 @@ LMatrix.prototype = {
 	},
 	add:function(mtx){
 		var s = this,a,b,c,d,tx,ty,u,v,w;
-		
 		a = s.a*mtx.a + s.b*mtx.c + s.u*mtx.tx;
 		b = s.a*mtx.b + s.b*mtx.d + s.u*mtx.ty;
 		u = s.a*mtx.u + s.b*mtx.v + s.u*mtx.w;
-		
 		c = s.c*mtx.a + s.d*mtx.c + s.v*mtx.tx;
 		d = s.c*mtx.b + s.d*mtx.d + s.v*mtx.ty;
 		v = s.c*mtx.u + s.d*mtx.v + s.v*mtx.w;
-		
 		tx = s.tx*mtx.a + s.ty*mtx.c + s.w*mtx.tx;
 		ty = s.tx*mtx.b + s.ty*mtx.d + s.w*mtx.ty;
 		w = s.tx*mtx.u + s.ty*mtx.v + s.w*mtx.w;
@@ -1450,11 +1187,9 @@ LMatrix.prototype = {
 			var a = s.a*mtx.a + s.b*mtx.c + s.u*mtx.tx,
 			b = s.a*mtx.b + s.b*mtx.d + s.u*mtx.ty,
 			u = s.a*mtx.u + s.b*mtx.v + s.u*mtx.w,
-			
 			c = s.c*mtx.a + s.d*mtx.c + s.v*mtx.tx,
 			d = s.c*mtx.b + s.d*mtx.d + s.v*mtx.ty,
 			v = s.c*mtx.u + s.d*mtx.v + s.v*mtx.w,
-			
 			tx = s.tx*mtx.a + s.ty*mtx.c + s.w*mtx.tx,
 			ty = s.tx*mtx.b + s.ty*mtx.d + s.w*mtx.ty,
 			w = s.tx*mtx.u + s.ty*mtx.v + s.w*mtx.w;
@@ -1466,7 +1201,6 @@ LMatrix.prototype = {
 		return new LMatrix(s.a,s.b,s.c,s.d,s.tx,s.ty,s.u,s.v,s.w);
 	}
 };
-
 function LVec2(x,y){
 	this.x = x?x:0;
 	this.y = y?y:0;
@@ -1479,18 +1213,15 @@ LVec2.prototype.normalize = function(){
 	var s = this,l=s.length();
 	return new LVec2(s.x/l,s.y/l);
 };
-
 LVec2.prototype.normR = function(){
 	return new LVec2(-this.y,this.x);
 };
 LVec2.prototype.normL = function(){
 	return new LVec2(this.y,-this.x);
 };
-
 LVec2.dot = function(a,b){
 	return a.x * b.x + a.y * b.y;
 };
-
 LVec2.cross = function(a,b){
 	return a.x * b.y - a.y * b.x;
 };
@@ -1517,370 +1248,557 @@ LVec2.getMinMax = function(vecs,axis){
 	}
 	return {"min_o":min_o,"min_i":min_i,"max_o":max_o,"max_i":max_i};
 };
-/*
- * LEventDispatcher.js
- **/
-function LEventDispatcher(){
-	var s = this;
-	base(s,LObject,[]);
-	s._eventList = new Array();
-}
-p = {
-	addEventListener:function(type,listener){
-		this._eventList.push({listener:listener,type:type});
-	},
-	removeEventListener:function(type,listener){
-		var s = this,i,length;
-		length = s._eventList.length;
-		for(i=0;i<length;i++){
-			if(!s._eventList[i])continue;
-			if(type == s._eventList[i].type && s._eventList[i].listener == listener){
-				s._eventList.splice(i,1);
-				return;
-			}
-		}
-	},
-	removeAllEventListener:function (){
-		this._eventList = [];
-	},
-	dispatchEvent:function(type){
+var LEventDispatcher = (function () {
+	function LEventDispatcher () {
 		var s = this;
-		var i,length = s._eventList.length,ctype = (typeof type == "string") ? type : type.eventType;
-		for(i=0;i<length;i++){
-			if(!s._eventList[i])continue;
-			if(ctype == s._eventList[i].type){
-				if(typeof type == "string"){
-					s.currentTarget = s.target = s;
-					s.eventType = s.event_type = ctype;
-					s._eventList[i].listener(s);
-				}else{
-					type.currentTarget = type.target = s;
-					s._eventList[i].listener(type);
+		LExtends(s, LObject, []);
+		s._eventList = new Array();
+	}
+	var p = {
+		addEventListener : function (type, listener) {
+			this._eventList.push({listener : listener, type : type});
+		},
+		removeEventListener : function (type, listener) {
+			var s = this, i, length;
+			length = s._eventList.length;
+			for (i = 0; i < length; i++) {
+				if (!s._eventList[i]) {
+					continue;
 				}
-			}
-		}
-	},
-	hasEventListener:function(type){
-		var s = this,i,length = s._eventList.length;
-		for(i=0;i<length;i++){
-			if(!s._eventList[i])continue;
-			if(type == s._eventList[i].type)return true;
-		}
-		return false;
-	}
-};
-for(var k in p)LEventDispatcher.prototype[k]=p[k];
-/*
- * LDisplayObject.js
- **/
-function LDisplayObject(){
-	var s = this;
-	base(s,LEventDispatcher,[]);
-	s.x = 0;  
-	s.y = 0;  
-	s.width = 0;  
-	s.height = 0;  
-	s.scaleX=1;
-	s.scaleY=1;
-	s.alpha = 1;
-	s.visible=true;
-	s.rotate = 0;
-	s.mask = null;
-	s.blendMode = null;
-}
-p = {
-	_createCanvas:function(){
-		var s = this;
-		if(!s._canvas){
-			s._canvas = document.createElement("canvas");
-			s._context = s._canvas.getContext("2d");
-		}
-	}
-	,ll_show:function (){
-		var s = this,c = LGlobal.canvas;
-		if(!s._canShow())return;
-		c.save();
-		s._showReady(c);
-		if(s.blendMode){
-			c.globalCompositeOperation = s.blendMode;
-		}
-		if(s.filters){
-			s.setShadow();
-		}
-		s._rotateReady();
-		if(s.mask != null && s.mask.ll_show){
-			s.mask.ll_show();
-			c.clip();
-		}
-
-		s._transformRotate();
-
-		s._transformScale();
-
-		s._coordinate(c);
-		if(s.alpha < 1){
-			c.globalAlpha = s.alpha;
-		}
-		s._ll_show(c);
-		c.restore();
-		if(typeof s._ll_loopframe == "function")s._ll_loopframe();
-	},
-	_canShow:function(){return this.visible;},
-	_coordinate:function(c){
-		var s = this;
-		if(s.x != 0 || s.y != 0)c.transform(1,0,0,1,s.x,s.y);
-	},
-	_rotateReady:function(){},
-	_showReady:function(c){},
-	_ll_show:function(c){},
-	setShadow:function(){
-		var s=this,f=s.filters;
-		if(!f)return;
-		for(var i=0,l=f.length;i<l;i++)f[i].ll_show();
-	},
-	_transformRotate:function(){
-		var s = this;
-		if(s.rotate == 0)return;
-		var c = LGlobal.canvas,rotateFlag = Math.PI / 180,rotateObj = new LMatrix();
-		if((typeof s.rotatex) == UNDEFINED){
-			s.rotatex=s.rotatey=0;
-		}
-		if(s.box2dBody)rotateFlag=1;
-		rotateObj.a = Math.cos(s.rotate * rotateFlag);
-		rotateObj.b = Math.sin(s.rotate * rotateFlag);
-		rotateObj.c = -rotateObj.b;
-		rotateObj.d = rotateObj.a;
-		rotateObj.tx = s.x + s.rotatex;
-		rotateObj.ty = s.y + s.rotatey;
-		rotateObj.transform(c).setTo(1,0,0,1,-rotateObj.tx,-rotateObj.ty).transform(c);
-	},
-	_transformScale:function(){
-		var s = this,c = LGlobal.canvas;
-		if(s.scaleX == 1 && s.scaleY == 1)return;
-		var scaleObj = new LMatrix();
-		if(s.scaleX != 1)scaleObj.tx = s.x;
-		if(s.scaleY != 1)scaleObj.ty = s.y;
-		scaleObj.a = s.scaleX;
-		scaleObj.d = s.scaleY;
-		scaleObj.transform(c).setTo(1,0,0,1,-scaleObj.tx,-scaleObj.ty).transform(c);
-	},
-	copyProperty:function(a){
-		var s = this;
-		for(var k in a){
-			if(typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean"){
-				if(k == "objectindex" || k == "objectIndex"){continue;}
-				s[k] = a[k];
-			}else if(Object.prototype.toString.apply(a[k]) == '[object Array]'){
-				s[k] = a[k].slice();
-			}
-		}
-		if(a.mask)s.mask = a.mask.clone();
-	},
-	getAbsoluteScale:function(){
-		var s = this;
-		var sX=s.scaleX,sY=s.scaleY;
-		var p = s.parent;
-		while(p != "root"){
-	        sX *= p.scaleX;
-	        sY *= p.scaleY;
-			p = p.parent;
-		}
-		return {scaleX:sX,scaleY:sY};
-	},
-	getRootCoordinate:function(){
-		var s = this;
-		var sx=s.x,sy=s.y;
-		var p = s.parent;
-		while(p != "root"){
-	        sx *= p.scaleX;
-	        sy *= p.scaleY;
-			sx += p.x;
-			sy += p.y;
-			p = p.parent;
-		}
-		return new LPoint(sx,sy);
-	},
-	getBounds:function(d){
-		if(typeof d == UNDEFINED)return new LRectangle(0,0,0,0);
-		var s = this,x=0,y=0,w=0,h=0;
-		if(s.objectIndex != d.objectIndex){
-			var sp = s.getRootCoordinate();
-			var dp = d.getRootCoordinate();
-			x = sp.x - dp.x;
-			y = sp.y - dp.y;
-		}
-		if(d.getWidth)w=d.getWidth();
-		if(d.getHeight)h=d.getHeight();
-		return new LRectangle(x,y,w,h);
-	},
-	getDataCanvas:function(){
-		var s = this,_o,o,_c,c;
-		s._createCanvas();
-		o = LGlobal.canvasObj,c = LGlobal.canvas;
-		_o = s._canvas,_c = s._context;
-		s.width = s.getWidth();
-		s.height = s.getHeight();
-		_o.width = s.width;
-		_o.height = s.height;
-		_c.clearRect(0,0,s.width,s.height);
-		LGlobal.canvasObj = s._canvas;
-		LGlobal.canvas = s._context;
-		s.ll_show();
-		s._canvas = _o;
-		s._context = _c;
-		LGlobal.canvasObj = o;
-		LGlobal.canvas = c;
-		return s._canvas;
-	},
-	getDataURL:function(){
-		var s = this,r = s.getDataCanvas();
-		return r.toDataURL();
-	},
-	ismouseonShapes:function(shapes,mx,my){
-		var s = this;
-		var parent = s;
-		if(typeof shapes == UNDEFINED){
-			shapes = s.shapes;
-		}
-		var m = s.getRootMatrix();
-		for(var j=shapes.length-1;j>=0;j--){
-			var child = shapes[j],v,arg = child.arg;
-			v = s._changeShape(child.type,arg,m);
-			if(child.type == LShape.VERTICES){
-				if(LGlobal.hitPolygon(v,mx,my))return true;
-			}else if(child.type == LShape.RECT){
-				if(LGlobal.hitPolygon(v,mx,my))return true;
-			}else if(child.type == LShape.ARC){
-				if((v[0] - mx)*(v[0] - mx) + (v[1] - my)*(v[1] - my) < v[3])return true;
-			}
-		}
-		return false;
-	},
-	_changeShape:function(type,arg,m){
-		var v,arg = arg,r2;
-		if(type == LShape.VERTICES){
-			v = [];
-			for(var i=0,l=arg.length;i<l;i++){
-				v[i]=m.toArray([arg[i][0],arg[i][1],1]);
-			}
-		}else if(type == LShape.RECT){
-			v = [[arg[0],arg[1]],[arg[0]+arg[2],arg[1]],[arg[0]+arg[2],arg[1]+arg[3]],[arg[0],arg[1]+arg[3]]];
-			for(var i=0,l=v.length;i<l;i++){
-				v[i]=m.toArray([v[i][0],v[i][1],1]);
-			}
-		}else if(type == LShape.ARC){
-			var v1 = m.toArray([arg[0],arg[1],1]),v2 = m.toArray([arg[0]+arg[2],arg[1],1]);
-			r2 = (v1[0] - v2[0])*(v1[0] - v2[0]) + (v1[1] - v2[1])*(v1[1] - v2[1]);
-			v = [v1[0],v1[1],Math.sqrt(r2),r2];
-		}
-		return v;
-	},
-	getRootMatrix:function(){
-		var parent = this;
-		var m = new LMatrix();
-		while(parent && parent != "root"){
-			if(parent.scaleX != 1 || parent.scaleY != 1)m.scale(parent.scaleX,parent.scaleY);
-			if(parent.rotate != 0)m.rotate(parent.rotate);
-			if(parent.x != 0 || parent.y != 0)m.translate(parent.x,parent.y);
-			parent = parent.parent;
-		}
-		return m;
-	},
-	remove:function(){
-		var s = this,p = s.parent;
-		if(!p || p == "root")return;
-		p.removeChild(s);
-	}
-};
-for(var k in p)LDisplayObject.prototype[k]=p[k];
-/*
- * LInteractiveObject.js
- **/
-function LInteractiveObject(){
-	var s = this;
-	base(s,LDisplayObject,[]);
-	s.type = "LInteractiveObject";
-	s.mouseEnabled = true;
-	s.mouseChildren = true;
-	s.mouseList = new Array();
-}
-p = {
-	addEventListener:function(type,listener){
-		var s = this;
-		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
-			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
-				LMouseEventContainer.addMouseEvent(s,type,listener);
-				return;
-			}
-			s.mouseList.push({listener:listener,type:type});
-		}else{
-			s._eventList.push({listener:listener,type:type});
-		}
-	},
-	removeEventListener:function(type,listener){
-		var s = this,i,length;
-		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
-			if(LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])){
-				LMouseEventContainer.removeMouseEvent(s,type,listener);
-				return;
-			}
-			length = s.mouseList.length;
-			for(i=0;i<length;i++){
-				if(!s.mouseList[i])continue;
-				if(type == s.mouseList[i].type && s.mouseList[i].listener == listener){
-					s.mouseList.splice(i,1);
+				if (type == s._eventList[i].type && s._eventList[i].listener == listener) {
+					s._eventList.splice(i, 1);
 					return;
 				}
 			}
-		}else{
-			length = s._eventList.length;
-			for(i=0;i<length;i++){
-				if(!s._eventList[i])continue;
-				if(type == s._eventList[i].type && s._eventList[i].listener == listener){
-					s._eventList.splice(i,1);
-					return;
+		},
+		removeAllEventListener : function () {
+			this._eventList = [];
+		},
+		dispatchEvent : function (type) {
+			var s = this, i, length = s._eventList.length, ctype = (typeof type == "string") ? type : type.eventType;
+			for (i = 0; i < length; i++) {
+				if (!s._eventList[i]) {
+					continue;
+				}
+				if (ctype == s._eventList[i].type) {
+					if (typeof type == "string") {
+						s.currentTarget = s.target = s;
+						s.eventType = s.event_type = ctype;
+						s._eventList[i].listener(s);
+					}else{
+						type.currentTarget = type.target = s;
+						s._eventList[i].listener(type);
+					}
 				}
 			}
-		}
-	},
-	removeAllEventListener:function (){
-		var s = this;
-		s.mouseList.length = 0;
-		s._eventList.length = 0;
-		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]){
-			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_DOWN);
-		}
-		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_UP]){
-			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_UP);
-		}
-		if(LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]){
-			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_MOVE);
-			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_OVER);
-			LMouseEventContainer.removeMouseEvent(s,LMouseEvent.MOUSE_OUT);
-		}
-	},
-	hasEventListener:function(type){
-		var s = this,i,length;
-		if(type.indexOf("mouse")>=0 || type.indexOf("touch")>=0 || type == LMouseEvent.DOUBLE_CLICK){
-			length = s.mouseList.length;
-			for(i=0;i<length;i++){
-				if(!s.mouseList[i])continue;
-				if(type == s.mouseList[i].type)return true;
+		},
+		hasEventListener : function (type) {
+			var s = this, i, length = s._eventList.length;
+			for (i = 0; i < length; i++) {
+				if (!s._eventList[i]) {
+					continue;
+				}
+				if (type == s._eventList[i].type) {
+					return true;
+				}
 			}
-		}else{
-			length = s._eventList.length;
-			for(i=0;i<length;i++){
-				if(!s._eventList[i])continue;
-				if(type == s._eventList[i].type)return true;
-			}
+			return false;
 		}
-		return false;
+	};
+	for (var k in p) {
+		LEventDispatcher.prototype[k] = p[k];
 	}
-};
-for(var k in p)LInteractiveObject.prototype[k]=p[k];
-/*
-* LLoader.js
-**/
+	return LEventDispatcher;
+})();
+var LDisplayObject = (function () {
+	function LDisplayObject () {
+		var s = this;
+		LExtends(s, LEventDispatcher, []);
+		s.x = 0;
+		s.y = 0;
+		s.width = 0;
+		s.height = 0;
+		s.scaleX = 1;
+		s.scaleY = 1;
+		s.alpha = 1;
+		s.visible = true;
+		s.rotate = 0;
+		s.mask = null;
+		s.blendMode = null;
+		s.filters = null;
+	}
+	var p = {
+		_createCanvas:function(){
+			var s = this;
+			if (!s._canvas) {
+				s._canvas = document.createElement("canvas");
+				s._context = s._canvas.getContext("2d");
+			}
+		},
+		ll_show : function () {
+			var s = this, c = LGlobal.canvas;
+			if (!s._canShow()) {
+				return;
+			}
+			c.save();
+			s._showReady(c);
+			if (s.blendMode) {
+				c.globalCompositeOperation = s.blendMode;
+			}
+			if (s.filters) {
+				s._ll_setShadow();
+			}
+			s._rotateReady();
+			if (s.mask != null && s.mask.ll_show) {
+				s.mask.ll_show();
+				c.clip();
+			}
+			s._transformRotate();
+			s._transformScale();
+			s._coordinate(c);
+			if (s.alpha < 1) {
+				c.globalAlpha = s.alpha;
+			}
+			s._ll_show(c);
+			c.restore();
+			if (typeof s._ll_loopframe == "function") {
+				s._ll_loopframe();
+			}
+		},
+		_canShow : function () {
+			return this.visible;
+		},
+		_coordinate : function (c) {
+			var s = this;
+			if (s.x != 0 || s.y != 0) {
+				c.transform(1, 0, 0, 1, s.x, s.y);
+			}
+		},
+		_rotateReady : function () {},
+		_showReady : function (c) {},
+		_ll_show : function (c) {},
+		_ll_setShadow : function () {
+			var s = this, f = s.filters, i, l;
+			if (!f) {
+				return;
+			}
+			for (i = 0, l = f.length; i < l; i++) {
+				f[i].ll_show();
+			}
+		},
+		_transformRotate : function () {
+			var s = this, c;
+			if (s.rotate == 0) {
+				return;
+			}
+			c = LGlobal.canvas, rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
+			if ((typeof s.rotatex) == UNDEFINED) {
+				s.rotatex = 0;
+				s.rotatey = 0;
+			}
+			if (s.box2dBody) {
+				rotateFlag = 1;
+			}
+			rotateObj.a = Math.cos(s.rotate * rotateFlag);
+			rotateObj.b = Math.sin(s.rotate * rotateFlag);
+			rotateObj.c = -rotateObj.b;
+			rotateObj.d = rotateObj.a;
+			rotateObj.tx = s.x + s.rotatex;
+			rotateObj.ty = s.y + s.rotatey;
+			rotateObj.transform(c).setTo(1, 0, 0, 1, -rotateObj.tx, -rotateObj.ty).transform(c);
+		},
+		_transformScale : function () {
+			var s = this,c = LGlobal.canvas, scaleObj;
+			if (s.scaleX == 1 && s.scaleY == 1) {
+				return;
+			}
+			scaleObj = new LMatrix();
+			if (s.scaleX != 1) {
+				scaleObj.tx = s.x;
+			}
+			if (s.scaleY != 1) {
+				scaleObj.ty = s.y;
+			}
+			scaleObj.a = s.scaleX;
+			scaleObj.d = s.scaleY;
+			scaleObj.transform(c).setTo(1, 0, 0, 1, -scaleObj.tx, -scaleObj.ty).transform(c);
+		},
+		copyProperty : function (a) {
+			var s = this, k;
+			for (k in a) {
+				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
+					if (k == "objectindex" || k == "objectIndex") {
+						continue;
+					}
+					s[k] = a[k];
+				} else if (Array.isArray(a[k])) {
+					s[k] = a[k].slice();
+				}
+			}
+			if (a.mask) {
+				s.mask = a.mask.clone();
+			}
+		},
+		getAbsoluteScale : function () {
+			var s = this, sX, sY, p;
+			sX = s.scaleX;
+			sY = s.scaleY;
+			p = s.parent;
+			while (p != "root") {
+				sX *= p.scaleX;
+				sY *= p.scaleY;
+				p = p.parent;
+			}
+			return {scaleX : sX, scaleY : sY};
+		},
+		getRootCoordinate : function () {
+			var s = this, sx, sy, p;
+			sx=s.x;
+			sy=s.y;
+			p = s.parent;
+			while (p != "root") {
+				sx *= p.scaleX;
+				sy *= p.scaleY;
+				sx += p.x;
+				sy += p.y;
+				p = p.parent;
+			}
+			return new LPoint(sx,sy);
+		},
+		getBounds : function (d) {
+			if (typeof d == UNDEFINED) {
+				return new LRectangle(0, 0, 0, 0);
+			}
+			var s = this, x = 0, y = 0, w = 0, h = 0, sp, dp;
+			if (s.objectIndex != d.objectIndex) {
+				sp = s.getRootCoordinate();
+				dp = d.getRootCoordinate();
+				x = sp.x - dp.x;
+				y = sp.y - dp.y;
+			}
+			if (d.getWidth) {
+				w = d.getWidth();
+			}
+			if (d.getHeight) {
+				h = d.getHeight();
+			}
+			return new LRectangle(x, y, w, h);
+		},
+		getDataCanvas : function () {
+			var s = this, _o, o, _c, c;
+			s._createCanvas();
+			o = LGlobal.canvasObj;
+			c = LGlobal.canvas;
+			_o = s._canvas;
+			_c = s._context;
+			s.width = s.getWidth();
+			s.height = s.getHeight();
+			_o.width = s.width;
+			_o.height = s.height;
+			_c.clearRect(0, 0, s.width, s.height);
+			LGlobal.canvasObj = s._canvas;
+			LGlobal.canvas = s._context;
+			s.ll_show();
+			s._canvas = _o;
+			s._context = _c;
+			LGlobal.canvasObj = o;
+			LGlobal.canvas = c;
+			return s._canvas;
+		},
+		getDataURL : function () {
+			var s = this, r = s.getDataCanvas();
+			return r.toDataURL();
+		},
+		ismouseonShapes : function (shapes, mx, my) {
+			var s = this, parent = s, m, child, j, v, arg;
+			if (typeof shapes == UNDEFINED) {
+				shapes = s.shapes;
+			}
+			m = s.getRootMatrix();
+			for (j = shapes.length - 1; j >= 0; j--) {
+				child = shapes[j];
+				arg = child.arg;
+				v = s._changeShape(child.type, arg, m);
+				if (child.type == LShape.VERTICES) {
+					if (LGlobal.hitPolygon(v, mx, my)) {
+						return true;
+					}
+				} else if (child.type == LShape.RECT) {
+					if (LGlobal.hitPolygon(v, mx, my)) {
+						return true;
+					}
+				} else if (child.type == LShape.ARC) {
+					if ((v[0] - mx) * (v[0] - mx) + (v[1] - my) * (v[1] - my) < v[3]) {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
+		_changeShape : function (type, arg, m) {
+			var v, arg = arg, r2, i, l, v1, v2;
+			if (type == LShape.VERTICES) {
+				v = [];
+				for (i = 0, l = arg.length; i < l; i++) {
+					v[i] = m.toArray([arg[i][0], arg[i][1], 1]);
+				}
+			} else if (type == LShape.RECT) {
+				v = [[arg[0], arg[1]], [arg[0] + arg[2], arg[1]], [arg[0] + arg[2], arg[1] + arg[3]], [arg[0], arg[1] + arg[3]]];
+				for (i = 0, l = v.length; i < l; i++) {
+					v[i] = m.toArray([v[i][0], v[i][1],1]);
+				}
+			} else if (type == LShape.ARC) {
+				v1 = m.toArray([arg[0], arg[1], 1]);
+				v2 = m.toArray([arg[0] + arg[2], arg[1], 1]);
+				r2 = (v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]);
+				v = [v1[0], v1[1], Math.sqrt(r2), r2];
+			}
+			return v;
+		},
+		getRootMatrix : function () {
+			var parent = this, m = new LMatrix();
+			while (parent && parent != "root") {
+				if (parent.scaleX != 1 || parent.scaleY != 1) {
+					m.scale(parent.scaleX, parent.scaleY);
+				}
+				if (parent.rotate != 0) {
+					m.rotate(parent.rotate);
+				}
+				if (parent.x != 0 || parent.y != 0) {
+					m.translate(parent.x, parent.y);
+				}
+				parent = parent.parent;
+			}
+			return m;
+		},
+		remove : function () {
+			var s = this, p = s.parent;
+			if (!p || p == "root") {
+				return;
+			}
+			p.removeChild(s);
+		}
+	};
+	for (var k in p) {
+		LDisplayObject.prototype[k] = p[k];
+	}
+	return LDisplayObject;
+})();
+var LInteractiveObject = (function () {
+	function LInteractiveObject () {
+		var s = this;
+		LExtends(s, LDisplayObject, []);
+		s.type = "LInteractiveObject";
+		s.mouseEnabled = true;
+		s.mouseChildren = true;
+		s.mouseList = new Array();
+	}
+	var p = {
+		addEventListener : function (type, listener) {
+			var s = this;
+			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
+				if (LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])) {
+					LMouseEventContainer.addMouseEvent(s, type, listener);
+					return;
+				}
+				s.mouseList.push({listener : listener, type : type});
+			}else{
+				s._eventList.push({listener : listener, type : type});
+			}
+		},
+		removeEventListener : function (type, listener) {
+			var s = this, i, length;
+			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
+				if (LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])) {
+					LMouseEventContainer.removeMouseEvent(s, type, listener);
+					return;
+				}
+				length = s.mouseList.length;
+				for (i = 0; i < length; i++) {
+					if (!s.mouseList[i]) {
+						continue;
+					}
+					if (type == s.mouseList[i].type && s.mouseList[i].listener == listener) {
+						s.mouseList.splice(i, 1);
+						return;
+					}
+				}
+			} else {
+				length = s._eventList.length;
+				for (i = 0; i < length; i++) {
+					if (!s._eventList[i]) {
+						continue;
+					}
+					if (type == s._eventList[i].type && s._eventList[i].listener == listener) {
+						s._eventList.splice(i, 1);
+						return;
+					}
+				}
+			}
+		},
+		removeAllEventListener : function () {
+			var s = this;
+			s.mouseList.length = 0;
+			s._eventList.length = 0;
+			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]) {
+				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_DOWN);
+			}
+			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_UP]) {
+				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_UP);
+			}
+			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_MOVE);
+				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OVER);
+				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OUT);
+			}
+		},
+		hasEventListener : function (type) {
+			var s = this, i, length;
+			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
+				length = s.mouseList.length;
+				for (i = 0; i < length; i++) {
+					if (!s.mouseList[i]){
+						continue;
+					}
+					if (type == s.mouseList[i].type) {
+						return true;
+					}
+				}
+			} else {
+				length = s._eventList.length;
+				for (i = 0; i < length; i++) {
+					if (!s._eventList[i]) {
+						continue;
+					}
+					if (type == s._eventList[i].type) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	};
+	for (var k in p) {
+		LInteractiveObject.prototype[k] = p[k];
+	}
+	return LInteractiveObject;
+})();
+var LDisplayObjectContainer = (function () {
+	function LDisplayObjectContainer () {
+		var s = this;console.log(" --- LDisplayObjectContainer --- ");
+		LExtends(s, LInteractiveObject, []);
+		s.childList = new Array();
+		s.numChildren = 0;
+	}
+	var p = {
+		addChild : function (d) {
+			var s  = this,t;
+			if (d.parent) {
+				t = LGlobal.destroy;
+				LGlobal.destroy = false;
+				d.parent.removeChild(d);
+				LGlobal.destroy = t;
+			}
+			d.parent = s;
+			s.childList.push(d);
+			s.numChildren = s.childList.length;
+			return d;
+		},
+		addChildAt : function (d, i) {
+			var s = this,t;
+			if (i < 0 || i > s.childList.length) {
+				return;
+			}
+			if (typeof d.remove == "function") {
+				t = LGlobal.destroy;
+				LGlobal.destroy = false;
+				d.remove();
+				LGlobal.destroy = t;
+			}
+			d.parent = s;
+			s.childList.splice(i, 0, d);
+			s.numChildren = s.childList.length;
+			return d;
+		},
+		removeChild : function (d) {
+			var s  = this, c = s.childList, i, l;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (d.objectIndex == c[i].objectIndex) {
+					if (LGlobal.destroy && d.die) {
+						d.die();
+					}
+					s.childList.splice(i, 1);
+					break;
+				}
+			}
+			s.numChildren = s.childList.length;
+			delete d.parent;
+		},
+		getChildAt : function (i) {
+			var s  = this, c = s.childList;
+			if (c.length == 0 || c.length <= i) {
+				return null;
+			}
+			return c[i];
+		},
+		removeChildAt : function (i) {
+			var s  = this, c = s.childList;
+			if (c.length <= i) {
+				return;
+			}
+			if (LGlobal.destroy && c[i].die) {
+				c[i].die();
+			}
+			var d = s.childList.splice(i, 1);
+			s.numChildren = s.childList.length;
+			return d;
+		},
+		getChildIndex : function (child) {
+			var s = this, c = s.childList, i, l = c.length;
+			for (i = 0; i < l; i++) {
+				if (c[i].objectIndex == child.objectIndex) {
+					return i;
+				}
+			}
+			return -1;
+		},
+		setChildIndex : function (child, index) {
+			var s = this, c = s.childList, i, l = c.length;
+			if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
+				return -1;
+			}
+			for (i = 0; i < l; i++) {
+				if(c[i].objectIndex == child.objectIndex){
+					break;
+				}
+			}
+			s.childList.splice(i,1);
+			s.childList.splice(index, 0, child);
+			return index;
+		},
+		resize : function () {
+			var s  = this;
+			s.width = s.getWidth();
+			s.height = s.getHeight();
+		},
+		removeAllChild : function () {
+			var s  = this, c = s.childList, i, l;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (LGlobal.destroy && c[i].die) {
+					c[i].die();
+				}
+			}
+			s.childList.length = 0;
+			s.width = 0;
+			s.height = 0;
+			s.numChildren = 0;
+		}
+	};
+	for (var k in p) {
+		LDisplayObjectContainer.prototype[k] = p[k];
+	}
+	return LDisplayObjectContainer;
+})();
 function LLoader(){
 	base(this,LEventDispatcher,[]);
 	var s = this;
@@ -1914,9 +1832,6 @@ p = {
 	}
 };
 for(var k in p)LLoader.prototype[k]=p[k];
-/*
-* LURLLoader.js
-**/
 function LURLLoader(){
 	var s = this;
 	base(s,LObject,[]);
@@ -1957,9 +1872,6 @@ p = {
 	}
 };
 for(var k in p)LURLLoader.prototype[k]=p[k];
-/*
- * LMedia.js 
- **/
 function LMedia(){
 	var s = this;
 	base(s,LDisplayObject,[]);
@@ -2046,9 +1958,6 @@ p = {
 	}
 };
 for(var k in p)LMedia.prototype[k]=p[k];
-/*
- * LSound.js 
- **/
 function LSound(u){
 	var s = this;
 	base(s,LMedia,[]);
@@ -2059,9 +1968,6 @@ function LSound(u){
 	s.data.autoplay = false;
 	if(u)s.load(u);
 }
-/*
- * LVideo.js 
- **/
 function LVideo(u){
 	var s = this;
 	base(s,LMedia,[]);
@@ -2090,9 +1996,7 @@ p = {
 		if(s.alpha < 1){
 			c.globalAlpha = s.alpha;
 		}
-
 		s._transformScale();
-
 		s._transformRotate();
 		if(s.mask != null && s.mask.ll_show){
 			s.mask.ll_show();
@@ -2114,9 +2018,6 @@ p = {
 	}
 };
 for(var k in p)LVideo.prototype[k]=p[k];
-/*
-* LPoint.js
-**/
 function LPoint(x,y){
 	var s = this;
 	s.x = x;
@@ -2169,9 +2070,6 @@ LPoint.prototype = {
 		return new LPoint(this.x  - v.x,this.y - v.y);
 	}
 };
-/*
-* LRectangle.js
-**/
 function LRectangle(x,y,w,h){
 	var s = this;
 	s.x = x;
@@ -2265,9 +2163,6 @@ LRectangle.prototype = {
 		return new LRectangle(s.x>t.x?t.x:s.x,s.y>t.y?t.y:s.y,s.right>t.right?s.right:t.right,s.bottom>t.bottom?s.bottom:t.bottom);
 	}
 };
-/*
-* LGraphics.js
-**/
 function LGraphics(){
 	base(this,LObject,[]);
 	var s = this;
@@ -2741,9 +2636,6 @@ p = {
 	}
 };
 for(var k in p)LGraphics.prototype[k]=p[k];
-/*
-* LShape.js
-**/
 function LShape(){
 	var s = this;
 	base(s,LInteractiveObject,[]);
@@ -2840,339 +2732,19 @@ p = {
 	}
 };
 for(var k in p)LShape.prototype[k]=p[k];
-/** @language chinese
- * 创建一个新的 LSprite 实例。
- * LSprite 类是基本显示列表构造块：一个可显示图形并且也可包含子项的显示列表节点。
- * @class LSprite
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  LInit(50, "legend", 800, 480, main);
- *  function main () {
- *  	var layer = new LSprite();
- *  	addChild(layer);
- *  	
- *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- *  	var bm = new LBitmap(bmd);
- *  	layer.addChild(bm);
- *  }
- * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Creates a new LSprite instance.
- * The LSprite class is a basic display list building block: a display list node that can display graphics and can also contain children.
- * @class LSprite
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  LInit(50, "legend", 800, 480, main);
- *  function main () {
- *  	var layer = new LSprite();
- *  	addChild(layer);
- *  	
- *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- *  	var bm = new LBitmap(bmd);
- *  	layer.addChild(bm);
- *  }
- * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * 新しい LSprite インスタンスを作成します。
- * LSprite クラスは、表示リストの基本的要素です。つまり、グラフィックを表示でき、子を持つこともできる表示リストノードです。
- * @class LSprite
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  LInit(50, "legend", 800, 480, main);
- *  function main () {
- *  	var layer = new LSprite();
- *  	addChild(layer);
- *  	
- *  	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- *  	var bm = new LBitmap(bmd);
- *  	layer.addChild(bm);
- *  }
- * @examplelink <p><a href="../../../api/LSprite/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
- * @public
- */
 var LSprite = (function () {
 	function LSprite () {
 		var s = this;
-		LExtends(s, LInteractiveObject, []);
-		/** @language chinese
-		 * 对象的类型
-		 * @property type
-		 * @type String
-		 * @default LSprite
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * type of the object
-		 * @property type
-		 * @type String
-		 * @default LSprite
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * オブジェクトのタイプ
-		 * @property type
-		 * @type String
-		 * @default LSprite
-		 * @since 1.0.0
-		 * @public
-		 */
+		LExtends(s, LDisplayObjectContainer, []);
 		s.type = "LSprite";
 		s.rotatex;
 		s.rotatey;
-		/** @language chinese
-		 * 子对象列表
-		 * @property childList
-		 * @type Array
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * the child display object list
-		 * @property childList
-		 * @type Array
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * 子表示オブジェクトのリスト
-		 * @property childList
-		 * @type Array
-		 * @since 1.0.0
-		 * @public
-		 */
-		s.childList = new Array();
-		/** @language chinese
-		 * 返回此对象的子项数目。
-		 * @property numChildren
-		 * @type int
-		 * @since 1.9.0
-		 * @example
-		 *  var container1 = new LSprite();
-		 *  var container2 = new LSprite();
-		 *  var circle1 = new LSprite();
-		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 *  var circle2 = new LSprite();
-		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 *  container2.addChild(container1);
-		 *  container1.addChild(circle1);
-		 *  container1.addChild(circle2);
-
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * Returns the number of children of this object.
-		 * @property numChildren
-		 * @type int
-		 * @since 1.9.0
-		 * @example
-		 *  var container1 = new LSprite();
-		 *  var container2 = new LSprite();
-		 *  var circle1 = new LSprite();
-		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 *  var circle2 = new LSprite();
-		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 *  container2.addChild(container1);
-		 *  container1.addChild(circle1);
-		 *  container1.addChild(circle2);
-
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * このオブジェクトの子の数を返します。
-		 * @property numChildren
-		 * @type int
-		 * @since 1.9.0
-		 * @example
-		 *  var container1 = new LSprite();
-		 *  var container2 = new LSprite();
-		 *  var circle1 = new LSprite();
-		 *  circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 *  var circle2 = new LSprite();
-		 *  circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 *  container2.addChild(container1);
-		 *  container1.addChild(circle1);
-		 *  container1.addChild(circle2);
-
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/numChildren.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
-		s.numChildren = 0;
-		/** @language chinese
-		 * [只读] 指定属于此 sprite 的 Graphics 对象，在此 sprite 中可执行矢量绘图命令。
-		 * @property graphics
-		 * @type LGraphics
-		 * @since 1.0.0
-		 * @example
-		 *  var layer = new LSprite();
-		 *  addChild(layer);
-		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
-		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * [read-only] Specifies the Graphics object that belongs to this sprite where vector drawing commands can occur.
-		 * @property graphics
-		 * @type LGraphics
-		 * @since 1.0.0
-		 * @example
-		 *  var layer = new LSprite();
-		 *  addChild(layer);
-		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
-		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * [読み取り専用] ベクターの描画コマンドが発生するこのスプライトに属する Graphics オブジェクトを指定します。
-		 * @property graphics
-		 * @type LGraphics
-		 * @since 1.0.0
-		 * @example
-		 *  var layer = new LSprite();
-		 *  addChild(layer);
-		 *  layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
-		 * @examplelink <p><a href="../../../api/LSprite/graphics.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.graphics = new LGraphics();
 		s.graphics.parent = s;
 		s.box2dBody = null;
-		/** @language chinese
-		 * 用于碰撞的形状列表
-		 * @property shapes
-		 * @type Array
-		 * @since 1.9.0
-		 * @example
-		 *  function loadBitmapdata (event) {
-		 *  	var bitmapdata = new LBitmapData(event.currentTarget); 
-		 *  	var bitmap = new LBitmap(bitmapdata);
-		 *  
-		 *  	layer = new LSprite();
-		 *  	layer.addChild(bitmap);
-		 *  	layer.x = 20;
-		 *  	layer.y = 50;
-		 *  	layer.addShape(LShape.VERTICES, [[180, 20], [210, 40], [210, 60], [120, 110], [35, 100]]);
-		 *  	layer.addShape(LShape.VERTICES, [[120, 110], [140, 120], [140, 150], [110, 160], [35, 120], [35, 100]]);
-		 *  	addChild(layer);
-		 *  
-		 *  	layer.addEventListener(LEvent.ENTER_FRAME, onframe);
-		 *  }
-		 *  function onframe (e) {
-		 *  	if (layer.hitTestPoint(mouseX, mouseY)) {
-		 *  		layer.alpha = 0.5;
-		 *  	} else {
-		 *  		layer.alpha = 1;
-		 *  	}
-		 *  }
-		 * @examplelink <p><a href="../../../api/LSprite/shapes.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * The collider’s shape list
-		 * @property shapes
-		 * @type Array
-		 * @since 1.9.0
-		 * @example
-		 *  function loadBitmapdata (event) {
-		 *  	var bitmapdata = new LBitmapData(event.currentTarget); 
-		 *  	var bitmap = new LBitmap(bitmapdata);
-		 *  
-		 *  	layer = new LSprite();
-		 *  	layer.addChild(bitmap);
-		 *  	layer.x = 20;
-		 *  	layer.y = 50;
-		 *  	layer.addShape(LShape.VERTICES, [[180, 20], [210, 40], [210, 60], [120, 110], [35, 100]]);
-		 *  	layer.addShape(LShape.VERTICES, [[120, 110], [140, 120], [140, 150], [110, 160], [35, 120], [35, 100]]);
-		 *  	addChild(layer);
-		 *  
-		 *  	layer.addEventListener(LEvent.ENTER_FRAME, onframe);
-		 *  }
-		 *  function onframe (e) {
-		 *  	if (layer.hitTestPoint(mouseX, mouseY)) {
-		 *  		layer.alpha = 0.5;
-		 *  	} else {
-		 *  		layer.alpha = 1;
-		 *  	}
-		 *  }
-		 * @examplelink <p><a href="../../../api/LSprite/shapes.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * 衝突判定用形状リスト
-		 * @property shapes
-		 * @type Array
-		 * @since 1.9.0
-		 * @example
-		 *  function loadBitmapdata (event) {
-		 *  	var bitmapdata = new LBitmapData(event.currentTarget); 
-		 *  	var bitmap = new LBitmap(bitmapdata);
-		 *  
-		 *  	layer = new LSprite();
-		 *  	layer.addChild(bitmap);
-		 *  	layer.x = 20;
-		 *  	layer.y = 50;
-		 *  	layer.addShape(LShape.VERTICES, [[180, 20], [210, 40], [210, 60], [120, 110], [35, 100]]);
-		 *  	layer.addShape(LShape.VERTICES, [[120, 110], [140, 120], [140, 150], [110, 160], [35, 120], [35, 100]]);
-		 *  	addChild(layer);
-		 *  
-		 *  	layer.addEventListener(LEvent.ENTER_FRAME, onframe);
-		 *  }
-		 *  function onframe (e) {
-		 *  	if (layer.hitTestPoint(mouseX, mouseY)) {
-		 *  		layer.alpha = 0.5;
-		 *  	} else {
-		 *  		layer.alpha = 1;
-		 *  	}
-		 *  }
-		 * @examplelink <p><a href="../../../api/LSprite/shapes.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.shapes = new Array();
 	}
 	var p = {
-		/** @language chinese
-		 * 使用Box2dWeb的时候，需要用setRotate来设定角度
-		 * @method setRotate
-		 * @param {float} angle 角度。
-		 * @since 1.4.0
-		 * @public
-		 */
-		/** @language english
-		 * Rotates the object by an angle, when you use the Box2dWeb
-		 * @method setRotate
-		 * @param {float} angle angle。
-		 * @since 1.4.0
-		 * @public
-		 */
-		/** @language japanese
-		 * Box2dWebを利用する時，setRotateを使って角度を設定する
-		 * @method setRotate
-		 * @param {float} angle 角度。
-		 * @since 1.4.0
-		 * @public
-		 */
 		setRotate : function (angle) {
 			var s = this;
 			if (s.box2dBody) {
@@ -3198,87 +2770,6 @@ var LSprite = (function () {
 			LGlobal.show(s.childList);
 			s._ll_debugShape();
 		},
-		/** @language chinese
-		 * 允许用户拖动指定的 Sprite。Sprite 将一直保持可拖动，直到通过调用 Sprite.stopDrag() 方法来明确停止。
-		 * @method startDrag
-		 * @param {int} touchPointID 分配给触摸点的整数(触摸设备)。
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">测试链接</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
-		/** @language english
-		 * Lets the user drag the specified sprite. The sprite remains draggable until explicitly stopped through a call to the Sprite.stopDrag() method.
-		 * @method startDrag
-		 * @param {int} touchPointID An integer to assign to the touch point(a touch-enabled device).
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">Try it »</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
-		/** @language japanese
-		 * 指定されたスプライトをユーザーがドラッグできるようにします。Sprite.stopDrag() メソッドを呼び出して明示的に停止する
-		 * @method startDrag
-		 * @param {int} touchPointID タッチポイントに割り当てる整数です(タッチ対応デバイス)。
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
 		startDrag : function (touchPointID) {
 			var s = this, r, c;
 			if (s.ll_dragStart) {
@@ -3292,84 +2783,6 @@ var LSprite = (function () {
 			s.ll_dragStart = true;
 			LGlobal.dragList.push(s);
 		},
-		/** @language chinese
-		 * 结束 startDrag() 方法。
-		 * @method stopDrag
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/stopDrag.html" target="_blank">测试链接</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
-		/** @language english
-		 * Ends the startDrag() method. 
-		 * @method stopDrag
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/stopDrag.html" target="_blank">Try it »</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
-		/** @language japanese
-		 * startDrag() メソッドを終了します。
-		 * @method stopDrag
-		 * @example
-		 * 	LInit(1000/50,"legend",800,450,main);
-		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
-		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/stopDrag.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 * @since 1.8.9
-		 */
 		stopDrag : function () {
 			var s = this, i, l;
 			for (i = 0, l = LGlobal.dragList.length; i < l; i++) {
@@ -3389,51 +2802,6 @@ var LSprite = (function () {
 			s.rotatex = w / 2;
 			s.rotatey = h / 2;
 		},
-		/** @language chinese
-		 * 获取显示对象的宽度，以像素为单位。
-		 * @method getWidth
-		 * @return {float} 显示对象的宽度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("width : " + layer.getWidth());
-		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the width of the display object, in pixels.
-		 * @method getWidth
-		 * @return {float} the width of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("width : " + layer.getWidth());
-		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
-		 * @method getWidth
-		 * @return @return {float} オブジェクトの幅。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("width : " + layer.getWidth());
-		 * @examplelink <p><a href="../../../api/LSprite/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getWidth : function (maskSize) {
 			var s = this, i, l, o, a, b, mx, mw,
 			left = s.graphics.startX(), right = left + s.graphics.getWidth();
@@ -3468,51 +2836,6 @@ var LSprite = (function () {
 			s.ll_right = s.x + right;
 			return (right - left) * s.scaleX;
 		},
-		/** @language chinese
-		 * 获取显示对象的高度，以像素为单位。
-		 * @method getHeight
-		 * @return {float} 显示对象的高度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("height : " + layer.getHeight());
-		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the height of the display object, in pixels.
-		 * @method getHeight
-		 * @return {float} the height of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("height : " + layer.getHeight());
-		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
-		 * @method getHeight
-		 * @return @return {float} オブジェクトの高さ。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 *  trace("height : " + layer.getHeight());
-		 * @examplelink <p><a href="../../../api/LSprite/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getHeight : function (maskSize) {
 			var s = this, i, l, o, a, b, my, mh,
 			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
@@ -3568,624 +2891,6 @@ var LSprite = (function () {
 		_ll_loopframe : function () {
 			this.dispatchEvent(LEvent.ENTER_FRAME);
 		},
-		/** @language chinese
-		 * <p>将一个 DisplayObject 子实例添加到该 LSprite 实例中。子项将被添加到该 LSprite 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）</p>
-		 * <p>如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。</p>
-		 * @method addChild
-		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData("#FF0000",0,0,100,100);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LSprite/addChild.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Adds a child DisplayObject instance to this LSprite instance. The child is added to the front (top) of all other children in this LSprite instance. (To add a child to a specific index position, use the addChildAt() method.)</p>
-		 * <p>If you add a child object that already has a different display object container as a parent, the object is removed from the child list of the other display object container.</p>
-		 * @method addChild
-		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData("#FF0000",0,0,100,100);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LSprite/addChild.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>この DisplayObjectContainer インスタンスに子 LSprite インスタンスを追加します。子インスタンスは、この LSprite インスタンスにある他のすべての子の前（上）に追加されます（特定のインデックス位置に子を追加する場合は、addChildAt() メソッドを使用します）。</p>
-		 * <p>既に異なる表示オブジェクトコンテナを親に持つ子オブジェクトを追加する場合は、もう一方の表示オブジェクトコンテナの子リストからそのオブジェクトが削除されます。</p>
-		 * @method addChild
-		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData("#FF0000",0,0,100,100);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LSprite/addChild.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		addChild : function (d) {
-			var s  = this,t;
-			if (d.parent) {
-				t = LGlobal.destroy;
-				LGlobal.destroy = false;
-				d.parent.removeChild(d);
-				LGlobal.destroy = t;
-			}
-			d.parent = s;
-			s.childList.push(d);
-			s.numChildren = s.childList.length;
-			return d;
-		},
-		/** @language chinese
-		 * <p>将一个 LDisplayObject 子实例添加到该 LSprite 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 LSprite 对象的显示列表的后（底）部。</p>
-		 * <p>例如，下例在索引位置 0、2、1 处分别显示 a、b、c 三个显示对象：</p>
-		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
-		 * <p>如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。</p>
-		 * @method addChild
-		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Adds a child LDisplayObject instance to this LSprite instance. The child is added at the index position specified. An index of 0 represents the back (bottom) of the display list for this LSprite object.</p>
-		 * <p>For example, the following example shows three display objects, labeled a, b, and c, at index positions 0, 2, and 1, respectively:</p>
-		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
-		 * <p>If you add a child object that already has a different display object container as a parent, the object is removed from the child list of the other display object container.</p>
-		 * @method addChild
-		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>この DisplayObjectContainer インスタンスに子 LDisplayObject インスタンスを追加します。子インスタンスは、指定されたインデックス位置に追加されます。インデックス 0 は、この LSprite オブジェクトの表示リストの背景または一番下を表します。</p>
-		 * <p>例えば、a、b、c というラベルの 3 個の表示オブジェクトをインデックス位置 0、2、1 にそれぞれ配置すると、以下のようになります。</p>
-		 * <p><img src="../../../api/LSprite/LSprite_layers.jpg" /></p>
-		 * <p>既に異なる表示オブジェクトコンテナを親に持つ子オブジェクトを追加する場合は、もう一方の表示オブジェクトコンテナの子リストからそのオブジェクトが削除されます。</p>
-		 * @method addChild
-		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	var circle1 = new LSprite();
-		 * 	var circle2 = new LSprite();
-		 * 	container.addChild(circle1);
-		 * 	container.addChildAt(circle2, 0);
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/addChildAt.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		addChildAt : function (d, i) {
-			var s = this,t;
-			if (i < 0 || i > s.childList.length) {
-				return;
-			}
-			if (typeof d.remove == "function") {
-				t = LGlobal.destroy;
-				LGlobal.destroy = false;
-				d.remove();
-				LGlobal.destroy = t;
-			}
-			d.parent = s;
-			s.childList.splice(i, 0, d);
-			s.numChildren = s.childList.length;
-			return d;
-		},
-		/** @language chinese
-		 * <p>从 LSprite 实例的子列表中删除指定的 child LDisplayObject 实例。将已删除子项的 parent 属性设置为 null；如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。LSprite 中该子项之上的任何显示对象的索引位置都减去 1。</p>
-		 * @method removeChild
-		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	function main () {
-		 * 		var container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		event.currentTarget.removeChild(event.target);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Removes the specified child LDisplayObject instance from the child list of the LSprite instance. The parent property of the removed child is set to null , and the object is garbage collected if no other references to the child exist. The index positions of any display objects above the child in the LSprite are decreased by 1.</p>
-		 * @method removeChild
-		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	function main () {
-		 * 		var container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		event.currentTarget.removeChild(event.target);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>LSprite インスタンスの子リストから指定の child LDisplayObject インスタンスを削除します。削除された子の parent プロパティは null に設定されます。その子に対する参照が存在しない場合、そのオブジェクトはガベージコレクションによって収集されます。LSprite の子より上位にある表示オブジェクトのインデックス位置は 1 つ下がります。</p>
-		 * @method removeChild
-		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	function main () {
-		 * 		var container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		event.currentTarget.removeChild(event.target);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/removeChild.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		removeChild : function (d) {
-			var s  = this, c = s.childList, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					if (LGlobal.destroy && d.die) {
-						d.die();
-					}
-					s.childList.splice(i, 1);
-					break;
-				}
-			}
-			s.numChildren = s.childList.length;
-			delete d.parent;
-		},
-		/** @language chinese
-		 * 返回位于指定索引处的子显示对象实例。
-		 * @method getChildAt
-		 * @param {int} index 子对象的索引位置。
-		 * @return {LDisplayObject} 位于指定索引位置处的子显示对象。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	var sprite2 = new LSprite();
-		 * 	var sprite3 = new LSprite();
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-		 * 	container.addChildAt(sprite3, 0);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns the child display object instance that exists at the specified index.
-		 * @method getChildAt
-		 * @param {int} index The index position of the child object.
-		 * @return {LDisplayObject} The child display object at the specified index position.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	var sprite2 = new LSprite();
-		 * 	var sprite3 = new LSprite();
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-		 * 	container.addChildAt(sprite3, 0);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 指定のインデックス位置にある子表示オブジェクトインスタンスを返します。
-		 * @method getChildAt
-		 * @param {int} index 子オブジェクトのインデックス位置です。
-		 * @return {LDisplayObject} 指定されたインデックス位置にある子表示オブジェクトです。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	var sprite2 = new LSprite();
-		 * 	var sprite3 = new LSprite();
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-		 * 	container.addChildAt(sprite3, 0);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildAt.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		getChildAt : function (i) {
-			var s  = this, c = s.childList;
-			if (c.length == 0 || c.length <= i) {
-				return null;
-			}
-			return c[i];
-		},
-		/** @language chinese
-		 * 从 LSprite 的子列表中指定的 index 位置删除子 LDisplayObject。将已删除子项的 parent 属性设置为 null；如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。LSprite 中该子项之上的任何显示对象的索引位置都减去 1。
-		 * @method removeChildAt
-		 * @param {int} index 要删除的 DisplayObject 的子索引。
-		 * @return {LDisplayObject} 已删除的 DisplayObject 实例。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * 	container.removeChildAt(0); 
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Removes a child LDisplayObject from the specified index position in the child list of the LSprite. The parent property of the removed child is set to null, and the object is garbage collected if no other references to the child exist. The index positions of any display objects above the child in the LSprite are decreased by 1.
-		 * @method removeChildAt
-		 * @param {int} index The child index of the LDisplayObject to remove.
-		 * @return {LDisplayObject} The LDisplayObject instance that was removed.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * 	container.removeChildAt(0); 
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * LSprite の子リストの指定された index 位置から子 LDisplayObject を削除します。削除された子の parent プロパティは null に設定されます。その子に対する参照が存在しない場合、そのオブジェクトはガベージコレクションによって収集されます。LSprite の子より上位にある表示オブジェクトのインデックス位置は 1 つ下がります。
-		 * @method removeChildAt
-		 * @param {int} index 削除する LDisplayObject の子インデックスです。
-		 * @return {LDisplayObject} 削除された LDisplayObject インスタンスです。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * 	container.removeChildAt(0); 
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/removeChildAt.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		removeChildAt : function (i) {
-			var s  = this, c = s.childList;
-			if (c.length <= i) {
-				return;
-			}
-			if (LGlobal.destroy && c[i].die) {
-				c[i].die();
-			}
-			var d = s.childList.splice(i, 1);
-			s.numChildren = s.childList.length;
-			return d;
-		},
-		/** @language chinese
-		 * 返回 LDisplayObject 的 child 实例的索引位置。
-		 * @method getChildIndex
-		 * @param {LDisplayObject} child 要标识的 LDisplayObject 实例。
-		 * @return {int} 要标识的子显示对象的索引位置。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns the index position of a child LDisplayObject instance.
-		 * @method getChildIndex
-		 * @param {LDisplayObject} The DisplayObject instance to identify.
-		 * @return {int} The index position of the child display object to identify.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * child LDisplayObject インスタンスのインデックス位置を返します
-		 * @method getChildIndex
-		 * @param {LDisplayObject} 特定する LDisplayObject インスタンスです。
-		 * @return {int} 特定する子表示オブジェクトのインデックス位置です。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var sprite1 = new LSprite();
-		 * 	sprite1.name = "sprite1";
-		 * 	var sprite2 = new LSprite();
-		 * 	sprite2.name = "sprite2";
-		 * 	container.addChild(sprite1);
-		 * 	container.addChild(sprite2);
-
-		 * @examplelink <p><a href="../../../api/LSprite/getChildIndex.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		getChildIndex : function (child) {
-			var s = this, c = s.childList, i, l = c.length;
-			for (i = 0; i < l; i++) {
-				if (c[i].objectIndex == child.objectIndex) {
-					return i;
-				}
-			}
-			return -1;
-		},
-		/** @language chinese
-		 * <p>更改现有子项在显示对象容器中的位置。这会影响子对象的分层。例如，下例在索引位置 0、1、2 处分别显示 a、b、c 三个显示对象：</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
-		 * <p>在使用 setChildIndex() 方法并指定一个已经占用的索引位置时，唯一发生更改的位置是显示对象先前的位置和新位置之间的位置。所有其他位置将保持不变。如果将一个子项移动到比它当前的索引更低的索引处，则这两个索引之间的所有子项的索引引用都将增加 1。如果将一个子项移动到比它当前的索引更高的索引处，则这两个索引之间的所有子项的索引引用都将减小 1。例如，如果上例中的显示对象容器名为 container，则可以通过调用以下代码来交换带有 a 和 b 标记的显示对象的位置：</p>
-		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
-		 * <p>该代码产生以下对象排列：</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
-		 * @method setChildIndex
-		 * @param {LDisplayObject} child 要为其更改索引编号的 LDisplayObject 子实例。
-		 * @return {int} 生成的 child 显示对象的索引编号。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	LInit(50, "legend", 800, 480, main);
-		 * 	var container;
-		 * 	function main () {
-		 * 		container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
-		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle3 = new LSprite();
-		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
-		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addChild(circle3);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		var circle = event.target;
-		 * 		var topPosition = container.numChildren - 1;
-		 * 		container.setChildIndex(circle, topPosition);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Changes the position of an existing child in the display object container. This affects the layering of child objects. For example, the following example shows three display objects, labeled a, b, and c, at index positions 0, 1, and 2, respectively:</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
-		 * <p>When you use the setChildIndex() method and specify an index position that is already occupied, the only positions that change are those in between the display object's former and new position. All others will stay the same. If a child is moved to an index LOWER than its current index, all children in between will INCREASE by 1 for their index reference. If a child is moved to an index HIGHER than its current index, all children in between will DECREASE by 1 for their index reference. For example, if the display object container in the previous example is named container, you can swap the position of the display objects labeled a and b by calling the following code:</p>
-		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
-		 * <p>This code results in the following arrangement of objects:</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
-		 * @method setChildIndex
-		 * @param {LDisplayObject} child The child LDisplayObject instance for which you want to change the index number.
-		 * @return {int} The resulting index number for the child display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	LInit(50, "legend", 800, 480, main);
-		 * 	var container;
-		 * 	function main () {
-		 * 		container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
-		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle3 = new LSprite();
-		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
-		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addChild(circle3);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		var circle = event.target;
-		 * 		var topPosition = container.numChildren - 1;
-		 * 		container.setChildIndex(circle, topPosition);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>表示オブジェクトコンテナの既存の子の位置を変更します。これは、子オブジェクトのレイヤーに影響します。例えば、a、b、c というラベルの 3 個の表示オブジェクトをインデックス位置 0、1、2 にそれぞれ配置すると、以下のようになります。</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex1.jpg" /></p>
-		 * <p>setChildIndex() を使用し、既に占有されているインデックス位置を指定した場合、表示オブジェクトの前の位置と新しい位置の間にある位置だけが変化します。その他は変化しません。現在のインデックスよりも小さいインデックスに子を移動すると、その間のすべての子が、それぞれのインデックス参照について 1 増加します。現在のインデックスよりも大きいインデックスに子を移動すると、その間のすべての子が、それぞれのインデックス参照について 1 減少します。例えば、上記の例の表示オブジェクトコンテナの名前が container である場合、次に示すコードを呼び出すことによって、a および b というラベルが付けられた表示オブジェクトの位置を入れ替えることができます。</p>
-		 * <p>container.setChildIndex(container.getChildAt(1), 0);</p>
-		 * <p>このコードによって、次に示すようなオブジェクトの配置になります。</p>
-		 * <p><img src="../../../api/LSprite/DisplayObjectContainerSetChildIndex2.jpg" /></p>
-		 * @method setChildIndex
-		 * @param {LDisplayObject} child インデックス番号を変更する子 LDisplayObject インスタンスです。
-		 * @return {int} child 表示オブジェクトの結果のインデックス番号です。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	LInit(50, "legend", 800, 480, main);
-		 * 	var container;
-		 * 	function main () {
-		 * 		container = new LSprite();
-		 * 		addChild(container);
-		 * 		var circle1 = new LSprite();
-		 * 		circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 		circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle2 = new LSprite();
-		 * 		circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
-		 * 		circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		var circle3 = new LSprite();
-		 * 		circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
-		 * 		circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
-		 * 		container.addChild(circle1);
-		 * 		container.addChild(circle2);
-		 * 		container.addChild(circle3);
-		 * 	}
-		 * 	function clicked (event) {
-		 * 		var circle = event.target;
-		 * 		var topPosition = container.numChildren - 1;
-		 * 		container.setChildIndex(circle, topPosition);
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/setChildIndex.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		setChildIndex : function (child, index) {
-			var s = this, c = s.childList, i, l = c.length;
-			if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
-				return -1;
-			}
-			for (i = 0; i < l; i++) {
-				if(c[i].objectIndex == child.objectIndex){
-					break;
-				}
-			}
-			s.childList.splice(i,1);
-			s.childList.splice(index, 0, child);
-			return index;
-		},
-		resize : function () {
-			var s  = this;
-			s.width = s.getWidth();
-			s.height = s.getHeight();
-		},
-		removeAllChild : function () {
-			var s  = this, c = s.childList, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (LGlobal.destroy && c[i].die) {
-					c[i].die();
-				}
-			}
-			s.childList.length = 0;
-			s.width = 0;
-			s.height = 0;
-			s.numChildren = 0;
-		},
-		/** @language chinese
-		 * 返回一个LSprite的克隆对象。
-		 * @method clone
-		 * @return {LSprite} 一个新的 LSprite 对象，它与原始对象相同.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = circle1.clone();
-		 * 	circle2.y = 120;
-		 * 	addChild(circle1);
-		 * 	addChild(circle2);
-		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns a new LSprite object that is a clone of the original instance with an exact copy of the object.
-		 * @method clone
-		 * @return {LSprite} A new LSprite object that is identical to the original.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = circle1.clone();
-		 * 	circle2.y = 120;
-		 * 	addChild(circle1);
-		 * 	addChild(circle2);
-		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 新しい LSprite オブジェクトとして、元のインスタンスのクローンを返します。オブジェクトはまったく同じコピーになります。
-		 * @method clone
-		 * @return {LSprite} 元のオブジェクトと同一の新しい LSprite オブジェクトです。
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = circle1.clone();
-		 * 	circle2.y = 120;
-		 * 	addChild(circle1);
-		 * 	addChild(circle2);
-		 * @examplelink <p><a href="../../../api/LSprite/clone.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		clone : function () {
 			var s = this, a = new LSprite(), c, o, i, l;
 			a.copyProperty(s);
@@ -4272,162 +2977,6 @@ var LSprite = (function () {
 			}
 			return false;
 		},
-		/** @language chinese
-		 * 计算显示对象，以确定它是否与 x 和 y 参数指定的点重叠或相交。x 和 y 参数指定舞台的坐标空间中的点，而不是包含显示对象的显示对象容器中的点（除非显示对象容器是舞台）。
-		 * @method hitTestPoint
-		 * @param {float} x 要测试的此对象的 x 坐标。
-		 * @param {float} y 要测试的此对象的 y 坐标。
-		 * @return {Boolean} 如果显示对象与指定的点重叠或相交，则为 true；否则为 false。
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Evaluates the display object to see if it overlaps or intersects with the point specified by the x and y parameters. The x and y parameters specify a point in the coordinate space of the Stage, not the display object container that contains the display object (unless that display object container is the Stage).
-		 * @method hitTestPoint
-		 * @param {float} x The x coordinate to test against this object.
-		 * @param {float} y The y coordinate to test against this object.
-		 * @return {Boolean} true if the display object overlaps or intersects with the specified point; false otherwise.
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトを評価して、x および y パラメーターで指定されたポイントと重複または交差するかどうかを調べます。x および y パラメーターは、表示オブジェクトが含まれる表示オブジェクトコンテナではなく Stage の座標空間内のポイントを指定します（その表示オブジェクトコンテナが Stage の場合を除く）。
-		 * @method hitTestPoint
-		 * @param {float} x このオブジェクトの検査の基準となる x 座標です。
-		 * @param {float} y このオブジェクトの検査の基準となる y 座標です。
-		 * @return {Boolean} 指定されたポイントと表示オブジェクトが重複または交差する場合は true、そうでなければ false です。
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	var backLayer;
-		 * 	var title;
-		 * 	function main(){
-		 * 		backLayer = new LSprite();
-		 * 		addChild(backLayer);
-		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-		 * 		title = new LTextField();
-		 * 		title.size = 18;
-		 * 		title.x = 10;
-		 * 		title.y = 5;
-		 * 		title.text = "hitTestPoint:false";
-		 * 		addChild(title);
-		 * 		var layer = new LSprite();
-		 * 		layer.x = 20;
-		 * 		layer.y = 50;
-		 * 		layer.graphics.drawRect(0,"#880088",[0,0,100,40],true,"#880088");
-		 * 		layer.addShape(LShape.RECT,[0,0,100,40]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 200;
-		 * 		layer.y = 100;
-		 * 		layer.graphics.drawArc(0,"#880088",[0,0,30,0,2*Math.PI],true,"#880088");
-		 * 		layer.addShape(LShape.ARC,[0,0,30]);
-		 * 		backLayer.addChild(layer);
-		 * 		layer = new LSprite();
-		 * 		layer.x = 120;
-		 * 		layer.y = 150;
-		 * 		layer.graphics.drawVertices(0,"#880088",[[10,10],[50,100],[100,70]],true,"#880088");
-		 * 		layer.addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]]);
-		 * 		backLayer.addChild(layer);
-		 * 	}
-		 * 	function onframe(e){
-		 * 		for(var i=0;i<backLayer.childList.length;i++){
-		 * 			if(backLayer.childList[i].hitTestPoint(mouseX,mouseY)){
-		 * 				title.text = "hitTestPoint:true";
-		 * 				return;
-		 * 			}
-		 * 		}
-		 * 		title.text = "hitTestPoint:false";
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestPoint.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		hitTestPoint : function (x, y) {
 			var s = this, shapes = s.shapes;
 			if (!shapes || shapes.length == 0) {
@@ -4437,90 +2986,6 @@ var LSprite = (function () {
 			}
 			return s.ismouseonShapes(shapes, x, y);
 		},
-		/** @language chinese
-		 * 计算显示对象的边框，以确定它是否与 obj 显示对象的边框重叠或相交。
-		 * @method hitTestObject
-		 * @param {LDisplayObject} obj 要测试的显示对象。
-		 * @return {Boolean} 如果显示对象的边框相交，则为 true；否则为 false。
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LGlobal.setDebug(true);
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = new LSprite();
-		 * 	circle2.x = 120;
-		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
-		 * 	var circle3 = new LSprite();
-		 * 	circle3.x = 60;
-		 * 	circle3.y = 60;
-		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
-		 * 	container.addChild(circle1);
-		 * 	container.addChild(circle2);
-		 * 	container.addChild(circle3);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Evaluates the bounding box of the display object to see if it overlaps or intersects with the bounding box of the obj display object.
-		 * @method hitTestObject
-		 * @param {LDisplayObject} obj The display object to test against.
-		 * @return {Boolean} true if the bounding boxes of the display objects intersect; false if not.
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LGlobal.setDebug(true);
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = new LSprite();
-		 * 	circle2.x = 120;
-		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
-		 * 	var circle3 = new LSprite();
-		 * 	circle3.x = 60;
-		 * 	circle3.y = 60;
-		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
-		 * 	container.addChild(circle1);
-		 * 	container.addChild(circle2);
-		 * 	container.addChild(circle3);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの境界ボックスを評価して、obj 表示オブジェクトの境界ボックスと重複または交差するかどうかを調べます。
-		 * @method hitTestObject
-		 * @param {LDisplayObject} obj 検査の対象となる表示オブジェクトです。
-		 * @return {Boolean} 表示オブジェクトの境界ボックスが交差する場合は true を返します。交差しない場合は false を返します。
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LGlobal.setDebug(true);
-		 * 	var container = new LSprite();
-		 * 	addChild(container);
-		 * 	var circle1 = new LSprite();
-		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
-		 * 	var circle2 = new LSprite();
-		 * 	circle2.x = 120;
-		 * 	circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
-		 * 	var circle3 = new LSprite();
-		 * 	circle3.x = 60;
-		 * 	circle3.y = 60;
-		 * 	circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
-		 * 	container.addChild(circle1);
-		 * 	container.addChild(circle2);
-		 * 	container.addChild(circle3);
-
-
-
-		 * @examplelink <p><a href="../../../api/LSprite/hitTestObject.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		hitTestObject : function (obj) {
 			var s = this, shapes = s.shapes, shapes1 = obj.shapes, m, m1, j, child, j1, child1, vo1, v1;
 			if (!shapes || shapes.length == 0) {
@@ -4566,156 +3031,6 @@ var LSprite = (function () {
 			}
 			return false;
 		},
-		/** @language chinese
-		 * <p>添加碰撞形状，指定碰撞的范围。如果没有添加碰撞形状，则会默认使用最大矩形范围来碰撞检测。</p>
-		 * <p>添加矩形 : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>添加圆形 : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>添加多边形 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
-		 * @method addShape
-		 * @param {string} type The shape's type.
-		 * @param {Array} arg The shape's parameters.
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	function main () {
-		 * 		LGlobal.setDebug(true);
-		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
-		 * 		loader.load("face.jpg", "bitmapData");
-		 * 	}
-		 * 	function loadBitmapdata (event) {
-
-		 * 		var bitmap01 = new LBitmap(bitmapData);
-		 * 		var layer01 = new LSprite();
-		 * 		addChild(layer01);
-		 * 		layer01.addChild(bitmap01);
-		 * 		var rect1 = new LSprite();
-		 * 		rect1.x = 180;
-		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect1);
-		 * 		var bitmap02 = new LBitmap(bitmapData);
-		 * 		var layer02 = new LSprite();
-		 * 		layer02.x = 300;
-		 * 		addChild(layer02);
-		 * 		layer02.addChild(bitmap02);
-		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
-		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
-		 * 		var rect2 = new LSprite();
-		 * 		rect2.x = 480;
-		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect2);
-		 * 		var rect3 = new LSprite();
-		 * 		rect3.x = 480;
-		 * 		rect3.y = 120;
-		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect3);
-
-
-
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Add a collider’s shape</p>
-		 * <p>a rectangle : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>a circle : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>a polygon : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
-		 * @method addShape
-		 * @param {string} type The shape's type.
-		 * @param {Array} arg The shape's parameters.
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	function main () {
-		 * 		LGlobal.setDebug(true);
-		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
-		 * 		loader.load("face.jpg", "bitmapData");
-		 * 	}
-		 * 	function loadBitmapdata (event) {
-
-		 * 		var bitmap01 = new LBitmap(bitmapData);
-		 * 		var layer01 = new LSprite();
-		 * 		addChild(layer01);
-		 * 		layer01.addChild(bitmap01);
-		 * 		var rect1 = new LSprite();
-		 * 		rect1.x = 180;
-		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect1);
-		 * 		var bitmap02 = new LBitmap(bitmapData);
-		 * 		var layer02 = new LSprite();
-		 * 		layer02.x = 300;
-		 * 		addChild(layer02);
-		 * 		layer02.addChild(bitmap02);
-		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
-		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
-		 * 		var rect2 = new LSprite();
-		 * 		rect2.x = 480;
-		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect2);
-		 * 		var rect3 = new LSprite();
-		 * 		rect3.x = 480;
-		 * 		rect3.y = 120;
-		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect3);
-
-
-
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>衝突の形状を追加します。追加していなければ、最大の矩形を使って、衝突を判定します。</p>
-		 * <p>矩形を追加 : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>円を追加 : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>多边形を追加 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
-		 * @method addShape
-		 * @param {string} type 衝突の形状。
-		 * @param {Array} arg 具体的なパラメータ。
-		 * @since 1.9.0
-		 * @public
-		 * @example
-		 * 	LInit(20,"legend",800,450,main);
-		 * 	function main () {
-		 * 		LGlobal.setDebug(true);
-		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
-		 * 		loader.load("face.jpg", "bitmapData");
-		 * 	}
-		 * 	function loadBitmapdata (event) {
-
-		 * 		var bitmap01 = new LBitmap(bitmapData);
-		 * 		var layer01 = new LSprite();
-		 * 		addChild(layer01);
-		 * 		layer01.addChild(bitmap01);
-		 * 		var rect1 = new LSprite();
-		 * 		rect1.x = 180;
-		 * 		rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect1);
-		 * 		var bitmap02 = new LBitmap(bitmapData);
-		 * 		var layer02 = new LSprite();
-		 * 		layer02.x = 300;
-		 * 		addChild(layer02);
-		 * 		layer02.addChild(bitmap02);
-		 * 		layer02.addShape(LShape.ARC,[110,80,60]);
-		 * 		layer02.addShape(LShape.RECT,[20,140,200,100]);
-		 * 		var rect2 = new LSprite();
-		 * 		rect2.x = 480;
-		 * 		rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect2);
-		 * 		var rect3 = new LSprite();
-		 * 		rect3.x = 480;
-		 * 		rect3.y = 120;
-		 * 		rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 		addChild(rect3);
-
-
-
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/addShape.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		addShape : function (type, arg) {
 			var s = this;
 			if (type == LShape.VERTICES && arg.length < 3) {
@@ -4723,72 +3038,6 @@ var LSprite = (function () {
 			}
 			s.shapes.push({"type" : type, "arg" : arg});
 		},
-		/** @language chinese
-		 * <p>清空所有碰撞形状。</p>
-		 * @method clearShape
-		 * @since 1.9.0
-		 * @public
-		 * @example
-
-		 * 	var bitmap01 = new LBitmap(bitmapData);
-		 * 	var layer01 = new LSprite();
-		 * 	addChild(layer01);
-		 * 	layer01.addChild(bitmap01);
-		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
-		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
-		 * 	var rect1 = new LSprite();
-		 * 	rect1.x = 180;
-		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 	addChild(rect1);
-
-		 * 	layer01.clearShape()
-
-		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * <p>Clear all the collider’s shape</p>
-		 * @method clearShape
-		 * @since 1.9.0
-		 * @public
-		 * @example
-
-		 * 	var bitmap01 = new LBitmap(bitmapData);
-		 * 	var layer01 = new LSprite();
-		 * 	addChild(layer01);
-		 * 	layer01.addChild(bitmap01);
-		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
-		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
-		 * 	var rect1 = new LSprite();
-		 * 	rect1.x = 180;
-		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 	addChild(rect1);
-
-		 * 	layer01.clearShape()
-
-		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * <p>衝突の形状をクリアする</p>
-		 * @method clearShape
-		 * @since 1.9.0
-		 * @public
-		 * @example
-
-		 * 	var bitmap01 = new LBitmap(bitmapData);
-		 * 	var layer01 = new LSprite();
-		 * 	addChild(layer01);
-		 * 	layer01.addChild(bitmap01);
-		 * 	layer01.addShape(LShape.ARC,[110,80,60]);
-		 * 	layer01.addShape(LShape.RECT,[20,140,200,100]);
-		 * 	var rect1 = new LSprite();
-		 * 	rect1.x = 180;
-		 * 	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
-		 * 	addChild(rect1);
-
-		 * 	layer01.clearShape()
-
-		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		clearShape : function () {
 			var s = this;
 			s.shapes.length = 0;
@@ -4852,24 +3101,6 @@ var LSprite = (function () {
 			}
 			return i;
 		},
-		/** @language chinese
-		 * <p>清空所有图形以及事件。</p>
-		 * @method die
-		 * @since 1.9.0
-		 * @public
-		 */
-		/** @language english
-		 * <p>Frees memory that is used.Clear all the shapes and the events</p>
-		 * @method clearShape
-		 * @since 1.9.0
-		 * @public
-		 */
-		/** @language japanese
-		 * <p>全部のベクターシェイプとイベントをクリアする。</p>
-		 * @method die
-		 * @since 1.9.0
-		 * @public
-		 */
 		die : function () {
 			var s = this, i, c, l;
 			s.graphics.clear();
@@ -4890,9 +3121,6 @@ var LSprite = (function () {
 	}
 	return LSprite;
 })();
-/*
-* LButton.js
-**/
 function LButton(upState,overState,downState,disableState){
 	var s = this;
 	base(s,LSprite,[]);
@@ -4918,7 +3146,6 @@ function LButton(upState,overState,downState,disableState){
 	s.overState = s.bitmap_over = overState;
 	s.downState = downState;
 	s.disableState = disableState;
-	
 	s.overState.visible = false;
 	s.downState.visible = false;
 	s.upState.visible = true;
@@ -4962,7 +3189,6 @@ LButton.prototype.ll_modeDown = function (e){
 	s.upState.visible = false;
 	s.overState.visible = false;
 	s.downState.visible = true;
-	
 	s._tweenOver = s.ll_modeOver;
 	onComplete = function(obj){
 		var s = obj.parent;
@@ -5043,549 +3269,31 @@ LBlendMode.LIGHTER = "lighter";
 LBlendMode.COPY = "copy";
 LBlendMode.XOR = "xor";
 LBlendMode.NONE = null;
-/*
-* LTextFieldType.js
-**/
+LBlendMode.NORMAL = null;
 var LTextFieldType = function (){throw "LTextFieldType cannot be instantiated";};
 LTextFieldType.INPUT = "input";
 LTextFieldType.DYNAMIC = null;
-/** @language chinese
- * 创建新的 LTextField 实例。在创建 LTextField 实例后，调用父 LSprite 对象的 addChild() 或 addChildAt() 方法可将 LTextField 实例添加到显示列表中。
- * LTextField 类的方法允许您设置、选择并操作在创作过程中或运行时创建的动态或输入文本字段中的文本。
- * @class LTextField
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
- * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Creates a new LTextField instance. After you create the LTextField instance, call the addChild() or addChildAt() method of the parent LSprite object to add the LTextField instance to the display list.
- * The methods of the LTextField class let you set, select, and manipulate text in a dynamic or input text field that you create during authoring or at runtime.
- * @class LTextField
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
- * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * 新しい LTextField インスタンスを作成します。LTextField インスタンスの作成後、親 LSprite オブジェクトの addChild() メソッドまたは addChildAt() メソッドを呼び出し、LTextField インスタンスを表示リストに追加します。
- * LTextField クラスのメソッドを使用すると、オーサリング時または実行時に作成したダイナミックテキストフィールドやテキスト入力フィールドにテキストを設定、選択、および操作できます。
- * @class LTextField
- * @extends LInteractiveObject
- * @constructor
- * @example
- *  var theTextField = new LTextField();
- *  theTextField.setType(LTextFieldType.INPUT);
- *  theTextField.x = 10;
- *  theTextField.y = 10;
- *  addChild(theTextField);
- * @examplelink <p><a href="../../../api/LTextField/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
- * @public
- */
 var LTextField = (function () {
 	function LTextField () {
 		var s = this;
 		LExtends(s, LInteractiveObject, []);
-		/** @language chinese
-		 * 对象的类型
-		 * @property type
-		 * @type String
-		 * @default LTextField
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * type of the object
-		 * @property type
-		 * @type String
-		 * @default LTextField
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * オブジェクトのタイプ
-		 * @property type
-		 * @type String
-		 * @default LTextField
-		 * @since 1.0.0
-		 * @public
-		 */
 		s.type = "LTextField";
 		s.texttype = null;
-		/** @language chinese
-		 * 作为文本字段中当前文本的字符串。各行之间用回车符（'\n'）分隔。
-		 * @property text
-		 * @type String
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property text
-		 * @type String
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property text
-		 * @type String
-		 * @since 1.0.0
-		 * @public
-		 */
 		s.text = "";
-		/** @language chinese
-		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
-		 * @property font
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * The name of the font for text in this text format, as a string. The default value is null, which means that Flash Player uses Times New Roman font for the text.
-		 * @property font
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * このテキストフォーマットでのテキストフォント名を示すストリングです。デフォルト値は null で、Flash Player ではテキストに Times New Roman フォントが使用されます。
-		 * @property font
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @example
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "font test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.font = "Georgia";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.font = "Arial";
-		/** @language chinese
-		 * 使用此文本格式的文本的大小（以像素为单位）。
-		 * @property size
-		 * @type int
-		 * @since 1.0.0
-		 * @default 11
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * The size in pixels of text in this text format. 
-		 * @property size
-		 * @type int
-		 * @since 1.0.0
-		 * @default 11
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * このテキストフォーマットのテキストのサイズ（ピクセル単位）です。
-		 * @property size
-		 * @type int
-		 * @since 1.0.0
-		 * @default 11
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "size test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.size = 20;
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.size = "11";
-		/** @language chinese
-		 * 表示文本的颜色。
-		 * @property color
-		 * @type String
-		 * @since 1.0.0
-		 * @default "#000000"
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * Indicates the color of the text. 
-		 * @property color
-		 * @type String
-		 * @since 1.0.0
-		 * @default "#000000"
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストの色を示します。
-		 * @property color
-		 * @type String
-		 * @since 1.0.0
-		 * @default "#000000"
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "color test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.color = "#FF0000";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.color = "#000000";
-		/** @language chinese
-		 * 规定字体的粗细。
-		 * @property weight
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">测试链接</a></p>
-		 * @public
-		 */
-		/** @language english
-		 * Specifies whether the text is boldface.
-		 * @property weight
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">Try it »</a></p>
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストをボールドにするかどうかを指定します。
-		 * @property weight
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 *  var theTextField = new LTextField();
-		 *  theTextField.text = "weight test";
-		 *  theTextField.x = 10;
-		 *  theTextField.y = 10;
-		 *  theTextField.weight = "bolder";
-		 *  addChild(theTextField);
-		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 */
 		s.weight = "normal";
-		/** @language chinese
-		 * 表示段落的对齐方式(水平)。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default left
-		 * @public
-		 */
-		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default left
-		 * @public
-		 */
-		/** @language japanese
-		 * 段落の行揃えの設定を示します(水平)。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default left
-		 * @public
-		 */
 		s.textAlign = "left";
-		/** @language chinese
-		 * 表示段落的对齐方式(竖直)。
-		 * @property textBaseline
-		 * @type String
-		 * @since 1.0.0
-		 * @default top
-		 * @public
-		 */
-		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
-		 * @property textBaseline
-		 * @type String
-		 * @since 1.0.0
-		 * @default top
-		 * @public
-		 */
-		/** @language japanese
-		 * 段落の行揃えの設定を示します(垂直)。
-		 * @property textBaseline
-		 * @type String
-		 * @since 1.0.0
-		 * @default top
-		 * @public
-		 */
 		s.textBaseline = "top";
-		/** @language chinese
-		 * 文字描边效果。
-		 * @property stroke
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language english
-		 * Text effects of stroke.
-		 * @property stroke
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストエフェクト。
-		 * @property stroke
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
 		s.stroke = false;
-		/** @language chinese
-		 * 表示段落的对齐方式。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.lineWidth = 1;
-		s.lineColor = false;
-		/** @language chinese
-		 * 表示显示对象的宽度，以像素为单位。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
+		s.lineColor = "#000000";
 		s.width = 150;
-		/** @language chinese
-		 * 表示显示对象的高度，以像素为单位。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default normal
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.height = s.size;
-		/** @language chinese
-		 * 指定文本字段是否是密码文本字段。如果此属性的值为 true，则文本字段被视为密码文本字段，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，则不会将文本字段视为密码文本字段。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.displayAsPassword = false;
-		/** @language chinese
-		 * [只读]一个布尔值，表示文本字段是否自动换行。修改此属性请使用setWordWrap函数。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.wordWrap = false;
-		/** @language chinese
-		 * [只读]表示字段是否为多行文本字段。修改此属性请使用setMultiline函数。
-		 * @property multiline
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.multiline = false;
-		/** @language chinese
-		 * [只读]定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
-		 * @public
-		 */
-		/** @language english
-		 * A string that is the current text in the text field. Lines are separated by the carriage return character ('\n').
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
-		/** @language japanese
-		 * テキストフィールド内の現在のテキストであるストリングです。行は復帰文字（'\n'）で区切られます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
-		 * @public
-		 */
 		s.numLines = 1;
 	}
 	var p = {
@@ -5649,8 +3357,8 @@ var LTextField = (function () {
 				}
 				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
 			}
-			if (s.wind_flag) {
-				s.windRun();
+			if (s.windRunning) {
+				s._ll_windRun();
 			}
 		},
 		_wordHeight : function (h) {
@@ -5859,22 +3567,23 @@ var LTextField = (function () {
 		wind : function (listener) {
 			var s = this;
 			s.wind_over_function = listener;
-			s.wind_flag = true;
-			s.wind_text = s.text;
+			s.windRunning = true;
+			s._ll_wind_text = s.text;
 			s.text = "";
-			s.wind_length = 0;
+			s._ll_wind_length = 0;
 		},
-		windRun : function () {
+		_ll_windRun : function () {
 			var s = this;
-			if (s.wind_length > s.wind_text.length) {
-				s.wind_flag = false;
+			if (s._ll_wind_length > s._ll_wind_text.length) {
+				s.windRunning = false;
 				if (s.wind_over_function) {
 					s.wind_over_function();
 				}
+				s.dispatchEvent(LTextEvent.WIND_COMPLETE);
 				return;
 			}
-			s.text = s.wind_text.substring(0, s.wind_length);
-			s.wind_length++;
+			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
+			s._ll_wind_length++;
 		},
 		die : function () {
 			LMouseEventContainer.removeInputBox(this);
@@ -5885,165 +3594,12 @@ var LTextField = (function () {
 	}
 	return LTextField;
 })();
-/** @language chinese
- * 初始化 LBitmap 对象以引用指定的 LBitmapData 对象。
- * LBitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 LLoader 类加载的图像，也可以是使用 LBitmap() 构造函数创建的图像。
- * 利用 LBitmap() 构造函数，可以创建包含对 LBitmapData 对象的引用的 LBitmap 对象。创建了 LBitmap 对象后，使用父实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
- * 一个 LBitmap 对象可在若干 LBitmap 对象之中共享其 LBitmapData 引用，与转换属性或旋转属性无关。由于能够创建引用相同 LBitmapData 对象的多个 LBitmap 对象，因此，多个显示对象可以使用相同的复杂 LBitmapData 对象，而不会因为每个显示对象实例使用一个 LBitmapData 对象而产生内存开销。
- * LBitmap 对象可通过以下两种方式之一将 LBitmapData 对象绘制到屏幕上：使用矢量渲染器作为填充位图形状，或使用更快的像素复制例程。像素复制例程的速度比矢量渲染器要快很多。
- * 注意：LBitmap 类不是 InteractiveObject 类的子类，因此它无法调度鼠标事件。但是，可以使用包含 LBitmap 对象的显示对象容器的 addEventListener() 方法。
- * @class LBitmap
- * @extends LDisplayObject
- * @constructor
- * @param {LBitmapData} bitmapData 被引用的 LBitmapData 对象。
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language english
- * Initializes a LBitmap object to refer to the specified LBitmapData object.
- * The LBitmap class represents display objects that represent bitmap images. These can be images that you load with the LLoader class, or they can be images that you create with the LBitmap() constructor.
- * The LBitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object. After you create a LBitmap object, use the addChild() or addChildAt() method of the parent instance to place the bitmap on the display list.
- * A LBitmap object can share its BitmapData reference among several Bitmap objects, independent of translation or rotation properties. Because you can create multiple LBitmap objects that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object without incurring the memory overhead of a BitmapData object for each display object instance.
- * A LBitmapData object can be drawn to the screen by a LBitmap object in one of two ways: by using the vector renderer as a fill-bitmap shape, or by using a faster pixel-copying routine. The pixel-copying routine is substantially faster than the vector renderer.
- * The LBitmap class is not a subclass of the InteractiveObject class, so it cannot dispatch mouse events. However, you can use the addEventListener() method of the display object container that contains the LBitmap object.
- * @class LBitmap
- * @extends LDisplayObject
- * @constructor
- * @param {LBitmapData} bitmapData The LBitmapData object being referenced.
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * 指定された LBitmapData オブジェクトを参照するようにビットマップオブジェクトを初期化します。
- * LBitmap クラスはビットマップイメージを表す表示オブジェクトを表します。これらは LLoader クラスによってロードするイメージか、LBitmap() コンストラクターによって作成するイメージです。
- * LBitmap() コンストラクターを使用すると、LBitmapData オブジェクトへの参照を含んだビットマップオブジェクトを作成できます。ビットマップオブジェクトの作成後、親 DisplayObjectContainer インスタンスの addChild() メソッドまたは addChildAt() メソッドを使用して表示リスト上にビットマップを配置できます。
- * LBitmap オブジェクトの BitmapData への参照は、translation プロパティまたは rotation プロパティと関係なく、複数の LBitmap オブジェクトで共有できます。作成した複数のビットマップオブジェクトで同じ LBitmapData オブジェクトを参照することができるため、各表示オブジェクトインスタンスに関する LBitmapData オブジェクトのメモリのオーバーヘッドを避けつつ、複数の表示オブジェクトで同一の複雑な LBitmapData オブジェクトを使用することができます。
- * LBitmap オブジェクトを使用して LBitmapData オブジェクトを画面に描画するには、ベクターレンダラーをビットマップ塗りつぶしのシェイプとして使用するか、高速なピクセルコピールーチンを使用します。ピクセルコピールーチンはベクターレンダラーよりも高速です。
- * 注意：LBitmap クラスは InteractiveObject クラスのサブクラスではないため、マウスイベントを送出できません。しかし、ビットマップオブジェクトを格納した表示オブジェクトコンテナの addEventListener() メソッドを使用できます。
- * @class LBitmap
- * @extends LDisplayObject
- * @constructor
- * @param {LBitmapData} bitmapData LBitmapData オブジェクトが参照されます。
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmap/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
- * @public
- */
 var LBitmap = (function () {
 	function LBitmap (bitmapdata) {
 		var s = this;
 		LExtends(s, LDisplayObject, []);
-		/** @language chinese
-		 * 对象的类型
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * type of the object
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * オブジェクトのタイプ
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
 		s.type = "LBitmap";
-		/** @language chinese
-		 * 对象的类型
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
-		/** @language english
-		 * type of the object
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
-		/** @language japanese
-		 * オブジェクトのタイプ
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
 		s.rotateCenter = true;
-		/** @language chinese
-		 * 被引用的 LBitmapData 对象
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * The LBitmapData object being referenced.
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * LBitmapData オブジェクトが参照されます
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
 		s.bitmapData = bitmapdata; 
 		if (s.bitmapData) {
 			s.width = s.bitmapData.width;
@@ -6080,54 +3636,6 @@ var LBitmap = (function () {
 				s.bitmapData.height
 			);
 		},
-		/** @language chinese
-		 * 返回一个LBitmap的克隆对象。
-		 * @method clone
-		 * @return {LBitmap} 一个新的 LBitmap 对象，它与原始对象相同.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
-		 * @method clone
-		 * @return {LBitmap} A new LSprite object that is identical to the original.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 新しい LBitmap オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
-		 * @method clone
-		 * @return {LBitmap} 元のオブジェクトと同一の新しい LBitmap オブジェクトです。
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		clone : function () {
 			var s = this, a = new LBitmap(s.bitmapData.clone());
 			a.copyProperty(s);
@@ -6152,45 +3660,6 @@ var LBitmap = (function () {
 			}
 			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s.bitmapData.width, s.bitmapData.height]}], e.offsetX, e.offsetY);
 		},
-		/** @language chinese
-		 * 获取显示对象的宽度，以像素为单位。
-		 * @method getWidth
-		 * @return {float} 显示对象的宽度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the width of the display object, in pixels.
-		 * @method getWidth
-		 * @return {float} the width of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
-		 * @method getWidth
-		 * @return @return {float} オブジェクトの幅。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getWidth : function (maskSize) {
 			var s = this, w, mx, mw;
 			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
@@ -6208,45 +3677,6 @@ var LBitmap = (function () {
 			}
 			return w;
 		},
-		/** @language chinese
-		 * 获取显示对象的高度，以像素为单位。
-		 * @method getHeight
-		 * @return {float} 显示对象的高度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the height of the display object, in pixels.
-		 * @method getHeight
-		 * @return {float} the height of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
-		 * @method getHeight
-		 * @return @return {float} オブジェクトの高さ。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 *  trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getHeight : function (maskSize) {
 			var s = this, h, my, mh;
 			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
@@ -6277,106 +3707,6 @@ var LBitmap = (function () {
 	}
 	return LBitmap;
 })();
-
-/** @language chinese
- * <p>创建一个具有指定的宽度和高度的 LBitmapData 对象。</p>
- * <p>使用 LBitmapData 类，您可以处理 LBitmap 对象的数据（像素）。可以使用 LBitmapData 类的方法创建任意大小的Image对象，并在运行时采用多种方式操作这些图像。也可以访问使用 LLoader 类加载的Image对象。</p>
- * @class LBitmapData
- * @extends LObject
- * @constructor
- * @param {Image} image 一个Image对象。
- * @param {float} x Image可视范围x坐标（该参数可省略）。
- * @param {float} y Image可视范围y坐标（该参数可省略）。
- * @param {float} width Image可视范围宽（该参数可省略）。
- * @param {float} height Image可视范围高（该参数可省略）。
- * @param {String} dataType 指定数据格式，可以使用LBitmapData.DATA_IMAGE（Image对象）和LBitmapData.DATA_CANVAS（Canvas对象）（该参数可省略）。
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 		
- * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bitmap2 = new LBitmap(bitmapdata2);
- * 		bitmap2.x = 200;
- * 		addChild(bitmap2);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
- * @public
-*/
-/** @language english
- * Creates a BitmapData object with a specified width and height.
- * The BitmapData class lets you work with the data (pixels) of a Bitmap object . You can use the methods of the BitmapData class to create arbitrarily sized an Image object. And You can use an Image object with LLoader。
- * @class LBitmapData
- * @extends LObject
- * @constructor
- * @param {Image} image The Image object。
- * @param {float} x The x coordinate of the image.(Optional).
- * @param {float} y The y coordinate of the image.(Optional).
- * @param {float} width The width of the bitmap image in pixels.(Optional).
- * @param {float} height The height of the bitmap image in pixels.(Optional).
- * @param {String} dataType You can use the type with LBitmapData.DATA_IMAGE（Image object）or LBitmapData.DATA_CANVAS（Canvas object）。(Optional).
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 		
- * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bitmap2 = new LBitmap(bitmapdata2);
- * 		bitmap2.x = 200;
- * 		addChild(bitmap2);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * 指定された幅と高さで BitmapData オブジェクトを作成します。
- * LBitmapData クラスを使用すると、LBitmap オブジェクトのデータ (ピクセル) を処理できます。LBitmapData クラスのメソッドを使用して、任意のサイズのImageを作成し、実行時に様々な方法で操作できます。LLoaderを使ってロードしたImageも利用することができます。
- * @class LBitmapData
- * @extends LObject
- * @constructor
- * @param {Image} image Image型オブジェクト。
- * @param {float} x Imageの表示範囲の座標x.(省略可).
- * @param {float} y Imageの表示範囲の座標y.(省略可).
- * @param {float} width Imageの表示範囲の幅。(省略可).
- * @param {float} height Imageの表示範囲の高さ。(省略可).
- * @param {String} dataType データータイプを指定する，使えるタイプはLBitmapData.DATA_IMAGE（Imageオブジェクト）とLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。(省略可).
- * @example
- * 	Linit(50, "mylegend", 800, 480, main);
- * 	function main () {
- * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
- * 		loader.load("lufylegend.js.png", "bitmapData");
- * 	}
- * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
- * 		var bitmap = new LBitmap(bitmapdata);
- * 		addChild(bitmap);
- * 		
- * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bitmap2 = new LBitmap(bitmapdata2);
- * 		bitmap2.x = 200;
- * 		addChild(bitmap2);
- * 	}
- * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
- * @public
- */
 var LBitmapData = (function () {
 	function LBitmapData (image, x, y, width, height, dataType) {
 		var s = this;
@@ -6388,100 +3718,10 @@ var LBitmapData = (function () {
 		s.oncomplete = null;
 		s._locked = false;
 		s._setPixel = false;
-		/** @language chinese
-		 * 位图图像的位置x，以像素为单位。
-		 * @property x
-		 * @type float
-		 * @public
-		 */
-		/** @language english
-		 * The location x of the bitmap image in pixels.
-		 * @property x
-		 * @type float
-		 * @public
-		 */
-		/** @language chinese
-		 * ビットマップイメージの位置x（ピクセル単位）です。
-		 * @property x
-		 * @type float
-		 * @public
-		 */
 		s.x = (x == null ? 0 : x);
-		/** @language chinese
-		 * 位图图像的位置y，以像素为单位。
-		 * @property y
-		 * @type float
-		 * @public
-		 */
-		/** @language english
-		 * The location y of the bitmap image in pixels.
-		 * @property y
-		 * @type float
-		 * @public
-		 */
-		/** @language chinese
-		 * ビットマップイメージの位置y（ピクセル単位）です。
-		 * @property y
-		 * @type float
-		 * @public
-		 */
 		s.y = (y == null ? 0 : y);
-		/** @language chinese
-		 * 位图图像的宽度，以像素为单位。
-		 * @property width
-		 * @type float
-		 * @public
-		 */
-		/** @language english
-		 * The width of the bitmap image in pixels.
-		 * @property width
-		 * @type float
-		 * @public
-		 */
-		/** @language chinese
-		 * ビットマップイメージの幅（ピクセル単位）です。
-		 * @property width
-		 * @type float
-		 * @public
-		 */
 		s.width = 0;
-		/** @language chinese
-		 * 位图图像的高度，以像素为单位。
-		 * @property height
-		 * @type float
-		 * @public
-		 */
-		/** @language english
-		 * The height of the bitmap image in pixels.
-		 * @property height
-		 * @type float
-		 * @public
-		 */
-		/** @language chinese
-		 * ビットマップイメージの高さ（ピクセル単位）です。
-		 * @property height
-		 * @type float
-		 * @public
-		 */
 		s.height = 0;
-		/** @language chinese
-		 * 数据格式，LBitmapData.DATA_IMAGE（Image对象）或者LBitmapData.DATA_CANVAS（Canvas对象）
-		 * @property dataType
-		 * @type String
-		 * @public
-		 */
-		/** @language english
-		 * data type, LBitmapData.DATA_IMAGE（Image object）or LBitmapData.DATA_CANVAS（Canvas object）。
-		 * @property dataType
-		 * @type String
-		 * @public
-		 */
-		/** @language chinese
-		 * データータイプ，値はLBitmapData.DATA_IMAGE（Imageオブジェクト）またはLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。
-		 * @property dataType
-		 * @type String
-		 * @public
-		 */
 		s.dataType = null;
 		if (image && typeof image == "object") {
 			s.image = image;
@@ -6514,46 +3754,7 @@ var LBitmapData = (function () {
 		}
 		s.resize();
 	}
-	/** @language chinese
-	 * LBitmapData数据保存形式的一种，以Image对象形式保存。
-	 * @property LBitmapData.DATA_IMAGE
-	 * @type String
-	 * @final
-	 * @static
-	*/
-	/** @language english
-	 * data type of the LBitmapData. Image object。
-	 * @property dataType
-	 * @type String
-	 * @public
-	 */
-	/** @language chinese
-	 * LBitmapDataのデーターの保存形式です，Image オブジェクト。
-	 * @property dataType
-	 * @type String
-	 * @public
-	 */
 	LBitmapData.DATA_IMAGE = "data_image";
-	/** @language chinese
-	 * LBitmapData数据保存形式的一种，以Canvas对象形式保存。
-	 * @property LBitmapData.DATA_CANVAS
-	 * @type String
-	 * @final
-	 * @static
-	 * @readOnly
-	*/
-	/** @language english
-	 * data type of the LBitmapData. Canvas object。
-	 * @property dataType
-	 * @type String
-	 * @public
-	 */
-	/** @language chinese
-	 * LBitmapDataのデーターの保存形式です，Canvas オブジェクト。
-	 * @property dataType
-	 * @type String
-	 * @public
-	 */
 	LBitmapData.DATA_CANVAS = "data_canvas";
 	var p = {
 		_setDataType : function (dataType) {
@@ -6583,69 +3784,6 @@ var LBitmapData = (function () {
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		/** @language chinese
-		 * 用来改变LBitmapData内Image的可视范围
-		 * @method setProperties
-		 * @param {float} x Image可视范围x坐标。
-		 * @param {float} y Image可视范围y坐标。
-		 * @param {float} width Image可视范围宽。
-		 * @param {float} height Image可视范围高。
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
-		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 240;
-		 * 	addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">测试链接</a></p>
-		 * @public
-		 * @since 1.0.0
-		 */
-		/** @language english
-		 * Change the Image's visual range
-		 * @method setProperties
-		 * @param {float} x The x coordinate of the image.
-		 * @param {float} y The y coordinate of the image.
-		 * @param {float} width The width of the bitmap image in pixels.
-		 * @param {float} height The height of the bitmap image in pixels.
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
-		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 240;
-		 * 	addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">Try it »</a></p>
-		 * @public
-		 * @since 1.0.0
-		 */
-		/** @language japanese
-		 * LBitmapData内のImageの表示範囲を変更する
-		 * @method setProperties
-		 * @param {float} x Imageの表示範囲の座標x.
-		 * @param {float} y Imageの表示範囲の座標y.
-		 * @param {float} width Imageの表示範囲の幅。
-		 * @param {float} height Imageの表示範囲の高さ。
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
-		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 240;
-		 * 	addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setProperties.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @public
-		 * @since 1.0.0
-		 */
 		setProperties : function (x, y, width, height) {
 			var s = this;
 			s.x = x;
@@ -6654,120 +3792,12 @@ var LBitmapData = (function () {
 			s.height = height;
 			s.resize();
 		},
-		/** @language chinese
-		 * 用来改变LBitmapData内Image的可视范围的起点位置坐标
-		 * @method setCoordinate
-		 * @param {float} x Image可视范围x坐标。
-		 * @param {float} y Image可视范围y坐标。
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	bitmapdata2.setCoordinate(100, 100);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 120;
-		 * 	addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">测试链接</a></p>
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * Change coordinate of the Image's visual range
-		 * @method setCoordinate
-		 * @param {float} x The x coordinate of the image.
-		 * @param {float} y The y coordinate of the image.
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	bitmapdata2.setCoordinate(100, 100);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 120;
-		 * 	addChild(bitmap2);
-		 * @since 1.0.0
-		 * @public
-		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * LBitmapData内のImageの表示範囲の座標を変更する
-		 * @method setCoordinate
-		 * @param {float} x Imageの表示範囲の座標x.
-		 * @param {float} y Imageの表示範囲の座標y.
-		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	var bitmap1 = new LBitmap(bitmapdata1);
-		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
-		 * 	bitmapdata2.setCoordinate(100, 100);
-		 * 	var bitmap2 = new LBitmap(bitmapdata2);
-		 * 	bitmap2.x = 120;
-		 * 	addChild(bitmap2);
-		 * @since 1.0.0
-		 * @public
-		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		setCoordinate : function (x, y) {
 			var s = this;
 			s.x = x;
 			s.y = y;
 			s.resize();
 		},
-		/** @language chinese
-		 * 返回一个LBitmapData的克隆对象。
-		 * @method clone
-		 * @return {LBitmapData} 一个新的 LBitmapData 对象，它与原始对象相同.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd1);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bmd2 = bmd1.clone();
-		 * 	var bm2 = new LBitmap(bmd2);
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns a new BitmapData object that is a clone of the original instance with an exact copy of the contained bitmap.
-		 * @method clone
-		 * @return {LBitmapData} A new BitmapData object that is identical to the original.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd1);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bmd2 = bmd1.clone();
-		 * 	var bm2 = new LBitmap(bmd2);
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 新しい BitmapData オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
-		 * @method clone
-		 * @return {LBitmapData} 元のオブジェクトと同一の新しい LBitmapData オブジェクトです。
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd1);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bmd2 = bmd1.clone();
-		 * 	var bm2 = new LBitmap(bmd2);
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		clone : function () {
 			var s = this;
 			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
@@ -6783,123 +3813,6 @@ var LBitmapData = (function () {
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
 		},
-		/** @language chinese
-		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
-		 * @method getPixel
-		 * @param {int} x 指定坐标点x坐标。
-		 * @param {int} y 指定坐标点y坐标。
-		 * @param {String} colorType 指定获取的颜色种类。[number|array]（可省略）。
-		 * @return {Array} 像素数据。
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns an integer that represents an RGB pixel value from a BitmapData object at a specific point (x, y).
-		 * @method getPixel
-		 * @param {int} x The x position of the pixel.
-		 * @param {int} y The y position of the pixel.
-		 * @param {String} colorType the color type. [number|array].(Optional).
-		 * @return {Array} A array that represents an RGB pixel value.
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * LBitmapData オブジェクトの特定ポイント (x, y) の RGB ピクセル値を表す整数を返します。
-		 * @method getPixel
-		 * @param {int} x ピクセルの x 座標です。
-		 * @param {int} y ピクセルの y 座標です。
-		 * @param {String} colorType 取得するカラータイプを指定する。[number|array]（省略可）。
-		 * @return {Array} RGB ピクセル値を表す数値。
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getPixel : function (x, y, colorType) {
 			var s = this, i, d;
 	        x = x >> 0;
@@ -6918,123 +3831,6 @@ var LBitmapData = (function () {
 				return [d[i], d[i + 1], d[i + 2], d[i + 3]];
 			}
 		},
-		/** @language chinese
-		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
-		 * @method setPixel
-		 * @param {int} x 指定坐标点x坐标。
-		 * @param {int} y 指定坐标点y坐标。
-		 * @param {Array} data 像素数据。
-		 * @return {Array} 像素数据。
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns an integer that represents an RGB pixel value from a BitmapData object at a specific point (x, y).
-		 * @method setPixel
-		 * @param {int} x The x position of the pixel whose value changes.
-		 * @param {int} y The y position of the pixel whose value changes.
-		 * @param {Array} data The resulting pixel data for the pixel.
-		 * @return {Array} A array that represents an RGB pixel value.
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * LBitmapData オブジェクトの特定ポイント (x, y) の RGB ピクセル値を表す整数を返します。
-		 * @method setPixel
-		 * @param {int} x 値が変更されるピクセルの x 座標です。
-		 * @param {int} y 値が変更されるピクセルの y 座標です。
-		 * @param {Array} data 結果として生成される、ピクセルの RGB カラーデータです。
-		 * @return {Array} RGB ピクセル値を表す数値。
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img, imgs = [], arr;
-		 *  bitmapData.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	 arr = [];
-		 *  	 for (var j = 0; j < 50; j++) {
-		 *  		img = bitmapData.getPixel(100 + i, 100 + j);
-		 *  		arr.push(img);
-		 *  	}
-		 *  	imgs.push(arr);
-		 *  }
-		 *  bitmapData.unlock();
-		 *  bitmapData2.lock();
-		 *  for (var i = 0; i < 50; i++) {
-		 *  	arr = imgs[i];
-		 *  	for (var j = 0; j < 50; j++) {
-		 *  		img = arr[j];
-		 *  		bitmapData2.setPixel(i, j, img);
-		 *  	}
-		 *  }
-		 *  bitmapData2.unlock();
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.x = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		setPixel : function (x, y, data) {
 			var s = this;
 	        x = x >> 0;
@@ -7061,84 +3857,6 @@ var LBitmapData = (function () {
 				s._update();
 			}
 		},
-		/** @language chinese
-		 * 返回一个数组，它表示 LBitmapData 对象中在特定矩形区域rect中的像素数据。
-		 * @method getPixels
-		 * @param {LRectangle} rect 指定矩形。
-		 * @return {Array} 返回该矩形区域的像素数据。
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Generates an array from a rectangular region of pixel data.
-		 * @method getPixels
-		 * @param {LRectangle} rect A rectangular area in the current BitmapData object.
-		 * @return {Array} the pixels in the given Rectangle.
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * ピクセルデータの矩形領域からバイト配列を生成します。
-		 * @method getPixels
-		 * @param {LRectangle} rect 現在の BitmapData オブジェクト内の矩形領域です。
-		 * @return {Array} 特定の矩形内のピクセルを表す配列です
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		getPixels : function (rect) {
 			var s = this, r;
 			if (!s._locked) {
@@ -7150,84 +3868,6 @@ var LBitmapData = (function () {
 			}
 			return r;
 		},
-		/** @language chinese
-		 * 设置 LBitmapData 对象的单个像素数据。
-		 * @method setPixels
-		 * @param {LRectangle} rect 指定矩形。
-		 * @param {Array} data 像素数据。（数组[0, 0, 0, 255, 255, 255] | 字符串"#000000" | 数值0x000000）
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Sets a single pixel of a LBitmapData object.
-		 * @method setPixels
-		 * @param {LRectangle} rect Specifies the rectangular region of the BitmapData object.
-		 * @param {Array} data the values to be used in the rectangular region.(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * LBitmapData オブジェクトの 1 つのピクセルを設定します。
-		 * @method setPixels
-		 * @param {LRectangle} rect LBitmapData オブジェクトの矩形領域を指定します。
-		 * @param {Array} data 矩形領域で使用されるピクセル値です。(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
-		 * @since 1.5.1
-		 * @public
-		 * @example
-		 *  var bitmapData = new LBitmapData(event.currentTarget);
-		 *  bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
-		 *  var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData2.lock();
-		 *  bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
-		 *  bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 *  bitmapData2.unlock(); 
-		 *  
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  addChild(bitmap);
-		 *  
-		 *  var bitmap2 = new LBitmap(bitmapData2);
-		 *  bitmap2.y = 250;
-		 *  addChild(bitmap2);
-		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		setPixels : function (rect, data) {
 			var s = this, i, j, d, w, sd, x, y;
 			if (!s._locked) {
@@ -7266,109 +3906,16 @@ var LBitmapData = (function () {
 				s._update();
 			}
 		},
-		/** @language chinese
-		 * 此函数将操作对象锁定，保证操作对象在另一个临时操作的canvas上只绘制一遍。
-		 * @method lock
-		 * @since 1.5.1
-		 * @public
-		 */
-		/** @language english
-		 * Locks an image so that any objects that reference the BitmapData object, such as Bitmap objects, are not updated when this BitmapData object changes.
-		 * @method lock
-		 * @since 1.5.1
-		 * @public
-		 */
-		/** @language japanese
-		 * ピクセルデータを操作する時、もう一つの非表示canvasを使っています、この関数使うと、LBitmapDataをロックして、一回しか描けないですから、効率が高くすることができます。
-		 * @method lock
-		 * @since 1.5.1
-		 * @public
-		 */
 		lock : function () {
 			var s = this;
 			s._locked = true;
 			s._ready();
 		},
-		/** @language chinese
-		 * 拷贝像素等操作结束后，解除对操作对象的锁定。
-		 * @method unlock
-		 * @since 1.5.1
-		 * @public
-		 */
-		/** @language english
-		 * Unlocks an image so that any objects that reference the BitmapData object, such as Bitmap objects, are updated when this BitmapData object changes.
-		 * @method unlock
-		 * @since 1.5.1
-		 * @public
-		 */
-		/** @language japanese
-		 * ピクセルデータの操作が終わったら、LBitmapDataのロックを解除します。
-		 * @method unlock
-		 * @since 1.5.1
-		 * @public
-		 */
 		unlock : function () {
 			var s = this;
 			s._locked = false;
 			s._update();
 		},
-		/** @language chinese
-		 * 在LBitmapData位图图像上绘制 source 显示对象。
-		 * @method draw
-		 * @param {LDisplayObject} source 要绘制到 LBitmapData 对象的显示对象或 BitmapData 对象。
-		 * @since 1.7.7
-		 * @public
-		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Draws the source display object onto the bitmap image, using the Flash runtime vector renderer.
-		 * @method draw
-		 * @param {LDisplayObject} [source] The display object or BitmapData object to draw to the BitmapData object.
-		 * @since 1.7.7
-		 * @public
-		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * source 表示オブジェクトをビットマップイメージ上に描画します。
-		 * @method draw
-		 * @param {LDisplayObject} [source] LBitmapData オブジェクトに描画される表示オブジェクトまたは BitmapData オブジェクトです。
-		 * @since 1.7.7
-		 * @public
-		 * @example
-		 *  var layer = new LSprite();
-		 *  layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
-		 *  layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
-		 *  addChild(layer);
-		 *  
-		 *  var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
-		 *  bitmapData.draw(layer);
-		 *  var bitmap = new LBitmap(bitmapData);
-		 *  bitmap.y = 150;
-		 *  addChild(bitmap);
-		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
 		draw : function (source) {
 			var s = this;
 			if (s.dataType == LBitmapData.DATA_CANVAS) {
@@ -7390,9 +3937,6 @@ var LBitmapData = (function () {
 	}
 	return LBitmapData;
 })();
-/*
- * LDropShadowFilter.js
- **/
 function LDropShadowFilter(distance,angle,color,blur){
 	var s = this;
 	base(s,LObject,[]);
@@ -7433,9 +3977,6 @@ p = {
 	}
 };
 for(var k in p)LDropShadowFilter.prototype[k]=p[k];
-/*
-* LAnimation.js
-**/
 function LAnimation(layer,data,list){
 	base(this,LSprite,[]);
 	var s = this;
@@ -7500,9 +4041,6 @@ LAnimation.prototype.onframe = function (){
 		s.dispatchEvent(LEvent.COMPLETE);
 	}
 };
-/*
-* LAnimationTimeline.js
-**/
 function LAnimationTimeline(data,list){
 	var s = this;
 	base(s,LAnimation,[null,data,list]);

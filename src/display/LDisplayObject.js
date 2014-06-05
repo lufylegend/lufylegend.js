@@ -1,7 +1,7 @@
 /** @language chinese
- * <p>LDisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 LSprite 类排列显示列表中的显示对象。LSprite 对象可以有子显示对象，而其他显示对象（如 LShape 和 LTextField 对象）是“叶”节点，只有父级和同级，没有子级。</p>
+ * <p>LDisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 LDisplayObjectContainer 类排列显示列表中的显示对象。LDisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 LShape 和 LTextField 对象）是“叶”节点，只有父级和同级，没有子级。</p>
  * <p>LDisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵）。</p>
- * <p>LDisplayObject 是一种抽象基类；因此，不能直接调用 DisplayObject。</p>
+ * <p>LDisplayObject 是一种抽象基类；因此，不能直接调用 LDisplayObject。</p>
  * <p>所有显示对象都继承自 LDisplayObject 类。</p>
  * @class LDisplayObject
  * @extends LEventDispatcher
@@ -10,7 +10,7 @@
  * @public
  */
 /** @language english
- * <p>The LDisplayObject class is the base class for all objects that can be placed on the display list. The display list manages all objects displayed in the runtimes. Use the LSprite class to arrange the display objects in the display list. LSprite objects can have child display objects, while other display objects, such as LShape and LTextField objects, are "leaf" nodes that have only parents and siblings, no children.</p>
+ * <p>The LDisplayObject class is the base class for all objects that can be placed on the display list. The display list manages all objects displayed in the runtimes. Use the LDisplayObjectContainer class to arrange the display objects in the display list. LDisplayObjectContainer objects can have child display objects, while other display objects, such as LShape and LTextField objects, are "leaf" nodes that have only parents and siblings, no children.</p>
  * <p>The LDisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced properties of the object such as its transformation matrix.</p>
  * <p>LDisplayObject is an abstract base class; therefore, you cannot call LDisplayObject directly. </p>
  * <p>All display objects inherit from the LDisplayObject class.</p>
@@ -21,7 +21,7 @@
  * @public
  */
 /** @language japanese
- * <p>LDisplayObject クラスは、表示リストに含めることのできるすべてのオブジェクトに関する基本クラスです。表示リストでは、ランタイムに表示されるすべてのオブジェクトを管理します。LSprite クラスは、表示リスト内で表示オブジェクトを配置するために使用します。LSprite オブジェクトは子表示オブジェクトを持つことができます。これに対して、他の表示オブジェクト（例えば LShape、LTextField オブジェクト）は「リーフ」ノードです。つまり、親と兄弟だけを持ち、子はありません。</p>
+ * <p>LDisplayObject クラスは、表示リストに含めることのできるすべてのオブジェクトに関する基本クラスです。表示リストでは、ランタイムに表示されるすべてのオブジェクトを管理します。LDisplayObjectContainer クラスは、表示リスト内で表示オブジェクトを配置するために使用します。LDisplayObjectContainer オブジェクトは子表示オブジェクトを持つことができます。これに対して、他の表示オブジェクト（例えば LShape、LTextField オブジェクト）は「リーフ」ノードです。つまり、親と兄弟だけを持ち、子はありません。</p>
  * <p>LDisplayObject クラスは、基本機能（例えばオブジェクトの x 方向および y 方向の位置）に加えて、オブジェクトの拡張プロパティ（例えば変換マトリックス）をサポートします。</p>
  * <p>LDisplayObject は抽象基本クラスであるため、LDisplayObject を直接呼び出すことはできません。</p>
  * <p>すべての表示オブジェクトは LDisplayObject クラスから継承します。</p>
@@ -36,7 +36,7 @@ var LDisplayObject = (function () {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
 		/** @language chinese
-		 * 表示 LDisplayObject 实例相对于父级 LSprite 本地坐标的 x 坐标。如果该对象位于具有变形的 LSprite 内，则它也位于包含 LSprite 的本地坐标系中。因此，对于逆时针旋转 90 度的 LSprite，该 LSprite 的子级将继承逆时针旋转 90 度的坐标系。对象的坐标指的是注册点的位置。
+		 * 表示 LDisplayObject 实例相对于父级 LDisplayObjectContainer 本地坐标的 x 坐标。如果该对象位于具有变形的 LDisplayObjectContainer 内，则它也位于包含 LDisplayObjectContainer 的本地坐标系中。因此，对于逆时针旋转 90 度的 LDisplayObjectContainer，该 LDisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。对象的坐标指的是注册点的位置。
 		 * @property x
 		 * @type float
 		 * @default 0
@@ -44,7 +44,7 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the x coordinate of the LDisplayObject instance relative to the local coordinates of the parent LSprite. If the object is inside a LSprite that has transformations, it is in the local coordinate system of the enclosing LSprite. Thus, for a LSprite rotated 90° counterclockwise, the LSprite's children inherit a coordinate system that is rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
+		 * Indicates the x coordinate of the LDisplayObject instance relative to the local coordinates of the parent LDisplayObjectContainer. If the object is inside a LDisplayObjectContainer that has transformations, it is in the local coordinate system of the enclosing LDisplayObjectContainer. Thus, for a LDisplayObjectContainer rotated 90° counterclockwise, the LDisplayObjectContainer's children inherit a coordinate system that is rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
 		 * @property x
 		 * @type float
 		 * @default 0
@@ -52,7 +52,7 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		/** @language japanese
-		 * 親 LSprite のローカル座標を基準にした LDisplayObject インスタンスの x 座標を示します。変形されている LSprite にオブジェクトが含まれる場合、そのオブジェクトの座標系は、それを囲む LSprite のローカル座標系になります。したがって、反時計回りに 90 度回転した LSprite の場合、その LSprite の子は、反時計回りに 90 度回転した座標系を継承します。オブジェクトの座標は、基準点の位置を参照します。
+		 * 親 LDisplayObjectContainer のローカル座標を基準にした LDisplayObject インスタンスの x 座標を示します。変形されている LDisplayObjectContainer にオブジェクトが含まれる場合、そのオブジェクトの座標系は、それを囲む LDisplayObjectContainer のローカル座標系になります。したがって、反時計回りに 90 度回転した LDisplayObjectContainer の場合、その LDisplayObjectContainer の子は、反時計回りに 90 度回転した座標系を継承します。オブジェクトの座標は、基準点の位置を参照します。
 		 * @property x
 		 * @type float
 		 * @default 0
@@ -61,7 +61,7 @@ var LDisplayObject = (function () {
 		 */
 		s.x = 0;
 		/** @language chinese
-		 * 表示 LDisplayObject 实例相对于父级 LSprite 本地坐标的 y 坐标。如果该对象位于具有变形的 LSprite 内，则它也位于包含 LSprite 的本地坐标系中。因此，对于逆时针旋转 90 度的 LSprite，该 LSprite 的子级将继承逆时针旋转 90 度的坐标系。对象的坐标指的是注册点的位置。
+		 * 表示 LDisplayObject 实例相对于父级 LDisplayObjectContainer 本地坐标的 y 坐标。如果该对象位于具有变形的 LDisplayObjectContainer 内，则它也位于包含 LDisplayObjectContainer 的本地坐标系中。因此，对于逆时针旋转 90 度的 LDisplayObjectContainer，该 LDisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。对象的坐标指的是注册点的位置。
 		 * @property y
 		 * @type float
 		 * @default 0
@@ -69,7 +69,7 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the y coordinate of the LDisplayObject instance relative to the local coordinates of the parent LSprite. If the object is inside a LSprite that has transformations, it is in the local coordinate system of the enclosing LSprite. Thus, for a LSprite rotated 90° counterclockwise, the LSprite's children inherit a coordinate system that is rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
+		 * Indicates the y coordinate of the LDisplayObject instance relative to the local coordinates of the parent LDisplayObjectContainer. If the object is inside a LDisplayObjectContainer that has transformations, it is in the local coordinate system of the enclosing LDisplayObjectContainer. Thus, for a LDisplayObjectContainer rotated 90° counterclockwise, the LDisplayObjectContainer's children inherit a coordinate system that is rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
 		 * @property y
 		 * @type float
 		 * @default 0
@@ -77,7 +77,7 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		/** @language japanese
-		 * 親 LSprite のローカル座標を基準にした LDisplayObject インスタンスの y 座標を示します。変形されている LSprite にオブジェクトが含まれる場合、そのオブジェクトの座標系は、それを囲む LSprite のローカル座標系になります。したがって、反時計回りに 90 度回転した LSprite の場合、その LSprite の子は、反時計回りに 90 度回転した座標系を継承します。オブジェクトの座標は、基準点の位置を参照します。
+		 * 親 LDisplayObjectContainer のローカル座標を基準にした LDisplayObject インスタンスの y 座標を示します。変形されている LDisplayObjectContainer にオブジェクトが含まれる場合、そのオブジェクトの座標系は、それを囲む LDisplayObjectContainer のローカル座標系になります。したがって、反時計回りに 90 度回転した LDisplayObjectContainer の場合、その LDisplayObjectContainer の子は、反時計回りに 90 度回転した座標系を継承します。オブジェクトの座標は、基準点の位置を参照します。
 		 * @property y
 		 * @type float
 		 * @default 0
