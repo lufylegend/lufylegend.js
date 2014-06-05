@@ -11,3 +11,4 @@ LBlendMode.LIGHTER = "lighter";
 LBlendMode.COPY = "copy";
 LBlendMode.XOR = "xor";
 LBlendMode.NONE = null;
+LBlendMode.NORMAL = null;
