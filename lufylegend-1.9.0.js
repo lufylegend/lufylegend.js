@@ -1274,23 +1274,25 @@ var LEventDispatcher = (function () {
 		removeAllEventListener : function () {
 			this._eventList = [];
 		},
-		dispatchEvent : function (type) {
-			var s = this, i, length = s._eventList.length, ctype = (typeof type == "string") ? type : type.eventType;
+		dispatchEvent : function (event) {
+			var s = this, i, length = s._eventList.length, ctype = (typeof event == "string") ? event : event.eventType;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
 				if (ctype == s._eventList[i].type) {
-					if (typeof type == "string") {
+					if (typeof event == "string") {
 						s.currentTarget = s.target = s;
 						s.eventType = s.event_type = ctype;
 						s._eventList[i].listener(s);
 					}else{
-						type.currentTarget = type.target = s;
-						s._eventList[i].listener(type);
+						event.currentTarget = event.target = s;
+						s._eventList[i].listener(event);
 					}
+					return true;
 				}
 			}
+			return false;
 		},
 		hasEventListener : function (type) {
 			var s = this, i, length = s._eventList.length;
@@ -1685,7 +1687,7 @@ var LInteractiveObject = (function () {
 })();
 var LDisplayObjectContainer = (function () {
 	function LDisplayObjectContainer () {
-		var s = this;console.log(" --- LDisplayObjectContainer --- ");
+		var s = this;
 		LExtends(s, LInteractiveObject, []);
 		s.childList = new Array();
 		s.numChildren = 0;
@@ -2636,102 +2638,110 @@ p = {
 	}
 };
 for(var k in p)LGraphics.prototype[k]=p[k];
-function LShape(){
-	var s = this;
-	base(s,LInteractiveObject,[]);
-	s.type = "LShape";
-	s.graphics = new LGraphics();
-	s.graphics.parent = s;
-}
-LShape.ARC = "arc";
-LShape.RECT = "rect";
-LShape.VERTICES = "vertices";
-p = {
-	_ll_show:function(c){
+var LShape = (function () {
+	function LShape () {
 		var s = this;
-		s.graphics.ll_show();
-	},
-	getWidth:function(maskSize){
-		var s=this, mx, mw,
-		left = s.graphics.startX(),right = left + s.graphics.getWidth();
-		if (maskSize && s.mask) {
-			mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-			mw = s.mask.getWidth();
-			if (left < mx) {
-				left = mx;
+		LExtends(s, LInteractiveObject, []);
+		s.type = "LShape";
+		s.graphics = new LGraphics();
+		s.graphics.parent = s;
+	}
+	LShape.ARC = "arc";
+	LShape.RECT = "rect";
+	LShape.VERTICES = "vertices";
+	var p = {
+		_ll_show : function (c) {
+			var s = this;
+			s.graphics.ll_show();
+		},
+		getWidth : function (maskSize) {
+			var s = this, mx, mw,
+			left = s.graphics.startX(), right = left + s.graphics.getWidth();
+			if (maskSize && s.mask) {
+				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+				mw = s.mask.getWidth();
+				if (left < mx) {
+					left = mx;
+				}
+				if (right > mx + mw) {
+					right = mx + mw;
+				}
 			}
-			if (right > mx + mw) {
-				right = mx + mw;
+			s.ll_left = s.x + left;
+			s.ll_right = s.x + right;
+			return (right - left) * s.scaleX;
+		},
+		getHeight : function (maskSize) {
+			var s = this, my, mh,
+			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
+			if (maskSize && s.mask) {
+				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+				mh = s.mask.getHeight();
+				if (top < my) {
+					top = my;
+				}
+				if (bottom > my + mh) {
+					bottom = my + mh;
+				}
 			}
-		}
-		s.ll_left = s.x + left;
-		s.ll_right = s.x + right;
-		return (right - left)*s.scaleX;
-	},
-	getHeight:function(maskSize){
-		var s=this, my, mh,
-		top = s.graphics.startY(),bottom = top + s.graphics.getHeight();
-		if (maskSize && s.mask) {
-			my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-			mh = s.mask.getHeight();
-			if (top < my) {
-				top = my;
-			}
-			if (bottom > my + mh) {
-				bottom = my + mh;
-			}
-		}
-		s.ll_top = s.y + top;
-		s.ll_bottom = s.y + bottom;
-		return (bottom - top)*s.scaleY;
-	},
-	_startX:function(){
-		var s = this;
-		s.getWidth();
-		return s.ll_left;
-	},
-	startX:function(){
-		var s = this;
-		return s._startX()*s.scaleX;
-	},
-	_startY:function(){
-		var s = this;
-		s.getHeight();
-		return s.ll_top;
-	},
-	startY:function(){
-		var s = this;
-		return s._startY()*s.scaleY;
-	},
-	clone:function(){
-		var s = this,a = new LShape(),c,o;
-		a.copyProperty(s);
-		a.graphics = s.graphics.clone();
-		a.graphics.parent = a;
-		return a;
-	},
-	ismouseon:function(e,cd){
-		var s = this,i=false,sc;
-		if(!s.visible || e==null)return false;
-		if(s.mask){
-			if(!s.mask.parent){
-				s.mask.parent = s.parent;
-			}
-			if(!s.mask.ismouseon(e,cd)){
+			s.ll_top = s.y + top;
+			s.ll_bottom = s.y + bottom;
+			return (bottom - top) * s.scaleY;
+		},
+		_startX : function () {
+			var s = this;
+			s.getWidth();
+			return s.ll_left;
+		},
+		startX : function () {
+			var s = this;
+			return s._startX() * s.scaleX;
+		},
+		_startY : function () {
+			var s = this;
+			s.getHeight();
+			return s.ll_top;
+		},
+		startY : function () {
+			var s = this;
+			return s._startY() * s.scaleY;
+		},
+		clone : function () {
+			var s = this, a = new LShape(), c, o;
+			a.copyProperty(s);
+			a.graphics = s.graphics.clone();
+			a.graphics.parent = a;
+			return a;
+		},
+		ismouseon : function (e, cd) {
+			var s = this, i = false, sc;
+			if (!s.visible || e == null) {
 				return false;
 			}
+			if (s.mask) {
+				if (!s.mask.parent) {
+					s.mask.parent = s.parent;
+				}
+				if (!s.mask.ismouseon(e, cd)) {
+					return false;
+				}
+			}
+			sc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
+			if (s.graphics) {
+				i = s.graphics.ismouseon(e, sc);
+			}
+			return i;
+		},
+		die : function () {
+			var s = this;
+			s.graphics.clear();
 		}
-		sc={x:s.x*cd.scaleX+cd.x,y:s.y*cd.scaleY+cd.y,scaleX:cd.scaleX*s.scaleX,scaleY:cd.scaleY*s.scaleY};
-		if(s.graphics)i = s.graphics.ismouseon(e,sc);
-		return i;
-	},
-	die:function (){
-		var s = this;
-		s.graphics.clear();
-		s.removeAllEventListener();
+	};
+	for (var k in p) {
+		LShape.prototype[k] = p[k];
 	}
-};
-for(var k in p)LShape.prototype[k]=p[k];
+	return LShape;
+})();
 var LSprite = (function () {
 	function LSprite () {
 		var s = this;
@@ -3121,141 +3131,148 @@ var LSprite = (function () {
 	}
 	return LSprite;
 })();
-function LButton(upState,overState,downState,disableState){
-	var s = this;
-	base(s,LSprite,[]);
-	s.type = "LButton";
-	s.buttonMode = true;
-	s.addChild(upState);
-	if(!overState){
-		overState = upState;
-	}else{
-		s.addChild(overState);
-	}
-	if(!downState){
-		downState = overState;
-	}else{
-		s.addChild(downState);
-	}
-	if(!disableState){
-		disableState = upState;
-	}else{
-		s.addChild(disableState);
-	}
-	s.upState = s.bitmap_up = upState;
-	s.overState = s.bitmap_over = overState;
-	s.downState = downState;
-	s.disableState = disableState;
-	s.overState.visible = false;
-	s.downState.visible = false;
-	s.upState.visible = true;
-	s.staticMode = false;
-	s.setState(LButton.STATE_ENABLE);
-	s.addEventListener(LMouseEvent.MOUSE_OVER,s.ll_modeOver);
-	s.addEventListener(LMouseEvent.MOUSE_OUT,s.ll_modeOut);
-	s.addEventListener(LMouseEvent.MOUSE_DOWN,s.ll_modeDown);
-}
-LButton.STATE_DISABLE = "disable";
-LButton.STATE_ENABLE = "enable";
-LButton.prototype.setState = function (state){
-	var s = this;
-	if(state == LButton.STATE_DISABLE){
-		s.upState.visible = false;
+var LButton = (function () {
+	function LButton (upState, overState, downState, disableState) {
+		var s = this;
+		LExtends(s, LSprite, []);
+		s.type = "LButton";
+		s.buttonMode = true;
+		s.addChild(upState);
+		if (!overState) {
+			overState = upState;
+		} else {
+			s.addChild(overState);
+		}
+		if (!downState) {
+			downState = overState;
+		} else {
+			s.addChild(downState);
+		}
+		if (!disableState) {
+			disableState = upState;
+		} else {
+			s.addChild(disableState);
+		}
+		s.upState = s.bitmap_up = upState;
+		s.overState = s.bitmap_over = overState;
+		s.downState = downState;
+		s.disableState = disableState;
 		s.overState.visible = false;
 		s.downState.visible = false;
-		s.disableState.visible = true;
-	}else if(state == LButton.STATE_ENABLE){
-		s.overState.visible = false;
-		s.downState.visible = false;
-		s.disableState.visible = false;
 		s.upState.visible = true;
-	}else{
-		return;
+		s.staticMode = false;
+		s.setState(LButton.STATE_ENABLE);
+		s.addEventListener(LMouseEvent.MOUSE_OVER, s.ll_modeOver);
+		s.addEventListener(LMouseEvent.MOUSE_OUT, s.ll_modeOut);
+		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
 	}
-	s.state = state;
-};
-LButton.prototype.ll_modeDown = function (e){
-	var s = e.clickTarget,w,h,tw,th,x,y,tx,ty,onComplete;
-	if(!s.buttonMode || s.tween){
-		return;
-	}
-	if(s.state == LButton.STATE_DISABLE){
-		s.upState.visible = false;
-		s.overState.visible = false;
-		s.downState.visible = false;
-		s.disableState.visible = true;
-		return;
-	}
-	s.upState.visible = false;
-	s.overState.visible = false;
-	s.downState.visible = true;
-	s._tweenOver = s.ll_modeOver;
-	onComplete = function(obj){
-		var s = obj.parent;
-		delete s.tween;
-		s._tweenOver({clickTarget:s});
-		delete s._tweenOver;
+	LButton.STATE_DISABLE = "disable";
+	LButton.STATE_ENABLE = "enable";
+	var p = {
+		setState : function (state) {
+			var s = this;
+			if (state == LButton.STATE_DISABLE) {
+				s.upState.visible = false;
+				s.overState.visible = false;
+				s.downState.visible = false;
+				s.disableState.visible = true;
+			} else if (state == LButton.STATE_ENABLE) {
+				s.overState.visible = false;
+				s.downState.visible = false;
+				s.disableState.visible = false;
+				s.upState.visible = true;
+			} else {
+				return;
+			}
+			s.state = state;
+		},
+		ll_modeDown : function (e) {
+			var s = e.clickTarget, w, h, tw, th, x, y, tx, ty, onComplete;
+			if (!s.buttonMode || s.tween) {
+				return;
+			}
+			if (s.state == LButton.STATE_DISABLE) {
+				s.upState.visible = false;
+				s.overState.visible = false;
+				s.downState.visible = false;
+				s.disableState.visible = true;
+				return;
+			}
+			s.upState.visible = false;
+			s.overState.visible = false;
+			s.downState.visible = true;	
+			s._tweenOver = s.ll_modeOver;
+			onComplete = function(obj){
+				var s = obj.parent;
+				delete s.tween;
+				s._tweenOver({clickTarget : s});
+				delete s._tweenOver;
+			};
+			if (s.staticMode) {
+				s.tween = LTweenLite.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
+			} else {
+				w = s.downState.getWidth();
+				h = s.downState.getHeight();
+				tw = w * 1.1;
+				th = h * 1.1;
+				x = s.downState.x;
+				y = s.downState.y;
+				tx = x + (w - tw) * 0.5;
+				ty = y + (h - th) * 0.5;
+				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : 1.1, scaleY : 1.1, ease : Quart.easeOut})
+				.to(s.downState, 0.1, {x : x, y : y, scaleX : 1, scaleY : 1, ease : Quart.easeOut,onComplete : onComplete});
+			}
+		},
+		ll_modeOver : function (e) {
+			var s = e.clickTarget;
+			if (!s.buttonMode) {
+				return;
+			}
+			if (s.tween) {
+				s._tweenOver = s.ll_modeOver;
+				return;
+			}
+			if (s.state == LButton.STATE_DISABLE) {
+				s.upState.visible = false;
+				s.overState.visible = false;
+				s.downState.visible = false;
+				s.disableState.visible = true;
+				return;
+			}
+			s.upState.visible = false;
+			s.downState.visible = false;
+			s.overState.visible = true;
+		},
+		ll_modeOut : function (e){
+			var s = e.clickTarget;
+			if (!s.buttonMode) {
+				return;
+			}
+			if (s.tween) {
+				s._tweenOver = s.ll_modeOut;
+				return;
+			}
+			if (s.state == LButton.STATE_DISABLE) {
+				s.upState.visible = false;
+				s.overState.visible = false;
+				s.downState.visible = false;
+				s.disableState.visible = true;
+				return;
+			}
+			s.overState.visible = false;
+			s.downState.visible = false;
+			s.upState.visible = true;
+		},
+		clone : function (){
+			var s = this;
+			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
+		}
 	};
-	if(s.staticMode){
-		s.tween = LTweenLite.to(s.downState,0.3,{})
-		.to(s.downState,0.1,{onComplete:onComplete});
-	}else{
-		w = s.downState.getWidth();
-		h = s.downState.getHeight();
-		tw = w*1.1;
-		th = h*1.1;
-		x = s.downState.x;
-		y = s.downState.y;
-		tx = x+(w - tw)*0.5;
-		ty = y+(h - th)*0.5;
-		s.tween = LTweenLite.to(s.downState,0.3,{x:tx,y:ty,scaleX:1.1,scaleY:1.1,ease:Quart.easeOut})
-		.to(s.downState,0.1,{x:x,y:y,scaleX:1,scaleY:1,ease:Quart.easeOut,onComplete:onComplete});
+	for (var k in p) {
+		LButton.prototype[k] = p[k];
 	}
-};
-LButton.prototype.ll_modeOver = function (e){
-	var s = e.clickTarget;
-	if(!s.buttonMode){
-		return;
-	}
-	if(s.tween){
-		s._tweenOver = s.ll_modeOver;
-		return;
-	}
-	if(s.state == LButton.STATE_DISABLE){
-		s.upState.visible = false;
-		s.overState.visible = false;
-		s.downState.visible = false;
-		s.disableState.visible = true;
-		return;
-	}
-	s.upState.visible = false;
-	s.downState.visible = false;
-	s.overState.visible = true;
-};
-LButton.prototype.ll_modeOut = function (e){
-	var s = e.clickTarget;
-	if(!s.buttonMode){
-		return;
-	}
-	if(s.tween){
-		s._tweenOver = s.ll_modeOut;
-		return;
-	}
-	if(s.state == LButton.STATE_DISABLE){
-		s.upState.visible = false;
-		s.overState.visible = false;
-		s.downState.visible = false;
-		s.disableState.visible = true;
-		return;
-	}
-	s.overState.visible = false;
-	s.downState.visible = false;
-	s.upState.visible = true;
-};
-LButton.prototype.clone = function (){
-	var s = this;
-	return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
-};
+	return LButton;
+})();
 function LBlendMode(){throw "LBlendMode cannot be instantiated";}
 LBlendMode.SOURCE_OVER = "source-over";
 LBlendMode.SOURCE_ATOP = "source-atop";
@@ -3820,7 +3837,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			i = s._canvas.width * 4 * (s.y + y) + (s.x + x) * 4;
+			i = s.width * 4 * y + x * 4;
 			d = s._data.data;
 			if (!s._locked) {
 				s._update();
@@ -3862,7 +3879,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			r = s._context.getImageData(rect.x, rect.y, rect.width, rect.height);
+			r = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
 			if (!s._locked) {
 				s._update();
 			}
@@ -3977,70 +3994,85 @@ p = {
 	}
 };
 for(var k in p)LDropShadowFilter.prototype[k]=p[k];
-function LAnimation(layer,data,list){
-	base(this,LSprite,[]);
-	var s = this;
-	s.type = "LAnimation";
-	s.rowIndex = 0;
-	s.colIndex = 0;
-	s.mode = 1;
-	s.isMirror = false;
-	s.bitmap =  new LBitmap(data);
-	s.imageArray = list;
-	s.addChild(s.bitmap);
-	if(layer != null)layer.addChild(s);
-	s.onframe();
-	s.colIndex = 0;
-};
-LAnimation.prototype.setAction = function (rowIndex,colIndex,mode,isMirror){
-	var s = this;
-	if(rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length)s.rowIndex = rowIndex;
-	if(colIndex != null && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length)s.colIndex = colIndex;
-	if(mode != null)s.mode = mode;
-	if(isMirror != null){
-		s.isMirror = isMirror;
-		if(s.isMirror){
-			s.bitmap.x = s.bitmap.getWidth();
-			s.bitmap.scaleX = -1*Math.abs(s.bitmap.scaleX);
-		}else{
-			s.bitmap.x = 0;
-			s.bitmap.scaleX = 1*Math.abs(s.bitmap.scaleX);
+var LAnimation = (function () {
+	function LAnimation(layer, data, list){
+		var s = this;
+		LExtends(s, LSprite, []);
+		s.type = "LAnimation";
+		s.rowIndex = 0;
+		s.colIndex = 0;
+		s.mode = 1;
+		s.isMirror = false;
+		s.bitmap =  new LBitmap(data);
+		s.imageArray = list;
+		s.addChild(s.bitmap);
+		if (layer != null) {
+			layer.addChild(s);
 		}
+		s.onframe();
+		s.colIndex = 0;
 	}
-};
-LAnimation.prototype.clone = function (){
-	var s = this,cB = s.bitmap.bitmapData.clone(),cI = s.imageArray.slice(0),
-	a = new LAnimation(null,cB,cI);
-	a.copyProperty(s);
-	return a;
-};
-LAnimation.prototype.getAction = function (){
-	var s = this;
-	return [s.rowIndex,s.colIndex,s.mode,s.isMirror];
-};
-LAnimation.prototype.onframe = function (){
-	var s = this;
-	var arr = s.imageArray[s.rowIndex][s.colIndex];
-	if(typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED){
-		s.bitmap.bitmapData.setProperties(arr.x,arr.y,arr.width,arr.height);
-	}else{
-		s.bitmap.bitmapData.setCoordinate(arr.x,arr.y);
+	var p = {
+		setAction : function (rowIndex,colIndex,mode,isMirror){
+			var s = this;
+			if (rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
+				s.rowIndex = rowIndex;
+			}
+			if (colIndex != null && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length) {
+				s.colIndex = colIndex;
+			}
+			if (mode != null) {
+				s.mode = mode;
+			}
+			if (isMirror != null) {
+				s.isMirror = isMirror;
+				if (s.isMirror) {
+					s.bitmap.x = s.bitmap.getWidth();
+					s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
+				}else{
+					s.bitmap.x = 0;
+					s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
+				}
+			}
+		},
+		getAction : function () {
+			var s = this;
+			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
+		},
+		onframe : function (){
+			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
+			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
+				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
+			} else {
+				s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
+			}
+			if (typeof arr.sx != UNDEFINED) {
+				s.bitmap.x = arr.sx;
+			}
+			if (typeof arr.sy != UNDEFINED) {
+				s.bitmap.y = arr.sy;
+			}
+			if (typeof arr.script == "function") {
+				arr.script(s, arr.params);
+			}
+			s.colIndex += s.mode;
+			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
+				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
+				s.dispatchEvent(LEvent.COMPLETE);
+			}
+		},
+		clone : function () {
+			var s = this, cB = s.bitmap.bitmapData.clone(), cI = s.imageArray.slice(0),
+			a = new LAnimation(null, cB, cI);
+			a.copyProperty(s);
+			return a;
+		}
+	};
+	for (var k in p) {
+		LAnimation.prototype[k] = p[k];
 	}
-	if(typeof arr.sx != UNDEFINED){
-		s.bitmap.x = arr.sx;
-	}
-	if(typeof arr.sy != UNDEFINED){
-		s.bitmap.y = arr.sy;
-	}
-	if(typeof arr.script == "function"){
-		arr.script(s,arr.params);
-	}
-	s.colIndex += s.mode;
-	if(s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0){
-		s.colIndex = s.mode>0?0:s.imageArray[s.rowIndex].length - 1;
-		s.dispatchEvent(LEvent.COMPLETE);
-	}
-};
+	return LAnimation;
+})();
 function LAnimationTimeline(data,list){
 	var s = this;
 	base(s,LAnimation,[null,data,list]);

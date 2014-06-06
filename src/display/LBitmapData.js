@@ -628,7 +628,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			i = s._canvas.width * 4 * (s.y + y) + (s.x + x) * 4;
+			i = s.width * 4 * y + x * 4;
 			d = s._data.data;
 			if (!s._locked) {
 				s._update();
@@ -865,7 +865,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			r = s._context.getImageData(rect.x, rect.y, rect.width, rect.height);
+			r = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
 			if (!s._locked) {
 				s._update();
 			}

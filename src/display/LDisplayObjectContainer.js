@@ -30,7 +30,7 @@
  */
 var LDisplayObjectContainer = (function () {
 	function LDisplayObjectContainer () {
-		var s = this;console.log(" --- LDisplayObjectContainer --- ");
+		var s = this;
 		LExtends(s, LInteractiveObject, []);
 		/** @language chinese
 		 * 子对象列表

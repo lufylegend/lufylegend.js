@@ -42,11 +42,11 @@ var LAnimation = (function () {
 				}
 			}
 		},
-		getAction = function () {
+		getAction : function () {
 			var s = this;
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
-		onframe = function (){
+		onframe : function (){
 			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
 			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);

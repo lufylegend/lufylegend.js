@@ -167,7 +167,7 @@ var LButton = (function () {
 			s.downState.visible = false;
 			s.overState.visible = true;
 		},
-		ll_modeOut = function (e){
+		ll_modeOut : function (e){
 			var s = e.clickTarget;
 			if (!s.buttonMode) {
 				return;
@@ -187,7 +187,7 @@ var LButton = (function () {
 			s.downState.visible = false;
 			s.upState.visible = true;
 		},
-		clone = function (){
+		clone : function (){
 			var s = this;
 			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
 		}
