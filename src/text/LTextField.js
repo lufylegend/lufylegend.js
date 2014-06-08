@@ -1187,7 +1187,7 @@ var LTextField = (function () {
 			return h;
 		},
 		/** @language chinese
-		 * 获取显示对象的宽度，以像素为单位。
+		 * 文本逐字显示（打字机效果）。
 		 * @method wind
 		 * @since 1.0.0
 		 * @public

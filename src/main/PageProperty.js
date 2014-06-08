@@ -35,6 +35,7 @@ if (!Array.isArray){
  * @param {Object} expression 要计算的表达式。expression 参数的值显示在"输出"面板中。
  * @example
  * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @examplelink <p><a href="../../../api/GlobalFunctions/trace.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
 */
@@ -44,6 +45,7 @@ if (!Array.isArray){
  * @param {Object} expression An expression to evaluate. the value of the expression parameter is displayed in the Output panel.
  * @example
  * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @examplelink <p><a href="../../../api/GlobalFunctions/trace.html" target="_blank">Try it »</a></p>
  * @since 1.0.0
  * @public
  */
@@ -53,6 +55,7 @@ if (!Array.isArray){
  * @param {Object} expression 評価する式。expression パラメータの値が [出力] パネルに表示されます。
  * @example
  * 	trace("debug text 1", "debug text 2", "debug text 3");
+ * @examplelink <p><a href="../../../api/GlobalFunctions/trace.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.0.0
  * @public
  */
@@ -168,11 +171,12 @@ function removeChild (o) {
  * 	LInit(50,"mylegend",800,480,main);
  * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
  * 	function main(){
- * 	    alert("感谢您使用lufylegend库件");
+ * 		alert("Hello lufylegend!");
  * 	}
  * 	</script>
  * 	</body>
  * 	</html>
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LInit.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
  */
@@ -199,11 +203,12 @@ function removeChild (o) {
  * 	LInit(50,"mylegend",800,480,main);
  * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
  * 	function main(){
- * 	    alert("感谢您使用lufylegend库件");
+ * 		alert("Hello lufylegend!");
  * 	}
  * 	</script>
  * 	</body>
  * 	</html>
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LInit.html" target="_blank">Try it »</a></p>
  * @since 1.0.0
  * @public
  */
@@ -221,20 +226,21 @@ function removeChild (o) {
  * 	<html>
  * 	<head>
  * 	<meta charset="UTF-8">
+ * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
  * 	<title>demo</title>
  * 	</head>
  * 	<body>
  * 	<div id="mylegend">loading……</div>
- * 	<script type="text/javascript" src="../lufylegend-x.x.x.min.js"></script> 
  * 	<script>
  * 	LInit(50,"mylegend",800,480,main);
  * 	//window.onload = function(){LInit(50, "mylegend", 800, 480, main, LEvent.INIT);};
  * 	function main(){
- * 	    alert("感谢您使用lufylegend库件");
+ * 		alert("Hello lufylegend!");
  * 	}
  * 	</script>
  * 	</body>
  * 	</html>
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LInit.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.0.0
  * @public
  */
@@ -275,9 +281,25 @@ var LInit = init;
  * @param {Object} parent 父对象。
  * @param {Array} params 参数。
  * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function FatherClass(){
+ * 		this.name = "Father";
+ * 	}
+ * 	FatherClass.prototype.getName = function(){
+ * 		return this.name;
+ * 	};
+ * 	function ChildClass(){
+ * 		LExtends(this,FatherClass,[]);
+ * 		this.name = "Child";
+ * 	}
+ * 	function main () {
+ * 		LGlobal.setDebug(true);
+ * 		var father = new FatherClass();
+ * 		var child = new ChildClass();
+ * 		trace("father.getName() = " + father.getName()); //father.getName() = Father
+ * 		trace("child.getName() = " + child.getName());//child.getName() = Child
+ * 	}
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LExtends.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
  */
@@ -288,9 +310,25 @@ var LInit = init;
  * @param {Object} parent The parent。
  * @param {Array} params params。
  * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function FatherClass(){
+ * 		this.name = "Father";
+ * 	}
+ * 	FatherClass.prototype.getName = function(){
+ * 		return this.name;
+ * 	};
+ * 	function ChildClass(){
+ * 		LExtends(this,FatherClass,[]);
+ * 		this.name = "Child";
+ * 	}
+ * 	function main () {
+ * 		LGlobal.setDebug(true);
+ * 		var father = new FatherClass();
+ * 		var child = new ChildClass();
+ * 		trace("father.getName() = " + father.getName()); //father.getName() = Father
+ * 		trace("child.getName() = " + child.getName());//child.getName() = Child
+ * 	}
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LExtends.html" target="_blank">Try it »</a></p>	
  * @since 1.0.0
  * @public
  */
@@ -301,9 +339,25 @@ var LInit = init;
  * @param {Object} parent 親オブジェクト。
  * @param {Array} params パラメータ。
  * @example
- * 	var backLayer = LSprite();
- * 	addChild(backLayer);
- * 	removeChild(backLayer);
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function FatherClass(){
+ * 		this.name = "Father";
+ * 	}
+ * 	FatherClass.prototype.getName = function(){
+ * 		return this.name;
+ * 	};
+ * 	function ChildClass(){
+ * 		LExtends(this,FatherClass,[]);
+ * 		this.name = "Child";
+ * 	}
+ * 	function main () {
+ * 		LGlobal.setDebug(true);
+ * 		var father = new FatherClass();
+ * 		var child = new ChildClass();
+ * 		trace("father.getName() = " + father.getName()); //father.getName() = Father
+ * 		trace("child.getName() = " + child.getName());//child.getName() = Child
+ * 	}
+ * @examplelink <p><a href="../../../api/GlobalFunctions/LExtends.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.0.0
  * @public
  */
