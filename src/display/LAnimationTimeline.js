@@ -284,9 +284,123 @@ var LAnimationTimeline = (function () {
 		setLabel : function (name, _rowIndex, _colIndex, _mode, _isMirror) {
 			this.ll_labelList[name] = {rowIndex : _rowIndex, colIndex : _colIndex, mode : _mode, isMirror : _isMirror};
 		},
+		/** @language chinese
+		 * 开始播放 LAnimationTimeline 动画。
+		 * @method play
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Starts playing the LAnimationTimeline object.
+		 * @method play
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LAnimationTimeline オブジェクトの再生を開始します。
+		 * @method play
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		play : function () {
 			this.mode = this.saveMode;
 		},
+		/** @language chinese
+		 * 停止播放 LAnimationTimeline 动画。
+		 * @method stop
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Stop playing the LAnimationTimeline object.
+		 * @method stop
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LAnimationTimeline オブジェクトの再生を停止します。
+		 * @method stop
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		stop : function () {
 			this.saveMode = this.mode;
 			this.mode = 0;
@@ -420,12 +534,162 @@ var LAnimationTimeline = (function () {
 			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
 			this.stop();
 		},
+		/** @language chinese
+		 * 向指定标签位置添加执行脚本。
+		 * @method addFrameScript
+		 * @param {String} label 指定标签。
+		 * @param {Function} func 动画到达指定标签位置时要执行的函数。
+		 * @param {Array} params 执行函数时的参数。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/addFrameScript.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Add script to LAnimationTimeline object at the specified frame.
+		 * @method addFrameScript
+		 * @param {String} label the label of the frame.
+		 * @param {Function} func function.
+		 * @param {Array} params params.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/addFrameScript.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 指定されたフレームにスクリプトを追加する。
+		 * @method addFrameScript
+		 * @param {String} label 指定されたフレーム。
+		 * @param {Function} func 関数。
+		 * @param {Array} params 関数を実行する時のパラメータ。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/addFrameScript.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		addFrameScript : function (name, func, params) {
 			var l = this.ll_labelList[name];
 			var arr = this.imageArray[l.rowIndex][l.colIndex];
 			arr.script = func;
 			arr.params = params ? params : null;
 		},
+		/** @language chinese
+		 * 删除指定标签位置的执行脚本。
+		 * @method removeFrameScript
+		 * @param {String} label 指定标签。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/removeFrameScript.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Remove script at the specified frame.
+		 * @method removeFrameScript
+		 * @param {String} label the label of the frame.
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/removeFrameScript.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * 指定されたフレームにあるスクリプトを削除する。
+		 * @method removeFrameScript
+		 * @param {String} label 指定されたフレーム。
+		 * @since 1.8.2
+		 * @public
+		 * @example
+		 * 	LInit(200,"legend",800,450,main);
+		 * 	function loadBitmapdata(event){
+		 * 		var backLayer = new LSprite();
+		 * 		addChild(backLayer);
+		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var player = new LAnimationTimeline(backLayer,data,list);
+		 * 		player.setLabel("right",2,0,1,true);
+		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+		 * 		backLayer.addChild(player);
+		 * 		player.gotoAndPlay("right");
+		 * 	}
+		 * 	function scriptTest(param1,param2){
+		 * 		trace("scriptTest Run : " + param1 + "," + param2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LAnimationTimeline/removeFrameScript.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		removeFrameScript : function (name) {
 			var l = this.ll_labelList[name];
 			this.imageArray[l.rowIndex][l.colIndex].script = null;
