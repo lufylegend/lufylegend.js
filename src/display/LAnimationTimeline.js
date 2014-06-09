@@ -1,6 +1,90 @@
-/*
-* LAnimationTimeline.js
-**/
+/** @language chinese
+ * 创建一个新的 LAnimationTimeline 实例。
+ * LAnimationTimeline类在LAnimation 类的基础上提供了很多扩展。LAnimation 类需要调用本身的onframe函数才能播放动画，而LAnimationTimeline类则不需要。
+ * @class LAnimationTimeline
+ * @extends LAnimation
+ * @constructor
+ * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
+ * @param {Array} list <p>每个frame的属性值。</p>
+ * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
+ * <p>如果精灵图表中的每个frame大小都是的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
+ * @example
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function main () {
+ * 		var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("player.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata(event){
+ * 		var backLayer = new LSprite();
+ * 		addChild(backLayer);
+ * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+ * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		player = new LAnimationTimeline(data,list);
+ * 		backLayer.addChild(player);
+ * 	}
+ * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">测试链接</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Creates a new LAnimation instance.
+ * In the LAnimation, you must call the onframe function to play the animation,but in LAnimationTimeline don't have to do that.
+ * @class LAnimationTimeline
+ * @extends LAnimation
+ * @constructor
+ * @param {LBitmapData} data a LBitmapData object(SpriteSheet).
+ * @param {Array} list <p>A frame's Setting。</p>
+ * <p>The Setting's format is like this : {x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 ［x, y, width, height］ is the LBitmapData object's property，［sx, sy］is the start coordinate.</p>
+ * <p>If the frames all of the same size, you can use LGlobal.divideCoordinate function to split the SpriteSheets.</p>
+ * @example
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function main () {
+ * 		var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("player.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata(event){
+ * 		var backLayer = new LSprite();
+ * 		addChild(backLayer);
+ * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+ * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		player = new LAnimationTimeline(data,list);
+ * 		backLayer.addChild(player);
+ * 	}
+ * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">Try it »</a></p>
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * 新しい LAnimation インスタンスを作成します。
+ * LAnimationTimeline クラスはLAnimation クラスの上にいくつの便利な機能をサポートしています。LAnimation クラスでアニメーションを再生する時、自身のonframe函数を呼び出し無ければなりません、LAnimationTimelineクラスは自動的にアニメーションを再生することができます。
+ * @class LAnimationTimeline
+ * @extends LAnimation
+ * @constructor
+ * @param {LBitmapData} data LBitmapData オブジェクト（スプライトシート），アニメーションのひとコマひとコマをひとつにまとめた画像ファイルです。
+ * @param {Array} list <p>frameごとの属性。</p>
+ * <p>フォーマットは{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}の通りです。 x, y, width, heightはLBitmapData オブジェクトの各属性の値です，sx, syはひとコマのアニメーションを表示する時の座標です。</p>
+ * <p>もしスプライトシートのframeの大きさが全部同じであれば、LGlobal.divideCoordinate関数を使って画像を分割することができます。</p>
+ * @example
+ * 	LInit(50, "legend", 800, 480, main);
+ * 	function main () {
+ * 		var loader = new LLoader();
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.load("player.png", "bitmapData");
+ * 	}
+ * 	function loadBitmapdata(event){
+ * 		var backLayer = new LSprite();
+ * 		addChild(backLayer);
+ * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+ * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		player = new LAnimationTimeline(data,list);
+ * 		backLayer.addChild(player);
+ * 	}
+ * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @since 1.0.0
+ * @public
+ */
 var LAnimationTimeline = (function () {
 	function LAnimationTimeline (data, list) {
 		var s = this;
