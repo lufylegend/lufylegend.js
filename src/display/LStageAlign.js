@@ -144,24 +144,24 @@ LStageAlign.BOTTOM = "B";
  */
 LStageAlign.LEFT = "L";
 /** @language chinese
- * [静态] 指定舞台靠左对齐。
- * @property LEFT
+ * [静态] 指定舞台靠右对齐。
+ * @property RIGHT
  * @type String
  * @static
  * @since 1.0.0
  * @public
  */
 /** @language english
- * [static] Specifies that the Stage is aligned on the left.
- * @property LEFT
+ * [static] Specifies that the Stage is aligned on the right.
+ * @property RIGHT
  * @type String
  * @static
  * @since 1.0.0
  * @public
  */
 /** @language japanese
- * [静的] ステージを左揃えにするよう指定します。
- * @property LEFT
+ * [静的] ステージを右揃えにするよう指定します。
+ * @property RIGHT
  * @type String
  * @static
  * @since 1.0.0

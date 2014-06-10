@@ -1,56 +1,47 @@
 /** @language chinese
- * 创建一个新的 LButton 实例。
+ * 使用 LButton 类，您可以控制按钮元件的所有实例。
  * @class LButton
  * @extends LSprite
  * @constructor
  * @example
- * 	LInit(50, "legend", 800, 480, main);
- * 	function main () {
- * 		var layer = new LSprite();
- * 		addChild(layer);
- * 		
- * 		var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bm = new LBitmap(bmd);
- * 		layer.addChild(bm);
- * 	}
+ * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
+ * 	var bitmapUp = new LBitmap(bitmapDataUp);
+ * 	var bitmapDataOver = new LBitmapData(result["ok_button"],0,48,98,48);
+ * 	var bitmapOver = new LBitmap(bitmapDataOver);
+ * 	var button02 = new LButton(bitmapUp,bitmapOver);
+ * 	backLayer.addChild(button02);
  * @examplelink <p><a href="../../../api/LButton/index.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
  */
 /** @language english
- * Creates a new LButton instance.
+ * The LButton class lets you control all instances of button symbols.
  * @class LButton
  * @extends LSprite
  * @constructor
  * @example
- * 	LInit(50, "legend", 800, 480, main);
- * 	function main () {
- * 		var layer = new LSprite();
- * 		addChild(layer);
- * 		
- * 		var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bm = new LBitmap(bmd);
- * 		layer.addChild(bm);
- * 	}
+ * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
+ * 	var bitmapUp = new LBitmap(bitmapDataUp);
+ * 	var bitmapDataOver = new LBitmapData(result["ok_button"],0,48,98,48);
+ * 	var bitmapOver = new LBitmap(bitmapDataOver);
+ * 	var button02 = new LButton(bitmapUp,bitmapOver);
+ * 	backLayer.addChild(button02);
  * @examplelink <p><a href="../../../api/LButton/index.html" target="_blank">Try it »</a></p>
  * @since 1.0.0
  * @public
  */
 /** @language japanese
- * 新しい LButton インスタンスを作成します。
+ * LButton クラスを使用すると、ボタンシンボルのすべてのインスタンスを制御することができます。
  * @class LButton
  * @extends LSprite
  * @constructor
  * @example
- * 	LInit(50, "legend", 800, 480, main);
- * 	function main () {
- * 		var layer = new LSprite();
- * 		addChild(layer);
- * 		
- * 		var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
- * 		var bm = new LBitmap(bmd);
- * 		layer.addChild(bm);
- * 	}
+ * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
+ * 	var bitmapUp = new LBitmap(bitmapDataUp);
+ * 	var bitmapDataOver = new LBitmapData(result["ok_button"],0,48,98,48);
+ * 	var bitmapOver = new LBitmap(bitmapDataOver);
+ * 	var button02 = new LButton(bitmapUp,bitmapOver);
+ * 	backLayer.addChild(button02);
  * @examplelink <p><a href="../../../api/LButton/index.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.0.0
  * @public

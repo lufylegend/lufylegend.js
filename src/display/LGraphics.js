@@ -1875,8 +1875,8 @@ var LGraphics = (function () {
 			return s.parent.ismouseonShapes(s.showList, e.offsetX, e.offsetY);
 		},
 		getWidth : function () {
-			var s = this, k = null, k1 = null, min = 0, max = 0, v, l, l1;
-			for (k = 0, l = s.showList; k < l; k++) {
+			var s = this, k, k1, min = 0, max = 0, v, l, l1;
+			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
 					if (min > s.showList[k].arg[0]) {
 						min = s.showList[k].arg[0];
@@ -1908,7 +1908,7 @@ var LGraphics = (function () {
 		},
 		getHeight : function () {
 			var s = this, k = null, k1 = null, l, l1, min = 0, max = 0, v;
-			for (k = 0, l = s.showList; k < l; k++) {
+			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
 					if (min > s.showList[k].arg[1]) {
 						min = s.showList[k].arg[1];

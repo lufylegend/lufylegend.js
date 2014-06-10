@@ -145,7 +145,7 @@ LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
 /** @language chinese
  * [静态] 指定应用程序的大小是固定的，因此，即使在更改播放器窗口大小时，它仍然保持不变。
- * @property NO_BORDER
+ * @property NO_SCALE
  * @type String
  * @static
  * @since 1.0.0
@@ -153,7 +153,7 @@ LStageScaleMode.NO_BORDER = "noBorder";
  */
 /** @language english
  * [static] Specifies that the size of the application be fixed, so that it remains unchanged even as the size of the player window changes.
- * @property NO_BORDER
+ * @property NO_SCALE
  * @type String
  * @static
  * @since 1.0.0
@@ -161,7 +161,7 @@ LStageScaleMode.NO_BORDER = "noBorder";
  */
 /** @language japanese
  * [静的] アプリケーションのサイズが固定され、Flash Player のウィンドウのサイズが変更された場合でも、サイズが維持されるように指定します。
- * @property NO_BORDER
+ * @property NO_SCALE
  * @type String
  * @static
  * @since 1.0.0
