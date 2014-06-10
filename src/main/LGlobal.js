@@ -546,59 +546,67 @@ LGlobal.resize = function(){
 		h = LGlobal.height;
 	}
 	switch(LGlobal.stageScale){
-		case "exactFit":
-			w = ww;
-			h = wh;
+	case "exactFit":
+		w = ww;
+		h = wh;
+		break;
+	case "noBorder":
+		w = ww;
+		h = LGlobal.height*ww/LGlobal.width;
+		switch(LGlobal.align){
+		case LStageAlign.BOTTOM:
+		case LStageAlign.BOTTOM_LEFT:
+		case LStageAlign.BOTTOM_RIGHT:
+		case LStageAlign.BOTTOM_MIDDLE:
+			t = wh - h;
 			break;
-		case "noBorder":
+		}
+	break;
+	case "showAll":
+		if(ww/wh > LGlobal.width/LGlobal.height){
+			h = wh;
+			w = LGlobal.width*wh/LGlobal.height;
+		}else{
 			w = ww;
 			h = LGlobal.height*ww/LGlobal.width;
+		}
+	case "noScale":
+	default:
+		switch(LGlobal.align){
+		case LStageAlign.BOTTOM:
+		case LStageAlign.BOTTOM_LEFT:
+			t = wh - h;
 			break;
-		case "showAll":
-			if(ww/wh > LGlobal.width/LGlobal.height){
-				h = wh;
-				w = LGlobal.width*wh/LGlobal.height;
-			}else{
-				w = ww;
-				h = LGlobal.height*ww/LGlobal.width;
-			}
-		case "noScale":
+		case LStageAlign.RIGHT:
+		case LStageAlign.TOP_RIGHT:
+			l = ww - w;
+			break;
+		case LStageAlign.TOP_MIDDLE:
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.BOTTOM_RIGHT:
+			t = wh - h;
+			l = ww - w;
+			break;
+		case LStageAlign.BOTTOM_MIDDLE:
+			t = wh - h;
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.MIDDLE:
+			t = (wh - h)*0.5;
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.TOP:
+		case LStageAlign.LEFT:
+		case LStageAlign.TOP_LEFT:
 		default:
-			switch(LGlobal.align){
-				case LStageAlign.BOTTOM:
-				case LStageAlign.BOTTOM_LEFT:
-					t = wh - h;
-					break;
-				case LStageAlign.RIGHT:
-				case LStageAlign.TOP_RIGHT:
-					l = ww - w;
-					break;
-				case LStageAlign.TOP_MIDDLE:
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.BOTTOM_RIGHT:
-					t = wh - h;
-					l = ww - w;
-					break;
-				case LStageAlign.BOTTOM_MIDDLE:
-					t = wh - h;
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.MIDDLE:
-					t = (wh - h)*0.5;
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.TOP:
-				case LStageAlign.LEFT:
-				case LStageAlign.TOP_LEFT:
-				default:
-			}
-			LGlobal.canvasObj.style.marginTop = t + "px";
-			LGlobal.canvasObj.style.marginLeft = l + "px";
-			if(LGlobal.isFirefox){
-				LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
-				LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
-			}
+		}
+	}
+	LGlobal.canvasObj.style.marginTop = t + "px";
+	LGlobal.canvasObj.style.marginLeft = l + "px";
+	if(LGlobal.isFirefox){
+		LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
+		LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
 	}
 	LGlobal.setStageSize(w,h);
 };

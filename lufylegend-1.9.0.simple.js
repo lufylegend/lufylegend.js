@@ -373,7 +373,7 @@ LStageAlign.BOTTOM_LEFT = "BL";
 LStageAlign.BOTTOM_RIGHT = "BR";
 LStageAlign.BOTTOM_MIDDLE = "BM";
 LStageAlign.MIDDLE = "M";
-function LStageScaleMode(){throw "LStageScaleMode cannot be instantiated";}
+function LStageScaleMode () {throw "LStageScaleMode cannot be instantiated";}
 LStageScaleMode.EXACT_FIT = "exactFit";
 LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
@@ -916,59 +916,67 @@ LGlobal.resize = function(){
 		h = LGlobal.height;
 	}
 	switch(LGlobal.stageScale){
-		case "exactFit":
-			w = ww;
-			h = wh;
+	case "exactFit":
+		w = ww;
+		h = wh;
+		break;
+	case "noBorder":
+		w = ww;
+		h = LGlobal.height*ww/LGlobal.width;
+		switch(LGlobal.align){
+		case LStageAlign.BOTTOM:
+		case LStageAlign.BOTTOM_LEFT:
+		case LStageAlign.BOTTOM_RIGHT:
+		case LStageAlign.BOTTOM_MIDDLE:
+			t = wh - h;
 			break;
-		case "noBorder":
+		}
+	break;
+	case "showAll":
+		if(ww/wh > LGlobal.width/LGlobal.height){
+			h = wh;
+			w = LGlobal.width*wh/LGlobal.height;
+		}else{
 			w = ww;
 			h = LGlobal.height*ww/LGlobal.width;
+		}
+	case "noScale":
+	default:
+		switch(LGlobal.align){
+		case LStageAlign.BOTTOM:
+		case LStageAlign.BOTTOM_LEFT:
+			t = wh - h;
 			break;
-		case "showAll":
-			if(ww/wh > LGlobal.width/LGlobal.height){
-				h = wh;
-				w = LGlobal.width*wh/LGlobal.height;
-			}else{
-				w = ww;
-				h = LGlobal.height*ww/LGlobal.width;
-			}
-		case "noScale":
+		case LStageAlign.RIGHT:
+		case LStageAlign.TOP_RIGHT:
+			l = ww - w;
+			break;
+		case LStageAlign.TOP_MIDDLE:
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.BOTTOM_RIGHT:
+			t = wh - h;
+			l = ww - w;
+			break;
+		case LStageAlign.BOTTOM_MIDDLE:
+			t = wh - h;
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.MIDDLE:
+			t = (wh - h)*0.5;
+			l = (ww - w)*0.5;
+			break;
+		case LStageAlign.TOP:
+		case LStageAlign.LEFT:
+		case LStageAlign.TOP_LEFT:
 		default:
-			switch(LGlobal.align){
-				case LStageAlign.BOTTOM:
-				case LStageAlign.BOTTOM_LEFT:
-					t = wh - h;
-					break;
-				case LStageAlign.RIGHT:
-				case LStageAlign.TOP_RIGHT:
-					l = ww - w;
-					break;
-				case LStageAlign.TOP_MIDDLE:
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.BOTTOM_RIGHT:
-					t = wh - h;
-					l = ww - w;
-					break;
-				case LStageAlign.BOTTOM_MIDDLE:
-					t = wh - h;
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.MIDDLE:
-					t = (wh - h)*0.5;
-					l = (ww - w)*0.5;
-					break;
-				case LStageAlign.TOP:
-				case LStageAlign.LEFT:
-				case LStageAlign.TOP_LEFT:
-				default:
-			}
-			LGlobal.canvasObj.style.marginTop = t + "px";
-			LGlobal.canvasObj.style.marginLeft = l + "px";
-			if(LGlobal.isFirefox){
-				LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
-				LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
-			}
+		}
+	}
+	LGlobal.canvasObj.style.marginTop = t + "px";
+	LGlobal.canvasObj.style.marginLeft = l + "px";
+	if(LGlobal.isFirefox){
+		LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
+		LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
 	}
 	LGlobal.setStageSize(w,h);
 };
@@ -1294,7 +1302,12 @@ var LEventDispatcher = (function () {
 						s.eventType = s.event_type = ctype;
 						s._eventList[i].listener(s);
 					}else{
-						event.currentTarget = event.target = s;
+						if (!event.target) {
+							event.target = s;
+						}
+						if (!event.currentTarget) {
+							event.currentTarget = event.target;
+						}
 						s._eventList[i].listener(event);
 					}
 					return true;
@@ -1809,39 +1822,30 @@ var LDisplayObjectContainer = (function () {
 	}
 	return LDisplayObjectContainer;
 })();
-function LLoader(){
-	base(this,LEventDispatcher,[]);
-	var s = this;
-	s.type="LLoader";
-	s.loadtype = "";
-	s.content = null;
-	s.oncomplete = null;
-	s.event = {};
-}
-p = {
-	addEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = l;
-		}
-	},
-	load:function (u,t){
+var LLoader = (function () {
+	function LLoader () {
+		var s = this;
+		LExtends(s, LEventDispatcher, []);
+		s.type = "LLoader";
+	}
+	LLoader.prototype.load = function (u, t) {
 		var s = this;
 		s.loadtype = t;
-		if(!t || t == "bitmapData"){
+		if (!t || t == "bitmapData") {
 			s.content = new Image();
-			s.content.onload = function(){
+			s.content.onload = function () {
 				s.content.onload = null;
-				if(s.oncomplete){
-					s.event.currentTarget = s.content;
-					s.event.target = s;
-					s.oncomplete(s.event);
-				}
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = s.content;
+				event.target = s;
+				s.dispatchEvent(event);
+				delete s.content;
 			};
 			s.content.src = u; 
 		}
-	}
-};
-for(var k in p)LLoader.prototype[k]=p[k];
+	};
+	return LLoader;
+})();
 function LURLLoader(){
 	var s = this;
 	base(s,LObject,[]);
@@ -3345,7 +3349,7 @@ var LButton = (function () {
 	}
 	return LButton;
 })();
-function LBlendMode(){throw "LBlendMode cannot be instantiated";}
+function LBlendMode () {throw "LBlendMode cannot be instantiated";}
 LBlendMode.SOURCE_OVER = "source-over";
 LBlendMode.SOURCE_ATOP = "source-atop";
 LBlendMode.SOURCE_IN = "source-in";
@@ -4682,26 +4686,29 @@ p = {
 	}
 };
 for(var k in p)LStageWebView.prototype[k]=p[k];
-function FPS(){
-        var s = this;
-        base(s,LSprite,[]);
-        s.fps = new LTextField();
-        s.fpsCount = 0;
-        s.fpsTime = (new Date()).getTime();
-        s.fps.color = "#ffffff";
-        s.addChild(s.fps);
-        s.addEventListener(LEvent.ENTER_FRAME,s.showFPS);
-}
-FPS.prototype.showFPS = function(s){
-        s.fpsCount++;
-        var t = (new Date()).getTime();
-        if(t - s.fpsTime < 1000)return;
-        s.fpsTime = t;
-        s.fps.text = s.fpsCount;
-        s.fpsCount = 0;
-        s.graphics.clear();
-        s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");
-};
+var FPS = (function () {
+	function FPS(){
+		var s = this;
+		LExtends(s,LSprite,[]);
+		s.fps = new LTextField();
+		s.fpsCount = 0;
+		s.fpsTime = (new Date()).getTime();
+		s.fps.color = "#ffffff";
+		s.addChild(s.fps);
+		s.addEventListener(LEvent.ENTER_FRAME,s.showFPS);
+	}
+	FPS.prototype.showFPS = function(s){
+		s.fpsCount++;
+		var t = (new Date()).getTime();
+		if(t - s.fpsTime < 1000)return;
+		s.fpsTime = t;
+		s.fps.text = s.fpsCount;
+		s.fpsCount = 0;
+		s.graphics.clear();
+		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");
+	};
+	return FPS;
+})();
 (function(){
 	LAjax = new $Ajax();
 	LLoadManage = new $LoadManage();

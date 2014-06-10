@@ -235,7 +235,12 @@ var LEventDispatcher = (function () {
 						s.eventType = s.event_type = ctype;
 						s._eventList[i].listener(s);
 					}else{
-						event.currentTarget = event.target = s;
+						if (!event.target) {
+							event.target = s;
+						}
+						if (!event.currentTarget) {
+							event.currentTarget = event.target;
+						}
 						s._eventList[i].listener(event);
 					}
 					return true;
