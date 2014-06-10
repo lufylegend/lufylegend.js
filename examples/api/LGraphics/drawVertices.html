@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>drawVertices</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var shape = new LShape();
+				addChild(shape);
+				shape.graphics.drawVertices(2, "#ff0000", [[10, 10], [60, 100], [100, 50]]);
+				shape.graphics.drawVertices(2, "#ff0000", [[10, 160], [60, 250], [100, 200]], true, "#880088");
+			}
+			</script>
+	</body>
+</html>
