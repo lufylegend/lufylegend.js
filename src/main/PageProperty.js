@@ -375,6 +375,9 @@ function base (d, b, a) {
 		}
 		o[p][SUPER] = b.prototype;
 	}
+	if (o.toString == Object.prototype.toString) {
+		o.toString = LObject.prototype.toString;
+	}
 	b.apply(d, a);
 }
 var LExtends = base;
