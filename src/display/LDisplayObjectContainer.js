@@ -121,6 +121,73 @@ var LDisplayObjectContainer = (function () {
 		 * @public
 		 */
 		s.numChildren = 0;
+		/** @language chinese
+		 * 返回此对象的子项数目。
+		 * @property mouseChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 * 	var container1 = new LSprite();
+		 * 	var container2 = new LSprite();
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 	container2.addChild(container1);
+		 * 	container1.addChild(circle1);
+		 * 	container1.addChild(circle2);
+		 * 	trace(container1.numChildren); // 2
+		 * 	trace(container2.numChildren); // 1
+		 * 	trace(circle1.numChildren); // 0
+		 * 	trace(circle2.numChildren); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/mouseChildren.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Returns the number of children of this object.
+		 * @property mouseChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 * 	var container1 = new LSprite();
+		 * 	var container2 = new LSprite();
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 	container2.addChild(container1);
+		 * 	container1.addChild(circle1);
+		 * 	container1.addChild(circle2);
+		 * 	trace(container1.numChildren); // 2
+		 * 	trace(container2.numChildren); // 1
+		 * 	trace(circle1.numChildren); // 0
+		 * 	trace(circle2.numChildren); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/mouseChildren.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このオブジェクトの子の数を返します。
+		 * @property mouseChildren
+		 * @type int
+		 * @since 1.9.0
+		 * @example
+		 * 	var container1 = new LSprite();
+		 * 	var container2 = new LSprite();
+		 * 	var circle1 = new LSprite();
+		 * 	circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+		 * 	var circle2 = new LSprite();
+		 * 	circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+		 * 	container2.addChild(container1);
+		 * 	container1.addChild(circle1);
+		 * 	container1.addChild(circle2);
+		 * 	trace(container1.numChildren); // 2
+		 * 	trace(container2.numChildren); // 1
+		 * 	trace(circle1.numChildren); // 0
+		 * 	trace(circle2.numChildren); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/mouseChildren.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.mouseChildren = true;
 	}
 	var p = {
 		/** @language chinese
