@@ -11,6 +11,7 @@ function $LMouseEventContainer(){
 	s.mouseOutContainer = [];
 	s.mouseDblContainer = [];
 	s.textFieldInputContainer = [];
+	s.buttonContainer = [];
 };
 $LMouseEventContainer.prototype = {
 	pushInputBox:function(d){
@@ -26,6 +27,30 @@ $LMouseEventContainer.prototype = {
 			if(d.objectIndex == c[i].objectIndex){
 				s.textFieldInputContainer.splice(i,1);
 				break;
+			}
+		}
+	},
+	pushButton:function(d){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex)return;
+		}
+		s.buttonContainer.push(d);
+	},
+	removeButton:function(d){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex){
+				s.buttonContainer.splice(i,1);
+				break;
+			}
+		}
+	}
+	,dispatchEventButton:function(e){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(typeof s.buttonContainer[i].ll_button_mode == "function"){
+				s.buttonContainer[i].ll_button_mode(e);
 			}
 		}
 	}
@@ -138,6 +163,7 @@ $LMouseEventContainer.prototype = {
 		}else if(type == LMouseEvent.DOUBLE_CLICK){
 			s.dispatchEvent(event,s.mouseDblContainer,LMouseEvent.DOUBLE_CLICK);
 		}else{
+			s.dispatchEventButton(event);
 			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
 			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);

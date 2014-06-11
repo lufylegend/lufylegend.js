@@ -723,6 +723,22 @@ var LSprite = (function () {
 				}
 			}
 		},
+		ll_mouseout : function (e, type, cd, ox, oy) {
+			var s = this;
+			if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
+				s.ll_mousein = false;
+				if (s._mevent(LMouseEvent.MOUSE_OUT)) {
+					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
+				}
+				if (s.mouseChildren) {
+					for (var k = s.childList.length - 1; k >= 0; k--) {
+						if (s.childList[k].mouseEvent && s.childList[k].ll_mouseout) {
+							s.childList[k].ll_mouseout(e, type, cd, ox, oy);
+						}
+					}
+				}
+			}
+		},
 		mouseEvent : function (e, type, cd) {
 			if (!e) {
 				return false;
@@ -759,12 +775,7 @@ var LSprite = (function () {
 				}
 				return true;
 			} else {
-				if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
-					s.ll_mousein = false;
-					if (s._mevent(LMouseEvent.MOUSE_OUT)) {
-						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
-					}
-				}
+				s.ll_mouseout(e, type, cd, ox, oy);
 			}
 			return false;
 		},

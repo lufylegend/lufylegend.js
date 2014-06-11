@@ -89,8 +89,9 @@ var LButton = (function () {
 		s.upState.visible = true;
 		s.staticMode = false;
 		s.setState(LButton.STATE_ENABLE);
-		s.addEventListener(LMouseEvent.MOUSE_OVER, s.ll_modeOver);
-		s.addEventListener(LMouseEvent.MOUSE_OUT, s.ll_modeOut);
+		if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+			LMouseEventContainer.pushButton(s);
+		}
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
 	}
 	LButton.STATE_DISABLE = "disable";
@@ -115,6 +116,32 @@ var LButton = (function () {
 			}
 			s.state = state;
 		},
+		ll_mouseout : function (e, type, cd, ox, oy) {
+			e.clickTarget=this;
+			this.ll_modeOut(e);
+		},
+		mouseEvent : function (e, type, cd) {
+			if (!e) {
+				return false;
+			}
+			var s = this;
+			if (type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
+				s.ll_button_mode(e);
+			}
+			return this.callParent("mouseEvent",arguments);
+		},
+		ll_button_mode : function(e){
+				var s = this;
+				if (!s.visible) {
+					return;
+				}
+				e.clickTarget=s;
+				if(s.hitTestPoint(e.offsetX,e.offsetY)){
+					s.ll_modeOver(e);
+				}else{
+					s.ll_modeOut(e);
+				}
+			},
 		ll_modeDown : function (e) {
 			var s = e.clickTarget, w, h, tw, th, x, y, tx, ty, onComplete;
 			if (!s.buttonMode || s.tween) {
@@ -195,6 +222,13 @@ var LButton = (function () {
 		clone : function (){
 			var s = this;
 			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
+		},
+		die : function () {
+			var s = this;
+			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+				LMouseEventContainer.removeButton(s);
+			}
+			s.callParent("die",arguments);
 		}
 	};
 	for (var k in p) {

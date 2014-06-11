@@ -83,6 +83,7 @@ function $LMouseEventContainer(){
 	s.mouseOutContainer = [];
 	s.mouseDblContainer = [];
 	s.textFieldInputContainer = [];
+	s.buttonContainer = [];
 };
 $LMouseEventContainer.prototype = {
 	pushInputBox:function(d){
@@ -98,6 +99,30 @@ $LMouseEventContainer.prototype = {
 			if(d.objectIndex == c[i].objectIndex){
 				s.textFieldInputContainer.splice(i,1);
 				break;
+			}
+		}
+	},
+	pushButton:function(d){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex)return;
+		}
+		s.buttonContainer.push(d);
+	},
+	removeButton:function(d){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(d.objectIndex == c[i].objectIndex){
+				s.buttonContainer.splice(i,1);
+				break;
+			}
+		}
+	}
+	,dispatchEventButton:function(e){
+		var s  = this,c = s.buttonContainer;
+		for(var i=0,l=c.length;i<l;i++){
+			if(typeof s.buttonContainer[i].ll_button_mode == "function"){
+				s.buttonContainer[i].ll_button_mode(e);
 			}
 		}
 	}
@@ -210,6 +235,7 @@ $LMouseEventContainer.prototype = {
 		}else if(type == LMouseEvent.DOUBLE_CLICK){
 			s.dispatchEvent(event,s.mouseDblContainer,LMouseEvent.DOUBLE_CLICK);
 		}else{
+			s.dispatchEventButton(event);
 			s.dispatchEvent(event,s.mouseOutContainer,LMouseEvent.MOUSE_OUT);
 			s.dispatchEvent(event,s.mouseOverContainer,LMouseEvent.MOUSE_OVER);
 			s.dispatchEvent(event,s.mouseMoveContainer,LMouseEvent.MOUSE_MOVE);
@@ -1613,7 +1639,6 @@ var LInteractiveObject = (function () {
 		LExtends(s, LDisplayObject, []);
 		s.type = "LInteractiveObject";
 		s.mouseEnabled = true;
-		s.mouseChildren = true;
 		s.mouseList = new Array();
 	}
 	var p = {
@@ -1712,6 +1737,7 @@ var LDisplayObjectContainer = (function () {
 		LExtends(s, LInteractiveObject, []);
 		s.childList = new Array();
 		s.numChildren = 0;
+		s.mouseChildren = true;
 	}
 	var p = {
 		addChild : function (d) {
@@ -3018,6 +3044,22 @@ var LSprite = (function () {
 				}
 			}
 		},
+		ll_mouseout : function (e, type, cd, ox, oy) {
+			var s = this;
+			if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
+				s.ll_mousein = false;
+				if (s._mevent(LMouseEvent.MOUSE_OUT)) {
+					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
+				}
+				if (s.mouseChildren) {
+					for (var k = s.childList.length - 1; k >= 0; k--) {
+						if (s.childList[k].mouseEvent && s.childList[k].ll_mouseout) {
+							s.childList[k].ll_mouseout(e, type, cd, ox, oy);
+						}
+					}
+				}
+			}
+		},
 		mouseEvent : function (e, type, cd) {
 			if (!e) {
 				return false;
@@ -3054,12 +3096,7 @@ var LSprite = (function () {
 				}
 				return true;
 			} else {
-				if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
-					s.ll_mousein = false;
-					if (s._mevent(LMouseEvent.MOUSE_OUT)) {
-						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
-					}
-				}
+				s.ll_mouseout(e, type, cd, ox, oy);
 			}
 			return false;
 		},
@@ -3238,8 +3275,9 @@ var LButton = (function () {
 		s.upState.visible = true;
 		s.staticMode = false;
 		s.setState(LButton.STATE_ENABLE);
-		s.addEventListener(LMouseEvent.MOUSE_OVER, s.ll_modeOver);
-		s.addEventListener(LMouseEvent.MOUSE_OUT, s.ll_modeOut);
+		if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+			LMouseEventContainer.pushButton(s);
+		}
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
 	}
 	LButton.STATE_DISABLE = "disable";
@@ -3252,16 +3290,44 @@ var LButton = (function () {
 				s.overState.visible = false;
 				s.downState.visible = false;
 				s.disableState.visible = true;
+				s.mouseEnabled = false;
 			} else if (state == LButton.STATE_ENABLE) {
 				s.overState.visible = false;
 				s.downState.visible = false;
 				s.disableState.visible = false;
 				s.upState.visible = true;
+				s.mouseEnabled = true;
 			} else {
 				return;
 			}
 			s.state = state;
 		},
+		ll_mouseout : function (e, type, cd, ox, oy) {
+			e.clickTarget=this;
+			this.ll_modeOut(e);
+		},
+		mouseEvent : function (e, type, cd) {
+			if (!e) {
+				return false;
+			}
+			var s = this;
+			if (type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
+				s.ll_button_mode(e);
+			}
+			return this.callParent("mouseEvent",arguments);
+		},
+		ll_button_mode : function(e){
+				var s = this;
+				if (!s.visible) {
+					return;
+				}
+				e.clickTarget=s;
+				if(s.hitTestPoint(e.offsetX,e.offsetY)){
+					s.ll_modeOver(e);
+				}else{
+					s.ll_modeOut(e);
+				}
+			},
 		ll_modeDown : function (e) {
 			var s = e.clickTarget, w, h, tw, th, x, y, tx, ty, onComplete;
 			if (!s.buttonMode || s.tween) {
@@ -3342,6 +3408,13 @@ var LButton = (function () {
 		clone : function (){
 			var s = this;
 			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
+		},
+		die : function () {
+			var s = this;
+			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+				LMouseEventContainer.removeButton(s);
+			}
+			s.callParent("die",arguments);
 		}
 	};
 	for (var k in p) {
