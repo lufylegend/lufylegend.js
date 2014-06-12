@@ -219,6 +219,82 @@ var LSprite = (function () {
 		 * @public
 		 */
 		s.shapes = new Array();
+		/** @language chinese
+		 * 指定此 sprite 的按钮模式。如果为 true，此 sprite 的行为方式就像按钮，这表示它可在指针经过 sprite 时触发显示手形光标(PC)。
+		 * @property buttonMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("buttonMode=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("buttonMode=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.buttonMode = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/buttonMode.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Specifies the button mode of this sprite. If true, this sprite behaves as a button, which means that it triggers the display of the hand cursor when the pointer passes over the sprite(PC).
+		 * @property buttonMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("buttonMode=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("buttonMode=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.buttonMode = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/buttonMode.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このスプライトのボタンモードを指定します。true の場合、このスプライトはボタンとして動作します。この場合(PCのみ)、このスプライトは、ポインターがこのスプライト上を通るとハンドカーソルの表示をトリガーします。
+		 * @property buttonMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("buttonMode=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("buttonMode=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.buttonMode = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/buttonMode.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.buttonMode = false;
 	}
 	var p = {
 		/** @language chinese
@@ -755,6 +831,9 @@ var LSprite = (function () {
 				if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
 					s.ll_mousein = true;
 					if (s._mevent(LMouseEvent.MOUSE_OVER)) {
+						if (s.buttonMode && LGlobal.os == OS_PC) {
+							
+						}
 						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER, e, cd, ox, oy);
 					}
 				}
