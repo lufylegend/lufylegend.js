@@ -33,9 +33,21 @@ var LInteractiveObject = (function () {
 		 * @type Boolean
 		 * @since 1.0.0
 		 * @example
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("mouseEnabled=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("mouseEnabled=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.mouseEnabled = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
 		 * @examplelink <p><a href="../../../api/LInteractiveObject/mouseEnabled.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
@@ -45,9 +57,21 @@ var LInteractiveObject = (function () {
 		 * @type Boolean
 		 * @since 1.0.0
 		 * @example
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("mouseEnabled=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("mouseEnabled=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.mouseEnabled = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
 		 * @examplelink <p><a href="../../../api/LInteractiveObject/mouseEnabled.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
@@ -57,9 +81,21 @@ var LInteractiveObject = (function () {
 		 * @type Boolean
 		 * @since 1.0.0
 		 * @example
-		 * 	var layer = new LSprite();
-		 * 	addChild(layer);
-		 * 	layer.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("mouseEnabled=true");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("mouseEnabled=false");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.mouseEnabled = false;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
 		 * @examplelink <p><a href="../../../api/LInteractiveObject/mouseEnabled.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
