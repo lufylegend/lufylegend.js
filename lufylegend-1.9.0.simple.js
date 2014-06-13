@@ -3249,7 +3249,6 @@ var LButton = (function () {
 		var s = this;
 		LExtends(s, LSprite, []);
 		s.type = "LButton";
-		s.buttonMode = true;
 		s.addChild(upState);
 		if (!overState) {
 			overState = upState;
@@ -3273,6 +3272,7 @@ var LButton = (function () {
 		s.overState.visible = false;
 		s.downState.visible = false;
 		s.upState.visible = true;
+		s.buttonMode = true;
 		s.staticMode = false;
 		s.setState(LButton.STATE_ENABLE);
 		if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
@@ -3303,8 +3303,13 @@ var LButton = (function () {
 			s.state = state;
 		},
 		ll_mouseout : function (e, type, cd, ox, oy) {
-			e.clickTarget=this;
-			this.ll_modeOut(e);
+			var s = this;
+			if (!s.ll_mousein) {
+				return;
+			}
+			e.clickTarget=s;
+			s.ll_modeOut(e);
+			s.ll_mousein = false;
 		},
 		mouseEvent : function (e, type, cd) {
 			if (!e) {
@@ -3317,17 +3322,17 @@ var LButton = (function () {
 			return this.callParent("mouseEvent",arguments);
 		},
 		ll_button_mode : function(e){
-				var s = this;
-				if (!s.visible) {
-					return;
-				}
-				e.clickTarget=s;
-				if(s.hitTestPoint(e.offsetX,e.offsetY)){
-					s.ll_modeOver(e);
-				}else{
-					s.ll_modeOut(e);
-				}
-			},
+			var s = this;
+			if (!s.visible) {
+				return;
+			}
+			e.clickTarget=s;
+			if(s.hitTestPoint(e.offsetX,e.offsetY)){
+				s.ll_modeOver(e);
+			}else{
+				s.ll_modeOut(e);
+			}
+		},
 		ll_modeDown : function (e) {
 			var s = e.clickTarget, w, h, tw, th, x, y, tx, ty, onComplete;
 			if (!s.buttonMode || s.tween) {
@@ -3384,6 +3389,9 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
+			if (s.buttonMode && LGlobal.os == OS_PC) {
+				document.body.style.cursor = "pointer";
+			}
 		},
 		ll_modeOut : function (e){
 			var s = e.clickTarget;
@@ -3404,6 +3412,9 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
+			if (s.buttonMode && LGlobal.os == OS_PC) {
+				document.body.style.cursor = "default";
+			}
 		},
 		clone : function (){
 			var s = this;

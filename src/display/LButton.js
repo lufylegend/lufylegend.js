@@ -62,6 +62,30 @@ var LButton = (function () {
 	function LButton (upState, overState, downState, disableState) {
 		var s = this;
 		LExtends(s, LSprite, []);
+		/** @language chinese
+		 * 对象的类型
+		 * @property type
+		 * @type String
+		 * @default LButton
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language english
+		 * type of the object
+		 * @property type
+		 * @type String
+		 * @default LButton
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクトのタイプ
+		 * @property type
+		 * @type String
+		 * @default LButton
+		 * @since 1.0.0
+		 * @public
+		 */
 		s.type = "LButton";
 		s.addChild(upState);
 		if (!overState) {
@@ -87,9 +111,10 @@ var LButton = (function () {
 		s.downState.visible = false;
 		s.upState.visible = true;
 		/** @language chinese
-		 * 指定此对象是否接收鼠标或其他用户输入、消息。默认值为 true，这表示默认情况下，显示列表上的任何 LInteractiveObject 实例都会接收鼠标事件或其他用户输入事件。如果将 mouseEnabled 设置为 false，则实例将不接收任何鼠标事件（或其他用户输入事件，例如键盘事件）。显示列表上的该实例的任何子级都不会受到影响。要更改显示列表上对象的所有子级的 mouseEnabled 行为，请使用 LDisplayObjectContainer.mouseChildren。
+		 * 指定此 LButton 的按钮模式。如果为 true，此 sprite 的行为方式就像按钮，这表示它可在指针经过 LButton 时触发显示手形光标(PC)。
 		 * @property buttonMode
 		 * @type Boolean
+		 * @default true
 		 * @since 1.0.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
@@ -111,9 +136,10 @@ var LButton = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Specifies whether this object receives mouse, or other user input, messages. The default value is true, which means that by default any InteractiveObject instance that is on the display list receives mouse events or other user input events. If mouseEnabled is set to false, the instance does not receive any mouse events (or other user input events like keyboard events). Any children of this instance on the display list are not affected. To change the mouseEnabled behavior for all children of an object on the display list, use LDisplayObjectContainer.mouseChildren.
+		 * Specifies the button mode of this LButton. If true, this LButton behaves as a button, which means that it triggers the display of the hand cursor when the pointer passes over the LButton(PC).
 		 * @property buttonMode
 		 * @type Boolean
+		 * @default true
 		 * @since 1.0.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
@@ -135,9 +161,10 @@ var LButton = (function () {
 		 * @public
 		 */
 		/** @language japanese
-		 * このオブジェクトでマウスまたはその他のユーザー入力メッセージを受け取るかどうかを指定します。デフォルト値は true であり、これは表示リスト上の LInteractiveObject インスタンスがデフォルトでマウスイベントまたはその他のユーザー入力イベントを受け取ることを意味します。mouseEnabled を false に設定すると、インスタンスでは、マウスイベント（またはキーボードイベントなど、その他のユーザー入力イベント）を一切受け取りません。表示リスト上のこのインスタンスの子は影響を受けません。表示リスト上のオブジェクトのすべての子に関する mouseEnabled 動作を変更するには、LDisplayObjectContainer.mouseChildren を使用します。
+		 * このLButtonのボタンモードを指定します。true の場合、このLButtonはボタンとして動作します。この場合(PCのみ)、このLButtonは、ポインターがこのスプライト上を通るとハンドカーソルの表示をトリガーします。
 		 * @property buttonMode
 		 * @type Boolean
+		 * @default true
 		 * @since 1.0.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
@@ -159,6 +186,81 @@ var LButton = (function () {
 		 * @public
 		 */
 		s.buttonMode = true;
+		/** @language chinese
+		 * LButton对象被点击时，是否使用动画显示。
+		 * @property staticMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("staticMode=false");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("staticMode=true");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.staticMode = true;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/staticMode.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * Specifies use a Animation when the button is clicked..
+		 * @property staticMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("staticMode=false");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("staticMode=true");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.staticMode = true;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/staticMode.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * このLButtonがクリックされた時、アニメーションを使うかどうか。
+		 * @property staticMode
+		 * @type Boolean
+		 * @default false
+		 * @since 1.0.0
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("staticMode=false");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("staticMode=true");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.staticMode = true;
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/staticMode.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
 		s.staticMode = false;
 		s.setState(LButton.STATE_ENABLE);
 		if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
@@ -166,9 +268,129 @@ var LButton = (function () {
 		}
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
 	}
+	/** @language chinese
+	 * [静态] 按钮的不可用状态
+	 * @property STATE_DISABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language english
+	 * [static] unavailable state
+	 * @property STATE_DISABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language japanese
+	 * [静的] ボタンの使えない状態
+	 * @property STATE_DISABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
 	LButton.STATE_DISABLE = "disable";
+	/** @language chinese
+	 * [静态] 按钮的可用状态
+	 * @property STATE_ENABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language english
+	 * [static] available state
+	 * @property STATE_ENABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language japanese
+	 * [静的] ボタンの使える状態
+	 * @property STATE_ENABLE
+	 * @type String
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
 	LButton.STATE_ENABLE = "enable";
 	var p = {
+		/** @language chinese
+		 * 设定按钮是否可用。
+		 * @method setState
+		 * @param {String} state LButton.STATE_DISABLE | LButton.STATE_ENABLE。
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("LButton.STATE_ENABLE");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("LButton.STATE_DISABLE");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.setState(LButton.STATE_DISABLE);
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language english
+		 * Set whether the button is available 
+		 * @method setState
+		 * @param {String} state LButton.STATE_DISABLE | LButton.STATE_ENABLE。
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("LButton.STATE_ENABLE");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("LButton.STATE_DISABLE");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.setState(LButton.STATE_DISABLE);
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">Try it »</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language japanese
+		 * ボタンが使えるかどうか設定する
+		 * @method setState
+		 * @param {String} state LButton.STATE_DISABLE | LButton.STATE_ENABLE。
+		 * @example
+		 * 	LGlobal.setDebug(true);
+		 * 	var button01 = new LButtonSample1("LButton.STATE_ENABLE");
+		 * 	button01.x = button01.y = 20;
+		 * 	addChild(button01);
+		 * 	button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button01 click");
+		 * 	});
+		 * 	var button02 = new LButtonSample1("LButton.STATE_DISABLE");
+		 * 	button02.x = 20;
+		 * 	button02.y = 150;
+		 * 	button02.setState(LButton.STATE_DISABLE);
+		 * 	addChild(button02);
+		 * 	button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+		 * 		trace("button02 click");
+		 * 	});
+		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
 		setState : function (state) {
 			var s = this;
 			if (state == LButton.STATE_DISABLE) {
@@ -189,8 +411,13 @@ var LButton = (function () {
 			s.state = state;
 		},
 		ll_mouseout : function (e, type, cd, ox, oy) {
-			e.clickTarget=this;
-			this.ll_modeOut(e);
+			var s = this;
+			if (!s.ll_mousein) {
+				return;
+			}
+			e.clickTarget=s;
+			s.ll_modeOut(e);
+			s.ll_mousein = false;
 		},
 		mouseEvent : function (e, type, cd) {
 			if (!e) {
@@ -203,17 +430,17 @@ var LButton = (function () {
 			return this.callParent("mouseEvent",arguments);
 		},
 		ll_button_mode : function(e){
-				var s = this;
-				if (!s.visible) {
-					return;
-				}
-				e.clickTarget=s;
-				if(s.hitTestPoint(e.offsetX,e.offsetY)){
-					s.ll_modeOver(e);
-				}else{
-					s.ll_modeOut(e);
-				}
-			},
+			var s = this;
+			if (!s.visible) {
+				return;
+			}
+			e.clickTarget=s;
+			if(s.hitTestPoint(e.offsetX,e.offsetY)){
+				s.ll_modeOver(e);
+			}else{
+				s.ll_modeOut(e);
+			}
+		},
 		ll_modeDown : function (e) {
 			var s = e.clickTarget, w, h, tw, th, x, y, tx, ty, onComplete;
 			if (!s.buttonMode || s.tween) {
@@ -270,6 +497,9 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
+			if (LGlobal.os == OS_PC) {
+				document.body.style.cursor = "pointer";
+			}
 		},
 		ll_modeOut : function (e){
 			var s = e.clickTarget;
@@ -290,6 +520,9 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
+			if (LGlobal.os == OS_PC) {
+				document.body.style.cursor = "default";
+			}
 		},
 		clone : function (){
 			var s = this;
