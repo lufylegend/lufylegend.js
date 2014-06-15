@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>wind</title>
+		<title>wind speed</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
 		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
 	</head>
@@ -10,7 +10,7 @@
 			<div id="legend">
 			</div>
 			<script>
-			LInit(50, "legend", 800, 480, main);
+			LInit(20, "legend", 800, 480, main);
 			function main () {
 				var theTextField = new LTextField();
 				theTextField.text = "wait click";
@@ -36,6 +36,7 @@
 					theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
 				}
 				theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+				theTextField.speed = 3;
 				theTextField.wind();
 				theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
 			}

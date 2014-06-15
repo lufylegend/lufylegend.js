@@ -16,6 +16,7 @@
  * 		var bm = new LBitmap(bmd);
  * 		layer01.addChild(bm);
  * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 		
  * 		var layer02 = new LSprite();
  * 		layer02.graphics.drawRect(1,"#008800",[0,0,100,100],true);
@@ -23,6 +24,7 @@
  * 		layer02.y = 20;
  * 		addChild(layer02);
  * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 	}
  * 	function onmouse(event){
  * 		trace("event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
@@ -30,6 +32,11 @@
  * 		trace("event.clickTarget == event.currentTarget : " + (event.clickTarget == event.currentTarget));
  * 		trace("event.offsetX : " + event.offsetX, "event.offsetY : " + event.offsetY);
  * 		trace("event.selfX : " + event.selfX, "event.selfY : " + event.selfY, "");
+ * 	}
+ * 	function onmouseOther(event,object){
+ * 		trace("onmouseOther event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
+ * 		trace("onmouseOther object : " + object + "(" + object.objectIndex + ")");
+ * 		trace("onmouseOther object == event.currentTarget : " + (object == event.currentTarget), "");
  * 	}
  * @examplelink <p><a href="../../../api/LMouseEvent/index.html" target="_blank">测试链接</a></p>
  * @public
@@ -52,6 +59,7 @@
  * 		var bm = new LBitmap(bmd);
  * 		layer01.addChild(bm);
  * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 		
  * 		var layer02 = new LSprite();
  * 		layer02.graphics.drawRect(1,"#008800",[0,0,100,100],true);
@@ -59,6 +67,7 @@
  * 		layer02.y = 20;
  * 		addChild(layer02);
  * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 	}
  * 	function onmouse(event){
  * 		trace("event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
@@ -66,6 +75,11 @@
  * 		trace("event.clickTarget == event.currentTarget : " + (event.clickTarget == event.currentTarget));
  * 		trace("event.offsetX : " + event.offsetX, "event.offsetY : " + event.offsetY);
  * 		trace("event.selfX : " + event.selfX, "event.selfY : " + event.selfY, "");
+ * 	}
+ * 	function onmouseOther(event,object){
+ * 		trace("onmouseOther event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
+ * 		trace("onmouseOther object : " + object + "(" + object.objectIndex + ")");
+ * 		trace("onmouseOther object == event.currentTarget : " + (object == event.currentTarget), "");
  * 	}
  * @examplelink <p><a href="../../../api/LMouseEvent/index.html" target="_blank">Try it »</a></p>
  * @public
@@ -88,6 +102,7 @@
  * 		var bm = new LBitmap(bmd);
  * 		layer01.addChild(bm);
  * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 		
  * 		var layer02 = new LSprite();
  * 		layer02.graphics.drawRect(1,"#008800",[0,0,100,100],true);
@@ -95,6 +110,7 @@
  * 		layer02.y = 20;
  * 		addChild(layer02);
  * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+ * 		layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
  * 	}
  * 	function onmouse(event){
  * 		trace("event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
@@ -102,6 +118,11 @@
  * 		trace("event.clickTarget == event.currentTarget : " + (event.clickTarget == event.currentTarget));
  * 		trace("event.offsetX : " + event.offsetX, "event.offsetY : " + event.offsetY);
  * 		trace("event.selfX : " + event.selfX, "event.selfY : " + event.selfY, "");
+ * 	}
+ * 	function onmouseOther(event,object){
+ * 		trace("onmouseOther event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
+ * 		trace("onmouseOther object : " + object + "(" + object.objectIndex + ")");
+ * 		trace("onmouseOther object == event.currentTarget : " + (object == event.currentTarget), "");
  * 	}
  * @examplelink <p><a href="../../../api/LMouseEvent/index.html" target="_blank">実際のサンプルを見る</a></p>
  * @public
@@ -111,7 +132,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * <p>[静态] 定义 mouseDown 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * <tr><td>offsetX</td><td>事件发生点在全局舞台坐标中的水平坐标。</td></tr>
@@ -130,7 +151,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * <p>[static] Defines the value of the type property of a mouseDown event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * <tr><td>offsetX</td><td>The horizontal coordinate at which the event occurred in global stage coordinates.</td></tr>
@@ -149,7 +170,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * <p>[静的] type プロパティ（mouseDown イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * <tr><td>offsetX</td><td>グローバルステージ座標を基準とするイベント発生位置の水平座標です。</td></tr>
@@ -169,7 +190,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * <p>[静态] 定义 mouseUp 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * <tr><td>offsetX</td><td>事件发生点在全局舞台坐标中的水平坐标。</td></tr>
@@ -188,7 +209,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * <p>[static] Defines the value of the type property of a mouseUp event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * <tr><td>offsetX</td><td>The horizontal coordinate at which the event occurred in global stage coordinates.</td></tr>
@@ -207,7 +228,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * <p>[静的] type プロパティ（mouseUp イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * <tr><td>offsetX</td><td>グローバルステージ座標を基準とするイベント発生位置の水平座標です。</td></tr>
@@ -230,7 +251,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * <p>[静态] 定义 mouseMove 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * <tr><td>offsetX</td><td>事件发生点在全局舞台坐标中的水平坐标。</td></tr>
@@ -248,7 +269,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * <p>[static] Defines the value of the type property of a mouseMove event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * <tr><td>offsetX</td><td>The horizontal coordinate at which the event occurred in global stage coordinates.</td></tr>
@@ -266,7 +287,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * <p>[静的] type プロパティ（mouseMove イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * <tr><td>offsetX</td><td>グローバルステージ座標を基準とするイベント発生位置の水平座標です。</td></tr>
@@ -285,7 +306,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * <p>[静态] 定义 mouseOver 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * <tr><td>offsetX</td><td>事件发生点在全局舞台坐标中的水平坐标。</td></tr>
@@ -303,7 +324,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * <p>[static] Defines the value of the type property of a mouseOver event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * <tr><td>offsetX</td><td>The horizontal coordinate at which the event occurred in global stage coordinates.</td></tr>
@@ -321,7 +342,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * <p>[静的] type プロパティ（mouseOver イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * <tr><td>offsetX</td><td>グローバルステージ座標を基準とするイベント発生位置の水平座標です。</td></tr>
@@ -340,7 +361,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * <p>[静态] 定义 mouseOut 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * </table>
@@ -354,7 +375,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * <p>[static] Defines the value of the type property of a mouseOut event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * </table>
@@ -368,7 +389,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * <p>[静的] type プロパティ（mouseOut イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * </table>
@@ -383,7 +404,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * <p>[静态] 定义 doubleClick 事件对象的 type 属性值。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。等同于 clickTarget。</td></tr>
  * <tr><td>target</td><td>指针设备下的 LInteractiveObject 实例。target 不一定是显示列表中注册此事件侦听器的对象。请使用 currentTarget 属性来访问显示列表中当前正在处理此事件的对象。</td></tr>
  * <tr><td>offsetX</td><td>事件发生点在全局舞台坐标中的水平坐标。</td></tr>
@@ -402,7 +423,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * <p>[static] Defines the value of the type property of a doubleClick event object.</p>
  * <p>This event has the following properties:</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>Property</th><th>Value</th></tr>
+ * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.Equivalent to clickTarget.</td></tr>
  * <tr><td>target</td><td>The LInteractiveObject instance under the pointing device. The target is not always the object in the display list that registered the event listener. Use the currentTarget property to access the object in the display list that is currently processing the event.</td></tr>
  * <tr><td>offsetX</td><td>The horizontal coordinate at which the event occurred in global stage coordinates.</td></tr>
@@ -421,7 +442,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * <p>[静的] type プロパティ（doubleClick イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
- * <tr style="background:#DDDDDD;"><th>属性</th><th>值</th></tr>
+ * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。clickTarget と同等。</td></tr>
  * <tr><td>target</td><td>ポインティングデバイスの下にある LInteractiveObject インスタンスです。target は、必ずしもイベントリスナーを登録した表示リスト内のオブジェクトとは限りません。現在イベントを処理している表示リスト内のオブジェクトにアクセスするには、currentTarget プロパティを使用します。</td></tr>
  * <tr><td>offsetX</td><td>グローバルステージ座標を基準とするイベント発生位置の水平座標です。</td></tr>
@@ -437,126 +458,3 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * @public
  */
 LMouseEvent.DOUBLE_CLICK = "dblclick";
-
-/** @language chinese
- * LMultitouchInputMode 类提供 LMultitouch 类的 inputMode 属性值。这些值设置用户与启用触屏的设备交互时canvas运行时调度的接触事件类型。
- * @class LMultitouchInputMode
- * @constructor
- * @since 1.0.0
- * @public
- */
-/** @language english
- * The LMultitouchInputMode class provides values for the inputMode property in the LMultitouch class. These values set the type of touch events the canvas runtime dispatches when the user interacts with a touch-enabled device.
- * @class LMultitouchInputMode
- * @constructor
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * LMultitouchInputMode クラスは、LMultitouch クラスの inputMode プロパティの値を提供します。これらの値には、ユーザーがタッチ対応デバイスで操作したときに canvas ランタイムが送出するタッチイベントのタイプを設定します。
- * @class LMultitouchInputMode
- * @constructor
- * @since 1.0.0
- * @public
- */
-var LMultitouchInputMode = function (){throw "LMultitouchInputMode cannot be instantiated";};
-/** @language chinese
- * [静态] 指定将用户触摸启用触摸设备的所有行为解释为鼠标事件类型。
- * @property NONE
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-/** @language english
- * [static] Specifies that all user contact with a touch-enabled device is interpreted as a type of mouse event.
- * @property NONE
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-/** @language japanese
- * [静的] タッチ対応デバイスでユーザーが行う操作をすべてマウスイベントのタイプとして解釈することを指定します。
- * @property NONE
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-LMultitouchInputMode.NONE = "none";
-LMultitouchInputMode.GESTURE = "gesture";
-/** @language chinese
- * [静态] 指定仅为基本触摸事件调度事件，如单个手指点击。
- * @property TOUCH_POINT
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-/** @language english
- * [static] Specifies that events are dispatched only for basic touch events, such as a single finger tap.
- * @property TOUCH_POINT
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-/** @language japanese
- * [静的] 一本指タップなどの基本タッチイベントの場合のみ、イベントを送出することを指定します。
- * @property TOUCH_POINT
- * @type String
- * @static
- * @since 1.9.0
- * @public
- */
-LMultitouchInputMode.TOUCH_POINT = "touchPoint";
-
-/** @language chinese
- * LMultitouch 类管理并提供有关当前环境支持用于处理来自用户输入设备的接触的信息，包括有两个或多个触点（例如，用户在触摸屏上使用的手指）的接触。当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。有很多种指针设备，如鼠标或笔针，其中很多种设备在某个应用程序中仅具有一个触控点。对于具有一个触控点的指针设备，用户交互事件可处理为鼠标事件，或者使用基本 touch 事件集（称为“接触点”事件）。
- * @class LMultitouch
- * @constructor
- * @since 1.0.0
- * @public
- */
-/** @language english
- * The LMultitouch class manages and provides information about the current environment's support for handling contact from user input devices, including contact that has two or more touch points (such as a user's fingers on a touch screen). When a user interacts with a device such as a mobile phone or tablet with a touch screen, the user typically touches the screen with his or her fingers or a pointing device. While there is a broad range of pointing devices, such as a mouse or a stylus, many of these devices only have a single point of contact with an application. For pointing devices with a single point of contact, user interaction events can be handled as a mouse event, or using a basic set of touch events (called "touch point" events).
- * @class LMultitouch
- * @constructor
- * @since 1.0.0
- * @public
- */
-/** @language japanese
- * LMultitouch クラスは、現在の環境でのユーザーによる入力デバイス操作の処理のサポートに関する情報の管理と提供を行います。複数のタッチポイント（ユーザーが複数の指でタッチスクリーンに触れるなど）が可能な入力デバイスが含まれます。タッチスクリーン搭載の携帯電話またはタブレットなどのデバイスを操作する場合、ユーザーは通常、指やポインティングデバイスで画面に触れます。ポインティングデバイスにはマウスやスタイラスなど様々な種類のものがありますが、これらのデバイスの多くは、アプリケーションでの接触ポイントは 1 つだけです。接触ポイントが 1 つだけのポインティングデバイスでは、ユーザーの操作イベントは、マウスイベントとしてか、タッチイベント（"タッチポイント" イベントと呼ばれる）の基本セットを使用したものとして扱うことができます。
- * @class LMultitouch
- * @constructor
- * @since 1.0.0
- * @public
- */
-var LMultitouch = function (){throw "LMultitouch cannot be instantiated";};
-/** @language chinese
- * 标识用于触摸和手势事件处理的多点触控模式。要设置此属性，请使用 LMultitouchInputMode 类中的值。
- * @property inputMode
- * @type String
- * @default none
- * @since 1.9.0
- * @public
- */
-/** @language english
- * Identifies the multi-touch mode for touch and gesture event handling. To set this property, use values from the LMultitouchInputMode class.
- * @property inputMode
- * @type String
- * @default none
- * @since 1.9.0
- * @public
- */
-/** @language japanese
- * タッチおよびジェスチャイベントを扱うマルチタッチモードを識別します。このプロパティを設定するには、LMultitouchInputMode クラスの値を使用します。
- * @property inputMode
- * @type String
- * @default none
- * @since 1.9.0
- * @public
- */
-LMultitouch.inputMode = "none";
-LMultitouch.touchs = [];

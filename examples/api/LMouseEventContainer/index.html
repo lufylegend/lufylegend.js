@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>LMouseEvent</title>
+		<title>LMouseEventContainer</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
 	</head>
 	<body>
@@ -12,6 +12,8 @@
 			LInit(50, "legend", 800, 480, main);
 			function main () {
 				LGlobal.setDebug(true);	
+				LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+				
 				var layer01 = new LSprite();
 				layer01.x = 50;
 				layer01.y = 20;

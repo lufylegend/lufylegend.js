@@ -548,6 +548,128 @@ var LTextField = (function () {
 		 * @public
 		 */
 		s.numLines = 1;
+		/** @language chinese
+		 * 文本逐字显示的速度
+		 * @property speed
+		 * @type int
+		 * @default 0
+		 * @since 1.0.0
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">测试链接</a></p>
+		 * @public
+		 */
+		/** @language english
+		 * The Text animation's speed.
+		 * @property speed
+		 * @type int
+		 * @default 0
+		 * @since 1.0.0
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">Try it »</a></p>
+		 * @public
+		 */
+		/** @language japanese
+		 * テキストを1文字ずつ画面に表示させるスピード。
+		 * @property speed
+		 * @type int
+		 * @default 0
+		 * @since 1.0.0
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var theTextField = new LTextField();
+		 * 		theTextField.text = "wait click";
+		 * 		theTextField.x = 10;
+		 * 		theTextField.y = 10;
+		 * 		theTextField.size = 20;
+		 * 		addChild(theTextField);
+		 * 		var button = new LButtonSample1("wind test start");
+		 * 		button.textField = theTextField;
+		 * 		button.x = 10;
+		 * 		button.y = 100;
+		 * 		addChild(button);
+		 * 		button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+		 * 	}
+		 * 	function windOver(event){
+		 * 		var theTextField = event.target;
+		 * 		theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		theTextField.text = "wind over";
+		 * 	}
+		 * 	function onclick(event){
+		 * 	var theTextField = event.currentTarget.textField;
+		 * 		if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 		}
+		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
+		 * 		theTextField.wind();
+		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 */
+		s.speed = 0;
+		s._speedIndex = 100;
 	}
 	var p = {
 		_showReady : function (c) {
@@ -565,9 +687,9 @@ var LTextField = (function () {
 					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
 					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
-			}
-			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-				return;
+				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+					return;
+				}
 			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
@@ -893,11 +1015,104 @@ var LTextField = (function () {
 				LGlobal.inputTextField = null;
 			}
 		},
+		/** @language chinese
+		 * 当LTextField对象设置为输入框的时候，将LTextField对象的text值反映到输入框中。
+		 * @method updateInput
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click Enter Key to clear the text!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.text = "test";
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			e.currentTarget.text = "";
+		 * 			e.currentTarget.updateInput();
+		 * 			e.preventDefault();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/updateInput.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * If the LTextField object's texttype is LTextFieldType.INPUT, copy the text to the inputbox.
+		 * @method updateInput
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click Enter Key to clear the text!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.text = "test";
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			e.currentTarget.text = "";
+		 * 			e.currentTarget.updateInput();
+		 * 			e.preventDefault();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LSprite/updateInput.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * LTextFieldオブジェクトは入力ボックスの場合、LTextFieldオブジェクトのtextを入力ボックスに反映する。
+		 * @method updateInput
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.x = 20;
+		 * 	theTextField.y = 20;
+		 * 	theTextField.text = "Click Enter Key to clear the text!";
+		 * 	addChild(theTextField);
+		 * 	var theTextField1 = new LTextField();
+		 * 	theTextField1.text = "test";
+		 * 	theTextField1.x = 20;
+		 * 	theTextField1.y = 100;
+		 * 	theTextField1.setType(LTextFieldType.INPUT);
+		 * 	addChild(theTextField1);
+		 * 	theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+		 * 		if(e.keyCode == 13){
+		 * 			e.currentTarget.text = "";
+		 * 			e.currentTarget.updateInput();
+		 * 			e.preventDefault();
+		 * 		}
+		 * 	});
+		 * 	setTimeout(function () {
+		 * 		theTextField1.focus();
+		 * 	}, 200);
+		 * @examplelink <p><a href="../../../api/LTextField/updateInput.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		updateInput : function () {
+			var s = this;
+			if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
+			}
+		},
 		_ll_input : function (e) {
 			var event = new LEvent(LTextEvent.TEXT_INPUT);
 			event.keyCode = e.keyCode;
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			LGlobal.inputTextField.dispatchEvent(event);
+			e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
 		},
 		/** @language chinese
 		 * 获取焦点。
@@ -1012,6 +1227,9 @@ var LTextField = (function () {
 			if (!s.parent) {
 				return;
 			}
+			if (s.texttype != LTextFieldType.INPUT) {
+				return;
+			}
 			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
 				s._ll_getValue();
 			}
@@ -1037,9 +1255,16 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+			if (s.texttype == LTextFieldType.INPUT) {
+				rc = s.getRootCoordinate();
+				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+				}
+			}
 			setTimeout(function () {
 				LGlobal.inputTextBox.focus();
-			}, 50);
+			}, 0);
 		},
 		_getWidth : function () {
 			var s = this;
@@ -1218,6 +1443,7 @@ var LTextField = (function () {
 		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 		}
 		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
 		 * 		theTextField.wind();
 		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 	}
@@ -1255,6 +1481,7 @@ var LTextField = (function () {
 		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 		}
 		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
 		 * 		theTextField.wind();
 		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 	}
@@ -1292,6 +1519,7 @@ var LTextField = (function () {
 		 * 			theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 		}
 		 * 		theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+		 * 		theTextField.speed = 3;
 		 * 		theTextField.wind();
 		 * 		theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
 		 * 	}
@@ -1307,12 +1535,16 @@ var LTextField = (function () {
 		},
 		_ll_windRun : function () {
 			var s = this;
+			if (s._speedIndex++ < s.speed) {
+				return;
+			}
+			s._speedIndex = 0;
 			if (s._ll_wind_length > s._ll_wind_text.length) {
 				s.windRunning = false;
 				if (s.wind_over_function) {
 					s.wind_over_function();
 				}
-				s.dispatchEvent(LTextEvent.WIND_COMPLETE);
+				s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
 				return;
 			}
 			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);

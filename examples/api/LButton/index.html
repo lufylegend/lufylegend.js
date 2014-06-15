@@ -54,6 +54,8 @@
 			var bitmapUp = new LBitmap(bitmapDataUp);
 			var bitmapDataOver = new LBitmapData(result["ok_button"],0,48,98,48);
 			var bitmapOver = new LBitmap(bitmapDataOver);
+			bitmapUp.scaleX = 0.5;
+			bitmapOver.scaleX = 0.5;
 			var button02 = new LButton(bitmapUp,bitmapOver);
 			button02.x = 50;
 			button02.y = 150;

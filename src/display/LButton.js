@@ -5,7 +5,7 @@
  * @constructor
  * @param {LDisplayObject} upState LButton 弹起状态的初始值。
  * @param {LDisplayObject} overState LButton 经过状态的初始值。
- * @param {LDisplayObject} upState LButton 按下状态的初始值。
+ * @param {LDisplayObject} downState LButton 按下状态的初始值。
  * @param {LDisplayObject} disableState LButton 不可用状态的初始值。
  * @example
  * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
@@ -25,7 +25,7 @@
  * @constructor
  * @param {LDisplayObject} upState The initial value for the LButton up state.
  * @param {LDisplayObject} overState The initial value for the LButton over state.
- * @param {LDisplayObject} upState The initial value for the LButton down state.
+ * @param {LDisplayObject} downState The initial value for the LButton down state.
  * @param {LDisplayObject} disableState The initial value for the LButton disable state.
  * @example
  * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
@@ -45,7 +45,7 @@
  * @constructor
  * @param {LDisplayObject} upState LButton のアップ状態用の初期値です。
  * @param {LDisplayObject} overState LButton のオーバー状態用の初期値です。
- * @param {LDisplayObject} upState LButton のダウン状態用の初期値です。
+ * @param {LDisplayObject} downState LButton のダウン状態用の初期値です。
  * @param {LDisplayObject} disableState LButton の不可用状態用の初期値です。
  * @example
  * 	var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
@@ -107,6 +107,8 @@ var LButton = (function () {
 		s.overState = s.bitmap_over = overState;
 		s.downState = downState;
 		s.disableState = disableState;
+		s._ll_down_sx = s.downState.scaleX;
+		s._ll_down_sy = s.downState.scaleY;
 		s.overState.visible = false;
 		s.downState.visible = false;
 		s.upState.visible = true;
@@ -474,8 +476,8 @@ var LButton = (function () {
 				y = s.downState.y;
 				tx = x + (w - tw) * 0.5;
 				ty = y + (h - th) * 0.5;
-				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : 1.1, scaleY : 1.1, ease : Quart.easeOut})
-				.to(s.downState, 0.1, {x : x, y : y, scaleX : 1, scaleY : 1, ease : Quart.easeOut,onComplete : onComplete});
+				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
+				.to(s.downState, 0.1, {x : x, y : y, scaleX : s._ll_down_sx, scaleY : s._ll_down_sy, ease : Quart.easeOut,onComplete : onComplete});
 			}
 		},
 		ll_modeOver : function (e) {

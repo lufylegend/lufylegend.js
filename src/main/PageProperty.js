@@ -181,7 +181,7 @@ function removeChild (o) {
  * @public
  */
 /** @language english
- * Engine initialization.Equivalent to init.
+ * Engine initialization. Equivalent to init.
  * @method LInit
  * @param {Number} speed game speed(milliseconds), FPS = 1000 / speed.
  * @param {String} divid Specifies a unique id for a div tag.

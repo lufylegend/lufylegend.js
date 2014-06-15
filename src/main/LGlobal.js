@@ -109,7 +109,7 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.stage.onresizeEvent = e;
 			};
 			LEvent.addEventListener(LGlobal.window,type,LGlobal.stage.onresize);
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
 			LEvent.addEventListener(LGlobal.window,type,listener);
 		}else{
 			LGlobal.stage.baseAddEvent(type,listener);
@@ -120,7 +120,7 @@ LGlobal.setCanvas = function (id,w,h){
 			LEvent.removeEventListener(LGlobal.window,LEvent.WINDOW_RESIZE,LGlobal.stage.onresize);
 			delete LGlobal.stage.onresize;
 			delete LGlobal.stage.onresizeListener;
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
 			LEvent.removeEventListener(LGlobal.window,type,listener);
 		}else{
 			LGlobal.stage.baseRemoveEvent(type,listener);
@@ -539,7 +539,15 @@ LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasStyleWidth = w;
 	LGlobal.canvasStyleHeight = h;
 };
-LGlobal.resize = function(){
+LGlobal.resize = function(canvasW,canvasH){
+	if(canvasW){
+		LGlobal.width = window.innerWidth;
+		LGlobal.canvasObj.width  = LGlobal.width;
+	}
+	if(canvasH){
+		LGlobal.height = window.innerHeight;
+		LGlobal.canvasObj.height  = LGlobal.height;
+	}
 	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
 	if(LGlobal.stageScale == "noScale"){
 		w = LGlobal.width;

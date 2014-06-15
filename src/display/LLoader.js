@@ -111,8 +111,8 @@ var LLoader = (function () {
 			s.content.onload = function () {
 				s.content.onload = null;
 				var event = new LEvent(LEvent.COMPLETE);
-				event.currentTarget = s.content;
-				event.target = s;
+				event.currentTarget = s;
+				event.target = s.content;
 				s.dispatchEvent(event);
 				delete s.content;
 			};

@@ -104,6 +104,12 @@ var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
  * @type String
  * @static
  * @since 1.9.0
+ * <p>此事件具有以下属性：</p>
+ * <table>
+ * <tr><th>属性</th><th>值</th></tr>
+ * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。</td></tr>
+ * <tr><td>target</td><td>在此事件中等同于currentTarget。</td></tr>
+ * </table>
  * @public
  */
 /** @language english
@@ -112,6 +118,12 @@ var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
  * @type String
  * @static
  * @since 1.9.0
+ * <p>This event has the following properties:</p>
+ * <table>
+ * <tr><th>Property</th><th>Value</th></tr>
+ * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.</td></tr>
+ * <tr><td>target</td><td>In this Event, Equivalent to currentTarget.</td></tr>
+ * </table>
  * @public
  */
 /** @language japanese
@@ -120,6 +132,12 @@ var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
  * @type String
  * @static
  * @since 1.9.0
+ * <p>このイベントには、次のプロパティがあります。</p>
+ * <table>
+ * <tr><th>属性</th><th>值</th></tr>
+ * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。</td></tr>
+ * <tr><td>target</td><td>このイベントにcurrentTargetと同じです.</td></tr>
+ * </table>
  * @public
  */
 LFocusEvent.FOCUS_IN = "focusIn";
@@ -129,6 +147,12 @@ LFocusEvent.FOCUS_IN = "focusIn";
  * @type String
  * @static
  * @since 1.9.0
+ * <p>此事件具有以下属性：</p>
+ * <table>
+ * <tr><th>属性</th><th>值</th></tr>
+ * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。</td></tr>
+ * <tr><td>target</td><td>在此事件中等同于currentTarget。</td></tr>
+ * </table>
  * @public
  */
 /** @language english
@@ -137,6 +161,12 @@ LFocusEvent.FOCUS_IN = "focusIn";
  * @type String
  * @static
  * @since 1.9.0
+ * <p>This event has the following properties:</p>
+ * <table>
+ * <tr><th>Property</th><th>Value</th></tr>
+ * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.</td></tr>
+ * <tr><td>target</td><td>In this Event, Equivalent to currentTarget.</td></tr>
+ * </table>
  * @public
  */
 /** @language japanese
@@ -145,6 +175,12 @@ LFocusEvent.FOCUS_IN = "focusIn";
  * @type String
  * @static
  * @since 1.9.0
+ * <p>このイベントには、次のプロパティがあります。</p>
+ * <table>
+ * <tr><th>属性</th><th>值</th></tr>
+ * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。</td></tr>
+ * <tr><td>target</td><td>このイベントにcurrentTargetと同じです.</td></tr>
+ * </table>
  * @public
  */
 LFocusEvent.FOCUS_OUT = "focusOut";

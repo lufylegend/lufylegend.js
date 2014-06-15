@@ -241,7 +241,11 @@ var LEventDispatcher = (function () {
 						if (!event.currentTarget) {
 							event.currentTarget = event.target;
 						}
+						event._ll_preventDefault = false;
 						s._eventList[i].listener(event);
+						if (event._ll_preventDefault) {
+							return false;
+						}
 					}
 					return true;
 				}

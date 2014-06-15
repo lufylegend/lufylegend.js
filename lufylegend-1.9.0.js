@@ -19,9 +19,13 @@ SUPER = "super",
 UNDEFINED = "undefined",
 LANDSCAPE = "landscape",
 PORTRAIT = "portrait",
-LAjax,LTweenLite,LLoadManage,p,mouseX,mouseY;
+p,mouseX,mouseY;
 function LEvent(type){
 	this.eventType = type;
+	this._ll_preventDefault = false;
+}
+LEvent.prototype.preventDefault = function () {
+	this._ll_preventDefault = true;
 };
 LEvent.INIT = "init";
 LEvent.COMPLETE = "complete";
@@ -32,24 +36,31 @@ LEvent.END_CONTACT = "endContact";
 LEvent.PRE_SOLVE = "preSolve";
 LEvent.POST_SOLVE = "postSolve";
 LEvent.BEGIN_CONTACT = "beginContact";
-LEvent.currentTarget = null;
-LEvent.addEventListener = function (n, t, f,b){
-	if(b==null)b=false;
-	if(n.addEventListener){
+LEvent.addEventListener = function (n, t, f, b) {
+	if (b == null) {
+		b = false;
+	}
+	if (n.addEventListener) {
 		n.addEventListener(t, f, b);
-	}else if(n.attachEvent){
+	} else if (n.attachEvent) {
 		n["e" + t + f] = f;
-		n[t + f] = function(){n["e" + t + f]();};
+		n[t + f] = function () {
+			n["e" + t + f]();
+		};
 		n.attachEvent("on" + t, n[t + f]);
 	}
 };
-LEvent.removeEventListener = function (n, t, f,b){
-	if(b==null)b=false;
-	if(n.removeEventListener){
+LEvent.removeEventListener = function (n, t, f, b) {
+	if (b == null) {
+		b = false;
+	}
+	if (n.removeEventListener) {
 		n.removeEventListener(t, f, b);
-	}else if(n.detachEvent){
+	} else if (n.detachEvent) {
 		n["e" + t + f] = f;
-		n[t + f] = function(){n["e" + t + f]();};
+		n[t + f] = function () {
+			n["e" + t + f]();
+		};
 		n.detachEvent("on" + t, n[t + f]);
 	}
 };
@@ -63,13 +74,16 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
 LMouseEvent.MOUSE_OVER = "mouseover";
 LMouseEvent.MOUSE_OUT = "mouseout";
 LMouseEvent.DOUBLE_CLICK = "dblclick";
-var LMultitouchInputMode = {"NONE":"none","GESTURE":"gesture","TOUCH_POINT":"touchPoint"};
-var LMultitouch = function (){throw "LMultitouch cannot be instantiated";};
+var LMultitouchInputMode = function () {throw "LMultitouchInputMode cannot be instantiated";};
+LMultitouchInputMode.NONE = "none";
+LMultitouchInputMode.GESTURE = "gesture";
+LMultitouchInputMode.TOUCH_POINT = "touchPoint";
+var LMultitouch = function () {throw "LMultitouch cannot be instantiated";};
 LMultitouch.inputMode = "none";
 LMultitouch.touchs = [];
-var LTextEvent = function (){throw "LTextEvent cannot be instantiated";};
+var LTextEvent = function () {throw "LTextEvent cannot be instantiated";};
 LTextEvent.TEXT_INPUT = "textInput";
-LTextEvent.WIND_COMPLETE = "wind_complete";
+LTextEvent.WIND_COMPLETE = "windComplete";
 var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
 LFocusEvent.FOCUS_IN = "focusIn";
 LFocusEvent.FOCUS_OUT = "focusOut";
@@ -318,7 +332,7 @@ $LMouseEventContainer.prototype = {
 			event.event_type = type;
 			event.selfX = (event.offsetX - o.co.x - o.sp.x)/(o.co.scaleX*o.sp.scaleX);
 			event.selfY = (event.offsetY - o.co.y - o.sp.y)/(o.co.scaleY*o.sp.scaleY);
-			o.listener(event);
+			o.listener(event,o.sp);
 			if(l==1 && i<st.length-1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
 				st.splice(i,1);
 				i--;
@@ -350,7 +364,7 @@ $LMouseEventContainer.prototype = {
 	}
 };
 var LMouseEventContainer = new $LMouseEventContainer();
-var LKeyboardEvent = function (){throw "LKeyboardEvent cannot be instantiated";};
+var LKeyboardEvent = function () {throw "LKeyboardEvent cannot be instantiated";};
 LKeyboardEvent.KEY_DOWN = "keydown";
 LKeyboardEvent.KEY_UP = "keyup";
 LKeyboardEvent.KEY_PRESS = "keypress";
@@ -509,7 +523,7 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.stage.onresizeEvent = e;
 			};
 			LEvent.addEventListener(LGlobal.window,type,LGlobal.stage.onresize);
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
 			LEvent.addEventListener(LGlobal.window,type,listener);
 		}else{
 			LGlobal.stage.baseAddEvent(type,listener);
@@ -520,7 +534,7 @@ LGlobal.setCanvas = function (id,w,h){
 			LEvent.removeEventListener(LGlobal.window,LEvent.WINDOW_RESIZE,LGlobal.stage.onresize);
 			delete LGlobal.stage.onresize;
 			delete LGlobal.stage.onresizeListener;
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PASS){
+		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
 			LEvent.removeEventListener(LGlobal.window,type,listener);
 		}else{
 			LGlobal.stage.baseRemoveEvent(type,listener);
@@ -935,7 +949,15 @@ LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasStyleWidth = w;
 	LGlobal.canvasStyleHeight = h;
 };
-LGlobal.resize = function(){
+LGlobal.resize = function(canvasW,canvasH){
+	if(canvasW){
+		LGlobal.width = window.innerWidth;
+		LGlobal.canvasObj.width  = LGlobal.width;
+	}
+	if(canvasH){
+		LGlobal.height = window.innerHeight;
+		LGlobal.canvasObj.height  = LGlobal.height;
+	}
 	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
 	if(LGlobal.stageScale == "noScale"){
 		w = LGlobal.width;
@@ -1334,7 +1356,11 @@ var LEventDispatcher = (function () {
 						if (!event.currentTarget) {
 							event.currentTarget = event.target;
 						}
+						event._ll_preventDefault = false;
 						s._eventList[i].listener(event);
+						if (event._ll_preventDefault) {
+							return false;
+						}
 					}
 					return true;
 				}
@@ -1862,8 +1888,8 @@ var LLoader = (function () {
 			s.content.onload = function () {
 				s.content.onload = null;
 				var event = new LEvent(LEvent.COMPLETE);
-				event.currentTarget = s.content;
-				event.target = s;
+				event.currentTarget = s;
+				event.target = s.content;
 				s.dispatchEvent(event);
 				delete s.content;
 			};
@@ -1872,46 +1898,42 @@ var LLoader = (function () {
 	};
 	return LLoader;
 })();
-function LURLLoader(){
-	var s = this;
-	base(s,LObject,[]);
-	s.type="LURLLoader";
-	s.loadtype = "";
-	s.content = null;
-	s.oncomplete = null;
-	s.event = {};
-}
-p = {
-	addEventListener:function(t,l){
-		if(t == LEvent.COMPLETE){
-			this.oncomplete = l;
-		}
-	},
-	load:function (u,t){
+var LURLLoader = (function () {
+	function LURLLoader () {
 		var s = this;
+		LExtends(s, LEventDispatcher, []);
+		s.type = "LURLLoader";
+		s.loadtype = "";
+		s.content = null;
+		s.event = {};
+	}
+	LURLLoader.prototype.load = function (u, t) {
+		var s = this, event;
 		s.loadtype = t;
-		if(!t || t == "text"){
-			LAjax.get(u,{},function(data){
-				if(s.oncomplete){
-					s.event.currentTarget = data;
-					s.event.target = s;
-					s.data = data;
-					if(s.oncomplete)s.oncomplete(s.event);
-				}
+		if (!t || t == "text") {
+			LAjax.get(u, {}, function (data) {
+				event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = s;
+				event.target = data;
+				s.dispatchEvent(event);
+				delete s.content;
 			});
-		}else if(t=="js"){
+		} else if (t == "js") {
 			var script = document.createElement("script");
-			script.onload = function (){
-				s.event.target = s;
-				if(s.oncomplete)s.oncomplete(s.event);
+			script.onload = function () {
+				event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = s;
+				event.target = s;
+				s.dispatchEvent(event);
+				delete s.content;
 			};
 			script.src = u;
 			script.type = "text/javascript";
 			document.querySelector('head').appendChild(script);
 		}
-	}
-};
-for(var k in p)LURLLoader.prototype[k]=p[k];
+	};
+	return LURLLoader;
+})();
 function LMedia(){
 	var s = this;
 	base(s,LDisplayObject,[]);
@@ -3269,6 +3291,8 @@ var LButton = (function () {
 		s.overState = s.bitmap_over = overState;
 		s.downState = downState;
 		s.disableState = disableState;
+		s._ll_down_sx = s.downState.scaleX;
+		s._ll_down_sy = s.downState.scaleY;
 		s.overState.visible = false;
 		s.downState.visible = false;
 		s.upState.visible = true;
@@ -3366,8 +3390,8 @@ var LButton = (function () {
 				y = s.downState.y;
 				tx = x + (w - tw) * 0.5;
 				ty = y + (h - th) * 0.5;
-				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : 1.1, scaleY : 1.1, ease : Quart.easeOut})
-				.to(s.downState, 0.1, {x : x, y : y, scaleX : 1, scaleY : 1, ease : Quart.easeOut,onComplete : onComplete});
+				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
+				.to(s.downState, 0.1, {x : x, y : y, scaleX : s._ll_down_sx, scaleY : s._ll_down_sy, ease : Quart.easeOut,onComplete : onComplete});
 			}
 		},
 		ll_modeOver : function (e) {
@@ -3389,7 +3413,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (s.buttonMode && LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC) {
 				document.body.style.cursor = "pointer";
 			}
 		},
@@ -3412,7 +3436,7 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (s.buttonMode && LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC) {
 				document.body.style.cursor = "default";
 			}
 		},
@@ -3472,6 +3496,8 @@ var LTextField = (function () {
 		s.wordWrap = false;
 		s.multiline = false;
 		s.numLines = 1;
+		s.speed = 0;
+		s._speedIndex = 100;
 	}
 	var p = {
 		_showReady : function (c) {
@@ -3489,9 +3515,9 @@ var LTextField = (function () {
 					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
 					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
-			}
-			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-				return;
+				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+					return;
+				}
 			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
@@ -3634,15 +3660,24 @@ var LTextField = (function () {
 				LGlobal.inputTextField = null;
 			}
 		},
+		updateInput : function () {
+			var s = this;
+			if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
+			}
+		},
 		_ll_input : function (e) {
 			var event = new LEvent(LTextEvent.TEXT_INPUT);
 			event.keyCode = e.keyCode;
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			LGlobal.inputTextField.dispatchEvent(event);
+			e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
 		},
 		focus : function () {
 			var s = this, sc, sx;
 			if (!s.parent) {
+				return;
+			}
+			if (s.texttype != LTextFieldType.INPUT) {
 				return;
 			}
 			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
@@ -3670,9 +3705,16 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+			if (s.texttype == LTextFieldType.INPUT) {
+				rc = s.getRootCoordinate();
+				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+				}
+			}
 			setTimeout(function () {
 				LGlobal.inputTextBox.focus();
-			}, 50);
+			}, 0);
 		},
 		_getWidth : function () {
 			var s = this;
@@ -3751,12 +3793,16 @@ var LTextField = (function () {
 		},
 		_ll_windRun : function () {
 			var s = this;
+			if (s._speedIndex++ < s.speed) {
+				return;
+			}
+			s._speedIndex = 0;
 			if (s._ll_wind_length > s._ll_wind_text.length) {
 				s.windRunning = false;
 				if (s.wind_over_function) {
 					s.wind_over_function();
 				}
-				s.dispatchEvent(LTextEvent.WIND_COMPLETE);
+				s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
 				return;
 			}
 			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
@@ -4301,84 +4347,91 @@ var LAnimationTimeline = (function () {
 	}
 	return LAnimationTimeline;
 })();
-function $LoadManage(){
-	this.llname="ll.file.";
-	this.llload="ll.load.";
-}
-$LoadManage.prototype={
-	load:function(l,u,c){
-		var s = this;
-		s.list=l,s.onupdate=u,s.oncomplete=c;
-		s.loader=s,s.index=0,s.loadIndex=0,s.result=[],s.lresult=[];
-		s.loadInit();
-	},
-	loadInit:function(){
-		var s = LLoadManage;
-		if(s.index >= s.list.length){
-			return;
-		}
-		s.loadIndex = 0;
-		s.loadStart();
-		s.reloadtime = setTimeout(s.loadInit,10000);
-	},
-	loadStart:function(){
-		var s = LLoadManage,d;
-		if(s.loadIndex >= s.list.length)return;
-		d = s.list[s.loadIndex];
-		if(!d.name){
-			d.name = s.llname+s.loadIndex;
-		}
-		if(!s.lresult[s.llload+d.name]){
-			if(d["type"] == "text" || d["type"] == "js"){
-				s.loader = new LURLLoader();
-				s.loader.name = d.name;
-				s.loader.addEventListener(LEvent.COMPLETE,s.loadComplete);
-				s.loader.load(s.url(d.path),d["type"]);
-			}else if(d["type"] == "sound"){
-				s.loader = new LSound();
-				s.loader.name = d.name;
-				s.loader.addEventListener(LEvent.COMPLETE,s.loadComplete);
-				s.loader.load(s.url(d.path));
-			}else{
-				s.loader = new LLoader();
-				s.loader.name = d.name;
-				s.loader.addEventListener(LEvent.COMPLETE,s.loadComplete);
-				s.loader.load(s.url(d.path),"bitmapData");
-			}
-		}
-		s.loadIndex++;
-		s.loadStart();
-	},
-	loadComplete:function(e){
-		var s = LLoadManage;
-		if(e  && e.target && e.target.name){
-			if(e.target.name.indexOf(s.llname) >= 0){
-				e.currentTarget = 1;
-			}
-			if(s.lresult[s.llload+e.target.name]){
+var LLoadManage = (function () {
+	function LoadManage(){
+		this.llname="ll.file.";
+		this.llload="ll.load.";
+	}
+	LoadManage.prototype = {
+		load : function (l, u, c) {
+			var s = this;
+			s.list = l, s.onupdate = u, s.oncomplete = c;
+			s.loader = s, s.index = 0, s.loadIndex = 0, s.result = [], s.lresult = [];
+			s.loadInit();
+		},
+		loadInit : function () {
+			var s = this;
+			if(s.index >= s.list.length){
 				return;
 			}
-			s.result[e.target.name] = e.currentTarget;
-			s.lresult[s.llload+e.target.name] = 1;
-		}
-		s.index++;
-		if(s.onupdate){
-			s.onupdate(Math.floor(s.index*100/s.list.length));
-		}
-		if(s.index >= s.list.length){
-			if(s.reloadtime){
-				clearTimeout(s.reloadtime);
+			s.loadIndex = 0;
+			s.loadStart();
+			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
+		},
+		loadStart : function () {
+			var s = this, d;
+			if (s.loadIndex >= s.list.length) {
+				return;
 			}
-			s.loader = null;
-			var r = s.result;
-			s.oncomplete(r);
+			d = s.list[s.loadIndex];
+			if (!d.name) {
+				d.name = s.llname + s.loadIndex;
+			}
+			if (!s.lresult[s.llload + d.name]) {
+				if (d["type"] == "text" || d["type"] == "js") {
+					s.loader = new LURLLoader();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(s.url(d.path), d["type"]);
+				} else if (d["type"] == "sound") {
+					s.loader = new LSound();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(s.url(d.path));
+				}else{
+					s.loader = new LLoader();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(s.url(d.path), "bitmapData");
+				}
+			}
+			s.loadIndex++;
+			s.loadStart();
+		},
+		loadComplete : function (e) {
+			var s = this;
+			if (e  && e.currentTarget && e.currentTarget.name) {
+				if (e.currentTarget.name.indexOf(s.llname) >= 0) {
+					e.target = 1;
+				}
+				if (s.lresult[s.llload + e.currentTarget.name]) {
+					return;
+				}
+				s.result[e.currentTarget.name] = e.target;
+				s.lresult[s.llload + e.currentTarget.name] = 1;
+			}
+			s.index++;
+			if (s.onupdate) {
+				s.onupdate(Math.floor(s.index * 100 / s.list.length));
+			}
+			if (s.index >= s.list.length) {
+				if (s.reloadtime) {
+					clearTimeout(s.reloadtime);
+				}
+				s.loader = null;
+				var r = s.result;
+				s.oncomplete(r);
+			}
+		},
+		url : function (u) {
+			if (!LGlobal.traceDebug) {
+				return u;
+			}
+			return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + (new Date()).getTime();
 		}
-	},
-	url:function(u){
-		if(!LGlobal.traceDebug)return u;
-		return u+(u.indexOf('?')>=0?'&':'?')+'t='+(new Date()).getTime();
-	}
-};
+	};
+	return new LoadManage();
+})();
 var LEasing = {
 	None:{
 		easeIn:function(t,b,c,d){
@@ -4553,189 +4606,224 @@ var Circ = LEasing.Circ;
 var Elastic = LEasing.Elastic;
 var Back = LEasing.Back;
 var Bounce = LEasing.Bounce;
-function $LTweenLiteChild($target,$duration,$vars){
-	var s = this;
-	s.objectIndex = s.objectindex = ++LGlobal.objectIndex;
-	s.toNew=[];
-	s.init($target,$duration,$vars);
-}
-$LTweenLiteChild.prototype = {
-	init:function($target,$duration,$vars){
-		var s = this,k=null;
-		s.target=$target;s.duration=$duration || 0.001;s.vars=$vars;
-		s.currentTime = (new Date()).getTime() / 1000;
-		s.delay = s.vars.delay || 0;
-		s.combinedTimeScale = s.vars.timeScale || 1;
-		s.active = s.duration == 0 && s.delay == 0;
-		s.varsto={};
-		s.varsfrom={};
-		if (typeof(s.vars.ease) != "function") {
-			s.vars.ease = LEasing.None.easeIn;
-		}
-		s.ease = s.vars.ease;
-		delete s.vars.ease;
-		if(s.vars.onComplete){
-			s.onComplete = s.vars.onComplete;
-			delete s.vars.onComplete;
-		}
-		if(s.vars.onUpdate){
-			s.onUpdate = s.vars.onUpdate;
-			delete s.vars.onUpdate;
-		}
-		if(s.vars.onStart){
-			s.onStart = s.vars.onStart;
-			delete s.vars.onStart;
-		}
-		for(k in s.vars){
-			s.varsto[k] = s.vars[k];
-			s.varsfrom[k] = s.target[k];
-		}
-		s.initTime = s.currentTime;
-		s.startTime = s.initTime + s.delay;
-	},
-	tween:function(){
+var LTweenLite = (function () {
+	function $LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
-		var time = (new Date()).getTime() / 1000 , etime;
-		etime = (time - s.startTime);
-		if(etime < 0)return;
-		var tweentype=null;
-		for(tweentype in s.varsto){
-			var v = s.ease(etime,s.varsfrom[tweentype],s.varsto[tweentype]-s.varsfrom[tweentype],s.duration);
-			s.target[tweentype] = v;
-		}
-		if(s.onStart){
-			s.onStart(s.target);
-			delete s.onStart;
-		}
-		if (etime >= s.duration){
-			for(tweentype in s.varsto)s.target[tweentype] = s.varsto[tweentype];
-			if(s.onComplete)s.onComplete(s.target);
-			return true;
-		}else if(s.onUpdate){
-			s.onUpdate(s.target);
-		}
-		return false;
-	},
-	to:function($target,$duration,$vars){
-		var s = this;
-		s.toNew.push({target:$target,duration:$duration,vars:$vars});
-		return s;
-	},
-	keep:function(){
-		var s = this;
-		if(s.toNew.length > 0){
-			var t = s.toNew.shift();
-			if(t.vars.loop)s.loop = true;
-			if(s.loop){
-				var vs = {},k;
-				for(k in t.vars)vs[k]=t.vars[k];
-				s.to(t.target,t.duration,vs);
-			}
-			s.init(t.target,t.duration,t.vars);
-			return true;
-		}
-		return false;
+		s.objectIndex = s.objectindex = ++LGlobal.objectIndex;
+		s.toNew = [];
+		s.init($target, $duration, $vars);
 	}
-};
-function $LTweenLite(){}
-$LTweenLite.prototype = {
-	tweens:[],
-	ll_show:null,
-	frame:function(){
-		var s = this;
-		var i,length=s.tweens.length,t;
-		for(i=0;i < length;i++){
-			t = s.tweens[i];
-			if(t && t.tween && t.tween()){
-				s.tweens.splice(i,1);
-				i--,length=s.tweens.length;
-				if(t.keep())s.add(t);
+	$LTweenLiteChild.prototype = {
+		init : function($target, $duration, $vars) {
+			var s = this, k = null;
+			s.target = $target;
+			s.duration = $duration || 0.001;
+			s.vars = $vars;
+			s.currentTime = (new Date()).getTime() / 1000;
+			s.delay = s.vars.delay || 0;
+			s.combinedTimeScale = s.vars.timeScale || 1;
+			s.active = s.duration == 0 && s.delay == 0;
+			s.varsto = {};
+			s.varsfrom = {};
+			if (typeof(s.vars.ease) != "function") {
+				s.vars.ease = LEasing.None.easeIn;
 			}
-		}
-		if(s.tweens.length == 0)s.ll_show = null;
-	},
-	to:function($target,$duration,$vars){
-		if(!$target)return;
-		var s = this;
-		var tween = new $LTweenLiteChild({},0,{});
-		s.tweens.push(tween);
-		s.ll_show = s.frame;
-		tween.to($target,$duration,$vars);
-		return tween;
-	},
-	add:function(tween){
-		this.tweens.push(tween);
-	},
-	remove:function(tween){
-		var s = this;
-		if(typeof tween == UNDEFINED)return;
-		for(i=0,l=s.tweens.length;i < l;i++){
-			if(tween.objectIndex == s.tweens[i].objectIndex){
-				s.tweens.splice(i,1);
-				break;
+			s.ease = s.vars.ease;
+			delete s.vars.ease;
+			if (s.vars.onComplete) {
+				s.onComplete = s.vars.onComplete;
+				delete s.vars.onComplete;
 			}
-		}
-	},
-	removeAll:function(){
-		this.tweens.splice(0,this.tweens.length);
-	}
-};
-function $Ajax(){}
-$Ajax.prototype = {
-	get:function(url, data, oncomplete,onerror){
-		this.getRequest("GET",url, data, oncomplete,onerror);
-	},
-	post:function(url, data, oncomplete,onerror){
-		this.getRequest("POST",url, data, oncomplete,onerror);
-	},
-	getRequest:function(t,url, d, oncomplete,err){
-		var s = this,k,data="",a="";
-		s.err = err;
-		var ajax = s.getHttp();
-		if (!ajax)return;
-		if(d){
-			for(k in d){
-				data += (a+k+"="+d[k]);
-				a="&";	
+			if (s.vars.onUpdate) {
+				s.onUpdate = s.vars.onUpdate;
+				delete s.vars.onUpdate;
 			}
-		}
-		if(t.toLowerCase() == "get"){
-			url += ((url.indexOf('?')>=0?'&':'?')+data);
-			data = null;
-		}
-		ajax.open(t, url, true);
-		ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		ajax.onreadystatechange = function(){
-			if (ajax.readyState == 4){
-				if(ajax.status >= 200 && ajax.status < 300 || ajax.status === 304){
-					if (ajax.responseText.length > 0){
-						oncomplete(ajax.responseText);
-					}else{
-						oncomplete(null);
-					}
-				}else{
-					if(err)err(ajax);
+			if (s.vars.onStart) {
+				s.onStart = s.vars.onStart;
+				delete s.vars.onStart;
+			}
+			for (k in s.vars) {
+				s.varsto[k] = s.vars[k];
+				s.varsfrom[k] = s.target[k];
+			}
+			s.initTime = s.currentTime;
+			s.startTime = s.initTime + s.delay;
+		},
+		tween : function () {
+			var s = this, time = (new Date()).getTime() / 1000, etime, tweentype;
+			etime = (time - s.startTime);
+			if (etime < 0) {
+				return;
+			}
+			for (tweentype in s.varsto) {
+				var v = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				s.target[tweentype] = v;
+			}
+			if (s.onStart) {
+				s.onStart(s.target);
+				delete s.onStart;
+			}
+			if (etime >= s.duration) {
+				for (tweentype in s.varsto) {
+					s.target[tweentype] = s.varsto[tweentype];
 				}
-	 		}
-		};
-		ajax.send(data);
-	},
-	getHttp:function(){
-		if (typeof XMLHttpRequest != UNDEFINED){
-			return new XMLHttpRequest();
-		}  
-		try{
-			return new ActiveXObject("Msxml2.XMLHTTP");
-		}catch (e){
-			try{
-				return new ActiveXObject("Microsoft.XMLHTTP");
-			}catch (e) {
-				if(!this.err)this.err(e);
+				if (s.onComplete) {
+					s.onComplete(s.target);
+				}
+				return true;
+			} else if (s.onUpdate) {
+				s.onUpdate(s.target);
 			}
+			return false;
+		},
+		to : function ($target, $duration, $vars) {
+			var s = this;
+			s.toNew.push({target : $target, duration : $duration, vars : $vars});
+			return s;
+		},
+		keep : function () {
+			var s = this, t, vs, k;
+			if (s.toNew.length > 0) {
+				t = s.toNew.shift();
+				if (t.vars.loop) {
+					s.loop = true;
+				}
+				if (s.loop) {
+					vs = {};
+					for (k in t.vars) {
+						vs[k] = t.vars[k];
+					}
+					s.to(t.target, t.duration, vs);
+				}
+				s.init(t.target, t.duration, t.vars);
+				return true;
+			}
+			return false;
 		}
-		return false;
+	};
+	function $LTweenLite () {
 	}
-};
+	$LTweenLite.prototype = {
+		tweens : [],
+		ll_show : null,
+		frame : function(){
+			var s = this;
+			var i, length = s.tweens.length, t;
+			for (i = 0; i < length; i++) {
+				t = s.tweens[i];
+				if (t && t.tween && t.tween()) {
+					s.tweens.splice(i, 1);
+					i--;
+					length = s.tweens.length;
+					if (t.keep()) {
+						s.add(t);
+					}
+				}
+			}
+			if (s.tweens.length == 0) {
+				s.ll_show = null;
+			}
+		},
+		to : function ($target, $duration, $vars) {
+			if (!$target) {
+				return;
+			}
+			var s = this;
+			var tween = new $LTweenLiteChild({}, 0, {});
+			s.tweens.push(tween);
+			s.ll_show = s.frame;
+			tween.to($target, $duration, $vars);
+			return tween;
+		},
+		add : function (tween) {
+			this.tweens.push(tween);
+		},
+		remove : function (tween) {
+			var s = this;
+			if (typeof tween == UNDEFINED) {
+				return;
+			}
+			for (i = 0, l = s.tweens.length; i < l; i++) {
+				if (tween.objectIndex == s.tweens[i].objectIndex) {
+					s.tweens.splice(i, 1);
+					break;
+				}
+			}
+		},
+		removeAll : function () {
+			this.tweens.splice(0, this.tweens.length);
+		}
+	};
+	var tween = new $LTweenLite();
+	LGlobal.childList.push(tween);
+	return tween;
+})();
+var LAjax = (function () {
+	function LAjax () {
+	}
+	LAjax.prototype = {
+		get : function (url, data, oncomplete, onerror) {
+			this.getRequest("GET", url, data, oncomplete, onerror);
+		},
+		post : function (url, data, oncomplete, onerror) {
+			this.getRequest("POST", url, data, oncomplete, onerror);
+		},
+		getRequest : function (t, url, d, oncomplete, err) {
+			var s = this, k, data = "", a = "";
+			s.err = err;
+			var ajax = s.getHttp();
+			if (!ajax) {
+				return;
+			}
+			if (d) {
+				for (k in d) {
+					data += (a + k + "=" + d[k]);
+					a = "&";	
+				}
+			}
+			if (t.toLowerCase() == "get") {
+				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
+				data = null;
+			}
+			ajax.open(t, url, true);
+			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			ajax.onreadystatechange = function () {
+				if (ajax.readyState == 4) {
+					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
+						if (ajax.responseText.length > 0) {
+							oncomplete(ajax.responseText);
+						} else {
+							oncomplete(null);
+						}
+					} else {
+						if (err) {
+							err(ajax);
+						}
+					}
+		 		}
+			};
+			ajax.send(data);
+		},
+		getHttp : function () {
+			if (typeof XMLHttpRequest != UNDEFINED) {
+				return new XMLHttpRequest();
+			}  
+			try {
+				return new ActiveXObject("Msxml2.XMLHTTP");
+			} catch (e) {
+				try {
+					return new ActiveXObject("Microsoft.XMLHTTP");
+				} catch (e) {
+					if (!this.err) {
+						this.err(e);
+					}
+				}
+			}
+			return false;
+		}
+	};
+	return new LAjax();
+})();
 function LStageWebView(){
 	var s = this;
 	base(s,LEventDispatcher,[]);
@@ -4792,12 +4880,6 @@ var FPS = (function () {
 		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");
 	};
 	return FPS;
-})();
-(function(){
-	LAjax = new $Ajax();
-	LLoadManage = new $LoadManage();
-	LTweenLite = new $LTweenLite();
-	LGlobal.childList.push(LTweenLite);
 })();
 function LQuadTree(rect){
 	var self = this;

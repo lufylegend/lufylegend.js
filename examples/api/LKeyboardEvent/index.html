@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LKeyboardEvent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 80, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var title = new LTextField();
+				addChild(title);
+				title.text = "Click the keyboard, please!";
+				LGlobal.stage.addEventListener(LKeyboardEvent.KEY_DOWN,keydown);
+				//LEvent.addEventListener(window,LKeyboardEvent.KEY_DOWN,keydown);
+				LGlobal.stage.addEventListener(LKeyboardEvent.KEY_UP,keyup);
+				//LEvent.addEventListener(window,LKeyboardEvent.KEY_UP,keyup);
+				LGlobal.stage.addEventListener(LKeyboardEvent.KEY_PRESS,keypress);
+				//LEvent.addEventListener(window,LKeyboardEvent.KEY_PRESS,keypress);
+			}
+			function keydown (e) {
+				trace("keydown e.keyCode = " + e.keyCode);
+			}
+			function keyup (e) {
+				trace("keyup e.keyCode = " + e.keyCode);
+			}
+			function keypress (e) {
+				trace("keypress e.keyCode = " + e.keyCode);
+			}
+			</script>
+	</body>
+</html>
