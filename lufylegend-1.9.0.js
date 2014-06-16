@@ -403,8 +403,11 @@ LStageScaleMode.EXACT_FIT = "exactFit";
 LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
 LStageScaleMode.NO_SCALE = "noScale";
-var LGlobal = function (){throw "LGlobal cannot be instantiated";};
-LGlobal.FULL_SCREEN="full_screen";
+var LGlobal = ( function () {
+	function LGlobal () {
+		throw "LGlobal cannot be instantiated";
+	}
+	LGlobal.FULL_SCREEN = "full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
 LGlobal.displayState = NONE;
@@ -526,7 +529,11 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.stage.baseRemoveEvent(type,listener);
 		}
 	};
-	if(LGlobal.displayState == LStage.FULL_SCREEN){LGlobal.resize();}
+	if(LGlobal.displayState == LStage.FULL_SCREEN){
+		LGlobal.resize();
+	}else if(typeof LGlobal.displayState == "number"){
+		LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+	}
 	if(LGlobal.canTouch){
 		LGlobal.ll_clicks = 0;
 		LGlobal.ll_prev_clickTime = 0;
@@ -936,27 +943,25 @@ LGlobal.setStageSize = function(w,h){
 	LGlobal.canvasStyleHeight = h;
 };
 LGlobal.resize = function(canvasW,canvasH){
+	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
 	if(canvasW){
-		LGlobal.width = window.innerWidth;
-		LGlobal.canvasObj.width  = LGlobal.width;
+		w = canvasW;
 	}
 	if(canvasH){
-		LGlobal.height = window.innerHeight;
-		LGlobal.canvasObj.height  = LGlobal.height;
+		h = canvasH;
 	}
-	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
 	if(LGlobal.stageScale == "noScale"){
 		w = LGlobal.width;
 		h = LGlobal.height;
 	}
 	switch(LGlobal.stageScale){
 	case "exactFit":
-		w = ww;
-		h = wh;
+		w = canvasW || ww;
+		h = canvasH || wh;
 		break;
 	case "noBorder":
-		w = ww;
-		h = LGlobal.height*ww/LGlobal.width;
+		w = canvasW || ww;
+		h = canvasH || LGlobal.height*ww/LGlobal.width;
 		switch(LGlobal.align){
 		case LStageAlign.BOTTOM:
 		case LStageAlign.BOTTOM_LEFT:
@@ -968,11 +973,11 @@ LGlobal.resize = function(canvasW,canvasH){
 	break;
 	case "showAll":
 		if(ww/wh > LGlobal.width/LGlobal.height){
-			h = wh;
-			w = LGlobal.width*wh/LGlobal.height;
+			h = canvasH || wh;
+			w = canvasW || LGlobal.width*wh/LGlobal.height;
 		}else{
-			w = ww;
-			h = LGlobal.height*ww/LGlobal.width;
+			w = canvasW || ww;
+			h = canvasH || LGlobal.height*ww/LGlobal.width;
 		}
 	case "noScale":
 	default:
@@ -1011,19 +1016,25 @@ LGlobal.resize = function(canvasW,canvasH){
 	if(LGlobal.isFirefox){
 		LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
 		LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
-	}
+	}console.log(w,h);
 	LGlobal.setStageSize(w,h);
 };
 LGlobal.sleep = function (s) {
 	var d = new Date();   
 	while ((new Date().getTime() - d.getTime()) < s) {}
 }
-LGlobal.screen = function (a) {
-	LGlobal.displayState = a;
-	if (LGlobal.stage) {
-		LGlobal.resize();
-	}
-};
+	LGlobal.screen = function (a) {
+		LGlobal.displayState = a;
+		if (LGlobal.stage) {
+			if (typeof LGlobal.displayState == "number") {
+				LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+			} else {
+				LGlobal.resize();
+			}
+		}
+	};
+	return LGlobal;
+})();
 var LSystem = LGlobal;
 var LStage = LGlobal;
 if (!Array.prototype.indexOf) {

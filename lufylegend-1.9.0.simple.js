@@ -403,8 +403,11 @@ LStageScaleMode.EXACT_FIT = "exactFit";
 LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
 LStageScaleMode.NO_SCALE = "noScale";
-var LGlobal = function (){throw "LGlobal cannot be instantiated";};
-LGlobal.FULL_SCREEN="full_screen";
+var LGlobal = ( function () {
+	function LGlobal () {
+		throw "LGlobal cannot be instantiated";
+	}
+	LGlobal.FULL_SCREEN = "full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
 LGlobal.displayState = NONE;
@@ -526,7 +529,11 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.stage.baseRemoveEvent(type,listener);
 		}
 	};
-	if(LGlobal.displayState == LStage.FULL_SCREEN){LGlobal.resize();}
+	if(LGlobal.displayState == LStage.FULL_SCREEN){
+		LGlobal.resize();
+	}else if(typeof LGlobal.displayState == "number"){
+		LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+	}
 	if(LGlobal.canTouch){
 		LGlobal.ll_clicks = 0;
 		LGlobal.ll_prev_clickTime = 0;
@@ -1018,12 +1025,18 @@ LGlobal.sleep = function (s) {
 	var d = new Date();   
 	while ((new Date().getTime() - d.getTime()) < s) {}
 }
-LGlobal.screen = function (a) {
-	LGlobal.displayState = a;
-	if (LGlobal.stage) {
-		LGlobal.resize();
-	}
-};
+	LGlobal.screen = function (a) {
+		LGlobal.displayState = a;
+		if (LGlobal.stage) {
+			if (typeof LGlobal.displayState == "number") {
+				LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+			} else {
+				LGlobal.resize();
+			}
+		}
+	};
+	return LGlobal;
+})();
 var LSystem = LGlobal;
 var LStage = LGlobal;
 if (!Array.prototype.indexOf) {

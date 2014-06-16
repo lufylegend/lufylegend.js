@@ -1,11 +1,48 @@
-/*
- * LGlobal.js
- **/
-var LGlobal = function (){throw "LGlobal cannot be instantiated";};
-/*
-设置全屏
-*/
-LGlobal.FULL_SCREEN="full_screen";
+/** @language chinese
+ * <p>全局类。</p>
+ * @class LGlobal
+ */
+/** @language english
+ * <p>Global Class</p>
+ * @class LGlobal
+ */
+/** @language japanese
+ * <p>グローバルクラス</p>
+ * @class LGlobal
+ */
+var LGlobal = ( function () {
+	function LGlobal () {
+		throw "LGlobal cannot be instantiated";
+	}
+
+	/** @language chinese
+	 * <p>[静态] 定义全屏的属性值。</p>
+	 * <p>用法请参照LGlobal.screen函数</p>
+	 * @property FULL_SCREEN
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>[static] Defines the value of the full screen.</p>
+	 * <p>Please refer LGlobal.screen function</p>
+	 * @property FULL_SCREEN
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>[静的] フルスクリーンの値を定義します。</p>
+	 * <p>使い方はLGlobal.screenの関数を参考してください。</p>
+	 * @property FULL_SCREEN
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	LGlobal.FULL_SCREEN = "full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
 LGlobal.displayState = NONE;
@@ -127,7 +164,11 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.stage.baseRemoveEvent(type,listener);
 		}
 	};
-	if(LGlobal.displayState == LStage.FULL_SCREEN){LGlobal.resize();}
+	if(LGlobal.displayState == LStage.FULL_SCREEN){
+		LGlobal.resize();
+	}else if(typeof LGlobal.displayState == "number"){
+		LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+	}
 	
 	if(LGlobal.canTouch){
 		LGlobal.ll_clicks = 0;
@@ -517,117 +558,263 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 	,maxy = (yA + hA) > (yB + hB) ? (yB + hB) : (yA + hA);
 	return minx <= maxx && miny <= maxy;
 };
-LGlobal.hitTest = LGlobal.hitTestRect;
-LGlobal.setFrameRate = function(s){
-	if(LGlobal.frameRate)clearInterval(LGlobal.frameRate);
-	LGlobal.speed = s;
-	LGlobal.frameRate = setInterval(function(){LGlobal.onShow();}, s);
-};
-LGlobal.scaleX = function(v){
-	return (v - LGlobal.left)*LGlobal.width/LGlobal.canvasStyleWidth;
-};
-LGlobal.scaleY = function(v){
-	return (v - LGlobal.top)*LGlobal.height/LGlobal.canvasStyleHeight;
-};
-/*
-将canvas缩放为规定大小
-*/
-LGlobal.setStageSize = function(w,h){
-	w =  Math.ceil(w);
-	h =  Math.ceil(h);
-	LGlobal.canvasObj.style.width = w+"px";
-	LGlobal.canvasObj.style.height = h+"px";
-	LGlobal.canvasStyleWidth = w;
-	LGlobal.canvasStyleHeight = h;
-};
-LGlobal.resize = function(canvasW,canvasH){
-	if(canvasW){
-		LGlobal.width = window.innerWidth;
-		LGlobal.canvasObj.width  = LGlobal.width;
-	}
-	if(canvasH){
-		LGlobal.height = window.innerHeight;
-		LGlobal.canvasObj.height  = LGlobal.height;
-	}
-	var w,h,t=0,l=0,ww=window.innerWidth,wh=window.innerHeight;
-	if(LGlobal.stageScale == "noScale"){
-		w = LGlobal.width;
-		h = LGlobal.height;
-	}
-	switch(LGlobal.stageScale){
-	case "exactFit":
-		w = ww;
-		h = wh;
+	LGlobal.hitTest = LGlobal.hitTestRect;
+	LGlobal.setFrameRate = function (s) {
+		if (LGlobal.frameRate) {
+			clearInterval(LGlobal.frameRate);
+		}
+		LGlobal.speed = s;
+		LGlobal.frameRate = setInterval(function () {
+			LGlobal.onShow();
+		}, s);
+	};
+	LGlobal.scaleX = function (v) {
+		return (v - LGlobal.left) * LGlobal.width/LGlobal.canvasStyleWidth;
+	};
+	LGlobal.scaleY = function (v) {
+		return (v - LGlobal.top) * LGlobal.height / LGlobal.canvasStyleHeight;
+	};
+	LGlobal.ll_setStageSize = function (w, h) {
+		w =  Math.ceil(w);
+		h =  Math.ceil(h);
+		LGlobal.canvasObj.style.width = w + "px";
+		LGlobal.canvasObj.style.height = h + "px";
+		LGlobal.canvasStyleWidth = w;
+		LGlobal.canvasStyleHeight = h;
+	};
+	/** @language chinese
+	 * 将画面设置为指定大小
+	 * @method resize
+	 * @static
+	 * @param {float} width 指定宽度
+	 * @param {float} height 指定高度
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.resize(400,100);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * change the screen size 
+	 * @method resize
+	 * @static
+	 * @param {float} width screen width
+	 * @param {float} height screen height
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.resize(400,100);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * スクリーンをリサイズする
+	 * @method resize
+	 * @static
+	 * @param {float} width スクリーンの幅
+	 * @param {float} height スクリーンの高さ
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.resize(400,100);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	LGlobal.resize = function (canvasW, canvasH) {
+		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
+		if (canvasW) {
+			w = canvasW;
+		}
+		if (canvasH) {
+			h = canvasH;
+		}
+		if (LGlobal.stageScale == "noScale") {
+			w = LGlobal.width;
+			h = LGlobal.height;
+		}
+		switch (LGlobal.stageScale) {
+		case "exactFit":
+			w = canvasW || ww;
+			h = canvasH || wh;
+			break;
+		case "noBorder":
+			w = canvasW || ww;
+			h = canvasH || LGlobal.height*ww/LGlobal.width;
+			switch (LGlobal.align) {
+			case LStageAlign.BOTTOM:
+			case LStageAlign.BOTTOM_LEFT:
+			case LStageAlign.BOTTOM_RIGHT:
+			case LStageAlign.BOTTOM_MIDDLE:
+				t = wh - h;
+				break;
+			}
 		break;
-	case "noBorder":
-		w = ww;
-		h = LGlobal.height*ww/LGlobal.width;
-		switch(LGlobal.align){
-		case LStageAlign.BOTTOM:
-		case LStageAlign.BOTTOM_LEFT:
-		case LStageAlign.BOTTOM_RIGHT:
-		case LStageAlign.BOTTOM_MIDDLE:
-			t = wh - h;
-			break;
-		}
-	break;
-	case "showAll":
-		if(ww/wh > LGlobal.width/LGlobal.height){
-			h = wh;
-			w = LGlobal.width*wh/LGlobal.height;
-		}else{
-			w = ww;
-			h = LGlobal.height*ww/LGlobal.width;
-		}
-	case "noScale":
-	default:
-		switch(LGlobal.align){
-		case LStageAlign.BOTTOM:
-		case LStageAlign.BOTTOM_LEFT:
-			t = wh - h;
-			break;
-		case LStageAlign.RIGHT:
-		case LStageAlign.TOP_RIGHT:
-			l = ww - w;
-			break;
-		case LStageAlign.TOP_MIDDLE:
-			l = (ww - w)*0.5;
-			break;
-		case LStageAlign.BOTTOM_RIGHT:
-			t = wh - h;
-			l = ww - w;
-			break;
-		case LStageAlign.BOTTOM_MIDDLE:
-			t = wh - h;
-			l = (ww - w)*0.5;
-			break;
-		case LStageAlign.MIDDLE:
-			t = (wh - h)*0.5;
-			l = (ww - w)*0.5;
-			break;
-		case LStageAlign.TOP:
-		case LStageAlign.LEFT:
-		case LStageAlign.TOP_LEFT:
+		case "showAll":
+			if (ww / wh > LGlobal.width / LGlobal.height) {
+				h = canvasH || wh;
+				w = canvasW || LGlobal.width * wh / LGlobal.height;
+			} else {
+				w = canvasW || ww;
+				h = canvasH || LGlobal.height * ww / LGlobal.width;
+			}
+		case "noScale":
 		default:
+			switch (LGlobal.align) {
+			case LStageAlign.BOTTOM:
+			case LStageAlign.BOTTOM_LEFT:
+				t = wh - h;
+				break;
+			case LStageAlign.RIGHT:
+			case LStageAlign.TOP_RIGHT:
+				l = ww - w;
+				break;
+			case LStageAlign.TOP_MIDDLE:
+				l = (ww - w) * 0.5;
+				break;
+			case LStageAlign.BOTTOM_RIGHT:
+				t = wh - h;
+				l = ww - w;
+				break;
+			case LStageAlign.BOTTOM_MIDDLE:
+				t = wh - h;
+				l = (ww - w) * 0.5;
+				break;
+			case LStageAlign.MIDDLE:
+				t = (wh - h) * 0.5;
+				l = (ww - w) * 0.5;
+				break;
+			case LStageAlign.TOP:
+			case LStageAlign.LEFT:
+			case LStageAlign.TOP_LEFT:
+			default:
+			}
 		}
-	}
-	LGlobal.canvasObj.style.marginTop = t + "px";
-	LGlobal.canvasObj.style.marginLeft = l + "px";
-	if(LGlobal.isFirefox){
-		LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
-		LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
-	}
-	LGlobal.setStageSize(w,h);
-};
-LGlobal.sleep = function (s) {
-	var d = new Date();   
-	while ((new Date().getTime() - d.getTime()) < s) {}
-}
-LGlobal.screen = function (a) {
-	LGlobal.displayState = a;
-	if (LGlobal.stage) {
-		LGlobal.resize();
-	}
-};
+		LGlobal.canvasObj.style.marginTop = t + "px";
+		LGlobal.canvasObj.style.marginLeft = l + "px";
+		if (LGlobal.isFirefox) {
+			LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
+			LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
+		}
+		LGlobal.ll_setStageSize(w, h);
+	};
+	LGlobal.sleep = function (s) {
+		var d = new Date();   
+		while ((new Date().getTime() - d.getTime()) < s) {}
+	};
+	/** @language chinese
+	 * 全画面显示或者设定画面大小的缩放比例值
+	 * @method screen
+	 * @static
+	 * @param {String | float} value 全画面的静态值LGlobal.FULL_SCREEN 或者 画面大小的缩放比例值
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LGlobal.screen(LStage.FULL_SCREEN);
+	 * 		//you can also use it like : LGlobal.screen(1.5);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * Full screen display　or to scale the screen size 
+	 * @method screen
+	 * @static
+	 * @param {String | float} value LGlobal.FULL_SCREEN or Screen size scaling value
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LGlobal.screen(LStage.FULL_SCREEN);
+	 * 		//you can also use it like : LGlobal.screen(1.5);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * フルスクリーン表示または画面サイズを拡大縮小する
+	 * @method screen
+	 * @static
+	 * @param {String | float} value 全画面のLGlobal.FULL_SCREEN または 画面サイズの拡大縮小の割合
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LGlobal.screen(LStage.FULL_SCREEN);
+	 * 		//you can also use it like : LGlobal.screen(1.5);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	LGlobal.screen = function (a) {
+		LGlobal.displayState = a;
+		if (LGlobal.stage) {
+			if (typeof LGlobal.displayState == "number") {
+				LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+			} else {
+				LGlobal.resize();
+			}
+		}
+	};
+	return LGlobal;
+})();
 var LSystem = LGlobal;
 var LStage = LGlobal;
