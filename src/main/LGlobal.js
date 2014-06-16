@@ -187,8 +187,8 @@ LGlobal.setCanvas = function (id,w,h){
 			eve = {offsetX:(event.touches[eveIndex].pageX - canvasX)
 			,offsetY:(event.touches[eveIndex].pageY - canvasY)
 			,touchPointID:event.touches[eveIndex].identifier};
-			eve.offsetX = LGlobal.scaleX(eve.offsetX);
-			eve.offsetY = LGlobal.scaleY(eve.offsetY);
+			eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
+			eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
 			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
@@ -248,8 +248,8 @@ LGlobal.setCanvas = function (id,w,h){
 			}
 			for(i=0,l=e.touches.length;i<l && i<ll;i++){
 				eve = {offsetX:(e.touches[i].pageX - cX),offsetY:(e.touches[i].pageY - cY),touchPointID:e.touches[i].identifier};
-				eve.offsetX = LGlobal.scaleX(eve.offsetX);
-				eve.offsetY = LGlobal.scaleY(eve.offsetY);
+				eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
+				eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 				mouseX = LGlobal.offsetX = eve.offsetX;
 				mouseY = LGlobal.offsetY = eve.offsetY;
 				if(LMultitouch.touchs["touch"+eve.touchPointID] && 
@@ -273,8 +273,8 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			var event = {button:e.button};
-			event.offsetX = LGlobal.scaleX(e.offsetX);
-			event.offsetY = LGlobal.scaleY(e.offsetY);
+			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.DOUBLE_CLICK);
 		});
 		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN,function(e){
@@ -286,8 +286,8 @@ LGlobal.setCanvas = function (id,w,h){
 				LGlobal.inputTextField._ll_getValue();
 			}
 			var event = {button:e.button};
-			event.offsetX = LGlobal.scaleX(e.offsetX);
-			event.offsetY = LGlobal.scaleY(e.offsetY);
+			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_DOWN);
 			LGlobal.IS_MOUSE_DOWN = true;
 			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start){
@@ -300,8 +300,8 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			var event = {};
-			event.offsetX = LGlobal.scaleX(e.offsetX);
-			event.offsetY = LGlobal.scaleY(e.offsetY);
+			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 			LGlobal.buttonStatusEvent = event;
 			mouseX = LGlobal.offsetX = event.offsetX;
 			mouseY = LGlobal.offsetY = event.offsetY;
@@ -316,8 +316,8 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			var event = {button:e.button};
-			event.offsetX = LGlobal.scaleX(e.offsetX);
-			event.offsetY = LGlobal.scaleY(e.offsetY);
+			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_UP);
 			LGlobal.IS_MOUSE_DOWN = false;
 			if(LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
@@ -331,8 +331,8 @@ LGlobal.setCanvas = function (id,w,h){
 				e.offsetY = e.layerY;
 			}
 			var event = {};
-			event.offsetX = LGlobal.scaleX(e.offsetX);
-			event.offsetY = LGlobal.scaleY(e.offsetY);
+			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_OUT);
 			LGlobal.IS_MOUSE_DOWN = false;
 		});
@@ -385,180 +385,225 @@ LGlobal.horizontalError = function(){
 	};
 	window.onorientationchange = f;
 };
-LGlobal.verticalError = function(){
-	var b = new LSprite(),c='#cccccc',d='#000000';
-	b.graphics.drawRoundRect(4,c,[5,25,100,70,5]);
-	b.graphics.drawRect(4,c,[80,50,10,20]);
-	b.graphics.drawRoundRect(4,d,[155,5,70,100,5]);
-	b.graphics.drawRect(4,d,[180,15,20,10]);
-	b.graphics.drawRect(4,d,[110,50,20,20]);
-	b.graphics.drawVertices(4,d,[[130,40],[150,60],[130,80]]);
-	addChild(b);
-	var f = function(){
-		setTimeout(function(){location.href=location.href;}, 100);
+	LGlobal.verticalError = function () {
+		var b = new LSprite(), c = '#cccccc', d = '#000000';
+		b.graphics.drawRoundRect(4,c,[5,25,100,70,5]);
+		b.graphics.drawRect(4,c,[80,50,10,20]);
+		b.graphics.drawRoundRect(4,d,[155,5,70,100,5]);
+		b.graphics.drawRect(4,d,[180,15,20,10]);
+		b.graphics.drawRect(4,d,[110,50,20,20]);
+		b.graphics.drawVertices(4,d,[[130,40],[150,60],[130,80]]);
+		addChild(b);
+		var f = function(){
+			setTimeout(function(){location.href=location.href;}, 100);
+		};
+		window.onorientationchange = f;
 	};
-	window.onorientationchange = f;
-};
-LGlobal.onShow = function (){
-	if(LGlobal.canvas == null)return;
-	if(LGlobal.stage.onresizeEvent){
-		LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
-		delete LGlobal.stage.onresizeEvent;
-	}
-	if(LGlobal.box2d != null){
-		LGlobal.box2d.ll_show();
-		if(!LGlobal.traceDebug && LGlobal.keepClear){
-			LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);
+	LGlobal.onShow = function () {
+		if (LGlobal.canvas == null) {
+			return;
 		}
-	}else{
-		if(LGlobal.keepClear){LGlobal.canvas.clearRect(0,0,LGlobal.width+1,LGlobal.height+1);}
-		if(LGlobal.backgroundColor !== null){
-			LGlobal.canvas.fillStyle=LGlobal.backgroundColor;
-			LGlobal.canvas.fillRect(0,0,LGlobal.width,LGlobal.height);
+		if (LGlobal.stage.onresizeEvent) {
+			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
+			delete LGlobal.stage.onresizeEvent;
 		}
-	}
-	LGlobal.show(LGlobal.childList);
-};
-LGlobal.show = function(s){
-	for(var i=0,l=s.length;i<l;i++){
-		if(s[i] && s[i].ll_show)s[i].ll_show();
-	}
-};
-LGlobal.divideCoordinate = function (w,h,row,col){
-	var i,j,cw = w/col,ch = h/row,r = [];
-	for(i=0;i<row;i++){
-		var c=[];
-		for(j=0;j<col;j++){
-			c.push({x:cw*j,y:ch*i});
-		}
-		r.push(c);
-	}
-	return r;
-};
-LGlobal._create_loading_color = function(){
-	var co = LGlobal.canvas.createRadialGradient(LGlobal.width/2, LGlobal.height, 0, LGlobal.width/2, 0, LGlobal.height);  
-	co.addColorStop(0, "red");  
-	co.addColorStop(0.3, "orange");  
-	co.addColorStop(0.4, "yellow");  
-	co.addColorStop(0.5, "green");  
-	co.addColorStop(0.8, "blue");  
-	co.addColorStop(1, "violet");  
-	return co;
-};
-LGlobal.hitPolygon = function(list,x,y){
-	var c = 0,p0 = list[0],b0x = x <= p0[0],b0y = y <= p0[1],i,l,p1,b1x,b1y;
-	for(i=1,l=list.length;i<l+1;i++){
-		p1 = list[i%l];
-		b1x = (x <= p1[0]);
-		b1y = (y <= p1[1]);
-		if( b0y != b1y ){
-			if( b0x == b1x ){
-				if( b0x )c += (b0y ? -1 : 1);
-			}else{
-				if( x <= ( p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]) ) )c += (b0y ? -1 : 1);
+		if (LGlobal.box2d != null) {
+			LGlobal.box2d.ll_show();
+			if (!LGlobal.traceDebug && LGlobal.keepClear) {
+				LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
+			}
+		} else {
+			if (LGlobal.keepClear) {
+				LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
+			}
+			if (LGlobal.backgroundColor !== null) {
+				LGlobal.canvas.fillStyle = LGlobal.backgroundColor;
+				LGlobal.canvas.fillRect(0, 0, LGlobal.width, LGlobal.height);
 			}
 		}
-		p0 = p1;
-		b0x = b1x;
-		b0y = b1y;
-	}
-	return 0 != c;
-};
-LGlobal.hitTestPolygon = function(p1,p2){
-	var i,j,l,listA,normals,vecs,list=[[p1,[],[]],[p2,[],[]]];
-	for(j=0;j<list.length;j++){
-		listA = list[j][0],normals = list[j][1];
-		for(i=0,l=listA.length;i<l;i++){
-			list[j][2].push(new LVec2(listA[i][0],listA[i][1]));
-			if(i<l-1){
-				normals.push((new LVec2(listA[i+1][0] - listA[i][0],listA[i+1][1]-listA[i][1])).normL());
+		LGlobal.show(LGlobal.childList);
+	};
+	LGlobal.show = function (s) {
+		for (var i = 0, l = s.length; i < l; i++) {
+			if (s[i] && s[i].ll_show) {
+				s[i].ll_show();
 			}
 		}
-		normals.push((new LVec2(listA[0][0] - listA[l-1][0],listA[0][1]-listA[l-1][1])).normL());
-	}
-	for(j=0;j<list.length;j++){
-		normals = list[j][1];
-		for(i=0,l=normals.length;i<l;i++){
-			var r1 = LVec2.getMinMax(list[0][2],normals[i]);
-			var r2 = LVec2.getMinMax(list[1][2],normals[i]);
-			if(r1.max_o<r2.min_o || r1.min_o>r2.max_o)return false;
+	};
+	LGlobal.divideCoordinate = function (w, h, row, col) {
+		var i, j, cw = w / col, ch = h / row, r = [], c;
+		for (i = 0; i < row; i++) {
+			c = [];
+			for (j = 0; j < col; j++) {
+				c.push({x : cw * j, y : ch * i});
+			}
+			r.push(c);
 		}
-	}
-	return true;
-};
-LGlobal.hitTestPolygonArc = function(vs,arc){
-	if(LGlobal.hitPolygon(vs,arc[0],arc[1])){
+		return r;
+	};
+	LGlobal._create_loading_color = function () {
+		var co = LGlobal.canvas.createRadialGradient(LGlobal.width / 2, LGlobal.height, 0, LGlobal.width / 2, 0, LGlobal.height);  
+		co.addColorStop(0, "red");  
+		co.addColorStop(0.3, "orange");  
+		co.addColorStop(0.4, "yellow");  
+		co.addColorStop(0.5, "green");  
+		co.addColorStop(0.8, "blue");  
+		co.addColorStop(1, "violet");  
+		return co;
+	};
+	LGlobal.hitPolygon = function (list, x, y) {
+		var c = 0, p0 = list[0], b0x = (x <= p0[0]), b0y = (y <= p0[1]), i, l, p1, b1x, b1y;
+		for (i = 1, l = list.length; i < l + 1; i++) {
+			p1 = list[i % l];
+			b1x = (x <= p1[0]);
+			b1y = (y <= p1[1]);
+			if (b0y != b1y) {
+				if (b0x == b1x) {
+					if (b0x) {
+						c += (b0y ? -1 : 1);
+					}
+				} else {
+					if (x <= (p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]))) {
+						c += (b0y ? -1 : 1);
+					}
+				}
+			}
+			p0 = p1;
+			b0x = b1x;
+			b0y = b1y;
+		}
+		return 0 != c;
+	};
+	LGlobal.hitTestPolygon = function (p1, p2) {
+		var i, j, l, listA, normals, vecs, list = [[p1, [], []], [p2, [], []]];
+		for (j = 0; j < list.length; j++) {
+			listA = list[j][0], normals = list[j][1];
+			for (i = 0, l = listA.length; i < l; i++) {
+				list[j][2].push(new LVec2(listA[i][0], listA[i][1]));
+				if (i < l - 1) {
+					normals.push((new LVec2(listA[i + 1][0] - listA[i][0], listA[i + 1][1] - listA[i][1])).normL());
+				}
+			}
+			normals.push((new LVec2(listA[0][0] - listA[l - 1][0], listA[0][1] - listA[l - 1][1])).normL());
+		}
+		for (j = 0; j < list.length; j++) {
+			normals = list[j][1];
+			for (i = 0, l = normals.length; i < l; i++) {
+				var r1 = LVec2.getMinMax(list[0][2], normals[i]);
+				var r2 = LVec2.getMinMax(list[1][2], normals[i]);
+				if (r1.max_o < r2.min_o || r1.min_o > r2.max_o) {
+					return false;
+				}
+			}
+		}
 		return true;
-	}	
-	var i,j,l,p1,p2,v1,v2,ext,inn,l2;
-	for(i=0,l=vs.length;i<l;i++){
-		j=i<l-1?i+1:0;
-		p1 = vs[i],p2 = vs[j];
-		v1 = new LVec2(arc[0]-p1[0],arc[1]-p1[1]),v2 = new LVec2(p2[0]-p1[0],p2[1]-p1[1]);
-		l2 = v2.normalize();
-		inn = LVec2.dot(v1,l2);
-		if(inn <= 0){
-			if(v1.x*v1.x + v1.y*v1.y < arc[3]){
-				return true;
-			}
-		}else if(inn*inn < v2.x*v2.x + v2.y*v2.y){
-			ext = LVec2.cross(v1,l2);
-			if(ext*ext < arc[3]){
-				return true;
+	};
+	LGlobal.hitTestPolygonArc = function (vs, arc) {
+		if (LGlobal.hitPolygon(vs, arc[0], arc[1])) {
+			return true;
+		}	
+		var i, j, l, p1, p2, v1, v2, ext, inn, l2;
+		for (i = 0, l = vs.length; i < l; i++) {
+			j = i < l - 1 ? i + 1 : 0;
+			p1 = vs[i], p2 = vs[j];
+			v1 = new LVec2(arc[0] - p1[0], arc[1] - p1[1]), v2 = new LVec2(p2[0] - p1[0], p2[1] - p1[1]);
+			l2 = v2.normalize();
+			inn = LVec2.dot(v1, l2);
+			if (inn <= 0) {
+				if (v1.x * v1.x + v1.y * v1.y < arc[3]) {
+					return true;
+				}
+			} else if (inn * inn < v2.x * v2.x + v2.y * v2.y) {
+				ext = LVec2.cross(v1, l2);
+				if (ext * ext < arc[3]) {
+					return true;
+				}
 			}
 		}
-	}
-	return false;
-};
-LGlobal.hitTestArc = function(objA,objB,objAR,objBR){
-	var rA = objA.getWidth()*0.5
-	,rB = objB.getWidth()*0.5
-	,xA = objA._startX?objA._startX():objA.startX()
-	,xB = objB._startX?objB._startX():objB.startX()
-	,yA = objA._startY?objA._startY():objA.startY()
-	,yB = objB._startY?objB._startY():objB.startY();
-	if(typeof objAR != UNDEFINED){
-		xA += (rA - objAR);
-		yA += (rA - objAR);
-		rA = objAR;
-	}
-	if(typeof objBR != UNDEFINED){
-		xB += (rB - objBR);
-		yB += (rB - objBR);
-		rB = objBR;
-	}
-	var disx = xA + rA - xB - rB
-	,disy = yA + rA - yB - rB;
-	return disx*disx + disy*disy < (rA + rB)*(rA + rB);
-};
-LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
-	var wA = objA.getWidth()
-	,wB = objB.getWidth()
-	,hA = objA.getHeight()
-	,hB = objB.getHeight()
-	,xA = objA._startX?objA._startX():objA.startX()
-	,xB = objB._startX?objB._startX():objB.startX()
-	,yA = objA._startY?objA._startY():objA.startY()
-	,yB = objB._startY?objB._startY():objB.startY();
-	if(typeof vecA != UNDEFINED){
-		xA += (wA - vecA[0])*0.5;
-		yA += (hA - vecA[1])*0.5;
-		wA = vecA[0];
-		hA = vecA[1];
-	}
-	if(typeof vecB != UNDEFINED){
-		xB += (wB - vecB[0])*0.5;
-		yB += (hB - vecB[1])*0.5;
-		wB = vecB[0];
-		hB = vecB[1];
-	}
-	var minx = xA > xB ? xA : xB
-	,miny = yA > yB ? yA : yB
-	,maxx = (xA + wA) > (xB + wB) ? (xB + wB) : (xA + wA)
-	,maxy = (yA + hA) > (yB + hB) ? (yB + hB) : (yA + hA);
-	return minx <= maxx && miny <= maxy;
-};
+		return false;
+	};
+	LGlobal.hitTestArc = function (objA, objB, objAR, objBR) {
+		var rA = objA.getWidth() * 0.5
+		,rB = objB.getWidth() * 0.5
+		,xA = objA._startX ? objA._startX() : objA.startX()
+		,xB = objB._startX ? objB._startX() : objB.startX()
+		,yA = objA._startY ? objA._startY() : objA.startY()
+		,yB = objB._startY ? objB._startY() : objB.startY();
+		if (typeof objAR != UNDEFINED) {
+			xA += (rA - objAR);
+			yA += (rA - objAR);
+			rA = objAR;
+		}
+		if (typeof objBR != UNDEFINED) {
+			xB += (rB - objBR);
+			yB += (rB - objBR);
+			rB = objBR;
+		}
+		var disx = xA + rA - xB - rB
+		,disy = yA + rA - yB - rB;
+		return disx * disx + disy * disy < (rA + rB) * (rA + rB);
+	};
+	LGlobal.hitTestRect = function (objA, objB, vecA, vecB) {
+		var wA = objA.getWidth()
+		,wB = objB.getWidth()
+		,hA = objA.getHeight()
+		,hB = objB.getHeight()
+		,xA = objA._startX ? objA._startX() : objA.startX()
+		,xB = objB._startX ? objB._startX() : objB.startX()
+		,yA = objA._startY ? objA._startY() : objA.startY()
+		,yB = objB._startY ? objB._startY() : objB.startY();
+		if (typeof vecA != UNDEFINED) {
+			xA += (wA - vecA[0]) * 0.5;
+			yA += (hA - vecA[1]) * 0.5;
+			wA = vecA[0];
+			hA = vecA[1];
+		}
+		if (typeof vecB != UNDEFINED) {
+			xB += (wB - vecB[0]) * 0.5;
+			yB += (hB - vecB[1]) * 0.5;
+			wB = vecB[0];
+			hB = vecB[1];
+		}
+		var minx = xA > xB ? xA : xB
+		,miny = yA > yB ? yA : yB
+		,maxx = (xA + wA) > (xB + wB) ? (xB + wB) : (xA + wA)
+		,maxy = (yA + hA) > (yB + hB) ? (yB + hB) : (yA + hA);
+		return minx <= maxx && miny <= maxy;
+	};
 	LGlobal.hitTest = LGlobal.hitTestRect;
+	/** @language chinese
+	 * 重新设定游戏速度
+	 * @method setFrameRate
+	 * @static
+	 * @param {int} speed 游戏速度,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * game speed reset 
+	 * @method setFrameRate
+	 * @static
+	 * @param {float} speed game speed(milliseconds), FPS = 1000 / speed.
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * スクリーンをリサイズする
+	 * @method setFrameRate
+	 * @static
+	 * @param {float} speed ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.setFrameRate = function (s) {
 		if (LGlobal.frameRate) {
 			clearInterval(LGlobal.frameRate);
@@ -568,10 +613,10 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 			LGlobal.onShow();
 		}, s);
 	};
-	LGlobal.scaleX = function (v) {
+	LGlobal.ll_scaleX = function (v) {
 		return (v - LGlobal.left) * LGlobal.width/LGlobal.canvasStyleWidth;
 	};
-	LGlobal.scaleY = function (v) {
+	LGlobal.ll_scaleY = function (v) {
 		return (v - LGlobal.top) * LGlobal.height / LGlobal.canvasStyleHeight;
 	};
 	LGlobal.ll_setStageSize = function (w, h) {
@@ -660,8 +705,8 @@ LGlobal.hitTestRect = function(objA,objB,vecA,vecB){
 			h = canvasH;
 		}
 		if (LGlobal.stageScale == "noScale") {
-			w = LGlobal.width;
-			h = LGlobal.height;
+			w = canvasW || LGlobal.width;
+			h = canvasH || LGlobal.height;
 		}
 		switch (LGlobal.stageScale) {
 		case "exactFit":

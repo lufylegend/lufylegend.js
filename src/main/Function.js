@@ -151,7 +151,7 @@ function removeChild (o) {
 /** @language chinese
  * 引擎初始化函数。等同于 init。
  * @method LInit
- * @param {Number} speed 游戏速度设定,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。
+ * @param {float} speed 游戏速度,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。
  * @param {String} divid 传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部。
  * @param {int} width 游戏界面宽。
  * @param {int} height 游戏界面高。
@@ -183,7 +183,7 @@ function removeChild (o) {
 /** @language english
  * Engine initialization. Equivalent to init.
  * @method LInit
- * @param {Number} speed game speed(milliseconds), FPS = 1000 / speed.
+ * @param {float} speed game speed(milliseconds), FPS = 1000 / speed.
  * @param {String} divid Specifies a unique id for a div tag.
  * @param {int} width Game Interface's width.
  * @param {int} height Game Interface's height.
@@ -215,7 +215,7 @@ function removeChild (o) {
 /** @language japanese
  * ライブラリの初期化。init と同等。
  * @method LInit
- * @param {Number} speed ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。
+ * @param {float} speed ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。
  * @param {String} divid divタブのid，ライブラリの初期化をする時，自動的にこのdivタブの中にcanvasを生成する。
  * @param {int} width ゲーム画面の幅。
  * @param {int} height ゲーム画面の高さ。
