@@ -392,9 +392,11 @@ var LDisplayObject = (function () {
 						continue;
 					}
 					s[k] = a[k];
+				} else if (a[k] && typeof a[k].clone == "function") {
+					s[k] = a[k].clone();
 				} else if (Array.isArray(a[k])) {
 					s[k] = a[k].slice();
-				}
+				} 
 			}
 			if (a.mask) {
 				s.mask = a.mask.clone();

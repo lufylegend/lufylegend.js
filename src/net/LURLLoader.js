@@ -1,6 +1,27 @@
-/*
-* LURLLoader.js
-**/
+/** @language chinese
+ * LURLLoader 类以文本、二进制数据或 URL 编码变量的形式从 URL 下载数据，LURLLoader 类读取文本数据时无法在本地环境下运行。
+ * @class LURLLoader
+ * @extends LEventDispatcher
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * The URLLoader class downloads data from a URL as text, binary data, or URL-encoded variables. When you download a text data, can not be run on the local environment.
+ * @class LURLLoader
+ * @extends LEventDispatcher
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * LURLLoader クラスは、指定した URL からテキスト、バイナリデータ、または URL エンコード形式の変数をダウンロードする際に使用します。テキストデーターをダウンロードする時、ローカル環境で実行できません。
+ * @class LURLLoader
+ * @extends LEventDispatcher
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
 var LURLLoader = (function () {
 	function LURLLoader () {
 		var s = this;
@@ -10,16 +31,87 @@ var LURLLoader = (function () {
 		s.content = null;
 		s.event = {};
 	}
+	/** @language chinese
+	 * 从指定的 URL 发送和加载数据。
+	 * @method load
+	 * @param {String} url 所请求的 URL。
+	 * @param {String} type 读取文件种类，目前支持"text","js"。
+	 * @example
+	 * 	LInit(1000/50,"legend",800,450,main);
+	 * 	var loader;
+	 * 	function main(){
+	 * 		LGlobal.setDebug(true);
+	 * 		loader = new LURLLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadTxt); 
+	 * 		loader.load("test.txt", "text");
+	 * 	}
+	 * 	function loadTxt (event) {
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.currentTarget.data == event.target);//true
+	 * 		trace("event.target = " + event.target);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.8.9
+	 */
+	/** @language english
+	 * Sends and loads data from the specified URL.
+	 * @method load
+	 * @param {String} url The URL to be requested.
+	 * @param {String} type file type，Currently supports "text","js".
+	 * @example
+	 * 	LInit(1000/50,"legend",800,450,main);
+	 * 	var loader;
+	 * 	function main(){
+	 * 		LGlobal.setDebug(true);
+	 * 		loader = new LURLLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadTxt); 
+	 * 		loader.load("test.txt", "text");
+	 * 	}
+	 * 	function loadTxt (event) {
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.currentTarget.data == event.target);//true
+	 * 		trace("event.target = " + event.target);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.8.9
+	 */
+	/** @language japanese
+	 * 指定された URL からデータを送信およびロードします。
+	 * @method load
+	 * @param {String} url リクエストされる URL です。
+	 * @param {String} type ファイルのタイプです，今は"text","js"をサポートされています。
+	 * @example
+	 * 	LInit(1000/50,"legend",800,450,main);
+	 * 	var loader;
+	 * 	function main(){
+	 * 		LGlobal.setDebug(true);
+	 * 		loader = new LURLLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadTxt); 
+	 * 		loader.load("test.txt", "text");
+	 * 	}
+	 * 	function loadTxt (event) {
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.currentTarget.data == event.target);//true
+	 * 		trace("event.target = " + event.target);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.8.9
+	 */
 	LURLLoader.prototype.load = function (u, t) {
 		var s = this, event;
 		s.loadtype = t;
 		if (!t || t == "text") {
 			LAjax.get(u, {}, function (data) {
 				event = new LEvent(LEvent.COMPLETE);
+				s.data = data;
 				event.currentTarget = s;
 				event.target = data;
 				s.dispatchEvent(event);
 				delete s.content;
+				delete s.data;
 			});
 		} else if (t == "js") {
 			var script = document.createElement("script");
