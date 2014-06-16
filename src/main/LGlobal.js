@@ -8,6 +8,7 @@ var LGlobal = function (){throw "LGlobal cannot be instantiated";};
 LGlobal.FULL_SCREEN="full_screen";
 LGlobal.type = "LGlobal";
 LGlobal.traceDebug = false;
+LGlobal.displayState = NONE;
 LGlobal.aspectRatio = NONE;
 LGlobal.script = null;
 LGlobal.stage = null;
@@ -126,7 +127,7 @@ LGlobal.setCanvas = function (id,w,h){
 			LGlobal.stage.baseRemoveEvent(type,listener);
 		}
 	};
-	if(LSystem.sv == LStage.FULL_SCREEN){LGlobal.resize();}
+	if(LGlobal.displayState == LStage.FULL_SCREEN){LGlobal.resize();}
 	
 	if(LGlobal.canTouch){
 		LGlobal.ll_clicks = 0;
@@ -618,4 +619,15 @@ LGlobal.resize = function(canvasW,canvasH){
 	}
 	LGlobal.setStageSize(w,h);
 };
+LGlobal.sleep = function (s) {
+	var d = new Date();   
+	while ((new Date().getTime() - d.getTime()) < s) {}
+}
+LGlobal.screen = function (a) {
+	LGlobal.displayState = a;
+	if (LGlobal.stage) {
+		LGlobal.resize();
+	}
+};
+var LSystem = LGlobal;
 var LStage = LGlobal;

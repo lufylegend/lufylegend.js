@@ -1,7 +1,7 @@
 /*
- * LMath.js
+ * LString.js
  **/
-var LMath = {
+var LString = {
 	trim:function (s){
 		return s.replace(/(^\s*)|(\s*$)|(\n)/g, "");
 	},
