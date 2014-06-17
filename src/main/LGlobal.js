@@ -48,6 +48,33 @@ var LGlobal = ( function () {
 	LGlobal.aspectRatio = NONE;
 	LGlobal.canvasObj = null;
 	LGlobal.canvas = null;
+	/** @language chinese
+	 * <p>一个LSprite对象，所有的DisplayObject对象的最底层。</p>
+	 * <p>除非做功能扩展，否则不推荐直接将对象加载到LGlobal.stage上。</p>
+	 * @property LGlobal.stage
+	 * @type LSprite
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>A LSprite object, the root of all DisplayObjects.</p>
+	 * <p>Unless do some extensions, Otherwise, it is not recommended to directly manipulate</p>
+	 * @property LGlobal.stage
+	 * @type LSprite
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>一つのLSPriteオブジェクト、全てのDisplayObjectオブジェクトのベース容器です。</p>
+	 * <p>機能を拡張しなければ，直接にLGlobal.stageを操作しないほうがいいです。</p>
+	 * @property LGlobal.stage
+	 * @type LSprite
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.stage = null;
 	LGlobal.width = 0;
 	LGlobal.height = 0;
