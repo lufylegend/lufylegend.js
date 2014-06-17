@@ -106,7 +106,7 @@ var LInteractiveObject = (function () {
 		addEventListener : function (type, listener) {
 			var s = this;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
-				if (LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])) {
+				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
 					LMouseEventContainer.addMouseEvent(s, type, listener);
 					return;
 				}
@@ -118,7 +118,7 @@ var LInteractiveObject = (function () {
 		removeEventListener : function (type, listener) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
-				if (LGlobal.mouseEventContainer[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE])) {
+				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
 					LMouseEventContainer.removeMouseEvent(s, type, listener);
 					return;
 				}
@@ -149,13 +149,13 @@ var LInteractiveObject = (function () {
 			var s = this;
 			s.mouseList.length = 0;
 			s._eventList.length = 0;
-			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]) {
+			if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_DOWN);
 			}
-			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_UP]) {
+			if (LMouseEventContainer.container[LMouseEvent.MOUSE_UP]) {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_UP);
 			}
-			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_MOVE);
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OVER);
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OUT);

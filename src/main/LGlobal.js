@@ -43,359 +43,380 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.FULL_SCREEN = "full_screen";
-LGlobal.type = "LGlobal";
-LGlobal.traceDebug = false;
-LGlobal.displayState = NONE;
-LGlobal.aspectRatio = NONE;
-LGlobal.script = null;
-LGlobal.stage = null;
-LGlobal.canvas = null;
-LGlobal.width = 0;
-LGlobal.height = 0;
-LGlobal.box2d = null;
-LGlobal.speed = 50;
-LGlobal.IS_MOUSE_DOWN = false;
-LGlobal.objectIndex = 0;
-LGlobal.preventDefault = true;
-LGlobal.childList = new Array();
-LGlobal.dragList = new Array();
-LGlobal.stageScale = "noScale";
-LGlobal.align = "M";
-LGlobal.canTouch = false;
-LGlobal.os = OS_PC;
-LGlobal.ios = false;
-LGlobal.android = false;
-LGlobal.android_new = false;
-LGlobal.backgroundColor = null;
-LGlobal.destroy = true;
-LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
-LGlobal.startTimer = 0;
-LGlobal.mouseEventContainer = {};
-LGlobal.keepClear = true;
-LGlobal.top = 0;
-LGlobal.left = 0;
-LGlobal.window = window;
-(function(n){
-	LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
-	if (n.indexOf(OS_IPHONE) > 0) {
-		LGlobal.os = OS_IPHONE;
-		LGlobal.canTouch = true;
-		LGlobal.ios = true;
-	}else if (n.indexOf(OS_IPOD) > 0) {
-		LGlobal.os = OS_IPOD;
-		LGlobal.canTouch = true;
-		LGlobal.ios = true;
-	}else if (n.indexOf(OS_IPAD) > 0) {
-		LGlobal.os = OS_IPAD;
-		LGlobal.ios = true;
-		LGlobal.canTouch = true;
-	}else if (n.indexOf(OS_ANDROID) > 0) {
-		LGlobal.os = OS_ANDROID;
-		LGlobal.canTouch = true;
-		LGlobal.android = true;
-		var i = n.indexOf(OS_ANDROID);
-		if(parseInt(n.substr(i+8,1)) > 3){
-			LGlobal.android_new = true;
+	LGlobal.traceDebug = false;
+	LGlobal.displayState = NONE;
+	LGlobal.aspectRatio = NONE;
+	LGlobal.stage = null;
+	LGlobal.canvas = null;
+	LGlobal.width = 0;
+	LGlobal.height = 0;
+	LGlobal.box2d = null;
+	LGlobal.speed = 50;
+	LGlobal.IS_MOUSE_DOWN = false;
+	LGlobal.preventDefault = true;
+	LGlobal.childList = new Array();
+	LGlobal.dragList = new Array();
+	LGlobal.stageScale = "noScale";
+	LGlobal.align = "M";
+	LGlobal.canTouch = false;
+	LGlobal.os = OS_PC;
+	LGlobal.ios = false;
+	LGlobal.android = false;
+	LGlobal.android_new = false;
+	LGlobal.backgroundColor = null;
+	LGlobal.destroy = true;
+	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
+	LGlobal.startTimer = 0;
+	LGlobal.keepClear = true;
+	LGlobal.top = 0;
+	LGlobal.left = 0;
+	LGlobal.window = window;
+	(function (n) {
+		LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
+		if (n.indexOf(OS_IPHONE) > 0) {
+			LGlobal.os = OS_IPHONE;
+			LGlobal.canTouch = true;
+			LGlobal.ios = true;
+		} else if (n.indexOf(OS_IPOD) > 0) {
+			LGlobal.os = OS_IPOD;
+			LGlobal.canTouch = true;
+			LGlobal.ios = true;
+		} else if (n.indexOf(OS_IPAD) > 0) {
+			LGlobal.os = OS_IPAD;
+			LGlobal.ios = true;
+			LGlobal.canTouch = true;
+		} else if (n.indexOf(OS_ANDROID) > 0) {
+			LGlobal.os = OS_ANDROID;
+			LGlobal.canTouch = true;
+			LGlobal.android = true;
+			var i = n.indexOf(OS_ANDROID);
+			if(parseInt(n.substr(i + 8, 1)) > 3){
+				LGlobal.android_new = true;
+			}
 		}
-	}
-})(navigator.userAgent);
-LGlobal.setDebug = function (v){
-	LGlobal.traceDebug = v; 
-};
-LGlobal.setCanvas = function (id,w,h){
-	LGlobal.id = id;
-	LGlobal.object = document.getElementById(id);
-	LGlobal.object.innerHTML='<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">'+
-	'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:'+w+'px;height:'+h+'px;">'+
-	'<div id="noCanvas">'+
-	"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>"+ 
-	'</div>'+  
-	'</canvas></div>'+
-	'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">'+
-	'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>'+
-	'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />'+
-	'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
-	LGlobal.canvasObj = document.getElementById(LGlobal.id+"_canvas");
-	LGlobal._canvas=document.createElement("canvas");
-	LGlobal._context=LGlobal._canvas.getContext("2d");
-	if(LGlobal._context){
-		LGlobal.canvasObj.innerHTML="";
-	}
-	LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
-	LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
-	LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
-	LGlobal.passwordBoxObj = document.getElementById(LGlobal.id + '_passwordBox');
-	LGlobal.inputTextField = null;
-	if(w){LGlobal.canvasObj.width = w;}
-	if(h){LGlobal.canvasObj.height = h;}
-	LGlobal.width = LGlobal.canvasObj.width;
-	LGlobal.height = LGlobal.canvasObj.height;
-	LGlobal.canvasStyleWidth = LGlobal.width;
-	LGlobal.canvasStyleHeight = LGlobal.height;
-	LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
-	LGlobal.offsetX = 0;
-	LGlobal.offsetY = 0;
-	LGlobal.stage = new LSprite();
-	LGlobal.stage.parent = "root";
-	LGlobal.childList.push(LGlobal.stage);
-	LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
-	LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
-	LGlobal.stage.addEventListener = function(type,listener){
-		if(type == LEvent.WINDOW_RESIZE){
-			LGlobal.stage.onresizeListener = listener;
-			LGlobal.stage.onresize = function(e){
-				LGlobal.stage.onresizeEvent = e;
-			};
-			LEvent.addEventListener(LGlobal.window,type,LGlobal.stage.onresize);
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
-			LEvent.addEventListener(LGlobal.window,type,listener);
-		}else{
-			LGlobal.stage.baseAddEvent(type,listener);
+	})(navigator.userAgent);
+	LGlobal.setDebug = function (v) {
+		LGlobal.traceDebug = v; 
+	};
+	LGlobal.setCanvas = function (id, w, h) {
+		LGlobal.ll_createCanvas(id, w, h);
+		LGlobal.ll_createStage();
+		if(LGlobal.displayState == LStage.FULL_SCREEN){
+			LGlobal.resize();
+		}else if(typeof LGlobal.displayState == "number"){
+			LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+		}
+		if (LGlobal.canTouch) {
+			LGlobal.ll_clicks = 0;
+			LGlobal.ll_prev_clickTime = 0;
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
+			LEvent.addEventListener(document,LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
+		} else {
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN, LGlobal.ll_mouseDown);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_MOVE, LGlobal.ll_mouseMove);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_UP, LGlobal.ll_mouseUp);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_OUT, LGlobal.ll_mouseOut);
 		}
 	};
-	LGlobal.stage.removeEventListener = function(type,listener){
-		if(type == LEvent.WINDOW_RESIZE){
-			LEvent.removeEventListener(LGlobal.window,LEvent.WINDOW_RESIZE,LGlobal.stage.onresize);
-			delete LGlobal.stage.onresize;
-			delete LGlobal.stage.onresizeListener;
-		}else if(type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS){
-			LEvent.removeEventListener(LGlobal.window,type,listener);
-		}else{
-			LGlobal.stage.baseRemoveEvent(type,listener);
+	LGlobal.ll_createCanvas = function (id, w, h) {
+		LGlobal.id = id;
+		LGlobal.object = document.getElementById(id);
+		LGlobal.object.innerHTML = '<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">' +
+		'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:' + w + 'px;height:' + h + 'px;">' +
+		'<div id="noCanvas">' +
+		"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>" + 
+		'</div>' +  
+		'</canvas></div>' +
+		'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">' +
+		'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>' +
+		'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />' +
+		'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
+		LGlobal.canvasObj = document.getElementById(LGlobal.id + "_canvas");
+		LGlobal._canvas = document.createElement("canvas");
+		LGlobal._context = LGlobal._canvas.getContext("2d");
+		if (LGlobal._context) {
+			LGlobal.canvasObj.innerHTML="";
+		}
+		LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
+		LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
+		LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
+		LGlobal.passwordBoxObj = document.getElementById(LGlobal.id + '_passwordBox');
+		LGlobal.inputTextField = null;
+		if (w) {
+			LGlobal.canvasObj.width = w;
+		}
+		if (h) {
+			LGlobal.canvasObj.height = h;
+		}
+		LGlobal.width = LGlobal.canvasObj.width;
+		LGlobal.height = LGlobal.canvasObj.height;
+		LGlobal.canvasStyleWidth = LGlobal.width;
+		LGlobal.canvasStyleHeight = LGlobal.height;
+		LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
+		LGlobal.offsetX = mouseX = 0;
+		LGlobal.offsetY = mouseY = 0;
+	};
+	LGlobal.ll_createStage = function () {
+		LGlobal.stage = new LSprite();
+		LGlobal.stage.parent = "root";
+		LGlobal.childList.push(LGlobal.stage);
+		LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
+		LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
+		LGlobal.stage.addEventListener = function (type, listener) {
+			if (type == LEvent.WINDOW_RESIZE) {
+				LGlobal.stage.onresizeListener = listener;
+				LGlobal.stage.onresize = function (e) {
+					LGlobal.stage.onresizeEvent = e;
+				};
+				LEvent.addEventListener(LGlobal.window, type,LGlobal.stage.onresize);
+			} else if (type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS) {
+				LEvent.addEventListener(LGlobal.window, type, listener);
+			} else {
+				LGlobal.stage.baseAddEvent(type, listener);
+			}
+		};
+		LGlobal.stage.removeEventListener = function (type, listener) {
+			if (type == LEvent.WINDOW_RESIZE) {
+				LEvent.removeEventListener(LGlobal.window, LEvent.WINDOW_RESIZE, LGlobal.stage.onresize);
+				delete LGlobal.stage.onresize;
+				delete LGlobal.stage.onresizeListener;
+			} else if (type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS) {
+				LEvent.removeEventListener(LGlobal.window, type, listener);
+			} else {
+				LGlobal.stage.baseRemoveEvent(type, listener);
+			}
+		};
+	};
+	LGlobal.ll_touchStart = function (event) {
+		if (LGlobal.inputBox.style.display != NONE) {
+			LGlobal.inputTextField._ll_getValue();
+		}
+		var canvasX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		canvasY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
+		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
+			eveIndex = 0;
+		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
+			eveIndex = event.touches.length - 1;
+		}
+		eve = {offsetX : (event.touches[eveIndex].pageX - canvasX),
+		offsetY : (event.touches[eveIndex].pageY - canvasY),
+		touchPointID : event.touches[eveIndex].identifier};
+		eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
+		eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
+		mouseX = LGlobal.offsetX = eve.offsetX;
+		mouseY = LGlobal.offsetY = eve.offsetY;
+		LMultitouch.touchs["touch" + eve.touchPointID] = eve;
+		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_DOWN);
+		LGlobal.buttonStatusEvent = eve;
+		var date = new Date();
+		var clickTime = date.getTime();
+		LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
+		LGlobal.ll_prev_clickTime = clickTime;
+		if (LGlobal.ll_clicks === 2) {
+			LGlobal.mouseEvent(eve, LMouseEvent.DOUBLE_CLICK);
+			LGlobal.ll_clicks = 0;
+		}
+		LGlobal.IS_MOUSE_DOWN = true;
+		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
+			LGlobal.mouseJoint_start(eve);
+		}
+		LGlobal.touchHandler(event);
+	};
+	LGlobal.ll_touchEnd = function (event) {
+		var e, eve, k, i, l, h;
+		if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
+			for (k in LMultitouch.touchs) {
+				e = LMultitouch.touchs[k];
+				h = false;
+				for (i = 0,l = event.touches.length; i < l; i++) {
+					if (event.touches[i].identifier == e.touchPointID) {
+						h = true;
+						break;
+					}
+				}
+				if (!h) {
+					eve = e;
+					delete LMultitouch.touchs[k];
+					break;
+				}
+			}
+		}
+		if (!eve) {
+			eve = {offsetX : LGlobal.offsetX, offsetY : LGlobal.offsetY};
+		}
+		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
+		LGlobal.touchHandler(event);
+		LGlobal.IS_MOUSE_DOWN = false;
+		LGlobal.buttonStatusEvent = null;
+		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
+			LGlobal.box2d.mouseJoint = null;
 		}
 	};
-	if(LGlobal.displayState == LStage.FULL_SCREEN){
-		LGlobal.resize();
-	}else if(typeof LGlobal.displayState == "number"){
-		LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
-	}
-	
-	if(LGlobal.canTouch){
-		LGlobal.ll_clicks = 0;
-		LGlobal.ll_prev_clickTime = 0;
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START,function(event){
-			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField._ll_getValue();
-			}
-			var canvasX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
-			canvasY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),eve,k,i,eveIndex;
-			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
-				eveIndex = 0;
-			}else if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
-				eveIndex = event.touches.length - 1;
-			}
-			eve = {offsetX:(event.touches[eveIndex].pageX - canvasX)
-			,offsetY:(event.touches[eveIndex].pageY - canvasY)
-			,touchPointID:event.touches[eveIndex].identifier};
+	LGlobal.ll_touchMove = function (e) {
+		var cX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		cY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
+		eve, l, ll = e.touches.length;
+		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
+			ll = 1;
+		}
+		for (i = 0, l = e.touches.length; i < l && i < ll; i++) {
+			eve = {offsetX : (e.touches[i].pageX - cX), offsetY : (e.touches[i].pageY - cY), touchPointID : e.touches[i].identifier};
 			eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
-			LMultitouch.touchs["touch"+eve.touchPointID] = eve;
-			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_DOWN);
+			if (LMultitouch.touchs["touch" + eve.touchPointID] && 
+				LMultitouch.touchs["touch" + eve.touchPointID].offsetX == eve.offsetX && 
+				LMultitouch.touchs["touch" + eve.touchPointID].offsetY == eve.offsetY){
+				continue;	
+			}
 			LGlobal.buttonStatusEvent = eve;
-			var date = new Date();
-			var clickTime = date.getTime();
-			LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
-			LGlobal.ll_prev_clickTime = clickTime;
-			if(LGlobal.ll_clicks === 2){
-				LGlobal.mouseEvent(eve,LMouseEvent.DOUBLE_CLICK);
-				LGlobal.ll_clicks = 0;
+			LMultitouch.touchs["touch" + eve.touchPointID] = eve;
+			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
+		}
+		LGlobal.touchHandler(e);
+		if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
+			LGlobal.mouseJoint_move(eve);
+		}
+	};
+	LGlobal.ll_mouseDbclick = function (e) {
+		if (e.offsetX == null && e.layerX != null) {
+			e.offsetX = e.layerX;
+			e.offsetY = e.layerY;
+		}
+		var event = {button : e.button};
+		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
+		LGlobal.mouseEvent(event, LMouseEvent.DOUBLE_CLICK);
+	};
+	LGlobal.ll_mouseDown = function (e) {
+		if (e.offsetX == null && e.layerX != null) {
+			e.offsetX = e.layerX;
+			e.offsetY = e.layerY;
+		}
+		if (LGlobal.inputBox.style.display != NONE) {
+			LGlobal.inputTextField._ll_getValue();
+		}
+		var event = {button : e.button};
+		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
+		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_DOWN);
+		LGlobal.IS_MOUSE_DOWN = true;
+		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
+			LGlobal.mouseJoint_start(e);
+		}
+	};
+	LGlobal.ll_mouseMove = function (e) {
+		if (e.offsetX == null && e.layerX != null) {
+			e.offsetX = e.layerX;
+			e.offsetY = e.layerY;
+		}
+		var event = {};
+		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
+		LGlobal.buttonStatusEvent = event;
+		mouseX = LGlobal.offsetX = event.offsetX;
+		mouseY = LGlobal.offsetY = event.offsetY;
+		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
+		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+			LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
+		}
+	};
+	LGlobal.ll_mouseUp = function (e) {
+		if (e.offsetX == null && e.layerX != null) {
+			e.offsetX = e.layerX;
+			e.offsetY = e.layerY;
+		}
+		var event = {button : e.button};
+		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
+		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_UP);
+		LGlobal.IS_MOUSE_DOWN = false;
+		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
+			LGlobal.box2d.mouseJoint = null;
+		}
+	};
+	LGlobal.ll_mouseOut = function (e) {
+		if (e.offsetX == null && e.layerX != null) {
+			e.offsetX = e.layerX;
+			e.offsetY = e.layerY;
+		}
+		var event = {};
+		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
+		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
+		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_OUT);
+		LGlobal.IS_MOUSE_DOWN = false;
+	};
+	LGlobal.touchHandler = function (e) {
+		e.stopPropagation();
+		if (LGlobal.preventDefault) {
+			e.preventDefault();
+		}
+		if (e.stopImmediatePropagation) {
+			e.stopImmediatePropagation();
+		}
+		return e;
+	};
+	LGlobal.mouseEvent = function (e, t) {
+		if (t == LMouseEvent.MOUSE_MOVE) {
+			LGlobal.dragHandler(e);
+		}
+		if (LMouseEventContainer.container[t]) {
+			LMouseEventContainer.dispatchMouseEvent(e, t);
+			return;
+		}
+		for (var k = LGlobal.childList.length - 1; k >= 0; k--) {
+			if (LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e, t)) {
+				break;
 			}
-			LGlobal.IS_MOUSE_DOWN = true;
-			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start){
-				LGlobal.mouseJoint_start(eve);
+		}
+	};
+	LGlobal.dragHandler = function (e) {
+		var i, s, c, d = LGlobal.dragList;
+		for(i = d.length - 1; i >= 0; i--) {
+			s = d[i];
+			if (LGlobal.canTouch && s.ll_touchPointID != e.touchPointID) {
+				continue;
 			}
-			LGlobal.touchHandler(event);
-		});
-		LEvent.addEventListener(document,LMouseEvent.TOUCH_END,function(event){
-			var e,eve,k,i,l,h;
-			if(LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT){
-				for(k in LMultitouch.touchs){
-					e = LMultitouch.touchs[k];
-					h = false;
-					for(i=0,l=event.touches.length;i<l;i++){
-						if(event.touches[i].identifier == e.touchPointID){
-							h = true;
-							break;
-						}
-					}
-					if(!h){
-						eve = e;
-						delete LMultitouch.touchs[k];
-						break;
-					}
-				}
-			}
-			if(!eve){
-				eve = {offsetX:LGlobal.offsetX,offsetY:LGlobal.offsetY};
-			}
-			LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_UP);
-			LGlobal.touchHandler(event);
-			LGlobal.IS_MOUSE_DOWN = false;
-			LGlobal.buttonStatusEvent = null;
-			if(LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
-				LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-				LGlobal.box2d.mouseJoint = null;
-			}
-		});
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE,function(e){
-			var cX = parseInt(STR_ZERO+LGlobal.object.style.left)+parseInt(LGlobal.canvasObj.style.marginLeft),
-			cY = parseInt(STR_ZERO+LGlobal.object.style.top)+parseInt(LGlobal.canvasObj.style.marginTop),
-			eve,l,ll=e.touches.length;
-			if(LMultitouch.inputMode == LMultitouchInputMode.NONE){
-				ll = 1;
-			}
-			for(i=0,l=e.touches.length;i<l && i<ll;i++){
-				eve = {offsetX:(e.touches[i].pageX - cX),offsetY:(e.touches[i].pageY - cY),touchPointID:e.touches[i].identifier};
-				eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
-				eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
-				mouseX = LGlobal.offsetX = eve.offsetX;
-				mouseY = LGlobal.offsetY = eve.offsetY;
-				if(LMultitouch.touchs["touch"+eve.touchPointID] && 
-					LMultitouch.touchs["touch"+eve.touchPointID].offsetX == eve.offsetX && 
-					LMultitouch.touchs["touch"+eve.touchPointID].offsetY == eve.offsetY){
-					continue;	
-				}
-				LGlobal.buttonStatusEvent = eve;
-				LMultitouch.touchs["touch"+eve.touchPointID] = eve;
-				LGlobal.mouseEvent(eve,LMouseEvent.MOUSE_MOVE);
-			}
-			LGlobal.touchHandler(e);
-			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
-				LGlobal.mouseJoint_move(eve);
-			}
-		});
-	}else{
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK,function(e){
-			if(e.offsetX == null && e.layerX != null){
-				e.offsetX = e.layerX;
-				e.offsetY = e.layerY;
-			}
-			var event = {button:e.button};
-			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
-			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
-			LGlobal.mouseEvent(event,LMouseEvent.DOUBLE_CLICK);
-		});
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN,function(e){
-			if(e.offsetX == null && e.layerX != null){
-				e.offsetX = e.layerX;
-				e.offsetY = e.layerY;
-			}
-			if(LGlobal.inputBox.style.display != NONE){
-				LGlobal.inputTextField._ll_getValue();
-			}
-			var event = {button:e.button};
-			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
-			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
-			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_DOWN);
-			LGlobal.IS_MOUSE_DOWN = true;
-			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start){
-				LGlobal.mouseJoint_start(e);
-			}
-		});
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_MOVE,function(e){
-			if(e.offsetX == null && e.layerX != null){
-				e.offsetX = e.layerX;
-				e.offsetY = e.layerY;
-			}
-			var event = {};
-			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
-			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
-			LGlobal.buttonStatusEvent = event;
-			mouseX = LGlobal.offsetX = event.offsetX;
-			mouseY = LGlobal.offsetY = event.offsetY;
-			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_MOVE);
-			if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
-				LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
-			}
-		});
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_UP,function(e){
-			if(e.offsetX == null && e.layerX != null){
-				e.offsetX = e.layerX;
-				e.offsetY = e.layerY;
-			}
-			var event = {button:e.button};
-			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
-			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
-			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_UP);
-			LGlobal.IS_MOUSE_DOWN = false;
-			if(LGlobal.box2d != null && LGlobal.box2d.mouseJoint){
-				LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-				LGlobal.box2d.mouseJoint = null;
-			}
-		});
-		LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_OUT,function(e){
-			if(e.offsetX == null && e.layerX != null){
-				e.offsetX = e.layerX;
-				e.offsetY = e.layerY;
-			}
-			var event = {};
-			event.offsetX = LGlobal.ll_scaleX(e.offsetX);
-			event.offsetY = LGlobal.ll_scaleY(e.offsetY);
-			LGlobal.mouseEvent(event,LMouseEvent.MOUSE_OUT);
-			LGlobal.IS_MOUSE_DOWN = false;
-		});
-	}
-} ;
-LGlobal.touchHandler = function(e){
-	e.stopPropagation();
-	if(LGlobal.preventDefault)e.preventDefault();
-	if(e.stopImmediatePropagation){
-		e.stopImmediatePropagation();
-	}
-	return e;
-};
-LGlobal.mouseEvent = function(e,t){
-	if(t == LMouseEvent.MOUSE_MOVE){
-		LGlobal.dragHandler(e);
-	}
-	if(LGlobal.mouseEventContainer[t]){
-		LMouseEventContainer.dispatchMouseEvent(e,t);
-		return;
-	}
-	for(var k = LGlobal.childList.length - 1; k >= 0; k--) {
-		if(LGlobal.childList[k].mouseEvent && LGlobal.childList[k].mouseEvent(e,t)){
+			c = s.getAbsoluteScale();
+			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
+			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
 			break;
 		}
-	}
-};
-LGlobal.dragHandler = function(e){
-	var i,s,c,d = LGlobal.dragList;
-	for(i = d.length - 1; i >= 0; i--) {
-		s = d[i];
-		if(LGlobal.canTouch && s.ll_touchPointID != e.touchPointID)continue;
-		c = s.getAbsoluteScale();
-		s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX)*s.scaleX/c.scaleX;
-		s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY)*s.scaleY/c.scaleY;
-		break;
-	}
-};
-LGlobal.horizontalError = function(){
-	var b = new LSprite(),c='#cccccc',d='#000000';
-	b.graphics.drawRoundRect(4,c,[5,5,70,100,5]);
-	b.graphics.drawRect(4,c,[30,15,20,10]);
-	b.graphics.drawRoundRect(4,d,[125,25,100,70,5]);
-	b.graphics.drawRect(4,d,[200,50,10,20]);
-	b.graphics.drawRect(4,d,[80,50,20,20]);
-	b.graphics.drawVertices(4,d,[[100,40],[120,60],[100,80]]);
-	addChild(b);
-	var f = function(){
-		setTimeout(function(){location.href=location.href;}, 100);
 	};
-	window.onorientationchange = f;
-};
+	LGlobal.horizontalError = function () {
+		var b = new LSprite(), c = '#cccccc', d = '#000000';
+		b.graphics.drawRoundRect(4, c, [5, 5, 70, 100, 5]);
+		b.graphics.drawRect(4, c, [30, 15, 20, 10]);
+		b.graphics.drawRoundRect(4, d, [125, 25, 100, 70, 5]);
+		b.graphics.drawRect(4, d, [200, 50, 10, 20]);
+		b.graphics.drawRect(4, d, [80, 50, 20, 20]);
+		b.graphics.drawVertices(4, d, [[100, 40], [120, 60], [100, 80]]);
+		addChild(b);
+		var f = function () {
+			setTimeout(function () {
+				location.href = location.href;
+			}, 100);
+		};
+		window.onorientationchange = f;
+	};
 	LGlobal.verticalError = function () {
 		var b = new LSprite(), c = '#cccccc', d = '#000000';
-		b.graphics.drawRoundRect(4,c,[5,25,100,70,5]);
-		b.graphics.drawRect(4,c,[80,50,10,20]);
-		b.graphics.drawRoundRect(4,d,[155,5,70,100,5]);
-		b.graphics.drawRect(4,d,[180,15,20,10]);
-		b.graphics.drawRect(4,d,[110,50,20,20]);
-		b.graphics.drawVertices(4,d,[[130,40],[150,60],[130,80]]);
+		b.graphics.drawRoundRect(4, c, [5, 25, 100, 70, 5]);
+		b.graphics.drawRect(4, c, [80, 50, 10, 20]);
+		b.graphics.drawRoundRect(4, d, [155, 5, 70, 100, 5]);
+		b.graphics.drawRect(4, d, [180, 15, 20, 10]);
+		b.graphics.drawRect(4, d, [110, 50, 20, 20]);
+		b.graphics.drawVertices(4, d, [[130, 40], [150, 60], [130, 80]]);
 		addChild(b);
-		var f = function(){
-			setTimeout(function(){location.href=location.href;}, 100);
+		var f = function () {
+			setTimeout(function () {
+				location.href = location.href;
+			}, 100);
 		};
 		window.onorientationchange = f;
 	};

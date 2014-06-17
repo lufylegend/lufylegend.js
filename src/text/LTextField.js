@@ -908,7 +908,7 @@ var LTextField = (function () {
 					s.inputBackLayer = inputBackLayer;
 				}
 				s.inputBackLayer.parent = s;
-				if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_DOWN]) {
+				if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
 					LMouseEventContainer.pushInputBox(s);
 				}
 			} else {

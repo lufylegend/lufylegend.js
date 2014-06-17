@@ -265,7 +265,7 @@ var LButton = (function () {
 		 */
 		s.staticMode = false;
 		s.setState(LButton.STATE_ENABLE);
-		if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
 		}
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
@@ -532,7 +532,7 @@ var LButton = (function () {
 		},
 		die : function () {
 			var s = this;
-			if (LGlobal.mouseEventContainer[LMouseEvent.MOUSE_MOVE]) {
+			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeButton(s);
 			}
 			s.callParent("die",arguments);

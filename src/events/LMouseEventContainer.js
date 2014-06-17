@@ -316,6 +316,7 @@ var LMouseEventContainer = (function () {
 		 * @examplelink <p><a href="../../../api/LMouseEventContainer/dispatchAllEvent.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
+		s.container = {};
 		s.dispatchAllEvent = false;
 		s.mouseDownContainer = [];
 		s.mouseUpContainer = [];
@@ -677,7 +678,7 @@ var LMouseEventContainer = (function () {
 		 * @since 1.8.9
 		 */
 		set : function (t, v) {
-			LGlobal.mouseEventContainer[t] = v;
+			s.container[t] = v;
 		},
 		_sort : function (a, b) {
 			var s = this, o1, o2, al = s._getSort(a.sp), bl = s._getSort(b.sp), i, l1, l2;
