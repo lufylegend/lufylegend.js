@@ -479,6 +479,51 @@ var LGlobal = ( function () {
 			}
 		}
 	};
+	/** @language chinese
+	 * <p>将传入的宽和高，按照行数和列数进行拆分计算，会得到一个2维数组。</p>
+	 * @method divideCoordinate
+	 * @static
+	 * @param {float} width 宽
+	 * @param {float} height 高
+	 * @param {int} row 行数
+	 * @param {int} col 列数
+	 * @return {Boolean} 2维数组
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>Split to 2-dimensional arrays from the width and height.</p>
+	 * @method divideCoordinate
+	 * @static
+	 * @param {float} width width
+	 * @param {float} height height
+	 * @param {int} row rows
+	 * @param {int} col cols
+	 * @return {Boolean} 2-dimensional arrays
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>幅と高さによって，指定する行数と列数の2次元の配列を戻す。</p>
+	 * @method divideCoordinate
+	 * @static
+	 * @param {float} width 幅
+	 * @param {float} height 高さ
+	 * @param {int} row 行数
+	 * @param {int} col 列数
+	 * @return {Boolean} 2次元の配列
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.divideCoordinate = function (w, h, row, col) {
 		var i, j, cw = w / col, ch = h / row, r = [], c;
 		for (i = 0; i < row; i++) {
@@ -500,6 +545,48 @@ var LGlobal = ( function () {
 		co.addColorStop(1, "violet");  
 		return co;
 	};
+	/** @language chinese
+	 * <p>检测点是否在多边形内部</p>
+	 * @method hitPolygon
+	 * @static
+	 * @param {Array} vertices 多边形的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {float} x coordinate-x of point
+	 * @param {float} y coordinate-y of point
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>HitTest polygon and point</p>
+	 * @method hitPolygon
+	 * @static
+	 * @param {Array} vertices Polygon[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {float} x 检测点的x坐标
+	 * @param {float} y 检测点的y坐标
+	 * @return {Boolean} Returns true if hit
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>点と多角形の衝突を検出する</p>
+	 * @method hitPolygon
+	 * @static
+	 * @param {Array} verticesA 多角形の頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {float} x 点の座標x
+	 * @param {float} y 点の座標y
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.hitPolygon = function (list, x, y) {
 		var c = 0, p0 = list[0], b0x = (x <= p0[0]), b0y = (y <= p0[1]), i, l, p1, b1x, b1y;
 		for (i = 1, l = list.length; i < l + 1; i++) {
@@ -523,6 +610,45 @@ var LGlobal = ( function () {
 		}
 		return 0 != c;
 	};
+	/** @language chinese
+	 * <p>检测多边形与多边形的碰撞</p>
+	 * @method hitTestPolygon
+	 * @static
+	 * @param {Array} verticesA 多边形A的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} verticesB 多边形B的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>HitTest polygon and circle</p>
+	 * @method hitTestPolygon
+	 * @static
+	 * @param {Array} vertices PolygonA[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} vertices PolygonB[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @return {Boolean} Returns true if hit
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>多角形と多角形の衝突を検出する</p>
+	 * @method hitTestPolygon
+	 * @static
+	 * @param {Array} verticesA 多角形Aの頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} verticesB 多角形Bの頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.hitTestPolygon = function (p1, p2) {
 		var i, j, l, listA, normals, vecs, list = [[p1, [], []], [p2, [], []]];
 		for (j = 0; j < list.length; j++) {
@@ -547,6 +673,45 @@ var LGlobal = ( function () {
 		}
 		return true;
 	};
+	/** @language chinese
+	 * <p>检测一个多边形和一个圆的碰撞</p>
+	 * @method hitTestPolygonArc
+	 * @static
+	 * @param {Array} vertices 多边形的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} circle 圆[中心坐标x,中心坐标y,半径]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>HitTest polygon and circle</p>
+	 * @method hitTestPolygonArc
+	 * @static
+	 * @param {Array} vertices Polygon[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} circle circle[x,y,radius]
+	 * @return {Boolean} Returns true if hit
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>多角形と円の衝突を検出する</p>
+	 * @method hitTestPolygonArc
+	 * @static
+	 * @param {Array} vertices 多角形の頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
+	 * @param {Array} circle 円[中心の座標x,中心の座標y,半径]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.hitTestPolygonArc = function (vs, arc) {
 		if (LGlobal.hitPolygon(vs, arc[0], arc[1])) {
 			return true;
@@ -571,6 +736,54 @@ var LGlobal = ( function () {
 		}
 		return false;
 	};
+	/** @language chinese
+	 * <p>将两个对象看作圆来检测碰撞</p>
+	 * <p>如果对象发生旋转，则不能使用此方法进行碰撞检测，请使用LSprite类的hitTestObject</p>
+	 * @method hitTestArc
+	 * @static
+	 * @param {LDisplayObject} objA 对象A
+	 * @param {LDisplayObject} objB 对象B
+	 * @param {Array} vecA 重新设置对象A的矩形范围 [width,height]
+	 * @param {Array} vecB 重新设置对象B的矩形范围 [width,height]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>HitTest two objects as circles</p>
+	 * <p>If the object is rotated, you can not use this method for hitTest, please use the LSprite class's hitTestObject</p>
+	 * @method hitTestArc
+	 * @static
+	 * @param {LDisplayObject} objA LDisplayObject A
+	 * @param {LDisplayObject} objB LDisplayObject B
+	 * @param {Array} vecA reset the range of LDisplayObject A [width,height]
+	 * @param {Array} vecB reset the range of LDisplayObject B [width,height]
+	 * @return {Boolean} Returns true if hit
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>円として、二つのオブジェクトの衝突を検出する</p>
+	 * <p>オブジェクトを回転させた場合は，この関数は使えなくなります，LSpriteクラスのhitTestObjectを使ってください</p>
+	 * @method hitTestArc
+	 * @static
+	 * @param {LDisplayObject} objA オブジェクトA
+	 * @param {LDisplayObject} objB オブジェクトB
+	 * @param {Array} vecA オブジェクトAの範囲を再設定する配列 [width,height]
+	 * @param {Array} vecB オブジェクトBの範囲を再設定する配列 [width,height]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.hitTestArc = function (objA, objB, objAR, objBR) {
 		var rA = objA.getWidth() * 0.5
 		,rB = objB.getWidth() * 0.5
@@ -592,6 +805,54 @@ var LGlobal = ( function () {
 		,disy = yA + rA - yB - rB;
 		return disx * disx + disy * disy < (rA + rB) * (rA + rB);
 	};
+	/** @language chinese
+	 * <p>将两个对象看作矩形来检测碰撞，等同于 hitTest。</p>
+	 * <p>如果对象发生旋转，则不能使用此方法进行碰撞检测，请使用LSprite类的hitTestObject</p>
+	 * @method hitTestRect
+	 * @static
+	 * @param {LDisplayObject} objA 对象A
+	 * @param {LDisplayObject} objB 对象B
+	 * @param {Array} vecA 重新设置对象A的矩形范围 [width,height]
+	 * @param {Array} vecB 重新设置对象B的矩形范围 [width,height]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>HitTest two objects as rectangles, Equivalent to hitTest</p>
+	 * <p>If the object is rotated, you can not use this method for hitTest, please use the LSprite class's hitTestObject</p>
+	 * @method hitTestRect
+	 * @static
+	 * @param {LDisplayObject} objA LDisplayObject A
+	 * @param {LDisplayObject} objB LDisplayObject B
+	 * @param {Array} vecA reset the range of LDisplayObject A [width,height]
+	 * @param {Array} vecB reset the range of LDisplayObject B [width,height]
+	 * @return {Boolean} Returns true if hit
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>矩形として、二つのオブジェクトの衝突を検出する、hitTest と同等。</p>
+	 * <p>オブジェクトを回転させた場合は，この関数は使えなくなります，LSpriteクラスのhitTestObjectを使ってください</p>
+	 * @method hitTestRect
+	 * @static
+	 * @param {LDisplayObject} objA オブジェクトA
+	 * @param {LDisplayObject} objB オブジェクトB
+	 * @param {Array} vecA オブジェクトAの範囲を再設定する配列 [width,height]
+	 * @param {Array} vecB オブジェクトBの範囲を再設定する配列 [width,height]
+	 * @return {Boolean} 当たったらtrueを返す
+	 * @example
+	 * 	LGlobal.setFrameRate(1000/60);
+	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.hitTestRect = function (objA, objB, vecA, vecB) {
 		var wA = objA.getWidth()
 		,wB = objB.getWidth()
