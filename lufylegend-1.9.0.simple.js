@@ -412,8 +412,9 @@ var LGlobal = ( function () {
 	LGlobal.traceDebug = false;
 	LGlobal.displayState = NONE;
 	LGlobal.aspectRatio = NONE;
-	LGlobal.stage = null;
+	LGlobal.canvasObj = null;
 	LGlobal.canvas = null;
+	LGlobal.stage = null;
 	LGlobal.width = 0;
 	LGlobal.height = 0;
 	LGlobal.box2d = null;
@@ -479,7 +480,7 @@ var LGlobal = ( function () {
 			LEvent.addEventListener(document,LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
 		} else {
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclickPc);
+			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN, LGlobal.ll_mouseDown);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_MOVE, LGlobal.ll_mouseMove);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_UP, LGlobal.ll_mouseUp);
@@ -648,7 +649,7 @@ var LGlobal = ( function () {
 			LGlobal.mouseJoint_move(eve);
 		}
 	};
-	LGlobal.ll_mouseDbclickPc = function (e) {
+	LGlobal.ll_mouseDbclick = function (e) {
 		if (e.offsetX == null && e.layerX != null) {
 			e.offsetX = e.layerX;
 			e.offsetY = e.layerY;
@@ -1194,28 +1195,73 @@ var LObject = (function () {
 var LMatrix = (function () {
 	function LMatrix (a, b, c, d, tx, ty, u, v, w) {
 		var s = this;
-		s.a = a || 1;
-		s.b = b || 0;
-		s.u = u || 0;
-		s.c = c || 0;
-		s.d = d || 1;
-		s.v = v || 0;
-		s.tx = tx || 0;
-		s.ty = ty || 0;
-		s.w = w || 1;
+		s.a = 1;
+		s.b = 0;
+		s.u = 0;
+		s.c = 0;
+		s.d = 1;
+		s.v = 0;
+		s.tx = 0;
+		s.ty = 0;
+		s.w = 1;
+		if (typeof a != UNDEFINED) {
+			s.a = a;
+		}
+		if (typeof b != UNDEFINED) {
+			s.b = b;
+		}
+		if (typeof c != UNDEFINED) {
+			s.c = c;
+		}
+		if (typeof d != UNDEFINED) {
+			s.d = d;
+		}
+		if (typeof tx != UNDEFINED) {
+			s.tx = tx;
+		}
+		if (typeof ty != UNDEFINED) {
+			s.ty = ty;
+		}
+		if (typeof u != UNDEFINED) {
+			s.u = u;
+		}
+		if (typeof v != UNDEFINED) {
+			s.v = v;
+		}
+		if (typeof w != UNDEFINED) {
+			s.w = w;
+		}
 	}
 	LMatrix.prototype = {
 		setTo : function (a, b, c, d, tx, ty, u, v, w) {
 			var s = this;
-			s.a = a || s.a;
-			s.b = b || s.b;
-			s.u = u || s.u;
-			s.c = c || s.c;
-			s.d = d || s.d;
-			s.v = v || s.v;
-			s.tx = tx || s.tx;
-			s.ty = ty || s.ty;
-			s.w = w || s.w;
+			if (typeof a != UNDEFINED) {
+				s.a = a;
+			}
+			if (typeof b != UNDEFINED) {
+				s.b = b;
+			}
+			if (typeof c != UNDEFINED) {
+				s.c = c;
+			}
+			if (typeof d != UNDEFINED) {
+				s.d = d;
+			}
+			if (typeof tx != UNDEFINED) {
+				s.tx = tx;
+			}
+			if (typeof ty != UNDEFINED) {
+				s.ty = ty;
+			}
+			if (typeof u != UNDEFINED) {
+				s.u = u;
+			}
+			if (typeof v != UNDEFINED) {
+				s.v = v;
+			}
+			if (typeof w != UNDEFINED) {
+				s.w = w;
+			}
 			return s;
 		},
 		isIdentity : function () {

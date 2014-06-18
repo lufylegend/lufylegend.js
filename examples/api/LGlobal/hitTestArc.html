@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.hitTestArc</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800,480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var arcLayer1 = new LSprite();
+				arcLayer1.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+				addChild(arcLayer1);
+				var arcLayer2 = new LSprite();
+				arcLayer2.alpha = 0.5;
+				arcLayer2.x = 150;
+				arcLayer2.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+				addChild(arcLayer2);
+				var arcLayer3 = new LSprite();
+				arcLayer3.alpha = 0.5;
+				arcLayer3.x = 300;
+				arcLayer3.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+				addChild(arcLayer3);
+				//[100,100,100,0,2*Math.PI] vs [100,100,100,0,2*Math.PI]
+				trace(LGlobal.hitTestArc(arcLayer1,arcLayer2));//out:true
+				//[115,115,70,0,2*Math.PI] vs [115,115,70,0,2*Math.PI]
+				trace(LGlobal.hitTestArc(arcLayer2,arcLayer3,70,70));//out:false
+			}
+			</script>
+	</body>
+</html>

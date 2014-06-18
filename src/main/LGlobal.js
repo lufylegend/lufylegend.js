@@ -554,7 +554,17 @@ var LGlobal = ( function () {
 	 * @param {float} y coordinate-y of point
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var point1 = [100,100];
+	 * 	layer.graphics.drawArc(1,"#000000",[point1[0],point1[1],2,0,2*Math.PI]);
+	 * 	var point2 = [50,200];
+	 * 	layer.graphics.drawArc(1,"#000000",[point2[0],point2[1],2,0,2*Math.PI]);
+	 * 	trace(LGlobal.hitPolygon(vertices,point1[0],point1[1]));//out:true
+	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -568,7 +578,17 @@ var LGlobal = ( function () {
 	 * @param {float} y 检测点的y坐标
 	 * @return {Boolean} Returns true if hit
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var point1 = [100,100];
+	 * 	layer.graphics.drawArc(1,"#000000",[point1[0],point1[1],2,0,2*Math.PI]);
+	 * 	var point2 = [50,200];
+	 * 	layer.graphics.drawArc(1,"#000000",[point2[0],point2[1],2,0,2*Math.PI]);
+	 * 	trace(LGlobal.hitPolygon(vertices,point1[0],point1[1]));//out:true
+	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -582,7 +602,17 @@ var LGlobal = ( function () {
 	 * @param {float} y 点の座標y
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var point1 = [100,100];
+	 * 	layer.graphics.drawArc(1,"#000000",[point1[0],point1[1],2,0,2*Math.PI]);
+	 * 	var point2 = [50,200];
+	 * 	layer.graphics.drawArc(1,"#000000",[point2[0],point2[1],2,0,2*Math.PI]);
+	 * 	trace(LGlobal.hitPolygon(vertices,point1[0],point1[1]));//out:true
+	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -618,7 +648,17 @@ var LGlobal = ( function () {
 	 * @param {Array} verticesB 多边形B的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var vertices1 = [[120,60],[250,150],[100,100]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices1);
+	 * 	var vertices2 = [[70,200],[100,160],[200,300]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices2);
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices1));//out:true
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -631,7 +671,17 @@ var LGlobal = ( function () {
 	 * @param {Array} vertices PolygonB[[x1,y1],[x2,y2],[x3,y3],......]
 	 * @return {Boolean} Returns true if hit
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var vertices1 = [[120,60],[250,150],[100,100]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices1);
+	 * 	var vertices2 = [[70,200],[100,160],[200,300]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices2);
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices1));//out:true
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -644,7 +694,17 @@ var LGlobal = ( function () {
 	 * @param {Array} verticesB 多角形Bの頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var vertices1 = [[120,60],[250,150],[100,100]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices1);
+	 * 	var vertices2 = [[70,200],[100,160],[200,300]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices2);
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices1));//out:true
+	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -678,10 +738,20 @@ var LGlobal = ( function () {
 	 * @method hitTestPolygonArc
 	 * @static
 	 * @param {Array} vertices 多边形的顶点数组[[x1,y1],[x2,y2],[x3,y3],......]
-	 * @param {Array} circle 圆[中心坐标x,中心坐标y,半径]
+	 * @param {Array} circle 圆[中心坐标x,中心坐标y,半径,半径*半径]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var circle1 = [170,100,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle1[0],circle1[1],circle1[2],0,2*Math.PI]);
+	 * 	var circle2 = [50,200,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle2[0],circle2[1],circle2[2],0,2*Math.PI]);
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle1));//out:true
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -691,10 +761,20 @@ var LGlobal = ( function () {
 	 * @method hitTestPolygonArc
 	 * @static
 	 * @param {Array} vertices Polygon[[x1,y1],[x2,y2],[x3,y3],......]
-	 * @param {Array} circle circle[x,y,radius]
+	 * @param {Array} circle circle[x,y,radius,radius*radius]
 	 * @return {Boolean} Returns true if hit
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var circle1 = [170,100,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle1[0],circle1[1],circle1[2],0,2*Math.PI]);
+	 * 	var circle2 = [50,200,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle2[0],circle2[1],circle2[2],0,2*Math.PI]);
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle1));//out:true
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -704,10 +784,20 @@ var LGlobal = ( function () {
 	 * @method hitTestPolygonArc
 	 * @static
 	 * @param {Array} vertices 多角形の頂点の配列[[x1,y1],[x2,y2],[x3,y3],......]
-	 * @param {Array} circle 円[中心の座標x,中心の座標y,半径]
+	 * @param {Array} circle 円[中心の座標x,中心の座標y,半径,半径*半径]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var layer = new LSprite();
+	 * 	addChild(layer);
+	 * 	var vertices = [[50,100],[150,50],[100,150]];
+	 * 	layer.graphics.drawVertices(1,"#000000",vertices);
+	 * 	var circle1 = [170,100,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle1[0],circle1[1],circle1[2],0,2*Math.PI]);
+	 * 	var circle2 = [50,200,50,2500];
+	 * 	layer.graphics.drawArc(1,"#000000",[circle2[0],circle2[1],circle2[2],0,2*Math.PI]);
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle1));//out:true
+	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -715,7 +805,7 @@ var LGlobal = ( function () {
 	LGlobal.hitTestPolygonArc = function (vs, arc) {
 		if (LGlobal.hitPolygon(vs, arc[0], arc[1])) {
 			return true;
-		}	
+		}
 		var i, j, l, p1, p2, v1, v2, ext, inn, l2;
 		for (i = 0, l = vs.length; i < l; i++) {
 			j = i < l - 1 ? i + 1 : 0;
@@ -743,11 +833,28 @@ var LGlobal = ( function () {
 	 * @static
 	 * @param {LDisplayObject} objA 对象A
 	 * @param {LDisplayObject} objB 对象B
-	 * @param {Array} vecA 重新设置对象A的矩形范围 [width,height]
-	 * @param {Array} vecB 重新设置对象B的矩形范围 [width,height]
+	 * @param {float} objAR 新的半径
+	 * @param {float} objBR 新的半径
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var arcLayer1 = new LSprite();
+	 * 	arcLayer1.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(arcLayer1);
+	 * 	var arcLayer2 = new LSprite();
+	 * 	arcLayer2.alpha = 0.5;
+	 * 	arcLayer2.x = 150;
+	 * 	arcLayer2.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(arcLayer2);
+	 * 	var arcLayer3 = new LSprite();
+	 * 	arcLayer3.alpha = 0.5;
+	 * 	arcLayer3.x = 300;
+	 * 	arcLayer3.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(arcLayer3);
+	 * 	//[100,100,100,0,2*Math.PI] vs [100,100,100,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(arcLayer1,arcLayer2));//out:true
+	 * 	//[115,115,70,0,2*Math.PI] vs [115,115,70,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(arcLayer2,arcLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -759,11 +866,28 @@ var LGlobal = ( function () {
 	 * @static
 	 * @param {LDisplayObject} objA LDisplayObject A
 	 * @param {LDisplayObject} objB LDisplayObject B
-	 * @param {Array} vecA reset the range of LDisplayObject A [width,height]
-	 * @param {Array} vecB reset the range of LDisplayObject B [width,height]
+	 * @param {float} objAR a new Radius
+	 * @param {float} objBR a new Radius
 	 * @return {Boolean} Returns true if hit
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var rectLayer1 = new LSprite();
+	 * 	rectLayer1.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer1);
+	 * 	var rectLayer2 = new LSprite();
+	 * 	rectLayer2.alpha = 0.5;
+	 * 	rectLayer2.x = 150;
+	 * 	rectLayer2.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer2);
+	 * 	var rectLayer3 = new LSprite();
+	 * 	rectLayer3.alpha = 0.5;
+	 * 	rectLayer3.x = 300;
+	 * 	rectLayer3.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer3);
+	 * 	//[100,100,100,0,2*Math.PI] vs [100,100,100,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(rectLayer1,rectLayer2));//out:true
+	 * 	//[115,115,70,0,2*Math.PI] vs [115,115,70,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(rectLayer2,rectLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -775,11 +899,28 @@ var LGlobal = ( function () {
 	 * @static
 	 * @param {LDisplayObject} objA オブジェクトA
 	 * @param {LDisplayObject} objB オブジェクトB
-	 * @param {Array} vecA オブジェクトAの範囲を再設定する配列 [width,height]
-	 * @param {Array} vecB オブジェクトBの範囲を再設定する配列 [width,height]
+	 * @param {float} objAR 新しい半径
+	 * @param {float} objBR 新しい半径
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var rectLayer1 = new LSprite();
+	 * 	rectLayer1.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer1);
+	 * 	var rectLayer2 = new LSprite();
+	 * 	rectLayer2.alpha = 0.5;
+	 * 	rectLayer2.x = 150;
+	 * 	rectLayer2.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer2);
+	 * 	var rectLayer3 = new LSprite();
+	 * 	rectLayer3.alpha = 0.5;
+	 * 	rectLayer3.x = 300;
+	 * 	rectLayer3.graphics.drawArc(1,"#000000",[100,100,100,0,2*Math.PI]);
+	 * 	addChild(rectLayer3);
+	 * 	//[100,100,100,0,2*Math.PI] vs [100,100,100,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(rectLayer1,rectLayer2));//out:true
+	 * 	//[115,115,70,0,2*Math.PI] vs [115,115,70,0,2*Math.PI]
+	 * 	trace(LGlobal.hitTestArc(rectLayer2,rectLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -816,7 +957,24 @@ var LGlobal = ( function () {
 	 * @param {Array} vecB 重新设置对象B的矩形范围 [width,height]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var rectLayer1 = new LSprite();
+	 * 	rectLayer1.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#FF0000");
+	 * 	addChild(rectLayer1);
+	 * 	var rectLayer2 = new LSprite();
+	 * 	rectLayer2.alpha = 0.5;
+	 * 	rectLayer2.x = 150;
+	 * 	rectLayer2.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#00FF00");
+	 * 	addChild(rectLayer2);
+	 * 	var rectLayer3 = new LSprite();
+	 * 	rectLayer3.alpha = 0.5;
+	 * 	rectLayer3.x = 300;
+	 * 	rectLayer3.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#0000FF");
+	 * 	addChild(rectLayer3);
+	 * 	//[0,0,200,200] vs [0,0,200,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer1,rectLayer2));//out:true
+	 * 	//[30,0,140,200] vs [30,0,140,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -832,7 +990,24 @@ var LGlobal = ( function () {
 	 * @param {Array} vecB reset the range of LDisplayObject B [width,height]
 	 * @return {Boolean} Returns true if hit
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var rectLayer1 = new LSprite();
+	 * 	rectLayer1.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#FF0000");
+	 * 	addChild(rectLayer1);
+	 * 	var rectLayer2 = new LSprite();
+	 * 	rectLayer2.alpha = 0.5;
+	 * 	rectLayer2.x = 150;
+	 * 	rectLayer2.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#00FF00");
+	 * 	addChild(rectLayer2);
+	 * 	var rectLayer3 = new LSprite();
+	 * 	rectLayer3.alpha = 0.5;
+	 * 	rectLayer3.x = 300;
+	 * 	rectLayer3.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#0000FF");
+	 * 	addChild(rectLayer3);
+	 * 	//[0,0,200,200] vs [0,0,200,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer1,rectLayer2));//out:true
+	 * 	//[30,0,140,200] vs [30,0,140,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -848,7 +1023,24 @@ var LGlobal = ( function () {
 	 * @param {Array} vecB オブジェクトBの範囲を再設定する配列 [width,height]
 	 * @return {Boolean} 当たったらtrueを返す
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LGlobal.setDebug(true);
+	 * 	var rectLayer1 = new LSprite();
+	 * 	rectLayer1.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#FF0000");
+	 * 	addChild(rectLayer1);
+	 * 	var rectLayer2 = new LSprite();
+	 * 	rectLayer2.alpha = 0.5;
+	 * 	rectLayer2.x = 150;
+	 * 	rectLayer2.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#00FF00");
+	 * 	addChild(rectLayer2);
+	 * 	var rectLayer3 = new LSprite();
+	 * 	rectLayer3.alpha = 0.5;
+	 * 	rectLayer3.x = 300;
+	 * 	rectLayer3.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#0000FF");
+	 * 	addChild(rectLayer3);
+	 * 	//[0,0,200,200] vs [0,0,200,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer1,rectLayer2));//out:true
+	 * 	//[30,0,140,200] vs [30,0,140,200]
+	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
