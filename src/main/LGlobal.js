@@ -76,7 +76,55 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.stage = null;
+	/** @language chinese
+	 * <p>游戏初始化时设定的画面的宽，即canvas的宽。</p>
+	 * @property LGlobal.width
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>game screen's width(canvas's width)</p>
+	 * @property LGlobal.width
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>ゲーム初期化する時の画面の幅、canvasの幅と同じです。</p>
+	 * @property LGlobal.width
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.width = 0;
+	/** @language chinese
+	 * <p>游戏初始化时设定的画面的高，即canvas的高。</p>
+	 * @property LGlobal.height
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>game screen's height(canvas's height)</p>
+	 * @property LGlobal.height
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>ゲーム初期化する時の画面の高さ、canvasの高さと同じです。</p>
+	 * @property LGlobal.height
+	 * @type int
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.height = 0;
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
@@ -489,7 +537,23 @@ var LGlobal = ( function () {
 	 * @param {int} col 列数
 	 * @return {Boolean} 2维数组
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("player.png", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata(event){
+	 * 		var backLayer = new LSprite();
+	 * 		addChild(backLayer);
+	 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+	 * 		var data = new LBitmapData(event.target,0,0,120,210);
+	 * 		player = new LAnimation(backLayer,data,list);
+	 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+	 * 	}
+	 * 	function onframe(){
+	 * 		player.onframe();
+	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">测试链接</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -504,7 +568,23 @@ var LGlobal = ( function () {
 	 * @param {int} col cols
 	 * @return {Boolean} 2-dimensional arrays
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("player.png", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata(event){
+	 * 		var backLayer = new LSprite();
+	 * 		addChild(backLayer);
+	 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+	 * 		var data = new LBitmapData(event.target,0,0,120,210);
+	 * 		player = new LAnimation(backLayer,data,list);
+	 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+	 * 	}
+	 * 	function onframe(){
+	 * 		player.onframe();
+	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">Try it »</a></p>
 	 * @public
 	 * @since 1.0.0
@@ -519,7 +599,23 @@ var LGlobal = ( function () {
 	 * @param {int} col 列数
 	 * @return {Boolean} 2次元の配列
 	 * @example
-	 * 	LGlobal.setFrameRate(1000/60);
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("player.png", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata(event){
+	 * 		var backLayer = new LSprite();
+	 * 		addChild(backLayer);
+	 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
+	 * 		var data = new LBitmapData(event.target,0,0,120,210);
+	 * 		player = new LAnimation(backLayer,data,list);
+	 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+	 * 	}
+	 * 	function onframe(){
+	 * 		player.onframe();
+	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
 	 * @since 1.0.0
