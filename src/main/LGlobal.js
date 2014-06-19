@@ -45,6 +45,33 @@ var LGlobal = ( function () {
 	LGlobal.FULL_SCREEN = "full_screen";
 	LGlobal.traceDebug = false;
 	LGlobal.displayState = NONE;
+	/** @language chinese
+	 * <p>将舞台设置成使用指定长宽比的方向。可以设置为下列值</p>
+	 * <p>LANDSCAPE、PORTRAIT。</p>
+	 * @property LGlobal.aspectRatio
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Sets the stage to an orientation with the specified aspect ratio.</p>
+	 * <p>LANDSCAPE、PORTRAIT</p>
+	 * @property LGlobal.aspectRatio
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>指定された縦横比になるように、ステージの方向を設定します。下記の値を設定することができます。</p>
+	 * <p>LANDSCAPE、PORTRAIT</p>
+	 * @property LGlobal.aspectRatio
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.aspectRatio = NONE;
 	LGlobal.canvasObj = null;
 	LGlobal.canvas = null;
@@ -129,20 +156,369 @@ var LGlobal = ( function () {
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
+	/** @language chinese
+	 * <p>移动网页中，是否禁止滚屏，默认为true(禁止)。</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Mobile web page, Sets scroll gestures to disabled., default true. (scroll disabled)</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>モバイルページのスクロールを禁止するかどうか設定する。ディフォルトは true。（スクロール禁止）</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
+	/** @language chinese
+	 * <p>一个 LStageScaleMode 类中指定要使用哪种缩放模式的值。</p>
+	 * @property LGlobal.stageScale
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">测试链接</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>A value from the LStageScaleMode class that specifies which scale mode to use. The following are valid values:</p>
+	 * @property LGlobal.stageScale
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">Try it »</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>使用する拡大 / 縮小モードを指定する LStageScaleMode クラスの値です。使用できる値は次のとおりです。</p>
+	 * @property LGlobal.stageScale
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.stageScale = "noScale";
+	/** @language chinese
+	 * <p>一个 LStageAlign 类中指定舞台在浏览器中的对齐方式的值。</p>
+	 * @property LGlobal.align
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">测试链接</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>A value from the StageAlign class that specifies the alignment of the stage in the browser.</p>
+	 * @property LGlobal.align
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">Try it »</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>ブラウザーでのステージの配置を指定する StageAlign クラスの値です。</p>
+	 * @property LGlobal.align
+	 * @type String
+	 * @static
+	 * @example
+	 * 	LInit(50, "legend", 240, 240, main);
+	 * 	function main () {
+	 * 		LGlobal.align = LStageAlign.BOTTOM_MIDDLE;
+	 * 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	 * 		LSystem.screen(LStage.FULL_SCREEN);
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata (event) {
+	 * 		var bitmapdata = new LBitmapData(event.target);  
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.align = "M";
+	/** @language chinese
+	 * <p>当前浏览器是否是移动浏览器。等同于 LGlobal.canTouch。</p>
+	 * @property LGlobal.mobile
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Whether the current browser is a mobile browser. Equivalent to LGlobal.canTouch.</p>
+	 * @property LGlobal.mobile
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>現在のブラウザは、モバイルブラウザであるかどうか。LGlobal.canTouch と同等。</p>
+	 * @property LGlobal.mobile
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	LGlobal.mobile = false;
 	LGlobal.canTouch = false;
+	/** @language chinese
+	 * <p>当前浏览器环境。可以是下面中的一个</p>
+	 * <p>OS_IPHONE，OS_IPOD，OS_IPAD，OS_ANDROID，OS_PC。</p>
+	 * @property LGlobal.os
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Browser environment. one of the following constants.</p>
+	 * <p>OS_IPHONE，OS_IPOD，OS_IPAD，OS_ANDROID，OS_PC。</p>
+	 * @property LGlobal.os
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>現在のブラウザ環境。下記の一つになります。</p>
+	 * <p>OS_IPHONE，OS_IPOD，OS_IPAD，OS_ANDROID，OS_PC。</p>
+	 * @property LGlobal.os
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.os = OS_PC;
+	/** @language chinese
+	 * <p>当前浏览器是否为IOS。</p>
+	 * @property LGlobal.ios
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Whether the IOS browser.</p>
+	 * @property LGlobal.ios
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>現在のブラウザはIOSかどうか。</p>
+	 * @property LGlobal.ios
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.ios = false;
+	/** @language chinese
+	 * <p>当前浏览器是否为Android。</p>
+	 * @property LGlobal.android
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Whether the Android browser.</p>
+	 * @property LGlobal.android
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>現在のブラウザはAndroidかどうか。</p>
+	 * @property LGlobal.android
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.android = false;
 	LGlobal.android_new = false;
+	/** @language chinese
+	 * <p>游戏画面的背景颜色。</p>
+	 * @property LGlobal.backgroundColor
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>The background color of the game screen.</p>
+	 * @property LGlobal.backgroundColor
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>ゲーム画面の背景色です。</p>
+	 * @property LGlobal.backgroundColor
+	 * @type String
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.backgroundColor = null;
+	/** @language chinese
+	 * <p>LDisplayObject对象从舞台上被移除的时候，是否将这个对象整个清空。</p>
+	 * @property LGlobal.destroy
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>When a LDisplayObject object be removed. Whether the object to empty.</p>
+	 * @property LGlobal.destroy
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>LDisplayObjectオブジェクトをremoveされた時、オブジェクトをクリアするかどうか。</p>
+	 * @property LGlobal.destroy
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.destroy = true;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
+	/** @language chinese
+	 * <p>LDisplayObject对象从舞台上被移除的时候，是否将这个对象整个清空。</p>
+	 * <p>如果游戏不是透明背景的话，可以将LGlobal.keepClear的值设置为false来提高游戏效率。</p>
+	 * @property LGlobal.keepClear
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Whether clear canvas in each frame.</p>
+	 * <p>If the game is not a transparent background, you can set the value to false.</p>
+	 * @property LGlobal.keepClear
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>フレームごとにcanvasをクリアするかどうか。</p>
+	 * <p>もしゲーム背景が透明ではなければ、canvasをクリアしないほうがパフォーマンスがいいですから、LGlobal.keepClear=falseに設定してください。</p>
+	 * @property LGlobal.keepClear
+	 * @type Boolean
+	 * @default true
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.keepClear = true;
 	LGlobal.top = 0;
 	LGlobal.left = 0;
@@ -170,7 +546,56 @@ var LGlobal = ( function () {
 				LGlobal.android_new = true;
 			}
 		}
+		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
+	/** @language chinese
+	 * <p>设定是否开启测试模式。</p>
+	 * <p>＊当游戏发布的时候，必须关闭测试模式。</p>
+	 * @method setDebug
+	 * @static
+	 * @param {Boolean} value 是否开启测试模式
+	 * @example
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		LGlobal.setDebug(true);
+	 * 		trace("test01", "test02", "test03");
+	 * 	}	
+	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language english
+	 * <p>Setting the debug mode is on.</p>
+	 * <p>＊When the game is released, you must set the debug mode off.</p>
+	 * @method setDebug
+	 * @static
+	 * @param {Boolean} value the debug mode on or off
+	 * @example
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		LGlobal.setDebug(true);
+	 * 		trace("test01", "test02", "test03");
+	 * 	}	
+	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">Try it »</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
+	/** @language japanese
+	 * <p>デバッグモードを起動するかどうか。</p>
+	 * <p>＊ゲームをリリースする時、デバッグモードを閉じないと行けないです。</p>
+	 * @method setDebug
+	 * @static
+	 * @param {Boolean} value デバッグモードを起動するかどうか
+	 * @example
+	 * 	LInit(50, "legend", 800, 480, main);
+	 * 	function main () {
+	 * 		LGlobal.setDebug(true);
+	 * 		trace("test01", "test02", "test03");
+	 * 	}	
+	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">実際のサンプルを見る</a></p>
+	 * @public
+	 * @since 1.0.0
+	 */
 	LGlobal.setDebug = function (v) {
 		LGlobal.traceDebug = v; 
 	};
@@ -464,37 +889,69 @@ var LGlobal = ( function () {
 			break;
 		}
 	};
-	LGlobal.horizontalError = function () {
-		var b = new LSprite(), c = '#cccccc', d = '#000000';
-		b.graphics.drawRoundRect(4, c, [5, 5, 70, 100, 5]);
-		b.graphics.drawRect(4, c, [30, 15, 20, 10]);
-		b.graphics.drawRoundRect(4, d, [125, 25, 100, 70, 5]);
-		b.graphics.drawRect(4, d, [200, 50, 10, 20]);
-		b.graphics.drawRect(4, d, [80, 50, 20, 20]);
-		b.graphics.drawVertices(4, d, [[100, 40], [120, 60], [100, 80]]);
+	LGlobal._ll_mobile = function () {
+		var w1 = LGlobal.width * 0.3, h1 = w1 * 1.5, s = LGlobal.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15, 
+		sx = w1 * 0.3, sh = h1 * 0.20, c = '#cccccc', d = '#000000', f = '#ffffff', h = '#ff0000', b, w1, h1, m, m1, n, v;
+		b = new LSprite();
 		addChild(b);
-		var f = function () {
+		w1 = LGlobal.width * 0.3, h1 = w1 * 1.5;
+		b.graphics.drawRoundRect(1, d, [s, s, w1, h1, s],true,c);
+		b.graphics.drawRoundRect(1, d, [s + ss, s + ss, w1 - ss * 2, h1 - ss * 2, s], true, d);
+		b.graphics.drawRect(1, f, [s + sm, s + sh, w1 - sm * 2, h1 - sh * 2], true, f);
+		b.graphics.drawArc(1, f, [s + w1 * 0.5, s + h1 - ss * 3.5, ss * 1.5, 0, 2 * Math.PI]);
+		b.graphics.drawRoundRect(1, f, [s + sx, s + sm, w1 - sx * 2, ss, ss * 0.5]);
+		
+		m = new LSprite();
+		m.x = -(w1 - sm * 2) * 0.5;
+		m.y = -ss * 0.5;
+		m.graphics.drawRect(1, h, [0, 0, w1 - sm * 2, ss], true, h);
+		m1 = new LSprite();
+		m1.y = -(w1 - sm * 2) * 0.5;
+		m1.x = -ss * 0.5;
+		m1.graphics.drawRect(1, h, [0, 0, ss, w1 - sm * 2], true, h);
+		n = new LSprite();
+		n.x = s + sx + (w1 - sx * 2) * 0.5;
+		n.y = s + sh + (h1 - sh * 2) * 0.5;
+		n.rotate = 45;
+		n.addChild(m);
+		n.addChild(m1);
+		b.addChild(n);
+		
+		v = new LSprite();
+		v.graphics.drawVertices(2, d, [[0, 0], [sm, sm ], [0, sm * 2]], true, c);
+		v.x = s * 1.5 + h1;
+		v.y = s * 1.5 + h1 * 0.5;
+		addChild(v);
+		b.arrow = v;
+		var fn = function () {
 			setTimeout(function () {
 				location.href = location.href;
 			}, 100);
 		};
-		window.onorientationchange = f;
+		window.onorientationchange = fn;
+		return b;
 	};
 	LGlobal.verticalError = function () {
-		var b = new LSprite(), c = '#cccccc', d = '#000000';
-		b.graphics.drawRoundRect(4, c, [5, 25, 100, 70, 5]);
-		b.graphics.drawRect(4, c, [80, 50, 10, 20]);
-		b.graphics.drawRoundRect(4, d, [155, 5, 70, 100, 5]);
-		b.graphics.drawRect(4, d, [180, 15, 20, 10]);
-		b.graphics.drawRect(4, d, [110, 50, 20, 20]);
-		b.graphics.drawVertices(4, d, [[130, 40], [150, 60], [130, 80]]);
-		addChild(b);
-		var f = function () {
-			setTimeout(function () {
-				location.href = location.href;
-			}, 100);
-		};
-		window.onorientationchange = f;
+		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var b = LGlobal._ll_mobile();
+		var d = b.clone();
+		d.getChildAt(0).visible = false;
+		d.x = LGlobal.width * 0.5 + s;
+		addChild(d);
+		b.rotate = 90;
+		b.x = LGlobal.width * 0.5 + s;
+		b.y = w1 * 0.5;
+	};
+	LGlobal.horizontalError = function () {
+		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var b = LGlobal._ll_mobile();
+		var d = b.clone();
+		d.getChildAt(0).visible = false;
+		d.rotate = 90;
+		d.x = LGlobal.width - s;
+		d.y = w1 * 0.5;
+		addChild(d);
+		b.arrow.x = s * 1.5 + w1;
 	};
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {

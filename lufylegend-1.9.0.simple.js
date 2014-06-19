@@ -425,6 +425,7 @@ var LGlobal = ( function () {
 	LGlobal.dragList = new Array();
 	LGlobal.stageScale = "noScale";
 	LGlobal.align = "M";
+	LGlobal.mobile = false;
 	LGlobal.canTouch = false;
 	LGlobal.os = OS_PC;
 	LGlobal.ios = false;
@@ -461,6 +462,7 @@ var LGlobal = ( function () {
 				LGlobal.android_new = true;
 			}
 		}
+		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
 	LGlobal.setDebug = function (v) {
 		LGlobal.traceDebug = v; 
@@ -755,37 +757,67 @@ var LGlobal = ( function () {
 			break;
 		}
 	};
-	LGlobal.horizontalError = function () {
-		var b = new LSprite(), c = '#cccccc', d = '#000000';
-		b.graphics.drawRoundRect(4, c, [5, 5, 70, 100, 5]);
-		b.graphics.drawRect(4, c, [30, 15, 20, 10]);
-		b.graphics.drawRoundRect(4, d, [125, 25, 100, 70, 5]);
-		b.graphics.drawRect(4, d, [200, 50, 10, 20]);
-		b.graphics.drawRect(4, d, [80, 50, 20, 20]);
-		b.graphics.drawVertices(4, d, [[100, 40], [120, 60], [100, 80]]);
+	LGlobal._ll_mobile = function () {
+		var w1 = LGlobal.width * 0.3, h1 = w1 * 1.5, s = LGlobal.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15, 
+		sx = w1 * 0.3, sh = h1 * 0.20, c = '#cccccc', d = '#000000', f = '#ffffff', h = '#ff0000', b, w1, h1, m, m1, n, v;
+		b = new LSprite();
 		addChild(b);
-		var f = function () {
+		w1 = LGlobal.width * 0.3, h1 = w1 * 1.5;
+		b.graphics.drawRoundRect(1, d, [s, s, w1, h1, s],true,c);
+		b.graphics.drawRoundRect(1, d, [s + ss, s + ss, w1 - ss * 2, h1 - ss * 2, s], true, d);
+		b.graphics.drawRect(1, f, [s + sm, s + sh, w1 - sm * 2, h1 - sh * 2], true, f);
+		b.graphics.drawArc(1, f, [s + w1 * 0.5, s + h1 - ss * 3.5, ss * 1.5, 0, 2 * Math.PI]);
+		b.graphics.drawRoundRect(1, f, [s + sx, s + sm, w1 - sx * 2, ss, ss * 0.5]);
+		m = new LSprite();
+		m.x = -(w1 - sm * 2) * 0.5;
+		m.y = -ss * 0.5;
+		m.graphics.drawRect(1, h, [0, 0, w1 - sm * 2, ss], true, h);
+		m1 = new LSprite();
+		m1.y = -(w1 - sm * 2) * 0.5;
+		m1.x = -ss * 0.5;
+		m1.graphics.drawRect(1, h, [0, 0, ss, w1 - sm * 2], true, h);
+		n = new LSprite();
+		n.x = s + sx + (w1 - sx * 2) * 0.5;
+		n.y = s + sh + (h1 - sh * 2) * 0.5;
+		n.rotate = 45;
+		n.addChild(m);
+		n.addChild(m1);
+		b.addChild(n);
+		v = new LSprite();
+		v.graphics.drawVertices(2, d, [[0, 0], [sm, sm ], [0, sm * 2]], true, c);
+		v.x = s * 1.5 + h1;
+		v.y = s * 1.5 + h1 * 0.5;
+		addChild(v);
+		b.arrow = v;
+		var fn = function () {
 			setTimeout(function () {
 				location.href = location.href;
 			}, 100);
 		};
-		window.onorientationchange = f;
+		window.onorientationchange = fn;
+		return b;
 	};
 	LGlobal.verticalError = function () {
-		var b = new LSprite(), c = '#cccccc', d = '#000000';
-		b.graphics.drawRoundRect(4, c, [5, 25, 100, 70, 5]);
-		b.graphics.drawRect(4, c, [80, 50, 10, 20]);
-		b.graphics.drawRoundRect(4, d, [155, 5, 70, 100, 5]);
-		b.graphics.drawRect(4, d, [180, 15, 20, 10]);
-		b.graphics.drawRect(4, d, [110, 50, 20, 20]);
-		b.graphics.drawVertices(4, d, [[130, 40], [150, 60], [130, 80]]);
-		addChild(b);
-		var f = function () {
-			setTimeout(function () {
-				location.href = location.href;
-			}, 100);
-		};
-		window.onorientationchange = f;
+		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var b = LGlobal._ll_mobile();
+		var d = b.clone();
+		d.getChildAt(0).visible = false;
+		d.x = LGlobal.width * 0.5 + s;
+		addChild(d);
+		b.rotate = 90;
+		b.x = LGlobal.width * 0.5 + s;
+		b.y = w1 * 0.5;
+	};
+	LGlobal.horizontalError = function () {
+		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var b = LGlobal._ll_mobile();
+		var d = b.clone();
+		d.getChildAt(0).visible = false;
+		d.rotate = 90;
+		d.x = LGlobal.width - s;
+		d.y = w1 * 0.5;
+		addChild(d);
+		b.arrow.x = s * 1.5 + w1;
 	};
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {
@@ -889,7 +921,7 @@ var LGlobal = ( function () {
 	LGlobal.hitTestPolygonArc = function (vs, arc) {
 		if (LGlobal.hitPolygon(vs, arc[0], arc[1])) {
 			return true;
-		}	
+		}
 		var i, j, l, p1, p2, v1, v2, ext, inn, l2;
 		for (i = 0, l = vs.length; i < l; i++) {
 			j = i < l - 1 ? i + 1 : 0;
