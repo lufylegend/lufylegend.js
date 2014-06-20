@@ -1187,6 +1187,8 @@ function base (d, b, a) {
 	if(d.constructor.name == "Object"){
 		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
+	d.__ll__parent__ = d.__ll__parent__ || [];
+	d.__ll__parent__.push(b.prototype);
 	for (p in o) {
 		h[p] = 1;
 	}
@@ -1194,7 +1196,6 @@ function base (d, b, a) {
 		if (!h[p]) {
 			o[p] = b.prototype[p];
 		}
-		o[p][SUPER] = b.prototype;
 	}
 	if (o.toString == Object.prototype.toString) {
 		o.toString = LObject.prototype.toString;
@@ -1216,7 +1217,18 @@ var LObject = (function () {
 			if (!f_n || !args) {
 				return;
 			}
-			return args.callee[SUPER][f_n].apply(this, args);
+			var s = this, init = false, r;
+			if (typeof s.__ll__parent_call == "undefined") {
+				init = true;
+				s.__ll__parent_call = 0;
+			} else {
+				s.__ll__parent_call++;
+			}
+			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
+			if (init) {
+				delete s.__ll__parent_call;
+			}
+			return r;
 		},
 		toString : function () {
 			return "[object " + this.type + "]";
