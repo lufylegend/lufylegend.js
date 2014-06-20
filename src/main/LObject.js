@@ -159,7 +159,18 @@ var LObject = (function () {
 			if (!f_n || !args) {
 				return;
 			}
-			return args.callee[SUPER][f_n].apply(this, args);
+			var s = this, init = false, r;
+			if (typeof s.__ll__parent_call == "undefined") {
+				init = true;
+				s.__ll__parent_call = 0;
+			} else {
+				s.__ll__parent_call++;
+			}
+			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
+			if (init) {
+				delete s.__ll__parent_call;
+			}
+			return r;
 		},
 		toString : function () {
 			return "[object " + this.type + "]";
