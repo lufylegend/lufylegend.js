@@ -166,6 +166,9 @@ var LObject = (function () {
 			} else {
 				s.__ll__parent_call++;
 			}
+			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+				return false;
+			}
 			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			if (init) {
 				delete s.__ll__parent_call;

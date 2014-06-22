@@ -19,7 +19,7 @@ function main () {
 	loader.load("face.jpg", "bitmapData");
 }
 function loadBitmapdata (event) {
-	var bitmapData = new LBitmapData(event.currentTarget);//width:240,height:240
+	var bitmapData = new LBitmapData(event.target);//width:240,height:240
 	var bitmap01 = new LBitmap(bitmapData);
 	var layer01 = new LSprite();
 	addChild(layer01);

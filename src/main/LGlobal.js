@@ -73,8 +73,85 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.aspectRatio = NONE;
+	/** @language chinese
+	 * <p><canvas> 标签。</p>
+	 * @property LGlobal.canvasObj
+	 * @type HTML elements
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p><canvas> Tag.</p>
+	 * @property LGlobal.canvasObj
+	 * @type HTML elements
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p><canvas> タグ。</p>
+	 * @property LGlobal.canvasObj
+	 * @type HTML elements
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.canvasObj = null;
+	/** @language chinese
+	 * <p>context 对象。</p>
+	 * @property LGlobal.canvasObj
+	 * @type CanvasRenderingContext2D
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>context object.</p>
+	 * @property LGlobal.canvasObj
+	 * @type CanvasRenderingContext2D
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>context タグ。</p>
+	 * @property LGlobal.canvasObj
+	 * @type CanvasRenderingContext2D
+	 * @static
+	 * @since 1.9.0
+	 * @public
+	 */
 	LGlobal.canvas = null;
+	/** @language chinese
+	 * <p>当设备支持Web Audio Api的时候，是否使用Web Audio Api来播放音频。</p>
+	 * @property LGlobal.webAudio
+	 * @type Boolean
+	 * @static
+	 * @default true
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>If the device supports Web Audio Api, whether to use the Web Audio Api to play audio.</p>
+	 * @property LGlobal.webAudio
+	 * @type Boolean
+	 * @static
+	 * @default true
+	 * @since 1.9.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>Web Audio Apiで音声を再生できる場合、Web Audio Apiを利用するかどうか。</p>
+	 * @property LGlobal.webAudio
+	 * @type Boolean
+	 * @static
+	 * @default true
+	 * @since 1.9.0
+	 * @public
+	 */
+	LGlobal.webAudio = true;
+	LGlobal.objectIndex = 1;
 	/** @language chinese
 	 * <p>一个LSprite对象，所有的DisplayObject对象的最底层。</p>
 	 * <p>除非做功能扩展，否则不推荐直接将对象加载到LGlobal.stage上。</p>

@@ -133,16 +133,7 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				length = s._eventList.length;
-				for (i = 0; i < length; i++) {
-					if (!s._eventList[i]) {
-						continue;
-					}
-					if (type == s._eventList[i].type && s._eventList[i].listener == listener) {
-						s._eventList.splice(i, 1);
-						return;
-					}
-				}
+				return s.callParent("removeEventListener",arguments);
 			}
 		},
 		removeAllEventListener : function () {
@@ -174,15 +165,7 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				length = s._eventList.length;
-				for (i = 0; i < length; i++) {
-					if (!s._eventList[i]) {
-						continue;
-					}
-					if (type == s._eventList[i].type) {
-						return true;
-					}
-				}
+				return s.callParent("hasEventListener",arguments);
 			}
 			return false;
 		}

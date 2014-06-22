@@ -16,11 +16,11 @@
 				loader.load("lufylegend.js.png", "bitmapData");
 			}
 			function loadBitmapdata (event) {
-				var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+				var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 				var bitmap1 = new LBitmap(bitmapdata1);
 				addChild(bitmap1);
 				
-				var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+				var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 				bitmapdata2.setCoordinate(100, 100);
 				var bitmap2 = new LBitmap(bitmapdata2);
 				bitmap2.x = 120;

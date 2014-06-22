@@ -21,9 +21,12 @@
  */
 var LAjax = (function () {
 	function LAjax () {
-		
+		this.responseType = null;
 	}
 	LAjax.prototype = {
+		TEXT : "text",
+		ARRAY_BUFFER : "arraybuffer",
+		BLOB : "blob",
 		/** @language chinese
 		 * 通过远程 HTTP GET 请求载入信息。
 		 * @method get
@@ -197,7 +200,9 @@ var LAjax = (function () {
 				if (ajax.readyState == 4) {
 					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
 						if (oncomplete) {
-							if (ajax.responseText.length > 0) {
+							if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB) {
+								oncomplete(ajax.response);
+							} else if (ajax.responseText.length > 0) {
 								oncomplete(ajax.responseText);
 							} else {
 								oncomplete(null);
@@ -214,7 +219,12 @@ var LAjax = (function () {
 		},
 		getHttp : function () {
 			if (typeof XMLHttpRequest != UNDEFINED) {
-				return new XMLHttpRequest();
+				var xhr = new XMLHttpRequest();
+				if (this.responseType) {
+					xhr.responseType = this.responseType;
+					this.responseType = this.TEXT;
+				}
+				return xhr;
 			}  
 			try {
 				return new ActiveXObject("Msxml2.XMLHTTP");

@@ -1,6 +1,6 @@
 /** @language chinese
  * <p>LDisplayObjectContainer 类是可用作显示列表中显示对象容器的所有对象的基类。该显示列表管理 运行时中显示的所有对象。使用 LDisplayObjectContainer 类排列显示列表中的显示对象。每个 LDisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，可确定哪个对象绘制在前，哪个对象绘制在后等。</p>
- * <p>LDisplayObject 是一种抽象基类；因此，不能直接调用 LDisplayObject。</p>
+ * <p>LDisplayObjectContainer 是一种抽象基类；因此，不能直接调用 LDisplayObjectContainer。</p>
  * <p>LDisplayObjectContainer 类是可以包含子对象的所有对象的抽象基类。无法直接对其进行实例化。</p>
  * @class LDisplayObjectContainer
  * @extends LInteractiveObject
@@ -9,9 +9,9 @@
  * @public
  */
 /** @language english
- * <p>The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on the display list. The display list manages all objects displayed in the runtimes. Use the DisplayObjectContainer class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is drawn in front, which is behind, and so on.</p>
- * <p>LDisplayObject is an abstract base class; therefore, you cannot call LDisplayObject directly. </p>
- * <p>The DisplayObjectContainer class is an abstract base class for all objects that can contain child objects. It cannot be instantiated directly.</p>
+ * <p>The LDisplayObjectContainer class is the base class for all objects that can serve as display object containers on the display list. The display list manages all objects displayed in the runtimes. Use the DisplayObjectContainer class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is drawn in front, which is behind, and so on.</p>
+ * <p>LDisplayObjectContainer is an abstract base class; therefore, you cannot call LDisplayObjectContainer directly. </p>
+ * <p>The LDisplayObjectContainer class is an abstract base class for all objects that can contain child objects. It cannot be instantiated directly.</p>
  * @class LDisplayObjectContainer
  * @extends LInteractiveObject
  * @constructor
@@ -20,7 +20,7 @@
  */
 /** @language japanese
  * <p>LDisplayObjectContainer クラスは、表示リストで表示オブジェクトコンテナとして機能するすべてのオブジェクトの基本クラスです。表示リストでは、ランタイムに表示されるすべてのオブジェクトを管理します。LDisplayObjectContainer クラスは、表示リスト内で表示オブジェクトを配置するために使用します。各 LDisplayObjectContainer オブジェクトは、オブジェクトの z 順序を編成するために独自の子リストを持っています。z 順序は、どのオブジェクトを前面、背面、その他に描画するかを決定する、前から後ろへの順序です。</p>
- * <p>LDisplayObject は抽象基本クラスであるため、LDisplayObject を直接呼び出すことはできません。</p>
+ * <p>LDisplayObjectContainer は抽象基本クラスであるため、LDisplayObjectContainer を直接呼び出すことはできません。</p>
  * <p>LDisplayObjectContainer クラスは、子オブジェクトを持つすべてのオブジェクトの抽象基本クラスです。これは直接インスタンス化することはできません。</p>
  * @class LDisplayObjectContainer
  * @extends LInteractiveObject

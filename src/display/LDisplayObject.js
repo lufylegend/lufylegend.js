@@ -301,6 +301,9 @@ var LDisplayObject = (function () {
 			if (!s._canShow()) {
 				return;
 			}
+			if (typeof s._ll_loopframe == "function") {
+				s._ll_loopframe();
+			}
 			c.save();
 			s._showReady(c);
 			if (s.blendMode) {
@@ -322,9 +325,6 @@ var LDisplayObject = (function () {
 			}
 			s._ll_show(c);
 			c.restore();
-			if (typeof s._ll_loopframe == "function") {
-				s._ll_loopframe();
-			}
 		},
 		_canShow : function () {
 			return this.visible;

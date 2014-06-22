@@ -678,7 +678,7 @@ var LMouseEventContainer = (function () {
 		 * @since 1.8.9
 		 */
 		set : function (t, v) {
-			s.container[t] = v;
+			this.container[t] = v;
 		},
 		_sort : function (a, b) {
 			var s = this, o1, o2, al = s._getSort(a.sp), bl = s._getSort(b.sp), i, l1, l2;

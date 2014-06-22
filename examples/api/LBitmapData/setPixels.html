@@ -16,7 +16,7 @@
 				loader.load("face.jpg", "bitmapData");
 			}
 			function loadBitmapdata (event) {
-				var bitmapData = new LBitmapData(event.currentTarget);
+				var bitmapData = new LBitmapData(event.target);
 				bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 				var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 			    bitmapData2.lock();

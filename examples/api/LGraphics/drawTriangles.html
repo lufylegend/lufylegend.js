@@ -16,7 +16,7 @@
 				loader.load("face.jpg", "bitmapData");
 			}
 			function loadBitmapdata (event) {
-				var bitmapdata = new LBitmapData(event.currentTarget);  
+				var bitmapdata = new LBitmapData(event.target);  
 				var backLayer = new LSprite();
 				addChild(backLayer);
 				var vertices = new Array();

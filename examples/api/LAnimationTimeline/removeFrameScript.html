@@ -20,7 +20,7 @@
 					var backLayer = new LSprite();
 					addChild(backLayer);
 					var list = LGlobal.divideCoordinate(480,630,3,4);
-					var data = new LBitmapData(event.currentTarget,0,0,120,210);
+					var data = new LBitmapData(event.target,0,0,120,210);
 					player = new LAnimationTimeline(data,list);
 					player.setLabel("right",2,0,1,true);
 					player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);

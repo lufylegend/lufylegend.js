@@ -121,7 +121,7 @@ var LBitmapData = (function () {
 		 * @type float
 		 * @public
 		 */
-		/** @language chinese
+		/** @language japanese
 		 * ビットマップイメージの位置x（ピクセル単位）です。
 		 * @property x
 		 * @type float
@@ -140,7 +140,7 @@ var LBitmapData = (function () {
 		 * @type float
 		 * @public
 		 */
-		/** @language chinese
+		/** @language japanese
 		 * ビットマップイメージの位置y（ピクセル単位）です。
 		 * @property y
 		 * @type float
@@ -159,7 +159,7 @@ var LBitmapData = (function () {
 		 * @type float
 		 * @public
 		 */
-		/** @language chinese
+		/** @language japanese
 		 * ビットマップイメージの幅（ピクセル単位）です。
 		 * @property width
 		 * @type float
@@ -178,7 +178,7 @@ var LBitmapData = (function () {
 		 * @type float
 		 * @public
 		 */
-		/** @language chinese
+		/** @language japanese
 		 * ビットマップイメージの高さ（ピクセル単位）です。
 		 * @property height
 		 * @type float
@@ -197,7 +197,7 @@ var LBitmapData = (function () {
 		 * @type String
 		 * @public
 		 */
-		/** @language chinese
+		/** @language japanese
 		 * データータイプ，値はLBitmapData.DATA_IMAGE（Imageオブジェクト）またはLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。
 		 * @property dataType
 		 * @type String
@@ -239,19 +239,21 @@ var LBitmapData = (function () {
 	 * LBitmapData数据保存形式的一种，以Image对象形式保存。
 	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
-	 * @final
 	 * @static
+	 * @public
 	*/
 	/** @language english
 	 * data type of the LBitmapData. Image object。
-	 * @property dataType
+	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
+	 * @static
 	 * @public
 	 */
-	/** @language chinese
+	/** @language japanese
 	 * LBitmapDataのデーターの保存形式です，Image オブジェクト。
-	 * @property dataType
+	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
+	 * @static
 	 * @public
 	 */
 	LBitmapData.DATA_IMAGE = "data_image";
@@ -259,19 +261,18 @@ var LBitmapData = (function () {
 	 * LBitmapData数据保存形式的一种，以Canvas对象形式保存。
 	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
-	 * @final
 	 * @static
 	 * @readOnly
 	*/
 	/** @language english
 	 * data type of the LBitmapData. Canvas object。
-	 * @property dataType
+	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
 	 * @public
 	 */
-	/** @language chinese
+	/** @language japanese
 	 * LBitmapDataのデーターの保存形式です，Canvas オブジェクト。
-	 * @property dataType
+	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
 	 * @public
 	 */
