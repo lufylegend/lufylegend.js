@@ -177,7 +177,7 @@ var LMedia = (function () {
 		 * @public
 		 */
 		getCurrentTime : function () {
-			return s.data.currentTime;
+			return this.data.currentTime;
 		},
 		/** @language japanese
 		 * <p>设定音量。</p>

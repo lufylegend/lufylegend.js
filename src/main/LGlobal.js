@@ -771,8 +771,8 @@ var LGlobal = ( function () {
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
-		var canvasX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		canvasY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
+		var canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			eveIndex = 0;
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
@@ -834,8 +834,8 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
-		var cX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		cY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
+		var cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
 		eve, l, ll = e.touches.length;
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;

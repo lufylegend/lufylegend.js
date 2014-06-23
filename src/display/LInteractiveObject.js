@@ -22,8 +22,8 @@
  * @since 1.9.0
  * @public
  */
-var LInteractiveObject = (function () {
-	function LInteractiveObject () {
+var LInteractiveObject = (function() {
+	function LInteractiveObject() {
 		var s = this;
 		LExtends(s, LDisplayObject, []);
 		s.type = "LInteractiveObject";
@@ -102,20 +102,27 @@ var LInteractiveObject = (function () {
 		s.mouseEnabled = true;
 		s.mouseList = new Array();
 	}
+
 	var p = {
-		addEventListener : function (type, listener) {
+		addEventListener : function(type, listener) {
 			var s = this;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
 					LMouseEventContainer.addMouseEvent(s, type, listener);
 					return;
 				}
-				s.mouseList.push({listener : listener, type : type});
-			}else{
-				s._eventList.push({listener : listener, type : type});
+				s.mouseList.push({
+					listener : listener,
+					type : type
+				});
+			} else {
+				s._eventList.push({
+					listener : listener,
+					type : type
+				});
 			}
 		},
-		removeEventListener : function (type, listener) {
+		removeEventListener : function(type, listener) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
@@ -123,7 +130,7 @@ var LInteractiveObject = (function () {
 					return;
 				}
 				length = s.mouseList.length;
-				for (i = 0; i < length; i++) {
+				for ( i = 0; i < length; i++) {
 					if (!s.mouseList[i]) {
 						continue;
 					}
@@ -133,10 +140,10 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				return s.callParent("removeEventListener",arguments);
+				return s.callParent("removeEventListener", arguments);
 			}
 		},
-		removeAllEventListener : function () {
+		removeAllEventListener : function() {
 			var s = this;
 			s.mouseList.length = 0;
 			s._eventList.length = 0;
@@ -152,12 +159,12 @@ var LInteractiveObject = (function () {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OUT);
 			}
 		},
-		hasEventListener : function (type) {
+		hasEventListener : function(type) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				length = s.mouseList.length;
-				for (i = 0; i < length; i++) {
-					if (!s.mouseList[i]){
+				for ( i = 0; i < length; i++) {
+					if (!s.mouseList[i]) {
 						continue;
 					}
 					if (type == s.mouseList[i].type) {
@@ -165,7 +172,7 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				return s.callParent("hasEventListener",arguments);
+				return s.callParent("hasEventListener", arguments);
 			}
 			return false;
 		}
@@ -174,4 +181,4 @@ var LInteractiveObject = (function () {
 		LInteractiveObject.prototype[k] = p[k];
 	}
 	return LInteractiveObject;
-})();
+})(); 

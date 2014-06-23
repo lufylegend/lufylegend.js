@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>LVideo</title>
+		<title>LMedia</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
 	</head>
 	<body>
@@ -11,12 +11,13 @@
 	<script>
 	LInit(1000/30, "legend", 800, 480, main);
 	var backLayer;
-	var video;
+	var sound;
 	var nowTime;
 	function main(){
-		video = new LVideo();
-		video.x = 20;
-		video.y = 100;
+		LGlobal.webAudio = false;
+		sound = new LSound();
+		sound.x = 20;
+		sound.y = 100;
 		backLayer = new LSprite();
 		addChild(backLayer);
 		
@@ -30,37 +31,34 @@
 	}
 	function onup(e){
 		if(e.offsetX > 30 && e.offsetX < 60 && e.offsetY > 0 && e.offsetY < 30){
-			if(video.length == 0){
+			if(sound.length == 0){
 				var url = "./sample.";
-				video.load(url+"mp4,"+url+"3gp,"+url+"mov,"+url+"3g2,"+url+"ogv,"+url+"webm");
-				video.addEventListener(LEvent.COMPLETE,loadOver);
-			}else if(video.playing){
-				video.stop();
+				sound.load(url+"mp3,"+url+"ogg,"+url+"wav");
+				sound.addEventListener(LEvent.COMPLETE,loadOver);
+			}else if(sound.playing){
+				sound.stop();
 			}else{
-				video.play();
+				sound.play();
 			}
-		}else if(video.length > 0 && e.offsetX > 200 && e.offsetX < 350 && e.offsetY > 50 && e.offsetY < 90){
-			video.setVolume((e.offsetX - 200)/150);
+		}else if(sound.length > 0 && e.offsetX > 200 && e.offsetX < 350 && e.offsetY > 50 && e.offsetY < 90){
+			sound.setVolume((e.offsetX - 200)/150);
 		}
 	}
 	function loadOver(){
-		var layer = new LSprite();
-		layer.addChild(video);
-		backLayer.addChild(layer);
-		video.play();
+		sound.play();
 	}
 	function onframe(){
 		backLayer.graphics.clear();
 		backLayer.graphics.drawRect(2,"#000000",[20,0,440,100]);
 		backLayer.graphics.drawRect(1,"#000000",[70,10,380,30]);
 		
-		var sec = video.data.currentTime % 60 >>>0;
+		var sec = sound.getCurrentTime() % 60 >>>0;
 		if(sec < 10)sec="0"+sec;
-		var min = (video.data.currentTime / 60)>>>0;
+		var min = (sound.getCurrentTime() / 60)>>>0;
 		if(min < 10)min="0"+min;
 		nowTime.text = "00:"+min+":"+sec;
-		backLayer.graphics.drawRect(1,"#000000",[70,10,380*(video.data.currentTime/video.length)>>>0,30],true,"#000000");
-		if(video.playing){
+		backLayer.graphics.drawRect(1,"#000000",[70,10,380*(sound.getCurrentTime()/sound.length)>>>0,30],true,"#000000");
+		if(sound.playing){
 			backLayer.graphics.drawRect(2,"#000000",[30,10,10,30],true,"#000000");
 			backLayer.graphics.drawRect(2,"#000000",[45,10,10,30],true,"#000000");
 		}else{
@@ -69,7 +67,7 @@
 		for(var i=0;i<10;i++){
 			var sx = 200 + i*15;
 			var sy = 40 - i*4;
-			if(video.getVolume() > i*0.1){
+			if(sound.getVolume() > i*0.1){
 				backLayer.graphics.drawRect(1,"#000000",[sx,50,10,40-sy],true,"#000000");
 			}else{
 				backLayer.graphics.drawRect(1,"#000000",[sx,50,10,40-sy]);

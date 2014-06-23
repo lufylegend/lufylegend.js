@@ -15,11 +15,10 @@ OS_IPAD = "iPad",
 OS_ANDROID = "Android",
 STR_ZERO = "0",
 NONE = "none",
-SUPER = "super",
 UNDEFINED = "undefined",
 LANDSCAPE = "landscape",
 PORTRAIT = "portrait",
-p,mouseX,mouseY;
+mouseX,mouseY;
 function LEvent(type){
 	this.eventType = type;
 	this._ll_preventDefault = false;
@@ -564,8 +563,8 @@ var LGlobal = ( function () {
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
-		var canvasX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		canvasY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
+		var canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			eveIndex = 0;
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
@@ -627,8 +626,8 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
-		var cX = parseInt(STR_ZERO + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		cY = parseInt(STR_ZERO + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
+		var cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
+		cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
 		eve, l, ll = e.touches.length;
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;
@@ -1789,8 +1788,8 @@ var LDisplayObject = (function () {
 	}
 	return LDisplayObject;
 })();
-var LInteractiveObject = (function () {
-	function LInteractiveObject () {
+var LInteractiveObject = (function() {
+	function LInteractiveObject() {
 		var s = this;
 		LExtends(s, LDisplayObject, []);
 		s.type = "LInteractiveObject";
@@ -1798,19 +1797,25 @@ var LInteractiveObject = (function () {
 		s.mouseList = new Array();
 	}
 	var p = {
-		addEventListener : function (type, listener) {
+		addEventListener : function(type, listener) {
 			var s = this;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
 					LMouseEventContainer.addMouseEvent(s, type, listener);
 					return;
 				}
-				s.mouseList.push({listener : listener, type : type});
-			}else{
-				s._eventList.push({listener : listener, type : type});
+				s.mouseList.push({
+					listener : listener,
+					type : type
+				});
+			} else {
+				s._eventList.push({
+					listener : listener,
+					type : type
+				});
 			}
 		},
-		removeEventListener : function (type, listener) {
+		removeEventListener : function(type, listener) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
@@ -1818,7 +1823,7 @@ var LInteractiveObject = (function () {
 					return;
 				}
 				length = s.mouseList.length;
-				for (i = 0; i < length; i++) {
+				for ( i = 0; i < length; i++) {
 					if (!s.mouseList[i]) {
 						continue;
 					}
@@ -1828,10 +1833,10 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				return s.callParent("removeEventListener",arguments);
+				return s.callParent("removeEventListener", arguments);
 			}
 		},
-		removeAllEventListener : function () {
+		removeAllEventListener : function() {
 			var s = this;
 			s.mouseList.length = 0;
 			s._eventList.length = 0;
@@ -1847,12 +1852,12 @@ var LInteractiveObject = (function () {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OUT);
 			}
 		},
-		hasEventListener : function (type) {
+		hasEventListener : function(type) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				length = s.mouseList.length;
-				for (i = 0; i < length; i++) {
-					if (!s.mouseList[i]){
+				for ( i = 0; i < length; i++) {
+					if (!s.mouseList[i]) {
 						continue;
 					}
 					if (type == s.mouseList[i].type) {
@@ -1860,7 +1865,7 @@ var LInteractiveObject = (function () {
 					}
 				}
 			} else {
-				return s.callParent("hasEventListener",arguments);
+				return s.callParent("hasEventListener", arguments);
 			}
 			return false;
 		}
@@ -1869,7 +1874,7 @@ var LInteractiveObject = (function () {
 		LInteractiveObject.prototype[k] = p[k];
 	}
 	return LInteractiveObject;
-})();
+})(); 
 var LDisplayObjectContainer = (function () {
 	function LDisplayObjectContainer () {
 		var s = this;
@@ -2278,7 +2283,7 @@ var LMedia = (function () {
 			}
 		},
 		getCurrentTime : function () {
-			return s.data.currentTime;
+			return this.data.currentTime;
 		},
 		setVolume : function (v) {
 			this.data.volume = v;
@@ -2325,7 +2330,7 @@ var LSound = (function () {
 		var s = this;
 		s.type = "LSound";
 		s._type="audio";
-		if (LSound.webAudioEnabled) {
+		if (LSound.webAudioEnabled && LGlobal.webAudio) {
 			LExtends(s, LWebAudio, []);
 		} else {
 			LExtends(s, LMedia, []);

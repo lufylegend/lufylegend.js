@@ -116,7 +116,7 @@ var LSound = (function () {
 		var s = this;
 		s.type = "LSound";
 		s._type="audio";
-		if (LSound.webAudioEnabled) {
+		if (LSound.webAudioEnabled && LGlobal.webAudio) {
 			LExtends(s, LWebAudio, []);
 		} else {
 			LExtends(s, LMedia, []);
