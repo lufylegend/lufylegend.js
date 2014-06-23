@@ -1,11 +1,32 @@
+/** @language chinese
+ * <p>LTweenLite是比较常用的一个动画库，包含各种缓动效果，使用LTweenLite能够简化动画制作的代码编写工作。</p>
+ * @class LTweenLite
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * <p>LTweenLite is an extremely fast, lightweight, and flexible animation tool that serves as the foundation Animation Platform.</p>
+ * @class LTweenLite
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * <p>LTweenLiteはアニメーショントゥイーン用ライブラリです。高速・軽量がウリなんです。</p>
+ * @class LTweenLite
+ * @constructor
+ * @since 1.0.0
+ * @public
+ */
 var LTweenLite = (function () {
-	function $LTweenLiteChild ($target, $duration, $vars) {
+	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
 		s.objectIndex = s.objectindex = ++LGlobal.objectIndex;
 		s.toNew = [];
 		s.init($target, $duration, $vars);
 	}
-	$LTweenLiteChild.prototype = {
+	LTweenLiteChild.prototype = {
 		init : function($target, $duration, $vars) {
 			var s = this, k = null;
 			s.target = $target;
@@ -93,10 +114,10 @@ var LTweenLite = (function () {
 			return false;
 		}
 	};
-	function $LTweenLite () {
+	function LTweenLite () {
 		
 	}
-	$LTweenLite.prototype = {
+	LTweenLite.prototype = {
 		tweens : [],
 		ll_show : null,
 		frame : function(){
@@ -117,12 +138,105 @@ var LTweenLite = (function () {
 				s.ll_show = null;
 			}
 		},
+		/** @language chinese
+		 * 允许用户拖动指定的 LSprite。LSprite 将一直保持可拖动，直到通过调用 LSprite.stopDrag() 方法来明确停止。
+		 * @method to
+		 * @param {int} touchPointID 分配给触摸点的整数(触摸设备)。
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	function main(){
+		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+		 * 		for(var i=0;i<3;i++){
+		 * 			var child = new LSprite();
+		 * 			child.x = 250*i;
+		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
+		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
+		 * 			addChild(child);
+		 * 		}
+		 * 	}
+		 * 	function ondown(e){
+		 * 		e.clickTarget.startDrag(e.touchPointID);
+		 * 	}
+		 * 	function onup(e){
+		 * 		e.clickTarget.stopDrag();
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language english
+		 * Static method for creating a LTweenLiteChild instance that animates to the specified destination values (from the current values).
+		 * @method to
+		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
+		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
+		 * @param {Object} vars An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});
+		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {left:"100px", top:"200px", opacity:0}, but the following optional special properties serve other purposes:</p>
+		 * <table>
+		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
+		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
+		 * <tr><td>ease</td><td>LEasing</td><td>You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, Elastic.easeOut or Strong.easeInOut. For best performance, use one of the GreenSock eases (Linear, Power0, Power1, Power2, Power3, Power4, Quad, Cubic, Quart, Quint, and Strong, each with their .easeIn, .easeOut, and .easeInOut variants are included in the TweenLite, and you can load EasePack to get extras like Elastic, Back, Bounce, SlowMo, SteppedEase, Circ, Expo, and Sine). For linear animation, use the GreenSock Linear.easeNone ease. You can also define an ease by name (string) like "Strong.easeOut" or reverse style (like jQuery uses) "easeOutStrong". The default is None.easeIn.</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
+		 * </table>
+		 * @return {LTweenLiteChild} LTweenLiteChild instance
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	function main(){
+		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+		 * 		for(var i=0;i<3;i++){
+		 * 			var child = new LSprite();
+		 * 			child.x = 250*i;
+		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
+		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
+		 * 			addChild(child);
+		 * 		}
+		 * 	}
+		 * 	function ondown(e){
+		 * 		e.clickTarget.startDrag(e.touchPointID);
+		 * 	}
+		 * 	function onup(e){
+		 * 		e.clickTarget.stopDrag();
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">Try it »</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language japanese
+		 * 指定されたスプライトをユーザーがドラッグできるようにします。LSprite.stopDrag() メソッドを呼び出して明示的に停止する
+		 * @method to
+		 * @param {int} touchPointID タッチポイントに割り当てる整数です(タッチ対応デバイス)。
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	function main(){
+		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
+		 * 		for(var i=0;i<3;i++){
+		 * 			var child = new LSprite();
+		 * 			child.x = 250*i;
+		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
+		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
+		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
+		 * 			addChild(child);
+		 * 		}
+		 * 	}
+		 * 	function ondown(e){
+		 * 		e.clickTarget.startDrag(e.touchPointID);
+		 * 	}
+		 * 	function onup(e){
+		 * 		e.clickTarget.stopDrag();
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
 		to : function ($target, $duration, $vars) {
 			if (!$target) {
 				return;
 			}
 			var s = this;
-			var tween = new $LTweenLiteChild({}, 0, {});
+			var tween = new LTweenLiteChild({}, 0, {});
 			s.tweens.push(tween);
 			s.ll_show = s.frame;
 			tween.to($target, $duration, $vars);
@@ -147,7 +261,7 @@ var LTweenLite = (function () {
 			this.tweens.splice(0, this.tweens.length);
 		}
 	};
-	var tween = new $LTweenLite();
+	var tween = new LTweenLite();
 	LGlobal.childList.push(tween);
 	return tween;
 })();

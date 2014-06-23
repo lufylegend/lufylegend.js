@@ -1,5 +1,5 @@
 /** @language chinese
- * 此类创建播放下列任一类型视频的 LVideo 对象。
+ * 此类创建播放视频的 LVideo 对象。
  * @class LVideo
  * @extends LMedia
  * @constructor
@@ -30,7 +30,7 @@
  * @public
  */
 /** @language english
- * This class creates a LVideo object that plays either of the following kinds of video.
+ * This class creates a LVideo object.
  * @class LVideo
  * @extends LMedia
  * @constructor
