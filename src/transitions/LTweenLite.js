@@ -141,7 +141,20 @@ var LTweenLite = (function () {
 		/** @language chinese
 		 * 允许用户拖动指定的 LSprite。LSprite 将一直保持可拖动，直到通过调用 LSprite.stopDrag() 方法来明确停止。
 		 * @method to
-		 * @param {int} touchPointID 分配给触摸点的整数(触摸设备)。
+		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
+		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
+		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
+		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
+		 * <table>
+		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
+		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
+		 * <tr><td>ease</td><td>LEasing</td><td>LEasing (or Function) - You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, LEasing.Quad.easeIn or LEasing.Cubic.easeOut. For best performance, use one of the eases. The default is LEasing.None.easeIn.</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
+		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
+		 * </table>
+		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
@@ -170,15 +183,16 @@ var LTweenLite = (function () {
 		 * @method to
 		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
 		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
-		 * @param {Object} vars An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});
-		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {left:"100px", top:"200px", opacity:0}, but the following optional special properties serve other purposes:</p>
+		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
+		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
 		 * <table>
 		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
 		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
-		 * <tr><td>ease</td><td>LEasing</td><td>You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, Elastic.easeOut or Strong.easeInOut. For best performance, use one of the GreenSock eases (Linear, Power0, Power1, Power2, Power3, Power4, Quad, Cubic, Quart, Quint, and Strong, each with their .easeIn, .easeOut, and .easeInOut variants are included in the TweenLite, and you can load EasePack to get extras like Elastic, Back, Bounce, SlowMo, SteppedEase, Circ, Expo, and Sine). For linear animation, use the GreenSock Linear.easeNone ease. You can also define an ease by name (string) like "Strong.easeOut" or reverse style (like jQuery uses) "easeOutStrong". The default is None.easeIn.</td></tr>
+		 * <tr><td>ease</td><td>LEasing</td><td>LEasing (or Function) - You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, LEasing.Quad.easeIn or LEasing.Cubic.easeOut. For best performance, use one of the eases. The default is LEasing.None.easeIn.</td></tr>
 		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
 		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
+		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
@@ -207,7 +221,20 @@ var LTweenLite = (function () {
 		/** @language japanese
 		 * 指定されたスプライトをユーザーがドラッグできるようにします。LSprite.stopDrag() メソッドを呼び出して明示的に停止する
 		 * @method to
-		 * @param {int} touchPointID タッチポイントに割り当てる整数です(タッチ対応デバイス)。
+		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
+		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
+		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
+		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
+		 * <table>
+		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
+		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
+		 * <tr><td>ease</td><td>LEasing</td><td>LEasing (or Function) - You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, LEasing.Quad.easeIn or LEasing.Cubic.easeOut. For best performance, use one of the eases. The default is LEasing.None.easeIn.</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
+		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
+		 * </table>
+		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
