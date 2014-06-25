@@ -139,22 +139,22 @@ var LTweenLite = (function () {
 			}
 		},
 		/** @language chinese
-		 * 允许用户拖动指定的 LSprite。LSprite 将一直保持可拖动，直到通过调用 LSprite.stopDrag() 方法来明确停止。
+		 * ［静态方法］用于创建一个LTweenLiteChild实例动画，让某对象的某些属性缓动到指定的目标的值（从当前值）。
 		 * @method to
-		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
-		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
-		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
-		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
+		 * @param {Object} target 要缓动的对象(这里注意类型是Object,并不仅仅是LSprite,LBitmap).
+		 * @param {float} duration 持续的时间(单位是秒)
+		 * @param {Object} vars <p>一个Object,包含你想要缓动的所有属性，比如 onComplete, ease, etc。举例, 将一个 对象mc.x 缓动到 100 ，将 mc.y 缓动到 200 ，缓动结束后执行一个函数 myFunction, 这时候，你可以这么写: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
+		 * <p>除了使用对象的属性之外，你也可以使用一些特殊的值:</p>
 		 * <table>
-		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
-		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
-		 * <tr><td>ease</td><td>LEasing</td><td>LEasing (or Function) - You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, LEasing.Quad.easeIn or LEasing.Cubic.easeOut. For best performance, use one of the eases. The default is LEasing.None.easeIn.</td></tr>
-		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
-		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
-		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
-		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
+		 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+		 * <tr><td>delay</td><td>float</td><td>延时几秒后开始缓动，这在有先后顺序的缓动效果中很有用</td></tr>
+		 * <tr><td>ease</td><td>LEasing (or Function)</td><td>应用在variables上的缓动函数，比如LEasing.Quad.easeIn or LEasing.Cubic.easeOut。默认值是LEasing.None.easeIn.</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>在缓动效果结束时触发此方法</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法</td></tr>
+		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
 		 * </table>
-		 * @return {LTweenLiteChild} LTweenLiteChild instance
+		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
@@ -184,7 +184,7 @@ var LTweenLite = (function () {
 		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
 		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
 		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
-		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
+		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
 		 * <table>
 		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
 		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
@@ -219,20 +219,20 @@ var LTweenLite = (function () {
 		 * @since 1.8.9
 		 */
 		/** @language japanese
-		 * 指定されたスプライトをユーザーがドラッグできるようにします。LSprite.stopDrag() メソッドを呼び出して明示的に停止する
+		 * [静的]新しい LTweenLiteChild インスタンスを作成して，指定したオブジェクトのある属性を指定した値に変更する。
 		 * @method to
-		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
-		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
-		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
-		 * <p>Typically the vars parameter is used to define ending values for tweening properties of the target (or beginning values for from() tweens) like {x:100, y:200, alpha:0}, but the following optional special properties serve other purposes:</p>
+		 * @param {Object} target トゥイーンするオブジェクト
+		 * @param {float} duration 時間
+		 * @param {Object} vars <p>パラメータ。 x,y,onComplete, easeなど. 例えば, オブジェクト mc.x を 100にトゥイーンする 、mc.y　を 200にトゥイーンする 、トゥイーンが終わったら myFunction関数を呼び出す, やり方は: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
+		 * <p>オブジェクトの属性以外は、下記の特別な値も使えます:</p>
 		 * <table>
-		 * <tr><th>Property</th><th>Type</th><th>Explanation</th></tr>
-		 * <tr><td>delay</td><td>float</td><td>Amount of delay in seconds (or frames for frames-based tweens) before the tween should begin.</td></tr>
-		 * <tr><td>ease</td><td>LEasing</td><td>LEasing (or Function) - You can choose from various eases to control the rate of change during the animation, giving it a specific "feel". For example, LEasing.Quad.easeIn or LEasing.Cubic.easeOut. For best performance, use one of the eases. The default is LEasing.None.easeIn.</td></tr>
-		 * <tr><td>onComplete</td><td>Function</td><td>A function that should be called when the tween has completed</td></tr>
-		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
-		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
-		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
+		 * <tr><th>属性</th><th>タイプ</th><th>説明</th></tr>
+		 * <tr><td>delay</td><td>float</td><td>遅延（単位：秒）</td></tr>
+		 * <tr><td>ease</td><td>LEasing (or Function)</td><td>トゥイーンの効果，例えばLEasing.Quad.easeIn や LEasing.Cubic.easeOutなど。ディフォルト値はLEasing.None.easeInです。</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>トゥイーンが終わったら、呼び出す関数</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>トゥイーンがスタートする時、呼び出す関数</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>トゥイーン中、呼び出す関数</td></tr>
+		 * <tr><td>loop</td><td>Boolean</td><td>trueを設定したら、トゥイーンはループします</td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
