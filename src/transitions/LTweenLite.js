@@ -22,11 +22,12 @@
 var LTweenLite = (function () {
 	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
-		s.objectIndex = s.objectindex = ++LGlobal.objectIndex;
+		LExtends (s, LObject, []);
+		s.type = "LTweenLiteChild";
 		s.toNew = [];
 		s.init($target, $duration, $vars);
 	}
-	LTweenLiteChild.prototype = {
+	var p = {
 		init : function($target, $duration, $vars) {
 			var s = this, k = null;
 			s.target = $target;
@@ -81,7 +82,11 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
+					s.target.target = s.target;
+					s.target.currentTarget = s;
 					s.onComplete(s.target);
+					delete s.target.currentTarget;
+					delete s.target.target;
 				}
 				return true;
 			} else if (s.onUpdate) {
@@ -114,10 +119,14 @@ var LTweenLite = (function () {
 			return false;
 		}
 	};
-	function LTweenLite () {
-		
+	for (var k in p) {
+		LTweenLiteChild.prototype[k] = p[k];
 	}
-	LTweenLite.prototype = {
+	function LTweenLite () {
+		LExtends (this, LObject, []);
+		this.type = "LTweenLite";
+	}
+	p = {
 		tweens : [],
 		ll_show : null,
 		frame : function(){
@@ -140,7 +149,7 @@ var LTweenLite = (function () {
 		},
 		/** @language chinese
 		 * ［静态方法］用于创建一个LTweenLiteChild实例动画，让某对象的某些属性缓动到指定的目标的值（从当前值）。
-		 * @method to
+		 * @method LTweenLite.to
 		 * @param {Object} target 要缓动的对象(这里注意类型是Object,并不仅仅是LSprite,LBitmap).
 		 * @param {float} duration 持续的时间(单位是秒)
 		 * @param {Object} vars <p>一个Object,包含你想要缓动的所有属性，比如 onComplete, ease, etc。举例, 将一个 对象mc.x 缓动到 100 ，将 mc.y 缓动到 200 ，缓动结束后执行一个函数 myFunction, 这时候，你可以这么写: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
@@ -158,29 +167,32 @@ var LTweenLite = (function () {
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
+		 * 		LGlobal.setDebug(true);
+		 * 		var circle = new LSprite();
+		 * 		circle.x = 50;
+		 * 		circle.y = 50;
+		 * 		circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+		 * 		addChild(circle);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 100;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut})
+		 * 		.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
+		 * 			trace(e.currentTarget);
+		 * 			trace(e.target);
+		 * 		}});
+		 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
 		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">测试链接</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">测试链接</a></p>
 		 * @public
 		 * @since 1.8.9
 		 */
 		/** @language english
 		 * Static method for creating a LTweenLiteChild instance that animates to the specified destination values (from the current values).
-		 * @method to
+		 * @method LTweenLite.to
 		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
 		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
 		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
@@ -198,29 +210,32 @@ var LTweenLite = (function () {
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
+		 * 		LGlobal.setDebug(true);
+		 * 		var circle = new LSprite();
+		 * 		circle.x = 50;
+		 * 		circle.y = 50;
+		 * 		circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+		 * 		addChild(circle);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 100;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut})
+		 * 		.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
+		 * 			trace(e.currentTarget);
+		 * 			trace(e.target);
+		 * 		}});
+		 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
 		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">Try it »</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">Try it »</a></p>
 		 * @public
 		 * @since 1.8.9
 		 */
 		/** @language japanese
 		 * [静的]新しい LTweenLiteChild インスタンスを作成して，指定したオブジェクトのある属性を指定した値に変更する。
-		 * @method to
+		 * @method LTweenLite.to
 		 * @param {Object} target トゥイーンするオブジェクト
 		 * @param {float} duration 時間
 		 * @param {Object} vars <p>パラメータ。 x,y,onComplete, easeなど. 例えば, オブジェクト mc.x を 100にトゥイーンする 、mc.y　を 200にトゥイーンする 、トゥイーンが終わったら myFunction関数を呼び出す, やり方は: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
@@ -238,23 +253,26 @@ var LTweenLite = (function () {
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
-		 * 		LMultitouch.inputMode = LMultitouchInputMode.TOUCH_POINT;
-		 * 		for(var i=0;i<3;i++){
-		 * 			var child = new LSprite();
-		 * 			child.x = 250*i;
-		 * 			child.graphics.drawRect(2,"#ff0000",[0,0,100,100],true,"#ff0000");
-		 * 			child.addEventListener(LMouseEvent.MOUSE_DOWN,ondown);
-		 * 			child.addEventListener(LMouseEvent.MOUSE_UP,onup);
-		 * 			addChild(child);
-		 * 		}
+		 * 		LGlobal.setDebug(true);
+		 * 		var circle = new LSprite();
+		 * 		circle.x = 50;
+		 * 		circle.y = 50;
+		 * 		circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+		 * 		addChild(circle);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 100;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut})
+		 * 		.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
+		 * 			trace(e.currentTarget);
+		 * 			trace(e.target);
+		 * 		}});
+		 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
 		 * 	}
-		 * 	function ondown(e){
-		 * 		e.clickTarget.startDrag(e.touchPointID);
-		 * 	}
-		 * 	function onup(e){
-		 * 		e.clickTarget.stopDrag();
-		 * 	}
-		 * @examplelink <p><a href="../../../api/LSprite/startDrag.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 * @since 1.8.9
 		 */
@@ -272,6 +290,96 @@ var LTweenLite = (function () {
 		add : function (tween) {
 			this.tweens.push(tween);
 		},
+		/** @language chinese
+		 * ［静态方法］停止当前的缓动动画。
+		 * @method LTweenLite.remove
+		 * @param {LTweenLiteChild} tween 当前正在进行缓动的对象.
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	var tween;
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stop");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.remove(tween);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language english
+		 * Static method to stop a tween affect.
+		 * @method LTweenLite.remove
+		 * @param {LTweenLiteChild} tween a tween affect.
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	var tween;
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stop");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.remove(tween);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">Try it »</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language japanese
+		 * [静的]トゥイーンをストップする。
+		 * @method LTweenLite.remove
+		 * @param {LTweenLiteChild} tween トゥイーン中のオブジェクト.
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	var tween;
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stop");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.remove(tween);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
 		remove : function (tween) {
 			var s = this;
 			if (typeof tween == UNDEFINED) {
@@ -284,10 +392,107 @@ var LTweenLite = (function () {
 				}
 			}
 		},
+		/** @language chinese
+		 * ［静态方法］停止所有正在进行的缓动动画。
+		 * @method LTweenLite.removeAll
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var circle = new LSprite();
+		 * 		circle.x = 50;
+		 * 		circle.y = 50;
+		 * 		circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+		 * 		addChild(circle);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		LTweenLite.to(circle,1,{x:500,y:400,scaleX:3,scaleY:3,loop:true,ease:LEasing.Strong.easeInOut})
+		 * 		.to(circle,1,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn})
+		 * 		.to(circle,1,{x:50,y:50,ease:LEasing.Quint.easeIn});
+		 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stopAll");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.removeAll();
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language english
+		 * Static method to stop all the tween affects.
+		 * @method LTweenLite.removeAll
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	var tween;
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stop");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.remove(tween);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">Try it »</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
+		/** @language japanese
+		 * [静的]全部のトゥイーンをストップする。
+		 * @method LTweenLite.removeAll
+		 * @example
+		 * 	LInit(1000/50,"legend",800,450,main);
+		 * 	var tween;
+		 * 	function main(){
+		 * 		LGlobal.setDebug(true);
+		 * 		var rect = new LSprite();
+		 * 		rect.x = 50;
+		 * 		rect.y = 50;
+		 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+		 * 		addChild(rect);
+		 * 		tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 		var stopButton = new LButtonSample1("stop");
+		 * 		stopButton.x = 50;
+		 * 		circle.y = 50;
+		 * 		stopButton.y = 100;
+		 * 		addChild(stopButton);
+		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+		 * 	}
+		 * 	function stopTween(e){
+		 * 		LTweenLite.remove(tween);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @public
+		 * @since 1.8.9
+		 */
 		removeAll : function () {
 			this.tweens.splice(0, this.tweens.length);
 		}
 	};
+	for (var k in p) {
+		LTweenLite.prototype[k] = p[k];
+	}
 	var tween = new LTweenLite();
 	LGlobal.childList.push(tween);
 	return tween;
