@@ -6,7 +6,7 @@
  * @example
  * 	addChild(new FPS());
  * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.7.6
  * @public
  */
 /** @language english
@@ -17,7 +17,7 @@
  * @example
  * 	addChild(new FPS());
  * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.7.6
  * @public
  */
 /** @language japanese
@@ -28,7 +28,7 @@
  * @example
  * 	addChild(new FPS());
  * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.7.6
  * @public
  */
 var FPS = (function () {

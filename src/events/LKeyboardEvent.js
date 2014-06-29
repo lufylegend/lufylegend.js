@@ -3,7 +3,7 @@
  * <p>加载键盘事件必须使用LGlobal.stage.addEventListener或者LEvent.addEventListener。</p>
  * @class LKeyboardEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 80, main);
  * 	function main () {
@@ -35,7 +35,7 @@
  * <p>In a mobile browser, MOUSE_DOWN, MOUSE_UP, MOUSE_MOVE are automatically converted to TOUCH_DOWN, TOUCH_UP, TOUCH_MOVE.</p>
  * @class LKeyboardEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 80, main);
  * 	function main () {
@@ -67,7 +67,7 @@
  * <p>モバイルブラウザの場合、MOUSE_DOWN,MOUSE_UP,MOUSE_MOVEは自動的にTOUCH_DOWN,TOUCH_UP,TOUCH_MOVEに変更することができます、開発者は特別な処理などをやらなくてもいいです。</p>
  * @class LKeyboardEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 80, main);
  * 	function main () {
@@ -110,7 +110,7 @@ var LKeyboardEvent = function () {throw "LKeyboardEvent cannot be instantiated";
  * @property KEY_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -128,7 +128,7 @@ var LKeyboardEvent = function () {throw "LKeyboardEvent cannot be instantiated";
  * @property KEY_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -146,7 +146,7 @@ var LKeyboardEvent = function () {throw "LKeyboardEvent cannot be instantiated";
  * @property KEY_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LKeyboardEvent.KEY_DOWN = "keydown";
@@ -165,7 +165,7 @@ LKeyboardEvent.KEY_DOWN = "keydown";
  * @property KEY_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -183,7 +183,7 @@ LKeyboardEvent.KEY_DOWN = "keydown";
  * @property KEY_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -201,7 +201,7 @@ LKeyboardEvent.KEY_DOWN = "keydown";
  * @property KEY_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LKeyboardEvent.KEY_UP = "keyup";
@@ -220,7 +220,7 @@ LKeyboardEvent.KEY_UP = "keyup";
  * @property KEY_PRESS
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -238,7 +238,7 @@ LKeyboardEvent.KEY_UP = "keyup";
  * @property KEY_PRESS
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -256,7 +256,7 @@ LKeyboardEvent.KEY_UP = "keyup";
  * @property KEY_PRESS
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LKeyboardEvent.KEY_PRESS = "keypress";

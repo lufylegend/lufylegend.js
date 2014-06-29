@@ -1,14 +1,20 @@
 /** @language chinese
  * <p>全局类。</p>
  * @class LGlobal
+ * @since 1.0.0
+ * @public
  */
 /** @language english
  * <p>Global Class</p>
  * @class LGlobal
+ * @since 1.0.0
+ * @public
  */
 /** @language japanese
  * <p>グローバルクラス</p>
  * @class LGlobal
+ * @since 1.0.0
+ * @public
  */
 var LGlobal = ( function () {
 	function LGlobal () {
@@ -21,7 +27,7 @@ var LGlobal = ( function () {
 	 * @property FULL_SCREEN
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.6.0
 	 * @public
 	 */
 	/** @language english
@@ -30,7 +36,7 @@ var LGlobal = ( function () {
 	 * @property FULL_SCREEN
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.6.0
 	 * @public
 	 */
 	/** @language japanese
@@ -39,7 +45,7 @@ var LGlobal = ( function () {
 	 * @property FULL_SCREEN
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.6.0
 	 * @public
 	 */
 	LGlobal.FULL_SCREEN = "full_screen";
@@ -51,7 +57,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.aspectRatio
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	/** @language english
@@ -60,7 +66,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.aspectRatio
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	/** @language japanese
@@ -69,7 +75,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.aspectRatio
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	LGlobal.aspectRatio = NONE;
@@ -78,7 +84,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	/** @language english
@@ -86,7 +92,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	/** @language japanese
@@ -94,7 +100,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.1
 	 * @public
 	 */
 	LGlobal.canvasObj = null;
@@ -103,7 +109,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type CanvasRenderingContext2D
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -111,7 +117,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type CanvasRenderingContext2D
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -119,7 +125,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.canvasObj
 	 * @type CanvasRenderingContext2D
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.canvas = null;
@@ -129,7 +135,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @static
 	 * @default true
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -138,7 +144,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @static
 	 * @default true
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -147,7 +153,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @static
 	 * @default true
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.webAudio = true;
@@ -158,7 +164,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.stage
 	 * @type LSprite
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	/** @language english
@@ -167,7 +173,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.stage
 	 * @type LSprite
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	/** @language japanese
@@ -176,7 +182,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.stage
 	 * @type LSprite
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	LGlobal.stage = null;
@@ -185,7 +191,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.width
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -193,7 +199,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.width
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -201,7 +207,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.width
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.width = 0;
@@ -210,7 +216,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.height
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -218,7 +224,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.height
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -226,7 +232,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.height
 	 * @type int
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.height = 0;
@@ -238,7 +244,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.preventDefault
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	/** @language english
@@ -246,7 +252,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.preventDefault
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	/** @language japanese
@@ -254,7 +260,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.preventDefault
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.3.1
 	 * @public
 	 */
 	LGlobal.preventDefault = true;
@@ -281,7 +287,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">测试链接</a></p>
-	 * @since 1.9.0
+	 * @since 1.4.0
 	 * @public
 	 */
 	/** @language english
@@ -305,7 +311,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">Try it »</a></p>
-	 * @since 1.9.0
+	 * @since 1.4.0
 	 * @public
 	 */
 	/** @language japanese
@@ -329,7 +335,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">実際のサンプルを見る</a></p>
-	 * @since 1.9.0
+	 * @since 1.4.0
 	 * @public
 	 */
 	LGlobal.stageScale = "noScale";
@@ -354,7 +360,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">测试链接</a></p>
-	 * @since 1.9.0
+	 * @since 1.8.6
 	 * @public
 	 */
 	/** @language english
@@ -378,7 +384,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">Try it »</a></p>
-	 * @since 1.9.0
+	 * @since 1.8.6
 	 * @public
 	 */
 	/** @language japanese
@@ -402,7 +408,7 @@ var LGlobal = ( function () {
 	 * 		addChild(bitmap);
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/stageScale_align.html" target="_blank">実際のサンプルを見る</a></p>
-	 * @since 1.9.0
+	 * @since 1.8.6
 	 * @public
 	 */
 	LGlobal.align = "M";
@@ -438,7 +444,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.os
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -447,7 +453,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.os
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -456,7 +462,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.os
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.os = OS_PC;
@@ -465,7 +471,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.ios
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -473,7 +479,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.ios
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -481,7 +487,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.ios
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.ios = false;
@@ -490,7 +496,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.android
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language english
@@ -498,7 +504,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.android
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	/** @language japanese
@@ -506,7 +512,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.android
 	 * @type Boolean
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.0.0
 	 * @public
 	 */
 	LGlobal.android = false;
@@ -516,7 +522,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.backgroundColor
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	/** @language english
@@ -524,7 +530,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.backgroundColor
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	/** @language japanese
@@ -532,7 +538,7 @@ var LGlobal = ( function () {
 	 * @property LGlobal.backgroundColor
 	 * @type String
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	LGlobal.backgroundColor = null;
@@ -542,7 +548,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	/** @language english
@@ -551,7 +557,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	/** @language japanese
@@ -560,7 +566,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.7.7
 	 * @public
 	 */
 	LGlobal.destroy = true;
@@ -573,7 +579,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.7
 	 * @public
 	 */
 	/** @language english
@@ -583,7 +589,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.7
 	 * @public
 	 */
 	/** @language japanese
@@ -593,7 +599,7 @@ var LGlobal = ( function () {
 	 * @type Boolean
 	 * @default true
 	 * @static
-	 * @since 1.9.0
+	 * @since 1.8.7
 	 * @public
 	 */
 	LGlobal.keepClear = true;
@@ -639,7 +645,7 @@ var LGlobal = ( function () {
 	 * 	}	
 	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.0
 	 */
 	/** @language english
 	 * <p>Setting the debug mode is on.</p>
@@ -655,7 +661,7 @@ var LGlobal = ( function () {
 	 * 	}	
 	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.0
 	 */
 	/** @language japanese
 	 * <p>デバッグモードを起動するかどうか。</p>
@@ -671,7 +677,7 @@ var LGlobal = ( function () {
 	 * 	}	
 	 * @examplelink <p><a href="../../../api/LGlobal/setDebug.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.0
 	 */
 	LGlobal.setDebug = function (v) {
 		LGlobal.traceDebug = v; 
@@ -1090,7 +1096,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.3.1
 	 */
 	/** @language english
 	 * <p>Split to 2-dimensional arrays from the width and height.</p>
@@ -1121,7 +1127,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.3.1
 	 */
 	/** @language japanese
 	 * <p>幅と高さによって，指定する行数と列数の2次元の配列を戻す。</p>
@@ -1152,7 +1158,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/divideCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.3.1
 	 */
 	LGlobal.divideCoordinate = function (w, h, row, col) {
 		var i, j, cw = w / col, ch = h / row, r = [], c;
@@ -1197,7 +1203,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.8.9
 	 */
 	/** @language english
 	 * <p>HitTest polygon and point</p>
@@ -1221,7 +1227,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.8.9
 	 */
 	/** @language japanese
 	 * <p>点と多角形の衝突を検出する</p>
@@ -1245,7 +1251,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitPolygon(vertices,point2[0],point2[1]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitPolygon.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.8.9
 	 */
 	LGlobal.hitPolygon = function (list, x, y) {
 		var c = 0, p0 = list[0], b0x = (x <= p0[0]), b0y = (y <= p0[1]), i, l, p1, b1x, b1y;
@@ -1291,7 +1297,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language english
 	 * <p>HitTest polygon and circle</p>
@@ -1314,7 +1320,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language japanese
 	 * <p>多角形と多角形の衝突を検出する</p>
@@ -1337,7 +1343,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygon.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	LGlobal.hitTestPolygon = function (p1, p2) {
 		var i, j, l, listA, normals, vecs, list = [[p1, [], []], [p2, [], []]];
@@ -1384,7 +1390,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language english
 	 * <p>HitTest polygon and circle</p>
@@ -1407,7 +1413,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language japanese
 	 * <p>多角形と円の衝突を検出する</p>
@@ -1430,7 +1436,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestPolygonArc.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	LGlobal.hitTestPolygonArc = function (vs, arc) {
 		if (LGlobal.hitPolygon(vs, arc[0], arc[1])) {
@@ -1487,7 +1493,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestArc(arcLayer2,arcLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	/** @language english
 	 * <p>HitTest two objects as circles</p>
@@ -1520,7 +1526,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestArc(rectLayer2,rectLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	/** @language japanese
 	 * <p>円として、二つのオブジェクトの衝突を検出する</p>
@@ -1553,7 +1559,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestArc(rectLayer2,rectLayer3,70,70));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestArc.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	LGlobal.hitTestArc = function (objA, objB, objAR, objBR) {
 		var rA = objA.getWidth() * 0.5
@@ -1607,7 +1613,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	/** @language english
 	 * <p>HitTest two objects as rectangles, Equivalent to hitTest</p>
@@ -1640,7 +1646,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	/** @language japanese
 	 * <p>矩形として、二つのオブジェクトの衝突を検出する、hitTest と同等。</p>
@@ -1673,7 +1679,7 @@ var LGlobal = ( function () {
 	 * 	trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
 	 * @examplelink <p><a href="../../../api/LGlobal/hitTestRect.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.4.1
 	 */
 	LGlobal.hitTestRect = function (objA, objB, vecA, vecB) {
 		var wA = objA.getWidth()
@@ -1712,7 +1718,7 @@ var LGlobal = ( function () {
 	 * 	LGlobal.setFrameRate(1000/60);
 	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 */
 	/** @language english
 	 * game speed reset 
@@ -1723,7 +1729,7 @@ var LGlobal = ( function () {
 	 * 	LGlobal.setFrameRate(1000/60);
 	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 */
 	/** @language japanese
 	 * スクリーンをリサイズする
@@ -1734,7 +1740,7 @@ var LGlobal = ( function () {
 	 * 	LGlobal.setFrameRate(1000/60);
 	 * @examplelink <p><a href="../../../api/LGlobal/setFrameRate.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 */
 	LGlobal.setFrameRate = function (s) {
 		if (LGlobal.frameRate) {
@@ -1780,7 +1786,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language english
 	 * change the screen size 
@@ -1803,7 +1809,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	/** @language japanese
 	 * スクリーンをリサイズする
@@ -1826,7 +1832,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/resize.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 */
 	LGlobal.resize = function (canvasW, canvasH) {
 		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
@@ -1931,7 +1937,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.6.0
 	 */
 	/** @language english
 	 * Full screen display　or to scale the screen size 
@@ -1955,7 +1961,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.6.0
 	 */
 	/** @language japanese
 	 * フルスクリーン表示または画面サイズを拡大縮小する
@@ -1979,7 +1985,7 @@ var LGlobal = ( function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LGlobal/screen.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.0.0
+	 * @since 1.6.0
 	 */
 	LGlobal.screen = function (a) {
 		LGlobal.displayState = a;

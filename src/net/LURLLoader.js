@@ -52,7 +52,7 @@ var LURLLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	/** @language english
 	 * Sends and loads data from the specified URL.
@@ -75,7 +75,7 @@ var LURLLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	/** @language japanese
 	 * 指定された URL からデータを送信およびロードします。
@@ -98,7 +98,7 @@ var LURLLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LURLLoader/index.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	LURLLoader.prototype.load = function (u, t) {
 		var s = this, event;

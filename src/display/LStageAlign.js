@@ -18,7 +18,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageAlign/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -41,7 +41,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageAlign/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -64,7 +64,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageAlign/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 function LStageAlign(){throw "LStageAlign cannot be instantiated";}
@@ -73,7 +73,7 @@ function LStageAlign(){throw "LStageAlign cannot be instantiated";}
  * @property TOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -81,7 +81,7 @@ function LStageAlign(){throw "LStageAlign cannot be instantiated";}
  * @property TOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -89,7 +89,7 @@ function LStageAlign(){throw "LStageAlign cannot be instantiated";}
  * @property TOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.TOP = "T";
@@ -98,7 +98,7 @@ LStageAlign.TOP = "T";
  * @property BOTTOM
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -106,7 +106,7 @@ LStageAlign.TOP = "T";
  * @property BOTTOM
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -114,7 +114,7 @@ LStageAlign.TOP = "T";
  * @property BOTTOM
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.BOTTOM = "B";
@@ -123,7 +123,7 @@ LStageAlign.BOTTOM = "B";
  * @property LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -131,7 +131,7 @@ LStageAlign.BOTTOM = "B";
  * @property LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -139,7 +139,7 @@ LStageAlign.BOTTOM = "B";
  * @property LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.LEFT = "L";
@@ -148,7 +148,7 @@ LStageAlign.LEFT = "L";
  * @property RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -156,7 +156,7 @@ LStageAlign.LEFT = "L";
  * @property RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -164,7 +164,7 @@ LStageAlign.LEFT = "L";
  * @property RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.RIGHT = "Re";
@@ -173,7 +173,7 @@ LStageAlign.RIGHT = "Re";
  * @property TOP_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -181,7 +181,7 @@ LStageAlign.RIGHT = "Re";
  * @property TOP_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -189,7 +189,7 @@ LStageAlign.RIGHT = "Re";
  * @property TOP_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.TOP_LEFT = "TL";
@@ -198,7 +198,7 @@ LStageAlign.TOP_LEFT = "TL";
  * @property TOP_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -206,7 +206,7 @@ LStageAlign.TOP_LEFT = "TL";
  * @property TOP_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -214,7 +214,7 @@ LStageAlign.TOP_LEFT = "TL";
  * @property TOP_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.TOP_RIGHT = "TR";
@@ -223,7 +223,7 @@ LStageAlign.TOP_RIGHT = "TR";
  * @property TOP_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -231,7 +231,7 @@ LStageAlign.TOP_RIGHT = "TR";
  * @property TOP_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -239,7 +239,7 @@ LStageAlign.TOP_RIGHT = "TR";
  * @property TOP_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.TOP_MIDDLE = "TM";
@@ -248,7 +248,7 @@ LStageAlign.TOP_MIDDLE = "TM";
  * @property BOTTOM_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -256,7 +256,7 @@ LStageAlign.TOP_MIDDLE = "TM";
  * @property BOTTOM_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -264,7 +264,7 @@ LStageAlign.TOP_MIDDLE = "TM";
  * @property BOTTOM_LEFT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.BOTTOM_LEFT = "BL";
@@ -273,7 +273,7 @@ LStageAlign.BOTTOM_LEFT = "BL";
  * @property BOTTOM_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -281,7 +281,7 @@ LStageAlign.BOTTOM_LEFT = "BL";
  * @property BOTTOM_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -289,7 +289,7 @@ LStageAlign.BOTTOM_LEFT = "BL";
  * @property BOTTOM_RIGHT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.BOTTOM_RIGHT = "BR";
@@ -298,7 +298,7 @@ LStageAlign.BOTTOM_RIGHT = "BR";
  * @property BOTTOM_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -306,7 +306,7 @@ LStageAlign.BOTTOM_RIGHT = "BR";
  * @property BOTTOM_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -314,7 +314,7 @@ LStageAlign.BOTTOM_RIGHT = "BR";
  * @property BOTTOM_MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.BOTTOM_MIDDLE = "BM";
@@ -323,7 +323,7 @@ LStageAlign.BOTTOM_MIDDLE = "BM";
  * @property MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language english
@@ -331,7 +331,7 @@ LStageAlign.BOTTOM_MIDDLE = "BM";
  * @property MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 /** @language japanese
@@ -339,7 +339,7 @@ LStageAlign.BOTTOM_MIDDLE = "BM";
  * @property MIDDLE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.6
  * @public
  */
 LStageAlign.MIDDLE = "M";

@@ -117,7 +117,7 @@ var LButton = (function () {
 		 * @property buttonMode
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("buttonMode=true");
@@ -142,7 +142,7 @@ var LButton = (function () {
 		 * @property buttonMode
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("buttonMode=true");
@@ -167,7 +167,7 @@ var LButton = (function () {
 		 * @property buttonMode
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("buttonMode=true");
@@ -193,7 +193,7 @@ var LButton = (function () {
 		 * @property staticMode
 		 * @type Boolean
 		 * @default false
-		 * @since 1.0.0
+		 * @since 1.9.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("staticMode=false");
@@ -218,7 +218,7 @@ var LButton = (function () {
 		 * @property staticMode
 		 * @type Boolean
 		 * @default false
-		 * @since 1.0.0
+		 * @since 1.9.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("staticMode=false");
@@ -243,7 +243,7 @@ var LButton = (function () {
 		 * @property staticMode
 		 * @type Boolean
 		 * @default false
-		 * @since 1.0.0
+		 * @since 1.9.0
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("staticMode=false");
@@ -275,7 +275,7 @@ var LButton = (function () {
 	 * @property STATE_DISABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	/** @language english
@@ -283,7 +283,7 @@ var LButton = (function () {
 	 * @property STATE_DISABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	/** @language japanese
@@ -291,7 +291,7 @@ var LButton = (function () {
 	 * @property STATE_DISABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	LButton.STATE_DISABLE = "disable";
@@ -300,7 +300,7 @@ var LButton = (function () {
 	 * @property STATE_ENABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	/** @language english
@@ -308,7 +308,7 @@ var LButton = (function () {
 	 * @property STATE_ENABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	/** @language japanese
@@ -316,7 +316,7 @@ var LButton = (function () {
 	 * @property STATE_ENABLE
 	 * @type String
 	 * @static
-	 * @since 1.0.0
+	 * @since 1.9.0
 	 * @public
 	 */
 	LButton.STATE_ENABLE = "enable";
@@ -343,7 +343,7 @@ var LButton = (function () {
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.9.0
 		 */
 		/** @language english
 		 * Set whether the button is available 
@@ -367,7 +367,7 @@ var LButton = (function () {
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.9.0
 		 */
 		/** @language japanese
 		 * ボタンが使えるかどうか設定する
@@ -391,7 +391,7 @@ var LButton = (function () {
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LButton/setState.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.9.0
 		 */
 		setState : function (state) {
 			var s = this;

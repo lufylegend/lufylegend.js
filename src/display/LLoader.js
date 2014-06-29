@@ -51,7 +51,7 @@ var LLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LLoader/index.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	/** @language english
 	 * Loads a JPEG, progressive JPEG, unanimated GIF, or PNG file into an object that is a child of this Loader object.
@@ -76,7 +76,7 @@ var LLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LLoader/index.html" target="_blank">Try it »</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	/** @language japanese
 	 * JPEG、プログレッシブ JPEG、非アニメーション GIF、または PNG ファイルを、この Loader オブジェクトの子であるオブジェクトにロードします。
@@ -101,7 +101,7 @@ var LLoader = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/LLoader/index.html" target="_blank">実際のサンプルを見る</a></p>
 	 * @public
-	 * @since 1.8.9
+	 * @since 1.0.0
 	 */
 	LLoader.prototype.load = function (u, t) {
 		var s = this;

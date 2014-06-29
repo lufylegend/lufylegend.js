@@ -2,21 +2,21 @@
  * LObject 类位于 lufylegend.js 类层次结构的根处。
  * @class LObject
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language english
  * The LObject class is at the root of the lufylegend.js class hierarchy.
  * @class LObject
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language japanese
  * LObject クラスは、lufylegend.js クラス階層のルートにあります。
  * @class LObject
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 var LObject = (function () {
@@ -26,21 +26,21 @@ var LObject = (function () {
 		 * 对象的ID
 		 * @property objectIndex
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
 		 * ID of the object
 		 * @property objectIndex
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
 		 * オブジェクトのID
 		 * @property objectIndex
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		this.objectIndex = ++LGlobal.objectIndex;
@@ -81,7 +81,7 @@ var LObject = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LObject/callParent.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.6.0
 		 */
 		/** @language english
 		 * call the method of parent。
@@ -117,7 +117,7 @@ var LObject = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LObject/callParent.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.6.0
 		 */
 		/** @language japanese
 		 * 親クラスの関数を呼び出す。
@@ -153,7 +153,7 @@ var LObject = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LObject/callParent.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.6.0
 		 */
 		callParent : function (f_n, args) {
 			if (!f_n || !args) {
@@ -166,8 +166,11 @@ var LObject = (function () {
 			} else {
 				s.__ll__parent_call++;
 			}
-			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+			if (s.__ll__parent_call >= s.__ll__parent__.length) {
 				return false;
+			}
+			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+				return s.callParent(f_n, args);
 			}
 			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			if (init) {

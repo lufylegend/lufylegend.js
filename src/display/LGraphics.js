@@ -109,7 +109,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,60);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineCap.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language english
@@ -136,7 +136,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,60);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineCap.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language japanese
@@ -163,7 +163,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,60);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineCap.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		lineCap : function (t) {
@@ -187,7 +187,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(20,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineJoin.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language english
@@ -205,7 +205,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(20,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineJoin.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language japanese
@@ -223,7 +223,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(20,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineJoin.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		lineJoin : function (t) {
@@ -250,7 +250,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,40);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineWidth.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -271,7 +271,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,40);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineWidth.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -292,7 +292,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(200,40);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineWidth.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		lineWidth : function (t) {
@@ -314,7 +314,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -330,7 +330,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -346,7 +346,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		strokeStyle : function (co) {
@@ -367,7 +367,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -382,7 +382,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -397,7 +397,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/stroke_strokeStyle.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		stroke : function () {
@@ -424,7 +424,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(150,130);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/beginPath.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -445,7 +445,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(150,130);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/beginPath.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -466,7 +466,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(150,130);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/beginPath.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		beginPath : function () {
@@ -488,7 +488,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.closePath();
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/closePath.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -504,7 +504,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.closePath();
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/closePath.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -520,7 +520,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.closePath();
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/closePath.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		closePath : function () {
@@ -542,7 +542,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -558,7 +558,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -574,7 +574,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		moveTo : function (x, y) {
@@ -596,7 +596,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -612,7 +612,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -628,7 +628,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.lineTo(70,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/moveTo_lineTo.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		lineTo : function (x, y) {
@@ -650,7 +650,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/rect.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -666,7 +666,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/rect.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -682,7 +682,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/rect.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		rect : function (x, y, w, h) {
@@ -703,7 +703,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -717,7 +717,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -731,7 +731,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		fillStyle : function (co) {
@@ -750,7 +750,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -763,7 +763,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -776,7 +776,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.fill();
 		 * @examplelink <p><a href="../../../api/LGraphics/fillStyle_fill.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		fill : function () {
@@ -800,7 +800,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/arc.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -818,7 +818,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/arc.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -836,7 +836,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/arc.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		arc : function (x, y, r, sa, ea, aw) {
@@ -858,7 +858,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineStyle.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -873,7 +873,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineStyle.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -888,7 +888,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.rect(20,20,150,100);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/lineStyle.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		lineStyle : function (tn, co) {
@@ -914,7 +914,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/clear.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -928,7 +928,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/clear.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -942,7 +942,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.arc(100,75,50,0,2*Math.PI);
 		 * 	shape.graphics.stroke();
 		 * @examplelink <p><a href="../../../api/LGraphics/clear.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		clear : function () {
@@ -979,7 +979,7 @@ var LGraphics = (function () {
 		 * 		backLayer.graphics.drawVertices(1,"#000000",[[120,100],[100,200],[200,150]]);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LGraphics/beginBitmapFill.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		/** @language english
@@ -1010,7 +1010,7 @@ var LGraphics = (function () {
 		 * 		backLayer.graphics.drawVertices(1,"#000000",[[120,100],[100,200],[200,150]]);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LGraphics/beginBitmapFill.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1041,7 +1041,7 @@ var LGraphics = (function () {
 		 * 		backLayer.graphics.drawVertices(1,"#000000",[[120,100],[100,200],[200,150]]);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LGraphics/beginBitmapFill.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		beginBitmapFill : function (b) {
@@ -1064,7 +1064,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawEllipse(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawEllipse(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawEllipse.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language english
@@ -1081,7 +1081,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawEllipse(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawEllipse(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawEllipse.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language japanese
@@ -1098,7 +1098,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawEllipse(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawEllipse(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawEllipse.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.8.8
 		 * @public
 		 */
 		drawEllipse : function (tn, lco, pa, isf, co) {
@@ -1161,7 +1161,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawArc(2, "#ff0000", [150, 50, 40, 0, 50*Math.PI/180,false,true]);
 		 * 	shape.graphics.drawArc(1, "#000000", [150, 150, 40, 0, 230*Math.PI/180,false,true], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawArc.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -1180,7 +1180,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawArc(2, "#ff0000", [150, 50, 40, 0, 50*Math.PI/180,false,true]);
 		 * 	shape.graphics.drawArc(1, "#000000", [150, 150, 40, 0, 230*Math.PI/180,false,true], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawArc.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1199,7 +1199,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawArc(2, "#ff0000", [150, 50, 40, 0, 50*Math.PI/180,false,true]);
 		 * 	shape.graphics.drawArc(1, "#000000", [150, 150, 40, 0, 230*Math.PI/180,false,true], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawArc.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		drawArc : function (tn, lco, pa, isf, co) {
@@ -1250,7 +1250,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRect(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawRect(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRect.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -1267,7 +1267,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRect(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawRect(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRect.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1284,7 +1284,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRect(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawRect(1, "#000000", [10, 100, 50, 100], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRect.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		drawRect : function (tn, lco, pa, isf, co) {
@@ -1332,7 +1332,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRoundRect(2, "#ff0000", [10, 10, 100, 50, 10]);
 		 * 	shape.graphics.drawRoundRect(1, "#000000", [10, 100, 50, 100, 10], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRoundRect.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.7.1
 		 * @public
 		 */
 		/** @language english
@@ -1349,7 +1349,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRoundRect(2, "#ff0000", [10, 10, 100, 50, 10]);
 		 * 	shape.graphics.drawRoundRect(1, "#000000", [10, 100, 50, 100, 10], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRoundRect.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.7.1
 		 * @public
 		 */
 		/** @language japanese
@@ -1366,7 +1366,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawRoundRect(2, "#ff0000", [10, 10, 100, 50, 10]);
 		 * 	shape.graphics.drawRoundRect(1, "#000000", [10, 100, 50, 100, 10], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawRoundRect.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.7.1
 		 * @public
 		 */
 		drawRoundRect : function (tn, lco, pa, isf, co) {
@@ -1422,7 +1422,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 10], [60, 100], [100, 50]]);
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 160], [60, 250], [100, 200]], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawVertices.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -1439,7 +1439,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 10], [60, 100], [100, 50]]);
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 160], [60, 250], [100, 200]], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawVertices.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -1456,7 +1456,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 10], [60, 100], [100, 50]]);
 		 * 	shape.graphics.drawVertices(2, "#ff0000", [[10, 160], [60, 250], [100, 200]], true, "#880088");
 		 * @examplelink <p><a href="../../../api/LGraphics/drawVertices.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		drawVertices : function (tn, lco, v, isf, co) {
@@ -1542,7 +1542,7 @@ var LGraphics = (function () {
 		 * 	backLayer.graphics.beginBitmapFill(bitmapdata);
 		 * 	backLayer.graphics.drawTriangles(vertices, indices, uvtData);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawTriangles.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		/** @language english
@@ -1589,7 +1589,7 @@ var LGraphics = (function () {
 		 * 	backLayer.graphics.beginBitmapFill(bitmapdata);
 		 * 	backLayer.graphics.drawTriangles(vertices, indices, uvtData);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawTriangles.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1636,7 +1636,7 @@ var LGraphics = (function () {
 		 * 	backLayer.graphics.beginBitmapFill(bitmapdata);
 		 * 	backLayer.graphics.drawTriangles(vertices, indices, uvtData);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawTriangles.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.5.0
 		 * @public
 		 */
 		drawTriangles : function (ve, ind, u, tn, lco) {
@@ -1758,7 +1758,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawLine(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawLine(1, "#000000", [10, 100, 50, 100]);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawLine.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -1773,7 +1773,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawLine(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawLine(1, "#000000", [10, 100, 50, 100]);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawLine.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1788,7 +1788,7 @@ var LGraphics = (function () {
 		 * 	shape.graphics.drawLine(2, "#ff0000", [10, 10, 100, 50]);
 		 * 	shape.graphics.drawLine(1, "#000000", [10, 100, 50, 100]);
 		 * @examplelink <p><a href="../../../api/LGraphics/drawLine.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		drawLine : function (tn, lco, pa) {
@@ -1821,7 +1821,7 @@ var LGraphics = (function () {
 		 * 		ctx.stroke();
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LGraphics/add.html" target="_blank">测试链接</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
@@ -1841,7 +1841,7 @@ var LGraphics = (function () {
 		 * 		ctx.stroke();
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LGraphics/add.html" target="_blank">Try it »</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
@@ -1861,7 +1861,7 @@ var LGraphics = (function () {
 		 * 		ctx.stroke();
 		 * 	});
 		 * @examplelink <p><a href="../../../api/LGraphics/add.html" target="_blank">実際のサンプルを見る</a></p>
-		 * @since 1.4.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		add : function (f) {

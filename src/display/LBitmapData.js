@@ -113,18 +113,21 @@ var LBitmapData = (function () {
 		 * 位图图像的位置x，以像素为单位。
 		 * @property x
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * The location x of the bitmap image in pixels.
 		 * @property x
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * ビットマップイメージの位置x（ピクセル単位）です。
 		 * @property x
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		s.x = (x == null ? 0 : x);
@@ -132,18 +135,21 @@ var LBitmapData = (function () {
 		 * 位图图像的位置y，以像素为单位。
 		 * @property y
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * The location y of the bitmap image in pixels.
 		 * @property y
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * ビットマップイメージの位置y（ピクセル単位）です。
 		 * @property y
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		s.y = (y == null ? 0 : y);
@@ -151,18 +157,21 @@ var LBitmapData = (function () {
 		 * 位图图像的宽度，以像素为单位。
 		 * @property width
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * The width of the bitmap image in pixels.
 		 * @property width
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * ビットマップイメージの幅（ピクセル単位）です。
 		 * @property width
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		s.width = 0;
@@ -170,18 +179,21 @@ var LBitmapData = (function () {
 		 * 位图图像的高度，以像素为单位。
 		 * @property height
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * The height of the bitmap image in pixels.
 		 * @property height
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * ビットマップイメージの高さ（ピクセル単位）です。
 		 * @property height
 		 * @type float
+		 * @since 1.0.0
 		 * @public
 		 */
 		s.height = 0;
@@ -189,18 +201,21 @@ var LBitmapData = (function () {
 		 * 数据格式，LBitmapData.DATA_IMAGE（Image对象）或者LBitmapData.DATA_CANVAS（Canvas对象）
 		 * @property dataType
 		 * @type String
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language english
 		 * data type, LBitmapData.DATA_IMAGE（Image object）or LBitmapData.DATA_CANVAS（Canvas object）。
 		 * @property dataType
 		 * @type String
+		 * @since 1.8.8
 		 * @public
 		 */
 		/** @language japanese
 		 * データータイプ，値はLBitmapData.DATA_IMAGE（Imageオブジェクト）またはLBitmapData.DATA_CANVAS（Canvasオブジェクト）です。
 		 * @property dataType
 		 * @type String
+		 * @since 1.8.8
 		 * @public
 		 */
 		s.dataType = null;
@@ -239,6 +254,7 @@ var LBitmapData = (function () {
 	 * LBitmapData数据保存形式的一种，以Image对象形式保存。
 	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
+	 * @since 1.8.8
 	 * @static
 	 * @public
 	*/
@@ -246,6 +262,7 @@ var LBitmapData = (function () {
 	 * data type of the LBitmapData. Image object。
 	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
+	 * @since 1.8.8
 	 * @static
 	 * @public
 	 */
@@ -253,6 +270,7 @@ var LBitmapData = (function () {
 	 * LBitmapDataのデーターの保存形式です，Image オブジェクト。
 	 * @property LBitmapData.DATA_IMAGE
 	 * @type String
+	 * @since 1.8.8
 	 * @static
 	 * @public
 	 */
@@ -261,19 +279,24 @@ var LBitmapData = (function () {
 	 * LBitmapData数据保存形式的一种，以Canvas对象形式保存。
 	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
+	 * @since 1.8.8
 	 * @static
-	 * @readOnly
+	 * @public
 	*/
 	/** @language english
 	 * data type of the LBitmapData. Canvas object。
 	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
+	 * @since 1.8.8
+	 * @static
 	 * @public
 	 */
 	/** @language japanese
 	 * LBitmapDataのデーターの保存形式です，Canvas オブジェクト。
 	 * @property LBitmapData.DATA_CANVAS
 	 * @type String
+	 * @since 1.8.8
+	 * @static
 	 * @public
 	 */
 	LBitmapData.DATA_CANVAS = "data_canvas";

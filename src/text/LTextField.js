@@ -1414,7 +1414,7 @@ var LTextField = (function () {
 		/** @language chinese
 		 * 文本逐字显示（打字机效果）。
 		 * @method wind
-		 * @since 1.0.0
+		 * @since 1.3.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -1452,7 +1452,7 @@ var LTextField = (function () {
 		/** @language english
 		 * Text animation
 		 * @method wind
-		 * @since 1.0.0
+		 * @since 1.3.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -1490,7 +1490,7 @@ var LTextField = (function () {
 		/** @language japanese
 		 * テキストを1文字ずつ画面に表示させる。
 		 * @method wind
-		 * @since 1.0.0
+		 * @since 1.3.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -1553,19 +1553,19 @@ var LTextField = (function () {
 		/** @language chinese
 		 * <p>清空所使用的内存。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * <p>Frees memory that is used.</p>
 		 * @method clearShape
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>使ったメモリをクリアする。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		die : function () {

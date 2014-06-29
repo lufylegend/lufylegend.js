@@ -25,7 +25,7 @@
  * 		sound.play();
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LMedia.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.7.0
  * @public
  */
 /** @language english
@@ -55,7 +55,7 @@
  * 		sound.play();
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LMedia.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.7.0
  * @public
  */
 /** @language japanese
@@ -85,7 +85,7 @@
  * 		sound.play();
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LMedia.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.7.0
  * @public
  */
 /** @language chinese
@@ -116,7 +116,7 @@
  * 		backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LWebAudio.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.9.0
  * @public
  */
 /** @language english
@@ -147,7 +147,7 @@
  * 		backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LWebAudio.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.9.0
  * @public
  */
 /** @language japanese
@@ -178,7 +178,7 @@
  * 		backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);
  * 	}
  * @examplelink <p><a href="../../../api/LSound/LWebAudio.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.9.0
  * @public
  */
 var LSound = (function () {

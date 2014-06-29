@@ -1,14 +1,27 @@
-/**
-* lufylegend.ui
-* @version 0.2.0
-* @Explain HTML5开源引擎lufylegend的专用UI
-* @author lufy(lufy_legend)
-* @blog http://blog.csdn.net/lufy_Legend
-* @email lufy.legend@gmail.com
-* @homepage http://lufylegend.com/lufylegend
-* @svn http://lufylegend.googlecode.com/svn/trunk/
-* @github https://github.com/lufylegend/lufylegend.js
-*/
+/** @language chinese
+ * lufylegend.js专用UI，按钮类
+ * @class UI:LButtonSample1
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, button class
+ * @class UI:LButtonSample1
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、ボタンクラス
+ * @class UI:LButtonSample1
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LButtonSample1(name,size,font,color){
 	var s = this;
 	if(!size)size=16;
@@ -38,6 +51,7 @@ function LButtonSample1(name,size,font,color){
 	var btn_disable = btn_down.clone();
 	btn_disable.alpha = 0.5;
 	base(s,LButton,[btn_up,btn_down,null,btn_disable]);
+	s.type = "LButtonSample1";
 	s.baseWidth = s.width = labelText.getWidth() + size;
 	s.baseHeight = s.height = 2.2*size;
 	s.backgroundSet = null;
@@ -92,12 +106,34 @@ LButtonSample1.prototype._onDraw = function(s){
 	s.disableState.graphics.drawRect(1,s.backgroundColor,[0,0,s.widthSet,s.heightSet],true,grd);
 	s.disableState.graphics.drawRect(0,s.backgroundColor,[1,s.heightSet*0.5,s.widthSet-2,s.heightSet*0.5-1],true,grd2);
 };
-LButtonSample1.prototype.toString = function(){
-	return "[LButtonSample1]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，按钮类
+ * @class UI:LButtonSample2
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, button class
+ * @class UI:LButtonSample2
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、ボタンクラス
+ * @class UI:LButtonSample2
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LButtonSampleX.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LButtonSample2(name,size,font,color){
 	var s = this;
 	base(s,LButtonSample1,[name,size,font,color]);
+	s.type = "LButtonSample2";
 }
 LButtonSample2.prototype.clone = function(){
 	var s = this,name = s.labelText.text,size = s.labelText.size,font = s.labelText.font,color = s.labelText.color,
@@ -137,12 +173,10 @@ LButtonSample2.prototype._onDraw = function(s){
 	s.disableState.graphics.drawRoundRect(1,s.backgroundColor,[0,0,s.width,s.height,s.height*0.1],true,grd);
 	s.disableState.graphics.drawRoundRect(0,s.backgroundColor,[1,s.height*0.5,s.width-2,s.height*0.5-1,s.height*0.1],true,grd2);
 };
-LButtonSample2.prototype.toString = function(){
-	return "[LButtonSample2]";
-};
 function LRadioChild(value,layer,layerSelect){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LRadioChild";
 	s.value = value;
 	
 	if(!layer){
@@ -174,11 +208,33 @@ LRadioChild.prototype._onChange = function(e){
 LRadioChild.prototype.setChecked = function(v){
 	this.layerSelect.visible = this.checked = v;
 };
-LRadioChild.prototype.toString = function(){
-	return "[LRadioChild]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，单选按钮
+ * @class UI:LRadio
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRadio.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Radio button
+ * @class UI:LRadio
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRadio.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、ラジオボタン
+ * @class UI:LRadio
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRadio.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LRadio(){
 	base(this,LSprite,[]);
+	s.type = "LRadio";
 }
 LRadio.prototype.setChildRadio = function(value,x,y,layer,layerSelect){
 	var s = this;
@@ -210,14 +266,34 @@ LRadio.prototype.clone = function(){
 	a.setValue(s.value);
 	return a;
 };
-LRadio.prototype.toString = function(){
-	return "[LRadio]";
-};
-
+/** @language chinese
+ * lufylegend.js专用UI，多选按钮
+ * @class UI:LCheckBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LCheckBox.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, checkbox button
+ * @class UI:LCheckBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LCheckBox.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、チェックボックス
+ * @class UI:LCheckBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LCheckBox.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LCheckBox(layer,layerSelect){
 	var s = this;
 	base(s,LSprite,[]);
-	
+	s.type = "LCheckBox";
 	if(!layer){
 		layer = new LSprite();
 		layer.graphics.drawRect(2,"#000000",[0,0,20,20],true,"#D3D3D3");
@@ -249,12 +325,34 @@ LCheckBox.prototype.clone = function(){
 	a.setChecked(s.checked);
 	return a;
 };
-LCheckBox.prototype.toString = function(){
-	return "[LCheckBox]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，组合框
+ * @class UI:LComboBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LComboBox.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, ComboBox
+ * @class UI:LComboBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LComboBox.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、コンボボックス
+ * @class UI:LComboBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LComboBox.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LComboBox(size,color,font,layer,layerUp,layerDown){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LComboBox";
 	s.list = [];
 	s.selectIndex = 0;
 	s.value = null;
@@ -414,12 +512,34 @@ LComboBox.prototype.clone = function(){
 	a.setValue(s.value);
 	return a;
 };
-LComboBox.prototype.toString = function(){
-	return "[LComboBox]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，滚动条
+ * @class UI:LScrollbar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LScrollbar.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Scroll bar
+ * @class UI:LScrollbar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LScrollbar.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、スクロール バー
+ * @class UI:LScrollbar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LScrollbar.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LScrollbar";
 	s._showLayer = new LSprite();
 	s._mask = new LGraphics();
 	s._mask.drawRect(1,"#ffffff",[0,0,maskW,maskH],true,"#ffffff");
@@ -842,12 +962,34 @@ LScrollbar.prototype.mouseDownH = function(event){
 		s.setSpeed();
 	}
 };
-LScrollbar.prototype.toString = function(){
-	return "[LScrollbar]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，窗口
+ * @class UI:LWindow
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LWindow.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Window
+ * @class UI:LWindow
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LWindow.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、モーダルウィンドウ
+ * @class UI:LWindow
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LWindow.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LWindow(width,height,title){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LWindow";
 	s.w = width;
 	s.h = height;
 	s.bar = new LSprite();
@@ -946,12 +1088,34 @@ LWindow.prototype._onBarUp = function(event){
 	s.stopDrag();
 	s.bar.removeEventListener(LMouseEvent.MOUSE_UP,s._onBarUp);
 };
-LWindow.prototype.toString = function(){
-	return "[LWindow]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，区域范围对象
+ * @class UI:LRange
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRange.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Range
+ * @class UI:LRange
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRange.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、範囲オブジェクト
+ * @class UI:LRange
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LRange.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LRange(width){
 	var s = this;
 	base(s,LSprite);
+	s.type = "LRange";
 	s.value = 0;
 	s.w = width;
 	var grd=LGlobal.canvas.createLinearGradient(0,0,0,s.w*0.13);
@@ -1002,16 +1166,38 @@ LRange.prototype._onUp = function(event){
 	s.removeEventListener(LMouseEvent.MOUSE_MOVE,s._onMove);
 	s.removeEventListener(LMouseEvent.MOUSE_UP,s._onUp);
 };
-LRange.prototype.toString = function(){
-	return "[LRange]";
-};
+/** @language chinese
+ * lufylegend.js专用UI，定义包含一个或多个菜单的顶级水平菜单栏
+ * @class UI:LMenubar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMenubar.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Menubar
+ * @class UI:LMenubar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMenubar.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、メニューバー
+ * @class UI:LMenubar
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMenubar.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LMenubar(list,style){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LMenubar";
 	if(!style)style={};
 	if(!style.textSize)style.textSize=20;
-	if(!style.spaceHorizontal)style.spaceHorizontal=10;
-	if(!style.spaceVertical)style.spaceVertical=5;
+	if(!style.horizontalIndent)style.horizontalIndent=10;
+	if(!style.verticalIndent)style.verticalIndent=5;
 	if(!style.textColor)style.textColor="#000000";
 	if(!style.lineColor)style.lineColor="#CCCCCC";
 	if(!style.backgroundColor)style.backgroundColor="#FFFFFF";
@@ -1073,7 +1259,7 @@ LMenubar.prototype.mousedown = function(e){
 				target.menuList[j].graphics.clear();
 				target.menuList[j].graphics.drawRect(1,root.style.lineColor,[0,0,target.childWidth,target.childHeight],true,root.style.itemBackgroundColor);
 				if(target.menuList[j].arrow){
-					target.menuList[j].arrow.x = target.childWidth - root.style.spaceHorizontal*2;
+					target.menuList[j].arrow.x = target.childWidth - root.style.horizontalIndent*2;
 				}
 			}
 		}
@@ -1109,8 +1295,7 @@ LMenubar.prototype.mousemove = function(e){
 	var sW = target.getWidth();
 	var sH = target.getHeight();
 	target.graphics.clear();
-	target.graphics.drawRect(target.mainMenu ? 0 : 1,root.style.lineColor,[0,0,sW,sH],true,root.style.backgroundColor);
-	target.graphics.drawRect(0,root.style.selectColor,[0,root.style.spaceVertical,sW,sH-root.style.spaceVertical*2],true,root.style.selectColor);
+	target.graphics.drawRect(0,root.style.selectColor,[0,0,sW,sH],true,root.style.selectColor);
 	if(target.mainMenu){
 		for(var j=0;j<root.childList.length;j++){
 			if(root.childList[j].mainMenu)continue;
@@ -1138,7 +1323,7 @@ LMenubar.prototype.mousemove = function(e){
 				target.menuList[j].x = target.x + target.getWidth();
 			}
 			if(target.menuList[j].arrow){
-				target.menuList[j].arrow.x = target.childWidth - root.style.spaceHorizontal*2;
+				target.menuList[j].arrow.x = target.childWidth - root.style.horizontalIndent*2;
 			}
 		}
 	}
@@ -1168,34 +1353,34 @@ LMenubar.prototype.setList = function(layer,list,depth,sx,sy){
 		label.size = s.style.textSize;
 		label.color = s.style.textColor;
 		label.text = child.label;
-		label.x = s.style.spaceHorizontal;
-		label.y = s.style.spaceVertical;
+		label.x = s.style.horizontalIndent;
+		label.y = s.style.verticalIndent;
 		menu.addChild(label);
-		menu.graphics.drawRect(0,s.style.backgroundColor,[0,0,label.getWidth()+s.style.textSize,label.getHeight()+s.style.textSize],true,s.style.backgroundColor);
+		menu.graphics.drawRect(0,s.style.backgroundColor,[0,0,label.getWidth()+s.style.horizontalIndent*2,label.getHeight()+s.style.verticalIndent*2],true,s.style.backgroundColor);
 		menu.addEventListener(LMouseEvent.MOUSE_DOWN,s.mousedown);
 		menu.addEventListener(LMouseEvent.MOUSE_MOVE,s.mousemove);
 		if(s.objectIndex == layer.objectIndex){
 			menu.x = w + sx;
 			menu.y = 0 + sy;
 			menu.mainMenu = true;
-			w += label.getWidth()+s.style.spaceHorizontal*2;
-			h = label.getHeight()+s.style.spaceVertical*2;
-			if(layer.childWidth < label.getWidth()+s.style.spaceHorizontal*2){
-				layer.childWidth = label.getWidth()+s.style.spaceHorizontal*2;
+			w += label.getWidth()+s.style.horizontalIndent*2;
+			h = label.getHeight()+s.style.verticalIndent*2;
+			if(layer.childWidth < label.getWidth()+s.style.horizontalIndent*2){
+				layer.childWidth = label.getWidth()+s.style.horizontalIndent*2;
 			}
-			if(layer.childHeight < label.getHeight()+s.style.spaceVertical*2){
-				layer.childHeight = label.getHeight()+s.style.spaceVertical*2;
+			if(layer.childHeight < label.getHeight()+s.style.verticalIndent*2){
+				layer.childHeight = label.getHeight()+s.style.verticalIndent*2;
 			}
 		}else{
 			menu.x = 0 + sx;
 			menu.y = h + sy;
-			w = w > label.getWidth()+s.style.spaceHorizontal*4 ? w : label.getWidth()+s.style.spaceHorizontal*4;
-			h += label.getHeight()+s.style.spaceVertical*2;
-			if(layer.childWidth < label.getWidth()+s.style.spaceHorizontal*4){
-				layer.childWidth = label.getWidth()+s.style.spaceHorizontal*4;
+			w = w > label.getWidth()+s.style.horizontalIndent*4 ? w : label.getWidth()+s.style.horizontalIndent*4;
+			h += label.getHeight()+s.style.verticalIndent*2;
+			if(layer.childWidth < label.getWidth()+s.style.horizontalIndent*4){
+				layer.childWidth = label.getWidth()+s.style.horizontalIndent*4;
 			}
-			if(layer.childHeight < label.getHeight()+s.style.spaceVertical*2){
-				layer.childHeight = label.getHeight()+s.style.spaceVertical*2;
+			if(layer.childHeight < label.getHeight()+s.style.verticalIndent*2){
+				layer.childHeight = label.getHeight()+s.style.verticalIndent*2;
 			}
 		}
 		s.addChild(menu);
@@ -1207,11 +1392,11 @@ LMenubar.prototype.setList = function(layer,list,depth,sx,sy){
 				var arrow = new LSprite();
 				menu.arrow = arrow;
 				menu.addChild(arrow);
-				arrow.x = label.getWidth()+s.style.spaceHorizontal*2;
+				arrow.x = label.getWidth()+s.style.horizontalIndent*2;
 				arrow.y = label.y;
-				arrow.graphics.drawVertices(0,s.style.textColor,[[0,0],[0,label.getHeight()],[s.style.spaceHorizontal,label.getHeight()*0.5]],true,s.style.textColor);
+				arrow.graphics.drawVertices(0,s.style.textColor,[[0,0],[0,label.getHeight()],[s.style.horizontalIndent,label.getHeight()*0.5]],true,s.style.textColor);
 
-				s.setList(menu,child.list,depth+1,menu.x+menu.getWidth()+s.style.spaceHorizontal*2,menu.y);
+				s.setList(menu,child.list,depth+1,menu.x+menu.getWidth()+s.style.horizontalIndent*2,menu.y);
 			}
 		}
 		if(s.objectIndex != layer.objectIndex){
@@ -1220,6 +1405,30 @@ LMenubar.prototype.setList = function(layer,list,depth,sx,sy){
 	}
 	layer.menuList = menuList;
 };
+/** @language chinese
+ * lufylegend.js专用UI，显示一个消息框
+ * @class UI:LMessageBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMessageBox.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, MessageBox
+ * @class UI:LMessageBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMessageBox.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、メッセージボックス
+ * @class UI:LMessageBox
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LMessageBox.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LMessageBox(){}
 LMessageBox.show = function(properties){
 	if(!properties.width)properties.width = 500;
@@ -1264,9 +1473,34 @@ LMessageBox.show = function(properties){
 	msgLabel.y = (properties.height - myWindow.bar.getHeight() - msgLabel.getHeight())*0.5;
 	myWindow.layer.addChild(msgLabel);
 };
+/** @language chinese
+ * lufylegend.js专用UI，Panel
+ * @class UI:LPanel
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LPanel.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * lufylegend.js UI, Panel
+ * @class UI:LPanel
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LPanel.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * lufylegend.jsの専用のUI、コントロールパネル
+ * @class UI:LPanel
+ * @constructor
+ * @since 0.9.1
+ * @examplelink <p><a href="../../../api/ui/LPanel.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 function LPanel(bitmapData,w,h,x1,x2,y1,y2){
 	var s = this;
 	base(s,LSprite,[]);
+	s.type = "LPanel";
 	if(typeof bitmapData == "string"){
 		var d = new LShape();
 		d.graphics.drawRoundRect(1,"#000000",[0,0,20,20,5],true,bitmapData);
@@ -1290,26 +1524,26 @@ function LPanel(bitmapData,w,h,x1,x2,y1,y2){
 	s.ltBitmap = new LBitmap(ltData);
 	s.addChild(s.ltBitmap);
 	s.mtBitmap = new LBitmap(mtData);
-	s.mtBitmap.x = s.x1;
+	s.mtBitmap.x = s.x1 - 1;
 	s.addChild(s.mtBitmap);
 	s.rtBitmap = new LBitmap(rtData);
 	s.addChild(s.rtBitmap);
 	
 	s.lmBitmap = new LBitmap(lmData);
-	s.lmBitmap.y = s.y1;
+	s.lmBitmap.y = s.y1 - 1;
 	s.addChild(s.lmBitmap);
 	s.mmBitmap = new LBitmap(mmData);
-	s.mmBitmap.x = s.x1;
-	s.mmBitmap.y = s.y1;
+	s.mmBitmap.x = s.x1 - 1;
+	s.mmBitmap.y = s.y1 - 1;
 	s.addChild(s.mmBitmap);
 	s.rmBitmap = new LBitmap(rmData);
-	s.rmBitmap.y = s.y1;
+	s.rmBitmap.y = s.y1 - 1;
 	s.addChild(s.rmBitmap);
 	
 	s.lbBitmap = new LBitmap(lbData);
 	s.addChild(s.lbBitmap);
 	s.mbBitmap = new LBitmap(mbData);
-	s.mbBitmap.x = s.x1;
+	s.mbBitmap.x = s.x1 - 1;
 	s.addChild(s.mbBitmap);
 	s.rbBitmap = new LBitmap(rbData);
 	s.addChild(s.rbBitmap);
@@ -1320,7 +1554,6 @@ LPanel.prototype.resize = function(w,h){
 	var s = this;
 	s.rtBitmap.x = s.rmBitmap.x = s.rbBitmap.x = w - (s.bitmapData.width-s.x2);
 	s.lbBitmap.y = s.mbBitmap.y = s.rbBitmap.y = h - (s.bitmapData.height-s.y2);
-	
-	s.lmBitmap.scaleY=s.mmBitmap.scaleY=s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2))/(s.y2 - s.y1);
-	s.mtBitmap.scaleX=s.mmBitmap.scaleX=s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2))/(s.x2 - s.x1);
+	s.lmBitmap.scaleY=s.mmBitmap.scaleY=s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2) + 2)/(s.y2 - s.y1);
+	s.mtBitmap.scaleX=s.mmBitmap.scaleX=s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2) + 2)/(s.x2 - s.x1);
 };

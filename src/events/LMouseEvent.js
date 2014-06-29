@@ -3,7 +3,7 @@
  * <p>如果是移动浏览器，则MOUSE_DOWN,MOUSE_UP,MOUSE_MOVE会自动转换为TOUCH_DOWN,TOUCH_UP,TOUCH_MOVE，开发者无需自己增加额外的判断。</p>
  * @class LMouseEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -46,7 +46,7 @@
  * <p>In a mobile browser, MOUSE_DOWN, MOUSE_UP, MOUSE_MOVE are automatically converted to TOUCH_DOWN, TOUCH_UP, TOUCH_MOVE.</p>
  * @class LMouseEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -89,7 +89,7 @@
  * <p>モバイルブラウザの場合、MOUSE_DOWN,MOUSE_UP,MOUSE_MOVEは自動的にTOUCH_DOWN,TOUCH_UP,TOUCH_MOVEに変更することができます、開発者は特別な処理などをやらなくてもいいです。</p>
  * @class LMouseEvent
  * @constructor
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -144,7 +144,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * @property MOUSE_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -163,7 +163,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * @property MOUSE_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -182,7 +182,7 @@ var LMouseEvent = function (){throw "LMouseEvent cannot be instantiated";};
  * @property MOUSE_DOWN
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.MOUSE_DOWN = "mousedown";
@@ -202,7 +202,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * @property MOUSE_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -221,7 +221,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * @property MOUSE_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -240,7 +240,7 @@ LMouseEvent.MOUSE_DOWN = "mousedown";
  * @property MOUSE_UP
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.MOUSE_UP = "mouseup";
@@ -262,7 +262,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * @property MOUSE_MOVE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -280,7 +280,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * @property MOUSE_MOVE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -298,7 +298,7 @@ LMouseEvent.TOUCH_END = "touchend";
  * @property MOUSE_MOVE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.MOUSE_MOVE = "mousemove";
@@ -317,7 +317,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * @property MOUSE_OVER
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -335,7 +335,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * @property MOUSE_OVER
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -353,7 +353,7 @@ LMouseEvent.MOUSE_MOVE = "mousemove";
  * @property MOUSE_OVER
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.MOUSE_OVER = "mouseover";
@@ -368,7 +368,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * @property MOUSE_OUT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -382,7 +382,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * @property MOUSE_OUT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -396,7 +396,7 @@ LMouseEvent.MOUSE_OVER = "mouseover";
  * @property MOUSE_OUT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.MOUSE_OUT = "mouseout";
@@ -416,7 +416,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * @property DOUBLE_CLICK
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -435,7 +435,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * @property DOUBLE_CLICK
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -454,7 +454,7 @@ LMouseEvent.MOUSE_OUT = "mouseout";
  * @property DOUBLE_CLICK
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LMouseEvent.DOUBLE_CLICK = "dblclick";

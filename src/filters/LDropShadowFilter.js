@@ -14,7 +14,7 @@
  * 	var shadow = new LDropShadowFilter(5,45,"#000000");
  * 	bitmap.filters = [shadow];
  * @examplelink <p><a href="../../../api/LDropShadowFilter/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language english
@@ -33,7 +33,7 @@
  * 	var shadow = new LDropShadowFilter(5,45,"#000000");
  * 	bitmap.filters = [shadow];
  * @examplelink <p><a href="../../../api/LDropShadowFilter/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language japanese
@@ -52,7 +52,7 @@
  * 	var shadow = new LDropShadowFilter(5,45,"#000000");
  * 	bitmap.filters = [shadow];
  * @examplelink <p><a href="../../../api/LDropShadowFilter/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 var LDropShadowFilter = (function () {
@@ -84,21 +84,21 @@ var LDropShadowFilter = (function () {
 		 * 设定阴影的偏移距离
 		 * @method setDistance
 		 * @param {int} distance 阴影的偏移距离。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
 		 * Set the offset distance for the shadow.
 		 * @method setDistance
 		 * @param {int} distance the offset distance for the shadow.
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
 		 * シャドウのオフセット距離を設定する
 		 * @method setDistance
 		 * @param {int} distance シャドウのオフセット距離（ピクセル単位）です。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		setDistance : function (distance) {
@@ -109,21 +109,21 @@ var LDropShadowFilter = (function () {
 		 * 设定阴影的角度
 		 * @method setAngle
 		 * @param {int} angle 阴影的角度。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
 		 * Set the angle of the shadow.
 		 * @method setAngle
 		 * @param {int} angle the angle of the shadow.
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
 		 * シャドウの角度を設定する
 		 * @method setAngle
 		 * @param {int} angle シャドウの角度です。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		setAngle : function (angle) {
@@ -134,21 +134,21 @@ var LDropShadowFilter = (function () {
 		 * 设定阴影的颜色
 		 * @method setColor
 		 * @param {int} color 阴影的颜色。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
 		 * Set the color of the shadow.
 		 * @method setColor
 		 * @param {int} color the color of the shadow.
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
 		 * シシャドウのカラーを設定する
 		 * @method setColor
 		 * @param {int} color シャドウのカラーです。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		setColor : function (color) {
@@ -158,21 +158,21 @@ var LDropShadowFilter = (function () {
 		 * 设定模糊量
 		 * @method setBlur
 		 * @param {int} blur 模糊量。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
 		 * Set the amount of blur.
 		 * @method setBlur
 		 * @param {int} blur the amount of blur。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
 		 * ぼかし量を設定する
 		 * @method setBlur
 		 * @param {int} blur ぼかし量です。
-		 * @since 1.4.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		setBlur : function (blur) {

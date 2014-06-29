@@ -125,7 +125,7 @@ LEvent.INIT = "init";
  * @property COMPLETE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language english
@@ -142,7 +142,7 @@ LEvent.INIT = "init";
  * @property COMPLETE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 /** @language japanese
@@ -159,7 +159,7 @@ LEvent.INIT = "init";
  * @property COMPLETE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @public
  */
 LEvent.COMPLETE = "complete";
@@ -175,7 +175,7 @@ LEvent.COMPLETE = "complete";
  * @property ENTER_FRAME
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(1000/60, "legend", 800, 480, main);
  * 	var direction = 1;
@@ -210,7 +210,7 @@ LEvent.COMPLETE = "complete";
  * @property ENTER_FRAME
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(1000/60, "legend", 800, 480, main);
  * 	var direction = 1;
@@ -245,7 +245,7 @@ LEvent.COMPLETE = "complete";
  * @property ENTER_FRAME
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.0.0
  * @example
  * 	LInit(1000/60, "legend", 800, 480, main);
  * 	var direction = 1;

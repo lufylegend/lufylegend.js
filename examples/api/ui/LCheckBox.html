@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LCheckBox</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,600,main);
+function main(){
+	var check1 = new LCheckBox();
+	check1.x = 50;
+	check1.y= 100;
+	addChild(check1);
+	var check2 = new LCheckBox();
+	check2.x = 100;
+	check2.y= 100;
+	addChild(check2);
+}
+</script>
+	</body>
+</html>

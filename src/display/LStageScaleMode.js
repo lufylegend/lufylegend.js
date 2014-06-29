@@ -18,7 +18,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageScaleMode/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -41,7 +41,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageScaleMode/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -64,7 +64,7 @@
  * 		addChild(bitmap);
  * 	}
  * @examplelink <p><a href="../../../api/LStageScaleMode/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 function LStageScaleMode () {throw "LStageScaleMode cannot be instantiated";}
@@ -73,7 +73,7 @@ function LStageScaleMode () {throw "LStageScaleMode cannot be instantiated";}
  * @property EXACT_FIT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -81,7 +81,7 @@ function LStageScaleMode () {throw "LStageScaleMode cannot be instantiated";}
  * @property EXACT_FIT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -89,7 +89,7 @@ function LStageScaleMode () {throw "LStageScaleMode cannot be instantiated";}
  * @property EXACT_FIT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LStageScaleMode.EXACT_FIT = "exactFit";
@@ -98,7 +98,7 @@ LStageScaleMode.EXACT_FIT = "exactFit";
  * @property SHOW_ALL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -106,7 +106,7 @@ LStageScaleMode.EXACT_FIT = "exactFit";
  * @property SHOW_ALL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -114,7 +114,7 @@ LStageScaleMode.EXACT_FIT = "exactFit";
  * @property SHOW_ALL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LStageScaleMode.SHOW_ALL = "showAll";
@@ -123,7 +123,7 @@ LStageScaleMode.SHOW_ALL = "showAll";
  * @property NO_BORDER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -131,7 +131,7 @@ LStageScaleMode.SHOW_ALL = "showAll";
  * @property NO_BORDER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -139,7 +139,7 @@ LStageScaleMode.SHOW_ALL = "showAll";
  * @property NO_BORDER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LStageScaleMode.NO_BORDER = "noBorder";
@@ -148,7 +148,7 @@ LStageScaleMode.NO_BORDER = "noBorder";
  * @property NO_SCALE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -156,7 +156,7 @@ LStageScaleMode.NO_BORDER = "noBorder";
  * @property NO_SCALE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -164,7 +164,7 @@ LStageScaleMode.NO_BORDER = "noBorder";
  * @property NO_SCALE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LStageScaleMode.NO_SCALE = "noScale";

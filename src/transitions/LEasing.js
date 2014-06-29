@@ -1,6 +1,72 @@
+/** @language chinese
+ * <p>LTweenLite的各种效果。</p>
+ * <p><img src="../../../api/LEasing/None.png" /></p>
+ * <p><img src="../../../api/LEasing/Quad.png" /></p>
+ * <p><img src="../../../api/LEasing/Cubic.png" /></p>
+ * <p><img src="../../../api/LEasing/Quart.png" /></p>
+ * <p><img src="../../../api/LEasing/Quint.png" /></p>
+ * <p><img src="../../../api/LEasing/Sine.png" /></p>
+ * <p><img src="../../../api/LEasing/Strong.png" /></p>
+ * <p><img src="../../../api/LEasing/Expo.png" /></p>
+ * <p><img src="../../../api/LEasing/Circ.png" /></p>
+ * <p><img src="../../../api/LEasing/Elastic.png" /></p>
+ * <p><img src="../../../api/LEasing/Back.png" /></p>
+ * <p><img src="../../../api/LEasing/Bounce.png" /></p>
+ * @class LEasing
+ * @constructor
+ * @since 1.4.0
+ * @examplelink <p><a href="../../../api/LEasing/index.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language english
+ * <p>LTweenLite's Eases.</p>
+ * <p><img src="../../../api/LEasing/None.png" /></p>
+ * <p><img src="../../../api/LEasing/Quad.png" /></p>
+ * <p><img src="../../../api/LEasing/Cubic.png" /></p>
+ * <p><img src="../../../api/LEasing/Quart.png" /></p>
+ * <p><img src="../../../api/LEasing/Quint.png" /></p>
+ * <p><img src="../../../api/LEasing/Sine.png" /></p>
+ * <p><img src="../../../api/LEasing/Strong.png" /></p>
+ * <p><img src="../../../api/LEasing/Expo.png" /></p>
+ * <p><img src="../../../api/LEasing/Circ.png" /></p>
+ * <p><img src="../../../api/LEasing/Elastic.png" /></p>
+ * <p><img src="../../../api/LEasing/Back.png" /></p>
+ * <p><img src="../../../api/LEasing/Bounce.png" /></p>
+ * @class LEasing
+ * @constructor
+ * @since 1.4.0
+ * @examplelink <p><a href="../../../api/LEasing/index.html" target="_blank">Try it »</a></p>
+ * @public
+ */
+/** @language japanese
+ * <p>LTweenLiteの効果。</p>
+ * <p><img src="../../../api/LEasing/None.png" /></p>
+ * <p><img src="../../../api/LEasing/Quad.png" /></p>
+ * <p><img src="../../../api/LEasing/Cubic.png" /></p>
+ * <p><img src="../../../api/LEasing/Quart.png" /></p>
+ * <p><img src="../../../api/LEasing/Quint.png" /></p>
+ * <p><img src="../../../api/LEasing/Sine.png" /></p>
+ * <p><img src="../../../api/LEasing/Strong.png" /></p>
+ * <p><img src="../../../api/LEasing/Expo.png" /></p>
+ * <p><img src="../../../api/LEasing/Circ.png" /></p>
+ * <p><img src="../../../api/LEasing/Elastic.png" /></p>
+ * <p><img src="../../../api/LEasing/Back.png" /></p>
+ * <p><img src="../../../api/LEasing/Bounce.png" /></p>
+ * @class LEasing
+ * @constructor
+ * @since 1.4.0
+ * @examplelink <p><a href="../../../api/LEasing/index.html" target="_blank">実際のサンプルを見る</a></p>
+ * @public
+ */
 var LEasing = {
 	None : {
 		easeIn : function (t, b, c, d) {
+			return b + t * c / d;
+		},
+		easeOut : function (t, b, c, d) {
+			return b + t * c / d;
+		},
+		easeInOut : function (t, b, c, d) {
 			return b + t * c / d;
 		}
 	},
@@ -183,19 +249,19 @@ var LEasing = {
 	},
 	Back : {
 		easeIn : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			}
 			return c * (t /= d) * t * ((s + 1) * t - s) + b;
 		},
 		easeOut : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			}
 			return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
 		},
 		easeInOut : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			} 
 			if ((t /= d / 2) < 1) {

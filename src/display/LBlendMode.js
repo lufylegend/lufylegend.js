@@ -10,7 +10,7 @@
  * 	imgLayer.addChild(img);
  * 	img.blendMode = LBlendMode.LIGHTER;
  * @examplelink <p><a href="../../../api/LBlendMode/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -25,7 +25,7 @@
  * 	imgLayer.addChild(img);
  * 	img.blendMode = LBlendMode.LIGHTER;
  * @examplelink <p><a href="../../../api/LBlendMode/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -40,7 +40,7 @@
  * 	imgLayer.addChild(img);
  * 	img.blendMode = LBlendMode.LIGHTER;
  * @examplelink <p><a href="../../../api/LBlendMode/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 function LBlendMode () {throw "LBlendMode cannot be instantiated";}
@@ -49,7 +49,7 @@ function LBlendMode () {throw "LBlendMode cannot be instantiated";}
  * @property SOURCE_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -57,7 +57,7 @@ function LBlendMode () {throw "LBlendMode cannot be instantiated";}
  * @property SOURCE_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -65,7 +65,7 @@ function LBlendMode () {throw "LBlendMode cannot be instantiated";}
  * @property SOURCE_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.SOURCE_OVER = "source-over";
@@ -74,7 +74,7 @@ LBlendMode.SOURCE_OVER = "source-over";
  * @property SOURCE_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -82,7 +82,7 @@ LBlendMode.SOURCE_OVER = "source-over";
  * @property SOURCE_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -90,7 +90,7 @@ LBlendMode.SOURCE_OVER = "source-over";
  * @property SOURCE_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.SOURCE_ATOP = "source-atop";
@@ -99,7 +99,7 @@ LBlendMode.SOURCE_ATOP = "source-atop";
  * @property SOURCE_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -107,7 +107,7 @@ LBlendMode.SOURCE_ATOP = "source-atop";
  * @property SOURCE_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -115,7 +115,7 @@ LBlendMode.SOURCE_ATOP = "source-atop";
  * @property SOURCE_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.SOURCE_IN = "source-in";
@@ -124,7 +124,7 @@ LBlendMode.SOURCE_IN = "source-in";
  * @property SOURCE_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -132,7 +132,7 @@ LBlendMode.SOURCE_IN = "source-in";
  * @property SOURCE_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -140,7 +140,7 @@ LBlendMode.SOURCE_IN = "source-in";
  * @property SOURCE_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.SOURCE_OUT = "source-out";
@@ -149,7 +149,7 @@ LBlendMode.SOURCE_OUT = "source-out";
  * @property DESTINATION_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -157,7 +157,7 @@ LBlendMode.SOURCE_OUT = "source-out";
  * @property DESTINATION_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -165,7 +165,7 @@ LBlendMode.SOURCE_OUT = "source-out";
  * @property DESTINATION_OVER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.DESTINATION_OVER = "destination-over";
@@ -174,7 +174,7 @@ LBlendMode.DESTINATION_OVER = "destination-over";
  * @property DESTINATION_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -182,7 +182,7 @@ LBlendMode.DESTINATION_OVER = "destination-over";
  * @property DESTINATION_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -190,7 +190,7 @@ LBlendMode.DESTINATION_OVER = "destination-over";
  * @property DESTINATION_ATOP
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.DESTINATION_ATOP = "destination-atop";
@@ -199,7 +199,7 @@ LBlendMode.DESTINATION_ATOP = "destination-atop";
  * @property DESTINATION_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -207,7 +207,7 @@ LBlendMode.DESTINATION_ATOP = "destination-atop";
  * @property DESTINATION_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -215,7 +215,7 @@ LBlendMode.DESTINATION_ATOP = "destination-atop";
  * @property DESTINATION_IN
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.DESTINATION_IN = "destination-in";
@@ -224,7 +224,7 @@ LBlendMode.DESTINATION_IN = "destination-in";
  * @property DESTINATION_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -232,7 +232,7 @@ LBlendMode.DESTINATION_IN = "destination-in";
  * @property DESTINATION_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -240,7 +240,7 @@ LBlendMode.DESTINATION_IN = "destination-in";
  * @property DESTINATION_OUT
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.DESTINATION_OUT = "destination-out";
@@ -249,7 +249,7 @@ LBlendMode.DESTINATION_OUT = "destination-out";
  * @property LIGHTER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -257,7 +257,7 @@ LBlendMode.DESTINATION_OUT = "destination-out";
  * @property LIGHTER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -265,7 +265,7 @@ LBlendMode.DESTINATION_OUT = "destination-out";
  * @property LIGHTER
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.LIGHTER = "lighter";
@@ -274,7 +274,7 @@ LBlendMode.LIGHTER = "lighter";
  * @property COPY
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -282,7 +282,7 @@ LBlendMode.LIGHTER = "lighter";
  * @property COPY
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -290,7 +290,7 @@ LBlendMode.LIGHTER = "lighter";
  * @property COPY
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.COPY = "copy";
@@ -299,7 +299,7 @@ LBlendMode.COPY = "copy";
  * @property XOR
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -307,7 +307,7 @@ LBlendMode.COPY = "copy";
  * @property XOR
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -315,7 +315,7 @@ LBlendMode.COPY = "copy";
  * @property XOR
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.XOR = "xor";
@@ -324,7 +324,7 @@ LBlendMode.XOR = "xor";
  * @property NONE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -332,7 +332,7 @@ LBlendMode.XOR = "xor";
  * @property NONE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -340,7 +340,7 @@ LBlendMode.XOR = "xor";
  * @property NONE
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.NONE = null;
@@ -349,7 +349,7 @@ LBlendMode.NONE = null;
  * @property NORMAL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -357,7 +357,7 @@ LBlendMode.NONE = null;
  * @property NORMAL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -365,7 +365,7 @@ LBlendMode.NONE = null;
  * @property NORMAL
  * @type String
  * @static
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 LBlendMode.NORMAL = null;

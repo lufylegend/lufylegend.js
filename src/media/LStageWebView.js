@@ -9,7 +9,7 @@
  * 	webview.loadURL("http://www.lufylegend.com");
  * 	webview.show();
  * @examplelink <p><a href="../../../api/LStageWebView/index.html" target="_blank">测试链接</a></p>
- * @since 1.9.0
+ * @since 1.7.2
  * @public
  */
 /** @language english
@@ -23,7 +23,7 @@
  * 	webview.loadURL("http://www.lufylegend.com");
  * 	webview.show();
  * @examplelink <p><a href="../../../api/LStageWebView/index.html" target="_blank">Try it »</a></p>
- * @since 1.9.0
+ * @since 1.7.2
  * @public
  */
 /** @language japanese
@@ -37,7 +37,7 @@
  * 	webview.loadURL("http://www.lufylegend.com");
  * 	webview.show();
  * @examplelink <p><a href="../../../api/LStageWebView/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.9.0
+ * @since 1.7.2
  * @public
  */
 var LStageWebView = (function () {
@@ -57,21 +57,21 @@ var LStageWebView = (function () {
 		 * <p>在指定的 URL 加载页面。</p>
 		 * @method loadURL
 		 * @param {String} url 指向的 URL。
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language english
 		 * <p>Loads the page at the specified URL.</p>
 		 * @method loadURL
 		 * @param {String} url the specified URL.
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>指定した URL のページを読み込みます。</p>
 		 * @method loadURL
 		 * @param {String} url 指定した URL。
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		loadURL : function (u) {
@@ -84,19 +84,19 @@ var LStageWebView = (function () {
 		/** @language chinese
 		 * <p>显示此LStageWebView对象。</p>
 		 * @method show
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language english
 		 * <p>show the LStageWebView object.</p>
 		 * @method show
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>LStageWebViewを表示する。</p>
 		 * @method show
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		show : function () {
@@ -105,19 +105,19 @@ var LStageWebView = (function () {
 		/** @language chinese
 		 * <p>隐藏此LStageWebView对象。</p>
 		 * @method die
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language english
 		 * <p>hide the LStageWebView object.</p>
 		 * @method die
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>LStageWebViewを非表示する。</p>
 		 * @method die
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		die : function () {
@@ -127,21 +127,21 @@ var LStageWebView = (function () {
 		 * <p>设定舞台上显示 LStageWebView 对象的区域。</p>
 		 * @method setViewPort
 		 * @param {LRectangle} viewPort 舞台上显示 LStageWebView 对象的区域。
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language english
 		 * <p>Set the area on the stage in which the LStageWebView object is displayed.</p>
 		 * @method setViewPort
 		 * @param {LRectangle} viewPort The area on the stage in which the LStageWebView object is displayed.
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>LStageWebView オブジェクトを表示するステージの領域を設定する。</p>
 		 * @method setViewPort
 		 * @param {LRectangle} viewPort LStageWebView オブジェクトを表示するステージの領域。
-		 * @since 1.0.0
+		 * @since 1.7.2
 		 * @public
 		 */
 		setViewPort : function (r) {

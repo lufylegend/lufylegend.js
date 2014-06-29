@@ -2,21 +2,21 @@
  * Ajax 操作函数。允许我们在不刷新浏览器的情况下从服务器加载数据。
  * @class LAjax	
  * @constructor
- * @since 1.0.0
+ * @since 1.7.1
  * @public
  */
 /** @language english
  * AJAX is the art of exchanging data with a server, and update parts of a web page - without reloading the whole page.
  * @class LAjax
  * @constructor
- * @since 1.0.0
+ * @since 1.7.1
  * @public
  */
 /** @language japanese
  * AJAX アプリケーション。
  * @class LAjax
  * @constructor
- * @since 1.0.0
+ * @since 1.7.1
  * @public
  */
 var LAjax = (function () {
@@ -49,7 +49,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		/** @language english
 		 * The method loads data from the server using a HTTP GET request.
@@ -73,7 +73,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		/** @language japanese
 		 * HTTP(GET)通信でページを読み込みます。
@@ -97,7 +97,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		get : function (url, data, oncomplete, onerror) {
 			this.getRequest("GET", url, data, oncomplete, onerror);
@@ -124,7 +124,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		/** @language english
 		 * The method loads data from the server using a HTTP POST request.
@@ -148,7 +148,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		/** @language japanese
 		 * HTTP(POST)通信でページを読み込みます。
@@ -172,7 +172,7 @@ var LAjax = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.7.1
 		 */
 		post : function (url, data, oncomplete, onerror) {
 			this.getRequest("POST", url, data, oncomplete, onerror);

@@ -28,7 +28,7 @@
  * 		player.onframe();
  * 	}
  * @examplelink <p><a href="../../../api/LAnimation/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.3.1
  * @public
  */
 /** @language english
@@ -61,7 +61,7 @@
  * 		player.onframe();
  * 	}
  * @examplelink <p><a href="../../../api/LAnimation/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.3.1
  * @public
  */
 /** @language japanese
@@ -94,7 +94,7 @@
  * 		player.onframe();
  * 	}
  * @examplelink <p><a href="../../../api/LAnimation/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.3.1
  * @public
  */
 var LAnimation = (function () {
@@ -106,7 +106,7 @@ var LAnimation = (function () {
 		 * @property type
 		 * @type String
 		 * @default LAnimation
-		 * @since 1.0.0
+		 * @since 1.3.1
 		 * @public
 		 */
 		/** @language english
@@ -114,7 +114,7 @@ var LAnimation = (function () {
 		 * @property type
 		 * @type String
 		 * @default LAnimation
-		 * @since 1.0.0
+		 * @since 1.3.1
 		 * @public
 		 */
 		/** @language japanese
@@ -122,7 +122,7 @@ var LAnimation = (function () {
 		 * @property type
 		 * @type String
 		 * @default LAnimation
-		 * @since 1.0.0
+		 * @since 1.3.1
 		 * @public
 		 */
 		s.type = "LAnimation";
@@ -147,7 +147,7 @@ var LAnimation = (function () {
 		 * @param {int} colIndex 播放动画的列号。
 		 * @param {int} mode (1,0,-1)分别代表(正序播放,静止,倒序播放)。
 		 * @param {Boolean} isMirror 是否使用镜像来水平翻转显示对象。
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -183,7 +183,7 @@ var LAnimation = (function () {
 		 * @param {int} colIndex Column index.
 		 * @param {int} mode You can set the value like this. (1,0,-1)：(Promote positive sequence ,Stop, Promote reverse sequence).
 		 * @param {Boolean} isMirror Flip Horizontal.
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -219,7 +219,7 @@ var LAnimation = (function () {
 		 * @param {int} colIndex 列番号。
 		 * @param {int} mode 下記の三つの値を設定することができます。(1,0,-1)：(正シーケンス進める,ストップ,逆シーケンス進める)。
 		 * @param {Boolean} isMirror 水平方向に反転するかどうか。
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -274,7 +274,7 @@ var LAnimation = (function () {
 		 * 获取当前播放的贞动画的属性。
 		 * @method getAction
 		 * @return {Array} 当前播放的贞动画的属性:[rowIndex,colIndex,mode,isMirror]([行号,列号,播放模式,是否为镜像])。
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -303,7 +303,7 @@ var LAnimation = (function () {
 		 * Get the frame's property.
 		 * @method getAction
 		 * @return {Array} The frame's property:[rowIndex,colIndex,mode,isMirror]([Row index,Column index,mode,Flip Horizontal])。
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -332,7 +332,7 @@ var LAnimation = (function () {
 		 * 今動いているフレームのプロパティを取得。
 		 * @method getAction
 		 * @return {Array} フレームのプロパティ:[rowIndex,colIndex,mode,isMirror]([行番号,列番号,(正|逆)モード,水平方向に反転するかどうか])。
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -364,7 +364,7 @@ var LAnimation = (function () {
 		/** @language chinese
 		 * 播放下一贞动画。
 		 * @method onframe
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -390,7 +390,7 @@ var LAnimation = (function () {
 		/** @language english
 		 * Show the next frame.
 		 * @method onframe
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -416,7 +416,7 @@ var LAnimation = (function () {
 		/** @language japanese
 		 * 次のフレームのアニメーションを表示します。
 		 * @method onframe
-		 * @since 1.8.2
+		 * @since 1.3.1
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -465,7 +465,7 @@ var LAnimation = (function () {
 		 * 返回一个LAnimation的克隆对象。
 		 * @method clone
 		 * @return {LAnimation} 一个新的 LAnimation 对象，它与原始对象相同.
-		 * @since 1.8.2
+		 * @since 1.8.8
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -498,7 +498,7 @@ var LAnimation = (function () {
 		 * Returns a new LAnimation object that is a clone of the original instance with an exact copy of the object.
 		 * @method clone
 		 * @return {LAnimation} A new LAnimation object that is identical to the original.
-		 * @since 1.8.2
+		 * @since 1.8.8
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);
@@ -531,7 +531,7 @@ var LAnimation = (function () {
 		 * 新しい LAnimation オブジェクトとして、元のインスタンスのクローンを返します。オブジェクトはまったく同じコピーになります。
 		 * @method clone
 		 * @return {LAnimation} 元のオブジェクトと同一の新しい LAnimation オブジェクトです。
-		 * @since 1.8.2
+		 * @since 1.8.8
 		 * @public
 		 * @example
 		 * 	LInit(200,"legend",800,450,main);

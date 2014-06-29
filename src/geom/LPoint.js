@@ -6,7 +6,7 @@
  * @param {float} y 垂直坐标。
  * @example
  * 	var myPoint = new LPoint(100,100);
- * @since 1.0.0
+ * @since 1.7.7
  * @public
  */
 /** @language english
@@ -17,7 +17,7 @@
  * @param {float} y The vertical coordinate.
  * @example
  * 	var myPoint = new LPoint(100,100);
- * @since 1.0.0
+ * @since 1.7.7
  * @public
  */
 /** @language japanese
@@ -28,13 +28,61 @@
  * @param {float} y 垂直座標です。
  * @example
  * 	var myPoint = new LPoint(100,100);
- * @since 1.0.0
+ * @since 1.7.7
  * @public
  */
 var LPoint = (function () {
 	function LPoint (x, y) {
 		var s = this;
+		/** @language chinese
+		 * 该点的水平坐标。
+		 * @property x
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * The horizontal coordinate of the point.
+		 * @property x
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * ポイントの水平座標です。
+		 * @property x
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
 		s.x = x;
+		/** @language chinese
+		 * 该点的垂直坐标。
+		 * @property y
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * The vertical coordinate of the point.
+		 * @property y
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * ポイントの垂直座標です。
+		 * @property y
+		 * @type float
+		 * @default 0
+		 * @since 1.7.7
+		 * @public
+		 */
 		s.y = y;
 	}
 	/** @language chinese
@@ -44,7 +92,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p1 第一个点
 	 * @param {LPoint} p2 第二个点。
 	 * @return {float} 第一个点和第二个点之间的距离。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language english
@@ -54,7 +102,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p1 The first point.
 	 * @param {LPoint} p2 The second point.
 	 * @return {float} The distance between the first and second points.
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language japanese
@@ -64,7 +112,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p1 最初のポイントです。
 	 * @param {LPoint} p2 2 番目のポイントです。
 	 * @return {float} 最初のポイントと 2 番目のポイント間の距離です。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	LPoint.distance = function (p1, p2) {
@@ -79,7 +127,7 @@ var LPoint = (function () {
 	 * @param {LPoint} x2 第二个点的水平坐标。
 	 * @param {LPoint} y2 第二个点的垂直坐标。
 	 * @return {float} 第一个点和第二个点之间的距离。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language english
@@ -91,7 +139,7 @@ var LPoint = (function () {
 	 * @param {LPoint} x2 2 The horizontal coordinate of the second point.
 	 * @param {LPoint} y2 2 The vertical coordinate of the second point.
 	 * @return {float} The distance between the first and second points.
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language japanese
@@ -103,7 +151,7 @@ var LPoint = (function () {
 	 * @param {LPoint} x2 2 番目のポイントの水平x座標です。
 	 * @param {LPoint} y2 2 番目のポイントの水平y座標です。
 	 * @return {float} 最初のポイントと 2 番目のポイント間の距離です。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	LPoint.distance2 = function (x1, y1, x2, y2) {
@@ -118,7 +166,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p2 第二个点。
 	 * @param {float} f 两个点之间的内插级别。表示新点将位于 p1 和 p2 连成的直线上的什么位置。如果 f=1，则返回 p1；如果 f=0，则返回 p2。
 	 * @return {LPoint} 新的内插点。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language english
@@ -129,7 +177,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p2 The second point.
 	 * @param {float} f The level of interpolation between the two points. Indicates where the new point will be, along the line between p1 and p2. If f=1, p1 is returned; if f=0, p2 is returned.
 	 * @return {LPoint} The new, interpolated point.
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language japanese
@@ -140,7 +188,7 @@ var LPoint = (function () {
 	 * @param {LPoint} p2 2 番目のポイントです。
 	 * @param {float} f 2 つのポイント間の補間のレベルです。p1 と p2 間の線に沿って新しいポイントがある位置を示します。f=1 の場合は p1 が返されます。f=0 の場合は p2 が返されます。
 	 * @return {LPoint} 新しい補間ポイントです。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	LPoint.interpolate = function (p1, p2, f) {
@@ -153,7 +201,7 @@ var LPoint = (function () {
 	 * @param {float} len 极坐标对的长度。
 	 * @param {float} angle 极坐标对的角度（以弧度表示）。
 	 * @return {LPoint} 笛卡尔点。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language english
@@ -163,7 +211,7 @@ var LPoint = (function () {
 	 * @param {float} len The length coordinate of the polar pair.
 	 * @param {float} angle The angle, in radians, of the polar pair.
 	 * @return {LPoint} The Cartesian point.
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	/** @language japanese
@@ -173,7 +221,7 @@ var LPoint = (function () {
 	 * @param {float} len 極座標ペアの長さ座標です。
 	 * @param {float} angle 極座標ペアの角度（ラジアン単位）です。
 	 * @return {LPoint} 直交ポイントです。
-	 * @since 1.0.0
+	 * @since 1.8.5
 	 * @public
 	 */
 	LPoint.polar = function (l, a) {
@@ -187,21 +235,21 @@ var LPoint = (function () {
 		 * 返回从 (0,0) 到此点的线段长度。
 		 * @method length
 		 * @return {float} 从 (0,0) 到此点的线段长度。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
 		 * Returns the length of the line segment from (0,0) to this point.
 		 * @method length
 		 * @return {float} The length of the line segment from (0,0) to this point.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
 		 * (0,0) からこのポイントまでの線のセグメントの長さを戻す。
 		 * @method length
 		 * @return {float} (0,0) からこのポイントまでの線のセグメントの長さです。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		length : function () {
@@ -212,7 +260,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v 要添加的点。
 		 * @return {LPoint} 新点。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -220,7 +268,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v The point to be added.
 		 * @return {LPoint} The new point.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -228,7 +276,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v 追加するポイントです。
 		 * @return {LPoint} 新しいポイントです。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		add : function (v) {
@@ -238,21 +286,21 @@ var LPoint = (function () {
 		 * 创建此 LPoint 对象的副本。
 		 * @method clone
 		 * @return {LPoint} 新的 LPoint 对象。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
 		 * Creates a copy of this LPoint object.
 		 * @method clone
 		 * @return {LPoint} The new LPoint object.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
 		 * この LPoint オブジェクトのコピーを作成します。
 		 * @method clone
 		 * @return {LPoint} 新しい LPoint オブジェクトです。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		clone : function () {
@@ -263,7 +311,7 @@ var LPoint = (function () {
 		 * @method setTo
 		 * @param {float} x 要将 LPoint 设置为的x坐标值。
 		 * @param {float} y 要将 LPoint 设置为的y坐标值。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -271,7 +319,7 @@ var LPoint = (function () {
 		 * @method setTo
 		 * @param {float} x the x values to set the point to.
 		 * @param {float} y the y values to set the point to.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -279,7 +327,7 @@ var LPoint = (function () {
 		 * @method setTo
 		 * @param {float} x ポイントに設定するx座標値です。
 		 * @param {float} y ポイントに設定するy座標値です。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		setTo : function (x, y) {
@@ -289,21 +337,21 @@ var LPoint = (function () {
 		 * 将源 LPoint 对象中的所有点数据复制到调用方 LPoint 对象中。
 		 * @method copyFrom
 		 * @param {LPoint} sourcePoint 要从中复制数据的 Point 对象。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
 		 * Copies all of the point data from the source LPoint object into the calling LPoint object.
 		 * @method copyFrom
 		 * @param {LPoint} sourcePoint The LPoint object from which to copy the data.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
 		 * すべてのポイントデータを、ソース LPoint オブジェクトから、呼び出し元の LPoint オブジェクトにコピーします。
 		 * @method copyFrom
 		 * @param {LPoint} sourcePoint データのコピー元となる LPoint オブジェクトです。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		copyFrom : function (s) {
@@ -314,7 +362,7 @@ var LPoint = (function () {
 		 * @method equals
 		 * @param {LPoint} toCompare 要比较的点。
 		 * @return {Boolean} 如果该对象与此 LPoint 对象相同，则为 true 值，如果不相同，则为 false。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -322,7 +370,7 @@ var LPoint = (function () {
 		 * @method equals
 		 * @param {LPoint} The point to be compared.
 		 * @return {Boolean}  A value of true if the object is equal to this Point object; false if it is not equal.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -330,7 +378,7 @@ var LPoint = (function () {
 		 * @method equals
 		 * @param {LPoint} toCompare 比較するポイントです。
 		 * @return {Boolean} オブジェクトがこの LPoint オブジェクトと等しい場合は true を返します。等しくない場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		equals : function (t) {
@@ -340,21 +388,21 @@ var LPoint = (function () {
 		 * 将 (0,0) 和当前点之间的线段缩放为设定的长度。
 		 * @method normalize
 		 * @param {float} thickness 缩放值。例如，如果当前点为 (0,5) 并且您将它规范化为 1，则返回的点位于 (0,1) 处。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
 		 * Scales the line segment between (0,0) and the current point to a set length.
 		 * @method normalize
 		 * @param {float} thickness The scaling value. For example, if the current point is (0,5), and you normalize it to 1, the point returned is at (0,1).
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
 		 * (0,0) と現在のポイント間の線のセグメントを設定された長さに拡大 / 縮小します。
 		 * @method normalize
 		 * @param {float} thickness 拡大 / 縮小値です。例えば、現在のポイントが (0,5) で、1 に正規化すると、返されるポイントは (0,1) になります。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		normalize : function (t) {
@@ -366,7 +414,7 @@ var LPoint = (function () {
 		 * @method offset
 		 * @param {float} dx 水平坐标 x 的偏移量。
 		 * @param {float} dy 垂直坐标 y 的偏移量。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -374,7 +422,7 @@ var LPoint = (function () {
 		 * @method offset
 		 * @param {float} dx The amount by which to offset the horizontal coordinate, x
 		 * @param {float} dy The amount by which to offset the vertical coordinate, y.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -382,7 +430,7 @@ var LPoint = (function () {
 		 * @method offset
 		 * @param {float} dx 水平座標 x をオフセットする量です。
 		 * @param {float} dy 垂直座標 y をオフセットする量です。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		offset : function (dx, dy) {
@@ -394,7 +442,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v 要减去的点。
 		 * @return {LPoint} 新点。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -402,7 +450,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v The point to be subtracted.
 		 * @return {LPoint} The new point.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -410,7 +458,7 @@ var LPoint = (function () {
 		 * @method add
 		 * @param {LPoint} v 減算するポイントです
 		 * @return {LPoint} 新しいポイントです。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		subtract : function (v) {

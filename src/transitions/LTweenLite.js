@@ -2,21 +2,21 @@
  * <p>LTweenLite是比较常用的一个动画库，包含各种缓动效果，使用LTweenLite能够简化动画制作的代码编写工作。</p>
  * @class LTweenLite
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 /** @language english
  * <p>LTweenLite is an extremely fast, lightweight, and flexible animation tool that serves as the foundation Animation Platform.</p>
  * @class LTweenLite
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 /** @language japanese
  * <p>LTweenLiteはアニメーショントゥイーン用ライブラリです。高速・軽量がウリなんです。</p>
  * @class LTweenLite
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 var LTweenLite = (function () {
@@ -188,7 +188,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		/** @language english
 		 * Static method for creating a LTweenLiteChild instance that animates to the specified destination values (from the current values).
@@ -231,7 +231,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		/** @language japanese
 		 * [静的]新しい LTweenLiteChild インスタンスを作成して，指定したオブジェクトのある属性を指定した値に変更する。
@@ -274,7 +274,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		to : function ($target, $duration, $vars) {
 			if (!$target) {
@@ -318,7 +318,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * Static method to stop a tween affect.
@@ -348,7 +348,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * [静的]トゥイーンをストップする。
@@ -378,7 +378,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		remove : function (tween) {
 			var s = this;
@@ -426,7 +426,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * Static method to stop all the tween affects.
@@ -455,7 +455,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * [静的]全部のトゥイーンをストップする。
@@ -484,7 +484,7 @@ var LTweenLite = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		removeAll : function () {
 			this.tweens.splice(0, this.tweens.length);

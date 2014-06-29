@@ -26,7 +26,7 @@
  * 		video.play();
  * 	}
  * @examplelink <p><a href="../../../api/LVideo/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language english
@@ -57,7 +57,7 @@
  * 		video.play();
  * 	}
  * @examplelink <p><a href="../../../api/LVideo/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language japanese
@@ -88,7 +88,7 @@
  * 		video.play();
  * 	}
  * @examplelink <p><a href="../../../api/LVideo/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 var LVideo = (function () {

@@ -2,21 +2,21 @@
  * LMatrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
  * @class LMatrix
  * @constructor
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
  * The LMatrix class represents a transformation matrix that determines how to map points from one coordinate space to another. 
  * @class LMatrix
  * @constructor
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
  * LMatrix クラスは、2 つの座標空間の間におけるポイントのマッピング方法を決定する変換マトリックスを表します。
  * @class LMatrix
  * @constructor
- * @since 1.0.0
+ * @since 1.8.0
  * @public
  */
 var LMatrix = (function () {

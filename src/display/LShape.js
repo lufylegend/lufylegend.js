@@ -12,7 +12,7 @@
  * 		shape.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
  * 	}
  * @examplelink <p><a href="../../../api/LShape/index.html" target="_blank">测试链接</a></p>
- * @since 1.0.0
+ * @since 1.8.5
  * @public
  */
 /** @language english
@@ -29,7 +29,7 @@
  * 		shape.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
  * 	}
  * @examplelink <p><a href="../../../api/LShape/index.html" target="_blank">Try it »</a></p>
- * @since 1.0.0
+ * @since 1.8.5
  * @public
  */
 /** @language japanese
@@ -46,7 +46,7 @@
  * 		shape.graphics.drawRect(2, "#ff0000", [10, 10, 50, 100], true, "#880088");
  * 	}
  * @examplelink <p><a href="../../../api/LShape/index.html" target="_blank">実際のサンプルを見る</a></p>
- * @since 1.0.0
+ * @since 1.8.5
  * @public
  */
 var LShape = (function () {
@@ -58,7 +58,7 @@ var LShape = (function () {
 		 * @property type
 		 * @type String
 		 * @default LShape
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
@@ -66,7 +66,7 @@ var LShape = (function () {
 		 * @property type
 		 * @type String
 		 * @default LShape
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
@@ -74,7 +74,7 @@ var LShape = (function () {
 		 * @property type
 		 * @type String
 		 * @default LShape
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		s.type = "LShape";
@@ -82,7 +82,7 @@ var LShape = (function () {
 		 * [只读] 指定属于此 sprite 的 LGraphics 对象，在此 sprite 中可执行矢量绘图命令。
 		 * @property graphics
 		 * @type LGraphics
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
@@ -94,7 +94,7 @@ var LShape = (function () {
 		 * [read-only] Specifies the LGraphics object that belongs to this sprite where vector drawing commands can occur.
 		 * @property graphics
 		 * @type LGraphics
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
@@ -106,7 +106,7 @@ var LShape = (function () {
 		 * [読み取り専用] ベクターの描画コマンドが発生するこのスプライトに属する LGraphics オブジェクトを指定します。
 		 * @property graphics
 		 * @type LGraphics
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
@@ -129,7 +129,7 @@ var LShape = (function () {
 		 * 获取显示对象的宽度，以像素为单位。
 		 * @method getWidth
 		 * @return {float} 显示对象的宽度。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -143,7 +143,7 @@ var LShape = (function () {
 		 * Get the width of the display object, in pixels.
 		 * @method getWidth
 		 * @return {float} the width of the display object.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -157,7 +157,7 @@ var LShape = (function () {
 		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
 		 * @method getWidth
 		 * @return {float} オブジェクトの幅。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -188,7 +188,7 @@ var LShape = (function () {
 		 * 获取显示对象的高度，以像素为单位。
 		 * @method getHeight
 		 * @return {float} 显示对象的高度。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -202,7 +202,7 @@ var LShape = (function () {
 		 * Get the height of the display object, in pixels.
 		 * @method getHeight
 		 * @return {float} the height of the display object.
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -216,7 +216,7 @@ var LShape = (function () {
 		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
 		 * @method getHeight
 		 * @return {float} オブジェクトの高さ。
-		 * @since 1.0.0
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -265,7 +265,7 @@ var LShape = (function () {
 		 * 返回一个LShape的克隆对象。
 		 * @method clone
 		 * @return {LShape} 一个新的 LShape 对象，它与原始对象相同.
-		 * @since 1.8.2
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -281,7 +281,7 @@ var LShape = (function () {
 		 * Returns a new LShape object that is a clone of the original instance with an exact copy of the object.
 		 * @method clone
 		 * @return {LShape} A new LShape object that is identical to the original.
-		 * @since 1.8.2
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -297,7 +297,7 @@ var LShape = (function () {
 		 * 新しい LShape オブジェクトとして、元のインスタンスのクローンを返します。オブジェクトはまったく同じコピーになります。
 		 * @method clone
 		 * @return {LShape} 元のオブジェクトと同一の新しい LShape オブジェクトです。
-		 * @since 1.8.2
+		 * @since 1.8.5
 		 * @public
 		 * @example
 		 * 	var shape = new LShape();
@@ -338,19 +338,19 @@ var LShape = (function () {
 		/** @language chinese
 		 * <p>清空所使用的内存。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language english
 		 * <p>Frees memory that is used.</p>
 		 * @method clearShape
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>使ったメモリをクリアする。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @public
 		 */
 		die : function () {

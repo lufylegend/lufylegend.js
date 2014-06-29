@@ -1224,8 +1224,11 @@ var LObject = (function () {
 			} else {
 				s.__ll__parent_call++;
 			}
-			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+			if (s.__ll__parent_call >= s.__ll__parent__.length) {
 				return false;
+			}
+			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+				return s.callParent(f_n, args);
 			}
 			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			if (init) {
@@ -1420,7 +1423,8 @@ var LVec2 = (function () {
 				max_i = i;
 			}
 		}
-		return {"min_o" : min_o, "min_i" : min_i, "max_o" : max_o, "max_i" : max_i};
+		var r = {"min_o" : min_o, "min_i" : min_i, "max_o" : max_o, "max_i" : max_i};
+		return r;
 	};
 	LVec2.prototype = {
 		length : function () {
@@ -4752,6 +4756,12 @@ var LEasing = {
 	None : {
 		easeIn : function (t, b, c, d) {
 			return b + t * c / d;
+		},
+		easeOut : function (t, b, c, d) {
+			return b + t * c / d;
+		},
+		easeInOut : function (t, b, c, d) {
+			return b + t * c / d;
 		}
 	},
 	Quad : {
@@ -4933,19 +4943,19 @@ var LEasing = {
 	},
 	Back : {
 		easeIn : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			}
 			return c * (t /= d) * t * ((s + 1) * t - s) + b;
 		},
 		easeOut : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			}
 			return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
 		},
 		easeInOut : function (t, b, c, d, s) {
-			if (s == UNDEFINED) {
+			if (typeof s == UNDEFINED) {
 				s = 1.70158;
 			} 
 			if ((t /= d / 2) < 1) {

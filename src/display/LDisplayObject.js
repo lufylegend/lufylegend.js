@@ -6,7 +6,7 @@
  * @class LDisplayObject
  * @extends LEventDispatcher
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language english
@@ -17,7 +17,7 @@
  * @class LDisplayObject
  * @extends LEventDispatcher
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 /** @language japanese
@@ -28,7 +28,7 @@
  * @class LDisplayObject
  * @extends LEventDispatcher
  * @constructor
- * @since 1.0.0
+ * @since 1.6.0
  * @public
  */
 var LDisplayObject = (function () {
@@ -40,7 +40,7 @@ var LDisplayObject = (function () {
 		 * @property x
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -48,7 +48,7 @@ var LDisplayObject = (function () {
 		 * @property x
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -56,7 +56,7 @@ var LDisplayObject = (function () {
 		 * @property x
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.x = 0;
@@ -65,7 +65,7 @@ var LDisplayObject = (function () {
 		 * @property y
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -73,7 +73,7 @@ var LDisplayObject = (function () {
 		 * @property y
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -81,7 +81,7 @@ var LDisplayObject = (function () {
 		 * @property y
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.y = 0;
@@ -92,7 +92,7 @@ var LDisplayObject = (function () {
 		 * @property scaleX
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -100,7 +100,7 @@ var LDisplayObject = (function () {
 		 * @property scaleX
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -108,7 +108,7 @@ var LDisplayObject = (function () {
 		 * @property scaleX
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.scaleX = 1;
@@ -117,7 +117,7 @@ var LDisplayObject = (function () {
 		 * @property scaleY
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -125,7 +125,7 @@ var LDisplayObject = (function () {
 		 * @property scaleY
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -133,7 +133,7 @@ var LDisplayObject = (function () {
 		 * @property scaleY
 		 * @type float
 		 * @default 1
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.scaleY = 1;
@@ -142,7 +142,7 @@ var LDisplayObject = (function () {
 		 * @property alpha
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -150,7 +150,7 @@ var LDisplayObject = (function () {
 		 * @property alpha
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -158,7 +158,7 @@ var LDisplayObject = (function () {
 		 * @property alpha
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.alpha = 1;
@@ -167,7 +167,7 @@ var LDisplayObject = (function () {
 		 * @property visible
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -175,7 +175,7 @@ var LDisplayObject = (function () {
 		 * @property visible
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -183,7 +183,7 @@ var LDisplayObject = (function () {
 		 * @property visible
 		 * @type Boolean
 		 * @default true
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.visible = true;
@@ -192,7 +192,7 @@ var LDisplayObject = (function () {
 		 * @property rotate
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -200,7 +200,7 @@ var LDisplayObject = (function () {
 		 * @property rotate
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -208,7 +208,7 @@ var LDisplayObject = (function () {
 		 * @property rotate
 		 * @type float
 		 * @default 0
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.rotate = 0;
@@ -217,7 +217,7 @@ var LDisplayObject = (function () {
 		 * @property mask
 		 * @type LDisplayObject
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -225,7 +225,7 @@ var LDisplayObject = (function () {
 		 * @property mask
 		 * @type LDisplayObject
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -233,7 +233,7 @@ var LDisplayObject = (function () {
 		 * @property mask
 		 * @type LDisplayObject
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.mask = null;
@@ -242,7 +242,7 @@ var LDisplayObject = (function () {
 		 * @property blendMode
 		 * @type String
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 */
 		/** @language english
@@ -250,7 +250,7 @@ var LDisplayObject = (function () {
 		 * @property blendMode
 		 * @type String
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 */
 		/** @language japanese
@@ -258,7 +258,7 @@ var LDisplayObject = (function () {
 		 * @property blendMode
 		 * @type String
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 */
 		s.blendMode = null;
@@ -267,7 +267,7 @@ var LDisplayObject = (function () {
 		 * @property filters
 		 * @type Array
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language english
@@ -275,7 +275,7 @@ var LDisplayObject = (function () {
 		 * @property filters
 		 * @type Array
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		/** @language japanese
@@ -283,7 +283,7 @@ var LDisplayObject = (function () {
 		 * @property filters
 		 * @type Array
 		 * @default null
-		 * @since 1.0.0
+		 * @since 1.6.0
 		 * @public
 		 */
 		s.filters = null;
@@ -412,6 +412,27 @@ var LDisplayObject = (function () {
 			}
 			return {scaleX : sX, scaleY : sY};
 		},
+		/** @language chinese
+		 * 得到一个可显示对象相对于canvas标签左上点的坐标。
+		 * @method getRootCoordinate
+		 * @return {LPoint} 一个LPoint对象。
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * Get the coordinates (Relative to the canvas).
+		 * @method getRootCoordinate
+		 * @return {LPoint} a LPoint object。
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * canvasの左上からの座標を取得する。
+		 * @method getRootCoordinate
+		 * @return {LPoint} LPointプロジェクット。
+		 * @since 1.7.7
+		 * @public
+		 */
 		getRootCoordinate : function () {
 			var s = this, sx, sy, p;
 			sx=s.x;
@@ -426,6 +447,30 @@ var LDisplayObject = (function () {
 			}
 			return new LPoint(sx,sy);
 		},
+		/** @language chinese
+		 * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+		 * @method getBounds
+		 * @param {LDisplayObject} targetCoordinateSpace 定义要使用的坐标系的显示对象。
+		 * @return {LRectangle} 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
+		 * @method getBounds
+		 * @param {LDisplayObject} targetCoordinateSpace The display object that defines the coordinate system to use.
+		 * @return {LRectangle} The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * targetCoordinateSpace オブジェクトの座標系を基準にして、表示オブジェクトの領域を定義する矩形を返します。
+		 * @method getBounds
+		 * @param {LDisplayObject} targetCoordinateSpace 使用する座標系を定義する表示オブジェクトです。
+		 * @return {LRectangle} targetCoordinateSpace オブジェクトの座標系を基準とする、表示オブジェクトの領域を定義する矩形です。
+		 * @since 1.7.7
+		 * @public
+		 */
 		getBounds : function (d) {
 			if (typeof d == UNDEFINED) {
 				return new LRectangle(0, 0, 0, 0);
@@ -466,6 +511,27 @@ var LDisplayObject = (function () {
 			LGlobal.canvas = c;
 			return s._canvas;
 		},
+		/** @language chinese
+		 * 将该对象转换成base64编码的image字符串。
+		 * @method getDataURL
+		 * @return {Base64 Image} base64编码的image字符串。
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * Get a string of base64-encoded image.
+		 * @method getDataURL
+		 * @return {Base64 Image} a string of base64-encoded image.
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * base64でエンコードされた画像の文字列を取得する。
+		 * @method getDataURL
+		 * @return {Base64 Image} base64でエンコードされた画像の文字列。
+		 * @since 1.7.7
+		 * @public
+		 */
 		getDataURL : function () {
 			var s = this, r = s.getDataCanvas();
 			return r.toDataURL();
@@ -532,6 +598,24 @@ var LDisplayObject = (function () {
 			}
 			return m;
 		},
+		/** @language chinese
+		 * 将对象自己从父容器中移除。
+		 * @method remove
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language english
+		 * Remove self from the parent container.
+		 * @method remove
+		 * @since 1.7.7
+		 * @public
+		 */
+		/** @language japanese
+		 * オブジェクト自体は、親コンテナから除去される。
+		 * @method remove
+		 * @since 1.7.7
+		 * @public
+		 */
 		remove : function () {
 			var s = this, p = s.parent;
 			if (!p || p == "root") {

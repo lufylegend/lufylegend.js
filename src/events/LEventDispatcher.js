@@ -3,7 +3,7 @@
  * @class LEventDispatcher
  * @extends LObject
  * @constructor
- * @since 1.9.0
+ * @since 1.8.0
  * @public
  */
 /** @language english
@@ -11,7 +11,7 @@
  * @class LEventDispatcher
  * @extends LObject
  * @constructor
- * @since 1.9.0
+ * @since 1.8.0
  * @public
  */
 /** @language japanese
@@ -19,7 +19,7 @@
  * @class LEventDispatcher
  * @extends LObject
  * @constructor
- * @since 1.9.0
+ * @since 1.8.0
  * @public
  */
 var LEventDispatcher = (function () {
@@ -37,7 +37,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type 事件的类型。
 		 * @param {Function} listener 处理事件的侦听器函数。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * <p>Registers an event listener object with an LEventDispatcher object so that the listener receives notification of an event. You can register event listeners on all nodes in the display list for a specific type of event, phase, and priority.</p>
@@ -47,7 +47,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type The type of event.
 		 * @param {Function} listener The listener function that processes the event. 
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * <p>イベントリスナーオブジェクトを LEventDispatcher オブジェクトに登録し、リスナーがイベントの通知を受け取るようにします。イベントリスナーは、特定のタイプのイベント、段階、および優先度に関する表示リスト内のすべてのノードに登録できます。</p>
@@ -57,7 +57,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type イベントのタイプです。
 		 * @param {Function} listener イベントを処理するリスナー関数です。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		addEventListener : function (type, listener) {
 			this._eventList.push({listener : listener, type : type});
@@ -68,7 +68,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type 事件的类型。
 		 * @param {Function} listener 要删除的侦听器对象。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * <p>Removes a listener from the LEventDispatcher object. If there is no matching listener registered with the LEventDispatcher object, a call to this method has no effect.</p>
@@ -76,7 +76,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type The type of event.
 		 * @param {Function} listener The listener object to remove.
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * <p>LEventDispatcher オブジェクトからリスナーを削除します。対応するリスナーが LEventDispatcher オブジェクトに登録されていない場合は、このメソッドを呼び出しても効果はありません。</p>
@@ -84,7 +84,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type イベントのタイプです。
 		 * @param {Function} listener 削除するリスナーオブジェクトです。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		removeEventListener : function (type, listener) {
 			var s = this, i, length;
@@ -103,19 +103,19 @@ var LEventDispatcher = (function () {
 		 * <p>从 LEventDispatcher 对象中删除所有侦听器。</p>
 		 * @method removeAllEventListener
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * <p>Removes all the listeners from the LEventDispatcher object. </p>
 		 * @method removeAllEventListener
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * <p>LEventDispatcher オブジェクトから全部のリスナーを削除します。</p>
 		 * @method removeAllEventListener
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		removeAllEventListener : function () {
 			this._eventList = [];
@@ -153,7 +153,7 @@ var LEventDispatcher = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LEventDispatcher/dispatchEvent.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * <p>Dispatches an event into the event flow. The event target is the LEventDispatcher object upon which the dispatchEvent() method is called.</p>
@@ -187,7 +187,7 @@ var LEventDispatcher = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LEventDispatcher/dispatchEvent.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * <p>イベントをイベントフローに送出します。イベントターゲットは LEventDispatcher オブジェクトです。これに対して dispatchEvent() メソッドが呼び出されます。</p>
@@ -221,7 +221,7 @@ var LEventDispatcher = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LEventDispatcher/dispatchEvent.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		dispatchEvent : function (event) {
 			var s = this, i, length = s._eventList.length, ctype = (typeof event == "string") ? event : event.eventType;
@@ -258,7 +258,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type 事件的类型。
 		 * @return {Boolean} 如果指定类型的侦听器已注册，则值为 true；否则，值为 false。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language english
 		 * <p>Checks whether the LEventDispatcher object has any listeners registered for a specific type of event. This allows you to determine where an LEventDispatcher object has altered handling of an event type in the event flow hierarchy. </p>
@@ -266,7 +266,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type The type of event.
 		 * @return {Boolean} A value of true if a listener of the specified type is registered; false otherwise.
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		/** @language japanese
 		 * <p>LEventDispatcher オブジェクトに、特定のイベントタイプに対して登録されたリスナーがあるかどうかを確認します。これにより、LEventDispatcher オブジェクトがイベントタイプの処理をイベントフロー階層のどこで変更したかを判断できます。</p>
@@ -274,7 +274,7 @@ var LEventDispatcher = (function () {
 		 * @param {String} type イベントのタイプです。
 		 * @return {Boolean} 指定したタイプのリスナーが登録されている場合は true、それ以外の場合は false です。
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.0
 		 */
 		hasEventListener : function (type) {
 			var s = this, i, length = s._eventList.length;

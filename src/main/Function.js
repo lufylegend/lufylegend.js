@@ -1,11 +1,17 @@
 /** @language chinese
  * @class 全局函数
+ * @since 1.0.0
+ * @public
  */
 /** @language english
  * @class Global Functions
+ * @since 1.0.0
+ * @public
  */
 /** @language japanese
  * @class グローバル関数
+ * @since 1.0.0
+ * @public
  */
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (elt) {

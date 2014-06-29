@@ -1362,19 +1362,19 @@ var LSprite = (function () {
 		/** @language chinese
 		 * <p>清空所有图形以及事件。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language english
 		 * <p>Frees memory that is used.Clear all the shapes and the events</p>
 		 * @method clearShape
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>全部のベクターシェイプとイベントをクリアする。</p>
 		 * @method die
-		 * @since 1.9.0
+		 * @since 1.0.0
 		 * @public
 		 */
 		die : function () {

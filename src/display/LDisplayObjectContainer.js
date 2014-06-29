@@ -278,7 +278,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child 要作为该 LDisplayObjectContainer 实例的子项添加的 LDisplayObject 实例。
 		 * @param {int} index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
 		 * @return {LDisplayObject} 在 child 参数中传递的 LDisplayObject 实例。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -299,7 +299,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child child The LDisplayObject instance to add as a child of this LDisplayObjectContainer instance.
 		 * @param {int} index The index position to which the child is added. If you specify a currently occupied index position, the child object that exists at that position and all higher positions are moved up one position in the child list.
 		 * @return {LDisplayObject} The LDisplayObject instance that you pass in the child parameter.
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -320,7 +320,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child この LDisplayObjectContainer インスタンスの子として追加する LDisplayObject インスタンスです。
 		 * @param {int} index 子を追加するインデックス位置です。既にオブジェクトが置かれているインデックス位置を指定すると、その位置にあるオブジェクトとその上に位置するすべてのオブジェクトが、子リスト内で 1 つ上の位置に移動します。
 		 * @return {LDisplayObject} child パラメーターで渡す LDisplayObject インスタンスです。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -439,7 +439,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildAt
 		 * @param {int} index 子对象的索引位置。
 		 * @return {LDisplayObject} 位于指定索引位置处的子显示对象。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -460,7 +460,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildAt
 		 * @param {int} index The index position of the child object.
 		 * @return {LDisplayObject} The child display object at the specified index position.
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -481,7 +481,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildAt
 		 * @param {int} index 子オブジェクトのインデックス位置です。
 		 * @return {LDisplayObject} 指定されたインデックス位置にある子表示オブジェクトです。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -509,7 +509,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method removeChildAt
 		 * @param {int} index 要删除的 DisplayObject 的子索引。
 		 * @return {LDisplayObject} 已删除的 DisplayObject 实例。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -531,7 +531,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method removeChildAt
 		 * @param {int} index The child index of the LDisplayObject to remove.
 		 * @return {LDisplayObject} The LDisplayObject instance that was removed.
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -553,7 +553,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method removeChildAt
 		 * @param {int} index 削除する LDisplayObject の子インデックスです。
 		 * @return {LDisplayObject} 削除された LDisplayObject インスタンスです。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -587,7 +587,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildIndex
 		 * @param {LDisplayObject} child 要标识的 LDisplayObject 实例。
 		 * @return {int} 要标识的子显示对象的索引位置。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -606,7 +606,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildIndex
 		 * @param {LDisplayObject} The DisplayObject instance to identify.
 		 * @return {int} The index position of the child display object to identify.
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -625,7 +625,7 @@ var LDisplayObjectContainer = (function () {
 		 * @method getChildIndex
 		 * @param {LDisplayObject} 特定する LDisplayObject インスタンスです。
 		 * @return {int} 特定する子表示オブジェクトのインデックス位置です。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	var container = new LSprite();
@@ -659,7 +659,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child 要为其更改索引编号的 LDisplayObject 子实例。
 		 * @param {int} index 生成的 child 显示对象的索引编号。
 		 * @return {int} 生成的 child 显示对象的索引编号。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -698,7 +698,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child The child LDisplayObject instance for which you want to change the index number.
 		 * @param {int} index The resulting index number for the child display object.
 		 * @return {int} The resulting index number for the child display object.
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -737,7 +737,7 @@ var LDisplayObjectContainer = (function () {
 		 * @param {LDisplayObject} child インデックス番号を変更する子 LDisplayObject インスタンスです。
 		 * @param {int} index 表示オブジェクトの結果のインデックス番号です。
 		 * @return {int} child 表示オブジェクトの結果のインデックス番号です。
-		 * @since 1.0.0
+		 * @since 1.8.0
 		 * @public
 		 * @example
 		 * 	LInit(50, "legend", 800, 480, main);
@@ -784,6 +784,18 @@ var LDisplayObjectContainer = (function () {
 			s.width = s.getWidth();
 			s.height = s.getHeight();
 		},
+		/** @language chinese
+		 * <p>从 LDisplayObjectContainer 实例的子列表中删除所有的 child LDisplayObject 实例。</p>
+		 * @method removeAllChild
+		 */
+		/** @language english
+		 * <p>Removes all the child LDisplayObject instance from the child list of the LDisplayObjectContainer instance. </p>
+		 * @method removeAllChild
+		 */
+		/** @language japanese
+		 * <p>LDisplayObjectContainer インスタンスの子リストから全部の child LDisplayObject インスタンスを削除します。</p>
+		 * @method removeAllChild
+		 */
 		removeAllChild : function () {
 			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {

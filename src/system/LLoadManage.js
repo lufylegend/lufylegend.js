@@ -2,21 +2,21 @@
  * LLoadManage类是可以用来同时读取图片，文本以及js多种类型的文件。
  * @class LLoadManage	
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 /** @language english
  * LLoadManage class can be used to simultaneously read multiple types of images files, text files and js files.
  * @class LLoadManage
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 /** @language japanese
  * LLoadManageクラスは同時的に画像ファイル、テキストファイル、jsファイルを読み込むことができます。
  * @class LLoadManage
  * @constructor
- * @since 1.0.0
+ * @since 1.4.0
  * @public
  */
 var LLoadManage = (function () {
@@ -69,7 +69,7 @@ var LLoadManage = (function () {
 		 * 		var txt = datalist["text01"];
 		 * 	}
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		/** @language english
 		 * loads data from the specified list.
@@ -115,7 +115,7 @@ var LLoadManage = (function () {
 		 * 		var txt = datalist["text01"];
 		 * 	}
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		/** @language japanese
 		 * 指定された リスト からデータをロードします。
@@ -161,7 +161,7 @@ var LLoadManage = (function () {
 		 * 		var txt = datalist["text01"];
 		 * 	}
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.4.0
 		 */
 		load : function (l, u, c) {
 			var s = this;

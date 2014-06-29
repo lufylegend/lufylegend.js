@@ -7,7 +7,7 @@
  * @param {float} y 矩形左上角的 y 坐标。
  * @param {float} width 矩形的宽度（以像素为单位）。
  * @param {float} height 矩形的高度（以像素为单位）。
- * @since 1.0.0
+ * @since 1.4.1
  * @public
  */
 /** @language english
@@ -19,7 +19,7 @@
  * @param {float} y The y coordinate of the top-left corner of the rectangle.
  * @param {float} width The width of the rectangle, in pixels.
  * @param {float} height The height of the rectangle, in pixels.
- * @since 1.0.0
+ * @since 1.4.1
  * @public
  */
 /** @language japanese
@@ -31,7 +31,7 @@
  * @param {float} y 矩形の左上隅の y 座標です。
  * @param {float} width 矩形の幅（ピクセル単位）です。
  * @param {float} height 矩形の高さ（ピクセル単位）です。
- * @since 1.0.0
+ * @since 1.4.1
  * @public
  */
 var LRectangle = (function () {
@@ -55,21 +55,21 @@ var LRectangle = (function () {
 		 * 返回一个新的 LRectangle 对象，其 x、y、width 和 height 属性的值与原始 LRectangle 对象的对应值相同。
 		 * @method clone
 		 * @return {LRectangle} 新的 LRectangle 对象，其 x、y、width 和 height 属性的值与原始 LRectangle 对象的对应值相同。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
 		 * Returns a new LRectangle object with the same values for the x, y, width, and height properties as the original LRectangle object.
 		 * @method clone
 		 * @return {LRectangle} A new LRectangle object with the same values for the x, y, width, and height properties as the original LRectangle object.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
 		 * 元の LRectangle オブジェクトと x、y、width、および height の各プロパティの値が同じである、新しい LRectangle オブジェクトを返します。
 		 * @method clone
 		 * @return {LRectangle} 元の LRectangle オブジェクトと x、y、width、および height の各プロパティの値が同じである、新しい LRectangle オブジェクトです。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		clone : function () {
@@ -82,7 +82,7 @@ var LRectangle = (function () {
 		 * @param {float} x 点的 x 坐标（水平位置）。
 		 * @param {float} y 点的 y 坐标（垂直位置）。
 		 * @return {Boolean} 如果 LRectangle 对象包含指定的点，则值为 true；否则为 false。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -91,7 +91,7 @@ var LRectangle = (function () {
 		 * @param {float} x The x coordinate (horizontal position) of the point.
 		 * @param {float} y The y coordinate (vertical position) of the point.
 		 * @return {Boolean} A value of true if the LRectangle object contains the specified point; otherwise false.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -100,7 +100,7 @@ var LRectangle = (function () {
 		 * @param {float} x ポイントの x 座標（水平位置）です。
 		 * @param {float} y ポイントの y 座標（垂直位置）です。
 		 * @return {Boolean} LRectangle オブジェクトに指定されたオブジェクトが含まれる場合は true を返します。含まれない場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		contains : function (x, y) {
@@ -112,7 +112,7 @@ var LRectangle = (function () {
 		 * @method containsRect
 		 * @param {LRectangle} rect 所检查的 LRectangle 对象。
 		 * @return {Boolean} 如果此 LRectangle 对象包含您指定的 LRectangle 对象，则返回 true 值，否则返回 false。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -120,7 +120,7 @@ var LRectangle = (function () {
 		 * @method containsRect
 		 * @param {LRectangle} rect The LRectangle object being checked.
 		 * @return {Boolean} A value of true if the LRectangle object that you specify is contained by this LRectangle object; otherwise false.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -128,7 +128,7 @@ var LRectangle = (function () {
 		 * @method containsRect
 		 * @param {LRectangle} rect チェック対象の LRectangle オブジェクトです。
 		 * @return {Boolean} 指定した LRectangle オブジェクトがこの LRectangle オブジェクトに含まれる場合は true を返します。含まれない場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		containsRect : function (rect) {
@@ -140,7 +140,7 @@ var LRectangle = (function () {
 		 * @method equals
 		 * @param {LRectangle} toCompare 要与此 LRectangle 对象进行比较的矩形。
 		 * @return {Boolean} 如果对象具有与此 LRectangle 对象完全相同的 x、y、width 和 height 属性值，则返回 true 值，否则返回 false。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -148,7 +148,7 @@ var LRectangle = (function () {
 		 * @method equals
 		 * @param {LRectangle} toCompare The LRectangle object being checked.
 		 * @return {Boolean} A value of true if the LRectangle object that you specify is contained by this LRectangle object; otherwise false.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -156,7 +156,7 @@ var LRectangle = (function () {
 		 * @method equals
 		 * @param {LRectangle} toCompare チェック対象の LRectangle オブジェクトです。
 		 * @return {Boolean} 指定した LRectangle オブジェクトがこの LRectangle オブジェクトに含まれる場合は true を返します。含まれない場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		equals : function (v) {
@@ -168,7 +168,7 @@ var LRectangle = (function () {
 		 * @method inflate
 		 * @param {float} dx LRectangle 对象横向增加的值。
 		 * @param {float} dy LRectangle 纵向增加的值。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -176,7 +176,7 @@ var LRectangle = (function () {
 		 * @method inflate
 		 * @param {float} dx The value to be added to the left and the right of the LRectangle object.
 		 * @param {float} dy The value to be added to the top and the bottom of the LRectangle object. 
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -184,7 +184,7 @@ var LRectangle = (function () {
 		 * @method inflate
 		 * @param {float} dx LRectangle オブジェクトの左右に加わる値です。
 		 * @param {float} dy LRectangle オブジェクトの上下に加わる値です。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		inflate : function (dx, dy) {
@@ -198,7 +198,7 @@ var LRectangle = (function () {
 		 * @method intersection
 		 * @param {LRectangle} toIntersect 要对照比较以查看其是否与此 LRectangle 对象相交的 LRectangle 对象。
 		 * @return {Boolean} 等于交集区域的 LRectangle 对象。如果该矩形不相交，则此方法返回一个空的 LRectangle 对象；即，其 x、y、width 和 height 属性均设置为 0 的矩形。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -206,7 +206,7 @@ var LRectangle = (function () {
 		 * @method intersection
 		 * @param {LRectangle} toIntersect The LRectangle object to compare against to see if it intersects with this LRectangle object.
 		 * @return {Boolean} A LRectangle object that equals the area of intersection. If the rectangles do not intersect, this method returns an empty LRectangle object; that is, a rectangle with its x, y, width, and height properties set to 0.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -214,7 +214,7 @@ var LRectangle = (function () {
 		 * @method intersection
 		 * @param {LRectangle} toIntersect この LRectangle オブジェクトと交差するかどうかを調べる対象の LRectangle オブジェクトです。
 		 * @return {Boolean} 交差領域と等しい LRectangle オブジェクトです。矩形が交差しない場合、このメソッドは x、y、width、および height の各プロパティが 0 に設定された空の LRectangle オブジェクトを返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		intersection : function (t) {
@@ -234,7 +234,7 @@ var LRectangle = (function () {
 		 * @method intersects
 		 * @param {LRectangle} toIntersect 要与此 LRectangle 对象比较的 LRectangle 对象。
 		 * @return {Boolean} 如果指定的对象与此 LRectangle 对象相交，则返回 true 值，否则返回 false。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -242,7 +242,7 @@ var LRectangle = (function () {
 		 * @method intersects
 		 * @param {LRectangle} toIntersect The LRectangle object to compare against this LRectangle object.
 		 * @return {Boolean} A value of true if the specified object intersects with this LRectangle object; otherwise false.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -250,7 +250,7 @@ var LRectangle = (function () {
 		 * @method intersects
 		 * @param {LRectangle} toIntersect この LRectangle オブジェクトと比較する LRectangle オブジェクトです。
 		 * @return {Boolean} 指定されたオブジェクトがこの LRectangle オブジェクトと交差する場合は true を返します。交差しない場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		intersects : function (t) {
@@ -265,21 +265,21 @@ var LRectangle = (function () {
 		 * 确定此 LRectangle 对象是否为空。
 		 * @method isEmpty
 		 * @return {Boolean} 如果 LRectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
 		 * Determines whether or not this LRectangle object is empty.
 		 * @method isEmpty
 		 * @return {Boolean} A value of true if the LRectangle object's width or height is less than or equal to 0; otherwise false.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
 		 * この LRectangle オブジェクトが空かどうかを判別します。
 		 * @method isEmpty
 		 * @return {Boolean} LRectangle オブジェクトの幅と高さが 0 以下の場合は true を返します。それ以外の場合は false を返します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		isEmpty : function () {
@@ -291,7 +291,7 @@ var LRectangle = (function () {
 		 * @method offset
 		 * @param {float} dx 将 LRectangle 对象的 x 值移动此数量。
 		 * @param {float} dy 将 LRectangle 对象的 y 值移动此数量。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -299,7 +299,7 @@ var LRectangle = (function () {
 		 * @method offset
 		 * @param {float} dx Moves the x value of the LRectangle object by this amount.
 		 * @param {float} dy Moves the y value of the LRectangle object by this amount.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -307,7 +307,7 @@ var LRectangle = (function () {
 		 * @method offset
 		 * @param {float} dx LRectangle オブジェクトの x 値をこの量だけ移動します。
 		 * @param {float} dy LRectangle オブジェクトの y 値をこの量だけ移動します。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		offset : function (dx, dy) {
@@ -319,19 +319,19 @@ var LRectangle = (function () {
 		/** @language chinese
 		 * 将 LRectangle 对象的所有属性设置为 0。如果 LRectangle 对象的宽度或高度小于或等于 0，则该对象为空。此方法将 x、y、width 和 height 属性设置为 0。
 		 * @method setEmpty
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
 		 * Sets all of the LRectangle object's properties to 0. A LRectangle object is empty if its width or height is less than or equal to 0. This method sets the values of the x, y, width, and height properties to 0.
 		 * @method setEmpty
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
 		 * LRectangle オブジェクトのすべてのプロパティを 0 に設定します。その幅または高さが 0 以下の場合、LRectangle オブジェクトは空です。このメソッドは、x、y、width、および height の各プロパティの値を 0 に設定します。
 		 * @method setEmpty
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		setEmpty : function () {
@@ -349,7 +349,7 @@ var LRectangle = (function () {
 		 * @param {float} ya 要将 LRectangle 设置为的值。
 		 * @param {float} widtha 要将 LRectangle 设置为的值。
 		 * @param {float} heighta 要将 LRectangle 设置为的值。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -359,7 +359,7 @@ var LRectangle = (function () {
 		 * @param {float} ya the values to set the rectangle to.
 		 * @param {float} widtha the values to set the rectangle to.
 		 * @param {float} heighta the values to set the rectangle to.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -369,7 +369,7 @@ var LRectangle = (function () {
 		 * @param {float} ya 矩形に設定する値です。
 		 * @param {float} widtha 矩形に設定する値です。
 		 * @param {float} heighta 矩形に設定する値です。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		setTo : function (xa, ya, w, h) {
@@ -389,7 +389,7 @@ var LRectangle = (function () {
 		 * @method union
 		 * @param {LRectangle} toUnion 要将 LRectangle 设置为的值。
 		 * @return {LRectangle} 充当两个矩形的联合的新 LRectangle 对象。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language english
@@ -397,7 +397,7 @@ var LRectangle = (function () {
 		 * @method union
 		 * @param {LRectangle} toUnion A LRectangle object to add to this Rectangle object.
 		 * @return {LRectangle}  A new LRectangle object that is the union of the two rectangles.
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		/** @language japanese
@@ -405,7 +405,7 @@ var LRectangle = (function () {
 		 * @method union
 		 * @param {LRectangle} toUnion この LRectangle オブジェクトに追加する LRectangle オブジェクトです。
 		 * @return {LRectangle} 2 つの矩形の和集合である新しい LRectangle オブジェクトです。
-		 * @since 1.0.0
+		 * @since 1.4.1
 		 * @public
 		 */
 		union : function (t) {

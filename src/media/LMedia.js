@@ -5,7 +5,7 @@
  * @class LMedia
  * @extends LDisplayObject
  * @constructor
- * @since 1.9.0
+ * @since 1.7.0
  * @public
  */
 /** @language english
@@ -15,7 +15,7 @@
  * @class LMedia
  * @extends LDisplayObject
  * @constructor
- * @since 1.9.0
+ * @since 1.7.0
  * @public
  */
 /** @language japanese
@@ -25,7 +25,7 @@
  * @class LMedia
  * @extends LDisplayObject
  * @constructor
- * @since 1.9.0
+ * @since 1.7.0
  * @public
  */
 var LMedia = (function () {
@@ -36,21 +36,21 @@ var LMedia = (function () {
 		 * LSound对象或LVideo对象的长度
 		 * @property length
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language english
 		 * The length of LSound object or LVideo object
 		 * @property length
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * LSoundオブジェクトまたはLVideoオブジェクトの長さ
 		 * @property length
 		 * @type int
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		s.length = 0;
@@ -60,21 +60,21 @@ var LMedia = (function () {
 		 * LSound对象或LVideo对象是否正在播放
 		 * @property playing
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language english
 		 * The LSound object or LVideo object is playing.
 		 * @property playing
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * LSoundオブジェクトまたはLVideoオブジェクトは再生中かどうか
 		 * @property playing
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		s.playing = false;
@@ -111,7 +111,7 @@ var LMedia = (function () {
 		 * <p>medio.load("medias/a.mp3,medias/a.wav,medias/a.ogg");</p>
 		 * @method load
 		 * @param {String} url 指向外部 多媒体 文件的 URL。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language english
@@ -120,7 +120,7 @@ var LMedia = (function () {
 		 * <p>medio.load("medias/a.mp3,medias/a.wav,medias/a.ogg");</p>
 		 * @method load
 		 * @param {String} url A URL that points to an external media file.
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
@@ -129,7 +129,7 @@ var LMedia = (function () {
 		 * <p>medio.load("medias/a.mp3,medias/a.wav,medias/a.ogg");</p>
 		 * @method load
 		 * @param {String} url 外部の メディア ファイルを指定する URL です。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		load : function (u) {
@@ -159,21 +159,21 @@ var LMedia = (function () {
 		 * <p>获取已经播放的时间。</p>
 		 * @method getCurrentTime
 		 * @return {int} 已经播放的时间。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>Get the time of reproducing.</p>
 		 * @method getCurrentTime
 		 * @return {int} the time of reproducing.
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>再生した時間を取得。</p>
 		 * @method getCurrentTime
 		 * @return {int} 再生した時間。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		getCurrentTime : function () {
@@ -183,21 +183,21 @@ var LMedia = (function () {
 		 * <p>设定音量。</p>
 		 * @method setVolume
 		 * @param {float} value 音量。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>Set the volume of media.</p>
 		 * @method setVolume
 		 * @param {float} value the volume。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>音量変更。</p>
 		 * @method setVolume
 		 * @param {float} value 音量。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		setVolume : function (v) {
@@ -207,21 +207,21 @@ var LMedia = (function () {
 		 * <p>获取音量。</p>
 		 * @method getVolume
 		 * @return {float} 音量。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>Get the volume of media.</p>
 		 * @method getVolume
 		 * @return {float} the volume.
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>音量を取得。</p>
 		 * @method getVolume
 		 * @return {float} 音量。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		getVolume : function () {
@@ -232,7 +232,7 @@ var LMedia = (function () {
 		 * @method play
 		 * @param {float} startTime 应开始播放的初始位置（以毫秒为单位）。
 		 * @param {float} loops 定义在声道停止播放之前，声音循环回 startTime 值的次数。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
@@ -240,7 +240,7 @@ var LMedia = (function () {
 		 * @method play
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
 		 * @param {float} loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback.
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
@@ -248,7 +248,7 @@ var LMedia = (function () {
 		 * @method play
 		 * @param {float} startTime 再生を開始する初期位置（ミリ秒単位）です。
 		 * @param {float} loops サウンドチャネルの再生が停止するまで startTime 値に戻ってサウンドの再生を繰り返す回数を定義します。
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		play : function (c, l) {
@@ -272,19 +272,19 @@ var LMedia = (function () {
 		/** @language japanese
 		 * <p>暂停当前播放的音频/视频。</p>
 		 * @method stop
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>Pauses the currently playing audio/video.</p>
 		 * @method stop
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>再生を一時停止する。</p>
 		 * @method stop
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		stop : function () {
@@ -294,19 +294,19 @@ var LMedia = (function () {
 		/** @language japanese
 		 * <p>关闭当前播放的音频/视频。</p>
 		 * @method close
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>Close the currently playing audio/video.</p>
 		 * @method close
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>再生を一時クローズする。</p>
 		 * @method close
-		 * @since 1.0.0
+		 * @since 1.7.0
 		 * @public
 		 */
 		close : function () {

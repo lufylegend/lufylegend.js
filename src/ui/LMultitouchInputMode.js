@@ -2,21 +2,21 @@
  * LMultitouchInputMode 类提供 LMultitouch 类的 inputMode 属性值。这些值设置用户与启用触屏的设备交互时canvas运行时调度的接触事件类型。
  * @class LMultitouchInputMode
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * @public
  */
 /** @language english
  * The LMultitouchInputMode class provides values for the inputMode property in the LMultitouch class. These values set the type of touch events the canvas runtime dispatches when the user interacts with a touch-enabled device.
  * @class LMultitouchInputMode
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * @public
  */
 /** @language japanese
  * LMultitouchInputMode クラスは、LMultitouch クラスの inputMode プロパティの値を提供します。これらの値には、ユーザーがタッチ対応デバイスで操作したときに canvas ランタイムが送出するタッチイベントのタイプを設定します。
  * @class LMultitouchInputMode
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * @public
  */
 var LMultitouchInputMode = function () {throw "LMultitouchInputMode cannot be instantiated";};
@@ -25,7 +25,7 @@ var LMultitouchInputMode = function () {throw "LMultitouchInputMode cannot be in
  * @property NONE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language english
@@ -33,7 +33,7 @@ var LMultitouchInputMode = function () {throw "LMultitouchInputMode cannot be in
  * @property NONE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language japanese
@@ -41,7 +41,7 @@ var LMultitouchInputMode = function () {throw "LMultitouchInputMode cannot be in
  * @property NONE
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 LMultitouchInputMode.NONE = "none";
@@ -51,7 +51,7 @@ LMultitouchInputMode.GESTURE = "gesture";
  * @property TOUCH_POINT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language english
@@ -59,7 +59,7 @@ LMultitouchInputMode.GESTURE = "gesture";
  * @property TOUCH_POINT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language japanese
@@ -67,7 +67,7 @@ LMultitouchInputMode.GESTURE = "gesture";
  * @property TOUCH_POINT
  * @type String
  * @static
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 LMultitouchInputMode.TOUCH_POINT = "touchPoint";

@@ -2,7 +2,7 @@
  * <p>LMouseEventContainer是一个鼠标事件监听器的容器，一般的鼠标事件监听需要遍历所有的可视对象，对程序消耗是比较大的，使用LMouseEventContainer后，鼠标监听对象变为只监听加载了鼠标事件的对象，可以大幅度提升鼠标事件监听的效率，但是，缺点是无法使用显示对象对鼠标事件进行遮挡。</p>
  * @class LMouseEventContainer
  * @constructor
- * @since 1.9.0
+ * @since 1.8.5
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -45,7 +45,7 @@
  * <p>LMouseEventContainer is a mouse event listener container，mouse event listeners need to traverse all visual objects, consumption is relatively large, this object can greatly improve efficiency.</p>
  * @class LMouseEventContainer
  * @constructor
- * @since 1.9.0
+ * @since 1.8.5
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -88,7 +88,7 @@
  * <p>LMouseEventContainer オブジェクトは、マウスイベントの容器になります、普通なマウスイベントが発生する時、全てのオブジェクトを確認しなければなりません、パフォーマンスが悪いです、LMouseEventContainerを使ったら、パフォーマンスをアップすることができます。</p>
  * @class LMouseEventContainer
  * @constructor
- * @since 1.9.0
+ * @since 1.8.5
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -135,7 +135,7 @@ var LMouseEventContainer = (function () {
 		 * @property dispatchAllEvent
 		 * @type Boolean
 		 * @default false
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @example
 		 * 	LInit(50, "legend", 800, 400, main);
 		 * 	var label;
@@ -197,7 +197,7 @@ var LMouseEventContainer = (function () {
 		 * @property dispatchAllEvent
 		 * @type Boolean
 		 * @default false
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @example
 		 * 	LInit(50, "legend", 800, 400, main);
 		 * 	var label;
@@ -259,7 +259,7 @@ var LMouseEventContainer = (function () {
 		 * @property dispatchAllEvent
 		 * @type Boolean
 		 * @default false
-		 * @since 1.9.0
+		 * @since 1.8.5
 		 * @example
 		 * 	LInit(50, "legend", 800, 400, main);
 		 * 	var label;
@@ -611,7 +611,7 @@ var LMouseEventContainer = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LMouseEventContainer/index.html" target="_blank">测试链接</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.5
 		 */
 		/** @language english
 		 * Set whether the mouse event listener container.
@@ -643,7 +643,7 @@ var LMouseEventContainer = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LMouseEventContainer/index.html" target="_blank">Try it »</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.5
 		 */
 		/** @language japanese
 		 * マウスイベントの容器を使うかどうか設定します。
@@ -675,7 +675,7 @@ var LMouseEventContainer = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LMouseEventContainer/index.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
-		 * @since 1.8.9
+		 * @since 1.8.5
 		 */
 		set : function (t, v) {
 			this.container[t] = v;

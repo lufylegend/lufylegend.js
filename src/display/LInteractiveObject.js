@@ -31,7 +31,7 @@ var LInteractiveObject = (function() {
 		 * 指定此对象是否接收鼠标或其他用户输入、消息。默认值为 true，这表示默认情况下，显示列表上的任何 LInteractiveObject 实例都会接收鼠标事件或其他用户输入事件。如果将 mouseEnabled 设置为 false，则实例将不接收任何鼠标事件（或其他用户输入事件，例如键盘事件）。显示列表上的该实例的任何子级都不会受到影响。要更改显示列表上对象的所有子级的 mouseEnabled 行为，请使用 LDisplayObjectContainer.mouseChildren。
 		 * @property mouseEnabled
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("mouseEnabled=true");
@@ -55,7 +55,7 @@ var LInteractiveObject = (function() {
 		 * Specifies whether this object receives mouse, or other user input, messages. The default value is true, which means that by default any InteractiveObject instance that is on the display list receives mouse events or other user input events. If mouseEnabled is set to false, the instance does not receive any mouse events (or other user input events like keyboard events). Any children of this instance on the display list are not affected. To change the mouseEnabled behavior for all children of an object on the display list, use LDisplayObjectContainer.mouseChildren.
 		 * @property mouseEnabled
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("mouseEnabled=true");
@@ -79,7 +79,7 @@ var LInteractiveObject = (function() {
 		 * このオブジェクトでマウスまたはその他のユーザー入力メッセージを受け取るかどうかを指定します。デフォルト値は true であり、これは表示リスト上の LInteractiveObject インスタンスがデフォルトでマウスイベントまたはその他のユーザー入力イベントを受け取ることを意味します。mouseEnabled を false に設定すると、インスタンスでは、マウスイベント（またはキーボードイベントなど、その他のユーザー入力イベント）を一切受け取りません。表示リスト上のこのインスタンスの子は影響を受けません。表示リスト上のオブジェクトのすべての子に関する mouseEnabled 動作を変更するには、LDisplayObjectContainer.mouseChildren を使用します。
 		 * @property mouseEnabled
 		 * @type Boolean
-		 * @since 1.0.0
+		 * @since 1.8.10
 		 * @example
 		 * 	LGlobal.setDebug(true);
 		 * 	var button01 = new LButtonSample1("mouseEnabled=true");

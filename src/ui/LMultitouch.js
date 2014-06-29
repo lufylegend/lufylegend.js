@@ -2,7 +2,7 @@
  * LMultitouch 类管理并提供有关当前环境支持用于处理来自用户输入设备的接触的信息，包括有两个或多个触点（例如，用户在触摸屏上使用的手指）的接触。当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。有很多种指针设备，如鼠标或笔针，其中很多种设备在某个应用程序中仅具有一个触控点。对于具有一个触控点的指针设备，用户交互事件可处理为鼠标事件，或者使用基本 touch 事件集（称为“接触点”事件）。
  * @class LMultitouch
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * @example
  * 	LInit(1000/50,"legend",800,450,main);
  * 	var layer,backLayer,touchPointIDList = [];
@@ -72,7 +72,7 @@
  * The LMultitouch class manages and provides information about the current environment's support for handling contact from user input devices, including contact that has two or more touch points (such as a user's fingers on a touch screen). When a user interacts with a device such as a mobile phone or tablet with a touch screen, the user typically touches the screen with his or her fingers or a pointing device. While there is a broad range of pointing devices, such as a mouse or a stylus, many of these devices only have a single point of contact with an application. For pointing devices with a single point of contact, user interaction events can be handled as a mouse event, or using a basic set of touch events (called "touch point" events).
  * @class LMultitouch
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * 	LInit(1000/50,"legend",800,450,main);
  * 	var layer,backLayer,touchPointIDList = [];
  * 	function main () {
@@ -141,7 +141,7 @@
  * LMultitouch クラスは、現在の環境でのユーザーによる入力デバイス操作の処理のサポートに関する情報の管理と提供を行います。複数のタッチポイント（ユーザーが複数の指でタッチスクリーンに触れるなど）が可能な入力デバイスが含まれます。タッチスクリーン搭載の携帯電話またはタブレットなどのデバイスを操作する場合、ユーザーは通常、指やポインティングデバイスで画面に触れます。ポインティングデバイスにはマウスやスタイラスなど様々な種類のものがありますが、これらのデバイスの多くは、アプリケーションでの接触ポイントは 1 つだけです。接触ポイントが 1 つだけのポインティングデバイスでは、ユーザーの操作イベントは、マウスイベントとしてか、タッチイベント（"タッチポイント" イベントと呼ばれる）の基本セットを使用したものとして扱うことができます。
  * @class LMultitouch
  * @constructor
- * @since 1.0.0
+ * @since 1.8.9
  * 	LInit(1000/50,"legend",800,450,main);
  * 	var layer,backLayer,touchPointIDList = [];
  * 	function main () {
@@ -212,7 +212,7 @@ var LMultitouch = function () {throw "LMultitouch cannot be instantiated";};
  * @property inputMode
  * @type String
  * @default none
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language english
@@ -220,7 +220,7 @@ var LMultitouch = function () {throw "LMultitouch cannot be instantiated";};
  * @property inputMode
  * @type String
  * @default none
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 /** @language japanese
@@ -228,7 +228,7 @@ var LMultitouch = function () {throw "LMultitouch cannot be instantiated";};
  * @property inputMode
  * @type String
  * @default none
- * @since 1.9.0
+ * @since 1.8.9
  * @public
  */
 LMultitouch.inputMode = "none";
