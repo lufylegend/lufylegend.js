@@ -251,7 +251,7 @@ var LMedia = (function () {
 		 * @since 1.7.0
 		 * @public
 		 */
-		play : function (c, l) {
+		play : function (c, l, to) {
 			var s = this;
 			if (typeof l == UNDEFINED) {
 				l = 1;
@@ -268,6 +268,12 @@ var LMedia = (function () {
 			s.playing = true;
 			s.data.play();
 			s._onended();
+		},
+		playSegment : function (c, seg, l) {
+			this.playTo(c, c + seg, l);
+		},
+		playTo : function (c, to, l) {
+			this.play(c, l, to);
 		},
 		/** @language japanese
 		 * <p>暂停当前播放的音频/视频。</p>

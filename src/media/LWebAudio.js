@@ -122,7 +122,7 @@ var LWebAudio = (function () {
 			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			s.close();
 			if (++s.loopIndex < s.loopLength) {
-				s.play();
+				s.play(undefined, undefined, s.currentTimeTo);
 			}
 		},
 		/** @language chinese
@@ -283,7 +283,7 @@ var LWebAudio = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		play : function (c, l) {
+		play : function (c, l, to) {
 			var s = this;
 			if (s.length == 0) {
 				return;
@@ -296,13 +296,18 @@ var LWebAudio = (function () {
 				s.currentTime = c;
 				s.currentStart = c;
 			}
+			if (typeof to !== UNDEFINED) {
+				s.currentTimeTo = to > s.length ? s.length : to;
+			} else {
+				s.currentTimeTo = s.length;
+			}
 			s.data.loop = false;
 			s.playing = true;
 			if (s.timeout) {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(s._onended.bind(s), (s.length - s.currentTime) * 1000);
+			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -315,6 +320,12 @@ var LWebAudio = (function () {
 			} else {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
+		},
+		playSegment : function (c, seg, l) {
+			this.playTo(c, c + seg, l);
+		},
+		playTo : function (c, to, l) {
+			this.play(c, l, to);
 		},
 		/** @language japanese
 		 * <p>暂停当前播放的音频。</p>
