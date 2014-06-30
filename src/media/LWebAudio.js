@@ -32,29 +32,6 @@ var LWebAudio = (function () {
 	function LWebAudio () {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
-		if(LWebAudio.containerCount > 0){
-			s.data = LWebAudio.container.shift();
-		} else {
-			if (typeof AudioContext !== UNDEFINED) {
-				try {
-					s.data = new AudioContext();
-				} catch (e) {
-					LWebAudio.containerCount = LWebAudio.container.length;
-					s.data = LWebAudio.container.shift();
-				}
-			} else if (typeof webkitAudioContext !== UNDEFINED) {
-				try {
-					s.data = new webkitAudioContext();
-				} catch (e) {
-					LWebAudio.containerCount = LWebAudio.container.length;
-					s.data = LWebAudio.container.shift();
-				}
-			} else {
-				throw "AudioContext not supported. :(";
-			}
-		}
-		LWebAudio.container.push(s.data);
-		s.audioTag = new Audio();
 		s.currentTime = 0;
 		s.currentStart = 0;
 		s.currentSave = 0;
@@ -110,12 +87,42 @@ var LWebAudio = (function () {
 	}
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
+	LWebAudio.audioTag = new Audio();
 	var p = {
+		getWebAudio : function () {
+			var data;
+			if(LWebAudio.containerCount > 0){
+				data = LWebAudio.container.shift();
+			} else {
+				if (typeof AudioContext !== UNDEFINED) {
+					try {
+						data = new AudioContext();
+					} catch (e) {
+						LWebAudio.containerCount = LWebAudio.container.length;
+						data = LWebAudio.container.shift();
+					}
+				} else if (typeof webkitAudioContext !== UNDEFINED) {
+					try {
+						data = new webkitAudioContext();
+					} catch (e) {
+						LWebAudio.containerCount = LWebAudio.container.length;
+						data = LWebAudio.container.shift();
+					}
+				} else {
+					throw "AudioContext not supported. :(";
+				}
+			}
+			LWebAudio.container.push(data);
+			return data;
+		},
 		onload : function (data) {
 			var s = this;
 			s.buffer = s.data.createBuffer(data,true);
 			s.length = s.buffer.duration;
-			s.dispatchEvent(LEvent.COMPLETE);
+			var e = new LEvent(LEvent.COMPLETE);
+			e.currentTarget = s;
+			e.target = s.buffer;
+			s.dispatchEvent(e);
 		},
 		_onended : function () {
 			var s = this;
@@ -172,7 +179,7 @@ var LWebAudio = (function () {
 				if (q[d]) {
 					d = q[d];
 				}
-				if (s.audioTag.canPlayType(s._type + "/" + d)) {
+				if (LWebAudio.audioTag.canPlayType(s._type + "/" + d)) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
 					return;
@@ -288,6 +295,9 @@ var LWebAudio = (function () {
 			if (s.length == 0) {
 				return;
 			}
+			if (!s.data) {
+				s.data = s.getWebAudio();
+			}
 			if (typeof l !== UNDEFINED) {
 				s.loopIndex = 0;
 				s.loopLength = l;
@@ -392,8 +402,8 @@ var LWebAudio = (function () {
 				s.bufferSource.noteOff(0);
 			}
 			s.playing = false;
-			s.currentTime = s.currentStart;
-			s.currentSave = s.currentStart;
+			s.currentTime = 0;
+			s.currentSave = 0;
 		}
 	};
 	for (var k in p) {

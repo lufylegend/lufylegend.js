@@ -193,6 +193,11 @@ var LLoadManage = (function () {
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(s.url(d.path), d["type"]);
+				} else if (d["type"] == "sound") {
+					s.loader = new LSound();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(s.url(d.path));
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
@@ -206,6 +211,7 @@ var LLoadManage = (function () {
 		loadComplete : function (e) {
 			var s = this;
 			if (e  && e.currentTarget && e.currentTarget.name) {
+				e.currentTarget.removeEventListener(LEvent.COMPLETE, s.loadComplete);
 				if (e.currentTarget.name.indexOf(s.llname) >= 0) {
 					e.target = 1;
 				}

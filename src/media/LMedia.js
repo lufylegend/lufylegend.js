@@ -80,13 +80,17 @@ var LMedia = (function () {
 		s.playing = false;
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
+		s.currentStart = 0;
 	}
 	var p = {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
 				s.length = s.data.duration;
-				s.dispatchEvent(LEvent.COMPLETE);
+				var e = new LEvent(LEvent.COMPLETE);
+				e.currentTarget = s;
+				e.target = s.data;
+				s.dispatchEvent(e);
 				return;
 			}
 			s.data.addEventListener("canplaythrough", function () {
@@ -97,12 +101,16 @@ var LMedia = (function () {
 			var s = this;
 			if (s.data.ended) {
 				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-				if (++s.loopIndex < s.loopLength) {
-					s.data.currentTime = 0;
-					s.data.play();
-				} else {
-					s.close();
+			}
+			if (++s.loopIndex < s.loopLength) {
+				s.data.currentTime = s.currentStart;
+				if (s.timeout) {
+					clearTimeout(s.timeout);
+					s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
 				}
+				s.data.play();
+			} else {
+				s.close();
 			}
 		},
 		/** @language chinese
@@ -133,7 +141,13 @@ var LMedia = (function () {
 		 * @public
 		 */
 		load : function (u) {
-			var s = this, a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var s = this;
+			if (Object.prototype.toString.apply(u) == "[object HTMLAudioElement]") {
+				s.data = u;
+				s.onload();
+				return;
+			}
+			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -253,6 +267,9 @@ var LMedia = (function () {
 		 */
 		play : function (c, l, to) {
 			var s = this;
+			if (s.length == 0) {
+				return;
+			}
 			if (typeof l == UNDEFINED) {
 				l = 1;
 			}
@@ -261,13 +278,21 @@ var LMedia = (function () {
 			}
 			if (c > 0) {
 				s.data.currentTime = c;
+				s.currentStart = c;
+			}
+			if (typeof to !== UNDEFINED) {
+				s.currentTimeTo = to > s.length ? s.length : to;
+				if (s.timeout) {
+					clearTimeout(s.timeout);
+					delete s.timeout;
+				}
+				s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
 			}
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
-			s._onended();
 		},
 		playSegment : function (c, seg, l) {
 			this.playTo(c, c + seg, l);
@@ -294,8 +319,16 @@ var LMedia = (function () {
 		 * @public
 		 */
 		stop : function () {
-			this.playing = false;
-			this.data.pause();
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.playing = false;
+			s.data.pause();
 		},
 		/** @language japanese
 		 * <p>关闭当前播放的音频/视频。</p>
@@ -317,9 +350,17 @@ var LMedia = (function () {
 		 */
 		close : function () {
 			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			s.playing = false;
 			s.data.pause();
 			s.data.currentTime = 0;
+			s.currentSave = 0;
 		}
 	};
 	for (var k in p) {

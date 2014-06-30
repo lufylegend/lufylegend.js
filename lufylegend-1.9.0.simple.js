@@ -2061,29 +2061,6 @@ var LWebAudio = (function () {
 	function LWebAudio () {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
-		if(LWebAudio.containerCount > 0){
-			s.data = LWebAudio.container.shift();
-		} else {
-			if (typeof AudioContext !== UNDEFINED) {
-				try {
-					s.data = new AudioContext();
-				} catch (e) {
-					LWebAudio.containerCount = LWebAudio.container.length;
-					s.data = LWebAudio.container.shift();
-				}
-			} else if (typeof webkitAudioContext !== UNDEFINED) {
-				try {
-					s.data = new webkitAudioContext();
-				} catch (e) {
-					LWebAudio.containerCount = LWebAudio.container.length;
-					s.data = LWebAudio.container.shift();
-				}
-			} else {
-				throw "AudioContext not supported. :(";
-			}
-		}
-		LWebAudio.container.push(s.data);
-		s.audioTag = new Audio();
 		s.currentTime = 0;
 		s.currentStart = 0;
 		s.currentSave = 0;
@@ -2097,7 +2074,34 @@ var LWebAudio = (function () {
 	}
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
+	LWebAudio.audioTag = new Audio();
 	var p = {
+		getWebAudio : function () {
+			var data;
+			if(LWebAudio.containerCount > 0){
+				data = LWebAudio.container.shift();
+			} else {
+				if (typeof AudioContext !== UNDEFINED) {
+					try {
+						data = new AudioContext();
+					} catch (e) {
+						LWebAudio.containerCount = LWebAudio.container.length;
+						data = LWebAudio.container.shift();
+					}
+				} else if (typeof webkitAudioContext !== UNDEFINED) {
+					try {
+						data = new webkitAudioContext();
+					} catch (e) {
+						LWebAudio.containerCount = LWebAudio.container.length;
+						data = LWebAudio.container.shift();
+					}
+				} else {
+					throw "AudioContext not supported. :(";
+				}
+			}
+			LWebAudio.container.push(data);
+			return data;
+		},
 		onload : function (data) {
 			var s = this;
 			s.buffer = s.data.createBuffer(data,true);
@@ -2109,7 +2113,7 @@ var LWebAudio = (function () {
 			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			s.close();
 			if (++s.loopIndex < s.loopLength) {
-				s.play();
+				s.play(undefined, undefined, s.currentTimeTo);
 			}
 		},
 		load : function (u) {
@@ -2132,7 +2136,7 @@ var LWebAudio = (function () {
 				if (q[d]) {
 					d = q[d];
 				}
-				if (s.audioTag.canPlayType(s._type + "/" + d)) {
+				if (LWebAudio.audioTag.canPlayType(s._type + "/" + d)) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
 					return;
@@ -2156,10 +2160,13 @@ var LWebAudio = (function () {
 		getVolume : function () {
 			return this.volume;
 		},
-		play : function (c, l) {
+		play : function (c, l, to) {
 			var s = this;
 			if (s.length == 0) {
 				return;
+			}
+			if (!s.data) {
+				s.data = s.getWebAudio();
 			}
 			if (typeof l !== UNDEFINED) {
 				s.loopIndex = 0;
@@ -2169,13 +2176,18 @@ var LWebAudio = (function () {
 				s.currentTime = c;
 				s.currentStart = c;
 			}
+			if (typeof to !== UNDEFINED) {
+				s.currentTimeTo = to > s.length ? s.length : to;
+			} else {
+				s.currentTimeTo = s.length;
+			}
 			s.data.loop = false;
 			s.playing = true;
 			if (s.timeout) {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(s._onended.bind(s), (s.length - s.currentTime) * 1000);
+			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -2188,6 +2200,12 @@ var LWebAudio = (function () {
 			} else {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
+		},
+		playSegment : function (c, seg, l) {
+			this.playTo(c, c + seg, l);
+		},
+		playTo : function (c, to, l) {
+			this.play(c, l, to);
 		},
 		stop : function () {
 			var s = this;
@@ -2218,8 +2236,8 @@ var LWebAudio = (function () {
 				s.bufferSource.noteOff(0);
 			}
 			s.playing = false;
-			s.currentTime = s.currentStart;
-			s.currentSave = s.currentStart;
+			s.currentTime = 0;
+			s.currentSave = 0;
 		}
 	};
 	for (var k in p) {
@@ -2294,8 +2312,11 @@ var LMedia = (function () {
 		getVolume : function () {
 			return this.data.volume;
 		},
-		play : function (c, l) {
+		play : function (c, l, to) {
 			var s = this;
+			if (s.length == 0) {
+				return;
+			}
 			if (typeof l == UNDEFINED) {
 				l = 1;
 			}
@@ -2304,23 +2325,53 @@ var LMedia = (function () {
 			}
 			if (c > 0) {
 				s.data.currentTime = c;
+				s.currentStart = c;
+			}
+			if (typeof to !== UNDEFINED) {
+				s.currentTimeTo = to > s.length ? s.length : to;
+				if (s.timeout) {
+					clearTimeout(s.timeout);
+					delete s.timeout;
+				}
+				s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			}
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
-			s._onended();
+		},
+		playSegment : function (c, seg, l) {
+			this.playTo(c, c + seg, l);
+		},
+		playTo : function (c, to, l) {
+			this.play(c, l, to);
 		},
 		stop : function () {
-			this.playing = false;
-			this.data.pause();
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.playing = false;
+			s.data.pause();
 		},
 		close : function () {
 			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			s.playing = false;
 			s.data.pause();
 			s.data.currentTime = 0;
+			s.currentSave = 0;
 		}
 	};
 	for (var k in p) {
