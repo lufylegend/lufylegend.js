@@ -17,7 +17,8 @@
 			}
 			function loadBitmapdata (event) {
 				var bitmapData = new LBitmapData(event.target);
-				bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+				var bitmapData2 = new LBitmapData(null, 0, 0, 50, 50);
+				var bitmapData3 = new LBitmapData(null, 0, 0, 50, 50);
 				var img, imgs = [], arr;
 				bitmapData.lock();
 				for (var i = 0; i < 50; i++) {
@@ -39,12 +40,27 @@
 				}
 				bitmapData2.unlock();
 				
+				bitmapData3.lock();
+				for (var i = 0; i < 50; i++) {
+					arr = imgs[i];
+					for (var j = 0; j < 50; j++) {
+						img = arr[j];
+						img[3] = 128;
+						bitmapData3.setPixel(i, j, img);
+					}
+				}
+				bitmapData3.unlock();
+				
 				var bitmap = new LBitmap(bitmapData);
 				addChild(bitmap);
 				
 				var bitmap2 = new LBitmap(bitmapData2);
 				bitmap2.x = 250;
 				addChild(bitmap2);
+				var bitmap3 = new LBitmap(bitmapData3);
+				bitmap3.x = 250;
+				bitmap3.y = 100;
+				addChild(bitmap3);
 			}
 			</script>
 	</body>

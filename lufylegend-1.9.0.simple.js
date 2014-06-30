@@ -4386,7 +4386,7 @@ var LBitmapData = (function () {
 				d.data[i + 0] = data[0];
 				d.data[i + 1] = data[1];
 				d.data[i + 2] = data[2];
-				d.data[i + 3] = 255;
+				d.data[i + 3] = data[3];
 			} else {
 				if (typeof data == "string") {
 					data = parseInt(data.replace("#", "0x"));
