@@ -1228,9 +1228,10 @@ var LObject = (function () {
 				return false;
 			}
 			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
-				return s.callParent(f_n, args);
+				r = s.callParent(f_n, args);
+			} else {
+				r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			}
-			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			if (init) {
 				delete s.__ll__parent_call;
 			}
@@ -2106,7 +2107,10 @@ var LWebAudio = (function () {
 			var s = this;
 			s.buffer = s.data.createBuffer(data,true);
 			s.length = s.buffer.duration;
-			s.dispatchEvent(LEvent.COMPLETE);
+			var e = new LEvent(LEvent.COMPLETE);
+			e.currentTarget = s;
+			e.target = s.buffer;
+			s.dispatchEvent(e);
 		},
 		_onended : function () {
 			var s = this;
@@ -2255,13 +2259,17 @@ var LMedia = (function () {
 		s.playing = false;
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
+		s.currentStart = 0;
 	}
 	var p = {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
 				s.length = s.data.duration;
-				s.dispatchEvent(LEvent.COMPLETE);
+				var e = new LEvent(LEvent.COMPLETE);
+				e.currentTarget = s;
+				e.target = s.data;
+				s.dispatchEvent(e);
 				return;
 			}
 			s.data.addEventListener("canplaythrough", function () {
@@ -2272,16 +2280,26 @@ var LMedia = (function () {
 			var s = this;
 			if (s.data.ended) {
 				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-				if (++s.loopIndex < s.loopLength) {
-					s.data.currentTime = 0;
-					s.data.play();
-				} else {
-					s.close();
+			}
+			if (++s.loopIndex < s.loopLength) {
+				s.data.currentTime = s.currentStart;
+				if (s.timeout) {
+					clearTimeout(s.timeout);
+					s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
 				}
+				s.data.play();
+			} else {
+				s.close();
 			}
 		},
 		load : function (u) {
-			var s = this, a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var s = this;
+			if (Object.prototype.toString.apply(u) == "[object HTMLAudioElement]") {
+				s.data = u;
+				s.onload();
+				return;
+			}
+			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -2333,7 +2351,7 @@ var LMedia = (function () {
 					clearTimeout(s.timeout);
 					delete s.timeout;
 				}
-				s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
+				s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
 			}
 			s.data.loop = false;
 			s.loopIndex = 0;
@@ -4759,6 +4777,11 @@ var LLoadManage = (function () {
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(s.url(d.path), d["type"]);
+				} else if (d["type"] == "sound") {
+					s.loader = new LSound();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(s.url(d.path));
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
@@ -4772,6 +4795,7 @@ var LLoadManage = (function () {
 		loadComplete : function (e) {
 			var s = this;
 			if (e  && e.currentTarget && e.currentTarget.name) {
+				e.currentTarget.removeEventListener(LEvent.COMPLETE, s.loadComplete);
 				if (e.currentTarget.name.indexOf(s.llname) >= 0) {
 					e.target = 1;
 				}

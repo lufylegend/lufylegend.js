@@ -170,9 +170,10 @@ var LObject = (function () {
 				return false;
 			}
 			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
-				return s.callParent(f_n, args);
+				r = s.callParent(f_n, args);
+			} else {
+				r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			}
-			r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
 			if (init) {
 				delete s.__ll__parent_call;
 			}
