@@ -127,9 +127,10 @@ var LWebAudio = (function () {
 		_onended : function () {
 			var s = this;
 			s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			s.close();
 			if (++s.loopIndex < s.loopLength) {
-				s.play(undefined, undefined, s.currentTimeTo);
+				s.play(s.currentStart, undefined, s.currentTimeTo);
+			} else {
+				s.close();
 			}
 		},
 		/** @language chinese
