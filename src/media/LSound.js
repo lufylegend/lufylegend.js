@@ -199,9 +199,21 @@ var LSound = (function () {
 		}
 	}
 	LSound.webAudioEnabled = false;
-	if (typeof AudioContext !== UNDEFINED || typeof webkitAudioContext !== UNDEFINED) {
-		var protocol = location.protocol;
-		if (protocol == "http:" || protocol == "https:") {
+	var protocol = location.protocol;
+	if (protocol == "http:" || protocol == "https:") {
+		if (typeof webkitAudioContext !== UNDEFINED) {
+			try {
+				LWebAudio._context = new webkitAudioContext();
+			} catch (e) {
+			}
+		} else if (typeof AudioContext !== UNDEFINED) {
+			try {
+				LWebAudio._context = new AudioContext();
+			} catch (e) {
+			}
+		}
+		if (LWebAudio._context) {
+			LWebAudio.container.push(LWebAudio._context);
 			LSound.webAudioEnabled = true;
 		}
 	}

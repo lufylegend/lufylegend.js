@@ -2076,22 +2076,23 @@ var LWebAudio = (function () {
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
 	LWebAudio.audioTag = new Audio();
+	LWebAudio._context = null;
 	var p = {
 		getWebAudio : function () {
 			var data;
 			if(LWebAudio.containerCount > 0){
 				data = LWebAudio.container.shift();
 			} else {
-				if (typeof AudioContext !== UNDEFINED) {
+				if (typeof webkitAudioContext !== UNDEFINED) {
 					try {
-						data = new AudioContext();
+						data = new webkitAudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
 					}
-				} else if (typeof webkitAudioContext !== UNDEFINED) {
+				} else if (typeof AudioContext !== UNDEFINED) {
 					try {
-						data = new webkitAudioContext();
+						data = new AudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
@@ -2100,12 +2101,22 @@ var LWebAudio = (function () {
 					throw "AudioContext not supported. :(";
 				}
 			}
+			if(!data.createGainNode){
+				data.createGainNode = data.createGain;
+			}
 			LWebAudio.container.push(data);
 			return data;
 		},
 		onload : function (data) {
 			var s = this;
-			s.buffer = s.data.createBuffer(data,true);
+			if (Object.prototype.toString.apply(data) !== '[object AudioBuffer]') {
+				s.load(data);
+				return;
+			};
+			if(!s.data){
+				s.data = s.getWebAudio();
+			}
+			s.buffer = data;
 			s.length = s.buffer.duration;
 			var e = new LEvent(LEvent.COMPLETE);
 			e.currentTarget = s;
@@ -2115,21 +2126,25 @@ var LWebAudio = (function () {
 		_onended : function () {
 			var s = this;
 			s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			s.close();
 			if (++s.loopIndex < s.loopLength) {
-				s.play(undefined, undefined, s.currentTimeTo);
+				s.play(s.currentStart, undefined, s.currentTimeTo);
+			} else {
+				s.close();
 			}
 		},
 		load : function (u) {
 			var s = this;
 			if (typeof u !== "string") {
 				if (Object.prototype.toString.apply(u) == '[object AudioBuffer]') {
-					s.buffer = u;
+					s.onload(u);
 				} else if (Object.prototype.toString.apply(u) == '[object ArrayBuffer]') {
-					s.buffer = s.data.createBuffer(u,true);
+					if(!s.data){
+						s.data = s.getWebAudio();
+					}
+					s.data.decodeAudioData(u, s.onload.bind(s), function (error) {
+						throw "AudioContext decodeAudioData error : " + error.toString();
+					});
 				}
-				s.length = s.buffer.duration;
-				s.dispatchEvent(LEvent.COMPLETE);
 				return;
 			}
 			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
@@ -2156,7 +2171,8 @@ var LWebAudio = (function () {
 			}
 		},
 		setVolume : function (v) {
-			this.volume = v;
+			var s = this;
+			s.volume = v;
 			if (s.playing) {
 				s.volumeNode.gain.value = v;
 			}
@@ -2168,9 +2184,6 @@ var LWebAudio = (function () {
 			var s = this;
 			if (s.length == 0) {
 				return;
-			}
-			if (!s.data) {
-				s.data = s.getWebAudio();
 			}
 			if (typeof l !== UNDEFINED) {
 				s.loopIndex = 0;
@@ -2415,9 +2428,21 @@ var LSound = (function () {
 		}
 	}
 	LSound.webAudioEnabled = false;
-	if (typeof AudioContext !== UNDEFINED || typeof webkitAudioContext !== UNDEFINED) {
-		var protocol = location.protocol;
-		if (protocol == "http:" || protocol == "https:") {
+	var protocol = location.protocol;
+	if (protocol == "http:" || protocol == "https:") {
+		if (typeof webkitAudioContext !== UNDEFINED) {
+			try {
+				LWebAudio._context = new webkitAudioContext();
+			} catch (e) {
+			}
+		} else if (typeof AudioContext !== UNDEFINED) {
+			try {
+				LWebAudio._context = new AudioContext();
+			} catch (e) {
+			}
+		}
+		if (LWebAudio._context) {
+			LWebAudio.container.push(LWebAudio._context);
 			LSound.webAudioEnabled = true;
 		}
 	}
@@ -5270,6 +5295,10 @@ var LAjax = (function () {
 				data = null;
 			}
 			ajax.open(t, url, true);
+			if (s.responseType) {
+				ajax.responseType = s.responseType;
+				s.responseType = s.TEXT;
+			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			ajax.onreadystatechange = function () {
 				if (ajax.readyState == 4) {
@@ -5294,12 +5323,7 @@ var LAjax = (function () {
 		},
 		getHttp : function () {
 			if (typeof XMLHttpRequest != UNDEFINED) {
-				var xhr = new XMLHttpRequest();
-				if (this.responseType) {
-					xhr.responseType = this.responseType;
-					this.responseType = this.TEXT;
-				}
-				return xhr;
+				return new XMLHttpRequest();
 			}  
 			try {
 				return new ActiveXObject("Msxml2.XMLHTTP");
@@ -5328,6 +5352,7 @@ var LStageWebView = (function () {
 		s.display.style.marginLeft = "0px";
 		s.display.style.zIndex = 11;
 		s.display.appendChild(s.iframe);
+		s.idAdded = false;
 	}
 	var p = {
 		loadURL : function (u) {
@@ -5338,10 +5363,21 @@ var LStageWebView = (function () {
 			};
 		},
 		show : function () {
-			LGlobal.object.appendChild(this.display);
+			var s = this;
+			if (!s.idAdded) {
+				LGlobal.object.appendChild(s.display);
+				s.idAdded = true;
+			}
+			if (s.display.style.display == "none") {
+				s.display.style.display = "";
+			}
 		},
 		die : function () {
 			LGlobal.object.removeChild(this.display);
+			this.idAdded = false;
+		},
+		hide : function () {
+			this.display.style.display = "none";
 		},
 		setViewPort : function (r) {
 			var s = this, sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width, sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;

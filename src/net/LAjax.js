@@ -195,6 +195,10 @@ var LAjax = (function () {
 				data = null;
 			}
 			ajax.open(t, url, true);
+			if (s.responseType) {
+				ajax.responseType = s.responseType;
+				s.responseType = s.TEXT;
+			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			ajax.onreadystatechange = function () {
 				if (ajax.readyState == 4) {
@@ -219,12 +223,7 @@ var LAjax = (function () {
 		},
 		getHttp : function () {
 			if (typeof XMLHttpRequest != UNDEFINED) {
-				var xhr = new XMLHttpRequest();
-				if (this.responseType) {
-					xhr.responseType = this.responseType;
-					this.responseType = this.TEXT;
-				}
-				return xhr;
+				return new XMLHttpRequest();
 			}  
 			try {
 				return new ActiveXObject("Msxml2.XMLHTTP");

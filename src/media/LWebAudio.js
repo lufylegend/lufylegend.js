@@ -88,22 +88,23 @@ var LWebAudio = (function () {
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
 	LWebAudio.audioTag = new Audio();
+	LWebAudio._context = null;
 	var p = {
 		getWebAudio : function () {
 			var data;
 			if(LWebAudio.containerCount > 0){
 				data = LWebAudio.container.shift();
 			} else {
-				if (typeof AudioContext !== UNDEFINED) {
+				if (typeof webkitAudioContext !== UNDEFINED) {
 					try {
-						data = new AudioContext();
+						data = new webkitAudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
 					}
-				} else if (typeof webkitAudioContext !== UNDEFINED) {
+				} else if (typeof AudioContext !== UNDEFINED) {
 					try {
-						data = new webkitAudioContext();
+						data = new AudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
@@ -112,12 +113,22 @@ var LWebAudio = (function () {
 					throw "AudioContext not supported. :(";
 				}
 			}
+			if(!data.createGainNode){
+				data.createGainNode = data.createGain;
+			}
 			LWebAudio.container.push(data);
 			return data;
 		},
 		onload : function (data) {
 			var s = this;
-			s.buffer = s.data.createBuffer(data,true);
+			if (Object.prototype.toString.apply(data) !== '[object AudioBuffer]') {
+				s.load(data);
+				return;
+			};
+			if(!s.data){
+				s.data = s.getWebAudio();
+			}
+			s.buffer = data;
 			s.length = s.buffer.duration;
 			var e = new LEvent(LEvent.COMPLETE);
 			e.currentTarget = s;
@@ -164,12 +175,15 @@ var LWebAudio = (function () {
 			var s = this;
 			if (typeof u !== "string") {
 				if (Object.prototype.toString.apply(u) == '[object AudioBuffer]') {
-					s.buffer = u;
+					s.onload(u);
 				} else if (Object.prototype.toString.apply(u) == '[object ArrayBuffer]') {
-					s.buffer = s.data.createBuffer(u,true);
+					if(!s.data){
+						s.data = s.getWebAudio();
+					}
+					s.data.decodeAudioData(u, s.onload.bind(s), function (error) {
+						throw "AudioContext decodeAudioData error : " + error.toString();
+					});
 				}
-				s.length = s.buffer.duration;
-				s.dispatchEvent(LEvent.COMPLETE);
 				return;
 			}
 			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
@@ -238,7 +252,8 @@ var LWebAudio = (function () {
 		 * @public
 		 */
 		setVolume : function (v) {
-			this.volume = v;
+			var s = this;
+			s.volume = v;
 			if (s.playing) {
 				s.volumeNode.gain.value = v;
 			}
@@ -295,9 +310,6 @@ var LWebAudio = (function () {
 			var s = this;
 			if (s.length == 0) {
 				return;
-			}
-			if (!s.data) {
-				s.data = s.getWebAudio();
 			}
 			if (typeof l !== UNDEFINED) {
 				s.loopIndex = 0;

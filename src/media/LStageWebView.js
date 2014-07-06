@@ -51,6 +51,7 @@ var LStageWebView = (function () {
 		s.display.style.marginLeft = "0px";
 		s.display.style.zIndex = 11;
 		s.display.appendChild(s.iframe);
+		s.idAdded = false;
 	}
 	var p = {
 		/** @language chinese
@@ -100,7 +101,14 @@ var LStageWebView = (function () {
 		 * @public
 		 */
 		show : function () {
-			LGlobal.object.appendChild(this.display);
+			var s = this;
+			if (!s.idAdded) {
+				LGlobal.object.appendChild(s.display);
+				s.idAdded = true;
+			}
+			if (s.display.style.display == "none") {
+				s.display.style.display = "";
+			}
 		},
 		/** @language chinese
 		 * <p>隐藏此LStageWebView对象。</p>
@@ -122,6 +130,10 @@ var LStageWebView = (function () {
 		 */
 		die : function () {
 			LGlobal.object.removeChild(this.display);
+			this.idAdded = false;
+		},
+		hide : function () {
+			this.display.style.display = "none";
 		},
 		/** @language chinese
 		 * <p>设定舞台上显示 LStageWebView 对象的区域。</p>
