@@ -32,3 +32,4 @@ var LString = {
 		return p.exec(s); 
 	}
 };
+LMath = LString;

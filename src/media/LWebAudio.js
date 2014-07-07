@@ -285,8 +285,8 @@ var LWebAudio = (function () {
 		/** @language japanese
 		 * <p>播放该音频对象。</p>
 		 * @method play
-		 * @param {float} startTime 应开始播放的初始位置（以毫秒为单位）。
-		 * @param {float} loops 定义在声道停止播放之前，声音循环回 startTime 值的次数。
+		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
+		 * @param {int} loops 定义在声道停止播放之前，声音循环回 startTime 值的次数。
 		 * @since 1.9.0
 		 * @public
 		 */
@@ -294,15 +294,15 @@ var LWebAudio = (function () {
 		 * <p>play the audio file.</p>
 		 * @method play
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
-		 * @param {float} loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback.
+		 * @param {int} loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback.
 		 * @since 1.9.0
 		 * @public
 		 */
 		/** @language japanese
 		 * <p>音声オブジェクトを再生する。</p>
 		 * @method play
-		 * @param {float} startTime 再生を開始する初期位置（ミリ秒単位）です。
-		 * @param {float} loops サウンドチャネルの再生が停止するまで startTime 値に戻ってサウンドの再生を繰り返す回数を定義します。
+		 * @param {float} startTime 再生を開始する初期位置（秒単位）です。
+		 * @param {int} loops サウンドチャネルの再生が停止するまで startTime 値に戻ってサウンドの再生を繰り返す回数を定義します。
 		 * @since 1.9.0
 		 * @public
 		 */
@@ -344,9 +344,63 @@ var LWebAudio = (function () {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
 		},
+		/** @language japanese
+		 * <p>播放指定长度的其中的一段音频。</p>
+		 * @method playSegment
+		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
+		 * @param {float} segment 指定长度（以秒为单位）。
+		 * @param {int} loops 定义在声道停止播放之前，声音循环回 startTime 值的次数。
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>play segment of audio.</p>
+		 * @method playSegment
+		 * @param {float} startTime The initial position in milliseconds at which playback should start.
+		 * @param {float} segment length。
+		 * @param {int} loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback.
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>指定する長さの音声オブジェクトを再生する。</p>
+		 * @method playSegment
+		 * @param {float} startTime 再生を開始する初期位置（秒単位）です。
+		 * @param {float} segment 指定する長さ（秒単位）。
+		 * @param {int} loops サウンドチャネルの再生が停止するまで startTime 値に戻ってサウンドの再生を繰り返す回数を定義します。
+		 * @since 1.9.0
+		 * @public
+		 */
 		playSegment : function (c, seg, l) {
 			this.playTo(c, c + seg, l);
 		},
+		/** @language japanese
+		 * <p>播放指定区间内的一段音频。</p>
+		 * @method playTo
+		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
+		 * @param {float} endTime 停止播放的位置（以秒为单位）。
+		 * @param {int} loops 定义在声道停止播放之前，声音循环回 startTime 值的次数。
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>play segment of audio.</p>
+		 * @method playTo
+		 * @param {float} startTime start time.
+		 * @param {float} endTime end time.
+		 * @param {int} loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback.
+		 * @since 1.9.0
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>指定する長さの音声オブジェクトを再生する。</p>
+		 * @method playTo
+		 * @param {float} startTime 再生を開始する初期位置（秒単位）です。
+		 * @param {float} endTime 再生を終了する位置（秒単位）。
+		 * @param {int} loops サウンドチャネルの再生が停止するまで startTime 値に戻ってサウンドの再生を繰り返す回数を定義します。
+		 * @since 1.9.0
+		 * @public
+		 */
 		playTo : function (c, to, l) {
 			this.play(c, l, to);
 		},

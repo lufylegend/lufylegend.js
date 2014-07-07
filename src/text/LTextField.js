@@ -1112,7 +1112,11 @@ var LTextField = (function () {
 			var event = new LEvent(LTextEvent.TEXT_INPUT);
 			event.keyCode = e.keyCode;
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
+			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+				e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
+			} else {
+				e.returnValue = true;
+			}
 		},
 		/** @language chinese
 		 * 获取焦点。
