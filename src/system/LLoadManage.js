@@ -34,7 +34,8 @@ var LLoadManage = (function () {
 		 * <tr><th>文件类型</th><th>格式</th></tr>
 		 * <tr><td>js文件</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
 		 * <tr><td>图片文件</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
-		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./images/testfile.txt"}</td></tr>
+		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt"}</td></tr>
+		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
 		 * </table>
 		 * @param {function} onUpdate 加载过程中调用的函数，一般用来显示游戏进度。
 		 * @param {function} onComplete list中全部文件加载完成时调用此函数
@@ -45,7 +46,9 @@ var LLoadManage = (function () {
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
 		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"}
+		 * 		{name:"text02",path:"./files/text02.txt"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 
@@ -81,6 +84,7 @@ var LLoadManage = (function () {
 		 * <tr><td>js file</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
 		 * <tr><td>image file</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
 		 * <tr><td>text file</td><td>{name:"testfile",path:"./images/testfile.txt"}</td></tr>
+		 * <tr><td>sound file（need web server）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
 		 * </table>
 		 * @param {function} onUpdate This function is called in the loading process
 		 * @param {function} onComplete This function is called when the all files is loaded
@@ -91,7 +95,9 @@ var LLoadManage = (function () {
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
 		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"}
+		 * 		{name:"text02",path:"./files/text02.txt"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 
@@ -127,6 +133,7 @@ var LLoadManage = (function () {
 		 * <tr><td>jsファイル</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
 		 * <tr><td>画像ファイル</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
 		 * <tr><td>テキストファイル</td><td>{name:"testfile",path:"./images/testfile.txt"}</td></tr>
+		 * <tr><td>音声ファイル（サーバーが必要になります）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
 		 * </table>
 		 * @param {function} onUpdate ロード中、この関数を呼び出す。
 		 * @param {function} onComplete 全てのファイルがロード終わったら、この関数を呼び出す。
@@ -137,7 +144,9 @@ var LLoadManage = (function () {
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
 		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"}
+		 * 		{name:"text02",path:"./files/text02.txt"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 

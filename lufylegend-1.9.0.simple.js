@@ -1549,7 +1549,7 @@ var LDisplayObject = (function () {
 			if (!s._canShow()) {
 				return;
 			}
-			if (typeof s._ll_loopframe == "function") {
+			if (!LGlobal.box2d && typeof s._ll_loopframe == "function") {
 				s._ll_loopframe();
 			}
 			c.save();
@@ -1573,6 +1573,9 @@ var LDisplayObject = (function () {
 			}
 			s._ll_show(c);
 			c.restore();
+			if (LGlobal.box2d != null && typeof s._ll_loopframe == "function") {
+				s._ll_loopframe();
+			}
 		},
 		_canShow : function () {
 			return this.visible;

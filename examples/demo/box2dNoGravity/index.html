@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>gravity</title>
+<script type="text/javascript" src="../../../lib/Box2dWeb-2.1.a.3.min.js"></script>
+<script type="text/javascript" src="../load_lufylegend.js"></script>
+</head>
+<body style="margin:0px 0px 0px 0px;">
+<div id="mylegend">loading……</div>
+<script type="text/javascript">
+init(10,"mylegend",800,480,main);
+function main(){
+    LGlobal.setDebug(true); 
+    LGlobal.box2d = new LBox2d([0,0]);
+    
+    var stageLayer = new LSprite();  
+    addChild(stageLayer);   
+	var child;
+	child = new LSprite();
+	child.x = 100;
+	child.y = 100;
+	child.addBodyPolygon(100,50,1,0.1,0.2,0.3);
+	child.setBodyMouseJoint(true);
+	stageLayer.addChild(child);
+	
+	child = new LSprite();
+	child.x = 400;
+	child.y = 100;
+	child.addBodyPolygon(50,50,1,0.1,0.2,0.3);
+	child.setBodyMouseJoint(true);
+	stageLayer.addChild(child);
+	
+	child = new LSprite();
+	child.x = 200;
+	child.y = 200;
+	child.addBodyCircle(40,0,0,1,0.1,0.2,0.3);
+	child.setBodyMouseJoint(true);
+	stageLayer.addChild(child);
+	
+}
+</script> 
+</body>
+</html>

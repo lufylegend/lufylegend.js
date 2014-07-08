@@ -1323,7 +1323,7 @@ var LGraphics = (function () {
 		 * @method drawRoundRect
 		 * @param {int} thickness 一个整数，以点为单位表示线条的粗细；
 		 * @param {String} color 线的颜色，这个属性可能是一个字符串，或者一个 CanvasGradient 对象 或 CanvasPattern 对象。如果是一个字符串，它被解析为一个 CSS 颜色值，并且画笔用所得的实色来绘制。如果这个属性的值是一个 CanvasGradient 对象或 CanvasPattern 对象，画笔使用这个渐变或模式来实现。
-		 * @param {Array} param [x,y,width,height,size]:[矩形左上角的 x 位置,矩形左上角的 y 位置,矩形的宽度,矩形的高度,圆角的大小]。
+		 * @param {Array} param [x,y,width,height,radius]:[矩形左上角的 x 位置,矩形左上角的 y 位置,矩形的宽度,矩形的高度,圆角的大小]。
 		 * @param {Boolean} isFill 是否填充图形
 		 * @param {String} fillColor 填充图形的颜色，这个属性可能是一个字符串，或者一个 CanvasGradient 对象 或 CanvasPattern 对象。如果是一个字符串，它被解析为一个 CSS 颜色值，并且画笔用所得的实色来绘制。如果这个属性的值是一个 CanvasGradient 对象或 CanvasPattern 对象，画笔使用这个渐变或模式来实现。
 		 * @example
@@ -1340,7 +1340,7 @@ var LGraphics = (function () {
 		 * @method drawRoundRect
 		 * @param {int} thickness An integer that indicates the thickness of the line in points; 
 		 * @param {String} color color|gradient|pattern
-		 * @param {Array} param [x,y,width,height,size]:[A number indicating the horizontal position relative to the registration point of the parent display object,A number indicating the vertical position relative to the registration point of the parent display object,The width of the rectangle,The height of the rectangle,The size of the ellipse used to draw the rounded corners]。
+		 * @param {Array} param [x,y,width,height,radius]:[A number indicating the horizontal position relative to the registration point of the parent display object,A number indicating the vertical position relative to the registration point of the parent display object,The width of the rectangle,The height of the rectangle,The size of the ellipse used to draw the rounded corners]。
 		 * @param {Boolean} isFill Whether to Fills the current drawing
 		 * @param {String} fillColor Fills color
 		 * @example
@@ -1357,7 +1357,7 @@ var LGraphics = (function () {
 		 * @method drawRoundRect
 		 * @param {int} thickness 線の太さをポイント単位で示す整数。
 		 * @param {String} color 線の色
-		 * @param {Array} param [x,y,width,height,size]:[親表示オブジェクトの基準点からの相対的な水平座標を示す数値,親表示オブジェクトの基準点からの相対的な垂直座標を示す数値,矩形の幅,矩形の高さ,丸角の描画に使用される楕円の大きさ]。
+		 * @param {Array} param [x,y,width,height,radius]:[親表示オブジェクトの基準点からの相対的な水平座標を示す数値,親表示オブジェクトの基準点からの相対的な垂直座標を示す数値,矩形の幅,矩形の高さ,丸角の描画に使用される楕円の大きさ]。
 		 * @param {Boolean} isFill サブパスを塗りつぶするかどうか
 		 * @param {String} fillColor サブパスを塗りつぶする色
 		 * @example
