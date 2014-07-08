@@ -1522,6 +1522,7 @@ var LDisplayObject = (function () {
 	function LDisplayObject () {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
+		s.name = "instance" + s.objectIndex;
 		s.x = 0;
 		s.y = 0;
 		s.width = 0;
@@ -1938,6 +1939,18 @@ var LDisplayObjectContainer = (function () {
 			}
 			return c[i];
 		},
+		getChildByName : function (n) {
+			var s  = this, c = s.childList;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (!c[i]) {
+					continue;
+				}
+				if (c[i].name == n) {
+					return c[i];
+				}
+			}
+			return null;
+		},
 		removeChildAt : function (i) {
 			var s  = this, c = s.childList;
 			if (c.length <= i) {
@@ -1951,6 +1964,9 @@ var LDisplayObjectContainer = (function () {
 			return d;
 		},
 		getChildIndex : function (child) {
+			if (!child) {
+				return -1;
+			}
 			var s = this, c = s.childList, i, l = c.length;
 			for (i = 0; i < l; i++) {
 				if (c[i].objectIndex == child.objectIndex) {

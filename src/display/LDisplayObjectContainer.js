@@ -505,6 +505,78 @@ var LDisplayObjectContainer = (function () {
 			return c[i];
 		},
 		/** @language chinese
+		 * <p>返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。</p>
+		 * <p>getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。</p>
+		 * @method getChildByName
+		 * @param {String} name 要返回的子项的名称。
+		 * @return {LDisplayObject} 具有指定名称的子显示对象。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	var target = container.getChildByName("sprite1");
+		 * 	trace(container.getChildIndex(target)); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/getChildByName.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>Returns the child display object that exists with the specified name. If more that one child display object has the specified name, the method returns the first object in the child list.</p>
+		 * <p>The getChildAt() method is faster than the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName() method has to traverse a linked list to access a child.</p>
+		 * @method getChildByName
+		 * @param {String} name The name of the child to return.
+		 * @return {LDisplayObject} The child display object with the specified name.
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	var target = container.getChildByName("sprite1");
+		 * 	trace(container.getChildIndex(target)); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/getChildByName.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>指定された名前に一致する子表示オブジェクトを返します。指定された名前を持つ子表示オブジェクトが複数存在する場合、メソッドは子リストの最初のオブジェクトを返します。</p>
+		 * <p>getChildAt() メソッドは、getChildByName() メソッドよりも処理が高速です。getChildAt() メソッドはキャッシュ配列の子にアクセスしますが、getChildByName() メソッドでは子にアクセスするためにリンクされたリストを移動する必要があります。</p>
+		 * @method getChildByName
+		 * @param {String} name 返される子の名前です。
+		 * @return {LDisplayObject} 指定された名前を持つ子表示オブジェクトです。
+		 * @since 1.9.0
+		 * @public
+		 * @example
+		 * 	var container = new LSprite();
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	container.addChild(sprite1);
+		 * 	container.addChild(sprite2);
+		 * 	var target = container.getChildByName("sprite1");
+		 * 	trace(container.getChildIndex(target)); // 0
+		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/getChildByName.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		getChildByName : function (n) {
+			var s  = this, c = s.childList;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (!c[i]) {
+					continue;
+				}
+				if (c[i].name == n) {
+					return c[i];
+				}
+			}
+			return null;
+		},
+		/** @language chinese
 		 * 从 LDisplayObjectContainer 的子列表中指定的 index 位置删除子 LDisplayObject。将已删除子项的 parent 属性设置为 null；如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。LDisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
 		 * @method removeChildAt
 		 * @param {int} index 要删除的 DisplayObject 的子索引。
@@ -640,6 +712,9 @@ var LDisplayObjectContainer = (function () {
 		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/getChildIndex.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getChildIndex : function (child) {
+			if (!child) {
+				return -1;
+			}
 			var s = this, c = s.childList, i, l = c.length;
 			for (i = 0; i < l; i++) {
 				if (c[i].objectIndex == child.objectIndex) {

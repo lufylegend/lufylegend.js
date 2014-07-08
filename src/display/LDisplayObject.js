@@ -35,6 +35,7 @@ var LDisplayObject = (function () {
 	function LDisplayObject () {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
+		s.name = "instance" + s.objectIndex;
 		/** @language chinese
 		 * 表示 LDisplayObject 实例相对于父级 LDisplayObjectContainer 本地坐标的 x 坐标。如果该对象位于具有变形的 LDisplayObjectContainer 内，则它也位于包含 LDisplayObjectContainer 的本地坐标系中。因此，对于逆时针旋转 90 度的 LDisplayObjectContainer，该 LDisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。对象的坐标指的是注册点的位置。
 		 * @property x
