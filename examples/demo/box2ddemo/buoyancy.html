@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>浮力效果</title>
+<script type="text/javascript" src="../../../lib/Box2dWeb-2.1.a.3.min.js"></script>
+<script type="text/javascript" src="../load_lufylegend.js"></script>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+<script type="text/javascript">
+init(10,"mylegend",800,480,main);
+var backLayer;
+var imgData = [
+	{name:"face",path:"./images/face.jpg"}
+];
+function main(){
+	LGlobal.setDebug(true);
+	LLoadManage.load(imgData, null, gameInit);
+}
+function gameInit(result){
+	LGlobal.box2d = new LBox2d();
+	backLayer = new LSprite();	
+	addChild(backLayer);	
+	//浮力效果初始化
+    var buoyancyController = new LGlobal.box2d.b2BuoyancyController();
+    buoyancyController.offset = -200 / LGlobal.box2d.drawScale;
+    buoyancyController.density = 4;
+    buoyancyController.linearDrag = 10;
+    buoyancyController.angularDrag = 6;
+    LGlobal.box2d.world.AddController(buoyancyController);
+    
+	//显示水面
+	var buoyancyControllerLayer = new LSprite();
+	buoyancyControllerLayer.graphics.drawRect(1,"#ffffff",[0, 200, 800, 280],true,"#000000");
+	buoyancyControllerLayer.alpha = 0.2;
+	backLayer.addChild(buoyancyControllerLayer);
+	//添加刚体
+	for (var i = 0; i < 5; i++) {
+		var box = new LSprite();
+		var faceBitmap = new LBitmap(new LBitmapData(result["face"],130*Math.random(),130*Math.random(),100,100));
+		box.addChild(faceBitmap);
+		box.x = 50 + 700*Math.random();
+		box.y = 100*Math.random();
+		box.addBodyPolygon(faceBitmap.getWidth(),faceBitmap.getHeight(), 1, 2, .4, .2);
+		box.setBodyMouseJoint(true);
+		backLayer.addChild(box);
+		//将刚体悬浮在水面
+		buoyancyController.AddBody(box.box2dBody);
+	}
+	
+	
+}
+</script> 
+</body>
+</html>

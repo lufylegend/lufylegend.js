@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LComboBox</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,600,main);
+function main(){
+	var com = new LComboBox(20);
+	com.x = 50;
+	com.y= 50;
+	com.setChild({label:"测试一",value:"aaa"});
+	com.setChild({label:"测试二",value:"bbb"});
+	com.setChild({label:"测试三",value:"ccc"});
+	com.setChild({label:"测试四",value:"ddd"});
+	addChild(com);
+}
+</script>
+	</body>
+</html>

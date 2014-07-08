@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.resize</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 240, 240, main);
+			function main () {
+				LGlobal.resize(400,100);
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				addChild(bitmap);
+			}
+			</script>
+	</body>
+</html>

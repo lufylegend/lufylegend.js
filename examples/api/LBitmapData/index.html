@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LBitmapData</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("lufylegend.js.png", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata1 = new LBitmapData(event.target);  
+				var bitmap1 = new LBitmap(bitmapdata1);
+				addChild(bitmap1);
+				
+				var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
+				var bitmap2 = new LBitmap(bitmapdata2);
+				bitmap2.x = 200;
+				addChild(bitmap2);
+			}
+			</script>
+	</body>
+</html>

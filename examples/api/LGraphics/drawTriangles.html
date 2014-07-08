@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>beginBitmapFill</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata = new LBitmapData(event.target);  
+				var backLayer = new LSprite();
+				addChild(backLayer);
+				var vertices = new Array();
+				vertices.push(0, 0);
+				vertices.push(-40, 90);
+				vertices.push(0, 200);
+				vertices.push(80, 0);
+				vertices.push(90, 30);
+				vertices.push(70,200);
+				vertices.push(130, 10);
+				vertices.push(140, 40);
+				vertices.push(120,220);
+				var indices = new Array();
+				indices.push(0, 3, 1);
+				indices.push(3, 1, 4);
+				indices.push(1, 4, 2);
+				indices.push(4, 2, 5);
+				indices.push(3, 6, 4);
+				indices.push(6, 4, 7);
+				indices.push(4, 7, 5);
+				indices.push(7, 5, 8);
+				var uvtData = new Array();
+				uvtData.push(0, 0);
+				uvtData.push(0, 0.5);
+				uvtData.push(0, 1);
+				uvtData.push(0.5, 0);
+				uvtData.push(0.5, 0.5);
+				uvtData.push(0.5, 1);
+				uvtData.push(1, 0);
+				uvtData.push(1, 0.5);
+				uvtData.push(1, 1);
+				backLayer.graphics.beginBitmapFill(bitmapdata);
+				backLayer.graphics.drawTriangles(vertices, indices, uvtData);
+			}
+			</script>
+	</body>
+</html>

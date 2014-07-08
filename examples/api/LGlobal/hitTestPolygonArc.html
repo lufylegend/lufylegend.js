@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.hitTestPolygonArc</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800,480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var layer = new LSprite();
+				addChild(layer);
+				var vertices = [[50,100],[150,50],[100,150]];
+				layer.graphics.drawVertices(1,"#000000",vertices);
+				var circle1 = [170,100,50,2500];
+				layer.graphics.drawArc(1,"#000000",[circle1[0],circle1[1],circle1[2],0,2*Math.PI]);
+				var circle2 = [50,200,50,2500];
+				layer.graphics.drawArc(1,"#000000",[circle2[0],circle2[1],circle2[2],0,2*Math.PI]);
+				trace(LGlobal.hitTestPolygonArc(vertices,circle1));//out:true
+				trace(LGlobal.hitTestPolygonArc(vertices,circle2));//out:false
+			}
+			</script>
+	</body>
+</html>

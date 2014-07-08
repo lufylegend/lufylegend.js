@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>lineCap</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var shape = new LShape();
+				addChild(shape);
+				
+				shape.graphics.beginPath();
+				shape.graphics.lineWidth(10);
+				shape.graphics.lineCap("butt");
+				shape.graphics.moveTo(20,20);
+				shape.graphics.lineTo(200,20);
+				shape.graphics.stroke();
+				
+				shape.graphics.beginPath();
+				shape.graphics.lineCap("round");
+				shape.graphics.moveTo(20,40);
+				shape.graphics.lineTo(200,40);
+				shape.graphics.stroke();
+				
+				shape.graphics.beginPath();
+				shape.graphics.lineCap("square");
+				shape.graphics.moveTo(20,60);
+				shape.graphics.lineTo(200,60);
+				shape.graphics.stroke();
+			}
+			</script>
+	</body>
+</html>

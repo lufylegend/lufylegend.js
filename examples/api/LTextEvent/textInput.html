@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>TEXT_INPUT</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 100, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var theTextFieldInput = new LTextField();
+				theTextFieldInput.x = 20;
+				theTextFieldInput.y = 20;
+				theTextFieldInput.setType(LTextFieldType.INPUT);
+				addChild(theTextFieldInput);
+				theTextFieldInput.addEventListener(LTextEvent.TEXT_INPUT, textinput);
+			}
+			function textinput (e) {
+				trace("e.keyCode=" + e.keyCode);console.log(e);
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.setFrameRate</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/10, "legend", 800,480, main);
+			var label;
+			var runFlag = 1;
+			function main () {
+				var layer = new LSprite();
+				addChild(layer);
+				label = new LTextField();
+				label.x = 20;
+				label.y = 20;
+				layer.addChild(label);
+				layer.addEventListener(LEvent.ENTER_FRAME, onframe);
+				var button01 = new LButtonSample1("FPS = 10");
+				button01.speed = 1000/10;
+				button01.x = 20;
+				button01.y = 50;
+				layer.addChild(button01);
+				button01.addEventListener(LMouseEvent.MOUSE_UP, onmouse);
+				var button02 = new LButtonSample1("FPS = 60");
+				button02.speed = 1000/60;
+				button02.x = 200;
+				button02.y = 50;
+				layer.addChild(button02);
+				button02.addEventListener(LMouseEvent.MOUSE_UP, onmouse);
+			}
+			function onframe (event) {
+				label.text = (runFlag++).toString();
+			}
+			function onmouse (event) {
+				LGlobal.setFrameRate(event.currentTarget.speed);
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,10 @@
+var OS_PC = "pc",
+OS_IPHONE = "iPhone",
+OS_IPOD = "iPod",
+OS_IPAD = "iPad",
+OS_ANDROID = "Android",
+NONE = "none",
+UNDEFINED = "undefined",
+LANDSCAPE = "landscape",
+PORTRAIT = "portrait",
+mouseX,mouseY;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.hitTestRect</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800,480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var rectLayer1 = new LSprite();
+				rectLayer1.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#FF0000");
+				addChild(rectLayer1);
+				var rectLayer2 = new LSprite();
+				rectLayer2.alpha = 0.5;
+				rectLayer2.x = 150;
+				rectLayer2.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#00FF00");
+				addChild(rectLayer2);
+				var rectLayer3 = new LSprite();
+				rectLayer3.alpha = 0.5;
+				rectLayer3.x = 300;
+				rectLayer3.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#0000FF");
+				addChild(rectLayer3);
+				//[0,0,200,200] vs [0,0,200,200]
+				trace(LGlobal.hitTestRect(rectLayer1,rectLayer2));//out:true
+				//[30,0,140,200] vs [30,0,140,200]
+				trace(LGlobal.hitTestRect(rectLayer2,rectLayer3,[140,200],[140,200]));//out:false
+			}
+			</script>
+	</body>
+</html>

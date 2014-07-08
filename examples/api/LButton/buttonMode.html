@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>buttonMode</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(20, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var button01 = new LButtonSample1("buttonMode=true");
+				button01.x = button01.y = 20;
+				addChild(button01);
+				button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+					trace("button01 click");
+				});
+				var button02 = new LButtonSample1("buttonMode=false");
+				button02.x = 20;
+				button02.y = 150;
+				button02.buttonMode = false;
+				addChild(button02);
+				button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+					trace("button02 click");
+				});
+			}
+			</script>
+	</body>
+</html>

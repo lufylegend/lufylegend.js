@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>WINDOW_RESIZE</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;overflow-x:hidden;overflow-y:hidden;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", window.innerWidth,window.innerHeight, main);
+			var layer;
+			function main () {
+				layer = new LSprite();
+				addChild(layer);
+				update();
+				LGlobal.stage.addEventListener(LEvent.WINDOW_RESIZE,update);
+			}
+			function update(){
+				LGlobal.resize(window.innerWidth,window.innerHeight);
+				layer.graphics.clear();
+				layer.graphics.drawRect(1, "#ff0000", [0, 0, 50, 50], true, "#880088");
+				layer.graphics.drawRect(1, "#ff0000", [LGlobal.width - 50, 0, 50, 50], true, "#880088");
+				layer.graphics.drawRect(1, "#ff0000", [0, LGlobal.height - 50, 50, 50], true, "#880088");
+				layer.graphics.drawRect(1, "#ff0000", [LGlobal.width - 50, LGlobal.height - 50, 50, 50], true, "#880088");
+			}
+			</script>
+	</body>
+</html>

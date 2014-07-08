@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getChildAt</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container = new LSprite();
+				var sprite1 = new LSprite();
+				var sprite2 = new LSprite();
+				var sprite3 = new LSprite();
+				container.addChild(sprite1);
+				container.addChild(sprite2);
+				container.addChildAt(sprite3, 0);
+				trace(container.getChildAt(0) == sprite3); // true
+				trace(container.getChildAt(1) == sprite1); // true
+				trace(container.getChildAt(2) == sprite2); // true
+			}
+			</script>
+	</body>
+</html>

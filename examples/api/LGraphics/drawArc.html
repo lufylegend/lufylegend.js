@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>drawArc</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var shape = new LShape();
+				addChild(shape);
+				shape.graphics.drawArc(2, "#ff0000", [50, 50, 40, 0, 2*Math.PI]);
+				shape.graphics.drawArc(1, "#000000", [50, 150, 40, 0, 2*Math.PI], true, "#880088");
+				
+				shape.graphics.drawArc(2, "#ff0000", [150, 50, 40, 0, 50*Math.PI/180,false,true]);
+				shape.graphics.drawArc(1, "#000000", [150, 150, 40, 0, 230*Math.PI/180,false,true], true, "#880088");
+			}
+			</script>
+	</body>
+</html>

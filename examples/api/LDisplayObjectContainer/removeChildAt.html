@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>removeChildAt</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container = new LSprite();
+				var sprite1 = new LSprite();
+				sprite1.name = "sprite1";
+				var sprite2 = new LSprite();
+				sprite2.name = "sprite2";
+				container.addChild(sprite1);
+				container.addChild(sprite2);
+				trace(container.numChildren) // 2
+				container.removeChildAt(0); 
+				trace(container.numChildren) // 1
+				trace(container.getChildAt(0).name); // sprite2
+			}
+			</script>
+	</body>
+</html>

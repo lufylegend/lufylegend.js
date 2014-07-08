@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>play and stop</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend"></div>
+			<script type="text/javascript">
+				LInit(20,"legend",800,450,main);
+				var player,playButton,stopButton;
+				function main(){
+					LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+					var loader = new LLoader();
+					loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+					loader.load("player.png", "bitmapData");
+				}
+				function loadBitmapdata(event){
+					var backLayer = new LSprite();
+					addChild(backLayer);
+					var list = LGlobal.divideCoordinate(480,630,3,4);
+					var data = new LBitmapData(event.target,0,0,120,210);
+					player = new LAnimationTimeline(data,list);
+					player.speed = 10;
+					backLayer.addChild(player);
+					playButton = new LButtonSample1("play");
+					playButton.x = 20;
+					playButton.y = 250;
+					backLayer.addChild(playButton);
+					playButton.setState(LButton.STATE_DISABLE);
+					stopButton = new LButtonSample1("stop");
+					stopButton.x = 100;
+					stopButton.y = 250;
+					backLayer.addChild(stopButton);
+					playButton.addEventListener(LMouseEvent.MOUSE_UP,onPlay);
+					stopButton.addEventListener(LMouseEvent.MOUSE_UP,onStop);
+				}
+				function onPlay(event){
+					if(playButton.state == LButton.STATE_DISABLE)return;
+					playButton.setState(LButton.STATE_DISABLE);
+					stopButton.setState(LButton.STATE_ENABLE);
+					player.play();
+				}
+				function onStop(event){
+					if(stopButton.state == LButton.STATE_DISABLE)return;
+					playButton.setState(LButton.STATE_ENABLE);
+					stopButton.setState(LButton.STATE_DISABLE);
+					player.stop();
+				}
+			</script>
+			
+			
+			
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LScrollbar</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+	init(1000/60,"legend",800,600,main);
+	function main(){
+		LGlobal.setDebug(true);
+		var showObject = new LSprite();
+		showObject.graphics.drawRect(2,"#ff0000",[0,0,500,500],true,"#ff0000");
+		var t = new LTextField();
+		t.color = "#000000";
+		t.text = "ABCABC\nABCABC\nABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC";
+		t.width = 300;
+		t.size = 30;
+		t.setWordWrap(true,35);
+		showObject.addChild(t);
+		showObject.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("showObject click");});
+		var sc = new LScrollbar(showObject,200,200);
+		sc.x = 100;
+		sc.y = 100;
+		addChild(sc);
+	}
+</script>
+	</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>beginBitmapFill</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata = new LBitmapData(event.target);  
+				var backLayer;
+				backLayer = new LSprite();
+				addChild(backLayer);
+				backLayer.graphics.beginBitmapFill(bitmapdata);
+				backLayer.graphics.drawArc(1,"#000000",[150,50,50,0,Math.PI*2]);
+				backLayer = new LSprite();
+				addChild(backLayer);
+				backLayer.graphics.beginBitmapFill(bitmapdata);
+				backLayer.graphics.drawRect(1,"#000000",[10,100,70,100]);
+				backLayer = new LSprite();
+				addChild(backLayer);
+				backLayer.graphics.beginBitmapFill(bitmapdata);
+				backLayer.graphics.drawVertices(1,"#000000",[[120,100],[100,200],[200,150]]);
+			}
+			</script>
+	</body>
+</html>

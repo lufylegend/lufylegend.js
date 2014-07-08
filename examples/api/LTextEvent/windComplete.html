@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>WIND_COMPLETE</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 100, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var theTextField = new LTextField();
+				theTextField.x = 20;
+				theTextField.y = 20;
+				addChild(theTextField);
+				theTextField.text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				theTextField.speed = 2;
+				theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windComplete);
+				theTextField.wind();
+			}
+			function windComplete (e) {
+				trace("windComplete","e.currentTarget = " + e.currentTarget);
+			}
+			</script>
+	</body>
+</html>

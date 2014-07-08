@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>draw</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var layer = new LSprite();
+				layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
+				layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
+				addChild(layer);
+
+				var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
+				bitmapData.draw(layer);
+				var bitmap = new LBitmap(bitmapData);
+				bitmap.y = 150;
+				addChild(bitmap);
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>updateInput</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(20, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.x = 20;
+				theTextField.y = 20;
+				theTextField.text = "Click Enter Key to clear the text!";
+				addChild(theTextField);
+								
+				var theTextField1 = new LTextField();
+				theTextField1.text = "test";
+				theTextField1.x = 20;
+				theTextField1.y = 100;
+				theTextField1.setType(LTextFieldType.INPUT);
+				addChild(theTextField1);
+				theTextField1.addEventListener(LTextEvent.TEXT_INPUT, function (e) {
+					if(e.keyCode == 13){
+						e.currentTarget.text = "";
+						e.currentTarget.updateInput();
+						e.preventDefault();
+					}
+				});
+				
+				setTimeout(function () {
+					theTextField1.focus();
+				}, 200);
+			}
+			</script>
+	</body>
+</html>

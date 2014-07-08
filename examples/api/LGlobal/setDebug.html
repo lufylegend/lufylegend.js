@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>setDebug</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 240, 240, main);
+			function main () {
+				LGlobal.setDebug(true);
+				trace("test01", "test02", "test03");
+			}
+			</script>
+	</body>
+</html>

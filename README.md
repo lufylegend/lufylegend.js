@@ -11,8 +11,12 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 官网 <a target='_blank' href="http://lufylegend.com/lufylegend">http://lufylegend.com/lufylegend</a>
 =============
 
-※1.8.12版更新内容
+※1.9.0版
 
-1，修正了LBitmap对象缩放时鼠标事件失效的bug(感谢网友↙`ゞ☆记忆提供bug报告)
+新版API地址
 
-2，修正了LTextField对象缩放时鼠标事失效的bug
+中文版 <a target='_blank' href="http://lufylegend.com/api/zh_CN/out/index.html">http://lufylegend.com/api/zh_CN/out/index.html</a>
+
+英文版 <a target='_blank' href="http://lufylegend.com/api/en_US/out/index.html">http://lufylegend.com/api/en_US/out/index.html</a>
+
+日文版 <a target='_blank' href="http://lufylegend.com/api/ja_JP/out/index.html">http://lufylegend.com/api/ja_JP/out/index.html</a>

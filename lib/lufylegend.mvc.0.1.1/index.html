@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>LMvc</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <script src="../../lufylegend-1.9.0.min.js" type="text/javascript"></script>
+        <script src="./lufylegend.mvc.0.1.1.js" type="text/javascript"></script>
+        <script src="./core/MyController.js" type="text/javascript"></script>
+        <script src="./core/MyModel.js" type="text/javascript"></script>
+    </head>
+    <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;">
+        <div id="mvclegend">loading</div>
+        <script>
+        //引擎中各路径的配置
+		LMvc.JS_PATH = "./";
+		LMvc.IMG_PATH = "./images/";
+		LMvc.MVC_PATH = "./";
+		LMvc.API_PATH = "./";
+		LMvc.SOUND_PATH = "./sound/";
+		
+        init(40,"mvclegend",480,800,main);
+		function main(){
+			if(LGlobal.canTouch){
+				LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+				LSystem.screen(LStage.FULL_SCREEN);
+			}
+			LMvc.init();
+		}
+        </script>
+    </body>
+</html>

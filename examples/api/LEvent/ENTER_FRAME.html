@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>ENTER_FRAME</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800, 480, main);
+			var direction = 1;
+			function main () {
+				var layer = new LSprite();
+				addChild(layer);
+				layer.graphics.drawRect(1, "#ff0000", [0, 0, 100, 100], true, "#880088");
+				layer.addEventListener(LEvent.ENTER_FRAME,onframe);
+			}
+			function onframe(event){
+				var layer = event.currentTarget;
+				layer.x += direction;
+				if(layer.x < 0){
+					direction = 1;
+				}
+				if(layer.x > 700){
+					direction = -1;
+				}
+			}
+			</script>
+	</body>
+</html>
