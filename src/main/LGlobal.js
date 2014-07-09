@@ -1075,7 +1075,7 @@ var LGlobal = ( function () {
 	 * @param {float} height 高
 	 * @param {int} row 行数
 	 * @param {int} col 列数
-	 * @return {Boolean} 2维数组
+	 * @return {Array} 2维数组
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
@@ -1106,7 +1106,7 @@ var LGlobal = ( function () {
 	 * @param {float} height height
 	 * @param {int} row rows
 	 * @param {int} col cols
-	 * @return {Boolean} 2-dimensional arrays
+	 * @return {Array} 2-dimensional arrays
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
@@ -1137,7 +1137,7 @@ var LGlobal = ( function () {
 	 * @param {float} height 高さ
 	 * @param {int} row 行数
 	 * @param {int} col 列数
-	 * @return {Boolean} 2次元の配列
+	 * @return {Array} 2次元の配列
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
