@@ -113,7 +113,7 @@ LEvent.prototype.preventDefault = function () {
 LEvent.INIT = "init";
 /** @language chinese
  * <p>[静态] 定义 mouseDown 事件对象的 type 属性值。</p>
- * <p>此事件具有以下属性：</p>
+ * <p>此事件可以在下列对象中使用：</p>
  * <table>
  * <tr><th>对象</th><th>说明</th></tr>
  * <tr><td>LLoader</td><td>图片加载完成事件。</td></tr>
@@ -130,7 +130,7 @@ LEvent.INIT = "init";
  */
 /** @language english
  * <p>[static] Defines the value of the type property of a mouseDown event object.</p>
- * <p>This event has the following properties:</p>
+ * <p>This event can be used in the classes:</p>
  * <table>
  * <tr><th>Object</th><th>Explanation</th></tr>
  * <tr><td>LLoader</td><td>when the image is loaded</td></tr>

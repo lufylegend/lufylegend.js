@@ -8,7 +8,7 @@
  * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
  * @param {Array} list <p>每个frame的属性值。</p>
  * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
- * <p>如果精灵图表中的每个frame大小都是的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
+ * <p>如果精灵图表中的每个frame大小都是一样的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
