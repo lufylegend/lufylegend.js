@@ -532,6 +532,9 @@ var LButton = (function () {
 		},
 		die : function () {
 			var s = this;
+			if (LGlobal.os == OS_PC && !s.upState.visible) {
+				document.body.style.cursor = "default";
+			}
 			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeButton(s);
 			}

@@ -223,6 +223,7 @@ var LSound = (function () {
 			s.load(u);
 		}
 	}
+	LSound.TYPE_SOUND = "sound";
 	/** @language chinese
 	 * <p>当前浏览器是否支持Web Audio。</p>
 	 * @property LSound.webAudioEnabled

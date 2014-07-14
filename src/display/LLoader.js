@@ -28,6 +28,7 @@ var LLoader = (function () {
 		LExtends(s, LEventDispatcher, []);
 		s.type = "LLoader";
 	}
+	LLoader.TYPE_BITMAPDATE = "bitmapData";
 	/** @language chinese
 	 * 将 JPEG、渐进式 JPEG、非动画 GIF 或 PNG 文件加载到此 LLoader 对象的子对象中。如果加载 GIF 动画文件，将仅显示第一帧。
 	 * @method load
@@ -105,8 +106,11 @@ var LLoader = (function () {
 	 */
 	LLoader.prototype.load = function (u, t) {
 		var s = this;
+		if (!t) {
+			t = LLoader.TYPE_BITMAPDATE;
+		}
 		s.loadtype = t;
-		if (!t || t == "bitmapData") {
+		if (t == LLoader.TYPE_BITMAPDATE) {
 			s.content = new Image();
 			s.content.onload = function () {
 				s.content.onload = null;

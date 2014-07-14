@@ -188,7 +188,7 @@ var LLoadManage = (function () {
 			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
-			var s = this, d;
+			var s = this, d, ph, phs, ext;
 			if (s.loadIndex >= s.list.length) {
 				return;
 			}
@@ -197,12 +197,22 @@ var LLoadManage = (function () {
 				d.name = s.llname + s.loadIndex;
 			}
 			if (!s.lresult[s.llload + d.name]) {
-				if (d["type"] == "text" || d["type"] == "js") {
+				if (!d["type"]) {
+					ext = getExtension(u);
+					if (ext == "txt") {
+						d["type"] = LURLLoader.TYPE_TEXT;
+					} else if (ext == "js") {
+						d["type"] = LURLLoader.TYPE_JS;
+					} else if ((new Array("mp3", "ogg", "wav", "m4a")).indexOf(ext) >= 0) {
+						d["type"] = LSound.TYPE_SOUND;
+					}
+				}
+				if (d["type"] == LURLLoader.TYPE_TEXT || d["type"] == LURLLoader.TYPE_JS) {
 					s.loader = new LURLLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(s.url(d.path), d["type"]);
-				} else if (d["type"] == "sound") {
+				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
@@ -211,7 +221,7 @@ var LLoadManage = (function () {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path), "bitmapData");
+					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE);
 				}
 			}
 			s.loadIndex++;
