@@ -45,7 +45,7 @@ var LAjax = (function () {
 		 * 		LAjax.get("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">测试链接</a></p>
 		 * @public
@@ -69,7 +69,7 @@ var LAjax = (function () {
 		 * 		LAjax.get("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">Try it »</a></p>
 		 * @public
@@ -93,7 +93,7 @@ var LAjax = (function () {
 		 * 		LAjax.get("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/get.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
@@ -116,11 +116,11 @@ var LAjax = (function () {
 		 * 		label = new LTextField();
 		 * 		addChild(label);
 		 * 		label.x = label.y = 50;
-		 * 		label.text = "LAjax.get ......";
+		 * 		label.text = "LAjax.post ......";
 		 * 		LAjax.post("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">测试链接</a></p>
 		 * @public
@@ -140,11 +140,11 @@ var LAjax = (function () {
 		 * 		label = new LTextField();
 		 * 		addChild(label);
 		 * 		label.x = label.y = 50;
-		 * 		label.text = "LAjax.get ......";
+		 * 		label.text = "LAjax.post ......";
 		 * 		LAjax.post("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">Try it »</a></p>
 		 * @public
@@ -164,11 +164,11 @@ var LAjax = (function () {
 		 * 		label = new LTextField();
 		 * 		addChild(label);
 		 * 		label.x = label.y = 50;
-		 * 		label.text = "LAjax.get ......";
+		 * 		label.text = "LAjax.post ......";
 		 * 		LAjax.post("test.txt",{},success);
 		 * 	}
 		 * 	function success (data) {
-		 * 		label.txt = data;
+		 * 		label.text = data;
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAjax/post.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
