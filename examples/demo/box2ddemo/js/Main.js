@@ -25,6 +25,8 @@ var imgData = new Array(
 		);
 		
 function main(){
+	LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	LSystem.screen(LStage.FULL_SCREEN); 
 	LGlobal.setDebug(true);	
 	backLayer = new LSprite();	
 	addChild(backLayer);	
