@@ -552,6 +552,7 @@ var LAnimationTimeline = (function () {
 		gotoAndPlay : function (name) {
 			var l = this.ll_labelList[name];
 			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			this.onframe();
 		},
 		/** @language chinese
 		 * 将播放头移到影片剪辑的指定标签并停在那里。
