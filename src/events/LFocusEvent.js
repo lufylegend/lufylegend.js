@@ -100,87 +100,87 @@
 var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
 /** @language chinese
  * [静态] 定义 focusIn 事件对象的 type 属性值。(目前只有LTextField对象支持)
- * @property FOCUS_IN
- * @type String
- * @static
- * @since 1.9.0
  * <p>此事件具有以下属性：</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。</td></tr>
  * <tr><td>target</td><td>在此事件中等同于currentTarget。</td></tr>
  * </table>
- * @public
- */
-/** @language english
- * [static] Defines the value of the type property of a focusIn event object.（It is only supported by the LTextField object）
  * @property FOCUS_IN
  * @type String
  * @static
  * @since 1.9.0
+ * @public
+ */
+/** @language english
+ * [static] Defines the value of the type property of a focusIn event object.（It is only supported by the LTextField object）
  * <p>This event has the following properties:</p>
  * <table>
  * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.</td></tr>
  * <tr><td>target</td><td>In this Event, Equivalent to currentTarget.</td></tr>
  * </table>
- * @public
- */
-/** @language japanese
- * [静的] focusIn イベントオブジェクトの type プロパティ値を定義します。(今LTextField オブジェクトでしかサポートされていません)
  * @property FOCUS_IN
  * @type String
  * @static
  * @since 1.9.0
+ * @public
+ */
+/** @language japanese
+ * [静的] focusIn イベントオブジェクトの type プロパティ値を定義します。(今LTextField オブジェクトでしかサポートされていません)
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。</td></tr>
  * <tr><td>target</td><td>このイベントにcurrentTargetと同じです.</td></tr>
  * </table>
+ * @property FOCUS_IN
+ * @type String
+ * @static
+ * @since 1.9.0
  * @public
  */
 LFocusEvent.FOCUS_IN = "focusIn";
 /** @language chinese
  * [静态] 定义 focusOut 事件对象的 type 属性值。(目前只有LTextField对象支持)
- * @property FOCUS_OUT
- * @type String
- * @static
- * @since 1.9.0
  * <p>此事件具有以下属性：</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>当前正在使用某个事件侦听器处理 Event 对象的对象。</td></tr>
  * <tr><td>target</td><td>在此事件中等同于currentTarget。</td></tr>
  * </table>
- * @public
- */
-/** @language english
- * [static] Defines the value of the type property of a focusOut event object.（It is only supported by the LTextField object）
  * @property FOCUS_OUT
  * @type String
  * @static
  * @since 1.9.0
+ * @public
+ */
+/** @language english
+ * [static] Defines the value of the type property of a focusOut event object.（It is only supported by the LTextField object）
  * <p>This event has the following properties:</p>
  * <table>
  * <tr><th>Property</th><th>Value</th></tr>
  * <tr><td>currentTarget</td><td>The object that is actively processing the Event object with an event listener.</td></tr>
  * <tr><td>target</td><td>In this Event, Equivalent to currentTarget.</td></tr>
  * </table>
- * @public
- */
-/** @language japanese
- * [静的] focusOut イベントオブジェクトの type プロパティ値を定義します。(今LTextField オブジェクトでしかサポートされていません)
  * @property FOCUS_OUT
  * @type String
  * @static
  * @since 1.9.0
+ * @public
+ */
+/** @language japanese
+ * [静的] focusOut イベントオブジェクトの type プロパティ値を定義します。(今LTextField オブジェクトでしかサポートされていません)
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
  * <tr><td>currentTarget</td><td>イベントリスナーで Event オブジェクトをアクティブに処理しているオブジェクトです。</td></tr>
  * <tr><td>target</td><td>このイベントにcurrentTargetと同じです.</td></tr>
  * </table>
+ * @property FOCUS_OUT
+ * @type String
+ * @static
+ * @since 1.9.0
  * @public
  */
 LFocusEvent.FOCUS_OUT = "focusOut";

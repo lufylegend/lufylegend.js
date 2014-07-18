@@ -1581,3 +1581,106 @@ var LTextField = (function () {
 	}
 	return LTextField;
 })();
+/** @language chinese
+ * LTextField对象获得焦点后调度。
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language english
+ * Dispatched after a LTextField object gains focus.
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language japanese
+ * LTextFieldオブジェクトがフォーカスを取得した後に送出されます。
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language chinese
+ * LTextField对象失去焦点后调度。
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language english
+ * Dispatched after a LTextField object loses focus.
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language japanese
+ * LTextFieldオブジェクトがフォーカスを失った後に送出されます。
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+

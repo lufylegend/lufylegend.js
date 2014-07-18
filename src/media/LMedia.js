@@ -422,3 +422,18 @@ var LMedia = (function () {
 	}
 	return LMedia;
 })();
+/** @language chinese
+ * 多媒体文件加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the media is loaded
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * audioまたはvideoファイルロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

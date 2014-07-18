@@ -125,3 +125,18 @@ var LLoader = (function () {
 	};
 	return LLoader;
 })();
+/** @language chinese
+ * 图片加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the image is loaded.
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * 画像ロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

@@ -390,3 +390,15 @@ var LBitmap = (function () {
 	}
 	return LBitmap;
 })();
+/** @language chinese
+ * 不可用。
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language english
+ * Disabled.
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LEvent.ENTER_FRAME
+ */

@@ -169,3 +169,18 @@ var LStageWebView = (function () {
 	}
 	return LStageWebView;
 })();
+/** @language chinese
+ * 网页加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the web page is loaded
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * webページロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

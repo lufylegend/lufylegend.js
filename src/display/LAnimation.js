@@ -574,3 +574,18 @@ var LAnimation = (function () {
 	}
 	return LAnimation;
 })();
+/** @language chinese
+ * 一组动画播放完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the animation is on the last frame.
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * アニメーションは最後のフレームを実行する時。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

@@ -139,3 +139,18 @@ var LURLLoader = (function () {
 	};
 	return LURLLoader;
 })();
+/** @language chinese
+ * js文件或者文本文件加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the text file or js file is loaded.
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * jsファイルまたはテキストファイルロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
