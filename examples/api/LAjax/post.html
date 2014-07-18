@@ -15,11 +15,11 @@
 				label = new LTextField();
 				addChild(label);
 				label.x = label.y = 50;
-				label.text = "LAjax.get ......";
+				label.text = "LAjax.post ......";
 				LAjax.post("test.txt",{},success);
 			}
 			function success (data) {
-				label.txt = data;
+				label.text = data;
 			}
 			</script>
 	</body>

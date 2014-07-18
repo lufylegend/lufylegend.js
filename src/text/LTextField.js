@@ -303,7 +303,7 @@ var LTextField = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
+		 * Indicates the alignment of the paragraph(horizontal).
 		 * @property textAlign
 		 * @type String
 		 * @since 1.0.0
@@ -328,7 +328,7 @@ var LTextField = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
+		 * Indicates the alignment of the paragraph(vertical).
 		 * @property textBaseline
 		 * @type String
 		 * @since 1.0.0
@@ -525,26 +525,23 @@ var LTextField = (function () {
 		s.multiline = false;
 		/** @language chinese
 		 * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		/** @language english
 		 * Defines the number of text lines in a multiline text field. If setWordWrap(true), the number of lines increases when text wraps.
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		/** @language japanese
 		 * 複数行テキストフィールド内のテキスト行の数を定義します。setWordWrap(true)の場合、テキストが折り返されると行数は増えます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		s.numLines = 1;
