@@ -360,7 +360,9 @@ LSprite.prototype.addBodyVertices = function(vertices,cx,cy,type,density,frictio
 	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x+cx)/LGlobal.box2d.drawScale,(s.y+cy)/LGlobal.box2d.drawScale));
 };
 LGlobal.mouseJoint_start = function(eve){
-	if(LGlobal.box2d.mouseJoint)return;
+	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint){
+		return;
+	}
 	var mX = eve.offsetX / LGlobal.box2d.drawScale
 	,mY = eve.offsetY / LGlobal.box2d.drawScale
 	,b = LGlobal.box2d.getBodyAtMouse(mX, mY);
@@ -376,10 +378,18 @@ LGlobal.mouseJoint_start = function(eve){
 	};
 };
 LGlobal.mouseJoint_move = function(eve){
-	if(!LGlobal.box2d.mouseJoint)return;
+	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint){
+		return;
+	}
 	mX = eve.offsetX / LGlobal.box2d.drawScale,
 	mY = eve.offsetY / LGlobal.box2d.drawScale;
 	if(LGlobal.box2d.mouseJoint) {
 		LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
+	}
+};
+LGlobal.mouseJoint_end = function(){
+	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
+		LGlobal.box2d.mouseJoint = null;
 	}
 };

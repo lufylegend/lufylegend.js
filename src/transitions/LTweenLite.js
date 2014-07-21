@@ -32,13 +32,15 @@ var LTweenLite = (function () {
 			var s = this, k = null;
 			s.target = $target;
 			s.duration = $duration || 0.001;
+			s.duration *= 1000;
 			s.vars = $vars;
-			s.currentTime = (new Date()).getTime() / 1000;
+			s.currentTime = 0;
 			s.delay = s.vars.delay || 0;
 			s.combinedTimeScale = s.vars.timeScale || 1;
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
 			s.varsfrom = {};
+			s.stop = false;
 			if (typeof(s.vars.ease) != "function") {
 				s.vars.ease = LEasing.None.easeIn;
 			}
@@ -60,24 +62,32 @@ var LTweenLite = (function () {
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
 			}
-			s.initTime = s.currentTime;
-			s.startTime = s.initTime + s.delay;
+			s.currentTime -= s.delay * 1000;
+		},
+		pause : function () {
+			this.stop = true;
+		},
+		resume : function () {
+			this.stop = false;
 		},
 		tween : function () {
-			var s = this, time = (new Date()).getTime() / 1000, etime, tweentype;
-			etime = (time - s.startTime);
-			if (etime < 0) {
+			var s = this, tweentype;
+			if (s.stop) {
+				return;
+			}
+			s.currentTime += LGlobal.speed;
+			if (s.currentTime < 0) {
 				return;
 			}
 			for (tweentype in s.varsto) {
-				var v = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				var v = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
 				s.target[tweentype] = v;
 			}
 			if (s.onStart) {
 				s.onStart(s.target);
 				delete s.onStart;
 			}
-			if (etime >= s.duration) {
+			if (s.currentTime >= s.duration) {
 				for (tweentype in s.varsto) {
 					s.target[tweentype] = s.varsto[tweentype];
 				}

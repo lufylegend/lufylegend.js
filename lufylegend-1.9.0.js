@@ -588,7 +588,7 @@ var LGlobal = ( function () {
 			LGlobal.ll_clicks = 0;
 		}
 		LGlobal.IS_MOUSE_DOWN = true;
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
+		if (LGlobal.mouseJoint_start) {
 			LGlobal.mouseJoint_start(eve);
 		}
 		LGlobal.touchHandler(event);
@@ -619,9 +619,8 @@ var LGlobal = ( function () {
 		LGlobal.touchHandler(event);
 		LGlobal.IS_MOUSE_DOWN = false;
 		LGlobal.buttonStatusEvent = null;
-		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-			LGlobal.box2d.mouseJoint = null;
+		if (LGlobal.mouseJoint_end) {
+			LGlobal.mouseJoint_end();
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
@@ -647,7 +646,7 @@ var LGlobal = ( function () {
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
 		}
 		LGlobal.touchHandler(e);
-		if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
+		if (LGlobal.mouseJoint_move) {
 			LGlobal.mouseJoint_move(eve);
 		}
 	};
@@ -674,8 +673,8 @@ var LGlobal = ( function () {
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_DOWN);
 		LGlobal.IS_MOUSE_DOWN = true;
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
-			LGlobal.mouseJoint_start(e);
+		if (LGlobal.mouseJoint_start) {
+			LGlobal.mouseJoint_start(event);
 		}
 	};
 	LGlobal.ll_mouseMove = function (e) {
@@ -690,8 +689,8 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
+		if (LGlobal.mouseJoint_move) {
+			LGlobal.mouseJoint_move(event);
 		}
 	};
 	LGlobal.ll_mouseUp = function (e) {
@@ -704,9 +703,8 @@ var LGlobal = ( function () {
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_UP);
 		LGlobal.IS_MOUSE_DOWN = false;
-		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-			LGlobal.box2d.mouseJoint = null;
+		if (LGlobal.mouseJoint_end) {
+			LGlobal.mouseJoint_end();
 		}
 	};
 	LGlobal.ll_mouseOut = function (e) {
@@ -1205,6 +1203,14 @@ function base (d, b, a) {
 var LExtends = base;
 function getTimer () {
 	return (new Date()).getTime() - LGlobal.startTimer;
+}
+function getExtension (path) {
+	var r, pattern = /([^#?]+\.)([^.#?]+)/;
+	r = path.match(pattern);
+	if (r.length >= 3) {
+		return r[2].toLowerCase();
+	}
+	return null;
 }
 var LObject = (function () {
 	function LObject () {
@@ -2021,10 +2027,14 @@ var LLoader = (function () {
 		LExtends(s, LEventDispatcher, []);
 		s.type = "LLoader";
 	}
+	LLoader.TYPE_BITMAPDATE = "bitmapData";
 	LLoader.prototype.load = function (u, t) {
 		var s = this;
+		if (!t) {
+			t = LLoader.TYPE_BITMAPDATE;
+		}
 		s.loadtype = t;
-		if (!t || t == "bitmapData") {
+		if (t == LLoader.TYPE_BITMAPDATE) {
 			s.content = new Image();
 			s.content.onload = function () {
 				s.content.onload = null;
@@ -2048,10 +2058,20 @@ var LURLLoader = (function () {
 		s.content = null;
 		s.event = {};
 	}
+	LURLLoader.TYPE_TEXT = "text";
+	LURLLoader.TYPE_JS = "js";
 	LURLLoader.prototype.load = function (u, t) {
-		var s = this, event;
+		var s = this, event, ext;
+		if (!t) {
+			ext = getExtension(u);
+			if (ext == "txt") {
+				t = LURLLoader.TYPE_TEXT;
+			} else if (ext == "js") {
+				t = LURLLoader.TYPE_JS;
+			}
+		}
 		s.loadtype = t;
-		if (!t || t == "text") {
+		if (t == LURLLoader.TYPE_TEXT) {
 			LAjax.get(u, {}, function (data) {
 				event = new LEvent(LEvent.COMPLETE);
 				s.data = data;
@@ -2061,7 +2081,7 @@ var LURLLoader = (function () {
 				delete s.content;
 				delete s.data;
 			});
-		} else if (t == "js") {
+		} else if (t == LURLLoader.TYPE_JS) {
 			var script = document.createElement("script");
 			script.onload = function () {
 				event = new LEvent(LEvent.COMPLETE);
@@ -2446,6 +2466,7 @@ var LSound = (function () {
 			s.load(u);
 		}
 	}
+	LSound.TYPE_SOUND = "sound";
 	LSound.webAudioEnabled = false;
 	var protocol = location.protocol;
 	if (protocol == "http:" || protocol == "https:") {
@@ -3879,6 +3900,9 @@ var LButton = (function () {
 		},
 		die : function () {
 			var s = this;
+			if (LGlobal.os == OS_PC && !s.upState.visible) {
+				document.body.style.cursor = "default";
+			}
 			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeButton(s);
 			}
@@ -4767,6 +4791,7 @@ var LAnimationTimeline = (function () {
 		gotoAndPlay : function (name) {
 			var l = this.ll_labelList[name];
 			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			this.onframe();
 		},
 		gotoAndStop : function (name) {
 			var l = this.ll_labelList[name];
@@ -4811,7 +4836,7 @@ var LLoadManage = (function () {
 			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
-			var s = this, d;
+			var s = this, d, ph, phs, ext;
 			if (s.loadIndex >= s.list.length) {
 				return;
 			}
@@ -4820,12 +4845,22 @@ var LLoadManage = (function () {
 				d.name = s.llname + s.loadIndex;
 			}
 			if (!s.lresult[s.llload + d.name]) {
-				if (d["type"] == "text" || d["type"] == "js") {
+				if (!d["type"]) {
+					ext = getExtension(d.path);
+					if (ext == "txt") {
+						d["type"] = LURLLoader.TYPE_TEXT;
+					} else if (ext == "js") {
+						d["type"] = LURLLoader.TYPE_JS;
+					} else if ((new Array("mp3", "ogg", "wav", "m4a")).indexOf(ext) >= 0) {
+						d["type"] = LSound.TYPE_SOUND;
+					}
+				}
+				if (d["type"] == LURLLoader.TYPE_TEXT || d["type"] == LURLLoader.TYPE_JS) {
 					s.loader = new LURLLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(s.url(d.path), d["type"]);
-				} else if (d["type"] == "sound") {
+				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
@@ -4834,7 +4869,7 @@ var LLoadManage = (function () {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path), "bitmapData");
+					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE);
 				}
 			}
 			s.loadIndex++;
@@ -5134,13 +5169,15 @@ var LTweenLite = (function () {
 			var s = this, k = null;
 			s.target = $target;
 			s.duration = $duration || 0.001;
+			s.duration *= 1000;
 			s.vars = $vars;
-			s.currentTime = (new Date()).getTime() / 1000;
+			s.currentTime = 0;
 			s.delay = s.vars.delay || 0;
 			s.combinedTimeScale = s.vars.timeScale || 1;
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
 			s.varsfrom = {};
+			s.stop = false;
 			if (typeof(s.vars.ease) != "function") {
 				s.vars.ease = LEasing.None.easeIn;
 			}
@@ -5162,24 +5199,32 @@ var LTweenLite = (function () {
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
 			}
-			s.initTime = s.currentTime;
-			s.startTime = s.initTime + s.delay;
+			s.currentTime -= s.delay * 1000;
+		},
+		pause : function () {
+			this.stop = true;
+		},
+		resume : function () {
+			this.stop = false;
 		},
 		tween : function () {
-			var s = this, time = (new Date()).getTime() / 1000, etime, tweentype;
-			etime = (time - s.startTime);
-			if (etime < 0) {
+			var s = this, tweentype;
+			if (s.stop) {
+				return;
+			}
+			s.currentTime += LGlobal.speed;
+			if (s.currentTime < 0) {
 				return;
 			}
 			for (tweentype in s.varsto) {
-				var v = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				var v = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
 				s.target[tweentype] = v;
 			}
 			if (s.onStart) {
 				s.onStart(s.target);
 				delete s.onStart;
 			}
-			if (etime >= s.duration) {
+			if (s.currentTime >= s.duration) {
 				for (tweentype in s.varsto) {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
@@ -6358,7 +6403,9 @@ LSprite.prototype.addBodyVertices = function(vertices,cx,cy,type,density,frictio
 	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x+cx)/LGlobal.box2d.drawScale,(s.y+cy)/LGlobal.box2d.drawScale));
 };
 LGlobal.mouseJoint_start = function(eve){
-	if(LGlobal.box2d.mouseJoint)return;
+	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint){
+		return;
+	}
 	var mX = eve.offsetX / LGlobal.box2d.drawScale
 	,mY = eve.offsetY / LGlobal.box2d.drawScale
 	,b = LGlobal.box2d.getBodyAtMouse(mX, mY);
@@ -6374,11 +6421,19 @@ LGlobal.mouseJoint_start = function(eve){
 	};
 };
 LGlobal.mouseJoint_move = function(eve){
-	if(!LGlobal.box2d.mouseJoint)return;
+	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint){
+		return;
+	}
 	mX = eve.offsetX / LGlobal.box2d.drawScale,
 	mY = eve.offsetY / LGlobal.box2d.drawScale;
 	if(LGlobal.box2d.mouseJoint) {
 		LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
+	}
+};
+LGlobal.mouseJoint_end = function(){
+	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
+		LGlobal.box2d.mouseJoint = null;
 	}
 };
 function LTransition(displayObject,transObj){

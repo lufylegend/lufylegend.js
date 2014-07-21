@@ -198,7 +198,7 @@ var LLoadManage = (function () {
 			}
 			if (!s.lresult[s.llload + d.name]) {
 				if (!d["type"]) {
-					ext = getExtension(u);
+					ext = getExtension(d.path);
 					if (ext == "txt") {
 						d["type"] = LURLLoader.TYPE_TEXT;
 					} else if (ext == "js") {

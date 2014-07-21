@@ -112,7 +112,7 @@
 	 * @since 1.9.0
 	 * @public
 	 */
-	//LSound.webAudioEnabled = false;
+	/*LSound.webAudioEnabled = false;*/
 /** @language chinese
  * <p>此类创建和播放音频的 LSound 对象。</p>
  * <p>当浏览器支持Web Audio Api并且设置LGlobal.webAudio = true(默认值是true)的时候，LSound会自动继承LWebAudio对象。</p>
