@@ -11,7 +11,7 @@
 			<div id="legend">
 			</div>
 <script type="text/javascript">
-	init(1000/60,"legend",800,600,main);
+	init(1000/60,"legend",800,200,main);
 	var imgData = [
 		{name:"radio",path:"radio.png"}
 	];
@@ -26,7 +26,7 @@
 		var bitmapSelect = new LBitmap(new LBitmapData(imglist["radio"],0,0,41,41));
 		var radio = new LRadio();
 		radio.x = 50;
-		radio.y = 100;
+		radio.y = 50;
 		radio.setChildRadio(1,0,0);
 		radio.setChildRadio(2,50,0);
 		radio.setChildRadio(3,100,0);
@@ -35,7 +35,7 @@
 		
 		radio = new LRadio();
 		radio.x = 50;
-		radio.y = 150;
+		radio.y = 100;
 		radio.setChildRadio(1,0,0,bitmap,bitmapSelect);
 		radio.setChildRadio(2,50,0,bitmap,bitmapSelect);
 		radio.setChildRadio(3,100,0,bitmap,bitmapSelect);

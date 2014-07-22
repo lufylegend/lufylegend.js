@@ -1,21 +1,25 @@
 
 function LRadioChild(value,layer,layerSelect){
-	var s = this;
+	var s = this, grd;
 	base(s,LSprite,[]);
 	s.type = "LRadioChild";
 	s.value = value;
 	
 	if(!layer){
+		grd=LGlobal.canvas.createLinearGradient(0,-20,0,40);
+		grd.addColorStop(0,"#FFFFFF");
+		grd.addColorStop(1,"#CCCCCC");
 		layer = new LSprite();
-		layer.graphics.drawArc(1,"#CCCCCC",[0,0,10,0,2*Math.PI],true,"#CCCCCC");
-		var shadow = new LDropShadowFilter(1,45,"#000000",4);
-		//layer.filters = [shadow];
+		layer.graphics.drawArc(1,"#CCCCCC",[0,0,10,0,2*Math.PI],true,grd);
 	}else{
 		layer = layer.clone();
 	}
 	if(!layerSelect){
+		grd=LGlobal.canvas.createLinearGradient(0,-20,0,20);
+		grd.addColorStop(0,"#FFFFFF");
+		grd.addColorStop(1,"#008000");
 		layerSelect = new LSprite();
-		layerSelect.graphics.drawArc(1,"#008000",[0,0,5,0,2*Math.PI],true,"#00FF00");
+		layerSelect.graphics.drawArc(1,grd,[0,0,5,0,2*Math.PI],true,grd);
 	}else{
 		layerSelect = layerSelect.clone();
 	}
