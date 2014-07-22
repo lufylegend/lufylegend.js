@@ -1354,7 +1354,11 @@ var LTextField = (function () {
 				return s.height;
 			}
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
-			return c.measureText("O").width * 1.2;
+			l = c.measureText("O").width * 1.2;
+			if (/.*(g|j|p|q|y)+.*/.exec(s.text)) {
+				l = l*1.2;
+			}
+			return l;
 		},
 		/** @language chinese
 		 * 获取显示对象的高度，以像素为单位。
