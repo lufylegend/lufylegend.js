@@ -46,12 +46,12 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 		grd.addColorStop(1,"#CCCCCC");
 		var layer1 = new LSprite();
 		layer1.graphics.drawRoundRect(1,"#999999",[0,0,200,30,4],true,"#f5f5f9");
-		layer1.graphics.drawRoundRect(1,"#CCCCCC",[4,4,22,22,2],true,grd);
-		layer1.graphics.drawVertices(1,"#CCCCCC",[[10,10],[20,10],[15,22]],true,"#008000");
+		layer1.graphics.drawRoundRect(1,"#CCCCCC",[174,4,22,22,2],true,grd);
+		layer1.graphics.drawVertices(1,"#CCCCCC",[[180,10],[190,10],[185,22]],true,"#008000");
 		var layer2 = new LSprite();
 		layer2.graphics.drawRoundRect(1,"#999999",[0,0,200,30,4],true,"#f5f5f9");
-		layer2.graphics.drawRoundRect(1,"#CCCCCC",[4,4,22,22,2],true,grd);
-		layer2.graphics.drawVertices(1,"#CCCCCC",[[10,10],[20,10],[15,22]],true,"#32CD32");
+		layer2.graphics.drawRoundRect(1,"#CCCCCC",[174,4,22,22,2],true,grd);
+		layer2.graphics.drawVertices(1,"#CCCCCC",[[180,10],[190,10],[185,22]],true,"#32CD32");
 		layer = new LButton(layer1,layer2);
 		layer.cursorEnabled = false;
 		layer.staticMode = true;
@@ -64,14 +64,23 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 		//s.refresh();
 	}
 	s.addChild(layer);
+	var label = new LTextField();
+	label.x = 4;
+	label.y = 4;
+	label.text = "测试一";
+	label.size = s.size;
+	label.color = s.color;
+	label.font = s.font;
+	layer.addChild(label);
+	s.label = label;
 	//s.addChild(layerUp);
 	//s.addChild(layerDown);
 	s.layer = layer;
 	//s.layerUp = layerUp;
 	//s.layerDown = layerDown;
 	
-	s.runing = false;
-	console.log(s.layer.getHeight());
+	//s.runing = false;
+	return;
 	s.textLayer = new LSprite();
 	s.textLayer.graphics.drawRect(1,"#999999",[0,0,200,100],true,"#f5f5f9");
 	s.selectLayer = new LSprite();
@@ -81,13 +90,15 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 	s._sy = s.size * 0.4;
 	//s.textLayer.y = s._sy;
 	s.addChild(s.textLayer);
-	//s.layerUp.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeUp);
+	s.layer.addEventListener(LMouseEvent.MOUSE_UP,s.showChildList);
 	//s.layerDown.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeDown);
 }
 LComboBox.prototype.setChild = function(child){
 	var s = this;
 	if(!child || typeof child.value == UNDEFINED || typeof child.label == UNDEFINED){throw "the child must be an object like:{label:a,value:b}"};
 	
+	s.list.push(child);
+	return;
 	var text = new LTextField();
 	text.size = s.size;
 	text.color = s.color;
@@ -102,8 +113,15 @@ LComboBox.prototype.setChild = function(child){
 	s.list.push(child);
 	s.selectWidth = 100;
 	//s.refresh();
-	console.log(s.textLayer.y);
 	
+};
+LComboBox.prototype.showChildList = function(){
+	var textLayer = new LSprite();
+	textLayer.graphics.drawRect(1,"#999999",[0,0,200,100],true,"#f5f5f9");
+	selectLayer = new LSprite();
+	textLayer.addChild(s.selectLayer);
+	selectLayer.graphics.drawRect(0,"#CCCCCC",[2,2,196,26],true,"#CCCCCC");
+	textLayer.y = s.layer.getHeight();
 };
 /*
 LComboBox.ON_CHANGE = "onchange";
