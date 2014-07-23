@@ -264,6 +264,7 @@ var LButton = (function () {
 		 * @public
 		 */
 		s.staticMode = false;
+		s.cursorEnabled = true;
 		s.setState(LButton.STATE_ENABLE);
 		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
@@ -499,7 +500,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC && s.cursorEnabled) {
 				document.body.style.cursor = "pointer";
 			}
 		},
@@ -522,7 +523,7 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC && s.cursorEnabled) {
 				document.body.style.cursor = "default";
 			}
 		},

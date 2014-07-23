@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.0
+* @version 1.9.1
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -1662,7 +1662,7 @@ var LDisplayObject = (function () {
 			sX = s.scaleX;
 			sY = s.scaleY;
 			p = s.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				sX *= p.scaleX;
 				sY *= p.scaleY;
 				p = p.parent;
@@ -1674,7 +1674,7 @@ var LDisplayObject = (function () {
 			sx=s.x;
 			sy=s.y;
 			p = s.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				sx *= p.scaleX;
 				sy *= p.scaleY;
 				sx += p.x;
@@ -3752,6 +3752,7 @@ var LButton = (function () {
 		s.upState.visible = true;
 		s.buttonMode = true;
 		s.staticMode = false;
+		s.cursorEnabled = true;
 		s.setState(LButton.STATE_ENABLE);
 		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
@@ -3867,7 +3868,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC && s.cursorEnabled) {
 				document.body.style.cursor = "pointer";
 			}
 		},
@@ -3890,7 +3891,7 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC) {
+			if (LGlobal.os == OS_PC && s.cursorEnabled) {
 				document.body.style.cursor = "default";
 			}
 		},
@@ -4225,7 +4226,11 @@ var LTextField = (function () {
 				return s.height;
 			}
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
-			return c.measureText("O").width * 1.2;
+			l = c.measureText("O").width * 1.2;
+			if (/.*(g|j|p|q|y)+.*/.exec(s.text)) {
+				l = l*1.2;
+			}
+			return l;
 		},
 		getHeight : function (maskSize) {
 			var s = this, h, my, mh;

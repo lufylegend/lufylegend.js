@@ -41,31 +41,71 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 	
 	if(!layer){
 		s.refreshFlag = true;
-		layer = new LSprite();
+		grd=LGlobal.canvas.createLinearGradient(0,-20,0,40);
+		grd.addColorStop(0,"#FFFFFF");
+		grd.addColorStop(1,"#CCCCCC");
+		var layer1 = new LSprite();
+		layer1.graphics.drawRoundRect(1,"#999999",[0,0,200,30,4],true,"#f5f5f9");
+		layer1.graphics.drawRoundRect(1,"#CCCCCC",[4,4,22,22,2],true,grd);
+		layer1.graphics.drawVertices(1,"#CCCCCC",[[10,10],[20,10],[15,22]],true,"#008000");
+		var layer2 = new LSprite();
+		layer2.graphics.drawRoundRect(1,"#999999",[0,0,200,30,4],true,"#f5f5f9");
+		layer2.graphics.drawRoundRect(1,"#CCCCCC",[4,4,22,22,2],true,grd);
+		layer2.graphics.drawVertices(1,"#CCCCCC",[[10,10],[20,10],[15,22]],true,"#32CD32");
+		layer = new LButton(layer1,layer2);
+		layer.cursorEnabled = false;
+		layer.staticMode = true;
+		/*
 		layerUp = new LSprite();
 		layerDown = new LSprite();
 		s.layer = layer;
 		s.layerUp = layerUp;
-		s.layerDown = layerDown;
-		s.refresh();
+		s.layerDown = layerDown;*/
+		//s.refresh();
 	}
 	s.addChild(layer);
-	s.addChild(layerUp);
-	s.addChild(layerDown);
+	//s.addChild(layerUp);
+	//s.addChild(layerDown);
 	s.layer = layer;
-	s.layerUp = layerUp;
-	s.layerDown = layerDown;
+	//s.layerUp = layerUp;
+	//s.layerDown = layerDown;
 	
 	s.runing = false;
-	
+	console.log(s.layer.getHeight());
 	s.textLayer = new LSprite();
-	s.textLayer.x = 5;
+	s.textLayer.graphics.drawRect(1,"#999999",[0,0,200,100],true,"#f5f5f9");
+	s.selectLayer = new LSprite();
+	s.textLayer.addChild(s.selectLayer);
+	s.selectLayer.graphics.drawRect(0,"#CCCCCC",[2,2,196,26],true,"#CCCCCC");
+	s.textLayer.y = s.layer.getHeight();
 	s._sy = s.size * 0.4;
-	s.textLayer.y = s._sy;
+	//s.textLayer.y = s._sy;
 	s.addChild(s.textLayer);
-	s.layerUp.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeUp);
-	s.layerDown.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeDown);
+	//s.layerUp.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeUp);
+	//s.layerDown.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeDown);
 }
+LComboBox.prototype.setChild = function(child){
+	var s = this;
+	if(!child || typeof child.value == UNDEFINED || typeof child.label == UNDEFINED){throw "the child must be an object like:{label:a,value:b}"};
+	
+	var text = new LTextField();
+	text.size = s.size;
+	text.color = s.color;
+	text.font = s.font;
+	text.text = child.label;
+	text.x = 5;
+	text.y = 5 + (s.size * 1.5 >>> 0) * s.list.length;
+	s.textLayer.addChild(text);
+	if(s.list.length == 0){
+		s.value = child.value;
+	}
+	s.list.push(child);
+	s.selectWidth = 100;
+	//s.refresh();
+	console.log(s.textLayer.y);
+	
+};
+/*
 LComboBox.ON_CHANGE = "onchange";
 LComboBox.prototype.refresh = function(){
 	var s = this,k=null;
@@ -89,25 +129,6 @@ LComboBox.prototype.refresh = function(){
 	s.layerDown.y = s.size;
 	s.layerDown.graphics.drawRect(2,"#000000",[0,0,s.size*2,s.size]);
 	s.layerDown.graphics.drawVertices(2,"#000000",[[s.size*0.5*2,s.size*0.8],[s.size*0.2*2,s.size*0.2],[s.size*0.8*2,s.size*0.2]],true,"#000000");
-};
-LComboBox.prototype.setChild = function(child){
-	var s = this;
-	if(!child || typeof child.value == UNDEFINED || typeof child.label == UNDEFINED){throw "the child must be an object like:{label:a,value:b}"};
-	
-	var text = new LTextField();
-	text.size = s.size;
-	text.color = s.color;
-	text.font = s.font;
-	text.text = child.label;
-	text.y = (s.size * 1.5 >>> 0) * s.list.length;
-	s.textLayer.addChild(text);
-	if(s.list.length == 0){
-		s.value = child.value;
-	}
-	s.list.push(child);
-	s.selectWidth = 100;
-	s.refresh();
-	
 };
 LComboBox.prototype._onChangeDown = function(e){
 	var b = e.clickTarget,s = b.parent;
@@ -185,4 +206,4 @@ LComboBox.prototype.clone = function(){
 	}	
 	a.setValue(s.value);
 	return a;
-};
+};*/
