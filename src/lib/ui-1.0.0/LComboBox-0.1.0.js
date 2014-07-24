@@ -55,13 +55,6 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 		layer = new LButton(layer1,layer2);
 		layer.cursorEnabled = false;
 		layer.staticMode = true;
-		/*
-		layerUp = new LSprite();
-		layerDown = new LSprite();
-		s.layer = layer;
-		s.layerUp = layerUp;
-		s.layerDown = layerDown;*/
-		//s.refresh();
 	}
 	s.addChild(layer);
 	var label = new LTextField();
@@ -73,55 +66,75 @@ function LComboBox(size,color,font,layer,layerUp,layerDown){
 	label.font = s.font;
 	layer.addChild(label);
 	s.label = label;
-	//s.addChild(layerUp);
-	//s.addChild(layerDown);
 	s.layer = layer;
-	//s.layerUp = layerUp;
-	//s.layerDown = layerDown;
-	
-	//s.runing = false;
-	return;
-	s.textLayer = new LSprite();
-	s.textLayer.graphics.drawRect(1,"#999999",[0,0,200,100],true,"#f5f5f9");
-	s.selectLayer = new LSprite();
-	s.textLayer.addChild(s.selectLayer);
-	s.selectLayer.graphics.drawRect(0,"#CCCCCC",[2,2,196,26],true,"#CCCCCC");
-	s.textLayer.y = s.layer.getHeight();
-	s._sy = s.size * 0.4;
-	//s.textLayer.y = s._sy;
-	s.addChild(s.textLayer);
-	s.layer.addEventListener(LMouseEvent.MOUSE_UP,s.showChildList);
-	//s.layerDown.addEventListener(LMouseEvent.MOUSE_UP,s._onChangeDown);
+	s.addEventListener(LMouseEvent.MOUSE_UP,s._showChildList);
 }
 LComboBox.prototype.setChild = function(child){
 	var s = this;
 	if(!child || typeof child.value == UNDEFINED || typeof child.label == UNDEFINED){throw "the child must be an object like:{label:a,value:b}"};
-	
 	s.list.push(child);
-	return;
-	var text = new LTextField();
-	text.size = s.size;
-	text.color = s.color;
-	text.font = s.font;
-	text.text = child.label;
-	text.x = 5;
-	text.y = 5 + (s.size * 1.5 >>> 0) * s.list.length;
-	s.textLayer.addChild(text);
-	if(s.list.length == 0){
-		s.value = child.value;
-	}
-	s.list.push(child);
-	s.selectWidth = 100;
-	//s.refresh();
-	
+};
+LComboBox.prototype._showChildList = function(event){
+	var s = event.currentTarget;
+	s.showChildList();
 };
 LComboBox.prototype.showChildList = function(){
+	var s = this,i,l,child;
 	var textLayer = new LSprite();
 	textLayer.graphics.drawRect(1,"#999999",[0,0,200,100],true,"#f5f5f9");
 	selectLayer = new LSprite();
-	textLayer.addChild(s.selectLayer);
+	textLayer.addChild(selectLayer);
 	selectLayer.graphics.drawRect(0,"#CCCCCC",[2,2,196,26],true,"#CCCCCC");
-	textLayer.y = s.layer.getHeight();
+	textLayer.selectLayer = selectLayer;
+	textLayer.childHeight = s.size * 1.5 >>> 0;
+	for(i=0,l=s.list.length;i<l;i++){
+		child = s.list[i];
+		var text = new LTextField();
+		text.size = s.size;
+		text.color = s.color;
+		text.font = s.font;
+		text.text = child.label;
+		text.x = 5;
+		text.y = 5 + (s.size * 1.5 >>> 0) * i;
+		textLayer.addChild(text);
+	}
+	var coordinate = s.getRootCoordinate();
+	textLayer.x = coordinate.x;
+	textLayer.y = coordinate.y + s.layer.getHeight();
+	textLayer.comboBox = s;
+	var translucent = new LSprite();
+	translucent.graphics.drawRect(0,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#000000");
+	translucent.alpha = 0;
+	LGlobal.stage.addChild(translucent);
+	translucent.addEventListener(LMouseEvent.MOUSE_UP,function(e){
+		var cnt = LGlobal.stage.numChildren;
+		LGlobal.stage.removeChildAt(cnt - 1);
+		LGlobal.stage.removeChildAt(cnt - 2);
+	});
+	translucent.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){});
+	translucent.addEventListener(LMouseEvent.MOUSE_MOVE,function(e){});
+	translucent.addEventListener(LMouseEvent.MOUSE_OVER,function(e){});
+	translucent.addEventListener(LMouseEvent.MOUSE_OUT,function(e){});
+	
+	LGlobal.stage.addChild(textLayer);
+	textLayer.addEventListener(LMouseEvent.MOUSE_MOVE,s._childSelecting);
+	textLayer.addEventListener(LMouseEvent.MOUSE_UP,s._childSelected);
+};
+LComboBox.prototype._childSelecting = function(event){
+	var textLayer = event.currentTarget, i;
+	i = event.selfY/textLayer.childHeight >>> 0;
+	if(i >= textLayer.comboBox.list.length){
+		return;
+	}
+	textLayer.selectLayer.y = textLayer.childHeight * i;
+};
+LComboBox.prototype._childSelected = function(event){
+	var textLayer = event.currentTarget, i;
+	i = event.selfY/textLayer.childHeight >>> 0;
+	textLayer.comboBox.label.text = textLayer.comboBox.list[i].label;
+	var cnt = LGlobal.stage.numChildren;
+	LGlobal.stage.removeChildAt(cnt - 1);
+	LGlobal.stage.removeChildAt(cnt - 2);
 };
 /*
 LComboBox.ON_CHANGE = "onchange";
