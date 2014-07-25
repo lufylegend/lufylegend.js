@@ -23,7 +23,7 @@
  * @examplelink <p><a href="../../../api/ui/LScrollbar.html" target="_blank">実際のサンプルを見る</a></p>
  * @public
  */
-function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible){
+function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible,hVisible){
 	var s = this;
 	base(s,LSprite,[]);
 	s.type = "LScrollbar";
@@ -32,6 +32,7 @@ function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible){
 	s._mask.drawRect(1,"#ffffff",[0,0,maskW,maskH],true,"#ffffff");
 	s._showLayer.graphics.drawRect(1,"#ffffff",[0,0,maskW,maskH],true,"#ffffff");
 	s._wVisible = typeof wVisible == UNDEFINED?true:wVisible;
+	s._hVisible = typeof hVisible == UNDEFINED?true:wVisible;
 	s.addChild(s._showLayer);
 	s._width = 0;
 	s._height = 0;
@@ -39,29 +40,32 @@ function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible){
 	s._showLayer.addChild(showObject);
 	s._showObject.mask = s._mask;
 	s._scrollWidth = scrollWidth?scrollWidth:20;
-	s._tager = {x:0,y:0};
+	s._target = {x:0,y:0};
 	s._maskW = maskW;
 	s._maskH = maskH;
 	s.addEventListener(LEvent.ENTER_FRAME,s.onFrame);
 }
 LScrollbar.prototype.clone = function(){
-	var s = this,a = new LScrollbar(s._showObject.clone(),s._maskW,s._maskH,s._scrollWidth,s.wVisible);
+	var s = this,a = new LScrollbar(s._showObject.clone(),s._maskW,s._maskH,s._scrollWidth,s._wVisible,s._hVisible);
 	a.copyProperty(s);
 	return a;
 };
-LScrollbar.prototype.onFrame = function(s){
-	if(s._wVisible && s._width != s._showObject.getWidth()){
-		s._width = s._showObject.getWidth();
-		if(s._width > s._mask.getWidth()){
+LScrollbar.prototype.onFrame = function(event){
+	var s = event.currentTarget, w, h;
+	w = s._showObject.getWidth();
+	h = s._showObject.getHeight();
+	if(s._wVisible && s._width != w){
+		s._width = w;
+		if(s._width > s._maskW){
 			s.resizeWidth(true);
 			s.moveLeft();
 		}else{
 			s.resizeWidth(false);
 		}
 	}
-	if(s._height != s._showObject.getHeight()){
-		s._height = s._showObject.getHeight();
-		if(s._height > s._mask.getHeight()){
+	if(s._hVisible && s._height != h){
+		s._height = h;
+		if(s._height > s._maskH){
 			s.resizeHeight(true);
 			s.moveUp();
 		}else{
@@ -84,7 +88,7 @@ LScrollbar.prototype.onFrame = function(s){
 };
 
 LScrollbar.prototype.resizeWidth = function(value){
-	var s = this;
+	var s = this, grd, grdb;
 	if(!value){
 		if(s._scroll_w != null){
 			s._scroll_w.parent.removeChild(s._scroll_w);
@@ -103,37 +107,33 @@ LScrollbar.prototype.resizeWidth = function(value){
 		s.addChild(s._scroll_w_bar);
 		var ny = s._scrollWidth*1.5;
 		s._scroll_w.x = 0;
-		s._scroll_w.y = s._mask.getHeight();
+		s._scroll_w.y = s._maskH;
 		s._scroll_w_bar.x = s._scrollWidth;
-		s._scroll_w_bar.y = s._mask.getHeight();
-		s._scroll_w_bar.graphics.drawRect(1,"#000000",[0,0,ny,s._scrollWidth],true,"#cccccc");
-		s._scroll_w_bar.graphics.drawLine(1,"#000000",[ny*0.5,s._scrollWidth*0.25,ny*0.5,s._scrollWidth*0.75]);
-		s._scroll_w_bar.graphics.drawLine(1,"#000000",[ny*0.5-3,s._scrollWidth*0.25,ny*0.5-3,s._scrollWidth*0.75]);
-		s._scroll_w_bar.graphics.drawLine(1,"#000000",[ny*0.5+3,s._scrollWidth*0.25,ny*0.5+3,s._scrollWidth*0.75]);
-		s._scroll_w.graphics.drawRect(1,"#000000",[0,0,s._mask.getWidth(),s._scrollWidth],true,"#292929");
-		s._scroll_w.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._scrollWidth],true,"#ffffff");
-		s._scroll_w.graphics.drawRect(1,"#000000",[s._mask.getWidth() - s._scrollWidth,0,s._scrollWidth,s._scrollWidth],true,"#ffffff");
-		s._scroll_w.graphics.drawVertices(1,"#000000",[[s._scrollWidth*0.75,s._scrollWidth*0.25],
-			[s._scrollWidth*0.75,s._scrollWidth*0.75],
-			[s._scrollWidth*0.25,s._scrollWidth*0.5]],true,"#000000");
-		s._scroll_w.graphics.drawVertices(1,"#000000",[[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.25],
-			[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.75],
-			[s._mask.getWidth() - s._scrollWidth*0.25,s._scrollWidth*0.5]],true,"#000000");
-		s._scroll_w.graphics.drawRect(1,"#000000",[0,0,s._mask.getWidth(),s._scrollWidth]);
-		s._scroll_w.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
-		s._scroll_w.graphics.drawRect(1,"#000000",[s._mask.getWidth() - s._scrollWidth,0,s._scrollWidth,s._scrollWidth]);
-		var mouseDownHave = false;
-		for(i=0;i<s.mouseList.length;i++){
- 			if(s.mouseList[i][0] == LMouseEvent.MOUSE_DOWN){
-				mouseDownHave = true;
-  				break;
-			}
+		s._scroll_w_bar.y = s._maskH;
+		grd=LGlobal.canvas.createLinearGradient(0,0,0,s._scrollWidth*2);
+		grd.addColorStop(0,"#FFFFFF");
+		grd.addColorStop(1,"#008000");
+		grdb=LGlobal.canvas.createLinearGradient(0,0,0,s._scrollWidth);
+		grdb.addColorStop(0,"#FFFFFF");
+		grdb.addColorStop(1,"#CCCCCC");
+		/*bar*/
+		s._scroll_w_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth*1.5,s._scrollWidth,s._scrollWidth*0.5],true,grd);
+		/*middle*/
+		s._scroll_w.graphics.drawRoundRect(1,"#CCCCCC",[s._scrollWidth,0,s._mask.getWidth() - s._scrollWidth*2,s._scrollWidth,s._scrollWidth*0.5],true,grdb);
+		/*left*/
+		s._scroll_w.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
+		s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth*0.75,s._scrollWidth*0.25],[s._scrollWidth*0.75,s._scrollWidth*0.75],[s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
+		/*right*/
+		s._scroll_w.graphics.drawRect(0,"#000000",[s._mask.getWidth() - s._scrollWidth,0,s._scrollWidth,s._scrollWidth]);
+		s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.25],[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.75],[s._mask.getWidth() - s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
+		
+		if(!s.hasEventListener(LMouseEvent.MOUSE_DOWN)){
+			s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 		}
-    	if(!mouseDownHave)s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 	}
 };
 LScrollbar.prototype.resizeHeight = function(value){
-	var s = this;
+	var s = this, grd, grdb;
 	if(!value){
 		if(s._scroll_h != null){
 			s._scroll_h.parent.removeChild(s._scroll_h);
@@ -151,41 +151,35 @@ LScrollbar.prototype.resizeHeight = function(value){
 		s.addChild(s._scroll_h);
 		s.addChild(s._scroll_h_bar);
 		var ny = s._scrollWidth*1.5;
-		s._scroll_h.x = s._mask.getWidth();
+		s._scroll_h.x = s._maskW;
 		s._scroll_h.y = 0;
-		s._scroll_h_bar.x = s._mask.getWidth();
+		s._scroll_h_bar.x = s._maskW;
 		s._scroll_h_bar.y = s._scrollWidth;
-		s._scroll_h_bar.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._scrollWidth*1.5],true,"#cccccc");
-		s._scroll_h_bar.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,ny]);
-		s._scroll_h_bar.graphics.drawLine(1,"#000000",[s._scrollWidth*0.25,ny*0.5,s._scrollWidth*0.75,ny*0.5]);
-		s._scroll_h_bar.graphics.drawLine(1,"#000000",[s._scrollWidth*0.25,ny*0.5-3,s._scrollWidth*0.75,ny*0.5-3]);
-		s._scroll_h_bar.graphics.drawLine(1,"#000000",[s._scrollWidth*0.25,ny*0.5+3,s._scrollWidth*0.75,ny*0.5+3]);
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._mask.getHeight()],true,"#292929");
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._scrollWidth],true,"#ffffff");
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,s._mask.getHeight() - s._scrollWidth,s._scrollWidth,s._scrollWidth],true,"#ffffff");
-		s._scroll_h.graphics.drawVertices(1,"#000000",[[s._scrollWidth/4,s._scrollWidth*0.75],
-			[s._scrollWidth/2,s._scrollWidth/4],
-			[s._scrollWidth*0.75,s._scrollWidth*0.75]],true,"#000000");
-		s._scroll_h.graphics.drawVertices(1,"#000000",[[s._scrollWidth/4,s._mask.getHeight() - s._scrollWidth*0.75],
-			[s._scrollWidth/2,s._mask.getHeight() - s._scrollWidth*0.25],
-			[s._scrollWidth*0.75,s._mask.getHeight() - s._scrollWidth*0.75]],true,"#000000");
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,0,s._scrollWidth,s._mask.getHeight()]);
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,0,0,0,s._scrollWidth,s._scrollWidth]);
-		s._scroll_h.graphics.drawRect(1,"#000000",[0,s._mask.getHeight() - s._scrollWidth,s._scrollWidth,s._scrollWidth]);
-		var mouseDownHave = false;
-  		for(i=0;i<s.mouseList.length;i++){
-      		if(s.mouseList[i][0] == LMouseEvent.MOUSE_DOWN){
-				mouseDownHave = true;
-			}
-		}
-		if(!mouseDownHave){
+		grd=LGlobal.canvas.createLinearGradient(0,0,s._scrollWidth*2,0);
+		grd.addColorStop(0,"#FFFFFF");
+		grd.addColorStop(1,"#008000");
+		grdb=LGlobal.canvas.createLinearGradient(0,0,s._scrollWidth,0);
+		grdb.addColorStop(0,"#FFFFFF");
+		grdb.addColorStop(1,"#CCCCCC");
+		/*bar*/
+		s._scroll_h_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth,s._scrollWidth*1.5,s._scrollWidth*0.5],true,grd);
+		/*middle*/
+		s._scroll_h.graphics.drawRoundRect(1,"#CCCCCC",[0,s._scrollWidth,s._scrollWidth,s._mask.getHeight()-s._scrollWidth*2,s._scrollWidth*0.5],true,grdb);
+		/*up*/
+		s._scroll_h.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
+		s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._scrollWidth*0.75],[s._scrollWidth/2,s._scrollWidth/4],[s._scrollWidth*0.75,s._scrollWidth*0.75]],true,grd);
+		/*down*/
+		s._scroll_h.graphics.drawRect(0,"#000000",[0,s._mask.getHeight() - s._scrollWidth,s._scrollWidth,s._scrollWidth]);
+		s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._mask.getHeight() - s._scrollWidth*0.75],[s._scrollWidth/2,s._mask.getHeight() - s._scrollWidth*0.25],[s._scrollWidth*0.75,s._mask.getHeight() - s._scrollWidth*0.75]],true,grd);
+		
+		if(!s.hasEventListener(LMouseEvent.MOUSE_DOWN)){
 			s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 		}
 	}
 };
 LScrollbar.prototype.moveLeft = function(){
 	var s = this;
-	if(!s._key["Dkey"] && s._showObject.x >= s._tager.x){
+	if(!s._key["Dkey"] && s._showObject.x >= s._target.x){
 		s._key["left"] = false;
 		s.setScroll_w();
 		return;
@@ -218,7 +212,7 @@ LScrollbar.prototype.setScroll_w = function(){
 };
 LScrollbar.prototype.moveUp = function(){
 	var s = this;
-	if(!s._key["Dkey"] && s._showObject.y >= s._tager.y){
+	if(!s._key["Dkey"] && s._showObject.y >= s._target.y){
 		s._key["up"] = false;
 		s.setScroll_h();
 		return;
@@ -235,7 +229,7 @@ LScrollbar.prototype.moveUp = function(){
 };
 LScrollbar.prototype.moveDown = function(){
 	var s = this;
-	if(!s._key["Dkey"] && s._showObject.y <= s._tager.y){
+	if(!s._key["Dkey"] && s._showObject.y <= s._target.y){
 		s._key["down"] = false;
 		s.setScroll_h();
 		return;
@@ -284,7 +278,7 @@ LScrollbar.prototype.scrollToRight = function(){
 };
 LScrollbar.prototype.moveRight = function(){
 	var s = this;
-	if(!s._key["Dkey"] && s._showObject.x <= s._tager.x){
+	if(!s._key["Dkey"] && s._showObject.x <= s._target.x){
 		s._key["right"] = false;
 		s.setScroll_w();
 		return;
@@ -314,13 +308,13 @@ LScrollbar.prototype.mouseMoveH = function(event){
 	var mx = event.selfY - s._key["scroll_y"];
 	s._key["up"] = false;
 	s._key["down"] = false;
-	s._tager.y = (s._mask.getHeight() - s._showObject.getHeight())*(mx - s._scrollWidth)/(s._mask.getHeight() - s._scrollWidth*3.5);
-	if(s._tager.y > s._showObject.y){
+	s._target.y = (s._mask.getHeight() - s._showObject.getHeight())*(mx - s._scrollWidth)/(s._mask.getHeight() - s._scrollWidth*3.5);
+	if(s._target.y > s._showObject.y){
 		s._key["up"] = true;
 	}else{
 		s._key["down"] = true;
 	}
-	s._speed = Math.abs(s._tager.y - s._showObject.y);
+	s._speed = Math.abs(s._target.y - s._showObject.y);
 	s.setSpeed();
 };
 LScrollbar.prototype.mouseUpH = function(event){
@@ -349,13 +343,13 @@ LScrollbar.prototype.mouseMoveW = function(event){
 	var my = event.selfX - s._key["scroll_x"];
 	s._key["left"] = false;
 	s._key["right"] = false;
-	s._tager.x = (s._mask.getWidth()- s._showObject.getWidth())*(my - s._scrollWidth)/(s._mask.getWidth() - s._scrollWidth*3.5);
-	if(s._tager.x > s._showObject.x){
+	s._target.x = (s._mask.getWidth()- s._showObject.getWidth())*(my - s._scrollWidth)/(s._mask.getWidth() - s._scrollWidth*3.5);
+	if(s._target.x > s._showObject.x){
 		s._key["left"] = true;
 	}else{
 		s._key["right"] = true;
 	}
-	s._speed = Math.abs(s._tager.x - s._showObject.x);
+	s._speed = Math.abs(s._target.x - s._showObject.x);
 	s.setSpeed();
 };
 LScrollbar.prototype.setSpeed = function(){
@@ -369,7 +363,7 @@ LScrollbar.prototype.mouseDownW = function(event){
 		if(s._showObject.x >= 0 || s._key["left"])return;
 		s._distance = 10;
 		if(s._showObject.x + s._distance > 0)s._distance = s._showObject.x;
-		s._tager.x = s._showObject.x + s._distance;
+		s._target.x = s._showObject.x + s._distance;
 		s._key["left"] = true;
 		s._key["right"] = false;
 		s._key["Dkey"] = true;
@@ -380,7 +374,7 @@ LScrollbar.prototype.mouseDownW = function(event){
 		if(s._showObject.x <= s._mask.getWidth() - s._showObject.getWidth() || s._key["left"])return;
 		s._distance = 10;
 		if(s._showObject.x-s._distance<s._mask.getWidth()-s._showObject.getWidth())s._distance = s._showObject.x - s._mask.getWidth() + s._showObject.getWidth();
-		s._tager.x = s._showObject.x - s._distance;
+		s._target.x = s._showObject.x - s._distance;
 		s._key["right"] = true;
 		s._key["left"] = false;
 		s._key["Dkey"] = true;
@@ -396,13 +390,13 @@ LScrollbar.prototype.mouseDownW = function(event){
 	}else if(event.selfX > 0 && event.selfX < s._mask.getWidth()){
 		s._key["left"] = false;
 		s._key["right"] = false;
-		s._tager.x = (s._mask.getWidth() - s._showObject.getWidth())*(event.selfX - s._scrollWidth)/(s._mask.getWidth() - s._scrollWidth*3.5);
-		if(s._tager.x > s._showObject.x){
+		s._target.x = (s._mask.getWidth() - s._showObject.getWidth())*(event.selfX - s._scrollWidth)/(s._mask.getWidth() - s._scrollWidth*3.5);
+		if(s._target.x > s._showObject.x){
 			s._key["left"] = true;
 		}else{
 			s._key["right"] = true;
 		}
-		s._speed = Math.abs(s._tager.x - s._showObject.x);
+		s._speed = Math.abs(s._target.x - s._showObject.x);
 		s.setSpeed();
 	}
 };
@@ -413,7 +407,7 @@ LScrollbar.prototype.mouseDownH = function(event){
 		if(s._showObject.y >= 0)return;
 		s._distance = 10;
 		if(s._showObject.y + s._distance > 0)s._distance = s._showObject.y;
-		s._tager.y = s._showObject.y + s._distance;
+		s._target.y = s._showObject.y + s._distance;
 		s._key["up"] = true;
 		s._key["down"] = false;
 		s._key["Dkey"] = true;
@@ -424,7 +418,7 @@ LScrollbar.prototype.mouseDownH = function(event){
 		if(s._showObject.y <= s._mask.getHeight() - s._showObject.getHeight())return;
 		s._distance = 10;
 		if(s._showObject.y-s._distance<s._mask.getHeight()-s._showObject.getHeight())s._distance=s._showObject.y-s._mask.getHeight()+s._showObject.getHeight();
-		s._tager.y = s._showObject.y - s._distance;
+		s._target.y = s._showObject.y - s._distance;
 		s._key["down"] = true;
 		s._key["up"] = false;
 		s._key["Dkey"] = true;
@@ -440,13 +434,13 @@ LScrollbar.prototype.mouseDownH = function(event){
 	}else if(event.selfY > 0 && event.selfY < s._mask.getHeight()){
 		s._key["up"] = false;
 		s._key["down"] = false;
-		s._tager.y = (s._mask.getHeight() - s._showObject.getHeight())*(event.selfY - s._scrollWidth)/(s._mask.getHeight() - s._scrollWidth*3.5);
-		if(s._tager.y > s._showObject.y){
+		s._target.y = (s._mask.getHeight() - s._showObject.getHeight())*(event.selfY - s._scrollWidth)/(s._mask.getHeight() - s._scrollWidth*3.5);
+		if(s._target.y > s._showObject.y){
 			s._key["up"] = true;
 		}else{
 			s._key["down"] = true;
 		}
-		s._speed = Math.abs(s._tager.y - s._showObject.y);
-		s.setSpeed();console.log(s._key,s._tager);
+		s._speed = Math.abs(s._target.y - s._showObject.y);
+		s.setSpeed();console.log(s._key,s._target);
 	}
 };
