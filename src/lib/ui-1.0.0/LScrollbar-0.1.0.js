@@ -23,7 +23,7 @@
  * @examplelink <p><a href="../../../api/ui/LScrollbar.html" target="_blank">実際のサンプルを見る</a></p>
  * @public
  */
-function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible,hVisible){
+function LScrollbar(showObject,maskW,maskH,param,wVisible,hVisible){
 	var s = this;
 	base(s,LSprite,[]);
 	s.type = "LScrollbar";
@@ -39,11 +39,24 @@ function LScrollbar(showObject,maskW,maskH,scrollWidth,wVisible,hVisible){
 	s._showObject = showObject;
 	s._showLayer.addChild(showObject);
 	s._showObject.mask = s._mask;
-	s._scrollWidth = scrollWidth?scrollWidth:20;
+	if(typeof param == UNDEFINED){
+		s._scrollWidth = 20;
+		s._selectHeight = s._scrollWidth*1.5;
+	}else if(typeof param == "number"){
+		s._scrollWidth = param;
+		s._selectHeight = s._scrollWidth*1.5;
+	}else if(typeof param == "object"){
+		s._ll_bar_back = param["back"];
+		s._ll_bar_select = param["select"];
+		s._ll_bar_arraw = param["arraw"];
+		s._scrollWidth = s._ll_bar_back.getWidth();
+		s._selectHeight = s._ll_bar_select.getHeight();
+	}
 	s._target = {x:0,y:0};
 	s._maskW = maskW;
 	s._maskH = maskH;
 	s.addEventListener(LEvent.ENTER_FRAME,s.onFrame);
+	s.dispatchEvent(LEvent.ENTER_FRAME);
 }
 LScrollbar.prototype.clone = function(){
 	var s = this,a = new LScrollbar(s._showObject.clone(),s._maskW,s._maskH,s._scrollWidth,s._wVisible,s._hVisible);
@@ -117,16 +130,50 @@ LScrollbar.prototype.resizeWidth = function(value){
 		grdb.addColorStop(0,"#FFFFFF");
 		grdb.addColorStop(1,"#CCCCCC");
 		/*bar*/
-		s._scroll_w_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth*1.5,s._scrollWidth,s._scrollWidth*0.5],true,grd);
-		/*middle*/
-		s._scroll_w.graphics.drawRoundRect(1,"#CCCCCC",[s._scrollWidth,0,s._mask.getWidth() - s._scrollWidth*2,s._scrollWidth,s._scrollWidth*0.5],true,grdb);
-		/*left*/
-		s._scroll_w.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
-		s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth*0.75,s._scrollWidth*0.25],[s._scrollWidth*0.75,s._scrollWidth*0.75],[s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
-		/*right*/
-		s._scroll_w.graphics.drawRect(0,"#000000",[s._mask.getWidth() - s._scrollWidth,0,s._scrollWidth,s._scrollWidth]);
-		s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.25],[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.75],[s._mask.getWidth() - s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
+		if(s._ll_bar_select){
+			s._ll_bar_select_w = s._ll_bar_select.clone();
+			s._ll_bar_select_w.rotateCenter = false;
+			s._ll_bar_select_w.x = s._selectHeight;
+			s._ll_bar_select_w.rotate = 90;
+			s._scroll_w_bar.addChild(s._ll_bar_select_w);
+		}else{
+			s._scroll_w_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth*1.5,s._scrollWidth,s._scrollWidth*0.5],true,grd);
+		}
 		
+		/*middle*/
+		if(s._ll_bar_back){
+			s._ll_bar_back_w = s._ll_bar_back.clone();
+			s._ll_bar_back_w.rotateCenter = false;
+			s._ll_bar_back_w.x = s._maskW - s._scrollWidth;
+			s._ll_bar_back_w.rotate = 90;
+			//s._ll_bar_back_w.y = (s._mask.getHeight() - s._ll_bar_back_h.getHeight())*0.5;
+			s._scroll_w.addChild(s._ll_bar_back_w);
+		}else{
+			s._scroll_w.graphics.drawRoundRect(1,"#CCCCCC",[s._scrollWidth,0,s._mask.getWidth() - s._scrollWidth*2,s._scrollWidth,s._scrollWidth*0.5],true,grdb);
+		}
+		
+		/*left*/
+		if(s._ll_bar_back){
+			s._ll_bar_arraw_left = s._ll_bar_arraw.clone();
+			s._ll_bar_arraw_left.rotateCenter = false;
+			s._ll_bar_arraw_left.y = s._scrollWidth;
+			s._ll_bar_arraw_left.rotate = -90;
+			s._scroll_w.addChild(s._ll_bar_arraw_left);
+		}else{
+			s._scroll_w.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
+			s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth*0.75,s._scrollWidth*0.25],[s._scrollWidth*0.75,s._scrollWidth*0.75],[s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
+		}
+		/*right*/
+		if(s._ll_bar_back){
+			s._ll_bar_arraw_left = s._ll_bar_arraw.clone();
+			s._ll_bar_arraw_left.rotateCenter = false;
+			s._ll_bar_arraw_left.x = s._maskW;
+			s._ll_bar_arraw_left.rotate = 90;
+			s._scroll_w.addChild(s._ll_bar_arraw_left);
+		}else{
+			s._scroll_w.graphics.drawRect(0,"#000000",[s._mask.getWidth() - s._scrollWidth,0,s._scrollWidth,s._scrollWidth]);
+			s._scroll_w.graphics.drawVertices(1,"#CCCCCC",[[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.25],[s._mask.getWidth() - s._scrollWidth*0.75,s._scrollWidth*0.75],[s._mask.getWidth() - s._scrollWidth*0.25,s._scrollWidth*0.5]],true,grd);
+		}
 		if(!s.hasEventListener(LMouseEvent.MOUSE_DOWN)){
 			s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 		}
@@ -162,16 +209,37 @@ LScrollbar.prototype.resizeHeight = function(value){
 		grdb.addColorStop(0,"#FFFFFF");
 		grdb.addColorStop(1,"#CCCCCC");
 		/*bar*/
-		s._scroll_h_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth,s._scrollWidth*1.5,s._scrollWidth*0.5],true,grd);
+		if(s._ll_bar_select){
+			s._scroll_h_bar.addChild(s._ll_bar_select);
+		}else{
+			s._scroll_h_bar.graphics.drawRoundRect(1,"#CCCCCC",[0,0,s._scrollWidth,s._scrollWidth*1.5,s._scrollWidth*0.5],true,grd);
+		}
 		/*middle*/
-		s._scroll_h.graphics.drawRoundRect(1,"#CCCCCC",[0,s._scrollWidth,s._scrollWidth,s._mask.getHeight()-s._scrollWidth*2,s._scrollWidth*0.5],true,grdb);
+		if(s._ll_bar_back){
+			s._ll_bar_back_h = s._ll_bar_back.clone();
+			s._ll_bar_back_h.y = (s._mask.getHeight() - s._ll_bar_back_h.getHeight())*0.5;
+			s._scroll_h.addChild(s._ll_bar_back_h);
+		}else{
+			s._scroll_h.graphics.drawRoundRect(1,"#CCCCCC",[0,s._scrollWidth,s._scrollWidth,s._mask.getHeight()-s._scrollWidth*2,s._scrollWidth*0.5],true,grdb);
+		}
 		/*up*/
-		s._scroll_h.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
-		s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._scrollWidth*0.75],[s._scrollWidth/2,s._scrollWidth/4],[s._scrollWidth*0.75,s._scrollWidth*0.75]],true,grd);
+		if(s._ll_bar_back){
+			s._ll_bar_arraw_up = s._ll_bar_arraw.clone();
+			s._scroll_h.addChild(s._ll_bar_arraw_up);
+		}else{
+			s._scroll_h.graphics.drawRect(0,"#000000",[0,0,s._scrollWidth,s._scrollWidth]);
+			s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._scrollWidth*0.75],[s._scrollWidth/2,s._scrollWidth/4],[s._scrollWidth*0.75,s._scrollWidth*0.75]],true,grd);
+		}
 		/*down*/
-		s._scroll_h.graphics.drawRect(0,"#000000",[0,s._mask.getHeight() - s._scrollWidth,s._scrollWidth,s._scrollWidth]);
-		s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._mask.getHeight() - s._scrollWidth*0.75],[s._scrollWidth/2,s._mask.getHeight() - s._scrollWidth*0.25],[s._scrollWidth*0.75,s._mask.getHeight() - s._scrollWidth*0.75]],true,grd);
-		
+		if(s._ll_bar_back){
+			s._ll_bar_arraw_down = s._ll_bar_arraw.clone();
+			s._ll_bar_arraw_down.scaleY = -1;
+			s._ll_bar_arraw_down.y = s._mask.getHeight();
+			s._scroll_h.addChild(s._ll_bar_arraw_down);
+		}else{
+			s._scroll_h.graphics.drawRect(0,"#000000",[0,s._mask.getHeight() - s._scrollWidth,s._scrollWidth,s._scrollWidth]);
+			s._scroll_h.graphics.drawVertices(1,"#CCCCCC",[[s._scrollWidth/4,s._mask.getHeight() - s._scrollWidth*0.75],[s._scrollWidth/2,s._mask.getHeight() - s._scrollWidth*0.25],[s._scrollWidth*0.75,s._mask.getHeight() - s._scrollWidth*0.75]],true,grd);
+		}
 		if(!s.hasEventListener(LMouseEvent.MOUSE_DOWN)){
 			s.addEventListener(LMouseEvent.MOUSE_DOWN,s.mouseDown);
 		}
@@ -196,7 +264,7 @@ LScrollbar.prototype.moveLeft = function(){
 };
 LScrollbar.prototype.setScroll_h = function(){
 	var s = this;
-	var sy = (s._mask.getHeight() - s._scrollWidth*3.5)*s._showObject.y/(s._mask.getHeight() - s._showObject.getHeight());
+	var sy = (s._mask.getHeight() - s._scrollWidth*2 - s._selectHeight)*s._showObject.y/(s._mask.getHeight() - s._showObject.getHeight());
 	if(s._scroll_h_bar){
 		s._scroll_h_bar.x = s._mask.getWidth();
 		s._scroll_h_bar.y = s._scrollWidth + sy;
@@ -204,7 +272,7 @@ LScrollbar.prototype.setScroll_h = function(){
 };
 LScrollbar.prototype.setScroll_w = function(){
 	var s = this;
-	var sx = (s._mask.getWidth() - s._scrollWidth*3.5)*s._showObject.x/(s._mask.getWidth() - s._showObject.getWidth());
+	var sx = (s._mask.getWidth() - s._scrollWidth*2 - s._selectHeight)*s._showObject.x/(s._mask.getWidth() - s._showObject.getWidth());
 	if(s._scroll_w_bar){
 		s._scroll_w_bar.x = s._scrollWidth + sx;
 		s._scroll_w_bar.y = s._mask.getHeight();
@@ -248,7 +316,13 @@ LScrollbar.prototype.getScrollY = function(){
 	return this._showObject.y;
 };
 LScrollbar.prototype.setScrollY = function(value){
-	this._showObject.y = value;
+	var s = this;
+	s._showObject.y = s._mask.getHeight()-s._showObject.getHeight();
+	if(s._showObject.y < -value){
+		s._showObject.y = -value;
+	}else if(value < 0){
+		s._showObject.y = 0;
+	}
 	this.setScroll_h();
 };
 LScrollbar.prototype.getScrollX = function(){
@@ -318,8 +392,9 @@ LScrollbar.prototype.mouseMoveH = function(event){
 	s.setSpeed();
 };
 LScrollbar.prototype.mouseUpH = function(event){
-	var s = event.clickTarget;
-	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+	var s = LGlobal.stage._ll_scrollbar;
+	delete LGlobal.stage._ll_scrollbar;
+	LGlobal.stage.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
 	if(s._key["Dkey"]){
 		s._key["Dkey"] = false;
 	}else{
@@ -328,8 +403,9 @@ LScrollbar.prototype.mouseUpH = function(event){
 	}
 };
 LScrollbar.prototype.mouseUpW = function(event){
-	var s = event.clickTarget;
-	s.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+	var s = LGlobal.stage._ll_scrollbar;
+	delete LGlobal.stage._ll_scrollbar;
+	LGlobal.stage.removeEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
 	if(s._key["Dkey"]){
 		s._key["Dkey"] = false;
 	}else{
@@ -369,7 +445,10 @@ LScrollbar.prototype.mouseDownW = function(event){
 		s._key["Dkey"] = true;
 		s._speed = s._distance;
 		s.setSpeed();
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		}
 	}else if(event.selfX >= s._mask.getWidth() - s._scrollWidth && event.selfX <= s._mask.getWidth()){
 		if(s._showObject.x <= s._mask.getWidth() - s._showObject.getWidth() || s._key["left"])return;
 		s._distance = 10;
@@ -380,13 +459,19 @@ LScrollbar.prototype.mouseDownW = function(event){
 		s._key["Dkey"] = true;
 		s._speed = this._distance;
 		s.setSpeed();
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		}
 	}else if(event.selfX >= s._scroll_w_bar.x && event.selfX <= s._scroll_w_bar.x + s._scroll_w_bar.getWidth() && !s._key["scroll_w"]){
 		s._key["scroll_w"] = true;
 		s._key["scroll_x"] = event.selfX - s._scroll_w_bar.x;
 		s._key["mouseX"] = event.selfX;
-       		s.addEventListener(LMouseEvent.MOUSE_MOVE,s.mouseMoveW);
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		s.addEventListener(LMouseEvent.MOUSE_MOVE,s.mouseMoveW);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpW);
+		}
 	}else if(event.selfX > 0 && event.selfX < s._mask.getWidth()){
 		s._key["left"] = false;
 		s._key["right"] = false;
@@ -402,7 +487,6 @@ LScrollbar.prototype.mouseDownW = function(event){
 };
 LScrollbar.prototype.mouseDownH = function(event){
 	var s = event.clickTarget;
-	console.log(event,s);
 	if(event.selfY >= 0 && event.selfY <= s._scrollWidth){
 		if(s._showObject.y >= 0)return;
 		s._distance = 10;
@@ -413,7 +497,10 @@ LScrollbar.prototype.mouseDownH = function(event){
 		s._key["Dkey"] = true;
 		s._speed = s._distance;
 		s.setSpeed();
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		}
 	}else if(event.selfY >= s._mask.getHeight() - s._scrollWidth && event.selfY <= s._mask.getHeight()){
 		if(s._showObject.y <= s._mask.getHeight() - s._showObject.getHeight())return;
 		s._distance = 10;
@@ -424,13 +511,19 @@ LScrollbar.prototype.mouseDownH = function(event){
 		s._key["Dkey"] = true;
 		s._speed = s._distance;
 		s.setSpeed();
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		}
 	}else if(event.selfY >= s._scroll_h_bar.y && event.selfY <= s._scroll_h_bar.y + s._scroll_h_bar.getHeight() && !s._key["scroll_h"]){
 		s._key["scroll_h"] = true;
 		s._key["scroll_y"] = event.selfY - s._scroll_h_bar.y;
 		s._key["mouseY"] = event.selfY;
 		s.addEventListener(LMouseEvent.MOUSE_MOVE,s.mouseMoveH);
-		s.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		if(!LGlobal.stage.hasEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH)){
+			LGlobal.stage._ll_scrollbar = s;
+			LGlobal.stage.addEventListener(LMouseEvent.MOUSE_UP,s.mouseUpH);
+		}
 	}else if(event.selfY > 0 && event.selfY < s._mask.getHeight()){
 		s._key["up"] = false;
 		s._key["down"] = false;
@@ -441,6 +534,6 @@ LScrollbar.prototype.mouseDownH = function(event){
 			s._key["down"] = true;
 		}
 		s._speed = Math.abs(s._target.y - s._showObject.y);
-		s.setSpeed();console.log(s._key,s._target);
+		s.setSpeed();
 	}
 };

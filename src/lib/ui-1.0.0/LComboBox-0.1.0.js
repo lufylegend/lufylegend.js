@@ -163,17 +163,8 @@ LComboBox.prototype.showChildList = function(){
 		sc._key["up"] = false;
 		sc._tager = {x:0,y:40};
 		sc._speed = Math.abs(sc._tager.y - sc._showObject.y);
-		sc.setSpeed();console.log("result ",sc._key,sc._tager);
-		//sc.mouseDownH({clickTarget:sc,selfY:55});
-		//sc.setScrollY(0);
-		//sc._showObject.y -= 30;
-	/*	sc._key = [];
-		sc.onFrame(sc);
-		sc.resizeHeight(true);
-		sc.mouseDownH({clickTarget:sc,selfY:40});*/
-		//sc._key["down"] = true;
-		//sc._key["up"] = false;
-		//sc._key["Dkey"] = true;
+		sc.setSpeed();
+		sc.setScrollY(textLayer.childHeight*s.selectIndex);
 		LGlobal.stage.addChild(sc);
 	}else{
 		textLayer.x = coordinate.x;
@@ -220,86 +211,6 @@ LComboBox.prototype.setValue = function(value, noEvent){
 		}
 	}
 };
-/*
-LComboBox.prototype.refresh = function(){
-	var s = this,k=null;
-
-	for(var k=0,l=s.list.length;k<l;k++){
-		s.textLayer.childList[k].visible = false;
-		if(s.value == s.list[k].value)s.textLayer.childList[k].visible = true;
-		if(s.selectWidth < s.textLayer.childList[k].getWidth() + s.size){
-			s.selectWidth = s.textLayer.childList[k].getWidth() + s.size;
-		}
-	}
-	
-	s.layer.graphics.clear();
-	s.layerUp.graphics.clear();
-	s.layerDown.graphics.clear();
-	s.layer.graphics.drawRect(2,"#000000",[0,0,s.selectWidth,s.size*2],true,"#D3D3D3");
-	s.layerUp.x = s.selectWidth;
-	s.layerUp.graphics.drawRect(2,"#000000",[0,0,s.size*2,s.size]);
-	s.layerUp.graphics.drawVertices(2,"#000000",[[s.size*0.5*2,s.size*0.2],[s.size*0.2*2,s.size*0.8],[s.size*0.8*2,s.size*0.8]],true,"#000000");
-	s.layerDown.x = s.selectWidth;
-	s.layerDown.y = s.size;
-	s.layerDown.graphics.drawRect(2,"#000000",[0,0,s.size*2,s.size]);
-	s.layerDown.graphics.drawVertices(2,"#000000",[[s.size*0.5*2,s.size*0.8],[s.size*0.2*2,s.size*0.2],[s.size*0.8*2,s.size*0.2]],true,"#000000");
-};
-LComboBox.prototype._onChangeDown = function(e){
-	var b = e.clickTarget,s = b.parent;
-	if(s.runing)return;
-	if(s.selectIndex >= s.list.length - 1)return;
-	s.runing = true;
-	for(k in s.list){
-		s.textLayer.childList[k].visible = true;
-	}
-	s.selectIndex++;
-	s.value = s.list[s.selectIndex].value;
-	var mask = new LSprite();
-	mask.graphics.drawRect(2,"#000000",[0,0,s.selectWidth,s.size*2]);
-	s.textLayer.mask = mask;
-	var my = s.textLayer.y - (s.size * 1.5 >>> 0);
-	var fun = function(layer){
-		var s = layer.parent;
-		layer.mask = null;
-		s.runing = false;
-		s.refresh();
-		s.dispatchEvent(LComboBox.ON_CHANGE);
-	};
-	LTweenLite.to(s.textLayer,0.3,
-	{ 
-		y:my,
-		onComplete:fun,
-		ease:Strong.easeOut
-	});
-};
-LComboBox.prototype._onChangeUp = function(e){
-	var b = e.clickTarget,s = b.parent;
-	if(s.runing)return;
-	if(s.selectIndex <= 0)return;
-	s.runing = true;
-	for(k in s.list){
-		s.textLayer.childList[k].visible = true;
-	}
-	s.selectIndex--;
-	s.value = s.list[s.selectIndex].value;
-	var mask = new LSprite();
-	mask.graphics.drawRect(2,"#000000",[0,0,s.selectWidth,s.size*2]);
-	s.textLayer.mask = mask;
-	var my = s.textLayer.y + (s.size * 1.5 >>> 0);
-	var fun = function(layer){
-		var s = layer.parent;
-		layer.mask = null;
-		s.runing = false;
-		s.refresh();
-		s.dispatchEvent(LComboBox.ON_CHANGE);
-	};
-	LTweenLite.to(s.textLayer,0.3,
-	{ 
-		y:my,
-		onComplete:fun,
-		ease:Strong.easeOut
-	});
-};
 LComboBox.prototype.clone = function(){
 	var s = this,a = new LComboBox(),k,c;
 	for(k in s.list){
@@ -308,4 +219,4 @@ LComboBox.prototype.clone = function(){
 	}	
 	a.setValue(s.value);
 	return a;
-};*/
+};
