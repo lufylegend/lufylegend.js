@@ -186,7 +186,7 @@ var LAnimationTimeline = (function () {
 		s.speed = 0;
 		s._speedIndex = 0;
 		s.ll_labelList = {};
-		s.addEventListener(LEvent.ENTER_FRAME, s._onframe);
+		s.addEventListener(LEvent.ENTER_FRAME, s._ll_onframe);
 	};
 	var p = {
 		/** @language chinese
@@ -300,7 +300,14 @@ var LAnimationTimeline = (function () {
 			}
 			return a;
 		},
-		_onframe : function (event) {
+		setFrameSpeedAt : function (rowIndex, colIndex, speed) {
+			var s = this;
+			if (!s._ll_stepArray[rowIndex]) {
+				s._ll_stepArray[rowIndex] = [];
+			}
+			s._ll_stepArray[rowIndex][colIndex] = speed;
+		},
+		_ll_onframe : function (event) {
 			var self = event.target;
 			if (self._speedIndex++ < self.speed) {
 				return;
@@ -615,9 +622,10 @@ var LAnimationTimeline = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/gotoAndStop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		gotoAndStop : function (name) {
-			var l = this.ll_labelList[name];
-			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			this.stop();
+			var s = this, l = s.ll_labelList[name];
+			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
+			s.stop();
 		},
 		/** @language chinese
 		 * 向指定标签位置添加执行脚本。

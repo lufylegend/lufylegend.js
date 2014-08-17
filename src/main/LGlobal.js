@@ -570,6 +570,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.destroy = true;
+	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
 	/** @language chinese
@@ -1041,6 +1042,10 @@ var LGlobal = ( function () {
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			delete LGlobal.stage.onresizeEvent;
+		}
+		if (LGlobal.forceRefresh) {
+			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+			LGlobal.forceRefresh = false;
 		}
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();

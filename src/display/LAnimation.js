@@ -128,6 +128,8 @@ var LAnimation = (function () {
 		s.type = "LAnimation";
 		s.rowIndex = 0;
 		s.colIndex = 0;
+		s._ll_stepIndex = 0;
+		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
 		s.bitmap =  new LBitmap(data);
@@ -440,7 +442,10 @@ var LAnimation = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimation/onframe.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
+			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
+				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
+			}
 			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
@@ -454,6 +459,12 @@ var LAnimation = (function () {
 			}
 			if (typeof arr.script == "function") {
 				arr.script(s, arr.params);
+			}
+			if (stepFrame) {
+				if (s._ll_stepIndex++ < stepFrame) {
+					return;
+				}
+				s._ll_stepIndex = 0;
 			}
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {

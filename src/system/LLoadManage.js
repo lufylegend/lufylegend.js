@@ -250,6 +250,7 @@ var LLoadManage = (function () {
 				}
 				s.loader = null;
 				var r = s.result;
+				LGlobal.forceRefresh = true;
 				s.oncomplete(r);
 			}
 		},

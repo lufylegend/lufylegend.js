@@ -1255,6 +1255,9 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.value = s.text;
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+			LGlobal.inputTextBox.style.color = s.color;
+			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+			LGlobal.inputTextBox.style.fontFamily = s.font;
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 			if (s.texttype == LTextFieldType.INPUT) {
 				rc = s.getRootCoordinate();
