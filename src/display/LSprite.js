@@ -637,6 +637,22 @@ var LSprite = (function () {
 		_ll_loopframe : function () {
 			this.dispatchEvent(LEvent.ENTER_FRAME);
 		},
+		setExcluding : function (value) {
+			var s = this, i, l , c = LGlobal.excludingContainer;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (c[i].objectIndex == s.objectIndex) {
+					if (value) {
+						return;
+					} else {
+						c.splice(i, 1);
+						return;
+					}
+				}
+			}
+			if (value) {
+				c.push(this);
+			}
+		},
 		/** @language chinese
 		 * 返回一个LSprite的克隆对象。
 		 * @method clone

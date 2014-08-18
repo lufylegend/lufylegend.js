@@ -266,6 +266,7 @@ var LGlobal = ( function () {
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
+	LGlobal.excludingContainer = new Array();
 	/** @language chinese
 	 * <p>一个 LStageScaleMode 类中指定要使用哪种缩放模式的值。</p>
 	 * @property LGlobal.stageScale
