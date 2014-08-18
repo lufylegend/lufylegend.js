@@ -109,7 +109,7 @@ var LBitmap = (function () {
 		 */
 		s.type = "LBitmap";
 		/** @language chinese
-		 * 对象的类型
+		 * LBitmap对象的旋转中心设置为对象的中心，此属性默认值为true，如果对象发生旋转时，会导致该对象相关的鼠标点击以及碰撞失效。如果需要使该对象旋转后依然保持鼠标事件有效的话，需要将它的值设置为false。
 		 * @property rotateCenter
 		 * @type Boolean
 		 * @default true
@@ -117,7 +117,7 @@ var LBitmap = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * type of the object
+		 * Set the LBitmap object's center of rotation .
 		 * @property rotateCenter
 		 * @type Boolean
 		 * @default true
@@ -125,7 +125,7 @@ var LBitmap = (function () {
 		 * @public
 		 */
 		/** @language japanese
-		 * オブジェクトのタイプ
+		 * LBitmapオブジェクトの回転する中心を自身の中心に有効する。回転すると、マウスイベントや当たり判定が無効になります。マウスイベントや当たり判定を有効にするため、falseに設定しなければなりません。
 		 * @property rotateCenter
 		 * @type Boolean
 		 * @default true
