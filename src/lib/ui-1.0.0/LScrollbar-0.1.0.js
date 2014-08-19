@@ -55,6 +55,7 @@ function LScrollbar(showObject,maskW,maskH,param,wVisible,hVisible){
 	s._target = {x:0,y:0};
 	s._maskW = maskW;
 	s._maskH = maskH;
+	s.excluding = false;
 	s.addEventListener(LEvent.ENTER_FRAME,s.onFrame);
 	s.dispatchEvent(LEvent.ENTER_FRAME);
 }
@@ -64,7 +65,7 @@ LScrollbar.prototype.clone = function(){
 	return a;
 };
 LScrollbar.prototype.onFrame = function(event){
-	var s = event.currentTarget, w, h;
+	var s = event.currentTarget, w, h, i, l, child;
 	w = s._showObject.getWidth();
 	h = s._showObject.getHeight();
 	if(s._wVisible && s._width != w){
@@ -83,6 +84,16 @@ LScrollbar.prototype.onFrame = function(event){
 			s.moveUp();
 		}else{
 			s.resizeHeight(false);
+		}
+	}
+	if (s.excluding) {
+		for (i = 0, l = s._showObject.numChildren; i < l; i++) {
+			child = s._showObject.getChildAt(i);
+			if (child.x + s._showObject.x > s._maskW || child.x + child.getWidth() + s._showObject.x < 0 || child.y + s._showObject.y > s._maskH || child.y + child.getHeight() + s._showObject.y < 0) {
+				child.visible = false;
+			} else {
+				child.visible = true;
+			}
 		}
 	}
 	if(s._key == null)return;

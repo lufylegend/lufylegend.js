@@ -423,6 +423,7 @@ var LGlobal = ( function () {
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
+	LGlobal.excludingContainer = new Array();
 	LGlobal.stageScale = "noScale";
 	LGlobal.align = "M";
 	LGlobal.mobile = false;
@@ -433,6 +434,7 @@ var LGlobal = ( function () {
 	LGlobal.android_new = false;
 	LGlobal.backgroundColor = null;
 	LGlobal.destroy = true;
+	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
 	LGlobal.keepClear = true;
@@ -824,6 +826,10 @@ var LGlobal = ( function () {
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			delete LGlobal.stage.onresizeEvent;
+		}
+		if (LGlobal.forceRefresh) {
+			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+			LGlobal.forceRefresh = false;
 		}
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
@@ -1506,14 +1512,16 @@ var LEventDispatcher = (function () {
 			}
 			return false;
 		},
-		hasEventListener : function (type) {
+		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
 				if (type == s._eventList[i].type) {
-					return true;
+					if (typeof listener == UNDEFINED || listener == s._eventList[i].listener) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -2014,6 +2022,22 @@ var LDisplayObjectContainer = (function () {
 			s.width = 0;
 			s.height = 0;
 			s.numChildren = 0;
+		},
+		setExcluding : function (value, frames, rect) {
+			var s = this, i, l , c = LGlobal.excludingContainer;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (c[i].obj.objectIndex == s.objectIndex) {
+					if (value) {
+						return;
+					} else {
+						c.splice(i, 1);
+						return;
+					}
+				}
+			}
+			if (value) {
+				c.push({obj : s, index : 0, frames : (frames ? frames : 1), rect : (rect ? rect : new LRectangle(0, 0, LGlobal.width, LGlobal.height))});
+			}
 		}
 	};
 	for (var k in p) {
@@ -3752,7 +3776,7 @@ var LButton = (function () {
 		s.upState.visible = true;
 		s.buttonMode = true;
 		s.staticMode = false;
-		s.cursorEnabled = true;
+		s._ll_cursorEnabled = true;
 		s.setState(LButton.STATE_ENABLE);
 		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
@@ -3868,7 +3892,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC && s.cursorEnabled) {
+			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
 				document.body.style.cursor = "pointer";
 			}
 		},
@@ -3891,11 +3915,17 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC && s.cursorEnabled) {
+			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
 				document.body.style.cursor = "default";
 			}
 		},
-		clone : function (){
+		setCursorEnabled : function (value) {
+			s._ll_cursorEnabled = value;
+			if(!value && document.body.style.cursor != "default"){
+				document.body.style.cursor = "default";
+			}
+		},
+		clone : function () {
 			var s = this;
 			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
 		},
@@ -4166,6 +4196,9 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.value = s.text;
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+			LGlobal.inputTextBox.style.color = s.color;
+			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+			LGlobal.inputTextBox.style.fontFamily = s.font;
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 			if (s.texttype == LTextFieldType.INPUT) {
 				rc = s.getRootCoordinate();
@@ -4423,19 +4456,19 @@ var LBitmapData = (function () {
 			s.dataType = LBitmapData.DATA_CANVAS;
 			s._canvas.width = s.width = (width == null ? 1 : width); 
 			s._canvas.height = s.height = (height == null ? 1 : height);
-			var d = s._context.createImageData(s.width, s.height);
 			if (typeof image == "string") {
 				image = parseInt(image.replace("#","0x"));
 			}
 			if (typeof image == "number") {
+				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
 					d.data[i + 1] = image >> 8 & 0xFF;
 					d.data[i + 2] = image & 0xFF;
 					d.data[i + 3] = 255;
 				}
+				s._context.putImageData(d, 0, 0);
 			}
-			s._context.putImageData(d, 0, 0);
 			s.image = s._canvas;
 			if (dataType == LBitmapData.DATA_IMAGE) {
 				s._setDataType(dataType);
@@ -4572,7 +4605,7 @@ var LBitmapData = (function () {
 						d.data[i + 0] = data.data[j + 0];
 						d.data[i + 1] = data.data[j + 1];
 						d.data[i + 2] = data.data[j + 2];
-						d.data[i + 3] = 255;
+						d.data[i + 3] = data.data[j + 3];
 					}
 				}
 			} else {
@@ -4594,6 +4627,13 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._update();
 			}
+		},
+		putPixels : function (rect, data) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
+				return;
+			}
+			s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
 		},
 		lock : function () {
 			var s = this;
@@ -4678,6 +4718,8 @@ var LAnimation = (function () {
 		s.type = "LAnimation";
 		s.rowIndex = 0;
 		s.colIndex = 0;
+		s._ll_stepIndex = 0;
+		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
 		s.bitmap =  new LBitmap(data);
@@ -4717,7 +4759,10 @@ var LAnimation = (function () {
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
+			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
+				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
+			}
 			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
@@ -4731,6 +4776,12 @@ var LAnimation = (function () {
 			}
 			if (typeof arr.script == "function") {
 				arr.script(s, arr.params);
+			}
+			if (stepFrame) {
+				if (s._ll_stepIndex++ < stepFrame) {
+					return;
+				}
+				s._ll_stepIndex = 0;
 			}
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
@@ -4760,7 +4811,7 @@ var LAnimationTimeline = (function () {
 		s.speed = 0;
 		s._speedIndex = 0;
 		s.ll_labelList = {};
-		s.addEventListener(LEvent.ENTER_FRAME, s._onframe);
+		s.addEventListener(LEvent.ENTER_FRAME, s._ll_onframe);
 	};
 	var p = {
 		clone : function () {
@@ -4775,7 +4826,14 @@ var LAnimationTimeline = (function () {
 			}
 			return a;
 		},
-		_onframe : function (event) {
+		setFrameSpeedAt : function (rowIndex, colIndex, speed) {
+			var s = this;
+			if (!s._ll_stepArray[rowIndex]) {
+				s._ll_stepArray[rowIndex] = [];
+			}
+			s._ll_stepArray[rowIndex][colIndex] = speed;
+		},
+		_ll_onframe : function (event) {
 			var self = event.target;
 			if (self._speedIndex++ < self.speed) {
 				return;
@@ -4799,9 +4857,10 @@ var LAnimationTimeline = (function () {
 			this.onframe();
 		},
 		gotoAndStop : function (name) {
-			var l = this.ll_labelList[name];
-			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			this.stop();
+			var s = this, l = s.ll_labelList[name];
+			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
+			s.stop();
 		},
 		addFrameScript : function (name, func, params) {
 			var l = this.ll_labelList[name];
@@ -4903,6 +4962,7 @@ var LLoadManage = (function () {
 				}
 				s.loader = null;
 				var r = s.result;
+				LGlobal.forceRefresh = true;
 				s.oncomplete(r);
 			}
 		},
@@ -5480,8 +5540,8 @@ var FPS = (function () {
 		s.fpsCount++;
 		var t = (new Date()).getTime();
 		if(t - s.fpsTime < 1000)return;
+		s.fps.text = Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
 		s.fpsTime = t;
-		s.fps.text = s.fpsCount;
 		s.fpsCount = 0;
 		s.graphics.clear();
 		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");
@@ -6061,360 +6121,381 @@ LoadingSample7.prototype.setProgress = function(value){
 		self.step ++;
 	}
 };
-function LBox2d(gravity,doSleep,drawScale){
-	var s = this;
-	Box2D.Dynamics.b2World.prototype.LAddController=Box2D.Dynamics.b2World.prototype.AddController;
-	Box2D.Dynamics.b2World.prototype.AddController=function(c){
-		var l = {},k;
-		for(k in c){
-			l[k]=c[k];
-		}
-		if(LBox2d)LBox2d.m_controllerList = l;
-		return this.LAddController(c);
-	};
-	var i,j,b=Box2D,d,
-	a=[b.Collision,b.Common,b.Common.Math,
-	b.Dynamics,b.Dynamics.Contacts,b.Dynamics.Controllers,b.Dynamics.Joints,b.Collision.Shapes];
-	for(i in a)for(j in a[i])s[j]=a[i][j];
-	if(typeof drawScale == UNDEFINED){
-		drawScale = 30;
-	}
-	s.drawScale = 30;
-	s.selectedBody = null;
-	s.mouseJoint = null;
-	s.mousePVec = null;
-	s.contactListener = null;
-	if(typeof gravity == UNDEFINED){
-		gravity = new s.b2Vec2(0, 9.8);
-	}else{
-		gravity = new s.b2Vec2(gravity[0],gravity[1]);
-	}
-	if(typeof doSleep == UNDEFINED){
-		doSleep = true;
-	}
-	s.world = new s.b2World(gravity,doSleep);
-	s.removeList = new Array();
-	if(LGlobal.traceDebug){
-		d = new s.b2DebugDraw();
-		d.SetSprite(LGlobal.canvas);
-		d.SetLineThickness(1);
-		d.SetFillAlpha(0.5);
-		d.SetAlpha(1);
-		d.SetDrawScale(s.drawScale);
-		d.SetFlags(s.b2DebugDraw.e_shapeBit | s.b2DebugDraw.e_jointBit);
-		s.world.SetDebugDraw(d);
-	}
-	LGlobal.destroy = true;
-}
-LBox2d.prototype = {
-	setEvent:function(t_v,f_v){
+var LBox2d = (function () {
+	function LBox2d (gravity, doSleep, drawScale) {
 		var s = this;
-		if(t_v == LEvent.ENTER_FRAME){
-			s.ll_enterFrame = f_v;
-			return;
+		Box2D.Dynamics.b2World.prototype.LAddController = Box2D.Dynamics.b2World.prototype.AddController;
+		Box2D.Dynamics.b2World.prototype.AddController = function (c) {
+			var l = {}, k;
+			for (k in c) {
+				l[k] = c[k];
+			}
+			if (LBox2d) {
+				LBox2d.m_controllerList = l;
+			}
+			return this.LAddController(c);
+		};
+		var i, j, b = Box2D, d,
+		a = [b.Collision, b.Common, b.Common.Math,
+		b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
+		for (i in a) {
+			for (j in a[i]) {
+				s[j] = a[i][j];
+			}
 		}
-		if(!s.contactListener){
-			s.contactListener = new s.b2ContactListener();
-			s.world.SetContactListener(s.contactListener);
+		if (typeof drawScale == UNDEFINED) {
+			drawScale = 30;
 		}
-		switch(t_v){
-			case LEvent.END_CONTACT:
-				s.contactListener.EndContact = f_v;
-				break;
-			case LEvent.PRE_SOLVE:
-				s.contactListener.PreSolve = f_v;
-				break;
-			case LEvent.POST_SOLVE:
-				s.contactListener.PostSolve = f_v;
-				break;
-			case LEvent.BEGIN_CONTACT:
-			default:
-				s.contactListener.BeginContact = f_v;
-		}
-	},
-	setWeldJoint:function(A,B){ 
-		var s = this; 
-		var j = new s.b2WeldJointDef();
-		j.Initialize(B, A, B.GetWorldCenter());
-		return s.world.CreateJoint(j);
-	},
-	setLineJoint:function(A,B,vec,t,m){
-		var s = this; 
-		var wa = new s.b2Vec2(vec[0],vec[1]);
-		var j = new s.b2LineJointDef();
-		j.Initialize(A, B, B.GetWorldCenter(), wa);
-		if(t == null){
-			j.enableLimit = false;
-		}else{
-			j.lowerTranslation = t[0];
-			j.upperTranslation = t[1];
-			j.enableLimit = true;
-		}
-		if(m == null){
-			j.enableMotor = false;
-		}else{
-			j.maxMotorForce = m[0];
-			j.motorSpeed = m[1];
-			j.enableMotor = true;
-		}
-		return s.world.CreateJoint(j);
-	},
-	setGearJoint:function(A,B,ra,r,p){ 
-		var s = this; 
-		var j = new s.b2GearJointDef();
-		j.joint1 = r;
-		j.joint2 = p;
-		j.bodyA = A;
-		j.bodyB = B;
-		j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
-		return s.world.CreateJoint(j);
-	},
-	setPrismaticJoint:function(A,B,vec,t,m){
-		var s = this;
-		var wa = new s.b2Vec2(vec[0],vec[1]);
-		var j = new s.b2PrismaticJointDef();
-		j.Initialize(B, A, B.GetWorldCenter(), wa);
-		if(t == null){
-			j.enableLimit = false;
-		}else{
-			j.lowerTranslation = t[0];
-			j.upperTranslation = t[1];
-			j.enableLimit = true;
-		}
-		if(m == null){
-			j.enableMotor = false;
-		}else{
-			j.maxMotorForce = m[0];
-			j.motorSpeed = m[1];
-			j.enableMotor = true;
-		}
-		return s.world.CreateJoint(j);
-	},
-	setRevoluteJoint:function(A,B,a,m){
-		var s = this;
-		var j  = new s.b2RevoluteJointDef();
-		j .Initialize(A, B, B.GetWorldCenter());
-		if(a == null){
-			j.enableLimit = false;
-		}else{
-			j.lowerAngle = a[0] * s.b2Settings.b2_pi/180;
-			j.upperAngle = a[1] * s.b2Settings.b2_pi/180;
-			j.enableLimit = true;
-		}
-		if(m == null){
-			j.enableMotor = false;
-		}else{
-			j.maxMotorTorque = m[0];
-			j.motorSpeed = m[1];
-			j.enableMotor = true;
-		}
-		return s.world.CreateJoint(j ); 
-	},
-	setDistanceJoint:function(A,B){
-		var s = this;
-		var j = new s.b2DistanceJointDef();
-		j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
-		return s.world.CreateJoint(j); 
-	},
-	setPulleyJoint:function(A,B,vA,vB,ratio){
-		var s = this;
-		var a1 = A.GetWorldCenter();  
-		var a2 = B.GetWorldCenter();
-		var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
-		var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
-		var j = new s.b2PulleyJointDef();  
-		j.Initialize(A, B, g1, g2, a1, a2,ratio);  
-		j.maxLengthA = vA[2] / s.drawScale;
-		j.maxLengthB = vB[2] / s.drawScale;
-		return s.world.CreateJoint(j);
-	},
-	addCircle:function(r,cx,cy,t,d,f,e){
-		var s = this;
-		s.bodyDef = new s.b2BodyDef;
-		s.bodyDef.type = t;
-		s.fixDef = new s.b2FixtureDef;
-		s.fixDef.density = d;
-		s.fixDef.friction = f;
-		s.fixDef.restitution = e;
-		s.fixDef.shape = new s.b2CircleShape( r );
-		s.bodyDef.position.x = cx;
-		s.bodyDef.position.y = cy;
-		var shape = s.world.CreateBody(s.bodyDef);
-		shape.CreateFixture(s.fixDef);
-		return shape;
-	},
-	addPolygon:function(w,h,cx,cy,type,d,f,e){
-		var s = this;
-		s.bodyDef = new s.b2BodyDef;
-		s.bodyDef.type = type;
-		s.fixDef = new s.b2FixtureDef;
-		s.fixDef.density = d;
-		s.fixDef.friction = f;
-		s.fixDef.restitution = e;
-		s.fixDef.shape = new s.b2PolygonShape;
-		s.fixDef.shape.SetAsBox(w,h);
-		s.bodyDef.position.x = cx;
-		s.bodyDef.position.y = cy;
-		var shape = s.world.CreateBody(s.bodyDef);
-		shape.CreateFixture(s.fixDef);
-		return shape;
-	},
-	addVertices:function(vertices,type,d,f,e){
-		var s = this;
-		s.bodyDef = new s.b2BodyDef;
-		s.bodyDef.type = type;
-		var shape = s.world.CreateBody(s.bodyDef);
-		for(var i = 0,l=vertices.length; i<l; i++){
-			s.createShapeAsArray(shape,vertices[i],type,d,f,e);
-		}
-		return shape;
-	},
-	createShapeAsArray:function(c,vertices,type,d,f,e){
-		var s = this;
-		var shape = new s.b2PolygonShape();
-		var sv = s.createVerticesArray(vertices);
-		shape.SetAsArray(sv,0);
-		var def = new s.b2FixtureDef();
-		def.shape = shape;
-		def.density = d;
-		def.friction = f;
-		def.restitution = e;
-		c.CreateFixture(def);
-	},
-	createVerticesArray:function(a){
-		var s = this;
-		var v = new Array();
-		if(a.length < 3)return v;
-		for (var i = 0,l=a.length; i<l; i++){
-			v.push(new s.b2Vec2(a[i][0]/s.drawScale, a[i][1]/s.drawScale));
-		}
-		return v;
-	},
-	getBodyAtMouse:function (mouseX, mouseY) { 
- 		var s = this;
-		s.mousePVec = new s.b2Vec2(mouseX, mouseY);
-		var aabb = new s.b2AABB();
-		aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
-		aabb.upperBound.Set(mouseX + 0.001, mouseY + 0.001);
+		s.stop = false;
+		s.drawScale = 30;
 		s.selectedBody = null;
-		s.world.QueryAABB(s.getBodyCallBack, aabb);
-		return s.selectedBody;
-	},
-	getBodyCallBack:function (fixture) {
-		var s = LGlobal.box2d;
-		if(fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
-			if(fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
-				s.selectedBody = fixture.GetBody();
-				return false;
-			}
+		s.mouseJoint = null;
+		s.mousePVec = null;
+		s.contactListener = null;
+		if (typeof gravity == UNDEFINED) {
+			gravity = new s.b2Vec2(0, 9.8);
+		} else {
+			gravity = new s.b2Vec2(gravity[0], gravity[1]);
 		}
-		return true;
-	},
-	ll_show:function(){
-		var s = this,k=null;
-		for(k in s.removeList){
-			s.world.DestroyBody(s.removeList[k]);
+		if (typeof doSleep == UNDEFINED) {
+			doSleep = true;
 		}
-		s.removeList.splice(0,s.removeList.length);
-		if(s.ll_enterFrame)s.ll_enterFrame({target:s});
-		s.world.Step(1 / 30,10,10);
-		s.world.ClearForces();
-		if(LGlobal.traceDebug){
-			s.world.DrawDebugData();
+		s.world = new s.b2World(gravity, doSleep);
+		s.removeList = new Array();
+		if (LGlobal.traceDebug) {
+			d = new s.b2DebugDraw();
+			d.SetSprite(LGlobal.canvas);
+			d.SetLineThickness(1);
+			d.SetFillAlpha(0.5);
+			d.SetAlpha(1);
+			d.SetDrawScale(s.drawScale);
+			d.SetFlags(s.b2DebugDraw.e_shapeBit | s.b2DebugDraw.e_jointBit);
+			s.world.SetDebugDraw(d);
 		}
-	},
-	synchronous:function(){
-		var s = this;
-		var parent = null,child,position=null,cx=0,cy=0,currentBody,joint;
-		for (currentBody=s.world.GetBodyList(); currentBody; currentBody=currentBody.GetNext()) {
-			child = currentBody.GetUserData();
-			if(child){
-				if(position==null){
-					parent = child.parent;
-					cx = currentBody.GetPosition().x;
-					cy = currentBody.GetPosition().y;
-				}
-				currentBody.SetPosition(new s.b2Vec2(
-					(child.x + child.rotatex + parent.x)/s.drawScale,
-					(child.y + child.rotatey + parent.y)/s.drawScale ));
-				if(position==null){
-					position = {x:(currentBody.GetPosition().x - cx),y:(currentBody.GetPosition().y - cy)};
-				}
-			}
-		}
-		for (joint=s.world.GetJointList(); joint; joint=joint.GetNext()) {
-			if(joint.m_groundAnchor1){
-				joint.m_groundAnchor1.x += position.x;
-				joint.m_groundAnchor1.y += position.y;
-			}
-			if(joint.m_groundAnchor2){
-				joint.m_groundAnchor2.x += position.x;
-				joint.m_groundAnchor2.y += position.y;
-			}
-		}
-		if(LBox2d.m_controllerList && s.world.m_controllerList && parent){
-			LGlobal.box2d.world.m_controllerList.offset = LBox2d.m_controllerList.offset - parent.y / LGlobal.box2d.drawScale;
-		}
+		LGlobal.destroy = true;
 	}
-};
-LSprite.prototype.setBodyMouseJoint = function(value){
+	LBox2d.prototype = {
+		setEvent : function (t_v, f_v) {
+			var s = this;
+			if (t_v == LEvent.ENTER_FRAME) {
+				s.ll_enterFrame = f_v;
+				return;
+			}
+			if (!s.contactListener) {
+				s.contactListener = new s.b2ContactListener();
+				s.world.SetContactListener(s.contactListener);
+			}
+			switch (t_v) {
+				case LEvent.END_CONTACT:
+					s.contactListener.EndContact = f_v;
+					break;
+				case LEvent.PRE_SOLVE:
+					s.contactListener.PreSolve = f_v;
+					break;
+				case LEvent.POST_SOLVE:
+					s.contactListener.PostSolve = f_v;
+					break;
+				case LEvent.BEGIN_CONTACT:
+				default:
+					s.contactListener.BeginContact = f_v;
+			}
+		},
+		setWeldJoint : function (A, B) { 
+			var s = this; 
+			var j = new s.b2WeldJointDef();
+			j.Initialize(B, A, B.GetWorldCenter());
+			return s.world.CreateJoint(j);
+		},
+		setLineJoint : function (A, B, vec, t, m) {
+			var s = this; 
+			var wa = new s.b2Vec2(vec[0], vec[1]);
+			var j = new s.b2LineJointDef();
+			j.Initialize(A, B, B.GetWorldCenter(), wa);
+			if (t == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerTranslation = t[0];
+				j.upperTranslation = t[1];
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorForce = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j);
+		},
+		setGearJoint : function (A, B, ra, r, p) { 
+			var s = this; 
+			var j = new s.b2GearJointDef();
+			j.joint1 = r;
+			j.joint2 = p;
+			j.bodyA = A;
+			j.bodyB = B;
+			j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
+			return s.world.CreateJoint(j);
+		},
+		setPrismaticJoint : function (A, B, vec, t, m) {
+			var s = this;
+			var wa = new s.b2Vec2(vec[0], vec[1]);
+			var j = new s.b2PrismaticJointDef();
+			j.Initialize(B, A, B.GetWorldCenter(), wa);
+			if (t == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerTranslation = t[0];
+				j.upperTranslation = t[1];
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorForce = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j);
+		},
+		setRevoluteJoint : function (A, B, a, m) {
+			var s = this;
+			var j  = new s.b2RevoluteJointDef();
+			j .Initialize(A, B, B.GetWorldCenter());
+			if (a == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerAngle = a[0] * s.b2Settings.b2_pi / 180;
+				j.upperAngle = a[1] * s.b2Settings.b2_pi / 180;
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorTorque = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j); 
+		},
+		setDistanceJoint : function (A, B) {
+			var s = this;
+			var j = new s.b2DistanceJointDef();
+			j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
+			return s.world.CreateJoint(j); 
+		},
+		setPulleyJoint : function (A, B, vA, vB, ratio) {
+			var s = this;
+			var a1 = A.GetWorldCenter();  
+			var a2 = B.GetWorldCenter();
+			var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
+			var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
+			var j = new s.b2PulleyJointDef();  
+			j.Initialize(A, B, g1, g2, a1, a2,ratio);  
+			j.maxLengthA = vA[2] / s.drawScale;
+			j.maxLengthB = vB[2] / s.drawScale;
+			return s.world.CreateJoint(j);
+		},
+		addCircle : function (r, cx, cy, t, d, f, e) {
+			var s = this;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = t;
+			s.fixDef = new s.b2FixtureDef;
+			s.fixDef.density = d;
+			s.fixDef.friction = f;
+			s.fixDef.restitution = e;
+			s.fixDef.shape = new s.b2CircleShape(r);
+			s.bodyDef.position.x = cx;
+			s.bodyDef.position.y = cy;
+			var shape = s.world.CreateBody(s.bodyDef);
+			shape.CreateFixture(s.fixDef);
+			return shape;
+		},
+		addPolygon : function (w, h, cx, cy, type, d, f, e) {
+			var s = this;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = type;
+			s.fixDef = new s.b2FixtureDef;
+			s.fixDef.density = d;
+			s.fixDef.friction = f;
+			s.fixDef.restitution = e;
+			s.fixDef.shape = new s.b2PolygonShape;
+			s.fixDef.shape.SetAsBox(w, h);
+			s.bodyDef.position.x = cx;
+			s.bodyDef.position.y = cy;
+			var shape = s.world.CreateBody(s.bodyDef);
+			shape.CreateFixture(s.fixDef);
+			return shape;
+		},
+		addVertices : function (vertices, type, d, f, e) {
+			var s = this, i, l;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = type;
+			var shape = s.world.CreateBody(s.bodyDef);
+			for (i = 0, l = vertices.length; i < l; i++) {
+				s.createShapeAsArray(shape, vertices[i], type, d, f, e);
+			}
+			return shape;
+		},
+		createShapeAsArray : function (c, vertices, type, d, f, e) {
+			var s = this;
+			var shape = new s.b2PolygonShape();
+			var sv = s.createVerticesArray(vertices);
+			shape.SetAsArray(sv, 0);
+			var def = new s.b2FixtureDef();
+			def.shape = shape;
+			def.density = d;
+			def.friction = f;
+			def.restitution = e;
+			c.CreateFixture(def);
+		},
+		createVerticesArray : function (a) {
+			var s = this, i, l;
+			var v = new Array();
+			if (a.length < 3) {
+				return v;
+			}
+			for (i = 0, l = a.length; i < l; i++) {
+				v.push(new s.b2Vec2(a[i][0] / s.drawScale, a[i][1] / s.drawScale));
+			}
+			return v;
+		},
+		getBodyAtMouse : function (mouseX, mouseY) { 
+	 		var s = this;
+			s.mousePVec = new s.b2Vec2(mouseX, mouseY);
+			var aabb = new s.b2AABB();
+			aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
+			aabb.upperBound.Set(mouseX + 0.001, mouseY + 0.001);
+			s.selectedBody = null;
+			s.world.QueryAABB(s.getBodyCallBack, aabb);
+			return s.selectedBody;
+		},
+		getBodyCallBack : function (fixture) {
+			var s = LGlobal.box2d;
+			if (fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
+				if (fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
+					s.selectedBody = fixture.GetBody();
+					return false;
+				}
+			}
+			return true;
+		},
+		ll_show : function () {
+			var s = this, k = null;
+			for (k in s.removeList) {
+				s.world.DestroyBody(s.removeList[k]);
+			}
+			s.removeList.splice(0, s.removeList.length);
+			if (s.stop) {
+				return;
+			}
+			if (s.ll_enterFrame) {
+				s.ll_enterFrame({target:s});
+			}
+			s.world.Step(1 / 30, 10, 10);
+			s.world.ClearForces();
+			if (LGlobal.traceDebug) {
+				s.world.DrawDebugData();
+			}
+		},
+		synchronous : function () {
+			var s = this;
+			var parent = null, child, position = null, cx = 0, cy = 0, currentBody, joint;
+			for (currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
+				child = currentBody.GetUserData();
+				if (child) {
+					if (position == null) {
+						parent = child.parent;
+						cx = currentBody.GetPosition().x;
+						cy = currentBody.GetPosition().y;
+					}
+					currentBody.SetPosition(new s.b2Vec2(
+						(child.x + child.rotatex + parent.x) / s.drawScale,
+						(child.y + child.rotatey + parent.y) / s.drawScale ));
+					if (position == null) {
+						position = {x : (currentBody.GetPosition().x - cx), y : (currentBody.GetPosition().y - cy)};
+					}
+				}
+			}
+			for (joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
+				if (joint.m_groundAnchor1) {
+					joint.m_groundAnchor1.x += position.x;
+					joint.m_groundAnchor1.y += position.y;
+				}
+				if (joint.m_groundAnchor2) {
+					joint.m_groundAnchor2.x += position.x;
+					joint.m_groundAnchor2.y += position.y;
+				}
+			}
+			if (LBox2d.m_controllerList && s.world.m_controllerList && parent) {
+				LGlobal.box2d.world.m_controllerList.offset = LBox2d.m_controllerList.offset - parent.y / LGlobal.box2d.drawScale;
+			}
+		}
+	};
+	return LBox2d;
+})();
+LSprite.prototype.setBodyMouseJoint = function (value) {
 	var s = this;
-	if(!s.box2dBody)return;
+	if (!s.box2dBody) {
+		return;
+	}
 	s.box2dBody.mouseJoint = value;
 };
-LSprite.prototype.clearBody = function(value){
+LSprite.prototype.clearBody = function (value) {
 	var s = this;
-	if(!s.box2dBody)return;
+	if (!s.box2dBody) {
+		return;
+	}
 	LGlobal.box2d.removeList.push(s.box2dBody);
 	s.box2dBody = null;
 };
-LSprite.prototype.addBodyCircle = function(radius,cx,cy,type,density,friction,restitution){
+LSprite.prototype.addBodyCircle = function (radius, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = radius;
 	s.rotatey = radius;
 	s.box2dBody = LGlobal.box2d.addCircle(
-		radius/LGlobal.box2d.drawScale,
-		(s.x+cx)/LGlobal.box2d.drawScale,
-		(s.y+cy)/LGlobal.box2d.drawScale,
-		(type==1)?LGlobal.box2d.b2Body.b2_dynamicBody:LGlobal.box2d.b2Body.b2_staticBody,
-		density==null?.5:density,
-		friction==null?0.4:friction,
-		restitution==null?0.8:restitution);
+		radius / LGlobal.box2d.drawScale,
+		(s.x + cx) / LGlobal.box2d.drawScale,
+		(s.y + cy) / LGlobal.box2d.drawScale,
+		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
+		density == null ? 0.5 : density,
+		friction == null ? 0.4 : friction,
+		restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyPolygon = function(w,h,type,density,friction,restitution){
+LSprite.prototype.addBodyPolygon = function (w, h, type, density, friction, restitution) {
 	var s = this;
-	s.rotatex = w/2;
-	s.rotatey = h/2;
+	s.rotatex = w / 2;
+	s.rotatey = h / 2;
 	s.box2dBody = LGlobal.box2d.addPolygon(
-		w*0.5/LGlobal.box2d.drawScale,
-		h*0.5/LGlobal.box2d.drawScale,
-		s.x/LGlobal.box2d.drawScale,
-		s.y/LGlobal.box2d.drawScale,
-		(type==1)?LGlobal.box2d.b2Body.b2_dynamicBody:LGlobal.box2d.b2Body.b2_staticBody,
-		density==null?.5:density,
-		friction==null?0.4:friction,
-		restitution==null?0.8:restitution);
+		w * 0.5 / LGlobal.box2d.drawScale,
+		h * 0.5 / LGlobal.box2d.drawScale,
+		s.x / LGlobal.box2d.drawScale,
+		s.y / LGlobal.box2d.drawScale,
+		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
+		density == null ? 0.5 : density,
+		friction == null ? 0.4 : friction,
+		restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyVertices = function(vertices,cx,cy,type,density,friction,restitution){
+LSprite.prototype.addBodyVertices = function (vertices, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = 0;
 	s.rotatey = 0;
 	s.box2dBody = LGlobal.box2d.addVertices(vertices,
-		(type==1)?LGlobal.box2d.b2Body.b2_dynamicBody:LGlobal.box2d.b2Body.b2_staticBody,
-			density,friction,restitution);
+		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
+			density, friction, restitution);
 	s.box2dBody.SetUserData(s);
-	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x+cx)/LGlobal.box2d.drawScale,(s.y+cy)/LGlobal.box2d.drawScale));
+	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale));
 };
-LGlobal.mouseJoint_start = function(eve){
-	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint){
+LGlobal.mouseJoint_start = function (eve) {
+	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint || LGlobal.box2d.stop) {
 		return;
 	}
-	var mX = eve.offsetX / LGlobal.box2d.drawScale
-	,mY = eve.offsetY / LGlobal.box2d.drawScale
-	,b = LGlobal.box2d.getBodyAtMouse(mX, mY);
-	if(b && b.mouseJoint) {
+	var mX = eve.offsetX / LGlobal.box2d.drawScale,
+	mY = eve.offsetY / LGlobal.box2d.drawScale,
+	b = LGlobal.box2d.getBodyAtMouse(mX, mY);
+	if (b && b.mouseJoint) {
 		var m = new LGlobal.box2d.b2MouseJointDef();
 		m.bodyA = LGlobal.box2d.world.GetGroundBody();
 		m.bodyB = b;
@@ -6425,17 +6506,15 @@ LGlobal.mouseJoint_start = function(eve){
 		b.SetAwake(true);
 	};
 };
-LGlobal.mouseJoint_move = function(eve){
+LGlobal.mouseJoint_move = function (eve) {
 	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint){
 		return;
 	}
 	mX = eve.offsetX / LGlobal.box2d.drawScale,
 	mY = eve.offsetY / LGlobal.box2d.drawScale;
-	if(LGlobal.box2d.mouseJoint) {
-		LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
-	}
+	LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
 };
-LGlobal.mouseJoint_end = function(){
+LGlobal.mouseJoint_end = function () {
 	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
 		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
 		LGlobal.box2d.mouseJoint = null;

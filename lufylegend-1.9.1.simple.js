@@ -423,6 +423,7 @@ var LGlobal = ( function () {
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
+	LGlobal.excludingContainer = new Array();
 	LGlobal.stageScale = "noScale";
 	LGlobal.align = "M";
 	LGlobal.mobile = false;
@@ -433,6 +434,7 @@ var LGlobal = ( function () {
 	LGlobal.android_new = false;
 	LGlobal.backgroundColor = null;
 	LGlobal.destroy = true;
+	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
 	LGlobal.keepClear = true;
@@ -824,6 +826,10 @@ var LGlobal = ( function () {
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			delete LGlobal.stage.onresizeEvent;
+		}
+		if (LGlobal.forceRefresh) {
+			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+			LGlobal.forceRefresh = false;
 		}
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
@@ -1506,14 +1512,16 @@ var LEventDispatcher = (function () {
 			}
 			return false;
 		},
-		hasEventListener : function (type) {
+		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
 				if (type == s._eventList[i].type) {
-					return true;
+					if (typeof listener == UNDEFINED || listener == s._eventList[i].listener) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -2014,6 +2022,22 @@ var LDisplayObjectContainer = (function () {
 			s.width = 0;
 			s.height = 0;
 			s.numChildren = 0;
+		},
+		setExcluding : function (value, frames, rect) {
+			var s = this, i, l , c = LGlobal.excludingContainer;
+			for (i = 0, l = c.length; i < l; i++) {
+				if (c[i].obj.objectIndex == s.objectIndex) {
+					if (value) {
+						return;
+					} else {
+						c.splice(i, 1);
+						return;
+					}
+				}
+			}
+			if (value) {
+				c.push({obj : s, index : 0, frames : (frames ? frames : 1), rect : (rect ? rect : new LRectangle(0, 0, LGlobal.width, LGlobal.height))});
+			}
 		}
 	};
 	for (var k in p) {
@@ -3752,7 +3776,7 @@ var LButton = (function () {
 		s.upState.visible = true;
 		s.buttonMode = true;
 		s.staticMode = false;
-		s.cursorEnabled = true;
+		s._ll_cursorEnabled = true;
 		s.setState(LButton.STATE_ENABLE);
 		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
@@ -3868,7 +3892,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC && s.cursorEnabled) {
+			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
 				document.body.style.cursor = "pointer";
 			}
 		},
@@ -3891,11 +3915,17 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC && s.cursorEnabled) {
+			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
 				document.body.style.cursor = "default";
 			}
 		},
-		clone : function (){
+		setCursorEnabled : function (value) {
+			s._ll_cursorEnabled = value;
+			if(!value && document.body.style.cursor != "default"){
+				document.body.style.cursor = "default";
+			}
+		},
+		clone : function () {
 			var s = this;
 			return new LButton(s.upState.clone(),s.overState.clone(),s.downState.clone(),s.disableState.clone());
 		},
@@ -4166,6 +4196,9 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.value = s.text;
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+			LGlobal.inputTextBox.style.color = s.color;
+			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+			LGlobal.inputTextBox.style.fontFamily = s.font;
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 			if (s.texttype == LTextFieldType.INPUT) {
 				rc = s.getRootCoordinate();
@@ -4423,19 +4456,19 @@ var LBitmapData = (function () {
 			s.dataType = LBitmapData.DATA_CANVAS;
 			s._canvas.width = s.width = (width == null ? 1 : width); 
 			s._canvas.height = s.height = (height == null ? 1 : height);
-			var d = s._context.createImageData(s.width, s.height);
 			if (typeof image == "string") {
 				image = parseInt(image.replace("#","0x"));
 			}
 			if (typeof image == "number") {
+				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
 					d.data[i + 1] = image >> 8 & 0xFF;
 					d.data[i + 2] = image & 0xFF;
 					d.data[i + 3] = 255;
 				}
+				s._context.putImageData(d, 0, 0);
 			}
-			s._context.putImageData(d, 0, 0);
 			s.image = s._canvas;
 			if (dataType == LBitmapData.DATA_IMAGE) {
 				s._setDataType(dataType);
@@ -4572,7 +4605,7 @@ var LBitmapData = (function () {
 						d.data[i + 0] = data.data[j + 0];
 						d.data[i + 1] = data.data[j + 1];
 						d.data[i + 2] = data.data[j + 2];
-						d.data[i + 3] = 255;
+						d.data[i + 3] = data.data[j + 3];
 					}
 				}
 			} else {
@@ -4594,6 +4627,13 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._update();
 			}
+		},
+		putPixels : function (rect, data) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
+				return;
+			}
+			s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
 		},
 		lock : function () {
 			var s = this;
@@ -4678,6 +4718,8 @@ var LAnimation = (function () {
 		s.type = "LAnimation";
 		s.rowIndex = 0;
 		s.colIndex = 0;
+		s._ll_stepIndex = 0;
+		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
 		s.bitmap =  new LBitmap(data);
@@ -4717,7 +4759,10 @@ var LAnimation = (function () {
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
+			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
+				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
+			}
 			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
@@ -4731,6 +4776,12 @@ var LAnimation = (function () {
 			}
 			if (typeof arr.script == "function") {
 				arr.script(s, arr.params);
+			}
+			if (stepFrame) {
+				if (s._ll_stepIndex++ < stepFrame) {
+					return;
+				}
+				s._ll_stepIndex = 0;
 			}
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
@@ -4760,7 +4811,7 @@ var LAnimationTimeline = (function () {
 		s.speed = 0;
 		s._speedIndex = 0;
 		s.ll_labelList = {};
-		s.addEventListener(LEvent.ENTER_FRAME, s._onframe);
+		s.addEventListener(LEvent.ENTER_FRAME, s._ll_onframe);
 	};
 	var p = {
 		clone : function () {
@@ -4775,7 +4826,14 @@ var LAnimationTimeline = (function () {
 			}
 			return a;
 		},
-		_onframe : function (event) {
+		setFrameSpeedAt : function (rowIndex, colIndex, speed) {
+			var s = this;
+			if (!s._ll_stepArray[rowIndex]) {
+				s._ll_stepArray[rowIndex] = [];
+			}
+			s._ll_stepArray[rowIndex][colIndex] = speed;
+		},
+		_ll_onframe : function (event) {
 			var self = event.target;
 			if (self._speedIndex++ < self.speed) {
 				return;
@@ -4799,9 +4857,10 @@ var LAnimationTimeline = (function () {
 			this.onframe();
 		},
 		gotoAndStop : function (name) {
-			var l = this.ll_labelList[name];
-			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			this.stop();
+			var s = this, l = s.ll_labelList[name];
+			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
+			s.stop();
 		},
 		addFrameScript : function (name, func, params) {
 			var l = this.ll_labelList[name];
@@ -4903,6 +4962,7 @@ var LLoadManage = (function () {
 				}
 				s.loader = null;
 				var r = s.result;
+				LGlobal.forceRefresh = true;
 				s.oncomplete(r);
 			}
 		},
@@ -5480,8 +5540,8 @@ var FPS = (function () {
 		s.fpsCount++;
 		var t = (new Date()).getTime();
 		if(t - s.fpsTime < 1000)return;
+		s.fps.text = Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
 		s.fpsTime = t;
-		s.fps.text = s.fpsCount;
 		s.fpsCount = 0;
 		s.graphics.clear();
 		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");

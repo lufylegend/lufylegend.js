@@ -438,6 +438,30 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.mobile = false;
+	/** @language chinese
+	 * <p>等同于 LGlobal.mobile。</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Equivalent to LGlobal.mobile.</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>LGlobal.mobile と同等。</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
 	LGlobal.canTouch = false;
 	/** @language chinese
 	 * <p>当前浏览器环境。可以是下面中的一个</p>
