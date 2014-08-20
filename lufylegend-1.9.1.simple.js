@@ -2022,22 +2022,6 @@ var LDisplayObjectContainer = (function () {
 			s.width = 0;
 			s.height = 0;
 			s.numChildren = 0;
-		},
-		setExcluding : function (value, frames, rect) {
-			var s = this, i, l , c = LGlobal.excludingContainer;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (c[i].obj.objectIndex == s.objectIndex) {
-					if (value) {
-						return;
-					} else {
-						c.splice(i, 1);
-						return;
-					}
-				}
-			}
-			if (value) {
-				c.push({obj : s, index : 0, frames : (frames ? frames : 1), rect : (rect ? rect : new LRectangle(0, 0, LGlobal.width, LGlobal.height))});
-			}
 		}
 	};
 	for (var k in p) {

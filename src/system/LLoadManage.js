@@ -56,7 +56,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 
@@ -105,7 +105,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 
@@ -154,7 +154,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 

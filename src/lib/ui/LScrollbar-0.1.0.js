@@ -157,7 +157,6 @@ LScrollbar.prototype.resizeWidth = function(value){
 			s._ll_bar_back_w.rotateCenter = false;
 			s._ll_bar_back_w.x = s._maskW - s._scrollWidth;
 			s._ll_bar_back_w.rotate = 90;
-			//s._ll_bar_back_w.y = (s._mask.getHeight() - s._ll_bar_back_h.getHeight())*0.5;
 			s._scroll_w.addChild(s._ll_bar_back_w);
 		}else{
 			s._scroll_w.graphics.drawRoundRect(1,"#CCCCCC",[s._scrollWidth,0,s._mask.getWidth() - s._scrollWidth*2,s._scrollWidth,s._scrollWidth*0.5],true,grdb);

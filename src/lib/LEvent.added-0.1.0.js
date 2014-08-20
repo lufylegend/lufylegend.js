@@ -28,16 +28,40 @@ LDisplayObjectContainer.prototype.dispatchEventAddToStage = function () {
 		p = p.parent;
 	}
 	if (p == "root") {
+		s._dispatchEventAddToStage();
 		s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+		for (i = 0, l = s.childList.length; i < l; i++) {
+			
+		}
+	}
+};
+LDisplayObjectContainer.prototype._dispatchEventAddToStage = function () {
+	var s = this, i, l;
+	if (!s.dispatchEvent) {
+		return;
+	}
+	s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+	for (i = 0, l = s.childList.length; i < l; i++) {
+		s.childList[i]._dispatchEventAddToStage();
 	}
 };
 LDisplayObjectContainer.prototype._ll_removed_removeChild = LDisplayObjectContainer.prototype.removeChild;
 LDisplayObjectContainer.prototype.removeChild = function (d) {
 	var s = this, h = d.inStage();
-	s._ll_removed_removeChild(d);
 	d.dispatchEvent(LEvent.REMOVED);
 	if (h) {
-		d.dispatchEvent(LEvent.REMOVED_FROM_STAGE);
+		d._dispatchEventRemovedFromStage();
+	}
+	s._ll_removed_removeChild(d);
+};
+LDisplayObjectContainer.prototype._dispatchEventRemovedFromStage = function () {
+	var s = this, i, l;
+	if (!s.dispatchEvent) {
+		return;
+	}
+	s.dispatchEvent(LEvent.REMOVED_FROM_STAGE);
+	for (i = 0, l = s.childList.length; i < l; i++) {
+		s.childList[i]._dispatchEventRemovedFromStage();
 	}
 };
 LDisplayObjectContainer.prototype._ll_removed_removeChildAt = LDisplayObjectContainer.prototype.removeChildAt;
@@ -47,11 +71,11 @@ LDisplayObjectContainer.prototype.removeChildAt = function (i) {
 		return;
 	}
 	var h = d.inStage();
-	s._ll_removed_removeChild(d);
 	d.dispatchEvent(LEvent.REMOVED);
 	if (h) {
-		d.dispatchEvent(LEvent.REMOVED_FROM_STAGE);
+		d._dispatchEventRemovedFromStage();
 	}
+	s._ll_removed_removeChild(d);
 };
 LDisplayObjectContainer.prototype.inStage = function () {
 	var s = this, p = s.parent;
