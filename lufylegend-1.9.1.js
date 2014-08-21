@@ -3959,6 +3959,7 @@ var LTextField = (function () {
 		s.weight = "normal";
 		s.textAlign = "left";
 		s.textBaseline = "top";
+		s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
 		s.stroke = false;
 		s.lineWidth = 1;
 		s.lineColor = "#000000";
@@ -3971,6 +3972,8 @@ var LTextField = (function () {
 		s.speed = 0;
 		s._speedIndex = 100;
 	}
+	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
+	LTextField.HEIGHT_MODE_BASELINE = "baseline";
 	var p = {
 		_showReady : function (c) {
 			var s = this;
@@ -4244,8 +4247,8 @@ var LTextField = (function () {
 			}
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
 			l = c.measureText("O").width * 1.2;
-			if (/.*(g|j|p|q|y)+.*/.exec(s.text)) {
-				l = l*1.2;
+			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
+				l = l * 1.2;
 			}
 			return l;
 		},

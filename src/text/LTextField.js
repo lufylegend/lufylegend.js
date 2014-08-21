@@ -345,6 +345,20 @@ var LTextField = (function () {
 		 */
 		s.textBaseline = "top";
 		/** @language chinese
+		 * <p>获取文字高度的时候，是否以［gjpqy］为标准。</p>
+		 * <p>可以设定的值有下面两种：</p>
+		 * <p>LTextField.HEIGHT_MODE_BOTTOM：获取文字高度时，不考虑［gjpqy］的下半部。</p>
+		 * <p>LTextField.HEIGHT_MODE_BASELINE：获取文字高度时，考虑［gjpqy］的下半部。</p>
+		 * <p>也就是说使用LTextField.HEIGHT_MODE_BASELINE获取高度，比LTextField.HEIGHT_MODE_BOTTOM要略大。</p>
+		 * <p>注意：HTML5中没有直接获取文字高度的方法，所以这两种方式无论使用哪一种获取的高度都无法绝对准确。</p>
+		 * @property heightMode
+		 * @type float
+		 * @since 1.9.1
+		 * @default LTextField.HEIGHT_MODE_BOTTOM
+		 * @public
+		 */
+		s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
+		/** @language chinese
 		 * 文字描边效果。
 		 * @property stroke
 		 * @type String
@@ -668,6 +682,8 @@ var LTextField = (function () {
 		s.speed = 0;
 		s._speedIndex = 100;
 	}
+	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
+	LTextField.HEIGHT_MODE_BASELINE = "baseline";
 	var p = {
 		_showReady : function (c) {
 			var s = this;
@@ -1358,8 +1374,8 @@ var LTextField = (function () {
 			}
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
 			l = c.measureText("O").width * 1.2;
-			if (/.*(g|j|p|q|y)+.*/.exec(s.text)) {
-				l = l*1.2;
+			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
+				l = l * 1.2;
 			}
 			return l;
 		},
