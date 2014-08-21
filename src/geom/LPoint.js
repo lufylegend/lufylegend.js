@@ -439,7 +439,7 @@ var LPoint = (function () {
 		},
 		/** @language chinese
 		 * 从此点的坐标中减去另一个点的坐标以创建一个新点。
-		 * @method add
+		 * @method subtract
 		 * @param {LPoint} v 要减去的点。
 		 * @return {LPoint} 新点。
 		 * @since 1.8.5
@@ -447,7 +447,7 @@ var LPoint = (function () {
 		 */
 		/** @language english
 		 * Subtracts the coordinates of another point from the coordinates of this point to create a new point.
-		 * @method add
+		 * @method subtract
 		 * @param {LPoint} v The point to be subtracted.
 		 * @return {LPoint} The new point.
 		 * @since 1.8.5
@@ -455,7 +455,7 @@ var LPoint = (function () {
 		 */
 		/** @language japanese
 		 * このポイントの座標から他のポイントの座標を減算して、新しいポイントを作成します。
-		 * @method add
+		 * @method subtract
 		 * @param {LPoint} v 減算するポイントです
 		 * @return {LPoint} 新しいポイントです。
 		 * @since 1.8.5
