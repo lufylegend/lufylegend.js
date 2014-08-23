@@ -169,14 +169,14 @@ var LMedia = (function () {
 				s.oncomplete({});
 			}
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>获取已经播放的时间。</p>
 		 * @method getCurrentTime
 		 * @return {int} 已经播放的时间。
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Get the time of reproducing.</p>
 		 * @method getCurrentTime
 		 * @return {int} the time of reproducing.
@@ -193,14 +193,14 @@ var LMedia = (function () {
 		getCurrentTime : function () {
 			return this.data.currentTime;
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>设定音量。</p>
 		 * @method setVolume
 		 * @param {float} value 音量。
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Set the volume of media.</p>
 		 * @method setVolume
 		 * @param {float} value the volume。
@@ -217,14 +217,14 @@ var LMedia = (function () {
 		setVolume : function (v) {
 			this.data.volume = v;
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>获取音量。</p>
 		 * @method getVolume
 		 * @return {float} 音量。
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Get the volume of media.</p>
 		 * @method getVolume
 		 * @return {float} the volume.
@@ -241,7 +241,7 @@ var LMedia = (function () {
 		getVolume : function () {
 			return this.data.volume;
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放该多媒体对象。</p>
 		 * @method play
 		 * @param {float} startTime 应开始播放的初始位置（以毫秒为单位）。
@@ -249,7 +249,7 @@ var LMedia = (function () {
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play the media file.</p>
 		 * @method play
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
@@ -294,7 +294,7 @@ var LMedia = (function () {
 			s.playing = true;
 			s.data.play();
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放指定长度的其中的一段音频。</p>
 		 * @method playSegment
 		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
@@ -303,7 +303,7 @@ var LMedia = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play segment of audio.</p>
 		 * @method playSegment
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
@@ -324,7 +324,7 @@ var LMedia = (function () {
 		playSegment : function (c, seg, l) {
 			this.playTo(c, c + seg, l);
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放指定区间内的一段音频。</p>
 		 * @method playTo
 		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
@@ -333,7 +333,7 @@ var LMedia = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play segment of audio.</p>
 		 * @method playTo
 		 * @param {float} startTime start time.
@@ -354,13 +354,13 @@ var LMedia = (function () {
 		playTo : function (c, to, l) {
 			this.play(c, l, to);
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>暂停当前播放的音频/视频。</p>
 		 * @method stop
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Pauses the currently playing audio/video.</p>
 		 * @method stop
 		 * @since 1.7.0
@@ -384,13 +384,13 @@ var LMedia = (function () {
 			s.playing = false;
 			s.data.pause();
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>关闭当前播放的音频/视频。</p>
 		 * @method close
 		 * @since 1.7.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Close the currently playing audio/video.</p>
 		 * @method close
 		 * @since 1.7.0

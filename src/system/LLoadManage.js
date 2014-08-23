@@ -32,10 +32,10 @@ var LLoadManage = (function () {
 		 * <p>list元素的格式如下</p>
 		 * <table>
 		 * <tr><th>文件类型</th><th>格式</th></tr>
-		 * <tr><td>js文件</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
-		 * <tr><td>图片文件</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
-		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt",type:"text"}</td></tr>
-		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}</td></tr>
+		 * <tr><td>js文件</td><td>{path:"./js/GameBody.js",type:"js"}。1.9.1以上版本，type可以省略。</td></tr>
+		 * <tr><td>图片文件</td><td>{name:"testimg",path:"./images/testimg.png"}。1.9.1以上版本，type可以省略。</td></tr>
+		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt",type:"text"}。1.9.1以上版本，扩展名为"txt"的时候,type可以省略。</td></tr>
+		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}。1.9.1以上版本，音频文件扩展名为"mp3", "ogg", "wav", "m4a"的时候，type可以省略。</td></tr>
 		 * </table>
 		 * @param {function} onUpdate 加载过程中调用的函数，一般用来显示游戏进度。
 		 * @param {function} onComplete list中全部文件加载完成时调用此函数
@@ -70,6 +70,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0
@@ -119,6 +122,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0
@@ -168,6 +174,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0

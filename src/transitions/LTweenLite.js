@@ -168,9 +168,9 @@ var LTweenLite = (function () {
 		 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
 		 * <tr><td>delay</td><td>float</td><td>延时几秒后开始缓动，这在有先后顺序的缓动效果中很有用</td></tr>
 		 * <tr><td>ease</td><td>LEasing (or Function)</td><td>应用在variables上的缓动函数，比如LEasing.Quad.easeIn or LEasing.Cubic.easeOut。默认值是LEasing.None.easeIn.</td></tr>
-		 * <tr><td>onComplete</td><td>Function</td><td>在缓动效果结束时触发此方法</td></tr>
-		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.</td></tr>
-		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法</td></tr>
+		 * <tr><td>onComplete</td><td>Function</td><td>在缓动效果结束时触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
+		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.回调函数是有参数的，使用方法同下面的例子。</td></tr>
+		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例
@@ -191,7 +191,7 @@ var LTweenLite = (function () {
 		 * 		LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut})
 		 * 		.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
 		 * 			trace(e.currentTarget);
-		 * 			trace(e.target);
+		 * 			trace(e.target);//circle
 		 * 		}});
 		 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
 		 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
