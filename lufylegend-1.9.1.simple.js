@@ -3904,7 +3904,7 @@ var LButton = (function () {
 			}
 		},
 		setCursorEnabled : function (value) {
-			s._ll_cursorEnabled = value;
+			this._ll_cursorEnabled = value;
 			if(!value && document.body.style.cursor != "default"){
 				document.body.style.cursor = "default";
 			}
@@ -4318,8 +4318,8 @@ var LBitmap = (function () {
 	var p = {
 		_canShow : function () {
 			return (this.visible && this.bitmapData);
-		}
-		, _rotateReady : function () {
+		},
+		_rotateReady : function () {
 			var s = this;
 			if (s.rotate != 0 && s.rotateCenter) {
 				s.rotatex = s.getWidth() * 0.5;
@@ -4509,7 +4509,8 @@ var LBitmapData = (function () {
 		},
 		clone : function () {
 			var s = this;
-			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
+			var r = new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
+			return r;
 		},
 		_ready : function () {
 			var s = this;

@@ -381,3 +381,44 @@ LEvent.removeEventListener = function (n, t, f, b) {
 		n.detachEvent("on" + t, n[t + f]);
 	}
 };
+
+/** @language chinese
+ * <p>[静态] LEvent.ADDED 常量定义 added 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.ADDED
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/added.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.ADDED_TO_STAGE 常量定义 addedToStage 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.ADDED_TO_STAGE
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/added.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.REMOVED 常量定义 removed 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.REMOVED
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/removed.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.REMOVED_FROM_STAGE 常量定义 removedFromStage 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.REMOVED_FROM_STAGE
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/removed.html" target="_blank">测试链接</a></p>
+ * @public
+ */

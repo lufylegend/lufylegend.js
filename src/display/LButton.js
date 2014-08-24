@@ -528,7 +528,7 @@ var LButton = (function () {
 			}
 		},
 		setCursorEnabled : function (value) {
-			s._ll_cursorEnabled = value;
+			this._ll_cursorEnabled = value;
 			if(!value && document.body.style.cursor != "default"){
 				document.body.style.cursor = "default";
 			}

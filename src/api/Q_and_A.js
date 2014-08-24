@@ -13,7 +13,7 @@
 
 
 /** @language chinese
- * <p>因为新版API还在继续更新，还未更新的内容，请先查看旧版API，旧版api地址如下：</p>
+ * <p>因为新版API还在继续更新，lib文件夹下的文件都属于外部库，还未完全添加到新的api文档中，请先查看旧版API，旧版api地址如下：</p>
  * <p><a href="http://lufylegend.com/lufylegend/oldapi" target="_blank">http://lufylegend.com/lufylegend/oldapi</a></p>
  * @property 1,找不到相关API：为什么有些类和属性API中找不到？
  */

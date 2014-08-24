@@ -889,3 +889,27 @@ var LDisplayObjectContainer = (function () {
 	}
 	return LDisplayObjectContainer;
 })();
+/** @language chinese
+ * <p>将显示对象添加到显示列表中时调度。以下方法会触发此事件：LDisplayObjectContainer.addChild()、LDisplayObjectContainer.addChildAt()。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * <p><a href="LEvent.html#property_ADDED">LEvent.ADDED</a></p>
+ * @event LEvent.ADDED
+ */
+/** @language chinese
+ * <p>在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。以下方法会触发此事件：LDisplayObjectContainer.addChild()、LDisplayObjectContainer.addChildAt()。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * <p><a href="LEvent.html#property_ADDED_TO_STAGE">LEvent.ADDED_TO_STAGE</a></p>
+ * @event LEvent.ADDED_TO_STAGE
+ */
+/** @language chinese
+ * <p>将要从显示列表中删除显示对象时调度。LDisplayObjectContainer 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * <p><a href="LEvent.html#property_REMOVED">LEvent.REMOVED</a></p>
+ * @event LEvent.REMOVED
+ */
+/** @language chinese
+ * <p>在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。LDisplayObjectContainer 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * <p><a href="LEvent.html#property_REMOVED_FROM_STAGE">LEvent.REMOVED_FROM_STAGE</a></p>
+ * @event LEvent.REMOVED_FROM_STAGE
+ */

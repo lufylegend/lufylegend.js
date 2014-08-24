@@ -166,8 +166,8 @@ var LBitmap = (function () {
 	var p = {
 		_canShow : function () {
 			return (this.visible && this.bitmapData);
-		}
-		, _rotateReady : function () {
+		},
+		_rotateReady : function () {
 			var s = this;
 			if (s.rotate != 0 && s.rotateCenter) {
 				s.rotatex = s.getWidth() * 0.5;
