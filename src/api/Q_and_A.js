@@ -50,6 +50,6 @@
 /** @language chinese
  * <p>使用LGraphics来绘制图形的时候，每个绘图指令都会以单个元素储存到数组当中，如果不断的添加绘图指令，而又要保留原有的图形，就会使绘图指令不断增加，导致每桢需要执行的绘图指令增加，所以会越来越卡。</p>
  * <p>解决的办法，一个是将绘制的图形及时的转为LBitmapData对象。或者利用LBitmapData的setPixels或者putPixels等函数来绘图。</p>
- * <p>一个持续绘图的例子：<a href="../../../api/LGlobal/hitPolygon.html" target="_blank">drawEM demo</a></p>
+ * <p>一个持续绘图的例子：<a href="../../../api/Q_and_A/drawEM.html" target="_blank">drawEM demo</a></p>
  * @property 7,持续绘图：不断的绘制图形，导致游戏越来越卡怎么办？
  */
