@@ -113,7 +113,7 @@ LEvent.prototype.preventDefault = function () {
 LEvent.INIT = "init";
 /** @language chinese
  * <p>[静态] 定义 mouseDown 事件对象的 type 属性值。</p>
- * <p>此事件具有以下属性：</p>
+ * <p>此事件可以在下列对象中使用：</p>
  * <table>
  * <tr><th>对象</th><th>说明</th></tr>
  * <tr><td>LLoader</td><td>图片加载完成事件。</td></tr>
@@ -130,7 +130,7 @@ LEvent.INIT = "init";
  */
 /** @language english
  * <p>[static] Defines the value of the type property of a mouseDown event object.</p>
- * <p>This event has the following properties:</p>
+ * <p>This event can be used in the classes:</p>
  * <table>
  * <tr><th>Object</th><th>Explanation</th></tr>
  * <tr><td>LLoader</td><td>when the image is loaded</td></tr>
@@ -381,3 +381,44 @@ LEvent.removeEventListener = function (n, t, f, b) {
 		n.detachEvent("on" + t, n[t + f]);
 	}
 };
+
+/** @language chinese
+ * <p>[静态] LEvent.ADDED 常量定义 added 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.ADDED
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/added.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.ADDED_TO_STAGE 常量定义 addedToStage 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.ADDED_TO_STAGE
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/added.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.REMOVED 常量定义 removed 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.REMOVED
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/removed.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+/** @language chinese
+ * <p>[静态] LEvent.REMOVED_FROM_STAGE 常量定义 removedFromStage 事件对象的 type 属性值。</p>
+ * <p>使用时需要引入lufylegend.LEvent.added-x.x.x.min.js文件。</p>
+ * @property LEvent.REMOVED_FROM_STAGE
+ * @type String
+ * @static
+ * @since 1.9.1
+ * @examplelink <p><a href="../../../api/LEvent.added/removed.html" target="_blank">测试链接</a></p>
+ * @public
+ */

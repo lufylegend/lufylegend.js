@@ -8,7 +8,7 @@
  * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
  * @param {Array} list <p>每个frame的属性值。</p>
  * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
- * <p>如果精灵图表中的每个frame大小都是的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
+ * <p>如果精灵图表中的每个frame大小都是一样的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
@@ -128,6 +128,8 @@ var LAnimation = (function () {
 		s.type = "LAnimation";
 		s.rowIndex = 0;
 		s.colIndex = 0;
+		s._ll_stepIndex = 0;
+		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
 		s.bitmap =  new LBitmap(data);
@@ -440,7 +442,10 @@ var LAnimation = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimation/onframe.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex];
+			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
+				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
+			}
 			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
@@ -454,6 +459,12 @@ var LAnimation = (function () {
 			}
 			if (typeof arr.script == "function") {
 				arr.script(s, arr.params);
+			}
+			if (stepFrame) {
+				if (s._ll_stepIndex++ < stepFrame) {
+					return;
+				}
+				s._ll_stepIndex = 0;
 			}
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
@@ -574,3 +585,18 @@ var LAnimation = (function () {
 	}
 	return LAnimation;
 })();
+/** @language chinese
+ * 一组动画播放完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the animation is on the last frame.
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * アニメーションは最後のフレームを実行する時。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

@@ -182,3 +182,93 @@ var LInteractiveObject = (function() {
 	}
 	return LInteractiveObject;
 })(); 
+/** @language chinese
+ * 当用户在 LInteractiveObject 实例上按下指针设备按钮时调度。
+ * <p><a href="LMouseEvent.html#property_MOUSE_DOWN">LMouseEvent.MOUSE_DOWN</a></p>
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language english
+ * Dispatched when a user presses the pointing device button over an LInteractiveObject instance.
+ * <p><a href="LMouseEvent.html#property_MOUSE_DOWN">LMouseEvent.MOUSE_DOWN</a></p>
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language japanese
+ * ユーザーが LInteractiveObject インスタンス上でポインティングデバイスのボタンを押したときに送出されます。
+ * <p><a href="LMouseEvent.html#property_MOUSE_DOWN">LMouseEvent.MOUSE_DOWN</a></p>
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language chinese
+ * 当用户在 LInteractiveObject 实例上释放指针设备按钮时调度。
+ * <p><a href="LMouseEvent.html#property_MOUSE_UP">LMouseEvent.MOUSE_UP</a></p>
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language english
+ * Dispatched when a user releases the pointing device button over an LInteractiveObject instance.
+ * <p><a href="LMouseEvent.html#property_MOUSE_UP">LMouseEvent.MOUSE_UP</a></p>
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language japanese
+ * ユーザーが LInteractiveObject インスタンス上でポインティングデバイスのボタンを離したときに送出されます。
+ * <p><a href="LMouseEvent.html#property_MOUSE_UP">LMouseEvent.MOUSE_UP</a></p>
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language chinese
+ * 用户移动 LInteractiveObject 上的指针设备时调度。
+ * <p><a href="LMouseEvent.html#property_MOUSE_MOVE">LMouseEvent.MOUSE_MOVE</a></p>
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language english
+ * Dispatched when a user moves the pointing device while it is over an LInteractiveObject.
+ * <p><a href="LMouseEvent.html#property_MOUSE_MOVE">LMouseEvent.MOUSE_MOVE</a></p>
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language japanese
+ * LInteractiveObject の上で、ユーザーがポインティングデバイスを移動させたときに送出されます。
+ * <p><a href="LMouseEvent.html#property_MOUSE_MOVE">LMouseEvent.MOUSE_MOVE</a></p>
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language chinese
+ * 用户将指针设备从 LInteractiveObject 实例上移开时调度。
+ * <p><a href="LMouseEvent.html#property_MOUSE_OUT">LMouseEvent.MOUSE_OUT</a></p>
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language english
+ * Dispatched when the user moves a pointing device away from an LInteractiveObject instance.
+ * <p><a href="LMouseEvent.html#property_MOUSE_OUT">LMouseEvent.MOUSE_OUT</a></p>
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language japanese
+ * ユーザーが LInteractiveObject インスタンスからポインティングデバイスを離したときに送出されます。
+ * <p><a href="LMouseEvent.html#property_MOUSE_OUT">LMouseEvent.MOUSE_OUT</a></p>
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language chinese
+ * 用户将指针设备移动到 LInteractiveObject 实例上时调度。
+ * <p><a href="LMouseEvent.html#property_MOUSE_OVER">LMouseEvent.MOUSE_OVER</a></p>
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language english
+ * Dispatched when the user moves a pointing device over an LInteractiveObject instance.
+ * <p><a href="LMouseEvent.html#property_MOUSE_OVER">LMouseEvent.MOUSE_OVER</a></p>
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language japanese
+ * ユーザーが LInteractiveObject インスタンスにポインティングデバイスを合わせたときに送出されます。
+ * <p><a href="LMouseEvent.html#property_MOUSE_OVER">LMouseEvent.MOUSE_OVER</a></p>
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language chinese
+ * 当用户在LInteractiveObject 实例上快速连续按下两次并释放指针设备的主按钮时调度。
+ * <p><a href="LMouseEvent.html#property_DOUBLE_CLICK">LMouseEvent.DOUBLE_CLICK</a></p>
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language english
+ * Dispatched when a user presses and releases the main button of a pointing device twice in rapid succession over the same LInteractiveObject.
+ * <p><a href="LMouseEvent.html#property_DOUBLE_CLICK">LMouseEvent.DOUBLE_CLICK</a></p>
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language japanese
+ * ユーザーが LInteractiveObject をポインティングデバイスのメインボタンで 2 回続けてすばやくクリックすると送出されます。
+ * <p><a href="LMouseEvent.html#property_DOUBLE_CLICK">LMouseEvent.DOUBLE_CLICK</a></p>
+ * @event LMouseEvent.DOUBLE_CLICK
+ */

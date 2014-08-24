@@ -413,3 +413,11 @@ var LExtends = base;
 function getTimer () {
 	return (new Date()).getTime() - LGlobal.startTimer;
 }
+function getExtension (path) {
+	var r, pattern = /([^#?]+\.)([^.#?]+)/;
+	r = path.match(pattern);
+	if (r.length >= 3) {
+		return r[2].toLowerCase();
+	}
+	return null;
+}

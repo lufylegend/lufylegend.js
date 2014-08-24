@@ -363,3 +363,87 @@ var LShape = (function () {
 	}
 	return LShape;
 })();
+/** @language chinese
+ * 不可用。
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language english
+ * Disabled.
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */

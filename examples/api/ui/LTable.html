@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LTable</title>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+<script>
+init(30,"mylegend",850,480,main);
+LStage.setDebug(true);
+function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	var tableLayer = new LTable(4, 4);
+	tableLayer.x = 10;
+	tableLayer.y = 100;
+	addChild(tableLayer);
+
+	var rect = new LShape();
+	rect.graphics.drawRect(3, "gray", [0, 0, 80, 80], true, "red");
+	tableLayer.setCell(rect, 0, 0);
+	var txt1 = new LTextField();
+	txt1.text = "lufylegend.js";
+	txt1.size = 20;
+	tableLayer.setCell(txt1, 0, 1);
+	var txt2 = new LTextField();
+	txt2.text = "lufylegend.js是一个html5开源游戏引擎";
+	tableLayer.setCell(txt2, 2, 0);
+	var txt3 = new LTextField();
+	txt3.text = "正在演示表格LTable";
+	tableLayer.setCell(txt3, 3, 0);
+	txt3.size = 20;
+	var tableLayer2 = new LTable(3, 3, {cellWidth:50});
+	tableLayer.setCell(tableLayer2, 3, 2);
+
+	tableLayer.addRow();
+	tableLayer.addCol();
+}
+</script>
+</body>
+</html>

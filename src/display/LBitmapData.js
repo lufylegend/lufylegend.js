@@ -230,19 +230,20 @@ var LBitmapData = (function () {
 			s.dataType = LBitmapData.DATA_CANVAS;
 			s._canvas.width = s.width = (width == null ? 1 : width); 
 			s._canvas.height = s.height = (height == null ? 1 : height);
-			var d = s._context.createImageData(s.width, s.height);
 			if (typeof image == "string") {
 				image = parseInt(image.replace("#","0x"));
 			}
 			if (typeof image == "number") {
+				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
 					d.data[i + 1] = image >> 8 & 0xFF;
 					d.data[i + 2] = image & 0xFF;
 					d.data[i + 3] = 255;
 				}
+				s._context.putImageData(d, 0, 0);
 			}
-			s._context.putImageData(d, 0, 0);
+			
 			s.image = s._canvas;
 			if (dataType == LBitmapData.DATA_IMAGE) {
 				s._setDataType(dataType);
@@ -896,10 +897,10 @@ var LBitmapData = (function () {
 			return r;
 		},
 		/** @language chinese
-		 * 设置 LBitmapData 对象的单个像素数据。
+		 * 设置 LBitmapData 对象的指定区域的像素数据。
 		 * @method setPixels
 		 * @param {LRectangle} rect 指定矩形。
-		 * @param {Array} data 像素数据。（数组[0, 0, 0, 255, 255, 255] | 字符串"#000000" | 数值0x000000）
+		 * @param {Array} data 像素数据。（ImageData对象 | 字符串"#000000" | 数值0x000000）
 		 * @since 1.5.1
 		 * @public
 		 * @example
@@ -922,10 +923,10 @@ var LBitmapData = (function () {
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
-		 * Sets a single pixel of a LBitmapData object.
+		 * Sets rect pixels of a LBitmapData object.
 		 * @method setPixels
 		 * @param {LRectangle} rect Specifies the rectangular region of the BitmapData object.
-		 * @param {Array} data the values to be used in the rectangular region.(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
+		 * @param {Array} data the values to be used in the rectangular region.(ImageData object | String"#000000" | Number0x000000)
 		 * @since 1.5.1
 		 * @public
 		 * @example
@@ -948,10 +949,10 @@ var LBitmapData = (function () {
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">Try it »</a></p>
 		 */
 		/** @language japanese
-		 * LBitmapData オブジェクトの 1 つのピクセルを設定します。
+		 * LBitmapData オブジェクトの指定する矩形領域のピクセルを設定します。
 		 * @method setPixels
 		 * @param {LRectangle} rect LBitmapData オブジェクトの矩形領域を指定します。
-		 * @param {Array} data 矩形領域で使用されるピクセル値です。(Array[0, 0, 0, 255, 255, 255] | String"#000000" | Number0x000000)
+		 * @param {Array} data 矩形領域で使用されるピクセル値です。(ImageDataオブジェクト | String"#000000" | Number0x000000)
 		 * @since 1.5.1
 		 * @public
 		 * @example
@@ -988,7 +989,7 @@ var LBitmapData = (function () {
 						d.data[i + 0] = data.data[j + 0];
 						d.data[i + 1] = data.data[j + 1];
 						d.data[i + 2] = data.data[j + 2];
-						d.data[i + 3] = 255;
+						d.data[i + 3] = data.data[j + 3];
 					}
 				}
 			} else {
@@ -1010,6 +1011,95 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._update();
 			}
+		},
+		/** @language chinese
+		 * <p>设置 LBitmapData 对象的指定区域的像素数据。使用条件如下：</p>
+		 * <p>1，数据保存形式为LBitmapData.DATA_CANVAS。</p>
+		 * <p>2，每桢单次或少量次数操作，且不与setPixel,setPixels,getPixel,getPixels等函数同时进行。</p>
+		 * <p>满足以上两个条件，可以使用putPixels来代替setPixels来更快速的设置像素，且不需要lock和unlock。</p>
+		 * @method putPixels
+		 * @param {LRectangle} rect 指定矩形。
+		 * @param {Array} data 像素数据。（ImageData对象）
+		 * @since 1.9.1
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
+		 *  bitmapData.lock();
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData.unlock();
+		 * 	
+		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/putPixels.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * Sets a single pixel of a LBitmapData object.
+		 * <p>Sets rect pixels of a LBitmapData object. Conditions：</p>
+		 * <p>1，The data type of the LBitmapData is Canvas object。</p>
+		 * <p>2，Operate only once or a small number，Do not using setPixel, setPixels, getPixel, getPixels at the same time。</p>
+		 * <p>You can use putPixels instead setPixels, but fast，and do not need to lock and unlock.</p>
+		 * @method setPixels
+		 * @param {LRectangle} rect Specifies the rectangular region of the BitmapData object.
+		 * @param {Array} data the values to be used in the rectangular region.(ImageData object)
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
+		 *  bitmapData.lock();
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData.unlock();
+		 * 	
+		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/putPixels.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>LBitmapData オブジェクトの指定する矩形領域のピクセルを設定します。使う条件は下記となります：</p>
+		 * <p>1，LBitmapDataのデーターの保存形式はCanvas オブジェクトである。</p>
+		 * <p>2，フレームごと一回か数回だけ使う，そしてsetPixel,setPixels,getPixel,getPixelsなどと同時に使わない。</p>
+		 * <p>上記の二つの条件を満足したら、setPixelsの代わりにputPixelsを使って、速く処理することができます，そしてlockとunlockは要りません。</p>
+		 * @method setPixels
+		 * @param {LRectangle} rect LBitmapData オブジェクトの矩形領域を指定します。
+		 * @param {Array} data 矩形領域で使用されるピクセル値です。(ImageData オブジェクト)
+		 * @since 1.5.1
+		 * @public
+		 * @example
+		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
+		 *  bitmapData.lock();
+		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+		 *  bitmapData.unlock();
+		 * 	
+		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
+		 * 	
+		 * 	var bitmap = new LBitmap(bitmapData);
+		 * 	addChild(bitmap);
+		 * 	
+		 * 	var bitmap2 = new LBitmap(bitmapData2);
+		 * 	bitmap2.y = 250;
+		 * 	addChild(bitmap2);
+		 * @examplelink <p><a href="../../../api/LBitmapData/putPixels.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		putPixels : function (rect, data) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
+				return;
+			}
+			s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
 		},
 		/** @language chinese
 		 * 此函数将操作对象锁定，保证操作对象在另一个临时操作的canvas上只绘制一遍。

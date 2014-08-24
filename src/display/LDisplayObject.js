@@ -409,7 +409,7 @@ var LDisplayObject = (function () {
 			sX = s.scaleX;
 			sY = s.scaleY;
 			p = s.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				sX *= p.scaleX;
 				sY *= p.scaleY;
 				p = p.parent;
@@ -442,7 +442,7 @@ var LDisplayObject = (function () {
 			sx=s.x;
 			sy=s.y;
 			p = s.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				sx *= p.scaleX;
 				sy *= p.scaleY;
 				sx += p.x;
@@ -633,3 +633,18 @@ var LDisplayObject = (function () {
 	}
 	return LDisplayObject;
 })();
+/** @language chinese
+ * [播放事件] 播放头进入新帧时调度。
+ * <p><a href="LEvent.html#property_ENTER_FRAME">LEvent.ENTER_FRAME</a></p>
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language english
+ * [broadcast event] Dispatched when the playhead is entering a new frame.
+ * <p><a href="LEvent.html#property_ENTER_FRAME">LEvent.ENTER_FRAME</a></p>
+ * @event LEvent.ENTER_FRAME
+ */
+/** @language japanese
+ * [ブロードキャストイベント] 再生ヘッドが新しいフレームに入るときに送出されます。
+ * <p><a href="LEvent.html#property_ENTER_FRAME">LEvent.ENTER_FRAME</a></p>
+ * @event LEvent.ENTER_FRAME
+ */

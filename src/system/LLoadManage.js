@@ -32,10 +32,10 @@ var LLoadManage = (function () {
 		 * <p>list元素的格式如下</p>
 		 * <table>
 		 * <tr><th>文件类型</th><th>格式</th></tr>
-		 * <tr><td>js文件</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
-		 * <tr><td>图片文件</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
-		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt"}</td></tr>
-		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
+		 * <tr><td>js文件</td><td>{path:"./js/GameBody.js",type:"js"}。1.9.1以上版本，type可以省略。</td></tr>
+		 * <tr><td>图片文件</td><td>{name:"testimg",path:"./images/testimg.png"}。1.9.1以上版本，type可以省略。</td></tr>
+		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt",type:"text"}。1.9.1以上版本，扩展名为"txt"的时候,type可以省略。</td></tr>
+		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}。1.9.1以上版本，音频文件扩展名为"mp3", "ogg", "wav", "m4a"的时候，type可以省略。</td></tr>
 		 * </table>
 		 * @param {function} onUpdate 加载过程中调用的函数，一般用来显示游戏进度。
 		 * @param {function} onComplete list中全部文件加载完成时调用此函数
@@ -45,10 +45,10 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
-		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"},
-		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
-		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
+		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
+		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav",type:"sound"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 
@@ -56,7 +56,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 
@@ -70,6 +70,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0
@@ -83,8 +86,8 @@ var LLoadManage = (function () {
 		 * <tr><th>File Type</th><th>format</th></tr>
 		 * <tr><td>js file</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
 		 * <tr><td>image file</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
-		 * <tr><td>text file</td><td>{name:"testfile",path:"./images/testfile.txt"}</td></tr>
-		 * <tr><td>sound file（need web server）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
+		 * <tr><td>text file</td><td>{name:"testfile",path:"./images/testfile.txt",type:"text"}</td></tr>
+		 * <tr><td>sound file（need web server）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}</td></tr>
 		 * </table>
 		 * @param {function} onUpdate This function is called in the loading process
 		 * @param {function} onComplete This function is called when the all files is loaded
@@ -94,10 +97,10 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
-		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"},
-		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
-		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
+		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
+		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav",type:"sound"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 
@@ -105,7 +108,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 
@@ -119,6 +122,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0
@@ -132,8 +138,8 @@ var LLoadManage = (function () {
 		 * <tr><th>ファイルタイプ</th><th>フォーマット</th></tr>
 		 * <tr><td>jsファイル</td><td>{path:"./js/GameBody.js",type:"js"}</td></tr>
 		 * <tr><td>画像ファイル</td><td>{name:"testimg",path:"./images/testimg.png"}</td></tr>
-		 * <tr><td>テキストファイル</td><td>{name:"testfile",path:"./images/testfile.txt"}</td></tr>
-		 * <tr><td>音声ファイル（サーバーが必要になります）</td><td>{name:"testSound",path:"./sounds/testsound.wav"}</td></tr>
+		 * <tr><td>テキストファイル</td><td>{name:"testfile",path:"./images/testfile.txt",type:"text"}</td></tr>
+		 * <tr><td>音声ファイル（サーバーが必要になります）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}</td></tr>
 		 * </table>
 		 * @param {function} onUpdate ロード中、この関数を呼び出す。
 		 * @param {function} onComplete 全てのファイルがロード終わったら、この関数を呼び出す。
@@ -143,10 +149,10 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
-		 * 		{name:"text01",path:"./files/text01.txt"},
-		 * 		{name:"text02",path:"./files/text02.txt"},
-		 * 		{name:"sound01",path:"./sounds/sound01.wav"},
-		 * 		{name:"sound02",path:"./sounds/sound02.wav"}
+		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
+		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
+		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
+		 * 		{name:"sound02",path:"./sounds/sound02.wav",type:"sound"}
 		 * 	];
 		 * 	var loadingLayer; 
 		 * 	var datalist=[]; 
@@ -154,7 +160,7 @@ var LLoadManage = (function () {
 		 * 		loadingLayer = new LoadingSample1(); 
 		 * 		addChild(loadingLayer); 
 		 * 		LLoadManage.load( 
-		 * 			imgData, 
+		 * 			loadData, 
 		 * 			function(progress){ 
 		 * 			    loadingLayer.setProgress(progress); 
 		 * 			 }, 
@@ -168,6 +174,9 @@ var LLoadManage = (function () {
 		 * 		//do something
 		 * 		var bitmapData = new LBitmapData(datalist["img0"]);
 		 * 		var txt = datalist["text01"];
+		 * 		var sound = new LSound();
+		 * 		sound.load(datalist["sound01"]);
+		 * 		sound.play();
 		 * 	}
 		 * @public
 		 * @since 1.4.0
@@ -188,7 +197,7 @@ var LLoadManage = (function () {
 			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
-			var s = this, d;
+			var s = this, d, ph, phs, ext;
 			if (s.loadIndex >= s.list.length) {
 				return;
 			}
@@ -197,12 +206,22 @@ var LLoadManage = (function () {
 				d.name = s.llname + s.loadIndex;
 			}
 			if (!s.lresult[s.llload + d.name]) {
-				if (d["type"] == "text" || d["type"] == "js") {
+				if (!d["type"]) {
+					ext = getExtension(d.path);
+					if (ext == "txt") {
+						d["type"] = LURLLoader.TYPE_TEXT;
+					} else if (ext == "js") {
+						d["type"] = LURLLoader.TYPE_JS;
+					} else if ((new Array("mp3", "ogg", "wav", "m4a")).indexOf(ext) >= 0) {
+						d["type"] = LSound.TYPE_SOUND;
+					}
+				}
+				if (d["type"] == LURLLoader.TYPE_TEXT || d["type"] == LURLLoader.TYPE_JS) {
 					s.loader = new LURLLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(s.url(d.path), d["type"]);
-				} else if (d["type"] == "sound") {
+				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
@@ -211,7 +230,7 @@ var LLoadManage = (function () {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path), "bitmapData");
+					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE);
 				}
 			}
 			s.loadIndex++;
@@ -240,6 +259,7 @@ var LLoadManage = (function () {
 				}
 				s.loader = null;
 				var r = s.result;
+				LGlobal.forceRefresh = true;
 				s.oncomplete(r);
 			}
 		},

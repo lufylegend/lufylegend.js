@@ -201,14 +201,14 @@ var LWebAudio = (function () {
 				}
 			}
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>获取已经播放的时间。</p>
 		 * @method getCurrentTime
 		 * @return {int} 已经播放的时间。
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Get the time of reproducing.</p>
 		 * @method getCurrentTime
 		 * @return {int} the time of reproducing.
@@ -230,14 +230,14 @@ var LWebAudio = (function () {
 				return s.currentSave;
 			}
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>设定音量。</p>
 		 * @method setVolume
 		 * @param {float} value 音量。
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Set the volume of media.</p>
 		 * @method setVolume
 		 * @param {float} value the volume。
@@ -258,14 +258,14 @@ var LWebAudio = (function () {
 				s.volumeNode.gain.value = v;
 			}
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>获取音量。</p>
 		 * @method getVolume
 		 * @return {float} 音量。
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Get the volume of media.</p>
 		 * @method getVolume
 		 * @return {float} the volume.
@@ -282,7 +282,7 @@ var LWebAudio = (function () {
 		getVolume : function () {
 			return this.volume;
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放该音频对象。</p>
 		 * @method play
 		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
@@ -290,7 +290,7 @@ var LWebAudio = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play the audio file.</p>
 		 * @method play
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
@@ -344,7 +344,7 @@ var LWebAudio = (function () {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放指定长度的其中的一段音频。</p>
 		 * @method playSegment
 		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
@@ -353,7 +353,7 @@ var LWebAudio = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play segment of audio.</p>
 		 * @method playSegment
 		 * @param {float} startTime The initial position in milliseconds at which playback should start.
@@ -374,7 +374,7 @@ var LWebAudio = (function () {
 		playSegment : function (c, seg, l) {
 			this.playTo(c, c + seg, l);
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>播放指定区间内的一段音频。</p>
 		 * @method playTo
 		 * @param {float} startTime 应开始播放的初始位置（以秒为单位）。
@@ -383,7 +383,7 @@ var LWebAudio = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>play segment of audio.</p>
 		 * @method playTo
 		 * @param {float} startTime start time.
@@ -404,13 +404,13 @@ var LWebAudio = (function () {
 		playTo : function (c, to, l) {
 			this.play(c, l, to);
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>暂停当前播放的音频。</p>
 		 * @method stop
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Pauses the currently playing audio.</p>
 		 * @method stop
 		 * @since 1.9.0
@@ -438,13 +438,13 @@ var LWebAudio = (function () {
 			s.currentTime = s.currentSave;
 			s.playing = false;
 		},
-		/** @language japanese
+		/** @language chinese
 		 * <p>关闭当前播放的音频。</p>
 		 * @method close
 		 * @since 1.9.0
 		 * @public
 		 */
-		/** @language japanese
+		/** @language english
 		 * <p>Close the currently playing audio.</p>
 		 * @method close
 		 * @since 1.9.0
@@ -478,3 +478,18 @@ var LWebAudio = (function () {
 	}
 	return LWebAudio;
 })();
+/** @language chinese
+ * 多媒体文件加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the media is loaded
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * audioまたはvideoファイルロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

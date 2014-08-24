@@ -276,14 +276,16 @@ var LEventDispatcher = (function () {
 		 * @public
 		 * @since 1.8.0
 		 */
-		hasEventListener : function (type) {
+		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
 				if (type == s._eventList[i].type) {
-					return true;
+					if (typeof listener == UNDEFINED || listener == s._eventList[i].listener) {
+						return true;
+					}
 				}
 			}
 			return false;

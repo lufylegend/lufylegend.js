@@ -266,6 +266,7 @@ var LGlobal = ( function () {
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
+	LGlobal.excludingContainer = new Array();
 	/** @language chinese
 	 * <p>一个 LStageScaleMode 类中指定要使用哪种缩放模式的值。</p>
 	 * @property LGlobal.stageScale
@@ -437,6 +438,30 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.mobile = false;
+	/** @language chinese
+	 * <p>等同于 LGlobal.mobile。</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>Equivalent to LGlobal.mobile.</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>LGlobal.mobile と同等。</p>
+	 * @property LGlobal.canTouch
+	 * @type Boolean
+	 * @static
+	 * @since 1.0.0
+	 * @public
+	 */
 	LGlobal.canTouch = false;
 	/** @language chinese
 	 * <p>当前浏览器环境。可以是下面中的一个</p>
@@ -570,6 +595,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.destroy = true;
+	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
 	/** @language chinese
@@ -803,7 +829,7 @@ var LGlobal = ( function () {
 			LGlobal.ll_clicks = 0;
 		}
 		LGlobal.IS_MOUSE_DOWN = true;
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
+		if (LGlobal.mouseJoint_start) {
 			LGlobal.mouseJoint_start(eve);
 		}
 		LGlobal.touchHandler(event);
@@ -834,9 +860,8 @@ var LGlobal = ( function () {
 		LGlobal.touchHandler(event);
 		LGlobal.IS_MOUSE_DOWN = false;
 		LGlobal.buttonStatusEvent = null;
-		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-			LGlobal.box2d.mouseJoint = null;
+		if (LGlobal.mouseJoint_end) {
+			LGlobal.mouseJoint_end();
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
@@ -862,7 +887,7 @@ var LGlobal = ( function () {
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
 		}
 		LGlobal.touchHandler(e);
-		if(LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_move){
+		if (LGlobal.mouseJoint_move) {
 			LGlobal.mouseJoint_move(eve);
 		}
 	};
@@ -889,8 +914,8 @@ var LGlobal = ( function () {
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_DOWN);
 		LGlobal.IS_MOUSE_DOWN = true;
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.mouseJoint_start) {
-			LGlobal.mouseJoint_start(e);
+		if (LGlobal.mouseJoint_start) {
+			LGlobal.mouseJoint_start(event);
 		}
 	};
 	LGlobal.ll_mouseMove = function (e) {
@@ -905,8 +930,8 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
-		if (LGlobal.IS_MOUSE_DOWN && LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(e.offsetX / LGlobal.box2d.drawScale, e.offsetY / LGlobal.box2d.drawScale));
+		if (LGlobal.mouseJoint_move) {
+			LGlobal.mouseJoint_move(event);
 		}
 	};
 	LGlobal.ll_mouseUp = function (e) {
@@ -919,9 +944,8 @@ var LGlobal = ( function () {
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_UP);
 		LGlobal.IS_MOUSE_DOWN = false;
-		if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-			LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-			LGlobal.box2d.mouseJoint = null;
+		if (LGlobal.mouseJoint_end) {
+			LGlobal.mouseJoint_end();
 		}
 	};
 	LGlobal.ll_mouseOut = function (e) {
@@ -1044,6 +1068,10 @@ var LGlobal = ( function () {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			delete LGlobal.stage.onresizeEvent;
 		}
+		if (LGlobal.forceRefresh) {
+			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
+			LGlobal.forceRefresh = false;
+		}
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
 			if (!LGlobal.traceDebug && LGlobal.keepClear) {
@@ -1075,7 +1103,7 @@ var LGlobal = ( function () {
 	 * @param {float} height 高
 	 * @param {int} row 行数
 	 * @param {int} col 列数
-	 * @return {Boolean} 2维数组
+	 * @return {Array} 2维数组
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
@@ -1106,7 +1134,7 @@ var LGlobal = ( function () {
 	 * @param {float} height height
 	 * @param {int} row rows
 	 * @param {int} col cols
-	 * @return {Boolean} 2-dimensional arrays
+	 * @return {Array} 2-dimensional arrays
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
@@ -1137,7 +1165,7 @@ var LGlobal = ( function () {
 	 * @param {float} height 高さ
 	 * @param {int} row 行数
 	 * @param {int} col 列数
-	 * @return {Boolean} 2次元の配列
+	 * @return {Array} 2次元の配列
 	 * @example
 	 * 	LInit(50, "legend", 800, 480, main);
 	 * 	function main () {
@@ -1591,7 +1619,7 @@ var LGlobal = ( function () {
 	 * @param {LDisplayObject} objB 对象B
 	 * @param {Array} vecA 重新设置对象A的矩形范围 [width,height]
 	 * @param {Array} vecB 重新设置对象B的矩形范围 [width,height]
-	 * @return {Boolean} 当たったらtrueを返す
+	 * @return {Boolean} 如果碰撞则返回true。
 	 * @example
 	 * 	LGlobal.setDebug(true);
 	 * 	var rectLayer1 = new LSprite();

@@ -31,6 +31,8 @@ var LURLLoader = (function () {
 		s.content = null;
 		s.event = {};
 	}
+	LURLLoader.TYPE_TEXT = "text";
+	LURLLoader.TYPE_JS = "js";
 	/** @language chinese
 	 * 从指定的 URL 发送和加载数据。
 	 * @method load
@@ -101,9 +103,17 @@ var LURLLoader = (function () {
 	 * @since 1.0.0
 	 */
 	LURLLoader.prototype.load = function (u, t) {
-		var s = this, event;
+		var s = this, event, ext;
+		if (!t) {
+			ext = getExtension(u);
+			if (ext == "txt") {
+				t = LURLLoader.TYPE_TEXT;
+			} else if (ext == "js") {
+				t = LURLLoader.TYPE_JS;
+			}
+		}
 		s.loadtype = t;
-		if (!t || t == "text") {
+		if (t == LURLLoader.TYPE_TEXT) {
 			LAjax.get(u, {}, function (data) {
 				event = new LEvent(LEvent.COMPLETE);
 				s.data = data;
@@ -113,7 +123,7 @@ var LURLLoader = (function () {
 				delete s.content;
 				delete s.data;
 			});
-		} else if (t == "js") {
+		} else if (t == LURLLoader.TYPE_JS) {
 			var script = document.createElement("script");
 			script.onload = function () {
 				event = new LEvent(LEvent.COMPLETE);
@@ -129,3 +139,18 @@ var LURLLoader = (function () {
 	};
 	return LURLLoader;
 })();
+/** @language chinese
+ * js文件或者文本文件加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language english
+ * when the text file or js file is loaded.
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */
+/** @language japanese
+ * jsファイルまたはテキストファイルロード完了。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ */

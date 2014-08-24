@@ -303,7 +303,7 @@ var LTextField = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
+		 * Indicates the alignment of the paragraph(horizontal).
 		 * @property textAlign
 		 * @type String
 		 * @since 1.0.0
@@ -328,7 +328,7 @@ var LTextField = (function () {
 		 * @public
 		 */
 		/** @language english
-		 * Indicates the alignment of the paragraph(竖直).
+		 * Indicates the alignment of the paragraph(vertical).
 		 * @property textBaseline
 		 * @type String
 		 * @since 1.0.0
@@ -344,6 +344,20 @@ var LTextField = (function () {
 		 * @public
 		 */
 		s.textBaseline = "top";
+		/** @language chinese
+		 * <p>获取文字高度的时候，是否以［gjpqy］为标准。</p>
+		 * <p>可以设定的值有下面两种：</p>
+		 * <p>LTextField.HEIGHT_MODE_BOTTOM：获取文字高度时，不考虑［gjpqy］的下半部。</p>
+		 * <p>LTextField.HEIGHT_MODE_BASELINE：获取文字高度时，考虑［gjpqy］的下半部。</p>
+		 * <p>也就是说使用LTextField.HEIGHT_MODE_BASELINE获取高度，比LTextField.HEIGHT_MODE_BOTTOM要略大。</p>
+		 * <p>注意：HTML5中没有直接获取文字高度的方法，所以这两种方式无论使用哪一种获取的高度都无法绝对准确。</p>
+		 * @property heightMode
+		 * @type float
+		 * @since 1.9.1
+		 * @default LTextField.HEIGHT_MODE_BOTTOM
+		 * @public
+		 */
+		s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
 		/** @language chinese
 		 * 文字描边效果。
 		 * @property stroke
@@ -525,26 +539,23 @@ var LTextField = (function () {
 		s.multiline = false;
 		/** @language chinese
 		 * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default false
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		/** @language english
 		 * Defines the number of text lines in a multiline text field. If setWordWrap(true), the number of lines increases when text wraps.
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		/** @language japanese
 		 * 複数行テキストフィールド内のテキスト行の数を定義します。setWordWrap(true)の場合、テキストが折り返されると行数は増えます。
-		 * @property textAlign
-		 * @type String
-		 * @since 1.0.0
-		 * @default Arial
+		 * @property numLines
+		 * @type int
+		 * @since 1.9.0
 		 * @public
 		 */
 		s.numLines = 1;
@@ -671,6 +682,8 @@ var LTextField = (function () {
 		s.speed = 0;
 		s._speedIndex = 100;
 	}
+	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
+	LTextField.HEIGHT_MODE_BASELINE = "baseline";
 	var p = {
 		_showReady : function (c) {
 			var s = this;
@@ -1258,6 +1271,9 @@ var LTextField = (function () {
 			LGlobal.inputTextBox.value = s.text;
 			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
 			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+			LGlobal.inputTextBox.style.color = s.color;
+			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+			LGlobal.inputTextBox.style.fontFamily = s.font;
 			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 			if (s.texttype == LTextFieldType.INPUT) {
 				rc = s.getRootCoordinate();
@@ -1357,7 +1373,11 @@ var LTextField = (function () {
 				return s.height;
 			}
 			c.font = s.weight + " " + s.size + "pt " + s.font; 
-			return c.measureText("O").width * 1.2;
+			l = c.measureText("O").width * 1.2;
+			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
+				l = l * 1.2;
+			}
+			return l;
 		},
 		/** @language chinese
 		 * 获取显示对象的高度，以像素为单位。
@@ -1581,3 +1601,106 @@ var LTextField = (function () {
 	}
 	return LTextField;
 })();
+/** @language chinese
+ * LTextField对象获得焦点后调度。
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language english
+ * Dispatched after a LTextField object gains focus.
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language japanese
+ * LTextFieldオブジェクトがフォーカスを取得した後に送出されます。
+ * <p><a href="LFocusEvent.html#property_FOCUS_IN">LFocusEvent.FOCUS_IN</a></p>
+ * @event LFocusEvent.FOCUS_IN
+ */
+/** @language chinese
+ * LTextField对象失去焦点后调度。
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language english
+ * Dispatched after a LTextField object loses focus.
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language japanese
+ * LTextFieldオブジェクトがフォーカスを失った後に送出されます。
+ * <p><a href="LFocusEvent.html#property_FOCUS_OUT">LFocusEvent.FOCUS_OUT</a></p>
+ * @event LFocusEvent.FOCUS_OUT
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_DOWN
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_UP
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_MOVE
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OUT
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.MOUSE_OVER
+ */
+/** @language chinese
+ * 不可用。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language english
+ * Disabled.
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+/** @language japanese
+ * 利用不可。
+ * @event LMouseEvent.DOUBLE_CLICK
+ */
+

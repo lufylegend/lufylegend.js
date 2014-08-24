@@ -46,8 +46,8 @@ var FPS = (function () {
 		s.fpsCount++;
 		var t = (new Date()).getTime();
 		if(t - s.fpsTime < 1000)return;
+		s.fps.text = Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
 		s.fpsTime = t;
-		s.fps.text = s.fpsCount;
 		s.fpsCount = 0;
 		s.graphics.clear();
 		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");

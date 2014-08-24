@@ -11,15 +11,56 @@
 			</div>
 <script type="text/javascript">
 init(1000/60,"legend",800,600,main);
+var imgData = [
+	{name:"combobox_back",path:"combobox_back.png"}
+	,{name:"combobox_up",path:"combobox_up.png"}
+	,{name:"combobox_over",path:"combobox_over.png"}
+		];
+var datalist;
 function main(){
-	var com = new LComboBox(20);
+	LLoadManage.load(imgData,null,gameInit);
+}
+function gameInit(result){
+	datalist = result;
+	var com = new LComboBox();
 	com.x = 50;
-	com.y= 50;
-	com.setChild({label:"测试一",value:"aaa"});
-	com.setChild({label:"测试二",value:"bbb"});
-	com.setChild({label:"测试三",value:"ccc"});
-	com.setChild({label:"测试四",value:"ddd"});
+	com.y = 50;
+	com.setChild({label:"测试一",value:"data1"});
+	com.setChild({label:"测试二",value:"data2"});
+	com.setChild({label:"测试三",value:"data3"});
+	com.setChild({label:"测试四",value:"data4"});
+	com.setChild({label:"测试五",value:"data5"});
+	com.setChild({label:"测试六",value:"data6"});
+	com.setChild({label:"测试七",value:"data7"});
+	com.setChild({label:"测试八",value:"data8"});
+	com.setChild({label:"测试九",value:"data9"});
+	com.setChild({label:"测试十",value:"data10"});
+	com.setChild({label:"测试十一",value:"data11"});
+	com.setChild({label:"测试十二",value:"data12"});
+	com.setChild({label:"测试十三",value:"data13"});
 	addChild(com);
+	
+	var panel = new LPanel(new LBitmapData(datalist["combobox_back"]),150,20,40,50,8,12);
+	var up = new LBitmap(new LBitmapData(datalist["combobox_up"]));
+	var over = new LBitmap(new LBitmapData(datalist["combobox_over"]));
+	com = new LComboBox(15,"#000000","Arial",panel,up,over);
+	com.x = 50;
+	com.y = 100;
+	com.setChild({label:"测试一",value:"data1"});
+	com.setChild({label:"测试二",value:"data2"});
+	com.setChild({label:"测试三",value:"data3"});
+	com.setChild({label:"测试四",value:"data4"});
+	com.setChild({label:"测试五",value:"data5"});
+	com.setChild({label:"测试六",value:"data6"});
+	com.setChild({label:"测试七",value:"data7"});
+	com.setChild({label:"测试八",value:"data8"});
+	com.setChild({label:"测试九",value:"data9"});
+	com.setChild({label:"测试十",value:"data10"});
+	com.setChild({label:"测试十一",value:"data11"});
+	com.setChild({label:"测试十二",value:"data12"});
+	com.setChild({label:"测试十三",value:"data13"});
+	addChild(com);
+	com.setValue("data5");
 }
 </script>
 	</body>

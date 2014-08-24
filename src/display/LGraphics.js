@@ -905,7 +905,7 @@ var LGraphics = (function () {
 		},
 		/** @language chinese
 		 * 删除所有矢量形状。
-		 * @method rect
+		 * @method clear
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
