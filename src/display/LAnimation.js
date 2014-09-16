@@ -251,15 +251,18 @@ var LAnimation = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimation/setAction.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		setAction : function (rowIndex, colIndex, mode, isMirror){
-			var s = this;
+			var s = this, changed = false;
 			if (rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
 				s.rowIndex = rowIndex;
+				changed = true;
 			}
 			if (colIndex != null && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length) {
 				s.colIndex = colIndex;
+				changed = true;
 			}
 			if (mode != null) {
 				s.mode = mode;
+				changed = true;
 			}
 			if (isMirror != null) {
 				s.isMirror = isMirror;
@@ -270,6 +273,10 @@ var LAnimation = (function () {
 					s.bitmap.x = 0;
 					s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
 				}
+				changed = true;
+			}
+			if (changed) {
+				s._ll_stepIndex = 0;
 			}
 		},
 		/** @language chinese
@@ -445,27 +452,29 @@ var LAnimation = (function () {
 			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
 			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
 				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
-			}
-			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
-				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
-				s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
+				stepFrame = 0;
 			}
-			if (typeof arr.sx != UNDEFINED) {
-				s.bitmap.x = arr.sx;
-			}
-			if (typeof arr.sy != UNDEFINED) {
-				s.bitmap.y = arr.sy;
-			}
-			if (typeof arr.script == "function") {
-				arr.script(s, arr.params);
-			}
-			if (stepFrame) {
-				if (s._ll_stepIndex++ < stepFrame) {
-					return;
+			if (s._ll_stepIndex == 0) {
+				if (typeof arr.script == "function") {
+					arr.script(s, arr.params);
 				}
-				s._ll_stepIndex = 0;
+				if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
+					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
+				} else {
+					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
+				}
+				if (typeof arr.sx != UNDEFINED) {
+					s.bitmap.x = arr.sx;
+				}
+				if (typeof arr.sy != UNDEFINED) {
+					s.bitmap.y = arr.sy;
+				}
 			}
+			if (s._ll_stepIndex++ < stepFrame) {
+				return;
+			}
+			s._ll_stepIndex = 0;
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;

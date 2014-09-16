@@ -309,6 +309,9 @@ var LAnimationTimeline = (function () {
 		},
 		_ll_onframe : function (event) {
 			var self = event.target;
+			if (self._ll_stop) {
+				return;
+			}
 			if (self._speedIndex++ < self.speed) {
 				return;
 			}
@@ -433,7 +436,7 @@ var LAnimationTimeline = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		play : function () {
-			this.mode = this.saveMode;
+			this._ll_stop = false;
 		},
 		/** @language chinese
 		 * 停止播放 LAnimationTimeline 动画。
@@ -493,8 +496,7 @@ var LAnimationTimeline = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		stop : function () {
-			this.saveMode = this.mode;
-			this.mode = 0;
+			this._ll_stop = true;
 		},
 		/** @language chinese
 		 * 从指定标签开始播放 LAnimationTimeline 动画。

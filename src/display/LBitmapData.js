@@ -1025,9 +1025,9 @@ var LBitmapData = (function () {
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	
@@ -1053,9 +1053,9 @@ var LBitmapData = (function () {
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	
@@ -1080,9 +1080,9 @@ var LBitmapData = (function () {
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	

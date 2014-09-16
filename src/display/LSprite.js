@@ -765,7 +765,9 @@ var LSprite = (function () {
 							i = s.childList[k].mouseEvent(e, type, mc);
 							if (i) {
 								e.target = s.childList[k];
-								break;
+								if (type != LMouseEvent.MOUSE_MOVE) {
+									break;
+								}
 							}
 						}
 					}

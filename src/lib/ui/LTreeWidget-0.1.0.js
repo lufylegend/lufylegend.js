@@ -6,7 +6,7 @@
  * @constructor
  * @extends LSprite
  * @param {Array} list 列表，列表的具体格式请看下面的使用举例。
- * @param {Object} 树形组件样式。包含textColor，textSize，textWeight，textFont，branchIndent（节点间的间隔），branchButtonColor（展开/关闭节点的按钮的颜色）
+ * @param {Object} style 树形组件样式。包含textColor，textSize，textWeight，textFont，branchIndent（节点间的间隔），branchButtonColor（展开/关闭节点的按钮的颜色）
  * @since 0.1.0
  * @examplelink <p><a href="../../../api/ui/LTreeWidget.html" target="_blank">测试链接</a></p>
  * @public
