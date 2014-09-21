@@ -931,21 +931,21 @@ var LTextField = (function () {
 			s.texttype = type;
 		},
 		ismouseon : function (e, cood) {
-			var s = this, ox, oy;
-			if (e==null || e == UNDEFINED) {
+			var s = this;
+			if (!e) {
 				return false;
 			}
 			if (!s.visible) {
 				return false;
 			}
-			if (cood == null) {
+			if (!cood) {
 				cood = {x : 0, y : 0, scaleX : 1, scaleY : 1};
 			}
 			if (s.mask) {
 				if (!s.mask.parent) {
 					s.mask.parent = s.parent;
 				}
-				if (!s.mask.ismouseon(e, cd)) {
+				if (!s.mask.ismouseon(e, cood)) {
 					return false;
 				}
 			}

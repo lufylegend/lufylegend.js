@@ -249,7 +249,7 @@ var LBitmap = (function () {
 		},
 		ismouseon : function (e, cood) {
 			var s = this;
-			if (e == null || e == UNDEFINED) {
+			if (!e) {
 				return false;
 			}
 			if (!s.visible || !s.bitmapData) {
@@ -259,7 +259,7 @@ var LBitmap = (function () {
 				if (!s.mask.parent) {
 					s.mask.parent = s.parent;
 				}
-				if (!s.mask.ismouseon(e, cd)) {
+				if (!s.mask.ismouseon(e, cood)) {
 					return false;
 				}
 			}

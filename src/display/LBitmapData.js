@@ -1025,9 +1025,9 @@ var LBitmapData = (function () {
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	
@@ -1045,17 +1045,17 @@ var LBitmapData = (function () {
 		 * <p>1，The data type of the LBitmapData is Canvas object。</p>
 		 * <p>2，Operate only once or a small number，Do not using setPixel, setPixels, getPixel, getPixels at the same time。</p>
 		 * <p>You can use putPixels instead setPixels, but fast，and do not need to lock and unlock.</p>
-		 * @method setPixels
+		 * @method putPixels
 		 * @param {LRectangle} rect Specifies the rectangular region of the BitmapData object.
 		 * @param {Array} data the values to be used in the rectangular region.(ImageData object)
-		 * @since 1.5.1
+		 * @since 1.9.1
 		 * @public
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	
@@ -1072,17 +1072,17 @@ var LBitmapData = (function () {
 		 * <p>1，LBitmapDataのデーターの保存形式はCanvas オブジェクトである。</p>
 		 * <p>2，フレームごと一回か数回だけ使う，そしてsetPixel,setPixels,getPixel,getPixelsなどと同時に使わない。</p>
 		 * <p>上記の二つの条件を満足したら、setPixelsの代わりにputPixelsを使って、速く処理することができます，そしてlockとunlockは要りません。</p>
-		 * @method setPixels
+		 * @method putPixels
 		 * @param {LRectangle} rect LBitmapData オブジェクトの矩形領域を指定します。
 		 * @param {Array} data 矩形領域で使用されるピクセル値です。(ImageData オブジェクト)
-		 * @since 1.5.1
+		 * @since 1.9.1
 		 * @public
 		 * @example
 		 * 	var bitmapData = new LBitmapData(event.currentTarget);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
-		 *  bitmapData.lock();
+		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
-		 *  bitmapData.unlock();
+		 * 	bitmapData.unlock();
 		 * 	
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
 		 * 	
