@@ -2359,17 +2359,16 @@ var LMedia = (function () {
 			}, false);
 		},
 		_onended : function () {
-			var s = this;
+			var s = this, i, l;
 			if (s.data.ended) {
 				s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			}
 			if (++s.loopIndex < s.loopLength) {
-				s.data.currentTime = s.currentStart;
-				if (s.timeout) {
-					clearTimeout(s.timeout);
-					s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
-				}
-				s.data.play();
+				i = s.loopIndex;
+				l = s.loopLength;
+				s.close();
+				s.play(s.currentStart, s.loopLength, s.currentTimeTo);
+				s.loopIndex = i;
 			} else {
 				s.close();
 			}
@@ -2392,9 +2391,6 @@ var LMedia = (function () {
 				if (s.data.canPlayType(s._type + "/" + d)) {
 					s.data.src = a[k];
 					s.onload();
-					s.data.addEventListener("ended", function () {
-						s._onended();
-					}, false);
 					s.data.load();
 					return;
 				}
@@ -2423,18 +2419,21 @@ var LMedia = (function () {
 			if (typeof c == UNDEFINED) {
 				c = 0;
 			}
-			if (c > 0) {
-				s.data.currentTime = c;
-				s.currentStart = c;
-			}
+			s.data.currentTime = c;
+			s.currentStart = c;
 			if (typeof to !== UNDEFINED) {
-				s.currentTimeTo = to > s.length ? s.length : to;
-				if (s.timeout) {
-					clearTimeout(s.timeout);
-					delete s.timeout;
-				}
-				s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.data.currentTime) * 1000);
+				to = to > s.length ? s.length : to;
+			}else{
+				to = s.length;
 			}
+			s.currentTimeTo = to;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(function(){
+				s._onended();
+			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.loopLength = l;
