@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.1
+* @version 1.9.2
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -565,22 +565,16 @@ var LGlobal = ( function () {
 			LGlobal.inputTextField._ll_getValue();
 		}
 		var canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i, eveIndex;
+		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i;
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
-			eveIndex = 0;
+			LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
-			eveIndex = event.touches.length - 1;
+			for (var i = 0,l = event.touches.length; i < l; i++) {
+				if(!LMultitouch.touchs["touch" + event.touches[i].identifier]){
+					LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
+				}
+			}
 		}
-		eve = {offsetX : (event.touches[eveIndex].pageX - canvasX),
-		offsetY : (event.touches[eveIndex].pageY - canvasY),
-		touchPointID : event.touches[eveIndex].identifier};
-		eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
-		eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
-		mouseX = LGlobal.offsetX = eve.offsetX;
-		mouseY = LGlobal.offsetY = eve.offsetY;
-		LMultitouch.touchs["touch" + eve.touchPointID] = eve;
-		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_DOWN);
-		LGlobal.buttonStatusEvent = eve;
 		var date = new Date();
 		var clickTime = date.getTime();
 		LGlobal.ll_clicks = (clickTime <= (LGlobal.ll_prev_clickTime + 500)) ? (LGlobal.ll_clicks + 1) : 1;
@@ -594,6 +588,18 @@ var LGlobal = ( function () {
 			LGlobal.mouseJoint_start(eve);
 		}
 		LGlobal.touchHandler(event);
+	};
+	LGlobal.ll_touchStartEvent = function (event,eveIndex,canvasX,canvasY) {
+		var eve = {offsetX : (event.touches[eveIndex].pageX - canvasX),
+		offsetY : (event.touches[eveIndex].pageY - canvasY),
+		touchPointID : event.touches[eveIndex].identifier};
+		eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
+		eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
+		mouseX = LGlobal.offsetX = eve.offsetX;
+		mouseY = LGlobal.offsetY = eve.offsetY;
+		LMultitouch.touchs["touch" + eve.touchPointID] = eve;
+		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_DOWN);
+		LGlobal.buttonStatusEvent = eve;
 	};
 	LGlobal.ll_touchEnd = function (event) {
 		var e, eve, k, i, l, h;
@@ -610,7 +616,7 @@ var LGlobal = ( function () {
 				if (!h) {
 					eve = e;
 					delete LMultitouch.touchs[k];
-					break;
+					LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 				}
 			}
 		}
@@ -1134,6 +1140,22 @@ if (!Array.isArray){
 		return Object.prototype.toString.apply(value) == '[object Array]';
 	};
 }
+if (!Function.prototype.bind) {
+	Function.prototype.bind = function (oThis) {
+		if (typeof this !== "function") {
+			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+		}
+		var aArgs = Array.prototype.slice.call(arguments, 1), 
+			fToBind = this, 
+			fNOP = function () {},
+			fBound = function () {
+			return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+		fNOP.prototype = this.prototype;
+		fBound.prototype = new fNOP();
+		return fBound;
+	};
+}
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -1229,23 +1251,23 @@ var LObject = (function () {
 			if (!f_n || !args) {
 				return;
 			}
-			var s = this, init = false, r;
-			if (typeof s.__ll__parent_call == "undefined") {
+			var s = this, init = false, r, k = "__ll__parent_call" + f_n;
+			if (typeof s[k] == "undefined") {
 				init = true;
-				s.__ll__parent_call = 0;
+				s[k] = 0;
 			} else {
-				s.__ll__parent_call++;
+				s[k]++;
 			}
-			if (s.__ll__parent_call >= s.__ll__parent__.length) {
+			if (s[k] >= s.__ll__parent__.length) {
 				return false;
 			}
-			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+			if (!s.__ll__parent__[s[k]][f_n]) {
 				r = s.callParent(f_n, args);
 			} else {
-				r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
+				r = s.__ll__parent__[s[k]][f_n].apply(s, args);
 			}
 			if (init) {
-				delete s.__ll__parent_call;
+				delete s[k];
 			}
 			return r;
 		},
@@ -3570,7 +3592,9 @@ var LSprite = (function () {
 							i = s.childList[k].mouseEvent(e, type, mc);
 							if (i) {
 								e.target = s.childList[k];
-								break;
+								if (type != LMouseEvent.MOUSE_MOVE) {
+									break;
+								}
 							}
 						}
 					}
@@ -4083,21 +4107,21 @@ var LTextField = (function () {
 			s.texttype = type;
 		},
 		ismouseon : function (e, cood) {
-			var s = this, ox, oy;
-			if (e==null || e == UNDEFINED) {
+			var s = this;
+			if (!e) {
 				return false;
 			}
 			if (!s.visible) {
 				return false;
 			}
-			if (cood == null) {
+			if (!cood) {
 				cood = {x : 0, y : 0, scaleX : 1, scaleY : 1};
 			}
 			if (s.mask) {
 				if (!s.mask.parent) {
 					s.mask.parent = s.parent;
 				}
-				if (!s.mask.ismouseon(e, cd)) {
+				if (!s.mask.ismouseon(e, cood)) {
 					return false;
 				}
 			}
@@ -4353,7 +4377,7 @@ var LBitmap = (function () {
 		},
 		ismouseon : function (e, cood) {
 			var s = this;
-			if (e == null || e == UNDEFINED) {
+			if (!e) {
 				return false;
 			}
 			if (!s.visible || !s.bitmapData) {
@@ -4363,7 +4387,7 @@ var LBitmap = (function () {
 				if (!s.mask.parent) {
 					s.mask.parent = s.parent;
 				}
-				if (!s.mask.ismouseon(e, cd)) {
+				if (!s.mask.ismouseon(e, cood)) {
 					return false;
 				}
 			}
@@ -4509,8 +4533,7 @@ var LBitmapData = (function () {
 		},
 		clone : function () {
 			var s = this;
-			var r = new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
-			return r;
+			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
 		},
 		_ready : function () {
 			var s = this;
@@ -4721,15 +4744,18 @@ var LAnimation = (function () {
 	}
 	var p = {
 		setAction : function (rowIndex, colIndex, mode, isMirror){
-			var s = this;
+			var s = this, changed = false;
 			if (rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
 				s.rowIndex = rowIndex;
+				changed = true;
 			}
 			if (colIndex != null && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length) {
 				s.colIndex = colIndex;
+				changed = true;
 			}
 			if (mode != null) {
 				s.mode = mode;
+				changed = true;
 			}
 			if (isMirror != null) {
 				s.isMirror = isMirror;
@@ -4740,6 +4766,10 @@ var LAnimation = (function () {
 					s.bitmap.x = 0;
 					s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
 				}
+				changed = true;
+			}
+			if (changed) {
+				s._ll_stepIndex = 0;
 			}
 		},
 		getAction : function () {
@@ -4750,27 +4780,29 @@ var LAnimation = (function () {
 			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
 			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
 				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
-			}
-			if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
-				s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 			} else {
-				s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
+				stepFrame = 0;
 			}
-			if (typeof arr.sx != UNDEFINED) {
-				s.bitmap.x = arr.sx;
-			}
-			if (typeof arr.sy != UNDEFINED) {
-				s.bitmap.y = arr.sy;
-			}
-			if (typeof arr.script == "function") {
-				arr.script(s, arr.params);
-			}
-			if (stepFrame) {
-				if (s._ll_stepIndex++ < stepFrame) {
-					return;
+			if (s._ll_stepIndex == 0) {
+				if (typeof arr.script == "function") {
+					arr.script(s, arr.params);
 				}
-				s._ll_stepIndex = 0;
+				if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
+					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
+				} else {
+					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
+				}
+				if (typeof arr.sx != UNDEFINED) {
+					s.bitmap.x = arr.sx;
+				}
+				if (typeof arr.sy != UNDEFINED) {
+					s.bitmap.y = arr.sy;
+				}
 			}
+			if (s._ll_stepIndex++ < stepFrame) {
+				return;
+			}
+			s._ll_stepIndex = 0;
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
@@ -4823,6 +4855,9 @@ var LAnimationTimeline = (function () {
 		},
 		_ll_onframe : function (event) {
 			var self = event.target;
+			if (self._ll_stop) {
+				return;
+			}
 			if (self._speedIndex++ < self.speed) {
 				return;
 			}
@@ -4833,11 +4868,10 @@ var LAnimationTimeline = (function () {
 			this.ll_labelList[name] = {rowIndex : _rowIndex, colIndex : _colIndex, mode : _mode, isMirror : _isMirror};
 		},
 		play : function () {
-			this.mode = this.saveMode;
+			this._ll_stop = false;
 		},
 		stop : function () {
-			this.saveMode = this.mode;
-			this.mode = 0;
+			this._ll_stop = true;
 		},
 		gotoAndPlay : function (name) {
 			var l = this.ll_labelList[name];
