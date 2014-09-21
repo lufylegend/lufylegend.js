@@ -159,23 +159,23 @@ var LObject = (function () {
 			if (!f_n || !args) {
 				return;
 			}
-			var s = this, init = false, r;
-			if (typeof s.__ll__parent_call == "undefined") {
+			var s = this, init = false, r, k = "__ll__parent_call" + f_n;
+			if (typeof s[k] == "undefined") {
 				init = true;
-				s.__ll__parent_call = 0;
+				s[k] = 0;
 			} else {
-				s.__ll__parent_call++;
+				s[k]++;
 			}
-			if (s.__ll__parent_call >= s.__ll__parent__.length) {
+			if (s[k] >= s.__ll__parent__.length) {
 				return false;
 			}
-			if (!s.__ll__parent__[s.__ll__parent_call][f_n]) {
+			if (!s.__ll__parent__[s[k]][f_n]) {
 				r = s.callParent(f_n, args);
 			} else {
-				r = s.__ll__parent__[s.__ll__parent_call][f_n].apply(s, args);
+				r = s.__ll__parent__[s[k]][f_n].apply(s, args);
 			}
 			if (init) {
-				delete s.__ll__parent_call;
+				delete s[k];
 			}
 			return r;
 		},
