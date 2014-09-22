@@ -559,9 +559,9 @@ var LAnimationTimeline = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/gotoAndPlay.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		gotoAndPlay : function (name) {
-			var l = this.ll_labelList[name];
-			this.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			this.onframe();
+			var s = this, l = s.ll_labelList[name];
+			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.play();
 		},
 		/** @language chinese
 		 * 将播放头移到影片剪辑的指定标签并停在那里。
@@ -626,7 +626,6 @@ var LAnimationTimeline = (function () {
 		gotoAndStop : function (name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			s.onframe();
 			s.stop();
 		},
 		/** @language chinese
