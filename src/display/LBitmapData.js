@@ -788,7 +788,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			var d = s._data, i = s._canvas.width * 4 * (s.y + y) + (s.x + x) * 4;
+			var d = s._data, i = s.width * 4 * (s.y + y) + (s.x + x) * 4;
 			if (typeof data == "object") {
 				d.data[i + 0] = data[0];
 				d.data[i + 1] = data[1];
