@@ -60,7 +60,29 @@ var loadData = [
 {type : "js",path : "js/GameOver.js"}
 ];
 function main() {
-	if(LGlobal.canTouch){
+	//预读取音频
+	var loadsound = true;
+	var protocol = location.protocol;
+	if (protocol == "http:" || protocol == "https:") {
+		if (LGlobal.ios && !LSound.webAudioEnabled){
+			//如果IOS环境，并且不支持WebAudio，则无法预先读取
+			loadsound = false;
+		}
+	} else if (LGlobal.mobile) {
+		//如果是移动浏览器本地访问，则无法预先读取
+		loadsound = false;
+	}
+	if(loadsound){
+		loadData.push({name : "sound_background",path : "sound/background.mp3"});
+		if(LSound.webAudioEnabled || LGlobal.os == OS_PC){
+			//浏览器支持WebAudio，或者环境为PC，则预先读取所有音频
+			loadData.push({name : "sound_fly",path : "sound/fly.mp3"});
+			loadData.push({name : "sound_gameover",path : "sound/gameover.mp3"});
+			loadData.push({name : "sound_get",path : "sound/get.mp3"});
+			loadData.push({name : "sound_jump",path : "sound/jump.mp3"});
+		}
+	}
+	if(LGlobal.mobile){
 		LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
 		LSystem.screen(LStage.FULL_SCREEN);
 	}

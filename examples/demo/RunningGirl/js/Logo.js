@@ -43,6 +43,7 @@ Logo.prototype.start = function(event){
 	}
 	
 	MySoundPlayer.loadSound();
+	MySoundPlayer.playSound("background");
 	gameStart();
 };
 Logo.prototype.social = function(){
