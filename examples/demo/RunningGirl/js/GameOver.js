@@ -102,7 +102,8 @@ GameOver.prototype.updateDistance = function(event){
 GameOver.prototype.getRank = function(){
 	var self = this;
 	self.rankingLayer.removeAllChild();
-	self.rankShow("[]");
+	var str = '[{"index":0,"name":"test1","value01":"100","value02":"0","value03":"0"},{"index":1,"name":"test2","value01":"90","value02":"0","value03":"0"},{"index":2,"name":"test3","value01":"80","value02":"0","value03":"0"},{"index":3,"name":"test4","value01":"70","value02":"0","value03":"0"},{"index":4,"name":"test5","value01":"60","value02":"0","value03":"0"}] ';
+	self.rankShow(str);
 };
 GameOver.prototype.rankShow = function(data){
 	var self = this;
