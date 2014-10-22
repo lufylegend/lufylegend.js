@@ -30,12 +30,22 @@ var LTweenLite = (function () {
 	var p = {
 		init : function($target, $duration, $vars) {
 			var s = this, k = null;
+			if (typeof $vars["tweenTimeline"] == UNDEFINED) {
+				$vars["tweenTimeline"] = LTweenLite.TYPE_FRAME;
+			}
 			s.target = $target;
 			s.duration = $duration || 0.001;
-			s.duration *= 1000;
 			s.vars = $vars;
-			s.currentTime = 0;
 			s.delay = s.vars.delay || 0;
+			if(s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER){
+				s.currentTime = (new Date()).getTime() / 1000;
+				s.initTime = s.currentTime;
+				s.startTime = s.initTime + s.delay;
+			}else{
+				s.currentTime = 0;
+				s.duration *= 1000;
+				s.currentTime -= s.delay * 1000;
+			}
 			s.combinedTimeScale = s.vars.timeScale || 1;
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
@@ -62,7 +72,6 @@ var LTweenLite = (function () {
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
 			}
-			s.currentTime -= s.delay * 1000;
 		},
 		pause : function () {
 			this.stop = true;
@@ -72,22 +81,42 @@ var LTweenLite = (function () {
 		},
 		tween : function () {
 			var s = this, tweentype;
-			if (s.stop) {
-				return;
-			}
-			s.currentTime += LGlobal.speed;
-			if (s.currentTime < 0) {
-				return;
+			var type_timer = (s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER);
+			if (type_timer) {
+				var time = (new Date()).getTime() / 1000, etime = time - s.startTime;
+				if (etime < 0) {
+					return;
+				}
+			} else {
+				if (s.stop) {
+					return;
+				}
+				s.currentTime += LGlobal.speed;
+				if (s.currentTime < 0) {
+					return;
+				}
 			}
 			for (tweentype in s.varsto) {
-				var v = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
-				s.target[tweentype] = v;
+				if (tweentype == "tweenTimeline") {
+					continue;
+				}
+				if (type_timer) {
+					s.target[tweentype] = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				} else {
+					s.target[tweentype] = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				}
 			}
 			if (s.onStart) {
 				s.onStart(s.target);
 				delete s.onStart;
 			}
-			if (s.currentTime >= s.duration) {
+			var e;
+			if (type_timer) {
+				e = (etime >= s.duration);
+			} else {
+				e = (s.currentTime >= s.duration);
+			}
+			if (e) {
 				for (tweentype in s.varsto) {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
@@ -136,6 +165,8 @@ var LTweenLite = (function () {
 		LExtends (this, LObject, []);
 		this.type = "LTweenLite";
 	}
+	LTweenLite.TYPE_FRAME = "type_frame";
+	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
 		tweens : [],
 		ll_show : null,
@@ -504,6 +535,8 @@ var LTweenLite = (function () {
 		LTweenLite.prototype[k] = p[k];
 	}
 	var tween = new LTweenLite();
+	tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
+	tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;
 	LGlobal.childList.push(tween);
 	return tween;
 })();
