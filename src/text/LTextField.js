@@ -719,23 +719,25 @@ var LTextField = (function () {
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
 				for (i = 0, l = s.text.length; i < l; i++) {
-					j = c.measureText(s.text.substr(k, i - k)).width;
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
-					if ((s.wordWrap && j > s.width) || enter) {
+					if (enter) {
 						j = 0;
-						k = i;
+						k = i + 1;
 						m++;
-						if (enter) {
-							k++;
-						}
 					}
 					if (!enter) {
 						if (s.stroke) {
-							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
 						}
-						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight);
 					}
 					s.numLines = m;
+					j = c.measureText(s.text.substr(k, i + 1 - k)).width;
+					if (s.wordWrap && j + c.measureText(lbl.substr(i, 1)).width > s.width) {
+						j = 0;
+						k = i + 1;
+						m++;
+					}
 				}
 				s.height = (m + 1) * s.wordHeight;
 			} else {
@@ -1000,7 +1002,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		clone : function () {
-			var s = this, a = new LTextField();
+			var s = this, a = new s.constructor();
 			a.copyProperty(s);
 			a.texttype = null;
 			if (s.texttype ==  LTextFieldType.INPUT) {
