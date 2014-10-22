@@ -180,7 +180,7 @@ var LObject = (function () {
 			return r;
 		},
 		toString : function () {
-			return "[object " + this.type + "]";
+			return "[object " + this.constructor.name + "]";
 		}
 	};
 	return LObject;
