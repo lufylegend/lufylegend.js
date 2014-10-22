@@ -26,8 +26,9 @@
 					backLayer.addChild(player);
 					player.gotoAndPlay("right");
 				}
-				function scriptTest(param1,param2){
-					trace("scriptTest Run : " + param1 + "," + param2);
+				function scriptTest(self,params){
+					trace("scriptTest self : " + self);
+					trace("scriptTest params : " + params+ "," );
 				}
 			</script>
 			
