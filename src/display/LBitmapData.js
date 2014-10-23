@@ -1218,6 +1218,31 @@ var LBitmapData = (function () {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
+		},
+		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+			var s = this, left, top, width, height, bd = sourceBitmapData;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			left = bd.x;
+			top = bd.y;
+			width = bd.width;
+			height = bd.height;
+			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image,
+				bd.x,
+				bd.y,
+				bd.width,
+				bd.height,
+				destPoint.x,
+				destPoint.y,
+				bd.width,
+				bd.height
+			);
+			sourceBitmapData.x = left;
+			sourceBitmapData.y = top;
+			sourceBitmapData.width = width;
+			sourceBitmapData.height = height;
 		}
 	};
 	for (var k in p) {
