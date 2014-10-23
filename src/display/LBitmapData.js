@@ -1204,7 +1204,7 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		draw : function (source) {
+		draw : function (source, matrix, colorTransform) {
 			var s = this;
 			if (s.dataType == LBitmapData.DATA_CANVAS) {
 				s._context.clearRect(0, 0, s.width, s.height);
@@ -1219,6 +1219,117 @@ var LBitmapData = (function () {
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
 		},
+		colorTransform : function (rect, colorTransform) {
+			var s = this, x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
+			if (!s._locked) {
+				s._ready();
+			}
+			var img = s._context.getImageData(x, y, w, h), data = img.data;
+			for (var i = 0, l = data.length; i < l; i += 4) {
+				var r = i, g = i + 1, b = i + 2, a = i + 3;
+				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
+				data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
+				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
+				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
+			}
+			s._context.putImageData(img, x, y);
+			if (!s._locked) {
+				s._update();
+			}
+		},
+		/** @language chinese
+		 * 此方法在目标 LBitmapData 对象的目标点将源图像的矩形区域复制为同样大小的矩形区域。
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData 要从中复制像素的输入位图图像。源图像可以是另一个 LBitmapData 实例，也可以指当前 LBitmapData 实例。
+		 * @param {LRectangle} sourceRect 定义要用作输入的源图像区域的矩形。
+		 * @param {LPoint} destPoint 目标点，它表示将在其中放置新像素的矩形区域的左上角。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * This method copies a rectangular area of a source image to a rectangular area of the same size at the destination point of the destination LBitmapData object.
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData The input bitmap image from which to copy pixels. The source image can be a different LBitmapData instance, or it can refer to the current LBitmapData instance.
+		 * @param {LRectangle} sourceRect A rectangle that defines the area of the source image to use as input.
+		 * @param {LPoint} destPoint The destination point that represents the upper-left corner of the rectangular area where the new pixels are placed.
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * source このメソッドは、ソースイメージの矩形領域を、ターゲット LBitmapData オブジェクトのターゲットポイントにある同じサイズの矩形領域にコピーします。
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData ピクセルのコピー元となる入力ビットマップイメージです。ソースイメージは、別の LBitmapData インスタンスにすることも、現在の LBitmapData インスタンスを参照することもできます。
+		 * @param {LRectangle} sourceRect 入力として使用するソースイメージの領域を定義する矩形です。
+		 * @param {LPoint} destPoint ターゲットポイントです。新しいピクセルが配置される矩形領域の左上隅を表します。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
 		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
 			var s = this, left, top, width, height, bd = sourceBitmapData;
 			if (s.dataType != LBitmapData.DATA_CANVAS) {
@@ -1239,10 +1350,10 @@ var LBitmapData = (function () {
 				bd.width,
 				bd.height
 			);
-			sourceBitmapData.x = left;
-			sourceBitmapData.y = top;
-			sourceBitmapData.width = width;
-			sourceBitmapData.height = height;
+			bd.x = left;
+			bd.y = top;
+			bd.width = width;
+			bd.height = height;
 		}
 	};
 	for (var k in p) {
