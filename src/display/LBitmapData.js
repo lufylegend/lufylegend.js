@@ -528,6 +528,7 @@ var LBitmapData = (function () {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
+			s._data = null;
 		},
 		/** @language chinese
 		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
@@ -1204,15 +1205,40 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		draw : function (source, matrix, colorTransform) {
-			var s = this;
-			if (s.dataType == LBitmapData.DATA_CANVAS) {
-				s._context.clearRect(0, 0, s.width, s.height);
-				s._context.drawImage(source.getDataCanvas(), 0, 0);
-			} else if (s.dataType == LBitmapData.DATA_IMAGE) {
-				s.image.src = source.getDataURL();
+		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+			var s = this, se = source.getDataCanvas(), save = false;
+			s._dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			if (matrix) {
+				s._context.save();
+				save = true;
+				s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
 			}
+			if (colorTransform) {
+				var bmd = new LBitmapData(se, 0, 0, se.width, se.height, LBitmapData.DATA_CANVAS);
+				bmd.colorTransform(new LRectangle(0, 0, sw, sh), colorTransform);
+				se = bmd.getDataCanvas();
+			}
+			if (blendMode) {
+				if (!save) {
+					s._context.save();
+				}
+				save = true;
+				s._context.globalCompositeOperation = blendMode;
+			}
+			s._context.drawImage(se, 0, 0);
+			if (save) {
+				s._context.restore();
+			}
+			s._setDataType(s._dataType);
 			s.resize();
+		},
+		getDataCanvas : function () {
+			var s = this;
+			s._dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			s._setDataType(s._dataType);
+			return s._canvas;
 		},
 		resize : function () {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
@@ -1224,7 +1250,7 @@ var LBitmapData = (function () {
 			if (!s._locked) {
 				s._ready();
 			}
-			var img = s._context.getImageData(x, y, w, h), data = img.data;
+			var data = s.getPixels(rect);
 			for (var i = 0, l = data.length; i < l; i += 4) {
 				var r = i, g = i + 1, b = i + 2, a = i + 3;
 				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
@@ -1232,7 +1258,7 @@ var LBitmapData = (function () {
 				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
 				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
 			}
-			s._context.putImageData(img, x, y);
+			s.setPixels(rect, data);
 			if (!s._locked) {
 				s._update();
 			}
