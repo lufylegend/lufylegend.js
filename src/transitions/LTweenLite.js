@@ -19,6 +19,7 @@
  * @since 1.4.0
  * @public
  */
+var LTweenLiteTimeline;
 var LTweenLite = (function () {
 	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
@@ -191,12 +192,14 @@ var LTweenLite = (function () {
 		/** @language chinese
 		 * ［静态方法］用于创建一个LTweenLiteChild实例动画，让某对象的某些属性缓动到指定的目标的值（从当前值）。
 		 * @method LTweenLite.to
+		 * @static
 		 * @param {Object} target 要缓动的对象(这里注意类型是Object,并不仅仅是LSprite,LBitmap).
 		 * @param {float} duration 持续的时间(单位是秒)
 		 * @param {Object} vars <p>一个Object,包含你想要缓动的所有属性，比如 onComplete, ease, etc。举例, 将一个 对象mc.x 缓动到 100 ，将 mc.y 缓动到 200 ，缓动结束后执行一个函数 myFunction, 这时候，你可以这么写: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
 		 * <p>除了使用对象的属性之外，你也可以使用一些特殊的值:</p>
 		 * <table>
 		 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+		 * <tr><td>tweenTimeline</td><td>float</td><td><p>动画播放的类型，默认值为LTweenLite.TYPE_FRAME。</p><p>LTweenLite.TYPE_FRAME:用桢来播放动画。</p><p>LTweenLite.TYPE_TIMER：用时间来播放动画。</p><p>为了测试两者的区别，接下来的demo在进行缓动时首先延迟2秒钟，使用LTweenLite.TYPE_FRAME播放是无间断，而使用LTweenLite.TYPE_TIMER播放则会直接跳到结束。<a href="../../../api/LTweenLite/to2.html" target="_blank">测试链接</a></p></td></tr>
 		 * <tr><td>delay</td><td>float</td><td>延时几秒后开始缓动，这在有先后顺序的缓动效果中很有用</td></tr>
 		 * <tr><td>ease</td><td>LEasing (or Function)</td><td>应用在variables上的缓动函数，比如LEasing.Quad.easeIn or LEasing.Cubic.easeOut。默认值是LEasing.None.easeIn.</td></tr>
 		 * <tr><td>onComplete</td><td>Function</td><td>在缓动效果结束时触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
@@ -234,6 +237,7 @@ var LTweenLite = (function () {
 		/** @language english
 		 * Static method for creating a LTweenLiteChild instance that animates to the specified destination values (from the current values).
 		 * @method LTweenLite.to
+		 * @static
 		 * @param {Object} target Target object (or array of objects) whose properties this tween affects.
 		 * @param {float} duration Duration in seconds (or frames if useFrames:true is set in the vars parameter).
 		 * @param {Object} vars <p>An object defining the end value for each property that should be tweened as well as any special properties like onComplete, ease, etc. For example, to tween mc.x to 100 and mc.y to 200 and then call myFunction, do this: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
@@ -277,6 +281,7 @@ var LTweenLite = (function () {
 		/** @language japanese
 		 * [静的]新しい LTweenLiteChild インスタンスを作成して，指定したオブジェクトのある属性を指定した値に変更する。
 		 * @method LTweenLite.to
+		 * @static
 		 * @param {Object} target トゥイーンするオブジェクト
 		 * @param {float} duration 時間
 		 * @param {Object} vars <p>パラメータ。 x,y,onComplete, easeなど. 例えば, オブジェクト mc.x を 100にトゥイーンする 、mc.y　を 200にトゥイーンする 、トゥイーンが終わったら myFunction関数を呼び出す, やり方は: TweenLite.to(mc, 1, {x:100, y:200, onComplete:myFunction});</p>
@@ -334,6 +339,7 @@ var LTweenLite = (function () {
 		/** @language chinese
 		 * ［静态方法］停止当前的缓动动画。
 		 * @method LTweenLite.remove
+		 * @static
 		 * @param {LTweenLiteChild} tween 当前正在进行缓动的对象.
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
@@ -364,6 +370,7 @@ var LTweenLite = (function () {
 		/** @language english
 		 * Static method to stop a tween affect.
 		 * @method LTweenLite.remove
+		 * @static
 		 * @param {LTweenLiteChild} tween a tween affect.
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
@@ -394,6 +401,7 @@ var LTweenLite = (function () {
 		/** @language japanese
 		 * [静的]トゥイーンをストップする。
 		 * @method LTweenLite.remove
+		 * @static
 		 * @param {LTweenLiteChild} tween トゥイーン中のオブジェクト.
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
@@ -436,6 +444,7 @@ var LTweenLite = (function () {
 		/** @language chinese
 		 * ［静态方法］停止所有正在进行的缓动动画。
 		 * @method LTweenLite.removeAll
+		 * @static
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	function main(){
@@ -472,6 +481,7 @@ var LTweenLite = (function () {
 		/** @language english
 		 * Static method to stop all the tween affects.
 		 * @method LTweenLite.removeAll
+		 * @static
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	var tween;
@@ -501,6 +511,7 @@ var LTweenLite = (function () {
 		/** @language japanese
 		 * [静的]全部のトゥイーンをストップする。
 		 * @method LTweenLite.removeAll
+		 * @static
 		 * @example
 		 * 	LInit(1000/50,"legend",800,450,main);
 		 * 	var tween;
@@ -534,6 +545,8 @@ var LTweenLite = (function () {
 	for (var k in p) {
 		LTweenLite.prototype[k] = p[k];
 	}
+	LTweenLiteTimeline = new LTweenLite();
+	LGlobal.childList.push(LTweenLiteTimeline);
 	var tween = new LTweenLite();
 	tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
 	tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;

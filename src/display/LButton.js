@@ -467,7 +467,7 @@ var LButton = (function () {
 				delete s._tweenOver;
 			};
 			if (s.staticMode) {
-				s.tween = LTweenLite.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
 			} else {
 				w = s.downState.getWidth();
 				h = s.downState.getHeight();
@@ -477,7 +477,7 @@ var LButton = (function () {
 				y = s.downState.y;
 				tx = x + (w - tw) * 0.5;
 				ty = y + (h - th) * 0.5;
-				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
 				.to(s.downState, 0.1, {x : x, y : y, scaleX : s._ll_down_sx, scaleY : s._ll_down_sy, ease : Quart.easeOut,onComplete : onComplete});
 			}
 		},

@@ -86,7 +86,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration;
+				s.length = s.data.duration - 0.1;
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -266,14 +266,13 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
-			if (typeof l == UNDEFINED) {
-				l = 1;
+			if (typeof c != UNDEFINED) {
+				s.data.currentTime = c;
+				s.currentStart = c;
 			}
-			if (typeof c == UNDEFINED) {
-				c = 0;
+			if (typeof l != UNDEFINED) {
+				s.loopLength = l;
 			}
-			s.data.currentTime = c;
-			s.currentStart = c;
 			if (typeof to !== UNDEFINED) {
 				s.currentTimeTo = to > s.length ? s.length : to;
 			} else {
@@ -288,7 +287,6 @@ var LMedia = (function () {
 			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
-			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
 		},

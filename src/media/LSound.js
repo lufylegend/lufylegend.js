@@ -88,31 +88,38 @@
  * @since 1.7.0
  * @public
  */
-	/** @language chinese
-	 * <p>当前浏览器是否支持Web Audio。</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/** @language english
-	 * <p>The browser supports the Web Audio.</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/** @language japanese
-	 * <p>現在のブラウザはWeb audioサポートされているかどうか。</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/*LSound.webAudioEnabled = false;*/
+/** @language chinese
+ * <p>当前浏览器是否支持Web Audio。</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/** @language english
+ * <p>The browser supports the Web Audio.</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/** @language japanese
+ * <p>現在のブラウザはWeb audioサポートされているかどうか。</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/*LSound.webAudioEnabled = false;*/
+/** @language chinese
+ * 播放结束事件，一个音频文件播放完之后调度。
+ * @event LEvent.SOUND_COMPLETE
+ * @since 1.0.0
+ * @public
+ */
+
 /** @language chinese
  * <p>此类创建和播放音频的 LSound 对象。</p>
  * <p>当浏览器支持Web Audio Api并且设置LGlobal.webAudio = true(默认值是true)的时候，LSound会自动继承LWebAudio对象。</p>
