@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.3
+* @version 1.9.4
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -1156,6 +1156,73 @@ if (!Function.prototype.bind) {
 		return fBound;
 	};
 }
+if (!Array.prototype.find) {
+	Array.prototype.find = function (predicate) {
+		if (this == null) {
+			throw new TypeError('Array.prototype.find called on null or undefined');
+		}
+		if (typeof predicate !== 'function') {
+			throw new TypeError('predicate must be a function');
+		}
+		var list = Object(this);
+		var length = list.length >>> 0;
+		var thisArg = arguments[1];
+		var value;
+		for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return value;
+			}
+		}
+		return undefined;
+	};
+}
+if (!Array.prototype.findIndex) {
+	Array.prototype.findIndex = function (predicate) {
+		if (this == null) {
+			throw new TypeError('Array.prototype.find called on null or undefined');
+		}
+		if ( typeof predicate !== 'function') {
+			throw new TypeError('predicate must be a function');
+		}
+		var list = Object(this);
+		var length = list.length >>> 0;
+		var thisArg = arguments[1];
+		var value;
+		for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return i;
+			}
+		}
+		return -1;
+	};
+}
+if (!Array.prototype.forEach) {
+	Array.prototype.forEach = function (callback, thisArg) {
+		var T, k;
+		if (this == null) {
+			throw new TypeError(' this is null or not defined');
+		}
+		var O = Object(this);
+		var len = O.length >>> 0;
+		if ( typeof callback !== "function") {
+			throw new TypeError(callback + ' is not a function');
+		}
+		if (arguments.length > 1) {
+			T = thisArg;
+		}
+		k = 0;
+		while (k < len) {
+			var kValue;
+			if ( k in O) {
+				kValue = O[k];
+				callback.call(T, kValue, k, O);
+			}
+			k++;
+		}
+	};
+}
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -1272,10 +1339,25 @@ var LObject = (function () {
 			return r;
 		},
 		toString : function () {
-			return "[object " + this.type + "]";
+			return "[object " + this.constructor.name + "]";
 		}
 	};
 	return LObject;
+})();
+var LColorTransform = (function () {
+	function LColorTransform (redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
+		var s = this;
+		LExtends (s, LObject, []);
+		s.redMultiplier = redMultiplier;
+		s.greenMultiplier = greenMultiplier;
+		s.blueMultiplier = blueMultiplier;
+		s.alphaMultiplier = alphaMultiplier;
+		s.redOffset = redOffset;
+		s.greenOffset = greenOffset;
+		s.blueOffset = blueOffset;
+		s.alphaOffset = alphaOffset;
+	}
+	return LColorTransform;
 })();
 var LMatrix = (function () {
 	function LMatrix (a, b, c, d, tx, ty, u, v, w) {
@@ -1367,24 +1449,24 @@ var LMatrix = (function () {
 		rotate : function (q) {
 			var s = this,
 			radian = q * Math.PI / 180,
-	        cos = Math.cos(radian),
-	        sin = Math.sin(radian),
-	        mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			cos = Math.cos(radian),
+			sin = Math.sin(radian),
+			mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
+			s.add(mtx);
 		},
 		scale : function (sx, sy) {
 			var s = this,
 			mtx = new LMatrix(sx, 0, 0, sy, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		translate : function (tx, ty) {
 			var s = this,
 			mtx = new LMatrix(1, 0, 0, 1, tx, ty, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		skew : function (kx, ky) {
 			mtx = new LMatrix(0, ky, kx, 0, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		add : function (mtx) {
 			var s = this, a, b, c, d, tx, ty, u, v, w;
@@ -2347,7 +2429,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration;
+				s.length = s.data.duration - 0.1;
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -2413,14 +2495,13 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
-			if (typeof l == UNDEFINED) {
-				l = 1;
+			if (typeof c != UNDEFINED) {
+				s.data.currentTime = c;
+				s.currentStart = c;
 			}
-			if (typeof c == UNDEFINED) {
-				c = 0;
+			if (typeof l != UNDEFINED) {
+				s.loopLength = l;
 			}
-			s.data.currentTime = c;
-			s.currentStart = c;
 			if (typeof to !== UNDEFINED) {
 				s.currentTimeTo = to > s.length ? s.length : to;
 			} else {
@@ -2435,7 +2516,6 @@ var LMedia = (function () {
 			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
-			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
 		},
@@ -3865,7 +3945,7 @@ var LButton = (function () {
 				delete s._tweenOver;
 			};
 			if (s.staticMode) {
-				s.tween = LTweenLite.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
 			} else {
 				w = s.downState.getWidth();
 				h = s.downState.getHeight();
@@ -3875,7 +3955,7 @@ var LButton = (function () {
 				y = s.downState.y;
 				tx = x + (w - tw) * 0.5;
 				ty = y + (h - th) * 0.5;
-				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
 				.to(s.downState, 0.1, {x : x, y : y, scaleX : s._ll_down_sx, scaleY : s._ll_down_sy, ease : Quart.easeOut,onComplete : onComplete});
 			}
 		},
@@ -4031,23 +4111,25 @@ var LTextField = (function () {
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
 				for (i = 0, l = s.text.length; i < l; i++) {
-					j = c.measureText(s.text.substr(k, i - k)).width;
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
-					if ((s.wordWrap && j > s.width) || enter) {
+					if (enter) {
 						j = 0;
-						k = i;
+						k = i + 1;
 						m++;
-						if (enter) {
-							k++;
-						}
 					}
 					if (!enter) {
 						if (s.stroke) {
-							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
 						}
-						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight);
 					}
 					s.numLines = m;
+					j = c.measureText(s.text.substr(k, i + 1 - k)).width;
+					if (s.wordWrap && j + c.measureText(lbl.substr(i, 1)).width > s.width) {
+						j = 0;
+						k = i + 1;
+						m++;
+					}
 				}
 				s.height = (m + 1) * s.wordHeight;
 			} else {
@@ -4129,7 +4211,7 @@ var LTextField = (function () {
 			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s._getWidth(), s._getHeight()]}], e.offsetX, e.offsetY);
 		},
 		clone : function () {
-			var s = this, a = new LTextField();
+			var s = this, a = new s.constructor();
 			a.copyProperty(s);
 			a.texttype = null;
 			if (s.texttype ==  LTextFieldType.INPUT) {
@@ -4543,6 +4625,7 @@ var LBitmapData = (function () {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
+			s._data = null;
 		},
 		getPixel : function (x, y, colorType) {
 			var s = this, i, d;
@@ -4654,20 +4737,111 @@ var LBitmapData = (function () {
 			s._locked = false;
 			s._update();
 		},
-		draw : function (source) {
-			var s = this;
-			if (s.dataType == LBitmapData.DATA_CANVAS) {
-				s._context.clearRect(0, 0, s.width, s.height);
-				s._context.drawImage(source.getDataCanvas(), 0, 0);
-			} else if (s.dataType == LBitmapData.DATA_IMAGE) {
-				s.image.src = source.getDataURL();
+		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+			var s = this, c, bd = source, x, y, w, h, save = false;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			if (matrix || colorTransform || blendMode || clipRect) {
+				s._context.save();
+				save = true;
 			}
+			if (clipRect) {
+				if (!(bd instanceof LBitmapData)) {
+					x = y = 0;
+				} else {
+					x = bd.x;
+					y = bd.y;
+				}
+				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
+			}
+			w = bd.getWidth();
+			h = bd.getHeight();
+			c = bd.getDataCanvas();
+			if (colorTransform) {
+				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
+				c = bd.image;
+			}
+			if (matrix) {
+				s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+			}
+			if (blendMode) {
+				s._context.globalCompositeOperation = blendMode;
+			}
+			s._context.drawImage(c,
+				bd.x,
+				bd.y,
+				w,
+				h,
+				0,
+				0,
+				w,
+				h
+			);
+			if (save) {
+				s._context.restore();
+			}
+			s._setDataType(_dataType);
 			s.resize();
+		},
+		getDataCanvas : function () {
+			var s = this;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			s._setDataType(_dataType);
+			return s._canvas;
+		},
+		getWidth : function () {
+			return this.width;
+		},
+		getHeight : function () {
+			return this.height;
 		},
 		resize : function () {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
+		},
+		colorTransform : function (rect, colorTransform) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			var x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
+			var img = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
+			var data = img.data;
+			for (var i = 0, l = data.length; i < l; i += 4) {
+				var r = i, g = i + 1, b = i + 2, a = i + 3;
+				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
+				data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
+				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
+				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
+			}
+			s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
+		},
+		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+			var s = this, left, top, width, height, bd = sourceBitmapData;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			left = bd.x;
+			top = bd.y;
+			width = bd.width;
+			height = bd.height;
+			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image,
+				bd.x,
+				bd.y,
+				bd.width,
+				bd.height,
+				destPoint.x,
+				destPoint.y,
+				bd.width,
+				bd.height
+			);
+			bd.x = left;
+			bd.y = top;
+			bd.width = width;
+			bd.height = height;
 		}
 	};
 	for (var k in p) {
@@ -4775,7 +4949,11 @@ var LAnimation = (function () {
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			var s = this, arr, stepFrame = null;
+			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
+				s.colIndex = 0;
+			}
+			arr = s.imageArray[s.rowIndex][s.colIndex];
 			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
 				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
 			} else {
@@ -4879,6 +5057,7 @@ var LAnimationTimeline = (function () {
 		gotoAndStop : function (name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
 			s.stop();
 		},
 		addFrameScript : function (name, func, params) {
@@ -5240,6 +5419,7 @@ Circ = LEasing.Circ,
 Elastic = LEasing.Elastic,
 Back = LEasing.Back,
 Bounce = LEasing.Bounce;
+var LTweenLiteTimeline;
 var LTweenLite = (function () {
 	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
@@ -5251,12 +5431,22 @@ var LTweenLite = (function () {
 	var p = {
 		init : function($target, $duration, $vars) {
 			var s = this, k = null;
+			if (typeof $vars["tweenTimeline"] == UNDEFINED) {
+				$vars["tweenTimeline"] = LTweenLite.TYPE_FRAME;
+			}
 			s.target = $target;
 			s.duration = $duration || 0.001;
-			s.duration *= 1000;
 			s.vars = $vars;
-			s.currentTime = 0;
 			s.delay = s.vars.delay || 0;
+			if(s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER){
+				s.currentTime = (new Date()).getTime() / 1000;
+				s.initTime = s.currentTime;
+				s.startTime = s.initTime + s.delay;
+			}else{
+				s.currentTime = 0;
+				s.duration *= 1000;
+				s.currentTime -= s.delay * 1000;
+			}
 			s.combinedTimeScale = s.vars.timeScale || 1;
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
@@ -5283,7 +5473,6 @@ var LTweenLite = (function () {
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
 			}
-			s.currentTime -= s.delay * 1000;
 		},
 		pause : function () {
 			this.stop = true;
@@ -5293,22 +5482,42 @@ var LTweenLite = (function () {
 		},
 		tween : function () {
 			var s = this, tweentype;
-			if (s.stop) {
-				return;
-			}
-			s.currentTime += LGlobal.speed;
-			if (s.currentTime < 0) {
-				return;
+			var type_timer = (s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER);
+			if (type_timer) {
+				var time = (new Date()).getTime() / 1000, etime = time - s.startTime;
+				if (etime < 0) {
+					return;
+				}
+			} else {
+				if (s.stop) {
+					return;
+				}
+				s.currentTime += LGlobal.speed;
+				if (s.currentTime < 0) {
+					return;
+				}
 			}
 			for (tweentype in s.varsto) {
-				var v = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
-				s.target[tweentype] = v;
+				if (tweentype == "tweenTimeline") {
+					continue;
+				}
+				if (type_timer) {
+					s.target[tweentype] = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				} else {
+					s.target[tweentype] = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				}
 			}
 			if (s.onStart) {
 				s.onStart(s.target);
 				delete s.onStart;
 			}
-			if (s.currentTime >= s.duration) {
+			var e;
+			if (type_timer) {
+				e = (etime >= s.duration);
+			} else {
+				e = (s.currentTime >= s.duration);
+			}
+			if (e) {
 				for (tweentype in s.varsto) {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
@@ -5357,6 +5566,8 @@ var LTweenLite = (function () {
 		LExtends (this, LObject, []);
 		this.type = "LTweenLite";
 	}
+	LTweenLite.TYPE_FRAME = "type_frame";
+	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
 		tweens : [],
 		ll_show : null,
@@ -5411,7 +5622,11 @@ var LTweenLite = (function () {
 	for (var k in p) {
 		LTweenLite.prototype[k] = p[k];
 	}
+	LTweenLiteTimeline = new LTweenLite();
+	LGlobal.childList.push(LTweenLiteTimeline);
 	var tween = new LTweenLite();
+	tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
+	tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;
 	LGlobal.childList.push(tween);
 	return tween;
 })();
@@ -6539,678 +6754,679 @@ LGlobal.mouseJoint_end = function () {
 		LGlobal.box2d.mouseJoint = null;
 	}
 };
-function LTransition(displayObject,transObj){
-	this.child = displayObject;
-	this.trans = transObj;
-}
-LTransition.prototype={
-	startTransition:function(){
-		var self = this;
-		switch(self.trans.type){
-			case LTransition.Blinds:
-				self.blinds();
-				break;
-			case LTransition.Fade:
-				self.fade();
-				break;
-			case LTransition.Fly:
-				self.fly();
-				break;
-			case LTransition.Iris:
-				self.iris();
-				break;
-			case LTransition.Squeeze:
-				self.squeeze();
-				break;
-			case LTransition.Wipe:
-				self.wipe();
-				break;
-			case LTransition.Zoom:
-				self.zoom();
-				break;
-			case LTransition.PixelDissolve:
-				self.pixelDissolve();
-				break;
-			case LTransition.Curtain:
-				self.curtain();
-				break;
-			default:
-				throw("the type is not exists.");
-		}
-	},
-	blindsComplete:function(self){
-		if(self.trans.direction == LTransition.OUT){
-			self.child.mask.clear();
-		}else{
+var LTransition = (function() {
+	function LTransition(displayObject, transObj) {
+		this.child = displayObject;
+		this.trans = transObj;
+	}
+	LTransition.prototype = {
+		startTransition : function() {
+			var self = this;
+			switch(self.trans.type) {
+				case LTransition.Blinds:
+					self.blinds();
+					break;
+				case LTransition.Fade:
+					self.fade();
+					break;
+				case LTransition.Fly:
+					self.fly();
+					break;
+				case LTransition.Iris:
+					self.iris();
+					break;
+				case LTransition.Squeeze:
+					self.squeeze();
+					break;
+				case LTransition.Wipe:
+					self.wipe();
+					break;
+				case LTransition.Zoom:
+					self.zoom();
+					break;
+				case LTransition.PixelDissolve:
+					self.pixelDissolve();
+					break;
+				case LTransition.Curtain:
+					self.curtain();
+					break;
+				default:
+					throw ("the type is not exists.");
+			}
+		},
+		blindsComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.blindsUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		blindsUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.dimension) {
+				g.add(function() {
+					c.save();
+					for (var i = 0; i < self.trans.numStrips; i++) {
+						c.rect(i * self.maxSize, 0, self.blindsSize, self.child.getHeight());
+					}
+					c.restore();
+				});
+			} else {
+				g.add(function() {
+					c.save();
+					for (var i = 0; i < self.trans.numStrips; i++) {
+						c.rect(0, 0 + i * self.maxSize, self.child.getWidth(), self.blindsSize);
+					}
+					c.restore();
+				});
+			}
+		},
+		blindsUpdate : function(self) {
 			self.blindsUpdateRun();
-		}
-		self.child.mask = null;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	blindsUpdateRun:function(){
-		var self=this,g = self.child.mask,c = LGlobal.canvas;
-		g.clear();
-		if(self.trans.dimension){
-			g.add(function(){
-				c.save();
-				for(var i=0;i<self.trans.numStrips;i++){
-					c.rect(i*self.maxSize,0,self.blindsSize,self.child.getHeight());
-				}
-				c.restore();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		blinds : function() {
+			var self = this;
+			if (!self.trans.numStrips)
+				self.trans.numStrips = 1;
+			self.blindsSize = 0;
+			if (self.trans.dimension) {
+				self.maxSize = self.child.getWidth() / self.trans.numStrips >> 0;
+			} else {
+				self.maxSize = self.child.getHeight() / self.trans.numStrips >> 0;
+			}
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.blindsSize = self.maxSize;
+				toSize = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				blindsSize : toSize,
+				onComplete : self.blindsComplete,
+				onUpdate : self.blindsUpdate,
+				ease : self.trans.easing
 			});
-		}else{
-			g.add(function(){
-				c.save();
-				for(var i=0;i<self.trans.numStrips;i++){
-					c.rect(0,0 + i*self.maxSize,self.child.getWidth(),self.blindsSize);
-				}
-				c.restore();
+		},
+		fadeComplete : function(self) {
+			self.child.alpha = self.alpha;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		fadeUpdate : function(self) {
+			self.child.alpha = self.alpha;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		fade : function() {
+			var self = this;
+			var toAlpha = 1;
+			self.alpha = 0;
+			if (self.trans.direction == LTransition.OUT) {
+				self.alpha = 1;
+				toAlpha = 0;
+			}
+			self.child.alpha = self.alpha;
+			LTweenLite.to(self, self.trans.duration, {
+				alpha : toAlpha,
+				onComplete : self.fadeComplete,
+				onUpdate : self.fadeUpdate,
+				ease : self.trans.easing
 			});
-		}
-	},
-	blindsUpdate:function(self){
-		self.blindsUpdateRun();
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	blinds:function(){
-		var self = this;
-		if(!self.trans.numStrips)self.trans.numStrips = 1;
-		self.blindsSize = 0;
-		if(self.trans.dimension){
-			self.maxSize = self.child.getWidth()/self.trans.numStrips >> 0;
-		}else{
-			self.maxSize = self.child.getHeight()/self.trans.numStrips >> 0;
-		}
-		var g = new LGraphics();
-		self.child.mask = g;
-		var toSize = self.maxSize;
-		if(self.trans.direction == LTransition.OUT){
-			self.blindsSize = self.maxSize;
-			toSize = 0;
-		}
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                blindsSize:toSize,
-	                onComplete:self.blindsComplete,
-			onUpdate:self.blindsUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	fadeComplete:function(self){
-		self.child.alpha = self.alpha;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	fadeUpdate:function(self){
-		self.child.alpha = self.alpha;
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	fade:function(){
-		var self = this;
-		var toAlpha = 1;
-		self.alpha = 0;
-		if(self.trans.direction == LTransition.OUT){
-			self.alpha = 1;
-			toAlpha = 0;
-		}
-		self.child.alpha = self.alpha;
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                alpha:toAlpha,
-	                onComplete:self.fadeComplete,
-			onUpdate:self.fadeUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	flyComplete:function(self){
-		self.child.x = self.x;
-		self.child.y = self.y;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	flyUpdate:function(self){
-		self.child.x = self.x;
-		self.child.y = self.y;
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	fly:function(){
-		var self = this;
-		var toX = self.child.x;
-		var toY = self.child.y;
-		switch(self.trans.startPoint){
-			case 1:
-				self.x = -self.child.getWidth();
-				self.y = -self.child.getHeight();
-				break;
-			case 2:
-				self.x = (LGlobal.width-self.child.getWidth())*0.5;
-				self.y = -self.child.getHeight();
-				break;
-			case 3:
-				self.x = LGlobal.width;
-				self.y = -self.child.getHeight();
-				break;
-			case 4:
-				self.x = -self.child.getWidth();
-				self.y = (LGlobal.height-self.child.getHeight())*0.5;
-				break;
-			case 6:
-				self.x = LGlobal.width;
-				self.y = (LGlobal.height-self.child.getHeight())*0.5;
-				break;
-			case 7:
-				self.x = -self.child.getWidth();
-				self.y = LGlobal.height;
-				break;
-			case 8:
-				self.x = (LGlobal.width-self.child.getWidth())*0.5;
-				self.y = LGlobal.height;
-				break;
-			case 9:
-				self.x = LGlobal.width;
-				self.y = LGlobal.height;
-				break;
-			case 5:
-			default:
-				self.x = (LGlobal.width-self.child.getWidth())*0.5;
-				self.y = (LGlobal.height-self.child.getHeight())*0.5;
-		}
-		if(self.trans.direction == LTransition.OUT){
-			var toX = self.x;
-			var toY = self.y;
-			self.x = self.child.x;
-			self.y = self.child.y;
-		}else{
+		},
+		flyComplete : function(self) {
 			self.child.x = self.x;
 			self.child.y = self.y;
-		}
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                x:toX,
-	                y:toY,
-	                onComplete:self.flyComplete,
-			onUpdate:self.flyUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	irisComplete:function(self){
-		if(self.trans.direction == LTransition.OUT){
-			self.child.mask.clear();
-		}else{
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		flyUpdate : function(self) {
+			self.child.x = self.x;
+			self.child.y = self.y;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		fly : function() {
+			var self = this;
+			var toX = self.child.x;
+			var toY = self.child.y;
+			switch(self.trans.startPoint) {
+				case 1:
+					self.x = -self.child.getWidth();
+					self.y = -self.child.getHeight();
+					break;
+				case 2:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = -self.child.getHeight();
+					break;
+				case 3:
+					self.x = LGlobal.width;
+					self.y = -self.child.getHeight();
+					break;
+				case 4:
+					self.x = -self.child.getWidth();
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+					break;
+				case 6:
+					self.x = LGlobal.width;
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+					break;
+				case 7:
+					self.x = -self.child.getWidth();
+					self.y = LGlobal.height;
+					break;
+				case 8:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = LGlobal.height;
+					break;
+				case 9:
+					self.x = LGlobal.width;
+					self.y = LGlobal.height;
+					break;
+				case 5:
+				default:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+			}
+			if (self.trans.direction == LTransition.OUT) {
+				var toX = self.x;
+				var toY = self.y;
+				self.x = self.child.x;
+				self.y = self.child.y;
+			} else {
+				self.child.x = self.x;
+				self.child.y = self.y;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				x : toX,
+				y : toY,
+				onComplete : self.flyComplete,
+				onUpdate : self.flyUpdate,
+				ease : self.trans.easing
+			});
+		},
+		irisComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.irisUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		irisUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.shape == LIris.CIRCLE) {
+				g.drawArc(0, "#000000", [self.x, self.y, self.r, 0, Math.PI * 2]);
+			} else {
+				g.drawRect(0, "#000000", [self.x + self.sLeft, self.y + self.sTop, self.width, self.height]);
+			}
+		},
+		irisUpdate : function(self) {
 			self.irisUpdateRun();
-		}
-		self.child.mask = null;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	irisUpdateRun:function(){
-		var self=this,g = self.child.mask,c = LGlobal.canvas;
-		g.clear();
-		if(self.trans.shape == LIris.CIRCLE){
-			g.drawArc(0,"#000000",[self.x,self.y,self.r,0,Math.PI*2]);
-		}else{
-			g.drawRect(0,"#000000",[self.x+self.sLeft,self.y+self.sTop,self.width,self.height]);
-		}
-	},
-	irisUpdate:function(self){
-		self.irisUpdateRun();
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	iris:function(){
-		var self = this;
-		self.sLeft = 0;
-		self.sTop = 0;
-		self.width = 0;
-		self.height = 0;
-		self.x = 0;
-		self.y = 0;
-		self.r = 0;
-		self.eWidth = self.child.getWidth();
-		self.eHeight = self.child.getHeight();
-		switch(self.trans.startPoint){
-			case 1:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+self.eHeight*self.eHeight);
-				break;
-			case 2:
-				self.eR = Math.sqrt((self.eWidth*0.5)*(self.eWidth*0.5)+self.eHeight*self.eHeight);
-				self.x = self.child.getWidth()*0.5;
-				break;
-			case 3:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+self.eHeight*self.eHeight);
-				self.x = self.child.getWidth();
-				break;
-			case 4:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+(self.eHeight*0.5)*(self.eHeight*0.5));
-				self.y = self.child.getHeight()*0.5;
-				break;
-			case 6:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+(self.eHeight*0.5)*(self.eHeight*0.5));
-				self.x = self.child.getWidth();
-				self.y = self.child.getHeight()*0.5;
-				break;
-			case 7:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+self.eHeight*self.eHeight);
-				self.y = self.child.getHeight();
-				break;
-			case 8:
-				self.eR = Math.sqrt((self.eWidth*0.5)*(self.eWidth*0.5)+self.eHeight*self.eHeight);
-				self.x = self.child.getWidth()*0.5;
-				self.y = self.child.getHeight();
-				break;
-			case 9:
-				self.eR = Math.sqrt(self.eWidth*self.eWidth+self.eHeight*self.eHeight);
-				self.x = self.child.getWidth();
-				self.y = self.child.getHeight();
-				break;
-			case 5:
-			default:
-				self.eR = Math.sqrt((self.eWidth*0.5)*(self.eWidth*0.5)+(self.eHeight*0.5)*(self.eHeight*0.5));
-				self.x = self.child.getWidth()*0.5;
-				self.y = self.child.getHeight()*0.5;
-		}
-		self.eLeft = -self.x;
-		self.eTop = -self.y;
-		var g = new LGraphics();
-		self.child.mask = g;
-		var toSize = self.maxSize;
-		if(self.trans.direction == LTransition.OUT){
-			self.sLeft = self.eLeft;
-			self.sTop = self.eTop;
-			self.eLeft = 0;
-			self.eTop = 0;
-			self.width = self.eWidth;
-			self.height = self.eHeight;
-			self.eWidth = 0;
-			self.eHeight = 0;
-			self.r = self.eR;
-			self.eR = 0;
-		}
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                width:self.eWidth,
-	                height:self.eHeight,
-			sLeft:self.eLeft,
-			sTop:self.eTop,
-			r:self.eR,
-	                onComplete:self.irisComplete,
-			onUpdate:self.irisUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	curtainComplete:function(self){
-		if(self.trans.direction == LTransition.OUT){
-			self.child.mask.clear();
-		}else{
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		iris : function() {
+			var self = this;
+			self.sLeft = 0;
+			self.sTop = 0;
+			self.width = 0;
+			self.height = 0;
+			self.x = 0;
+			self.y = 0;
+			self.r = 0;
+			self.eWidth = self.child.getWidth();
+			self.eHeight = self.child.getHeight();
+			switch(self.trans.startPoint) {
+				case 1:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					break;
+				case 2:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth() * 0.5;
+					break;
+				case 3:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth();
+					break;
+				case 4:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.y = self.child.getHeight() * 0.5;
+					break;
+				case 6:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.x = self.child.getWidth();
+					self.y = self.child.getHeight() * 0.5;
+					break;
+				case 7:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.y = self.child.getHeight();
+					break;
+				case 8:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth() * 0.5;
+					self.y = self.child.getHeight();
+					break;
+				case 9:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth();
+					self.y = self.child.getHeight();
+					break;
+				case 5:
+				default:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.x = self.child.getWidth() * 0.5;
+					self.y = self.child.getHeight() * 0.5;
+			}
+			self.eLeft = -self.x;
+			self.eTop = -self.y;
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.sLeft = self.eLeft;
+				self.sTop = self.eTop;
+				self.eLeft = 0;
+				self.eTop = 0;
+				self.width = self.eWidth;
+				self.height = self.eHeight;
+				self.eWidth = 0;
+				self.eHeight = 0;
+				self.r = self.eR;
+				self.eR = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				width : self.eWidth,
+				height : self.eHeight,
+				sLeft : self.eLeft,
+				sTop : self.eTop,
+				r : self.eR,
+				onComplete : self.irisComplete,
+				onUpdate : self.irisUpdate,
+				ease : self.trans.easing
+			});
+		},
+		curtainComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.curtainUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		curtainUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.dimension) {
+				g.add(function() {
+					c.save();
+					c.rect(0, 0, self.width, self.child.getHeight());
+					c.rect(self.child.getWidth() - self.width, 0, self.width, self.child.getHeight());
+					c.restore();
+				});
+			} else {
+				g.add(function() {
+					c.save();
+					c.rect(0, 0, self.child.getWidth(), self.height);
+					c.rect(0, self.child.getHeight() - self.height, self.child.getWidth(), self.height);
+					c.restore();
+				});
+			}
+		},
+		curtainUpdate : function(self) {
 			self.curtainUpdateRun();
-		}
-		self.child.mask = null;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	curtainUpdateRun:function(){
-		var self=this,g = self.child.mask,c = LGlobal.canvas;
-		g.clear();
-		if(self.trans.dimension){
-			g.add(function(){
-				c.save();
-				c.rect(0,0,self.width,self.child.getHeight());
-				c.rect(self.child.getWidth()-self.width,0,self.width,self.child.getHeight());
-				c.restore();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		curtain : function() {
+			var self = this;
+			var eW = self.child.getWidth() * 0.5;
+			var eH = self.child.getHeight() * 0.5;
+			if (self.trans.dimension) {
+				eH = 0;
+			} else {
+				eW = 0;
+			}
+			self.width = 0;
+			self.height = 0;
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.width = eW;
+				self.height = eH;
+				eW = 0;
+				eH = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				width : eW,
+				height : eH,
+				onComplete : self.curtainComplete,
+				onUpdate : self.curtainUpdate,
+				ease : self.trans.easing
 			});
-		}else{
-			g.add(function(){
-				c.save();
-				c.rect(0,0,self.child.getWidth(),self.height);
-				c.rect(0,self.child.getHeight()-self.height,self.child.getWidth(),self.height);
-				c.restore();
+		},
+		squeezeComplete : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		squeezeUpdate : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		squeeze : function() {
+			var self = this;
+			var toScaleX = 1, toScaleY = 1;
+			self.scaleX = 0, self.scaleY = 0;
+			if (self.trans.dimension) {
+				self.scaleX = 1;
+			} else {
+				self.scaleY = 1;
+			}
+			if (self.trans.direction == LTransition.OUT) {
+				toScaleX = self.scaleX, toScaleY = self.scaleY;
+				self.scaleX = 1, self.scaleY = 1;
+			}
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			LTweenLite.to(self, self.trans.duration, {
+				scaleX : toScaleX,
+				scaleY : toScaleY,
+				onComplete : self.squeezeComplete,
+				onUpdate : self.squeezeUpdate,
+				ease : self.trans.easing
 			});
-		}
-	},
-	curtainUpdate:function(self){
-		self.curtainUpdateRun();
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	curtain:function(){
-		var self = this;
-		var eW = self.child.getWidth()*0.5;
-		var eH = self.child.getHeight()*0.5;
-		if(self.trans.dimension){
-			eH = 0;
-		}else{
-			eW = 0;
-		}
-		self.width = 0;
-		self.height = 0;
-		var g = new LGraphics();
-		self.child.mask = g;
-		var toSize = self.maxSize;
-		if(self.trans.direction == LTransition.OUT){
-			self.width = eW;
-			self.height = eH;
-			eW = 0;
-			eH = 0;
-		}
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                width:eW,
-	                height:eH,
-	                onComplete:self.curtainComplete,
-			onUpdate:self.curtainUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	squeezeComplete:function(self){
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	squeezeUpdate:function(self){
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	squeeze:function(){
-		var self = this;
-		var toScaleX = 1,toScaleY = 1;
-		self.scaleX = 0,self.scaleY = 0;
-		if(self.trans.dimension){
-			self.scaleX = 1;
-		}else{
-			self.scaleY = 1;
-		}
-		if(self.trans.direction == LTransition.OUT){
-			toScaleX = self.scaleX,toScaleY = self.scaleY;
-			self.scaleX = 1,self.scaleY = 1;
-		}
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                scaleX:toScaleX,
-	                scaleY:toScaleY,
-	                onComplete:self.squeezeComplete,
-			onUpdate:self.squeezeUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	zoomComplete:function(self){
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	zoomUpdate:function(self){
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	zoom:function(){
-		var self = this;
-		var toScaleX = 1,toScaleY = 1;
-		self.scaleX = 0,self.scaleY = 0;
-		if(self.trans.direction == LTransition.OUT){
-			toScaleX = 0,toScaleY = 0;
-			self.scaleX = 1,self.scaleY = 1;
-		}
-		self.child.scaleX = self.scaleX;
-		self.child.scaleY = self.scaleY;
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                scaleX:toScaleX,
-	                scaleY:toScaleY,
-	                onComplete:self.zoomComplete,
-			onUpdate:self.zoomUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	wipeComplete:function(self){
-		if(self.trans.direction == LTransition.OUT){
-			self.child.mask.clear();
-		}else{
+		},
+		zoomComplete : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		zoomUpdate : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		zoom : function() {
+			var self = this;
+			var toScaleX = 1, toScaleY = 1;
+			self.scaleX = 0, self.scaleY = 0;
+			if (self.trans.direction == LTransition.OUT) {
+				toScaleX = 0, toScaleY = 0;
+				self.scaleX = 1, self.scaleY = 1;
+			}
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			LTweenLite.to(self, self.trans.duration, {
+				scaleX : toScaleX,
+				scaleY : toScaleY,
+				onComplete : self.zoomComplete,
+				onUpdate : self.zoomUpdate,
+				ease : self.trans.easing
+			});
+		},
+		wipeComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.wipeUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		wipeUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			g.drawVertices(0, "#000000", [[self.leftTopX, self.leftTopY], [self.leftBottomX, self.leftBottomY], [self.rightBottomX, self.rightBottomY], [self.rightTopX, self.rightTopY]]);
+		},
+		wipeUpdate : function(self) {
 			self.wipeUpdateRun();
-		}
-		self.child.mask = null;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	wipeUpdateRun:function(){
-		var self=this,g = self.child.mask,c = LGlobal.canvas;
-		g.clear();
-		g.drawVertices(0,"#000000",[[self.leftTopX,self.leftTopY],[self.leftBottomX,self.leftBottomY],[self.rightBottomX,self.rightBottomY],[self.rightTopX,self.rightTopY]]);
-	},
-	wipeUpdate:function(self){
-		self.wipeUpdateRun();
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	wipe:function(){
-		var self = this,w=self.child.getWidth(),h=self.child.getHeight(),
-		ltX = self.leftTopX = 0,
-		ltY = self.leftTopY = 0,
-		lbX = self.leftBottomX = 0,
-		lbY = self.leftBottomY = h,
-		rtX = self.rightTopX = w,
-		rtY = self.rightTopY = 0,
-		rbX = self.rightBottomX = w,
-		rbY = self.rightBottomY = h;
-		switch(self.trans.startPoint){
-			case 1:
-				ltX = self.leftTopX = -w;
-				lbX = self.leftBottomX = -w*2;
-				self.rightTopX = 0;
-				rtX = w*2;
-				self.rightBottomX = -w;
-				rbX = w;
-				break;
-			case 2:
-				ltY = self.leftTopY = -h;
-				self.leftBottomY = 0;
-				lbY = h;
-				rtY = self.rightTopY = -h;
-				self.rightBottomY = 0;
-				rbY = h;
-				break;
-			case 3:
-				self.leftTopX = w;
-				ltX = -w;
-				self.leftBottomX = w*2;
-				lbX = 0;
-				rtX = self.rightTopX = w*2;
-				rbX = self.rightBottomX = w*3;
-				break;
-			case 4:
-				self.rightTopX = 0;
-				rtX = w;
-				self.rightBottomX = 0;
-				rbX = w;
-				break;
-			case 6:
-				self.leftTopX = w;
-				ltX = 0;
-				self.leftBottomX = w;
-				lbX = 0;
-				break;
-			case 7:
-				lbX = self.leftBottomX = -w;
-				ltX = self.leftTopX = -w*2;
-				self.rightBottomX = 0;
-				rbX = w*2;
-				self.rightTopX = -w;
-				rtX = w;
-				break;
-			case 8:
-				lbY = self.leftBottomY = h;
-				self.leftTopY = h;
-				ltY = 0;
-				rbY = self.rightBottomY = h;
-				self.rightTopY = h;
-				rtY = 0;
-				break;
-			case 9:
-				self.leftBottomX = w;
-				lbX = -w;
-				self.leftTopX = w*2;
-				ltX = 0;
-				rbX = self.rightBottomX = w*2;
-				rtX = self.rightTopX = w*3;
-				break;
-			case 5:
-			default:
-				self.leftTopX = w*0.5;
-				self.leftTopY = h*0.5;
-				self.rightTopX = w*0.5;
-				self.rightTopY = h*0.5;
-				self.leftBottomX = w*0.5;
-				self.leftBottomY = h*0.5;
-				self.rightBottomX = w*0.5;
-				self.rightBottomY = h*0.5;
-				ltX = 0,ltY = 0;
-				lbX = 0,lbY = h;
-				rtX = w,rtY = 0;
-				rbX = w,rbY = h;
-		}
-		var g = new LGraphics();
-		self.child.mask = g;
-		if(self.trans.direction == LTransition.OUT){
-			var oltX=ltX,oltY=ltY,olbX=lbX,olbY=lbY,ortX=rtX,ortY=rtY,orbX=rbX,orbY=rbY;
-			ltX=self.leftTopX,ltY=self.leftTopY,lbX=self.leftBottomX,lbY=self.leftBottomY,rtX=self.rightTopX,rtY=self.rightTopY,rbX=self.rightBottomX,rbY=self.rightBottomY;
-			self.leftTopX=oltX,self.leftTopY=oltY,self.leftBottomX=olbX,self.leftBottomY=olbY,self.rightTopX=ortX,self.rightTopY=ortY,self.rightBottomX=orbX,self.rightBottomY=orbY;
-		}
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                leftTopX:ltX,
-	                leftTopY:ltY,
-	                leftBottomX:lbX,
-	                leftBottomY:lbY,
-	                rightTopX:rtX,
-	                rightTopY:rtY,
-	                rightBottomX:rbX,
-	                rightBottomY:rbY,
-	                onComplete:self.wipeComplete,
-			onUpdate:self.wipeUpdate,
-	                ease:self.trans.easing
-	        });
-	},
-	pixelDissolveComplete:function(self){
-		if(self.trans.direction == LTransition.OUT){
-			self.child.mask.clear();
-		}else{
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		wipe : function() {
+			var self = this, w = self.child.getWidth(), h = self.child.getHeight(), ltX = self.leftTopX = 0, ltY = self.leftTopY = 0, lbX = self.leftBottomX = 0, lbY = self.leftBottomY = h, rtX = self.rightTopX = w, rtY = self.rightTopY = 0, rbX = self.rightBottomX = w, rbY = self.rightBottomY = h;
+			switch(self.trans.startPoint) {
+				case 1:
+					ltX = self.leftTopX = -w;
+					lbX = self.leftBottomX = -w * 2;
+					self.rightTopX = 0;
+					rtX = w * 2;
+					self.rightBottomX = -w;
+					rbX = w;
+					break;
+				case 2:
+					ltY = self.leftTopY = -h;
+					self.leftBottomY = 0;
+					lbY = h;
+					rtY = self.rightTopY = -h;
+					self.rightBottomY = 0;
+					rbY = h;
+					break;
+				case 3:
+					self.leftTopX = w;
+					ltX = -w;
+					self.leftBottomX = w * 2;
+					lbX = 0;
+					rtX = self.rightTopX = w * 2;
+					rbX = self.rightBottomX = w * 3;
+					break;
+				case 4:
+					self.rightTopX = 0;
+					rtX = w;
+					self.rightBottomX = 0;
+					rbX = w;
+					break;
+				case 6:
+					self.leftTopX = w;
+					ltX = 0;
+					self.leftBottomX = w;
+					lbX = 0;
+					break;
+				case 7:
+					lbX = self.leftBottomX = -w;
+					ltX = self.leftTopX = -w * 2;
+					self.rightBottomX = 0;
+					rbX = w * 2;
+					self.rightTopX = -w;
+					rtX = w;
+					break;
+				case 8:
+					lbY = self.leftBottomY = h;
+					self.leftTopY = h;
+					ltY = 0;
+					rbY = self.rightBottomY = h;
+					self.rightTopY = h;
+					rtY = 0;
+					break;
+				case 9:
+					self.leftBottomX = w;
+					lbX = -w;
+					self.leftTopX = w * 2;
+					ltX = 0;
+					rbX = self.rightBottomX = w * 2;
+					rtX = self.rightTopX = w * 3;
+					break;
+				case 5:
+				default:
+					self.leftTopX = w * 0.5;
+					self.leftTopY = h * 0.5;
+					self.rightTopX = w * 0.5;
+					self.rightTopY = h * 0.5;
+					self.leftBottomX = w * 0.5;
+					self.leftBottomY = h * 0.5;
+					self.rightBottomX = w * 0.5;
+					self.rightBottomY = h * 0.5;
+					ltX = 0, ltY = 0;
+					lbX = 0, lbY = h;
+					rtX = w, rtY = 0;
+					rbX = w, rbY = h;
+			}
+			var g = new LGraphics();
+			self.child.mask = g;
+			if (self.trans.direction == LTransition.OUT) {
+				var oltX = ltX, oltY = ltY, olbX = lbX, olbY = lbY, ortX = rtX, ortY = rtY, orbX = rbX, orbY = rbY;
+				ltX = self.leftTopX, ltY = self.leftTopY, lbX = self.leftBottomX, lbY = self.leftBottomY, rtX = self.rightTopX, rtY = self.rightTopY, rbX = self.rightBottomX, rbY = self.rightBottomY;
+				self.leftTopX = oltX, self.leftTopY = oltY, self.leftBottomX = olbX, self.leftBottomY = olbY, self.rightTopX = ortX, self.rightTopY = ortY, self.rightBottomX = orbX, self.rightBottomY = orbY;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				leftTopX : ltX,
+				leftTopY : ltY,
+				leftBottomX : lbX,
+				leftBottomY : lbY,
+				rightTopX : rtX,
+				rightTopY : rtY,
+				rightBottomX : rbX,
+				rightBottomY : rbY,
+				onComplete : self.wipeComplete,
+				onUpdate : self.wipeUpdate,
+				ease : self.trans.easing
+			});
+		},
+		pixelDissolveComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.pixelDissolveUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		pixelDissolveUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas, list;
+			g.clear();
+			g.add(function() {
+				c.save();
+				for (var i = 0; i < self.index; i++) {
+					list = self.list[i];
+					c.rect(list[0] * self.w, list[1] * self.h, self.w, self.h);
+				}
+				c.restore();
+			});
+		},
+		pixelDissolveUpdate : function(self) {
 			self.pixelDissolveUpdateRun();
-		}
-		self.child.mask = null;
-		if(self.trans.onComplete){
-			self.trans.onComplete(self.child);
-		}
-	},
-	pixelDissolveUpdateRun:function(){
-		var self=this,g = self.child.mask,c = LGlobal.canvas,list;
-		g.clear();
-		g.add(function(){
-			c.save();
-			for(var i=0;i<self.index;i++){
-				list = self.list[i];
-				c.rect(list[0]*self.w,list[1]*self.h,self.w,self.h);
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
 			}
-			c.restore();
-		});
-	},
-	pixelDissolveUpdate:function(self){
-		self.pixelDissolveUpdateRun();
-		if(self.trans.onUpdate){
-			self.trans.onUpdate(self.child);
-		}
-	},
-	pixelDissolve:function(){
-		var self = this;
-		var g = new LGraphics();
-		self.child.mask = g;LGlobal.mg = g;
-		self.w = self.child.getWidth()/self.trans.xSections,
-		self.h = self.child.getHeight()/self.trans.ySections;
-		self.list = [];
-		for(var i=0;i<self.trans.xSections;i++){
-			for(var j=0;j<self.trans.ySections;j++){
-				self.list.push([i,j]);
+		},
+		pixelDissolve : function() {
+			var self = this;
+			var g = new LGraphics();
+			self.child.mask = g;
+			LGlobal.mg = g;
+			self.w = self.child.getWidth() / self.trans.xSections, self.h = self.child.getHeight() / self.trans.ySections;
+			self.list = [];
+			for (var i = 0; i < self.trans.xSections; i++) {
+				for (var j = 0; j < self.trans.ySections; j++) {
+					self.list.push([i, j]);
+				}
 			}
+			self.index = 0;
+			var to = self.trans.xSections * self.trans.ySections;
+			if (self.trans.direction == LTransition.OUT) {
+				self.index = to;
+				to = 0;
+			}
+			self.list = self.list.sort(function(a, b) {
+				return Math.random() > 0.5;
+			});
+			self.pixelDissolveUpdateRun();
+			LTweenLite.to(self, self.trans.duration, {
+				index : to,
+				onComplete : self.pixelDissolveComplete,
+				onUpdate : self.pixelDissolveUpdate,
+				ease : self.trans.easing
+			});
 		}
-		self.index=0;
-		var to = self.trans.xSections*self.trans.ySections;
-		if(self.trans.direction == LTransition.OUT){
-			self.index = to;
-			to = 0;
+	};
+	LTransition.IN = "in";
+	LTransition.OUT = "out";
+	LTransition.Blinds = 1;
+	LTransition.Fade = 2;
+	LTransition.Fly = 3;
+	LTransition.Iris = 4;
+	LTransition.Curtain = 5;
+	LTransition.PixelDissolve = 6;
+	LTransition.Squeeze = 7;
+	LTransition.Wipe = 8;
+	LTransition.Zoom = 9;
+	return LTransition;
+})();
+var LIris = (function() {
+	function LIris() {
+	}
+	LIris.SQUARE = 0;
+	LIris.CIRCLE = 1;
+	return LIris;
+})();
+var LTransitionManager = (function() {
+	function LTransitionManager(displayObject) {
+		this.child = displayObject;
+	}
+	LTransitionManager.prototype = {
+		startTransition : function(transParams) {
+			return LTransitionManager.start(this.child, transParams);
 		}
-		self.list = self.list.sort(function(a,b){return Math.random()>0.5;});
-		self.pixelDissolveUpdateRun();
-	        LTweenLite.to(self,self.trans.duration,
-	        {
-	                index:to,
-	                onComplete:self.pixelDissolveComplete,
-			onUpdate:self.pixelDissolveUpdate,
-	                ease:self.trans.easing
-	        });
-	}
-};
-LTransition.IN = "in";
-LTransition.OUT = "out";
-LTransition.Blinds = 1;
-LTransition.Fade = 2;
-LTransition.Fly = 3;
-LTransition.Iris = 4;
-LTransition.Curtain = 5;
-LTransition.PixelDissolve = 6;
-LTransition.Squeeze = 7;
-LTransition.Wipe = 8;
-LTransition.Zoom = 9;
-function LIris(){}
-LIris.SQUARE = 0;
-LIris.CIRCLE = 1;
-function LTransitionManager(displayObject){
-	this.child = displayObject;
-}
-LTransitionManager.prototype={
-	startTransition:function(transObj){
-		return LTransitionManager.start(this.child,transObj);
-	}
-};
-LTransitionManager.start = function(displayObject,transObj){
-	if(!LTweenLite)throw("you need load the LTweenLite.");
-	var trans = new LTransition(displayObject,transObj);
-	trans.startTransition();
-	return trans;
-};
-function LFlash(){}
-LFlash.SpriteSheetConvert = function(frames){
-	var result = [],child;
-	for(var i=0;i<frames.length;i++){
-		child = frames[i];
-		result.push({x:child.frame.x,sx:child.spriteSourceSize.x,y:child.frame.y,sy:child.spriteSourceSize.y,width:child.frame.w,height:child.frame.h});
-	}
-	return result;
-};
+	};
+	LTransitionManager.start = function(displayObject, transParams) {
+		if (!LTweenLite) {
+			throw ("you need load the LTweenLite.");
+		}	
+		var trans = new LTransition(displayObject, transParams);
+		trans.startTransition();
+		return trans;
+	};
+	return LTransitionManager;
+})(); 
+var LFlash = (function () {
+	function LFlash(){}
+	LFlash.SpriteSheetConvert = function(frames){
+		var result = [],child;
+		for(var i=0;i<frames.length;i++){
+			child = frames[i];
+			result.push({x:child.frame.x,sx:child.spriteSourceSize.x,y:child.frame.y,sy:child.spriteSourceSize.y,width:child.frame.w,height:child.frame.h});
+		}
+		return result;
+	};
+	return LFlash;
+})();
 var LString = {
 	trim:function (s){
 		return s.replace(/(^\s*)|(\s*$)|(\n)/g, "");

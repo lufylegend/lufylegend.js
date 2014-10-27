@@ -774,10 +774,10 @@ var LIris = (function() {
  * <p>您可以通过两种方式创建 TransitionManager 实例：</p>
  * <p>请调用 LTransitionManager.start() 方法。 这是创建 LTransitionManager 实例最简单的方式，建议使用该方式。</p>
  * <p>使用 new 运算符。 然后可以指定过渡属性，并通过调用 LTransitionManager.startTransition() 方法在另一步中启动过渡效果。</p>
- * <p>使用时需要引进lufylegend.LTransitionManager-x.x.x.js文件。</p>
  * @class Lib:LTransitionManager
  * @constructor
  * @param {LDisplayObject} displayObject 要应用过渡效果的对象。
+ * @examplelink <p><a href="../../../api/LTransitionManager/index.html" target="_blank">测试链接</a></p>
  * @since 1.8.0
  * @public
  */
@@ -791,6 +791,22 @@ var LTransitionManager = (function() {
 		 * @method startTransition
 		 * @param {Object} transParams 请参考LTransitionManager.start的transParams参数。
 		 * @since 1.8.0
+		 * @example
+		 * 	LInit(20,"legend",640,400,main);
+		 * 	function main(){
+		 * 	    var layer = new LSprite();
+		 * 		addChild(layer);
+		 * 		var sprite01 = new LSprite();
+		 * 		sprite01.graphics.drawRect(1, "#ff0000", [0, 0, 300, 300], true, "#ff0000");
+		 * 		layer.addChild(sprite01);
+		 * 		var sprite02 = new LSprite();
+		 * 		sprite02.graphics.drawRect(1, "#008800", [0, 0, 300, 300], true, "#008800");
+		 * 		layer.addChild(sprite02);
+		 * 		var transitionManager = new LTransitionManager(sprite02);
+		 * 		var transParams = {type:LTransition.Fly,startPoint:1,duration:2,direction:LTransition.OUT,easing:Strong.easeOut};
+		 * 		transitionManager.startTransition(transParams);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LTransitionManager/startTransition.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
 		startTransition : function(transParams) {
@@ -814,6 +830,21 @@ var LTransitionManager = (function() {
 	 * <tr><td>ease</td><td>LEasing (or Function)</td><td>动画的补间效果，比如LEasing.Quad.easeIn or LEasing.Cubic.easeOut。默认值是LEasing.None.easeIn.</td></tr>
 	 * </table>
 	 * @since 1.8.0
+	 * @example
+	 * 	LInit(20,"legend",640,400,main);
+	 * 	function main(){
+	 * 	    var layer = new LSprite();
+	 * 		addChild(layer);
+	 * 		var sprite01 = new LSprite();
+	 * 		sprite01.graphics.drawRect(1, "#ff0000", [0, 0, 300, 300], true, "#ff0000");
+	 * 		layer.addChild(sprite01);
+	 * 		var sprite02 = new LSprite();
+	 * 		sprite02.graphics.drawRect(1, "#008800", [0, 0, 300, 300], true, "#008800");
+	 * 		layer.addChild(sprite02);
+	 * 		var transParams = {type:LTransition.Fly,startPoint:1,duration:2,direction:LTransition.OUT,easing:Strong.easeOut};
+	 * 		LTransitionManager.start(sprite02,transParams);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LTransitionManager/LTransitionManager_start.html" target="_blank">测试链接</a></p>
 	 * @public
 	 */
 	LTransitionManager.start = function(displayObject, transParams) {

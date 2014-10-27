@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.3
+* @version 1.9.4
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -1156,6 +1156,73 @@ if (!Function.prototype.bind) {
 		return fBound;
 	};
 }
+if (!Array.prototype.find) {
+	Array.prototype.find = function (predicate) {
+		if (this == null) {
+			throw new TypeError('Array.prototype.find called on null or undefined');
+		}
+		if (typeof predicate !== 'function') {
+			throw new TypeError('predicate must be a function');
+		}
+		var list = Object(this);
+		var length = list.length >>> 0;
+		var thisArg = arguments[1];
+		var value;
+		for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return value;
+			}
+		}
+		return undefined;
+	};
+}
+if (!Array.prototype.findIndex) {
+	Array.prototype.findIndex = function (predicate) {
+		if (this == null) {
+			throw new TypeError('Array.prototype.find called on null or undefined');
+		}
+		if ( typeof predicate !== 'function') {
+			throw new TypeError('predicate must be a function');
+		}
+		var list = Object(this);
+		var length = list.length >>> 0;
+		var thisArg = arguments[1];
+		var value;
+		for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return i;
+			}
+		}
+		return -1;
+	};
+}
+if (!Array.prototype.forEach) {
+	Array.prototype.forEach = function (callback, thisArg) {
+		var T, k;
+		if (this == null) {
+			throw new TypeError(' this is null or not defined');
+		}
+		var O = Object(this);
+		var len = O.length >>> 0;
+		if ( typeof callback !== "function") {
+			throw new TypeError(callback + ' is not a function');
+		}
+		if (arguments.length > 1) {
+			T = thisArg;
+		}
+		k = 0;
+		while (k < len) {
+			var kValue;
+			if ( k in O) {
+				kValue = O[k];
+				callback.call(T, kValue, k, O);
+			}
+			k++;
+		}
+	};
+}
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -1272,7 +1339,7 @@ var LObject = (function () {
 			return r;
 		},
 		toString : function () {
-			return "[object " + this.type + "]";
+			return "[object " + this.constructor.name + "]";
 		}
 	};
 	return LObject;
@@ -1367,24 +1434,24 @@ var LMatrix = (function () {
 		rotate : function (q) {
 			var s = this,
 			radian = q * Math.PI / 180,
-	        cos = Math.cos(radian),
-	        sin = Math.sin(radian),
-	        mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			cos = Math.cos(radian),
+			sin = Math.sin(radian),
+			mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
+			s.add(mtx);
 		},
 		scale : function (sx, sy) {
 			var s = this,
 			mtx = new LMatrix(sx, 0, 0, sy, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		translate : function (tx, ty) {
 			var s = this,
 			mtx = new LMatrix(1, 0, 0, 1, tx, ty, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		skew : function (kx, ky) {
 			mtx = new LMatrix(0, ky, kx, 0, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		add : function (mtx) {
 			var s = this, a, b, c, d, tx, ty, u, v, w;
@@ -2347,7 +2414,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration;
+				s.length = s.data.duration - 0.1;
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -2413,14 +2480,13 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
-			if (typeof l == UNDEFINED) {
-				l = 1;
+			if (typeof c != UNDEFINED) {
+				s.data.currentTime = c;
+				s.currentStart = c;
 			}
-			if (typeof c == UNDEFINED) {
-				c = 0;
+			if (typeof l != UNDEFINED) {
+				s.loopLength = l;
 			}
-			s.data.currentTime = c;
-			s.currentStart = c;
 			if (typeof to !== UNDEFINED) {
 				s.currentTimeTo = to > s.length ? s.length : to;
 			} else {
@@ -2435,7 +2501,6 @@ var LMedia = (function () {
 			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
-			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
 		},
@@ -3865,7 +3930,7 @@ var LButton = (function () {
 				delete s._tweenOver;
 			};
 			if (s.staticMode) {
-				s.tween = LTweenLite.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {}).to(s.downState, 0.1, {onComplete : onComplete});
 			} else {
 				w = s.downState.getWidth();
 				h = s.downState.getHeight();
@@ -3875,7 +3940,7 @@ var LButton = (function () {
 				y = s.downState.y;
 				tx = x + (w - tw) * 0.5;
 				ty = y + (h - th) * 0.5;
-				s.tween = LTweenLite.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
+				s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {x : tx, y : ty, scaleX : s._ll_down_sx*1.1, scaleY : s._ll_down_sy*1.1, ease : Quart.easeOut})
 				.to(s.downState, 0.1, {x : x, y : y, scaleX : s._ll_down_sx, scaleY : s._ll_down_sy, ease : Quart.easeOut,onComplete : onComplete});
 			}
 		},
@@ -4031,23 +4096,25 @@ var LTextField = (function () {
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
 				for (i = 0, l = s.text.length; i < l; i++) {
-					j = c.measureText(s.text.substr(k, i - k)).width;
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
-					if ((s.wordWrap && j > s.width) || enter) {
+					if (enter) {
 						j = 0;
-						k = i;
+						k = i + 1;
 						m++;
-						if (enter) {
-							k++;
-						}
 					}
 					if (!enter) {
 						if (s.stroke) {
-							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
 						}
-						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight, c.measureText(lbl).width);
+						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight);
 					}
 					s.numLines = m;
+					j = c.measureText(s.text.substr(k, i + 1 - k)).width;
+					if (s.wordWrap && j + c.measureText(lbl.substr(i, 1)).width > s.width) {
+						j = 0;
+						k = i + 1;
+						m++;
+					}
 				}
 				s.height = (m + 1) * s.wordHeight;
 			} else {
@@ -4129,7 +4196,7 @@ var LTextField = (function () {
 			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s._getWidth(), s._getHeight()]}], e.offsetX, e.offsetY);
 		},
 		clone : function () {
-			var s = this, a = new LTextField();
+			var s = this, a = new s.constructor();
 			a.copyProperty(s);
 			a.texttype = null;
 			if (s.texttype ==  LTextFieldType.INPUT) {
@@ -4543,6 +4610,7 @@ var LBitmapData = (function () {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
+			s._data = null;
 		},
 		getPixel : function (x, y, colorType) {
 			var s = this, i, d;
@@ -4654,20 +4722,111 @@ var LBitmapData = (function () {
 			s._locked = false;
 			s._update();
 		},
-		draw : function (source) {
-			var s = this;
-			if (s.dataType == LBitmapData.DATA_CANVAS) {
-				s._context.clearRect(0, 0, s.width, s.height);
-				s._context.drawImage(source.getDataCanvas(), 0, 0);
-			} else if (s.dataType == LBitmapData.DATA_IMAGE) {
-				s.image.src = source.getDataURL();
+		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+			var s = this, c, bd = source, x, y, w, h, save = false;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			if (matrix || colorTransform || blendMode || clipRect) {
+				s._context.save();
+				save = true;
 			}
+			if (clipRect) {
+				if (!(bd instanceof LBitmapData)) {
+					x = y = 0;
+				} else {
+					x = bd.x;
+					y = bd.y;
+				}
+				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
+			}
+			w = bd.getWidth();
+			h = bd.getHeight();
+			c = bd.getDataCanvas();
+			if (colorTransform) {
+				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
+				c = bd.image;
+			}
+			if (matrix) {
+				s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+			}
+			if (blendMode) {
+				s._context.globalCompositeOperation = blendMode;
+			}
+			s._context.drawImage(c,
+				bd.x,
+				bd.y,
+				w,
+				h,
+				0,
+				0,
+				w,
+				h
+			);
+			if (save) {
+				s._context.restore();
+			}
+			s._setDataType(_dataType);
 			s.resize();
+		},
+		getDataCanvas : function () {
+			var s = this;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			s._setDataType(_dataType);
+			return s._canvas;
+		},
+		getWidth : function () {
+			return this.width;
+		},
+		getHeight : function () {
+			return this.height;
 		},
 		resize : function () {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
+		},
+		colorTransform : function (rect, colorTransform) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			var x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
+			var img = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
+			var data = img.data;
+			for (var i = 0, l = data.length; i < l; i += 4) {
+				var r = i, g = i + 1, b = i + 2, a = i + 3;
+				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
+				data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
+				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
+				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
+			}
+			s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
+		},
+		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+			var s = this, left, top, width, height, bd = sourceBitmapData;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			left = bd.x;
+			top = bd.y;
+			width = bd.width;
+			height = bd.height;
+			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image,
+				bd.x,
+				bd.y,
+				bd.width,
+				bd.height,
+				destPoint.x,
+				destPoint.y,
+				bd.width,
+				bd.height
+			);
+			bd.x = left;
+			bd.y = top;
+			bd.width = width;
+			bd.height = height;
 		}
 	};
 	for (var k in p) {
@@ -4775,7 +4934,11 @@ var LAnimation = (function () {
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			var s = this, arr, stepFrame = null;
+			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
+				s.colIndex = 0;
+			}
+			arr = s.imageArray[s.rowIndex][s.colIndex];
 			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
 				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
 			} else {
@@ -4879,6 +5042,7 @@ var LAnimationTimeline = (function () {
 		gotoAndStop : function (name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
 			s.stop();
 		},
 		addFrameScript : function (name, func, params) {
@@ -5240,6 +5404,7 @@ Circ = LEasing.Circ,
 Elastic = LEasing.Elastic,
 Back = LEasing.Back,
 Bounce = LEasing.Bounce;
+var LTweenLiteTimeline;
 var LTweenLite = (function () {
 	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
@@ -5251,12 +5416,22 @@ var LTweenLite = (function () {
 	var p = {
 		init : function($target, $duration, $vars) {
 			var s = this, k = null;
+			if (typeof $vars["tweenTimeline"] == UNDEFINED) {
+				$vars["tweenTimeline"] = LTweenLite.TYPE_FRAME;
+			}
 			s.target = $target;
 			s.duration = $duration || 0.001;
-			s.duration *= 1000;
 			s.vars = $vars;
-			s.currentTime = 0;
 			s.delay = s.vars.delay || 0;
+			if(s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER){
+				s.currentTime = (new Date()).getTime() / 1000;
+				s.initTime = s.currentTime;
+				s.startTime = s.initTime + s.delay;
+			}else{
+				s.currentTime = 0;
+				s.duration *= 1000;
+				s.currentTime -= s.delay * 1000;
+			}
 			s.combinedTimeScale = s.vars.timeScale || 1;
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
@@ -5283,7 +5458,6 @@ var LTweenLite = (function () {
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
 			}
-			s.currentTime -= s.delay * 1000;
 		},
 		pause : function () {
 			this.stop = true;
@@ -5293,22 +5467,42 @@ var LTweenLite = (function () {
 		},
 		tween : function () {
 			var s = this, tweentype;
-			if (s.stop) {
-				return;
-			}
-			s.currentTime += LGlobal.speed;
-			if (s.currentTime < 0) {
-				return;
+			var type_timer = (s.vars["tweenTimeline"] == LTweenLite.TYPE_TIMER);
+			if (type_timer) {
+				var time = (new Date()).getTime() / 1000, etime = time - s.startTime;
+				if (etime < 0) {
+					return;
+				}
+			} else {
+				if (s.stop) {
+					return;
+				}
+				s.currentTime += LGlobal.speed;
+				if (s.currentTime < 0) {
+					return;
+				}
 			}
 			for (tweentype in s.varsto) {
-				var v = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
-				s.target[tweentype] = v;
+				if (tweentype == "tweenTimeline") {
+					continue;
+				}
+				if (type_timer) {
+					s.target[tweentype] = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				} else {
+					s.target[tweentype] = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
+				}
 			}
 			if (s.onStart) {
 				s.onStart(s.target);
 				delete s.onStart;
 			}
-			if (s.currentTime >= s.duration) {
+			var e;
+			if (type_timer) {
+				e = (etime >= s.duration);
+			} else {
+				e = (s.currentTime >= s.duration);
+			}
+			if (e) {
 				for (tweentype in s.varsto) {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
@@ -5357,6 +5551,8 @@ var LTweenLite = (function () {
 		LExtends (this, LObject, []);
 		this.type = "LTweenLite";
 	}
+	LTweenLite.TYPE_FRAME = "type_frame";
+	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
 		tweens : [],
 		ll_show : null,
@@ -5411,7 +5607,11 @@ var LTweenLite = (function () {
 	for (var k in p) {
 		LTweenLite.prototype[k] = p[k];
 	}
+	LTweenLiteTimeline = new LTweenLite();
+	LGlobal.childList.push(LTweenLiteTimeline);
 	var tween = new LTweenLite();
+	tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
+	tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;
 	LGlobal.childList.push(tween);
 	return tween;
 })();

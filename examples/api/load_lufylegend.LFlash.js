@@ -1,0 +1,1 @@
+document.write('<script type="text/javascript" src="../../../lib/lufylegend.LFlash-0.0.0.min.js"></script> ');

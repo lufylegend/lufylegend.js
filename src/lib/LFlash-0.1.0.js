@@ -14,28 +14,48 @@ var LFlash = (function () {
 	 * @param {Array} jsonArray 通过Flash Professional工具导出的SpriteSheet对象的json数组，导出时需要以JSON Array格式导出。
 	 * @return {Array} 返回一个可被LAnimation直接使用的数组。 
 	 * @example
-	 * 	LInit(1000/50,"legend",800,450,main);
-	 * 	function main(){
-	 * 		LGlobal.setDebug(true);
-	 * 		var circle = new LSprite();
-	 * 		circle.x = 50;
-	 * 		circle.y = 50;
-	 * 		circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
-	 * 		addChild(circle);
-	 * 		var rect = new LSprite();
-	 * 		rect.x = 50;
-	 * 		rect.y = 100;
-	 * 		rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
-	 * 		addChild(rect);
-	 * 		LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut})
-	 * 		.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
-	 * 			trace(e.currentTarget);
-	 * 			trace(e.target);//circle
-	 * 		}});
-	 * 		LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
-	 * 		.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+	 * 	var loader;
+	 * 	var jData = {"frames": [
+	 * 	{
+	 * 	    "filename": "fairy_base0000",
+	 * 	    "frame": {"x":0,"y":0,"w":169,"h":182},
+	 * 	    "rotated": false,
+	 * 	    "trimmed": true,
+	 * 	    "spriteSourceSize": {"x":245,"y":433,"w":527,"h":616},
+	 * 	    "sourceSize": {"w":527,"h":616}
 	 * 	}
-	 * @examplelink <p><a href="../../../api/LTweenLite/to.html" target="_blank">测试链接</a></p>
+	 * 	,{
+	 * 	    "filename": "fairy_base0001",
+	 * 	    "frame": {"x":169,"y":0,"w":164,"h":182},
+	 * 	    "rotated": false,
+	 * 	    "trimmed": true,
+	 * 	    "spriteSourceSize": {"x":247,"y":433,"w":527,"h":616},
+	 * 	    "sourceSize": {"w":527,"h":616}
+	 * 	}
+	 * 	......
+	 * 	],
+	 * 	"meta": {
+	 * 	    "app": "Adobe Flash Professional",
+	 * 	    "version": "13.1.0.226",
+	 * 	    "image": "Pet2.png",
+	 * 	    "format": "RGBA8888",
+	 * 	    "size": {"w":4096,"h":4096},
+	 * 	    "scale": "1"
+	 * 	}
+	 * 	};
+	 * 	LInit(50,"legend",527,616,main);
+	 * 	function main(){
+	 * 	    loader = new LLoader();  
+	 * 		loader.addEventListener(LEvent.COMPLETE,loadBitmapdata);  
+	 * 		loader.load("Pet2.png","bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata(event){
+	 * 		var bitmapdata = new LBitmapData(loader.content,0,0,jData.frames[0].frame.w,jData.frames[0].frame.h);
+	 * 		var list = LFlash.SpriteSheetConvert(jData.frames);
+	 * 		var ppbing = new LAnimationTimeline(bitmapdata,[list]);
+	 * 		addChild(ppbing);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LFlash/SpriteSheetConvert.html" target="_blank">测试链接</a></p>
 	 * @since 1.8.11
 	 * @public
 	 */
