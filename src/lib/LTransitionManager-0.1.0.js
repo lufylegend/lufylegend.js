@@ -1,8 +1,8 @@
 /** @language chinese
- * <p>LTweenLite是比较常用的一个动画库，包含各种缓动效果，使用LTweenLite能够简化动画制作的代码编写工作。</p>
- * @class LTweenLite
+ * <p>为LTransitionManager提供动画效果。</p>
+ * @class Lib:LTransition
  * @constructor
- * @since 1.4.0
+ * @since 1.8.0
  * @public
  */
 var LTransition = (function() {
@@ -632,47 +632,133 @@ var LTransition = (function() {
 			});
 		}
 	};
+	/** @language chinese
+	 * <p>指出现时的动画。</p>
+	 * @property LTransition.IN
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.IN = "in";
+	/** @language chinese
+	 * <p>指消失时的动画。</p>
+	 * @property LTransition.OUT
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.OUT = "out";
-	/*Blinds：使用逐渐消失或逐渐出现的矩形来显示影剪对象。
-	 参数：
-	 numStrips：“遮帘”效果中的遮罩条纹数，建议范围1-50.
-	 dimension：指示遮罩条纹是垂直的（0）还是水平的（1）。遮罩条纹是垂直的，也意味着显示出来的是水平条纹的影片剪辑。*/
+	/** @language chinese
+	 * <p>使用逐渐消失或逐渐出现的矩形来显示影剪对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>numStrips</td><td>int</td><td>“遮帘”效果中的遮罩条纹数，建议范围1-50。</td></tr>
+	 * <tr><td>dimension</td><td>0|1</td><td>指示遮罩条纹是垂直的（0）还是水平的（1）。遮罩条纹是垂直的，也意味着显示出来的是水平条纹的影片剪辑。</td></tr>
+	 * </table>
+	 * @property LTransition.Blinds
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Blinds = 1;
-	/*Fade：淡入淡出效果。
-	 无参数*/
+	/** @language chinese
+	 * <p>淡入淡出效果。</p>
+	 * <p>支持属性:无</p>
+	 * @property LTransition.Fade
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Fade = 2;
-	/*Fly：从某一指定方向滑入影片剪辑对象。
-	 参数：
-	 startPoint:一个指示起始位置的整数，范围1-9：
-	 1：左上     2：上中     3：右上     4：左中
-	 5：中心     6：右中     7：左下     8：下中
-	 9：右下*/
+	/** @language chinese
+	 * <p>从某一指定方向滑入影片剪辑对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>startPoint</td><td>int</td><td><p>一个指示起始位置的整数，范围1-9。</p><p>1：左上，2：上中，3：右上，4：左中，5：中心，6：右中，7：左下，8：下中，9：右下。</p></td></tr>
+	 * </table>
+	 * @property LTransition.Fly
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Fly = 3;
-	/*Iris：使用可以缩放的方形或圆形动画遮罩来显示影剪对象。
-	 参数：
-	 startPoint:同上
-	 shape:LIris.SQUARE(方形)或LIris.CIRCLE（圆形）的遮罩形状*/
+	/** @language chinese
+	 * <p>使用可以缩放的方形或圆形动画遮罩来显示影剪对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>startPoint</td><td>int</td><td><p>一个指示起始位置的整数，范围1-9。</p><p>1：左上，2：上中，3：右上，4：左中，5：中心，6：右中，7：左下，8：下中，9：右下。</p></td></tr>
+	 * <tr><td>shape</td><td>int</td><td><p>LIris.SQUARE(方形）的遮罩形状</p><p>LIris.CIRCLE（圆形）的遮罩形状</p></td></tr>
+	 * </table>
+	 * @property LTransition.Iris
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Iris = 4;
-	/*Curtain：使用挤压遮帘效果水平或垂直显示对象。
-	 参数：
-	 dimension：挤压效果是水平的（0）还是垂直的（1）。*/
+	/** @language chinese
+	 * <p>使用挤压遮帘效果水平或垂直显示对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>dimension</td><td>int</td><td>挤压效果是水平的（0）还是垂直的（1）。</td></tr>
+	 * </table>
+	 * @property LTransition.Curtain
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Curtain = 5;
-	/*PixelDissolve：使用随机出现或消失的棋盘图案矩形来显示影剪。
-	 参数：
-	 xSections:整数，沿水平轴的遮罩矩形的数目（建议1-25）
-	 ySections:整数，沿垂直轴的遮罩矩形的数目（建议1-25）*/
+	/** @language chinese
+	 * <p>使用随机出现或消失的棋盘图案矩形来显示影剪。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>xSections</td><td>int</td><td>沿水平轴的遮罩矩形的数目（建议1-25）</td></tr>
+	 * <tr><td>ySections</td><td>int</td><td>沿垂直轴的遮罩矩形的数目（建议1-25）</td></tr>
+	 * </table>
+	 * @property LTransition.PixelDissolve
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.PixelDissolve = 6;
-	/*Squeeze：水平或垂直缩放影剪对象。
-	 参数：
-	 dimension：挤压效果是水平的（0）还是垂直的（1）。*/
+	/** @language chinese
+	 * <p>使用缩放效果水平或垂直影剪对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>dimension</td><td>int</td><td>缩放效果是水平的（0）还是垂直的（1）。</td></tr>
+	 * </table>
+	 * @property LTransition.Squeeze
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Squeeze = 7;
-	/*Wipe：使用水平移动的某一形状的动画遮罩来显示或隐藏影剪对象。
-	 参数：
-	 startPoint：同上。*/
+	/** @language chinese
+	 * <p>使用水平移动的某一形状的动画遮罩来显示或隐藏影剪对象。</p>
+	 * <p>支持属性:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>startPoint</td><td>int</td><td><p>一个指示起始位置的整数，范围1-9。</p><p>1：左上，2：上中，3：右上，4：左中，5：中心，6：右中，7：左下，8：下中，9：右下。</p></td></tr>
+	 * </table>
+	 * @property LTransition.Wipe
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Wipe = 8;
-	/*Zoom：通过按比例缩放来 放大或缩小 影剪对象。
-	 无参数*/
+	/** @language chinese
+	 * <p>通过按比例缩放来 放大或缩小 影剪对象。</p>
+	 * <p>支持属性:无</p>
+	 * @property LTransition.Zoom
+	 * @since 1.8.0
+	 * @public
+	 * @static
+	 */
 	LTransition.Zoom = 9;
 	return LTransition;
 })();
@@ -688,7 +774,8 @@ var LIris = (function() {
  * <p>您可以通过两种方式创建 TransitionManager 实例：</p>
  * <p>请调用 LTransitionManager.start() 方法。 这是创建 LTransitionManager 实例最简单的方式，建议使用该方式。</p>
  * <p>使用 new 运算符。 然后可以指定过渡属性，并通过调用 LTransitionManager.startTransition() 方法在另一步中启动过渡效果。</p>
- * @class LTransitionManager
+ * <p>使用时需要引进lufylegend.LTransitionManager-x.x.x.js文件。</p>
+ * @class Lib:LTransitionManager
  * @constructor
  * @param {LDisplayObject} displayObject 要应用过渡效果的对象。
  * @since 1.8.0
@@ -700,33 +787,40 @@ var LTransitionManager = (function() {
 	}
 	LTransitionManager.prototype = {
 		/** @language chinese
-		 * <p>定义动画效果。 它允许您将九种动画效果中的一种应用于影片剪辑。 在创建自定义组件时，您可以使用 LTransitionManager 类将动画效果应用于组件可视界面中的影片剪辑。整体来说，有九个不同的动画可以用。</p>
-		 * <p>您可以通过两种方式创建 TransitionManager 实例：</p>
-		 * <p>请调用 LTransitionManager.start() 方法。 这是创建 LTransitionManager 实例最简单的方式，建议使用该方式。</p>
-		 * <p>使用 new 运算符。 然后可以指定过渡属性，并通过调用 LTransitionManager.startTransition() 方法在另一步中启动过渡效果。</p>
+		 * <p>创建新的 LTransitionManager 实例，并指定目标对象，应用过渡并启动该过渡。</p>
 		 * @method startTransition
-		 * @param {LDisplayObject} displayObject 要应用过渡效果的对象。
+		 * @param {Object} transParams 请参考LTransitionManager.start的transParams参数。
 		 * @since 1.8.0
 		 * @public
 		 */
-		startTransition : function(transObj) {
-			return LTransitionManager.start(this.child, transObj);
+		startTransition : function(transParams) {
+			return LTransitionManager.start(this.child, transParams);
 		}
 	};
 	/** @language chinese
-	 * <p>[静态] 创建新的 LTransitionManager 实例，指定目标对象，应用过渡并启动该过渡。</p>
+	 * <p>[静态] 不创建新的 LTransitionManager 实例，直接指定目标对象，应用过渡并启动该过渡。</p>
 	 * @method LTransitionManager.start
 	 * @static
 	 * @param {LDisplayObject} content 要应用过渡效果的对象。
-	 * @param {Object} transParams 在对象内传递的参数的集合。 transParams 对象应包含 type 参数，该参数（后面跟有 direction、duration 和 easing 参数） 指示要应用的过渡效果类。 此外，还必须包括该过渡效果类所必需的任何参数。 例如，LIris过渡效果类需要附加的 startPoint 和 shape 参数。 因此，除了每个过渡都需要的 type、duration 和 easing 参数外，您还应该添加 LIris 效果所需要的 startPoint 和 shape 参数（添加到 transParams 对象）。
+	 * @param {Object} transParams 
+	 * 在对象内传递的参数的集合。 transParams 对象应包含 type 参数，该参数（后面跟有 direction、duration 和 easing 参数） 指示要应用的过渡效果类。 
+	 * 此外，还必须包括该过渡效果类所必需的任何参数。 例如，LIris过渡效果类需要附加的 startPoint 和 shape 参数。 
+	 * 因此，除了每个过渡都需要的 type、duration 和 easing 参数外，您还应该添加 LIris 效果所需要的 startPoint 和 shape 参数（添加到 transParams 对象）。
+	 * <p>transParams可以使用的值:</p>
+	 * <table>
+	 * <tr><th>属性</th><th>类型</th><th>说明</th></tr>
+	 * <tr><td>type</td><td>float</td><td>过渡效果的类型，具体类型请参考LTransition</td></tr>
+	 * <tr><td>duration</td><td>float</td><td>过渡效果的时间长度。</td></tr>
+	 * <tr><td>ease</td><td>LEasing (or Function)</td><td>动画的补间效果，比如LEasing.Quad.easeIn or LEasing.Cubic.easeOut。默认值是LEasing.None.easeIn.</td></tr>
+	 * </table>
 	 * @since 1.8.0
 	 * @public
 	 */
-	LTransitionManager.start = function(displayObject, transObj) {
+	LTransitionManager.start = function(displayObject, transParams) {
 		if (!LTweenLite) {
 			throw ("you need load the LTweenLite.");
 		}	
-		var trans = new LTransition(displayObject, transObj);
+		var trans = new LTransition(displayObject, transParams);
 		trans.startTransition();
 		return trans;
 	};
