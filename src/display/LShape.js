@@ -117,6 +117,7 @@ var LShape = (function () {
 		s.graphics = new LGraphics();
 		s.graphics.parent = s;
 	}
+	LShape.LINE = "line";
 	LShape.ARC = "arc";
 	LShape.RECT = "rect";
 	LShape.VERTICES = "vertices";

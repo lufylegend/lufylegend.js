@@ -1803,6 +1803,7 @@ var LGraphics = (function () {
 				c.closePath();
 				c.stroke();
 			});
+			s.showList.push({type : LShape.LINE, arg : pa});
 		},
 		/** @language chinese
 		 * 使用原生的canvas函数进行绘图。
