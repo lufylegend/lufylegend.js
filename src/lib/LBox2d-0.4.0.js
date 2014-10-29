@@ -1,8 +1,8 @@
-var LBox2d = (function () {
-	function LBox2d (gravity, doSleep, drawScale) {
+var LBox2d = (function() {
+	function LBox2d(gravity, doSleep, drawScale) {
 		var s = this;
 		Box2D.Dynamics.b2World.prototype.LAddController = Box2D.Dynamics.b2World.prototype.AddController;
-		Box2D.Dynamics.b2World.prototype.AddController = function (c) {
+		Box2D.Dynamics.b2World.prototype.AddController = function(c) {
 			var l = {}, k;
 			for (k in c) {
 				l[k] = c[k];
@@ -12,15 +12,13 @@ var LBox2d = (function () {
 			}
 			return this.LAddController(c);
 		};
-		var i, j, b = Box2D, d,
-		a = [b.Collision, b.Common, b.Common.Math,
-		b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
+		var i, j, b = Box2D, d, a = [b.Collision, b.Common, b.Common.Math, b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
 		for (i in a) {
 			for (j in a[i]) {
 				s[j] = a[i][j];
 			}
 		}
-		if (typeof drawScale == UNDEFINED) {
+		if ( typeof drawScale == UNDEFINED) {
 			drawScale = 30;
 		}
 		s.stop = false;
@@ -29,12 +27,12 @@ var LBox2d = (function () {
 		s.mouseJoint = null;
 		s.mousePVec = null;
 		s.contactListener = null;
-		if (typeof gravity == UNDEFINED) {
+		if ( typeof gravity == UNDEFINED) {
 			gravity = new s.b2Vec2(0, 9.8);
 		} else {
 			gravity = new s.b2Vec2(gravity[0], gravity[1]);
 		}
-		if (typeof doSleep == UNDEFINED) {
+		if ( typeof doSleep == UNDEFINED) {
 			doSleep = true;
 		}
 		s.world = new s.b2World(gravity, doSleep);
@@ -51,8 +49,10 @@ var LBox2d = (function () {
 		}
 		LGlobal.destroy = true;
 	}
+
+
 	LBox2d.prototype = {
-		setEvent : function (t_v, f_v) {
+		setEvent : function(t_v, f_v) {
 			var s = this;
 			if (t_v == LEvent.ENTER_FRAME) {
 				s.ll_enterFrame = f_v;
@@ -77,14 +77,14 @@ var LBox2d = (function () {
 					s.contactListener.BeginContact = f_v;
 			}
 		},
-		setWeldJoint : function (A, B) { 
-			var s = this; 
+		setWeldJoint : function(A, B) {
+			var s = this;
 			var j = new s.b2WeldJointDef();
 			j.Initialize(B, A, B.GetWorldCenter());
 			return s.world.CreateJoint(j);
 		},
-		setLineJoint : function (A, B, vec, t, m) {
-			var s = this; 
+		setLineJoint : function(A, B, vec, t, m) {
+			var s = this;
 			var wa = new s.b2Vec2(vec[0], vec[1]);
 			var j = new s.b2LineJointDef();
 			j.Initialize(A, B, B.GetWorldCenter(), wa);
@@ -104,8 +104,8 @@ var LBox2d = (function () {
 			}
 			return s.world.CreateJoint(j);
 		},
-		setGearJoint : function (A, B, ra, r, p) { 
-			var s = this; 
+		setGearJoint : function(A, B, ra, r, p) {
+			var s = this;
 			var j = new s.b2GearJointDef();
 			j.joint1 = r;
 			j.joint2 = p;
@@ -114,7 +114,7 @@ var LBox2d = (function () {
 			j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
 			return s.world.CreateJoint(j);
 		},
-		setPrismaticJoint : function (A, B, vec, t, m) {
+		setPrismaticJoint : function(A, B, vec, t, m) {
 			var s = this;
 			var wa = new s.b2Vec2(vec[0], vec[1]);
 			var j = new s.b2PrismaticJointDef();
@@ -135,10 +135,10 @@ var LBox2d = (function () {
 			}
 			return s.world.CreateJoint(j);
 		},
-		setRevoluteJoint : function (A, B, a, m) {
+		setRevoluteJoint : function(A, B, a, m) {
 			var s = this;
-			var j  = new s.b2RevoluteJointDef();
-			j .Initialize(A, B, B.GetWorldCenter());
+			var j = new s.b2RevoluteJointDef();
+			j.Initialize(A, B, B.GetWorldCenter());
 			if (a == null) {
 				j.enableLimit = false;
 			} else {
@@ -153,27 +153,27 @@ var LBox2d = (function () {
 				j.motorSpeed = m[1];
 				j.enableMotor = true;
 			}
-			return s.world.CreateJoint(j); 
+			return s.world.CreateJoint(j);
 		},
-		setDistanceJoint : function (A, B) {
+		setDistanceJoint : function(A, B) {
 			var s = this;
 			var j = new s.b2DistanceJointDef();
 			j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
-			return s.world.CreateJoint(j); 
+			return s.world.CreateJoint(j);
 		},
-		setPulleyJoint : function (A, B, vA, vB, ratio) {
+		setPulleyJoint : function(A, B, vA, vB, ratio) {
 			var s = this;
-			var a1 = A.GetWorldCenter();  
+			var a1 = A.GetWorldCenter();
 			var a2 = B.GetWorldCenter();
 			var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
 			var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
-			var j = new s.b2PulleyJointDef();  
-			j.Initialize(A, B, g1, g2, a1, a2,ratio);  
+			var j = new s.b2PulleyJointDef();
+			j.Initialize(A, B, g1, g2, a1, a2, ratio);
 			j.maxLengthA = vA[2] / s.drawScale;
 			j.maxLengthB = vB[2] / s.drawScale;
 			return s.world.CreateJoint(j);
 		},
-		addCircle : function (r, cx, cy, t, d, f, e) {
+		addCircle : function(r, cx, cy, t, d, f, e) {
 			var s = this;
 			s.bodyDef = new s.b2BodyDef;
 			/*动态*/
@@ -192,7 +192,7 @@ var LBox2d = (function () {
 			shape.CreateFixture(s.fixDef);
 			return shape;
 		},
-		addPolygon : function (w, h, cx, cy, type, d, f, e) {
+		addPolygon : function(w, h, cx, cy, type, d, f, e) {
 			var s = this;
 			s.bodyDef = new s.b2BodyDef;
 			/*动态*/
@@ -212,18 +212,18 @@ var LBox2d = (function () {
 			shape.CreateFixture(s.fixDef);
 			return shape;
 		},
-		addVertices : function (vertices, type, d, f, e) {
+		addVertices : function(vertices, type, d, f, e) {
 			var s = this, i, l;
 			s.bodyDef = new s.b2BodyDef;
 			/*动态*/
 			s.bodyDef.type = type;
 			var shape = s.world.CreateBody(s.bodyDef);
-			for (i = 0, l = vertices.length; i < l; i++) {
+			for ( i = 0, l = vertices.length; i < l; i++) {
 				s.createShapeAsArray(shape, vertices[i], type, d, f, e);
 			}
 			return shape;
 		},
-		createShapeAsArray : function (c, vertices, type, d, f, e) {
+		createShapeAsArray : function(c, vertices, type, d, f, e) {
 			var s = this;
 			var shape = new s.b2PolygonShape();
 			var sv = s.createVerticesArray(vertices);
@@ -238,19 +238,19 @@ var LBox2d = (function () {
 			def.restitution = e;
 			c.CreateFixture(def);
 		},
-		createVerticesArray : function (a) {
+		createVerticesArray : function(a) {
 			var s = this, i, l;
 			var v = new Array();
 			if (a.length < 3) {
 				return v;
 			}
-			for (i = 0, l = a.length; i < l; i++) {
+			for ( i = 0, l = a.length; i < l; i++) {
 				v.push(new s.b2Vec2(a[i][0] / s.drawScale, a[i][1] / s.drawScale));
 			}
 			return v;
 		},
-		getBodyAtMouse : function (mouseX, mouseY) { 
-	 		var s = this;
+		getBodyAtMouse : function(mouseX, mouseY) {
+			var s = this;
 			s.mousePVec = new s.b2Vec2(mouseX, mouseY);
 			var aabb = new s.b2AABB();
 			aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
@@ -259,7 +259,7 @@ var LBox2d = (function () {
 			s.world.QueryAABB(s.getBodyCallBack, aabb);
 			return s.selectedBody;
 		},
-		getBodyCallBack : function (fixture) {
+		getBodyCallBack : function(fixture) {
 			var s = LGlobal.box2d;
 			if (fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
 				if (fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
@@ -269,7 +269,7 @@ var LBox2d = (function () {
 			}
 			return true;
 		},
-		ll_show : function () {
+		ll_show : function() {
 			var s = this, k = null;
 			for (k in s.removeList) {
 				s.world.DestroyBody(s.removeList[k]);
@@ -279,7 +279,9 @@ var LBox2d = (function () {
 				return;
 			}
 			if (s.ll_enterFrame) {
-				s.ll_enterFrame({target:s});
+				s.ll_enterFrame({
+					target : s
+				});
 			}
 			s.world.Step(1 / 30, 10, 10);
 			s.world.ClearForces();
@@ -287,10 +289,10 @@ var LBox2d = (function () {
 				s.world.DrawDebugData();
 			}
 		},
-		synchronous : function () {
+		synchronous : function() {
 			var s = this;
 			var parent = null, child, position = null, cx = 0, cy = 0, currentBody, joint;
-			for (currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
+			for ( currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
 				child = currentBody.GetUserData();
 				if (child) {
 					if (position == null) {
@@ -298,15 +300,16 @@ var LBox2d = (function () {
 						cx = currentBody.GetPosition().x;
 						cy = currentBody.GetPosition().y;
 					}
-					currentBody.SetPosition(new s.b2Vec2(
-						(child.x + child.rotatex + parent.x) / s.drawScale,
-						(child.y + child.rotatey + parent.y) / s.drawScale ));
+					currentBody.SetPosition(new s.b2Vec2((child.x + child.rotatex + parent.x) / s.drawScale, (child.y + child.rotatey + parent.y) / s.drawScale));
 					if (position == null) {
-						position = {x : (currentBody.GetPosition().x - cx), y : (currentBody.GetPosition().y - cy)};
+						position = {
+							x : (currentBody.GetPosition().x - cx),
+							y : (currentBody.GetPosition().y - cy)
+						};
 					}
 				}
 			}
-			for (joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
+			for ( joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
 				if (joint.m_groundAnchor1) {
 					joint.m_groundAnchor1.x += position.x;
 					joint.m_groundAnchor1.y += position.y;
@@ -323,14 +326,14 @@ var LBox2d = (function () {
 	};
 	return LBox2d;
 })();
-LSprite.prototype.setBodyMouseJoint = function (value) {
+LSprite.prototype.setBodyMouseJoint = function(value) {
 	var s = this;
 	if (!s.box2dBody) {
 		return;
 	}
 	s.box2dBody.mouseJoint = value;
 };
-LSprite.prototype.clearBody = function (value) {
+LSprite.prototype.clearBody = function(value) {
 	var s = this;
 	if (!s.box2dBody) {
 		return;
@@ -338,52 +341,33 @@ LSprite.prototype.clearBody = function (value) {
 	LGlobal.box2d.removeList.push(s.box2dBody);
 	s.box2dBody = null;
 };
-LSprite.prototype.addBodyCircle = function (radius, cx, cy, type, density, friction, restitution) {
+LSprite.prototype.addBodyCircle = function(radius, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = radius;
 	s.rotatey = radius;
-	s.box2dBody = LGlobal.box2d.addCircle(
-		radius / LGlobal.box2d.drawScale,
-		(s.x + cx) / LGlobal.box2d.drawScale,
-		(s.y + cy) / LGlobal.box2d.drawScale,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-		density == null ? 0.5 : density,
-		friction == null ? 0.4 : friction,
-		restitution == null ? 0.8 : restitution);
+	s.box2dBody = LGlobal.box2d.addCircle(radius / LGlobal.box2d.drawScale, (s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyPolygon = function (w, h, type, density, friction, restitution) {
+LSprite.prototype.addBodyPolygon = function(w, h, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = w / 2;
 	s.rotatey = h / 2;
-	s.box2dBody = LGlobal.box2d.addPolygon(
-		w * 0.5 / LGlobal.box2d.drawScale,
-		h * 0.5 / LGlobal.box2d.drawScale,
-		s.x / LGlobal.box2d.drawScale,
-		s.y / LGlobal.box2d.drawScale,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-		density == null ? 0.5 : density,
-		friction == null ? 0.4 : friction,
-		restitution == null ? 0.8 : restitution);
+	s.box2dBody = LGlobal.box2d.addPolygon(w * 0.5 / LGlobal.box2d.drawScale, h * 0.5 / LGlobal.box2d.drawScale, s.x / LGlobal.box2d.drawScale, s.y / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyVertices = function (vertices, cx, cy, type, density, friction, restitution) {
+LSprite.prototype.addBodyVertices = function(vertices, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = 0;
 	s.rotatey = 0;
-	s.box2dBody = LGlobal.box2d.addVertices(vertices,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-			density, friction, restitution);
+	s.box2dBody = LGlobal.box2d.addVertices(vertices, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density, friction, restitution);
 	s.box2dBody.SetUserData(s);
 	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale));
 };
-LGlobal.mouseJoint_start = function (eve) {
+LGlobal.mouseJoint_start = function(eve) {
 	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint || LGlobal.box2d.stop) {
 		return;
 	}
-	var mX = eve.offsetX / LGlobal.box2d.drawScale,
-	mY = eve.offsetY / LGlobal.box2d.drawScale,
-	b = LGlobal.box2d.getBodyAtMouse(mX, mY);
+	var mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale, b = LGlobal.box2d.getBodyAtMouse(mX, mY);
 	if (b && b.mouseJoint) {
 		var m = new LGlobal.box2d.b2MouseJointDef();
 		m.bodyA = LGlobal.box2d.world.GetGroundBody();
@@ -395,17 +379,16 @@ LGlobal.mouseJoint_start = function (eve) {
 		b.SetAwake(true);
 	};
 };
-LGlobal.mouseJoint_move = function (eve) {
-	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint){
+LGlobal.mouseJoint_move = function(eve) {
+	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint) {
 		return;
 	}
-	mX = eve.offsetX / LGlobal.box2d.drawScale,
-	mY = eve.offsetY / LGlobal.box2d.drawScale;
+	mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale;
 	LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
 };
-LGlobal.mouseJoint_end = function () {
+LGlobal.mouseJoint_end = function() {
 	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
 		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
 		LGlobal.box2d.mouseJoint = null;
 	}
-};
+}; 

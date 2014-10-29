@@ -582,6 +582,7 @@ var LGraphics = (function () {
 			s.setList.push(function () {
 				LGlobal.canvas.moveTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		/** @language chinese
 		 * 为当前的子路径添加一条直线线段。
@@ -636,6 +637,7 @@ var LGraphics = (function () {
 			s.setList.push(function () {
 				LGlobal.canvas.lineTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		/** @language chinese
 		 * 为当前路径添加一条矩形子路径。
@@ -1902,6 +1904,26 @@ var LGraphics = (function () {
 							max = v[0];
 						}
 					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (min > s.showList[k].arg[2]) {
+						min = s.showList[k].arg[2];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[2]) {
+						max = s.showList[k].arg[2];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
 				}
 			}
 			s.left = min;
@@ -1933,6 +1955,26 @@ var LGraphics = (function () {
 						if (max < v[1]) {
 							max = v[1];
 						}
+					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (min > s.showList[k].arg[3]) {
+						min = s.showList[k].arg[3];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[3]) {
+						max = s.showList[k].arg[3];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
 					}
 				}
 			}	
