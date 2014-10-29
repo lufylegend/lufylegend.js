@@ -1393,6 +1393,68 @@ var LSprite = (function () {
 				}
 			}
 		}
+		/** @language chinese
+		 * <p>LBox2d相关。</p>
+		 * <p>给物体添加鼠标关节,响应鼠标拖拽物体。</p>
+		 * <p>使用lufylegend.js引擎后，鼠标拖拽变得非常简便了，只需要调用LSprite对象的setBodyMouseJoint方法即可。</p>
+		 * <p>一个LSprite对象通过addBodyCircle，addBodyPolygon等方法，会将其变为一个Box2d物理世界里的一个物体，如果调用它的setBodyMouseJoint(true)函数，可以让其支持鼠标拖拽。</p>
+		 * @method setBodyMouseJoint
+		 * @param {Boolean} value 是否支持鼠标拖拽
+		 * @since 1.4.0
+		 * @public
+		 */
+		/** @language chinese
+		 * <p>LBox2d相关。</p>
+		 * <p>设定圆形body。</p>
+		 * @method addBodyCircle
+		 * @param {float} radius 半径
+		 * @param {float} cx 圆心坐标x
+		 * @param {float} cy 圆心坐标y
+		 * @param {int} type 是否动态(1或0)
+		 * @param {float} density 密度
+		 * @param {float} friction 摩擦
+		 * @param {float} restitution 弹性
+		 * @return {b2Body} 返回一个被创建的box2d的body
+		 * @since 1.4.0
+		 * @public
+		 */
+		/** @language chinese
+		 * <p>LBox2d相关。</p>
+		 * <p>设定矩形body。</p>
+		 * @method addBodyPolygon
+		 * @param {float} width 矩形宽
+		 * @param {float} height 矩形高
+		 * @param {int} type 是否动态(1或0)
+		 * @param {float} density 密度
+		 * @param {float} friction 摩擦
+		 * @param {float} restitution 弹性
+		 * @return {b2Body} 返回一个被创建的box2d的body
+		 * @since 1.4.0
+		 * @public
+		 */
+		/** @language chinese
+		 * <p>LBox2d相关。</p>
+		 * <p>以定点数组形式设定任意形状的body。</p>
+		 * @method addBodyVertices
+		 * @param {float} vertices 顶点数组
+		 * @param {float} cx 中心坐标x
+		 * @param {float} cy 中心坐标y
+		 * @param {int} type 是否动态(1或0)
+		 * @param {float} density 密度
+		 * @param {float} friction 摩擦
+		 * @param {float} restitution 弹性
+		 * @return {b2Body} 返回一个被创建的box2d的body
+		 * @since 1.4.0
+		 * @public
+		 */
+		/** @language chinese
+		 * <p>LBox2d相关。</p>
+		 * <p>移除已设定的body。</p>
+		 * <p>一个LSprite对象通过addBodyCircle，addBodyPolygon等方法，会将其变为一个Box2d物理世界里的一个物体，它的运动开始遵循牛顿运动定律，当调用它的clearBody()函数后，会将其变回到普通的LSprite对象，并且被加入到该对象上的body也一起被移除。</p>
+		 * @method clearBody
+		 * @since 1.4.0
+		 * @public
+		 */
 	};
 	for (var k in p) {
 		LSprite.prototype[k] = p[k];
