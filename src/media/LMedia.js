@@ -81,6 +81,7 @@ var LMedia = (function () {
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
 		s.currentStart = 0;
+		LMedia.Container.add(this);
 	}
 	var p = {
 		onload : function () {
@@ -411,10 +412,54 @@ var LMedia = (function () {
 			s.data.pause();
 			s.data.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_end : function () {
+			var s = this;
+			if (s.data.currentTime >= s.length){
+				s.data.pause();
+			}
+		},
+		die : function () {
+			LMedia.Container.remove(this);
 		}
 	};
 	for (var k in p) {
 		LMedia.prototype[k] = p[k];
+	}
+	LMedia.Container = {
+		list : [],
+		ll_show : function () {
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i]) {
+					s[i].ll_end();
+				}
+			}
+		},
+		add : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			if (LMedia.Container.list.indexOf(obj) >= 0) {
+				return;
+			} 
+			LMedia.Container.list.push(obj);
+		},
+		remove : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i].objectIndex == obj.objectIndex) {
+					l.splice(i,1);
+					break;
+				}
+			}
+		}
+	};
+	if (LGlobal.android) {
+		LGlobal.childList.push(LMedia.Container);
 	}
 	return LMedia;
 })();
