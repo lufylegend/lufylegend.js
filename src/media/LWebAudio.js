@@ -502,3 +502,9 @@ var LWebAudio = (function () {
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
  */
+/** @language chinese
+ * 播放结束事件，一个音频文件播放完之后调度。
+ * @event LEvent.SOUND_COMPLETE
+ * @since 1.7.0
+ * @public
+ */

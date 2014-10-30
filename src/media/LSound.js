@@ -113,12 +113,6 @@
  * @public
  */
 /*LSound.webAudioEnabled = false;*/
-/** @language chinese
- * 播放结束事件，一个音频文件播放完之后调度。
- * @event LEvent.SOUND_COMPLETE
- * @since 1.0.0
- * @public
- */
 
 /** @language chinese
  * <p>此类创建和播放音频的 LSound 对象。</p>
