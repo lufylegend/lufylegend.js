@@ -81,7 +81,7 @@ var LMedia = (function () {
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
 		s.currentStart = 0;
-		LMedia.Container.add(this);
+		LSound.Container.add(this);
 	}
 	var p = {
 		onload : function () {
@@ -147,15 +147,20 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (s.data.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					s.data.src = a[k];
 					s.onload();
 					s.data.load();
@@ -283,9 +288,9 @@ var LMedia = (function () {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(function(){
+			/*s.timeout = setTimeout(function(){
 				s._onended();
-			}, (s.currentTimeTo - s.data.currentTime) * 1000);
+			}, (s.currentTimeTo - s.data.currentTime) * 1000);*/
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -413,53 +418,21 @@ var LMedia = (function () {
 			s.data.currentTime = 0;
 			s.currentSave = 0;
 		},
-		ll_end : function () {
+		ll_check : function () {
 			var s = this;
-			if (s.data.currentTime >= s.length){
-				s.data.pause();
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime + LGlobal.speed * 0.001) {
+				s._onended();
 			}
 		},
 		die : function () {
-			LMedia.Container.remove(this);
+			LSound.Container.remove(this);
 		}
 	};
 	for (var k in p) {
 		LMedia.prototype[k] = p[k];
-	}
-	LMedia.Container = {
-		list : [],
-		ll_show : function () {
-			var l = LMedia.Container.list;
-			for (var i = l.length; i >= 0; i--) {
-				if (l[i]) {
-					s[i].ll_end();
-				}
-			}
-		},
-		add : function (obj) {
-			if (!LGlobal.android) {
-				return;
-			}
-			if (LMedia.Container.list.indexOf(obj) >= 0) {
-				return;
-			} 
-			LMedia.Container.list.push(obj);
-		},
-		remove : function (obj) {
-			if (!LGlobal.android) {
-				return;
-			}
-			var l = LMedia.Container.list;
-			for (var i = l.length; i >= 0; i--) {
-				if (l[i].objectIndex == obj.objectIndex) {
-					l.splice(i,1);
-					break;
-				}
-			}
-		}
-	};
-	if (LGlobal.android) {
-		LGlobal.childList.push(LMedia.Container);
 	}
 	return LMedia;
 })();

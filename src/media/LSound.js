@@ -274,5 +274,32 @@ var LSound = (function () {
 			LSound.webAudioEnabled = true;
 		}
 	}
+	LSound.Container = {
+		list : [],
+		ll_show : function () {
+			var l = LSound.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i]) {
+					l[i].ll_check();
+				}
+			}
+		},
+		add : function (obj) {
+			if (LSound.Container.list.indexOf(obj) >= 0) {
+				return;
+			} 
+			LSound.Container.list.push(obj);
+		},
+		remove : function (obj) {
+			var l = LSound.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i].objectIndex == obj.objectIndex) {
+					l.splice(i,1);
+					break;
+				}
+			}
+		}
+	};
+	LGlobal.childList.push(LSound.Container);
 	return LSound;
 })();

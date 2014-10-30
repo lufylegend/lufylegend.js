@@ -1223,6 +1223,57 @@ if (!Array.prototype.forEach) {
 		}
 	};
 }
+if (!Array.prototype.every) {
+	Array.prototype.every = function(callbackfn, thisArg) {
+		'use strict';
+		var T, k;
+		if (this == null) {
+			throw new TypeError('this is null or not defined');
+		}
+		var O = Object(this);
+		var len = O.length >>> 0;
+		if ( typeof callbackfn !== 'function') {
+			throw new TypeError();
+		}
+		if (arguments.length > 1) {
+			T = thisArg;
+		}
+		k = 0;
+		while (k < len) {
+			var kValue;
+			if ( k in O) {
+				kValue = O[k];
+				var testResult = callbackfn.call(T, kValue, k, O);
+				if (!testResult) {
+					return false;
+				}
+			}
+			k++;
+		}
+		return true;
+	};
+}
+if (!Array.prototype.some) {
+	Array.prototype.some = function(fun) {
+		'use strict';
+		if (this == null) {
+			throw new TypeError('Array.prototype.some called on null or undefined');
+		}
+		if ( typeof fun !== 'function') {
+			throw new TypeError();
+		}
+		var t = Object(this);
+		var len = t.length >>> 0;
+		var thisArg = arguments.length >= 2 ? arguments[1] :
+		void 0;
+		for (var i = 0; i < len; i++) {
+			if ( i in t && fun.call(thisArg, t[i], i, t)) {
+				return true;
+			}
+		}
+		return false;
+	};
+}
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -2424,6 +2475,7 @@ var LMedia = (function () {
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
 		s.currentStart = 0;
+		LMedia.Container.add(this);
 	}
 	var p = {
 		onload : function () {
@@ -2462,15 +2514,20 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (s.data.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					s.data.src = a[k];
 					s.onload();
 					s.data.load();
@@ -2511,9 +2568,6 @@ var LMedia = (function () {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(function(){
-				s._onended();
-			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -2550,10 +2604,57 @@ var LMedia = (function () {
 			s.data.pause();
 			s.data.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_check : function () {
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime) {
+				s._onended();
+			}
+		},
+		die : function () {
+			LMedia.Container.remove(this);
 		}
 	};
 	for (var k in p) {
 		LMedia.prototype[k] = p[k];
+	}
+	LMedia.Container = {
+		list : [],
+		ll_show : function () {
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i]) {
+					l[i].ll_check();
+				}
+			}
+		},
+		add : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			if (LMedia.Container.list.indexOf(obj) >= 0) {
+				return;
+			} 
+			LMedia.Container.list.push(obj);
+		},
+		remove : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i].objectIndex == obj.objectIndex) {
+					l.splice(i,1);
+					break;
+				}
+			}
+		}
+	};
+	if (LGlobal.android) {
+		LGlobal.childList.push(LMedia.Container);
 	}
 	return LMedia;
 })();
@@ -2870,12 +2971,14 @@ var LGraphics = (function () {
 			s.setList.push(function () {
 				LGlobal.canvas.moveTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		lineTo : function (x, y) {
 			var s = this;
 			s.setList.push(function () {
 				LGlobal.canvas.lineTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		rect : function (x, y, w, h) {
 			var s = this;
@@ -3233,6 +3336,7 @@ var LGraphics = (function () {
 				c.closePath();
 				c.stroke();
 			});
+			s.showList.push({type : LShape.LINE, arg : pa});
 		},
 		add : function (f) {
 			this.setList.push(f);
@@ -3271,6 +3375,26 @@ var LGraphics = (function () {
 							max = v[0];
 						}
 					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (min > s.showList[k].arg[2]) {
+						min = s.showList[k].arg[2];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[2]) {
+						max = s.showList[k].arg[2];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
 				}
 			}
 			s.left = min;
@@ -3303,6 +3427,26 @@ var LGraphics = (function () {
 							max = v[1];
 						}
 					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (min > s.showList[k].arg[3]) {
+						min = s.showList[k].arg[3];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[3]) {
+						max = s.showList[k].arg[3];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
+					}
 				}
 			}	
 			s.top = min;	
@@ -3332,6 +3476,8 @@ var LShape = (function () {
 		s.graphics = new LGraphics();
 		s.graphics.parent = s;
 	}
+	LShape.POINT = "point";
+	LShape.LINE = "line";
 	LShape.ARC = "arc";
 	LShape.RECT = "rect";
 	LShape.VERTICES = "vertices";
@@ -5782,96 +5928,105 @@ var FPS = (function () {
 	};
 	return FPS;
 })();
-function LQuadTree(rect){
-	var self = this;
-	self.q1 = null;
-	self.q2 = null;
-	self.q3 = null;
-	self.q4 = null;
-	self.parent = null;
-	self.data = [];
-	self.rect = rect;
-	self.root = self;
-}
-LQuadTree.prototype = {
-	createChildren:function (deep){
-		if (deep == 0)return;
-		var self = this;
-		var hw = self.rect.width / 2 , hh = self.rect.height / 2;
-		self.q1 = new LQuadTree(new LRectangle(self.rect.x + hw, self.rect.y, hw, hh));
-		self.q2 = new LQuadTree(new LRectangle(self.rect.x + hw, self.rect.y + hh, hw, hh));
-		self.q3 = new LQuadTree(new LRectangle(self.rect.x, self.rect.y + hh, hw, hh));
-		self.q4 = new LQuadTree(new LRectangle(self.rect.x, self.rect.y, hw, hh));
-		self.q1.parent = self.q2.parent = self.q3.parent = self.q4.parent = self;
-		self.q1.root = self.q2.root = self.q3.root = self.q4.root = self.root;
-		self.q1.createChildren(deep - 1);
-		self.q2.createChildren(deep - 1);
-		self.q3.createChildren(deep - 1);
-		self.q4.createChildren(deep - 1);
-	},
-	hasChildren:function(){
-		var self = this;
-		return self.q1 && self.q2 && self.q3 && self.q4;
-	},
-	clear:function(){
-		var self = this;
-		if (self.hasChildren()){
-			return self.q1.clear() || self.q2.clear()|| self.q3.clear() || self.q4.clear();
-		}else{
-			self.q1 = null;
-			self.q2 = null;
-			self.q3 = null;
-			self.q4 = null;
-			self.parent = null;
-			self.data = [];
-			return self;
-		}
-	},
-	add:function(v, x, y){
-		var self = this;
-		if (!self.isIn(x,y))return null;
-		if (self.hasChildren()){
-			return self.q1.add(v,x,y) || self.q2.add(v,x,y) || self.q3.add(v,x,y) || self.q4.add(v,x,y);
-		}else{
-			self.data.push(v);
-			return self;
-		}
-	},
-	remove:function(v, x, y){
-		var self = this;
-		if (!self.isIn(x,y))return null;
-		if (self.hasChildren()){
-			return self.q1.remove(v,x,y) || self.q2.remove(v,x,y) || self.q3.remove(v,x,y) || self.q4.remove(v,x,y);
-		}else{
-			var index = self.data.indexOf(v);
-			if (index!=-1){
-				self.data.splice(index, 1);
-				return self;
-			}else{
+var LQuadTree = (function() {
+	function LQuadTree(rect) {
+		var s = this;
+		LExtends (s, LObject, []);
+		s.q1 = null;
+		s.q2 = null;
+		s.q3 = null;
+		s.q4 = null;
+		s.parent = null;
+		s.data = [];
+		s.rect = rect;
+		s.root = s;
+	}
+	LQuadTree.prototype = {
+		createChildren : function(deep) {
+			if (deep == 0) {
+				return;
+			}
+			var s = this;
+			var hw = s.rect.width / 2, hh = s.rect.height / 2;
+			s.q1 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y, hw, hh));
+			s.q2 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y + hh, hw, hh));
+			s.q3 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y + hh, hw, hh));
+			s.q4 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y, hw, hh));
+			s.q1.parent = s.q2.parent = s.q3.parent = s.q4.parent = s;
+			s.q1.root = s.q2.root = s.q3.root = s.q4.root = s.root;
+			s.q1.createChildren(deep - 1);
+			s.q2.createChildren(deep - 1);
+			s.q3.createChildren(deep - 1);
+			s.q4.createChildren(deep - 1);
+		},
+		hasChildren : function() {
+			var s = this;
+			return s.q1 && s.q2 && s.q3 && s.q4;
+		},
+		clear : function() {
+			var s = this;
+			if (s.hasChildren()) {
+				return s.q1.clear() || s.q2.clear() || s.q3.clear() || s.q4.clear();
+			} else {
+				s.q1 = null;
+				s.q2 = null;
+				s.q3 = null;
+				s.q4 = null;
+				s.parent = null;
+				s.data = [];
+				return s;
+			}
+		},
+		add : function(v, x, y) {
+			var s = this;
+			if (!s.isIn(x, y)) {
 				return null;
 			}
+			if (s.hasChildren()) {
+				return s.q1.add(v, x, y) || s.q2.add(v, x, y) || s.q3.add(v, x, y) || s.q4.add(v, x, y);
+			} else {
+				s.data.push(v);
+				return s;
+			}
+		},
+		remove : function(v, x, y) {
+			var s = this;
+			if (!s.isIn(x, y)) {
+				return null;
+			}
+			if (s.hasChildren()) {
+				return s.q1.remove(v, x, y) || s.q2.remove(v, x, y) || s.q3.remove(v, x, y) || s.q4.remove(v, x, y);
+			} else {
+				var index = s.data.indexOf(v);
+				if (index != -1) {
+					s.data.splice(index, 1);
+					return s;
+				} else {
+					return null;
+				}
+			}
+		},
+		isIn : function(x, y) {
+			var s = this;
+			return ( typeof x == UNDEFINED || (x >= s.rect.x && x < s.rect.right)) && ( typeof y == UNDEFINED || (y >= s.rect.y && y < s.rect.bottom));
+		},
+		getDataInRect : function(rect) {
+			var s = this;
+			if (!s.rect.intersects(rect)) {
+				return [];
+			}
+			var r = s.data.concat();
+			if (s.hasChildren()) {
+				r.push.apply(r, s.q1.getDataInRect(rect));
+				r.push.apply(r, s.q2.getDataInRect(rect));
+				r.push.apply(r, s.q3.getDataInRect(rect));
+				r.push.apply(r, s.q4.getDataInRect(rect));
+			}
+			return r;
 		}
-	},
-	isIn:function(x, y){
-		var self = this;
-		return (typeof x == UNDEFINED || (x >= self.rect.x && x < self.rect.right)) && (typeof y == UNDEFINED || (y >= self.rect.y && y < self.rect.bottom));
-	},
-	getDataInRect:function(rect){
-		var self = this;
-		if (!self.rect.intersects(rect))return [];
-		var r = self.data.concat();
-		if (self.hasChildren()){
-			r.push.apply(r,self.q1.getDataInRect(rect));
-			r.push.apply(r,self.q2.getDataInRect(rect));
-			r.push.apply(r,self.q3.getDataInRect(rect));
-			r.push.apply(r,self.q4.getDataInRect(rect));
-		}
-		return r;
-	},
-	toString:function(){
-		return "[LQuadTree]";
-	}
-};
+	};
+	return LQuadTree;
+})();
 function LoadingSample1(step,b,c){
 	base(this,LSprite,[]);
 	var s = this;
@@ -6355,11 +6510,11 @@ LoadingSample7.prototype.setProgress = function(value){
 		self.step ++;
 	}
 };
-var LBox2d = (function () {
-	function LBox2d (gravity, doSleep, drawScale) {
+var LBox2d = (function() {
+	function LBox2d(gravity, doSleep, drawScale) {
 		var s = this;
 		Box2D.Dynamics.b2World.prototype.LAddController = Box2D.Dynamics.b2World.prototype.AddController;
-		Box2D.Dynamics.b2World.prototype.AddController = function (c) {
+		Box2D.Dynamics.b2World.prototype.AddController = function(c) {
 			var l = {}, k;
 			for (k in c) {
 				l[k] = c[k];
@@ -6369,15 +6524,13 @@ var LBox2d = (function () {
 			}
 			return this.LAddController(c);
 		};
-		var i, j, b = Box2D, d,
-		a = [b.Collision, b.Common, b.Common.Math,
-		b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
+		var i, j, b = Box2D, d, a = [b.Collision, b.Common, b.Common.Math, b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
 		for (i in a) {
 			for (j in a[i]) {
 				s[j] = a[i][j];
 			}
 		}
-		if (typeof drawScale == UNDEFINED) {
+		if ( typeof drawScale == UNDEFINED) {
 			drawScale = 30;
 		}
 		s.stop = false;
@@ -6386,12 +6539,12 @@ var LBox2d = (function () {
 		s.mouseJoint = null;
 		s.mousePVec = null;
 		s.contactListener = null;
-		if (typeof gravity == UNDEFINED) {
+		if ( typeof gravity == UNDEFINED) {
 			gravity = new s.b2Vec2(0, 9.8);
 		} else {
 			gravity = new s.b2Vec2(gravity[0], gravity[1]);
 		}
-		if (typeof doSleep == UNDEFINED) {
+		if ( typeof doSleep == UNDEFINED) {
 			doSleep = true;
 		}
 		s.world = new s.b2World(gravity, doSleep);
@@ -6409,7 +6562,7 @@ var LBox2d = (function () {
 		LGlobal.destroy = true;
 	}
 	LBox2d.prototype = {
-		setEvent : function (t_v, f_v) {
+		setEvent : function(t_v, f_v) {
 			var s = this;
 			if (t_v == LEvent.ENTER_FRAME) {
 				s.ll_enterFrame = f_v;
@@ -6434,14 +6587,14 @@ var LBox2d = (function () {
 					s.contactListener.BeginContact = f_v;
 			}
 		},
-		setWeldJoint : function (A, B) { 
-			var s = this; 
+		setWeldJoint : function(A, B) {
+			var s = this;
 			var j = new s.b2WeldJointDef();
 			j.Initialize(B, A, B.GetWorldCenter());
 			return s.world.CreateJoint(j);
 		},
-		setLineJoint : function (A, B, vec, t, m) {
-			var s = this; 
+		setLineJoint : function(A, B, vec, t, m) {
+			var s = this;
 			var wa = new s.b2Vec2(vec[0], vec[1]);
 			var j = new s.b2LineJointDef();
 			j.Initialize(A, B, B.GetWorldCenter(), wa);
@@ -6461,8 +6614,8 @@ var LBox2d = (function () {
 			}
 			return s.world.CreateJoint(j);
 		},
-		setGearJoint : function (A, B, ra, r, p) { 
-			var s = this; 
+		setGearJoint : function(A, B, ra, r, p) {
+			var s = this;
 			var j = new s.b2GearJointDef();
 			j.joint1 = r;
 			j.joint2 = p;
@@ -6471,7 +6624,7 @@ var LBox2d = (function () {
 			j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
 			return s.world.CreateJoint(j);
 		},
-		setPrismaticJoint : function (A, B, vec, t, m) {
+		setPrismaticJoint : function(A, B, vec, t, m) {
 			var s = this;
 			var wa = new s.b2Vec2(vec[0], vec[1]);
 			var j = new s.b2PrismaticJointDef();
@@ -6492,10 +6645,10 @@ var LBox2d = (function () {
 			}
 			return s.world.CreateJoint(j);
 		},
-		setRevoluteJoint : function (A, B, a, m) {
+		setRevoluteJoint : function(A, B, a, m) {
 			var s = this;
-			var j  = new s.b2RevoluteJointDef();
-			j .Initialize(A, B, B.GetWorldCenter());
+			var j = new s.b2RevoluteJointDef();
+			j.Initialize(A, B, B.GetWorldCenter());
 			if (a == null) {
 				j.enableLimit = false;
 			} else {
@@ -6510,27 +6663,27 @@ var LBox2d = (function () {
 				j.motorSpeed = m[1];
 				j.enableMotor = true;
 			}
-			return s.world.CreateJoint(j); 
+			return s.world.CreateJoint(j);
 		},
-		setDistanceJoint : function (A, B) {
+		setDistanceJoint : function(A, B) {
 			var s = this;
 			var j = new s.b2DistanceJointDef();
 			j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
-			return s.world.CreateJoint(j); 
+			return s.world.CreateJoint(j);
 		},
-		setPulleyJoint : function (A, B, vA, vB, ratio) {
+		setPulleyJoint : function(A, B, vA, vB, ratio) {
 			var s = this;
-			var a1 = A.GetWorldCenter();  
+			var a1 = A.GetWorldCenter();
 			var a2 = B.GetWorldCenter();
 			var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
 			var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
-			var j = new s.b2PulleyJointDef();  
-			j.Initialize(A, B, g1, g2, a1, a2,ratio);  
+			var j = new s.b2PulleyJointDef();
+			j.Initialize(A, B, g1, g2, a1, a2, ratio);
 			j.maxLengthA = vA[2] / s.drawScale;
 			j.maxLengthB = vB[2] / s.drawScale;
 			return s.world.CreateJoint(j);
 		},
-		addCircle : function (r, cx, cy, t, d, f, e) {
+		addCircle : function(r, cx, cy, t, d, f, e) {
 			var s = this;
 			s.bodyDef = new s.b2BodyDef;
 			s.bodyDef.type = t;
@@ -6545,7 +6698,7 @@ var LBox2d = (function () {
 			shape.CreateFixture(s.fixDef);
 			return shape;
 		},
-		addPolygon : function (w, h, cx, cy, type, d, f, e) {
+		addPolygon : function(w, h, cx, cy, type, d, f, e) {
 			var s = this;
 			s.bodyDef = new s.b2BodyDef;
 			s.bodyDef.type = type;
@@ -6561,17 +6714,17 @@ var LBox2d = (function () {
 			shape.CreateFixture(s.fixDef);
 			return shape;
 		},
-		addVertices : function (vertices, type, d, f, e) {
+		addVertices : function(vertices, type, d, f, e) {
 			var s = this, i, l;
 			s.bodyDef = new s.b2BodyDef;
 			s.bodyDef.type = type;
 			var shape = s.world.CreateBody(s.bodyDef);
-			for (i = 0, l = vertices.length; i < l; i++) {
+			for ( i = 0, l = vertices.length; i < l; i++) {
 				s.createShapeAsArray(shape, vertices[i], type, d, f, e);
 			}
 			return shape;
 		},
-		createShapeAsArray : function (c, vertices, type, d, f, e) {
+		createShapeAsArray : function(c, vertices, type, d, f, e) {
 			var s = this;
 			var shape = new s.b2PolygonShape();
 			var sv = s.createVerticesArray(vertices);
@@ -6583,19 +6736,19 @@ var LBox2d = (function () {
 			def.restitution = e;
 			c.CreateFixture(def);
 		},
-		createVerticesArray : function (a) {
+		createVerticesArray : function(a) {
 			var s = this, i, l;
 			var v = new Array();
 			if (a.length < 3) {
 				return v;
 			}
-			for (i = 0, l = a.length; i < l; i++) {
+			for ( i = 0, l = a.length; i < l; i++) {
 				v.push(new s.b2Vec2(a[i][0] / s.drawScale, a[i][1] / s.drawScale));
 			}
 			return v;
 		},
-		getBodyAtMouse : function (mouseX, mouseY) { 
-	 		var s = this;
+		getBodyAtMouse : function(mouseX, mouseY) {
+			var s = this;
 			s.mousePVec = new s.b2Vec2(mouseX, mouseY);
 			var aabb = new s.b2AABB();
 			aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
@@ -6604,7 +6757,7 @@ var LBox2d = (function () {
 			s.world.QueryAABB(s.getBodyCallBack, aabb);
 			return s.selectedBody;
 		},
-		getBodyCallBack : function (fixture) {
+		getBodyCallBack : function(fixture) {
 			var s = LGlobal.box2d;
 			if (fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
 				if (fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
@@ -6614,7 +6767,7 @@ var LBox2d = (function () {
 			}
 			return true;
 		},
-		ll_show : function () {
+		ll_show : function() {
 			var s = this, k = null;
 			for (k in s.removeList) {
 				s.world.DestroyBody(s.removeList[k]);
@@ -6624,7 +6777,9 @@ var LBox2d = (function () {
 				return;
 			}
 			if (s.ll_enterFrame) {
-				s.ll_enterFrame({target:s});
+				s.ll_enterFrame({
+					target : s
+				});
 			}
 			s.world.Step(1 / 30, 10, 10);
 			s.world.ClearForces();
@@ -6632,10 +6787,10 @@ var LBox2d = (function () {
 				s.world.DrawDebugData();
 			}
 		},
-		synchronous : function () {
+		synchronous : function() {
 			var s = this;
 			var parent = null, child, position = null, cx = 0, cy = 0, currentBody, joint;
-			for (currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
+			for ( currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
 				child = currentBody.GetUserData();
 				if (child) {
 					if (position == null) {
@@ -6643,15 +6798,16 @@ var LBox2d = (function () {
 						cx = currentBody.GetPosition().x;
 						cy = currentBody.GetPosition().y;
 					}
-					currentBody.SetPosition(new s.b2Vec2(
-						(child.x + child.rotatex + parent.x) / s.drawScale,
-						(child.y + child.rotatey + parent.y) / s.drawScale ));
+					currentBody.SetPosition(new s.b2Vec2((child.x + child.rotatex + parent.x) / s.drawScale, (child.y + child.rotatey + parent.y) / s.drawScale));
 					if (position == null) {
-						position = {x : (currentBody.GetPosition().x - cx), y : (currentBody.GetPosition().y - cy)};
+						position = {
+							x : (currentBody.GetPosition().x - cx),
+							y : (currentBody.GetPosition().y - cy)
+						};
 					}
 				}
 			}
-			for (joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
+			for ( joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
 				if (joint.m_groundAnchor1) {
 					joint.m_groundAnchor1.x += position.x;
 					joint.m_groundAnchor1.y += position.y;
@@ -6668,14 +6824,14 @@ var LBox2d = (function () {
 	};
 	return LBox2d;
 })();
-LSprite.prototype.setBodyMouseJoint = function (value) {
+LSprite.prototype.setBodyMouseJoint = function(value) {
 	var s = this;
 	if (!s.box2dBody) {
 		return;
 	}
 	s.box2dBody.mouseJoint = value;
 };
-LSprite.prototype.clearBody = function (value) {
+LSprite.prototype.clearBody = function(value) {
 	var s = this;
 	if (!s.box2dBody) {
 		return;
@@ -6683,52 +6839,33 @@ LSprite.prototype.clearBody = function (value) {
 	LGlobal.box2d.removeList.push(s.box2dBody);
 	s.box2dBody = null;
 };
-LSprite.prototype.addBodyCircle = function (radius, cx, cy, type, density, friction, restitution) {
+LSprite.prototype.addBodyCircle = function(radius, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = radius;
 	s.rotatey = radius;
-	s.box2dBody = LGlobal.box2d.addCircle(
-		radius / LGlobal.box2d.drawScale,
-		(s.x + cx) / LGlobal.box2d.drawScale,
-		(s.y + cy) / LGlobal.box2d.drawScale,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-		density == null ? 0.5 : density,
-		friction == null ? 0.4 : friction,
-		restitution == null ? 0.8 : restitution);
+	s.box2dBody = LGlobal.box2d.addCircle(radius / LGlobal.box2d.drawScale, (s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyPolygon = function (w, h, type, density, friction, restitution) {
+LSprite.prototype.addBodyPolygon = function(w, h, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = w / 2;
 	s.rotatey = h / 2;
-	s.box2dBody = LGlobal.box2d.addPolygon(
-		w * 0.5 / LGlobal.box2d.drawScale,
-		h * 0.5 / LGlobal.box2d.drawScale,
-		s.x / LGlobal.box2d.drawScale,
-		s.y / LGlobal.box2d.drawScale,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-		density == null ? 0.5 : density,
-		friction == null ? 0.4 : friction,
-		restitution == null ? 0.8 : restitution);
+	s.box2dBody = LGlobal.box2d.addPolygon(w * 0.5 / LGlobal.box2d.drawScale, h * 0.5 / LGlobal.box2d.drawScale, s.x / LGlobal.box2d.drawScale, s.y / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
 	s.box2dBody.SetUserData(s);
 };
-LSprite.prototype.addBodyVertices = function (vertices, cx, cy, type, density, friction, restitution) {
+LSprite.prototype.addBodyVertices = function(vertices, cx, cy, type, density, friction, restitution) {
 	var s = this;
 	s.rotatex = 0;
 	s.rotatey = 0;
-	s.box2dBody = LGlobal.box2d.addVertices(vertices,
-		(type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody,
-			density, friction, restitution);
+	s.box2dBody = LGlobal.box2d.addVertices(vertices, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density, friction, restitution);
 	s.box2dBody.SetUserData(s);
 	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale));
 };
-LGlobal.mouseJoint_start = function (eve) {
+LGlobal.mouseJoint_start = function(eve) {
 	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint || LGlobal.box2d.stop) {
 		return;
 	}
-	var mX = eve.offsetX / LGlobal.box2d.drawScale,
-	mY = eve.offsetY / LGlobal.box2d.drawScale,
-	b = LGlobal.box2d.getBodyAtMouse(mX, mY);
+	var mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale, b = LGlobal.box2d.getBodyAtMouse(mX, mY);
 	if (b && b.mouseJoint) {
 		var m = new LGlobal.box2d.b2MouseJointDef();
 		m.bodyA = LGlobal.box2d.world.GetGroundBody();
@@ -6740,20 +6877,19 @@ LGlobal.mouseJoint_start = function (eve) {
 		b.SetAwake(true);
 	};
 };
-LGlobal.mouseJoint_move = function (eve) {
-	if(!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint){
+LGlobal.mouseJoint_move = function(eve) {
+	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint) {
 		return;
 	}
-	mX = eve.offsetX / LGlobal.box2d.drawScale,
-	mY = eve.offsetY / LGlobal.box2d.drawScale;
+	mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale;
 	LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
 };
-LGlobal.mouseJoint_end = function () {
+LGlobal.mouseJoint_end = function() {
 	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
 		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
 		LGlobal.box2d.mouseJoint = null;
 	}
-};
+}; 
 var LTransition = (function() {
 	function LTransition(displayObject, transObj) {
 		this.child = displayObject;

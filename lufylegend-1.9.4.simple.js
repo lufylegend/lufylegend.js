@@ -1223,6 +1223,57 @@ if (!Array.prototype.forEach) {
 		}
 	};
 }
+if (!Array.prototype.every) {
+	Array.prototype.every = function(callbackfn, thisArg) {
+		'use strict';
+		var T, k;
+		if (this == null) {
+			throw new TypeError('this is null or not defined');
+		}
+		var O = Object(this);
+		var len = O.length >>> 0;
+		if ( typeof callbackfn !== 'function') {
+			throw new TypeError();
+		}
+		if (arguments.length > 1) {
+			T = thisArg;
+		}
+		k = 0;
+		while (k < len) {
+			var kValue;
+			if ( k in O) {
+				kValue = O[k];
+				var testResult = callbackfn.call(T, kValue, k, O);
+				if (!testResult) {
+					return false;
+				}
+			}
+			k++;
+		}
+		return true;
+	};
+}
+if (!Array.prototype.some) {
+	Array.prototype.some = function(fun) {
+		'use strict';
+		if (this == null) {
+			throw new TypeError('Array.prototype.some called on null or undefined');
+		}
+		if ( typeof fun !== 'function') {
+			throw new TypeError();
+		}
+		var t = Object(this);
+		var len = t.length >>> 0;
+		var thisArg = arguments.length >= 2 ? arguments[1] :
+		void 0;
+		for (var i = 0; i < len; i++) {
+			if ( i in t && fun.call(thisArg, t[i], i, t)) {
+				return true;
+			}
+		}
+		return false;
+	};
+}
 function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
@@ -2409,6 +2460,7 @@ var LMedia = (function () {
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
 		s.currentStart = 0;
+		LMedia.Container.add(this);
 	}
 	var p = {
 		onload : function () {
@@ -2447,15 +2499,20 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (s.data.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					s.data.src = a[k];
 					s.onload();
 					s.data.load();
@@ -2496,9 +2553,6 @@ var LMedia = (function () {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(function(){
-				s._onended();
-			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -2535,10 +2589,57 @@ var LMedia = (function () {
 			s.data.pause();
 			s.data.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_check : function () {
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime) {
+				s._onended();
+			}
+		},
+		die : function () {
+			LMedia.Container.remove(this);
 		}
 	};
 	for (var k in p) {
 		LMedia.prototype[k] = p[k];
+	}
+	LMedia.Container = {
+		list : [],
+		ll_show : function () {
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i]) {
+					l[i].ll_check();
+				}
+			}
+		},
+		add : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			if (LMedia.Container.list.indexOf(obj) >= 0) {
+				return;
+			} 
+			LMedia.Container.list.push(obj);
+		},
+		remove : function (obj) {
+			if (!LGlobal.android) {
+				return;
+			}
+			var l = LMedia.Container.list;
+			for (var i = l.length; i >= 0; i--) {
+				if (l[i].objectIndex == obj.objectIndex) {
+					l.splice(i,1);
+					break;
+				}
+			}
+		}
+	};
+	if (LGlobal.android) {
+		LGlobal.childList.push(LMedia.Container);
 	}
 	return LMedia;
 })();
@@ -2855,12 +2956,14 @@ var LGraphics = (function () {
 			s.setList.push(function () {
 				LGlobal.canvas.moveTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		lineTo : function (x, y) {
 			var s = this;
 			s.setList.push(function () {
 				LGlobal.canvas.lineTo(x, y);
 			});
+			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
 		rect : function (x, y, w, h) {
 			var s = this;
@@ -3218,6 +3321,7 @@ var LGraphics = (function () {
 				c.closePath();
 				c.stroke();
 			});
+			s.showList.push({type : LShape.LINE, arg : pa});
 		},
 		add : function (f) {
 			this.setList.push(f);
@@ -3256,6 +3360,26 @@ var LGraphics = (function () {
 							max = v[0];
 						}
 					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (min > s.showList[k].arg[2]) {
+						min = s.showList[k].arg[2];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[2]) {
+						max = s.showList[k].arg[2];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[0]) {
+						min = s.showList[k].arg[0];
+					}
+					if (max < s.showList[k].arg[0]) {
+						max = s.showList[k].arg[0];
+					}
 				}
 			}
 			s.left = min;
@@ -3288,6 +3412,26 @@ var LGraphics = (function () {
 							max = v[1];
 						}
 					}
+				} else if (s.showList[k].type == LShape.LINE) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (min > s.showList[k].arg[3]) {
+						min = s.showList[k].arg[3];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[3]) {
+						max = s.showList[k].arg[3];
+					}
+				} else if (s.showList[k].type == LShape.POINT) {
+					if (min > s.showList[k].arg[1]) {
+						min = s.showList[k].arg[1];
+					}
+					if (max < s.showList[k].arg[1]) {
+						max = s.showList[k].arg[1];
+					}
 				}
 			}	
 			s.top = min;	
@@ -3317,6 +3461,8 @@ var LShape = (function () {
 		s.graphics = new LGraphics();
 		s.graphics.parent = s;
 	}
+	LShape.POINT = "point";
+	LShape.LINE = "line";
 	LShape.ARC = "arc";
 	LShape.RECT = "rect";
 	LShape.VERTICES = "vertices";
