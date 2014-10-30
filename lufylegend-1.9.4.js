@@ -17,7 +17,8 @@ NONE = "none",
 UNDEFINED = "undefined",
 LANDSCAPE = "landscape",
 PORTRAIT = "portrait",
-mouseX,mouseY;
+mouseX,
+mouseY;
 function LEvent(type){
 	this.eventType = type;
 	this._ll_preventDefault = false;
@@ -564,8 +565,15 @@ var LGlobal = ( function () {
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
-		var canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i;
+		var canvasX, canvasY, eve, k, i;
+		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
+			canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+			canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
+		} else {
+			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
+			canvasX = parseInt(rectangle.left);
+			canvasY = parseInt(rectangle.top);
+		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
@@ -632,9 +640,15 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
-		var cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
-		eve, l, ll = e.touches.length;
+		var cX, cY, eve, l, ll = e.touches.length;
+		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
+			cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+			cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
+		} else {
+			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
+			cX = parseInt(rectangle.left);
+			cY = parseInt(rectangle.top);
+		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;
 		}
@@ -865,7 +879,7 @@ var LGlobal = ( function () {
 		for (i = 0; i < row; i++) {
 			c = [];
 			for (j = 0; j < col; j++) {
-				c.push({x : cw * j, y : ch * i});
+				c.push({x : cw * j, y : ch * i, width : cw, height : ch});
 			}
 			r.push(c);
 		}
@@ -2350,15 +2364,20 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (LWebAudio.audioTag.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
 					return;
@@ -2427,8 +2446,6 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -2443,8 +2460,6 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -2572,10 +2587,6 @@ var LMedia = (function () {
 			} else {
 				s.currentTimeTo = s.length;
 			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
-			}
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -2592,10 +2603,6 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
-			}
 			s.playing = false;
 			s.data.pause();
 		},
@@ -2603,10 +2610,6 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
-			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
 			}
 			s.playing = false;
 			s.data.pause();

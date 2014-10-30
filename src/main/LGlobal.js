@@ -1212,7 +1212,7 @@ var LGlobal = ( function () {
 		for (i = 0; i < row; i++) {
 			c = [];
 			for (j = 0; j < col; j++) {
-				c.push({x : cw * j, y : ch * i});
+				c.push({x : cw * j, y : ch * i, width : cw, height : ch});
 			}
 			r.push(c);
 		}
