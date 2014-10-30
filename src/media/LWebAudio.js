@@ -84,6 +84,7 @@ var LWebAudio = (function () {
 		 */
 		s.playing = false;
 		s.volume = 1;
+		LSound.Container.add(s);
 	}
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
@@ -186,15 +187,20 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (LWebAudio.audioTag.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
 					return;
@@ -326,11 +332,6 @@ var LWebAudio = (function () {
 			}
 			s.data.loop = false;
 			s.playing = true;
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
-			}
-			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -427,8 +428,6 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -461,8 +460,6 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -471,6 +468,18 @@ var LWebAudio = (function () {
 			s.playing = false;
 			s.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_check : function () {
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LGlobal.speed * 0.001) {
+				s._onended();
+			}
+		},
+		die : function () {
+			LSound.Container.remove(this);
 		}
 	};
 	for (var k in p) {

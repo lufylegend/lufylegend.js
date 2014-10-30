@@ -284,13 +284,6 @@ var LMedia = (function () {
 			} else {
 				s.currentTimeTo = s.length;
 			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
-			}
-			/*s.timeout = setTimeout(function(){
-				s._onended();
-			}, (s.currentTimeTo - s.data.currentTime) * 1000);*/
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -379,10 +372,6 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
-			}
 			s.playing = false;
 			s.data.pause();
 		},
@@ -408,10 +397,6 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
-			}
-			if (s.timeout) {
-				clearTimeout(s.timeout);
-				delete s.timeout;
 			}
 			s.playing = false;
 			s.data.pause();
