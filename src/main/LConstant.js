@@ -49,6 +49,20 @@ OS_IPAD = "iPad",
  */
 OS_ANDROID = "Android",
 /** @language chinese
+ * 用来和LGlobal.os的值做比较，判断用户的环境为Windows Phone。
+ * @property OS_WINDOWS_PHONE
+ * @since 1.0.0
+ * @public
+ */
+OS_WINDOWS_PHONE = "Windows Phone",
+/** @language chinese
+ * 用来和LGlobal.os的值做比较，判断用户的环境为BlackBerry。
+ * @property OS_BLACK_BERRY
+ * @since 1.0.0
+ * @public
+ */
+OS_BLACK_BERRY = "BlackBerry",
+/** @language chinese
  * 表示字符串"none"。
  * @property NONE
  * @since 1.0.0

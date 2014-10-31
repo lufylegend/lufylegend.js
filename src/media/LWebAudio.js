@@ -187,7 +187,7 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -198,7 +198,7 @@ var LWebAudio = (function () {
 					d = [d];
 				}
 				c = d.some(function (element, index, array) {
-					return s.data.canPlayType(s._type + "/" + element);
+					return LWebAudio.audioTag.canPlayType(s._type + "/" + element);
 				});
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
@@ -474,7 +474,7 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LGlobal.speed * 0.001) {
+			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LSound.Container.time * 0.001) {
 				s._onended();
 			}
 		},

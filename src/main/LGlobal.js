@@ -80,7 +80,7 @@ var LGlobal = ( function () {
 	 */
 	LGlobal.aspectRatio = NONE;
 	/** @language chinese
-	 * <p><canvas> 标签。</p>
+	 * <p>canvas 标签。</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -88,7 +88,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	/** @language english
-	 * <p><canvas> Tag.</p>
+	 * <p>canvas Tag.</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -96,7 +96,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	/** @language japanese
-	 * <p><canvas> タグ。</p>
+	 * <p>canvas タグ。</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -106,7 +106,7 @@ var LGlobal = ( function () {
 	LGlobal.canvasObj = null;
 	/** @language chinese
 	 * <p>context 对象。</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -114,7 +114,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language english
 	 * <p>context object.</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -122,7 +122,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language japanese
 	 * <p>context タグ。</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -654,6 +654,12 @@ var LGlobal = ( function () {
 			if(parseInt(n.substr(i + 8, 1)) > 3){
 				LGlobal.android_new = true;
 			}
+		} else if (n.indexOf(OS_WINDOWS_PHONE) > 0) {
+			LGlobal.os = OS_WINDOWS_PHONE;
+			LGlobal.canTouch = true;
+		} else if (n.indexOf(OS_BLACK_BERRY) > 0) {
+			LGlobal.os = OS_BLACK_BERRY;
+			LGlobal.canTouch = true;
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);

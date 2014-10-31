@@ -269,9 +269,15 @@ var LSound = (function () {
 		}
 	}
 	LSound.Container = {
+		ll_save : 0,
+		time : 0,
 		list : [],
 		ll_show : function () {
-			var l = LSound.Container.list;
+			var c = LSound.Container;
+			var t = (new Date()).getTime();
+			c.time = t - (c.ll_save ? c.ll_save : t);
+			c.ll_save = t;
+			var l = c.list;
 			for (var i = l.length; i >= 0; i--) {
 				if (l[i]) {
 					l[i].ll_check();

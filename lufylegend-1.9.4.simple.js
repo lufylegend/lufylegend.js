@@ -13,6 +13,8 @@ OS_IPHONE = "iPhone",
 OS_IPOD = "iPod",
 OS_IPAD = "iPad",
 OS_ANDROID = "Android",
+OS_WINDOWS_PHONE = "Windows Phone",
+OS_BLACK_BERRY = "BlackBerry",
 NONE = "none",
 UNDEFINED = "undefined",
 LANDSCAPE = "landscape",
@@ -464,6 +466,12 @@ var LGlobal = ( function () {
 			if(parseInt(n.substr(i + 8, 1)) > 3){
 				LGlobal.android_new = true;
 			}
+		} else if (n.indexOf(OS_WINDOWS_PHONE) > 0) {
+			LGlobal.os = OS_WINDOWS_PHONE;
+			LGlobal.canTouch = true;
+		} else if (n.indexOf(OS_BLACK_BERRY) > 0) {
+			LGlobal.os = OS_BLACK_BERRY;
+			LGlobal.canTouch = true;
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
@@ -2349,7 +2357,7 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -2360,7 +2368,7 @@ var LWebAudio = (function () {
 					d = [d];
 				}
 				c = d.some(function (element, index, array) {
-					return s.data.canPlayType(s._type + "/" + element);
+					return LWebAudio.audioTag.canPlayType(s._type + "/" + element);
 				});
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
@@ -2459,7 +2467,7 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LGlobal.speed * 0.001) {
+			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LSound.Container.time * 0.001) {
 				s._onended();
 			}
 		},
@@ -2522,7 +2530,7 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -2606,7 +2614,7 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
-			if (s.currentTimeTo < s.data.currentTime + LGlobal.speed * 0.001) {
+			if (s.currentTimeTo < s.data.currentTime + LSound.Container.time * 0.005) {
 				s._onended();
 			}
 		},
@@ -2657,9 +2665,15 @@ var LSound = (function () {
 		}
 	}
 	LSound.Container = {
+		ll_save : 0,
+		time : 0,
 		list : [],
 		ll_show : function () {
-			var l = LSound.Container.list;
+			var c = LSound.Container;
+			var t = (new Date()).getTime();
+			c.time = t - (c.ll_save ? c.ll_save : t);
+			c.ll_save = t;
+			var l = c.list;
 			for (var i = l.length; i >= 0; i--) {
 				if (l[i]) {
 					l[i].ll_check();
