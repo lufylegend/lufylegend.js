@@ -208,7 +208,6 @@ function addChara(){
 	}
 }
 function ondown(event){
-	console.log("ondown",event.offsetX+">="+(ctrlLayer.x + 40) + "&&"+event.offsetX + "<="+(ctrlLayer.x+80));
 	//根据点击位置，判断移动方向
 	if(event.offsetX >= ctrlLayer.x + 40 && event.offsetX <= ctrlLayer.x+80){
 		if(event.offsetY >= ctrlLayer.y && event.offsetY <= ctrlLayer.y+40){
@@ -268,6 +267,5 @@ function onkeyup(event){
  * 循环
  * */
 function onframe(){
-	var key;
-	for(key in charaLayer.childList)charaLayer.childList[key].onframe();
+	for(var i=0;i<charaLayer.childList.length;i++)charaLayer.childList[i].onframe();
 }

@@ -48,9 +48,9 @@
 					addChild(backLayer);
 					backLayer.addChild(labelText);
 					
-					bitmapData = new LBitmapData("#000000",0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);
+					bitmapData = new LBitmapData(null,0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);
 					bitmapData.draw(backLayer);
-					
+
 					backLayer.removeChild(labelText);
 					
 					snowBack = new LBitmapData(null,0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);

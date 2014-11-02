@@ -22,8 +22,10 @@
 				rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
 				addChild(rect);
 				LTweenLite.to(circle,2,{x:700,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut,tweenTimeline:LTweenLite.TYPE_TIMER});
-				LTweenLite.to(rect,2,{x:600,loop:true,ease:LEasing.Sine.easeInOut});
-				LGlobal.sleep(2000);
+				LTweenLite.to(rect,2,{x:600,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME});
+				setTimeout(function(){
+					LGlobal.sleep(2000);
+				},100);
 			}
 			</script>
 	</body>

@@ -1,4 +1,5 @@
 /** @language chinese
+ * <p>Library:lufylegend.LBox2d-x.x.x.min.js</p>
  * <p>在lufylegend库件里使用box2dweb。</p>
  * <p>下面是几篇相关的文章。</p>
  * <p><a href="http://blog.csdn.net/lufy_legend/article/details/7654607" target="_blank">HTML5游戏开发-Box2dWeb应用(一)-创建各种各样的刚体</a></p>

@@ -225,7 +225,7 @@ var LLoadManage = (function () {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path));
+					s.loader.load(d.path);
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;

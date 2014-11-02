@@ -1,4 +1,5 @@
 /** @language chinese
+ * <p>Library:lufylegend.LQuadTree-x.x.x.min.js</p>
  * <p>四叉树类，可拥有高速检测矩形碰撞。下面两个demo可以说明LQuadTree的强大</p>
  * <p><a href="../../../api/LQuadTree/index.html" target="_blank">碰撞检测 一般方法</a></p>
  * <p><a href="../../../api/LQuadTree/index2.html" target="_blank">碰撞检测 四叉树方法</a></p>

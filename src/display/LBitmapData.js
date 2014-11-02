@@ -1236,6 +1236,10 @@ var LBitmapData = (function () {
 			}
 			w = bd.getWidth();
 			h = bd.getHeight();
+			if (w == 0 || h == 0) {
+				s._setDataType(_dataType);
+				return;
+			}
 			c = bd.getDataCanvas();
 			if (colorTransform) {
 				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);

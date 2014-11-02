@@ -87,7 +87,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration - 0.1;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -100,9 +100,7 @@ var LMedia = (function () {
 		},
 		_onended : function () {
 			var s = this, i, l;
-			if (s.data.ended) {
-				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			}
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if (++s.loopIndex < s.loopLength) {
 				i = s.loopIndex;
 				l = s.loopLength;
@@ -284,6 +282,13 @@ var LMedia = (function () {
 			} else {
 				s.currentTimeTo = s.length;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(function(){
+				s._onended();
+			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -372,6 +377,10 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			s.playing = false;
 			s.data.pause();
 		},
@@ -397,6 +406,10 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			s.playing = false;
 			s.data.pause();
@@ -437,7 +450,7 @@ var LMedia = (function () {
  * @event LEvent.COMPLETE
  */
 /** @language chinese
- * 播放结束事件，一个音频文件播放完之后调度。
+ * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
  * @event LEvent.SOUND_COMPLETE
  * @since 1.7.0
  * @public

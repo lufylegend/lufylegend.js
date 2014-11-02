@@ -2430,6 +2430,11 @@ var LWebAudio = (function () {
 			}
 			s.data.loop = false;
 			s.playing = true;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -2454,6 +2459,10 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -2467,6 +2476,10 @@ var LWebAudio = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
@@ -2512,7 +2525,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration - 0.1;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -2525,9 +2538,7 @@ var LMedia = (function () {
 		},
 		_onended : function () {
 			var s = this, i, l;
-			if (s.data.ended) {
-				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			}
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if (++s.loopIndex < s.loopLength) {
 				i = s.loopIndex;
 				l = s.loopLength;
@@ -2595,6 +2606,13 @@ var LMedia = (function () {
 			} else {
 				s.currentTimeTo = s.length;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(function(){
+				s._onended();
+			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -2611,6 +2629,10 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			s.playing = false;
 			s.data.pause();
 		},
@@ -2618,6 +2640,10 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			s.playing = false;
 			s.data.pause();
@@ -3366,107 +3392,119 @@ var LGraphics = (function () {
 			return s.parent.ismouseonShapes(s.showList, e.offsetX, e.offsetY);
 		},
 		getWidth : function () {
-			var s = this, k, k1, min = 0, max = 0, v, l, l1;
+			var s = this, k, k1, min, max, v, l, l1;
 			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[0] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[0] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.ARC) {
-					if (min > s.showList[k].arg[0] - s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[0] - s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0] - s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[0] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[0] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.VERTICES) {
 					for (k1 = 0, l1 = s.showList[k].arg.length; k1 < l1; k1++) {
 						v = s.showList[k].arg[k1];
-						if (min > v[0]) {
+						if (min > v[0] || typeof min == UNDEFINED) {
 							min = v[0];
 						}
-						if (max < v[0]) {
+						if (max < v[0] || typeof max == UNDEFINED) {
 							max = v[0];
 						}
 					}
 				} else if (s.showList[k].type == LShape.LINE) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (min > s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[0]) {
+					if (max < s.showList[k].arg[0] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.POINT) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[0]) {
+					if (max < s.showList[k].arg[0] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0];
 					}
 				}
 			}
+			if (typeof min == UNDEFINED) {
+				min = max = 0;
+			}
 			s.left = min;
+			if (l > 0 && max == min) {
+				max = min + 1;
+			}
 			return max - min;
 		},
 		getHeight : function () {
-			var s = this, k = null, k1 = null, l, l1, min = 0, max = 0, v;
+			var s = this, k = null, k1 = null, l, l1, min, max, v;
 			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[1] + s.showList[k].arg[3]) {
+					if (max < s.showList[k].arg[1] + s.showList[k].arg[3] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1] + s.showList[k].arg[3];
 					}
 				} else if (s.showList[k].type == LShape.ARC) {
-					if (min > s.showList[k].arg[1] - s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[1] - s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1] - s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[1] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[1] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.VERTICES) {
 					for (k1 = 0, l1 = s.showList[k].arg.length; k1 < l1; k1++) {
 						v = s.showList[k].arg[k1];
-						if (min > v[1]) {
+						if (min > v[1] || typeof min == UNDEFINED) {
 							min = v[1];
 						}
-						if (max < v[1]) {
+						if (max < v[1] || typeof max == UNDEFINED) {
 							max = v[1];
 						}
 					}
 				} else if (s.showList[k].type == LShape.LINE) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (min > s.showList[k].arg[3]) {
+					if (min > s.showList[k].arg[3] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[3];
 					}
-					if (max < s.showList[k].arg[1]) {
+					if (max < s.showList[k].arg[1] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[3]) {
+					if (max < s.showList[k].arg[3] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[3];
 					}
 				} else if (s.showList[k].type == LShape.POINT) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[1]) {
+					if (max < s.showList[k].arg[1] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1];
 					}
 				}
-			}	
-			s.top = min;	
+			}
+			if (typeof min == UNDEFINED) {
+				min = max = 0;
+			}
+			s.top = min;
+			if (l > 0 && max == min) {
+				max = min + 1;
+			}
 			return max - min;
 		},
 		startX : function () {
@@ -4919,6 +4957,10 @@ var LBitmapData = (function () {
 			}
 			w = bd.getWidth();
 			h = bd.getHeight();
+			if (w == 0 || h == 0) {
+				s._setDataType(_dataType);
+				return;
+			}
 			c = bd.getDataCanvas();
 			if (colorTransform) {
 				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
@@ -5289,7 +5331,7 @@ var LLoadManage = (function () {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path));
+					s.loader.load(d.path);
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
@@ -6044,117 +6086,113 @@ var LQuadTree = (function() {
 	};
 	return LQuadTree;
 })();
-function LoadingSample1(step,b,c){
-	base(this,LSprite,[]);
-	var s = this;
-	s.numberList = new Array(
-		[1,1,1,1,0,1,1,0,1,1,0,1,1,1,1],
-		[0,1,0,1,1,0,0,1,0,0,1,0,0,1,0],
-		[1,1,1,0,0,1,1,1,1,1,0,0,1,1,1],
-		[1,1,1,0,0,1,1,1,1,0,0,1,1,1,1],
-		[1,0,1,1,0,1,1,1,1,0,0,1,0,0,1],
-		[1,1,1,1,0,0,1,1,1,0,0,1,1,1,1],
-		[1,1,1,1,0,0,1,1,1,1,0,1,1,1,1],
-		[1,1,1,0,0,1,0,0,1,0,0,1,0,0,1],
-		[1,1,1,1,0,1,1,1,1,1,0,1,1,1,1],
-		[1,1,1,1,0,1,1,1,1,0,0,1,1,1,1]
-	);
-	s.backgroundColor = b==null?"#000000":b;
-	s.color = c==null?"#ffffff":c;
-	s.progress = 0;
-	s.step = step==null?LGlobal.width*0.5/15:step;
-	s.back = new LSprite();
-	s.addChild(s.back);
-	s.num = new LSprite();
-	s.addChild(s.num);
-	s.num.mask = new LSprite();
-	s.screenX = (LGlobal.width - s.step*15)/2;
-	s.screenY = (LGlobal.height - s.step*5)/2;
-	s.num.x = s.screenX;
-	s.num.y = s.screenY;
-	s.setProgress(s.progress);
-}
-LoadingSample1.prototype.setProgress = function (value){
-	var s = this,c = LGlobal.canvas;
-	var num_0="" , num_1 , num_2 , i;
-	var s_x = s.step;
-	if(value >= 100){
-		num_0 = s.getNumber(1);
-		num_1 = s.getNumber(0);
-		num_2 = s.getNumber(0);
-		s_x = s.step*3;
-	}else if(value >= 10){
-		num_1 = s.getNumber(Math.floor(value/10));
-		num_2 = s.getNumber(value%10);
-	}else{
-		num_1 = s.getNumber(0);
-		num_2 = s.getNumber(value);
+var LoadingSample1 = (function() {
+	function LoadingSample1(step, b, c) {
+		base(this, LSprite, []);
+		var s = this;
+		s.numberList = new Array([1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0], [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1]);
+		s.backgroundColor = b == null ? "#000000" : b;
+		s.color = c == null ? "#ffffff" : c;
+		s.progress = 0;
+		s.step = step == null ? LGlobal.width * 0.5 / 15 : step;
+		s.back = new LSprite();
+		s.addChild(s.back);
+		s.num = new LSprite();
+		s.addChild(s.num);
+		s.num.mask = new LSprite();
+		s.screenX = (LGlobal.width - s.step * 15) / 2;
+		s.screenY = (LGlobal.height - s.step * 5) / 2;
+		s.num.x = s.screenX;
+		s.num.y = s.screenY;
+		s.setProgress(s.progress);
 	}
-	s.back.graphics.clear();
-	s.back.graphics.add(function(){
-		c.beginPath();
-		c.fillStyle = s.backgroundColor;
-		c.fillRect(0,0,LGlobal.width,LGlobal.height);
-		c.closePath();
-		c.fillStyle = s.color;
-		if(value >= 100){
-			for(i=0;i<num_0.length;i++){
-				if(num_0[i] == 0)continue;
-				c.fillRect(s.screenX + Math.floor(i%3)*s.step, 
-				s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
+	LoadingSample1.prototype.setProgress = function(value) {
+		var s = this, c = LGlobal.canvas;
+		var num_0 = "", num_1, num_2, i;
+		var s_x = s.step;
+		if (value >= 100) {
+			num_0 = s.getNumber(1);
+			num_1 = s.getNumber(0);
+			num_2 = s.getNumber(0);
+			s_x = s.step * 3;
+		} else if (value >= 10) {
+			num_1 = s.getNumber(Math.floor(value / 10));
+			num_2 = s.getNumber(value % 10);
+		} else {
+			num_1 = s.getNumber(0);
+			num_2 = s.getNumber(value);
+		}
+		s.back.graphics.clear();
+		s.back.graphics.add(function() {
+			c.beginPath();
+			c.fillStyle = s.backgroundColor;
+			c.fillRect(0, 0, LGlobal.width, LGlobal.height);
+			c.closePath();
+			c.fillStyle = s.color;
+			if (value >= 100) {
+				for ( i = 0; i < num_0.length; i++) {
+					if (num_0[i] == 0) {
+						continue;
+					}
+					c.fillRect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+				}
 			}
-		}
-		for(i=0;i<num_1.length;i++){
-			if(num_1[i] == 0)continue;
-			c.fillRect(s.screenX + s_x + Math.floor(i%3)*s.step, 
-			s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
-		}
-		for(i=0;i<num_2.length;i++){
-			if(num_2[i] == 0)continue;
-			c.fillRect(s.screenX + s_x + Math.floor(i%3)*s.step + s.step*4, 
-			s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
-		}
-		c.moveTo(s.screenX + s_x + s.step*9.7,s.screenY);
-		c.lineTo(s.screenX + s_x + s.step*10.5,s.screenY);
-		c.lineTo(s.screenX + s_x + s.step*9.3,s.screenY + s.step * 5);
-		c.lineTo(s.screenX + s_x + s.step*8.5,s.screenY + s.step * 5);
-		c.lineTo(s.screenX + s_x + s.step*9.7,s.screenY);
-		c.fill();
-		c.moveTo(s.screenX + s_x + s.step*8.5,s.screenY + s.step);
-		c.arc(s.screenX + s_x + s.step*8.5,s.screenY + s.step
-			,s.step*0.6,0,360+Math.PI/180);
-		c.moveTo(s.screenX + s_x + s.step*10.5,s.screenY + s.step*4);
-		c.arc(s.screenX + s_x + s.step*10.5,s.screenY + s.step*4
-			,s.step*0.6,0,360+Math.PI/180);
-		c.fill();
-	});
-	s.num.mask.graphics.clear();
-	s.num.mask.graphics.add(function(){
-		if(value >= 100){
-			for(i=0;i<num_0.length;i++){
-				if(num_0[i] == 0)continue;
-				c.rect(s.screenX + Math.floor(i%3)*s.step, 
-				s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
+			for ( i = 0; i < num_1.length; i++) {
+				if (num_1[i] == 0) {
+					continue;
+				}
+				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
 			}
-		}
-		for(var i=0;i<num_1.length;i++){
-			if(num_1[i] == 0)continue;
-			c.rect(s.screenX + s_x + Math.floor(i%3)*s.step, 
-			s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
-		}
-		for(var i=0;i<num_2.length;i++){
-			if(num_2[i] == 0)continue;
-			c.rect(s.screenX + s_x + Math.floor(i%3)*s.step + s.step*4, 
-			s.screenY + Math.floor(i/3)*s.step, s.step, s.step);
-		}
-	});
-	c.fillStyle = LGlobal._create_loading_color();
-	s.num.graphics.clear();
-	s.num.graphics.drawRect(1,c.fillStyle,[0,s.step*5*(100-value)*0.01,LGlobal.width,LGlobal.height],true,c.fillStyle);
-};
-LoadingSample1.prototype.getNumber = function (value){
-	return this.numberList[value];
-};
+			for ( i = 0; i < num_2.length; i++) {
+				if (num_2[i] == 0) {
+					continue;
+				}
+				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+			c.moveTo(s.screenX + s_x + s.step * 9.7, s.screenY);
+			c.lineTo(s.screenX + s_x + s.step * 10.5, s.screenY);
+			c.lineTo(s.screenX + s_x + s.step * 9.3, s.screenY + s.step * 5);
+			c.lineTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step * 5);
+			c.lineTo(s.screenX + s_x + s.step * 9.7, s.screenY);
+			c.fill();
+			c.moveTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step);
+			c.arc(s.screenX + s_x + s.step * 8.5, s.screenY + s.step, s.step * 0.6, 0, 360 + Math.PI / 180);
+			c.moveTo(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4);
+			c.arc(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4, s.step * 0.6, 0, 360 + Math.PI / 180);
+			c.fill();
+		});
+		s.num.mask.graphics.clear();
+		s.num.mask.graphics.add(function() {
+			if (value >= 100) {
+				for ( i = 0; i < num_0.length; i++) {
+					if (num_0[i] == 0) {
+						continue;
+					}
+					c.rect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+				}
+			}
+			for (var i = 0; i < num_1.length; i++) {
+				if (num_1[i] == 0) {
+					continue;
+				}
+				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+			for (var i = 0; i < num_2.length; i++) {
+				if (num_2[i] == 0) {
+					continue;
+				}
+				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+		});
+		c.fillStyle = LGlobal._create_loading_color();
+		s.num.graphics.clear();
+		s.num.graphics.drawRect(1, c.fillStyle, [0, s.step * 5 * (100 - value) * 0.01, LGlobal.width, LGlobal.height], true, c.fillStyle);
+	};
+	LoadingSample1.prototype.getNumber = function(value) {
+		return this.numberList[value];
+	};
+	return LoadingSample1;
+})();
 function LoadingSample2(size,background,color){
 	base(this,LSprite,[]);
 	var s = this,c = LGlobal.canvas,t = "Loading...",l;
@@ -7559,9 +7597,6 @@ var LTransitionManager = (function() {
 		}
 	};
 	LTransitionManager.start = function(displayObject, transParams) {
-		if (!LTweenLite) {
-			throw ("you need load the LTweenLite.");
-		}	
 		var trans = new LTransition(displayObject, transParams);
 		trans.startTransition();
 		return trans;

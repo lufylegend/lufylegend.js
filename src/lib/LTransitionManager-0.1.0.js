@@ -1,6 +1,7 @@
 /** @language chinese
+ * <p>Library:lufylegend.LTransitionManager-x.x.x.min.js</p>
  * <p>为LTransitionManager提供动画效果。</p>
- * @class Lib:LTransition
+ * @class LTransition
  * @constructor
  * @since 1.8.0
  * @public
@@ -770,11 +771,12 @@ var LIris = (function() {
 	return LIris;
 })();
 /** @language chinese
+ * <p>Library:lufylegend.LTransitionManager-x.x.x.min.js</p>
  * <p>定义动画效果。 它允许您将九种动画效果中的一种应用于影片剪辑。 在创建自定义组件时，您可以使用 LTransitionManager 类将动画效果应用于组件可视界面中的影片剪辑。整体来说，有九个不同的动画可以用。</p>
  * <p>您可以通过两种方式创建 TransitionManager 实例：</p>
  * <p>请调用 LTransitionManager.start() 方法。 这是创建 LTransitionManager 实例最简单的方式，建议使用该方式。</p>
  * <p>使用 new 运算符。 然后可以指定过渡属性，并通过调用 LTransitionManager.startTransition() 方法在另一步中启动过渡效果。</p>
- * @class Lib:LTransitionManager
+ * @class LTransitionManager
  * @constructor
  * @param {LDisplayObject} displayObject 要应用过渡效果的对象。
  * @examplelink <p><a href="../../../api/LTransitionManager/index.html" target="_blank">测试链接</a></p>
@@ -848,9 +850,6 @@ var LTransitionManager = (function() {
 	 * @public
 	 */
 	LTransitionManager.start = function(displayObject, transParams) {
-		if (!LTweenLite) {
-			throw ("you need load the LTweenLite.");
-		}	
 		var trans = new LTransition(displayObject, transParams);
 		trans.startTransition();
 		return trans;

@@ -57,8 +57,8 @@ function main(){
 function onframe(){
 	a += 0.1 , b += 0.1;
 	backLayer.childList = backLayer.childList.sort(function(a,b){return a.z - b.z;});
-	for(key in backLayer.childList){
-		backLayer.childList[key].setAngle(a,b);
-		backLayer.childList[key].draw(backLayer);
+	for(var i=0;i<backLayer.childList.length;i++){
+		backLayer.childList[i].setAngle(a,b);
+		backLayer.childList[i].draw(backLayer);
    }
 }

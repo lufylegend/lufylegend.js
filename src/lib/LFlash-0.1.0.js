@@ -1,4 +1,5 @@
 /** @language chinese
+ * <p>Library:lufylegend.LFlash-x.x.x.min.js</p>
  * <p>为adobe flash cs导出的纹理提供动画转换支持。</p>
  * @class LFlash
  * @constructor

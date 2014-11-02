@@ -332,6 +332,11 @@ var LWebAudio = (function () {
 			}
 			s.data.loop = false;
 			s.playing = true;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -428,6 +433,10 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -459,6 +468,10 @@ var LWebAudio = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
@@ -503,7 +516,7 @@ var LWebAudio = (function () {
  * @event LEvent.COMPLETE
  */
 /** @language chinese
- * 播放结束事件，一个音频文件播放完之后调度。
+ * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
  * @event LEvent.SOUND_COMPLETE
  * @since 1.7.0
  * @public

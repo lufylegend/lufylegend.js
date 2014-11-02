@@ -140,8 +140,8 @@ function start(event){
 function onframe(){
 	timeText.text = "time : " + ((new Date()).getTime() - time)/1000;
 	var child,rand;
-	for(key in sky.childList){
-		child = sky.childList[key];
+	for(var i=0;i<sky.childList.length;i++){
+		child = sky.childList[i];
 		child.x += child.sx;
 		child.y += child.sy;
 		if(LGlobal.hitTestArc(player,child,10,1)){

@@ -116,8 +116,8 @@ function addHero(){
 function onframe(){
 	var key = null;
 	charaLayer.childList = charaLayer.childList.sort(function(a,b){return a.y - b.y;});
-	for(key in charaLayer.childList){
-		charaLayer.childList[key].onframe();
+	for(var i=0;i<charaLayer.childList.length;i++){
+		charaLayer.childList[i].onframe();
 	}
 }
 function addEnemy(){

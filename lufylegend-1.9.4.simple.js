@@ -2415,6 +2415,11 @@ var LWebAudio = (function () {
 			}
 			s.data.loop = false;
 			s.playing = true;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(s._onended.bind(s), (s.currentTimeTo - s.currentTime) * 1000);
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
@@ -2439,6 +2444,10 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -2452,6 +2461,10 @@ var LWebAudio = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
@@ -2497,7 +2510,7 @@ var LMedia = (function () {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration - 0.1;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -2510,9 +2523,7 @@ var LMedia = (function () {
 		},
 		_onended : function () {
 			var s = this, i, l;
-			if (s.data.ended) {
-				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			}
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if (++s.loopIndex < s.loopLength) {
 				i = s.loopIndex;
 				l = s.loopLength;
@@ -2580,6 +2591,13 @@ var LMedia = (function () {
 			} else {
 				s.currentTimeTo = s.length;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
+			s.timeout = setTimeout(function(){
+				s._onended();
+			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
@@ -2596,6 +2614,10 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			s.playing = false;
 			s.data.pause();
 		},
@@ -2603,6 +2625,10 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
 			}
 			s.playing = false;
 			s.data.pause();
@@ -3351,107 +3377,119 @@ var LGraphics = (function () {
 			return s.parent.ismouseonShapes(s.showList, e.offsetX, e.offsetY);
 		},
 		getWidth : function () {
-			var s = this, k, k1, min = 0, max = 0, v, l, l1;
+			var s = this, k, k1, min, max, v, l, l1;
 			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[0] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[0] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.ARC) {
-					if (min > s.showList[k].arg[0] - s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[0] - s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0] - s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[0] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[0] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.VERTICES) {
 					for (k1 = 0, l1 = s.showList[k].arg.length; k1 < l1; k1++) {
 						v = s.showList[k].arg[k1];
-						if (min > v[0]) {
+						if (min > v[0] || typeof min == UNDEFINED) {
 							min = v[0];
 						}
-						if (max < v[0]) {
+						if (max < v[0] || typeof max == UNDEFINED) {
 							max = v[0];
 						}
 					}
 				} else if (s.showList[k].type == LShape.LINE) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (min > s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[0]) {
+					if (max < s.showList[k].arg[0] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.POINT) {
-					if (min > s.showList[k].arg[0]) {
+					if (min > s.showList[k].arg[0] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[0];
 					}
-					if (max < s.showList[k].arg[0]) {
+					if (max < s.showList[k].arg[0] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[0];
 					}
 				}
 			}
+			if (typeof min == UNDEFINED) {
+				min = max = 0;
+			}
 			s.left = min;
+			if (l > 0 && max == min) {
+				max = min + 1;
+			}
 			return max - min;
 		},
 		getHeight : function () {
-			var s = this, k = null, k1 = null, l, l1, min = 0, max = 0, v;
+			var s = this, k = null, k1 = null, l, l1, min, max, v;
 			for (k = 0, l = s.showList.length; k < l; k++) {
 				if (s.showList[k].type == LShape.RECT) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[1] + s.showList[k].arg[3]) {
+					if (max < s.showList[k].arg[1] + s.showList[k].arg[3] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1] + s.showList[k].arg[3];
 					}
 				} else if (s.showList[k].type == LShape.ARC) {
-					if (min > s.showList[k].arg[1] - s.showList[k].arg[2]) {
+					if (min > s.showList[k].arg[1] - s.showList[k].arg[2] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1] - s.showList[k].arg[2];
 					}
-					if (max < s.showList[k].arg[1] + s.showList[k].arg[2]) {
+					if (max < s.showList[k].arg[1] + s.showList[k].arg[2] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1] + s.showList[k].arg[2];
 					}
 				} else if (s.showList[k].type == LShape.VERTICES) {
 					for (k1 = 0, l1 = s.showList[k].arg.length; k1 < l1; k1++) {
 						v = s.showList[k].arg[k1];
-						if (min > v[1]) {
+						if (min > v[1] || typeof min == UNDEFINED) {
 							min = v[1];
 						}
-						if (max < v[1]) {
+						if (max < v[1] || typeof max == UNDEFINED) {
 							max = v[1];
 						}
 					}
 				} else if (s.showList[k].type == LShape.LINE) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (min > s.showList[k].arg[3]) {
+					if (min > s.showList[k].arg[3] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[3];
 					}
-					if (max < s.showList[k].arg[1]) {
+					if (max < s.showList[k].arg[1] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[3]) {
+					if (max < s.showList[k].arg[3] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[3];
 					}
 				} else if (s.showList[k].type == LShape.POINT) {
-					if (min > s.showList[k].arg[1]) {
+					if (min > s.showList[k].arg[1] || typeof min == UNDEFINED) {
 						min = s.showList[k].arg[1];
 					}
-					if (max < s.showList[k].arg[1]) {
+					if (max < s.showList[k].arg[1] || typeof max == UNDEFINED) {
 						max = s.showList[k].arg[1];
 					}
 				}
-			}	
-			s.top = min;	
+			}
+			if (typeof min == UNDEFINED) {
+				min = max = 0;
+			}
+			s.top = min;
+			if (l > 0 && max == min) {
+				max = min + 1;
+			}
 			return max - min;
 		},
 		startX : function () {
@@ -4904,6 +4942,10 @@ var LBitmapData = (function () {
 			}
 			w = bd.getWidth();
 			h = bd.getHeight();
+			if (w == 0 || h == 0) {
+				s._setDataType(_dataType);
+				return;
+			}
 			c = bd.getDataCanvas();
 			if (colorTransform) {
 				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
@@ -5274,7 +5316,7 @@ var LLoadManage = (function () {
 					s.loader = new LSound();
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path));
+					s.loader.load(d.path);
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;
