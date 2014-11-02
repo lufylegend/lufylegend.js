@@ -80,7 +80,7 @@ var LGlobal = ( function () {
 	 */
 	LGlobal.aspectRatio = NONE;
 	/** @language chinese
-	 * <p><canvas> 标签。</p>
+	 * <p>canvas 标签。</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -88,7 +88,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	/** @language english
-	 * <p><canvas> Tag.</p>
+	 * <p>canvas Tag.</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -96,7 +96,7 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	/** @language japanese
-	 * <p><canvas> タグ。</p>
+	 * <p>canvas タグ。</p>
 	 * @property LGlobal.canvasObj
 	 * @type HTML elements
 	 * @static
@@ -106,7 +106,7 @@ var LGlobal = ( function () {
 	LGlobal.canvasObj = null;
 	/** @language chinese
 	 * <p>context 对象。</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -114,7 +114,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language english
 	 * <p>context object.</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -122,7 +122,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language japanese
 	 * <p>context タグ。</p>
-	 * @property LGlobal.canvasObj
+	 * @property LGlobal.canvas
 	 * @type CanvasRenderingContext2D
 	 * @static
 	 * @since 1.0.0
@@ -654,6 +654,12 @@ var LGlobal = ( function () {
 			if(parseInt(n.substr(i + 8, 1)) > 3){
 				LGlobal.android_new = true;
 			}
+		} else if (n.indexOf(OS_WINDOWS_PHONE) > 0) {
+			LGlobal.os = OS_WINDOWS_PHONE;
+			LGlobal.canTouch = true;
+		} else if (n.indexOf(OS_BLACK_BERRY) > 0) {
+			LGlobal.os = OS_BLACK_BERRY;
+			LGlobal.canTouch = true;
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
@@ -803,8 +809,15 @@ var LGlobal = ( function () {
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
-		var canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop), eve, k, i;
+		var canvasX, canvasY, eve, k, i;
+		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
+			canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+			canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
+		} else {
+			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
+			canvasX = parseInt(rectangle.left);
+			canvasY = parseInt(rectangle.top);
+		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
@@ -871,9 +884,15 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal.ll_touchMove = function (e) {
-		var cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft),
-		cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop),
-		eve, l, ll = e.touches.length;
+		var cX, cY, eve, l, ll = e.touches.length;
+		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
+			cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+			cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
+		} else {
+			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
+			cX = parseInt(rectangle.left);
+			cY = parseInt(rectangle.top);
+		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;
 		}
@@ -1199,7 +1218,7 @@ var LGlobal = ( function () {
 		for (i = 0; i < row; i++) {
 			c = [];
 			for (j = 0; j < col; j++) {
-				c.push({x : cw * j, y : ch * i});
+				c.push({x : cw * j, y : ch * i, width : cw, height : ch});
 			}
 			r.push(c);
 		}

@@ -449,7 +449,11 @@ var LAnimation = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimation/onframe.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		onframe : function (){
-			var s = this, arr = s.imageArray[s.rowIndex][s.colIndex], stepFrame = null;
+			var s = this, arr, stepFrame = null;
+			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
+				s.colIndex = 0;
+			}
+			arr = s.imageArray[s.rowIndex][s.colIndex];
 			if (s._ll_stepArray[s.rowIndex] && s._ll_stepArray[s.rowIndex][s.colIndex]) {
 				stepFrame = s._ll_stepArray[s.rowIndex][s.colIndex];
 			} else {

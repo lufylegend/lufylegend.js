@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>LTransitionManager</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+</head>
+<body>
+	<div id="legend"></div>
+<script>
+LInit(20,"legend",640,400,main);
+function main(){
+	var layer = new LSprite();
+	addChild(layer);
+	var sprite01 = new LSprite();
+	sprite01.graphics.drawRect(1, "#ff0000", [0, 0, 300, 300], true, "#ff0000");
+	layer.addChild(sprite01);
+	var sprite02 = new LSprite();
+	sprite02.graphics.drawRect(1, "#008800", [0, 0, 300, 300], true, "#008800");
+	layer.addChild(sprite02);
+	var transParams = {type:LTransition.Fly,startPoint:1,duration:2,direction:LTransition.OUT,easing:Strong.easeOut};
+	LTransitionManager.start(sprite02,transParams);
+}
+</script>
+	</body>
+</html>

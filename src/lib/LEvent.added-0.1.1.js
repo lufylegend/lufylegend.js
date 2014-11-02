@@ -22,7 +22,7 @@ LDisplayObjectContainer.prototype.addChildAt = function (d, i) {
 	r.dispatchEventAddToStage();
 	return r;
 };
-LDisplayObjectContainer.prototype.dispatchEventAddToStage = function () {
+LInteractiveObject.prototype.dispatchEventAddToStage = function () {
 	var s = this, p = s.parent;
 	while (p && p != "root") {
 		p = p.parent;
@@ -30,17 +30,17 @@ LDisplayObjectContainer.prototype.dispatchEventAddToStage = function () {
 	if (p == "root") {
 		s._dispatchEventAddToStage();
 		s.dispatchEvent(LEvent.ADDED_TO_STAGE);
-		for (i = 0, l = s.childList.length; i < l; i++) {
-			
-		}
 	}
 };
-LDisplayObjectContainer.prototype._dispatchEventAddToStage = function () {
+LInteractiveObject.prototype._dispatchEventAddToStage = function () {
 	var s = this, i, l;
 	if (!s.dispatchEvent) {
 		return;
 	}
 	s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+	if (!s.childList) {
+		return;
+	}
 	for (i = 0, l = s.childList.length; i < l; i++) {
 		s.childList[i]._dispatchEventAddToStage();
 	}

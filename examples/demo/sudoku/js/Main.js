@@ -58,7 +58,16 @@ var imgData = [
 {name:"ico_sina",path:"./images/ico_sina.gif"},
 {name:"ico_qq",path:"./images/ico_qq.gif"},
 {name:"ico_facebook",path:"./images/ico_facebook.png"},
-{name:"ico_twitter",path:"./images/ico_twitter.png"}
+{name:"ico_twitter",path:"./images/ico_twitter.png"},
+{type:"js",path:"./js/Algorithm.js"},
+{type:"js",path:"./js/share.js"},
+{type:"js",path:"./js/Social.js"},
+{type:"js",path:"./js/GameLogo.js"},
+{type:"js",path:"./js/GameMenu.js"},
+{type:"js",path:"./js/GameClear.js"},
+{type:"js",path:"./js/GameRanking.js"},
+{type:"js",path:"./js/Stage.js"},
+{type:"js",path:"./js/Num.js"}
 ];
 //读取完的图片数组
 var imglist = {};
@@ -71,6 +80,8 @@ var btnReturn;
 var focus;
 var nowNum,selectLayer,stageNumList;
 function main(){
+	LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+	LSystem.screen(LStage.FULL_SCREEN);
 	loadingLayer = new LoadingSample1();
 	addChild(loadingLayer);	
 	LLoadManage.load(

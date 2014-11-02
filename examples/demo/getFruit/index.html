@@ -84,10 +84,10 @@
 				function onframe(){
 					hero.run();
 					
-					for(var key in itemLayer.childList){
-						itemLayer.childList[key].run();
-						if(itemLayer.childList[key].mode=="die"){
-							itemLayer.removeChild(itemLayer.childList[key]);
+					for(var i=0;i<itemLayer.childList.length;i++){
+						itemLayer.childList[i].run();
+						if(itemLayer.childList[i].mode=="die"){
+							itemLayer.removeChild(itemLayer.childList[i]);
 						}
 					}
 					if(stepindex++ > step){

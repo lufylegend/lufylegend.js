@@ -528,6 +528,7 @@ var LBitmapData = (function () {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
+			s._data = null;
 		},
 		/** @language chinese
 		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
@@ -1148,9 +1149,13 @@ var LBitmapData = (function () {
 			s._update();
 		},
 		/** @language chinese
-		 * 在LBitmapData位图图像上绘制 source 显示对象。
+		 * 在LBitmapData位图图像上绘制 source 显示对象。可以指定 matrix、colorTransform、blendMode 和目标 clipRect 参数来控制呈现的执行方式。您可以根据需要指定是否应在缩放时对位图进行平滑处理。
 		 * @method draw
-		 * @param {LDisplayObject} source 要绘制到 LBitmapData 对象的显示对象或 BitmapData 对象。
+		 * @param {LDisplayObject|LBitmapData} source 要绘制到 LBitmapData 对象的显示对象或 LBitmapData 对象。
+		 * @param {LMatrix} matrix 一个 Matrix 对象，用于缩放、旋转位图或转换位图的坐标。如果不想将矩阵转换应用于图像，请将此参数设置为恒等矩阵（使用默认 new LMatrix() 构造函数创建），或传递 null 值。
+		 * @param {LColorTransform} colorTransform 一个 LColorTransform 对象，用于调整位图的颜色值。如果没有提供任何对象，则不会转换位图图像的颜色。如果必须传递此参数但又不想转换图像，请将此参数设置为使用默认 new LColorTransform() 构造函数创建的 LColorTransform 对象。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">测试链接</a></p>
+		 * @param {string} blendMode 来自 LBlendMode 类的一个字符串值，指定要应用于所生成位图的混合模式。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">测试链接</a></p>
+		 * @param {LRectangle} clipRect 一个 LRectangle 对象，定义要绘制的源对象的区域。 如果不提供此值，则不会进行剪裁，并且将绘制整个源对象。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">测试链接</a></p>
 		 * @since 1.7.7
 		 * @public
 		 * @example
@@ -1169,7 +1174,11 @@ var LBitmapData = (function () {
 		/** @language english
 		 * Draws the source display object onto the bitmap image, using the Flash runtime vector renderer.
 		 * @method draw
-		 * @param {LDisplayObject} [source] The display object or BitmapData object to draw to the BitmapData object.
+		 * @param {LDisplayObject|LBitmapData} [source] The display object or LBitmapData object to draw to the LBitmapData object.
+		 * @param {LMatrix} matrix A LMatrix object used to scale, rotate, or translate the coordinates of the bitmap. If you do not want to apply a matrix transformation to the image, set this parameter to an identity matrix, created with the default new LMatrix() constructor, or pass a null value.
+		 * @param {LColorTransform} colorTransform A ColorTransform object that you use to adjust the color values of the bitmap. If no object is supplied, the bitmap image's colors are not transformed. If you must pass this parameter but you do not want to transform the image, set this parameter to a ColorTransform object created with the default new ColorTransform() constructor.<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">Try it »</a></p>
+		 * @param {string} blendMode A string value, from the flash.display.BlendMode class, specifying the blend mode to be applied to the resulting bitmap.<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">Try it »</a></p>
+		 * @param {LRectangle} clipRect A Rectangle object that defines the area of the source object to draw. If you do not supply this value, no clipping occurs and the entire source object is drawn.<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">Try it »</a></p>
 		 * @since 1.7.7
 		 * @public
 		 * @example
@@ -1188,7 +1197,11 @@ var LBitmapData = (function () {
 		/** @language japanese
 		 * source 表示オブジェクトをビットマップイメージ上に描画します。
 		 * @method draw
-		 * @param {LDisplayObject} [source] LBitmapData オブジェクトに描画される表示オブジェクトまたは BitmapData オブジェクトです。
+		 * @param {LDisplayObject|LBitmapData} [source] LBitmapData オブジェクトに描画される表示オブジェクトまたは LBitmapData オブジェクトです。
+		 * @param {LMatrix} matrix ビットマップの座標を拡大 / 縮小、回転、または平行移動するために使われる LMatrix オブジェクトです。マトリックス変換をイメージに適用したくない場合は、（デフォルト new LMatrix() コンストラクターを使って作成される）単位マトリックスにこのパラメーターを設定するか、null 値を渡してください。
+		 * @param {LColorTransform} colorTransform ビットマップのカラー値を調整するために使用する ColorTransform オブジェクトです。オブジェクトが提供されない場合、ビットマップイメージのカラーは変換されません。このパラメーターを渡す必要があるが、イメージを変換したくない場合、このパラメーターを、デフォルトの new ColorTransform() コンストラクターを使って作成される ColorTransform オブジェクトに設定します。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @param {string} blendMode 結果として生成されるビットマップに適用されるブレンドモードを指定する、flash.display.BlendMode クラスのストリング値です。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @param {LRectangle} clipRect 描画するソースオブジェクトの領域を定義する矩形オブジェクトです。この値を指定しない場合、クリッピングは発生せず、ソースオブジェクト全体が描画されます。<p><a href="../../../api/LBitmapData/draw2.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @since 1.7.7
 		 * @public
 		 * @example
@@ -1204,20 +1217,286 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		draw : function (source) {
-			var s = this;
-			if (s.dataType == LBitmapData.DATA_CANVAS) {
-				s._context.clearRect(0, 0, s.width, s.height);
-				s._context.drawImage(source.getDataCanvas(), 0, 0);
-			} else if (s.dataType == LBitmapData.DATA_IMAGE) {
-				s.image.src = source.getDataURL();
+		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+			var s = this, c, bd = source, x, y, w, h, save = false;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			if (matrix || colorTransform || blendMode || clipRect) {
+				s._context.save();
+				save = true;
 			}
+			if (clipRect) {
+				if (!(bd instanceof LBitmapData)) {
+					x = y = 0;
+				} else {
+					x = bd.x;
+					y = bd.y;
+				}
+				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
+			}
+			w = bd.getWidth();
+			h = bd.getHeight();
+			if (w == 0 || h == 0) {
+				s._setDataType(_dataType);
+				return;
+			}
+			c = bd.getDataCanvas();
+			if (colorTransform) {
+				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
+				c = bd.image;
+			}
+			if (matrix) {
+				s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+			}
+			if (blendMode) {
+				s._context.globalCompositeOperation = blendMode;
+			}
+			s._context.drawImage(c,
+				bd.x,
+				bd.y,
+				w,
+				h,
+				0,
+				0,
+				w,
+				h
+			);
+			if (save) {
+				s._context.restore();
+			}
+			s._setDataType(_dataType);
 			s.resize();
+		},
+		getDataCanvas : function () {
+			var s = this;
+			var _dataType = s.dataType;
+			s._setDataType(LBitmapData.DATA_CANVAS);
+			s._setDataType(_dataType);
+			return s._canvas;
+		},
+		getWidth : function () {
+			return this.width;
+		},
+		getHeight : function () {
+			return this.height;
 		},
 		resize : function () {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
+		},
+		/** @language chinese
+		 * <p>使用 LColorTransform 对象调整位图图像的指定区域中的颜色值。如果矩形与位图图像的边界匹配，则此方法将转换整个图像的颜色值。</p>
+		 * <p>使用条件：数据保存形式为LBitmapData.DATA_CANVAS。</p>
+		 * @method colorTransform
+		 * @param {LRectangle} rect 一个 LRectangle 对象，它定义在其中应用 LColorTransform 对象的图像区域。
+		 * @param {LColorTransform} colorTransform 一个 LColorTransform 对象，它描述要应用的颜色转换值。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		var rect = new LRectangle(50, 50, 90, 90);
+		 * 		var colorTransform = new LColorTransform(0.5, 0.7, 0.4, 1, 0, 0, 0, 0);
+		 * 		bitmapData.colorTransform(rect, colorTransform);
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/colorTransform.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>This method copies a rectangular area of a source image to a rectangular area of the same size at the destination point of the destination LBitmapData object.</p>
+		 * <p>Conditions：The data type of the LBitmapData is Canvas object。</p>
+		 * @method colorTransform
+		 * @param {LRectangle} rect A LRectangle object that defines the area of the image in which the LColorTransform object is applied.
+		 * @param {LColorTransform} colorTransform A LColorTransform object that describes the color transformation values to apply.
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		var rect = new LRectangle(50, 50, 90, 90);
+		 * 		var colorTransform = new LColorTransform(0.5, 0.7, 0.4, 1, 0, 0, 0, 0);
+		 * 		bitmapData.colorTransform(rect, colorTransform);
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/colorTransform.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>source このメソッドは、ソースイメージの矩形領域を、ターゲット LBitmapData オブジェクトのターゲットポイントにある同じサイズの矩形領域にコピーします。</p>
+		 * <p>利用条件：LBitmapDataのデーターの保存形式はCanvas オブジェクトである。</p>
+		 * @method colorTransform
+		 * @param {LRectangle} rect LColorTransform オブジェクトが適用されるイメージの領域を定義する LRectangle オブジェクトです。
+		 * @param {LColorTransform} colorTransform 適用されるカラー変換値を記述する LColorTransform オブジェクトです。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		var rect = new LRectangle(50, 50, 90, 90);
+		 * 		var colorTransform = new LColorTransform(0.5, 0.7, 0.4, 1, 0, 0, 0, 0);
+		 * 		bitmapData.colorTransform(rect, colorTransform);
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/colorTransform.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		colorTransform : function (rect, colorTransform) {
+			var s = this;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			var x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
+			var img = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
+			var data = img.data;
+			for (var i = 0, l = data.length; i < l; i += 4) {
+				var r = i, g = i + 1, b = i + 2, a = i + 3;
+				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
+				data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
+				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
+				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
+			}
+			s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
+		},
+		/** @language chinese
+		 * <p>此方法在目标 LBitmapData 对象的目标点将源图像的矩形区域复制为同样大小的矩形区域。</p>
+		 * <p>使用条件：数据保存形式为LBitmapData.DATA_CANVAS。</p>
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData 要从中复制像素的输入位图图像。源图像可以是另一个 LBitmapData 实例，也可以指当前 LBitmapData 实例。
+		 * @param {LRectangle} sourceRect 定义要用作输入的源图像区域的矩形。
+		 * @param {LPoint} destPoint 目标点，它表示将在其中放置新像素的矩形区域的左上角。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * <p>This method copies a rectangular area of a source image to a rectangular area of the same size at the destination point of the destination LBitmapData object.</p>
+		 * <p>Conditions：The data type of the LBitmapData is Canvas object。</p>
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData The input bitmap image from which to copy pixels. The source image can be a different LBitmapData instance, or it can refer to the current LBitmapData instance.
+		 * @param {LRectangle} sourceRect A rectangle that defines the area of the source image to use as input.
+		 * @param {LPoint} destPoint The destination point that represents the upper-left corner of the rectangular area where the new pixels are placed.
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">Try it »</a></p>
+		 */
+		/** @language japanese
+		 * <p>source このメソッドは、ソースイメージの矩形領域を、ターゲット LBitmapData オブジェクトのターゲットポイントにある同じサイズの矩形領域にコピーします。</p>
+		 * <p>利用条件：LBitmapDataのデーターの保存形式はCanvas オブジェクトである。</p>
+		 * @method copyPixels
+		 * @param {LBitmapData} sourceBitmapData ピクセルのコピー元となる入力ビットマップイメージです。ソースイメージは、別の LBitmapData インスタンスにすることも、現在の LBitmapData インスタンスを参照することもできます。
+		 * @param {LRectangle} sourceRect 入力として使用するソースイメージの領域を定義する矩形です。
+		 * @param {LPoint} destPoint ターゲットポイントです。新しいピクセルが配置される矩形領域の左上隅を表します。
+		 * @since 1.9.4
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.jpg", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapData = new LBitmapData(event.target);
+		 * 		bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+		 * 		
+		 * 		var bitmap = new LBitmap(bitmapData);
+		 * 		addChild(bitmap);
+		 * 		
+		 * 		var bitmap2 = new LBitmap(bitmapData2);
+		 * 		bitmap2.y = 250;
+		 * 		addChild(bitmap2);
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">実際のサンプルを見る</a></p>
+		 */
+		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+			var s = this, left, top, width, height, bd = sourceBitmapData;
+			if (s.dataType != LBitmapData.DATA_CANVAS) {
+				return;
+			}
+			left = bd.x;
+			top = bd.y;
+			width = bd.width;
+			height = bd.height;
+			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image,
+				bd.x,
+				bd.y,
+				bd.width,
+				bd.height,
+				destPoint.x,
+				destPoint.y,
+				bd.width,
+				bd.height
+			);
+			bd.x = left;
+			bd.y = top;
+			bd.width = width;
+			bd.height = height;
 		}
 	};
 	for (var k in p) {

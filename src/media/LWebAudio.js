@@ -84,6 +84,7 @@ var LWebAudio = (function () {
 		 */
 		s.playing = false;
 		s.volume = 1;
+		LSound.Container.add(s);
 	}
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
@@ -186,15 +187,20 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (LWebAudio.audioTag.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return LWebAudio.audioTag.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
 					return;
@@ -427,8 +433,10 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -461,8 +469,10 @@ var LWebAudio = (function () {
 			if (!s.playing) {
 				return;
 			}
-			clearTimeout(s.timeout);
-			delete s.timeout;
+			if (s.timeout) {
+				clearTimeout(s.timeout);
+				delete s.timeout;
+			}
 			if (s.bufferSource.stop) {
 				s.bufferSource.stop(0);
 			} else {
@@ -471,6 +481,18 @@ var LWebAudio = (function () {
 			s.playing = false;
 			s.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_check : function () {
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime - s.currentSave + LSound.Container.time * 0.001) {
+				s._onended();
+			}
+		},
+		die : function () {
+			LSound.Container.remove(this);
 		}
 	};
 	for (var k in p) {
@@ -492,4 +514,10 @@ var LWebAudio = (function () {
  * audioまたはvideoファイルロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ */
+/** @language chinese
+ * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
+ * @event LEvent.SOUND_COMPLETE
+ * @since 1.7.0
+ * @public
  */

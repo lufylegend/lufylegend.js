@@ -81,12 +81,13 @@ var LMedia = (function () {
 		s.oncomplete = null;
 		s.onsoundcomplete = null;
 		s.currentStart = 0;
+		LSound.Container.add(this);
 	}
 	var p = {
 		onload : function () {
 			var s = this;
 			if (s.data.readyState) {
-				s.length = s.data.duration;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
 				var e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -99,9 +100,7 @@ var LMedia = (function () {
 		},
 		_onended : function () {
 			var s = this, i, l;
-			if (s.data.ended) {
-				s.dispatchEvent(LEvent.SOUND_COMPLETE);
-			}
+			s.dispatchEvent(LEvent.SOUND_COMPLETE);
 			if (++s.loopIndex < s.loopLength) {
 				i = s.loopIndex;
 				l = s.loopLength;
@@ -146,15 +145,20 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, k, d, q = {"mov" : "quicktime", "3gp" : "3gpp", "ogv" : "ogg", "m4a" : "mpeg", "mp3" : "mpeg", "wave" : "wav", "aac" : "mp4"};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
 					d = q[d];
+				} else {
+					d = [d];
 				}
-				if (s.data.canPlayType(s._type + "/" + d)) {
+				c = d.some(function (element, index, array) {
+					return s.data.canPlayType(s._type + "/" + element);
+				});
+				if (c) {
 					s.data.src = a[k];
 					s.onload();
 					s.data.load();
@@ -266,14 +270,16 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
-			if (typeof l == UNDEFINED) {
-				l = 1;
+			if (LGlobal.android) {
+				LSound.Container.stopOther(this);
 			}
-			if (typeof c == UNDEFINED) {
-				c = 0;
+			if (typeof c != UNDEFINED) {
+				s.data.currentTime = c;
+				s.currentStart = c;
 			}
-			s.data.currentTime = c;
-			s.currentStart = c;
+			if (typeof l != UNDEFINED) {
+				s.loopLength = l;
+			}
 			if (typeof to !== UNDEFINED) {
 				s.currentTimeTo = to > s.length ? s.length : to;
 			} else {
@@ -288,7 +294,6 @@ var LMedia = (function () {
 			}, (s.currentTimeTo - s.data.currentTime) * 1000);
 			s.data.loop = false;
 			s.loopIndex = 0;
-			s.loopLength = l;
 			s.playing = true;
 			s.data.play();
 		},
@@ -413,6 +418,18 @@ var LMedia = (function () {
 			s.data.pause();
 			s.data.currentTime = 0;
 			s.currentSave = 0;
+		},
+		ll_check : function () {
+			var s = this;
+			if (!s.playing) {
+				return;
+			}
+			if (s.currentTimeTo < s.data.currentTime + LSound.Container.time * 0.005) {
+				s._onended();
+			}
+		},
+		die : function () {
+			LSound.Container.remove(this);
 		}
 	};
 	for (var k in p) {
@@ -434,4 +451,10 @@ var LMedia = (function () {
  * audioまたはvideoファイルロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ */
+/** @language chinese
+ * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
+ * @event LEvent.SOUND_COMPLETE
+ * @since 1.7.0
+ * @public
  */

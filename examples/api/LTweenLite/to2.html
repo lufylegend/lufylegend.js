@@ -11,7 +11,6 @@
 			<script>
 			LInit(50, "legend", 800, 480, main);
 			function main () {
-				LGlobal.setDebug(true);
 				var circle = new LSprite();
 				circle.x = 50;
 				circle.y = 50;
@@ -22,13 +21,11 @@
 				rect.y = 100;
 				rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
 				addChild(rect);
-				LTweenLite.to(circle,2,{x:500,y:400,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut,tweenTimeline:LTweenLite.TYPE_TIMER})
-				.to(circle,2,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn,onComplete:function(e){
-					trace(e.currentTarget);
-					trace(e.target);
-				},tweenTimeline:LTweenLite.TYPE_TIMER});
-				LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
-				.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+				LTweenLite.to(circle,2,{x:700,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut,tweenTimeline:LTweenLite.TYPE_TIMER});
+				LTweenLite.to(rect,2,{x:600,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME});
+				setTimeout(function(){
+					LGlobal.sleep(2000);
+				},100);
 			}
 			</script>
 	</body>

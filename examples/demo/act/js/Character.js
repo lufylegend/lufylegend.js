@@ -39,8 +39,8 @@ Character.prototype.onframe = function (){
 	}
 	if(self.action == ACTION.ATTACK || self.action == ACTION.BIG_ATTACK || self.action == ACTION.HIT || 
 			self.action == ACTION.JUMP_ATTACK || self.action == ACTION.SKILL || self.action == ACTION.BIG_SKILL){
-		for(key in charaLayer.childList){
-			chara = charaLayer.childList[key];
+		for(var i=0;i<charaLayer.childList.length;i++){
+			chara = charaLayer.childList[i];
 			if(self.belong == chara.belong)continue;
 			self.checkAction(chara);
 		}

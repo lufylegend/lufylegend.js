@@ -7,6 +7,6 @@ function BitmapSprite(src){
 	loader.load(LMvc.IMG_PATH+src,"bitmapData");
 }
 BitmapSprite.prototype.loadOver = function(event){
-	var self = event.target.parent;
-	self.addChild(new LBitmap(new LBitmapData(event.currentTarget)));
+	var self = event.currentTarget.parent;
+	self.addChild(new LBitmap(new LBitmapData(event.target)));
 };

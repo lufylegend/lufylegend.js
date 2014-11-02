@@ -109,24 +109,24 @@ var LMatrix = (function () {
 		rotate : function (q) {
 			var s = this,
 			radian = q * Math.PI / 180,
-	        cos = Math.cos(radian),
-	        sin = Math.sin(radian),
-	        mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			cos = Math.cos(radian),
+			sin = Math.sin(radian),
+			mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
+			s.add(mtx);
 		},
 		scale : function (sx, sy) {
 			var s = this,
 			mtx = new LMatrix(sx, 0, 0, sy, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		translate : function (tx, ty) {
 			var s = this,
 			mtx = new LMatrix(1, 0, 0, 1, tx, ty, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		skew : function (kx, ky) {
 			mtx = new LMatrix(0, ky, kx, 0, 0, 0, 0, 0, 1);
-	        s.add(mtx);
+			s.add(mtx);
 		},
 		add : function (mtx) {
 			var s = this, a, b, c, d, tx, ty, u, v, w;

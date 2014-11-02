@@ -626,6 +626,7 @@ var LAnimationTimeline = (function () {
 		gotoAndStop : function (name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
 			s.stop();
 		},
 		/** @language chinese

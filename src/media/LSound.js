@@ -88,31 +88,32 @@
  * @since 1.7.0
  * @public
  */
-	/** @language chinese
-	 * <p>当前浏览器是否支持Web Audio。</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/** @language english
-	 * <p>The browser supports the Web Audio.</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/** @language japanese
-	 * <p>現在のブラウザはWeb audioサポートされているかどうか。</p>
-	 * @property LSound.webAudioEnabled
-	 * @type Boolean
-	 * @static
-	 * @since 1.9.0
-	 * @public
-	 */
-	/*LSound.webAudioEnabled = false;*/
+/** @language chinese
+ * <p>当前浏览器是否支持Web Audio。</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/** @language english
+ * <p>The browser supports the Web Audio.</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/** @language japanese
+ * <p>現在のブラウザはWeb audioサポートされているかどうか。</p>
+ * @property LSound.webAudioEnabled
+ * @type Boolean
+ * @static
+ * @since 1.9.0
+ * @public
+ */
+/*LSound.webAudioEnabled = false;*/
+
 /** @language chinese
  * <p>此类创建和播放音频的 LSound 对象。</p>
  * <p>当浏览器支持Web Audio Api并且设置LGlobal.webAudio = true(默认值是true)的时候，LSound会自动继承LWebAudio对象。</p>
@@ -267,5 +268,46 @@ var LSound = (function () {
 			LSound.webAudioEnabled = true;
 		}
 	}
+	LSound.Container = {
+		ll_save : 0,
+		time : 0,
+		list : [],
+		ll_show : function () {
+			var c = LSound.Container;
+			var t = (new Date()).getTime();
+			c.time = t - (c.ll_save ? c.ll_save : t);
+			c.ll_save = t;
+			var l = c.list;
+			for (var i = l.length - 1; i >= 0; i--) {
+				if (l[i]) {
+					l[i].ll_check();
+				}
+			}
+		},
+		add : function (obj) {
+			if (LSound.Container.list.indexOf(obj) >= 0) {
+				return;
+			} 
+			LSound.Container.list.push(obj);
+		},
+		remove : function (obj) {
+			var l = LSound.Container.list;
+			for (var i = l.length -1; i >= 0; i--) {
+				if (l[i].objectIndex == obj.objectIndex) {
+					l.splice(i,1);
+					break;
+				}
+			}
+		},
+		stopOther : function (obj) {
+			var l = LSound.Container.list;
+			for (var i = l.length - 1; i >= 0; i--) {
+				if (l[i].objectIndex != obj.objectIndex) {
+					l[i].stop();
+				}
+			}
+		}
+	};
+	LGlobal.childList.push(LSound.Container);
 	return LSound;
 })();
