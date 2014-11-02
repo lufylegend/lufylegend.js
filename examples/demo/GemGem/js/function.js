@@ -107,8 +107,8 @@ function addBullet(gem,flag){
 }
 function onBullet(){
 	var key,bullet;
-	for(key in bulletLayer.childList){
-		bullet = bulletLayer.childList[key];
+	for(var i=0;i<bulletLayer.childList.length;i++){
+		bullet = bulletLayer.childList[i];
 		bullet.onframe();
 	}
 }

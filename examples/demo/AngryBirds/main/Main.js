@@ -195,8 +195,8 @@ function onframe(){
 		LGlobal.box2d.synchronous();
 	}
 	var child;
-	for(var key in backLayer.childList){
-		child = backLayer.childList[key];
+	for(var i=0;i<backLayer.childList.length;i++){
+		child = backLayer.childList[i];
 		if(child.name == null || child.name.indexOf("instance") >= 0)continue;
 		if(child.x < -child.getWidth() || child.x > backLayer.getWidth()){
 			child.name = null;
