@@ -7,8 +7,8 @@ function Face(index){
 	loader.load(LMvc.IMG_PATH+"face/face-"+index+".png","bitmapData");
 }
 Face.prototype.loadOver = function(event){
-	var self = event.target.parent;
-	var bitmapData = new LBitmapData(event.currentTarget);
+	var self = event.currentTarget.parent;
+	var bitmapData = new LBitmapData(event.target);
 	var bitmap = new LBitmap(bitmapData);
 	self.addChild(bitmap);
 };
