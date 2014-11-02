@@ -278,7 +278,7 @@ var LSound = (function () {
 			c.time = t - (c.ll_save ? c.ll_save : t);
 			c.ll_save = t;
 			var l = c.list;
-			for (var i = l.length; i >= 0; i--) {
+			for (var i = l.length - 1; i >= 0; i--) {
 				if (l[i]) {
 					l[i].ll_check();
 				}
@@ -292,10 +292,18 @@ var LSound = (function () {
 		},
 		remove : function (obj) {
 			var l = LSound.Container.list;
-			for (var i = l.length; i >= 0; i--) {
+			for (var i = l.length -1; i >= 0; i--) {
 				if (l[i].objectIndex == obj.objectIndex) {
 					l.splice(i,1);
 					break;
+				}
+			}
+		},
+		stopOther : function (obj) {
+			var l = LSound.Container.list;
+			for (var i = l.length - 1; i >= 0; i--) {
+				if (l[i].objectIndex != obj.objectIndex) {
+					l[i].stop();
 				}
 			}
 		}

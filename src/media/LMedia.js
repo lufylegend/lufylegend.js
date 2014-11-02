@@ -270,6 +270,9 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
+			if (LGlobal.android) {
+				LSound.Container.stopOther(this);
+			}
 			if (typeof c != UNDEFINED) {
 				s.data.currentTime = c;
 				s.currentStart = c;
