@@ -17,7 +17,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 	}
@@ -44,7 +44,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 	}
@@ -71,7 +71,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 	}
@@ -272,7 +272,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("width : " + bitmap.getWidth());
@@ -285,7 +285,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("width : " + bitmap.getWidth());
@@ -298,7 +298,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("width : " + bitmap.getWidth());
@@ -328,7 +328,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("height : " + bitmap.getHeight());
@@ -341,7 +341,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("height : " + bitmap.getHeight());
@@ -354,7 +354,7 @@ var LBitmap = (function () {
 		 * @since 1.0.0
 		 * @public
 		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.currentTarget);  
+		 * 	var bitmapdata = new LBitmapData(event.target);  
 		 * 	var bitmap = new LBitmap(bitmapdata);
 		 * 	addChild(bitmap);
 		 * 	trace("height : " + bitmap.getHeight());

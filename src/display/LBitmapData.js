@@ -19,7 +19,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 		
@@ -52,7 +52,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 		
@@ -85,7 +85,7 @@
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);  
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
  * 		
@@ -337,11 +337,11 @@ var LBitmapData = (function () {
 		 * @param {float} width Image可视范围宽。
 		 * @param {float} height Image可视范围高。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -358,11 +358,11 @@ var LBitmapData = (function () {
 		 * @param {float} width The width of the bitmap image in pixels.
 		 * @param {float} height The height of the bitmap image in pixels.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -379,11 +379,11 @@ var LBitmapData = (function () {
 		 * @param {float} width Imageの表示範囲の幅。
 		 * @param {float} height Imageの表示範囲の高さ。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -406,11 +406,11 @@ var LBitmapData = (function () {
 		 * @param {float} x Image可视范围x坐标。
 		 * @param {float} y Image可视范围y坐标。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -425,11 +425,11 @@ var LBitmapData = (function () {
 		 * @param {float} x The x coordinate of the image.
 		 * @param {float} y The y coordinate of the image.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -444,11 +444,11 @@ var LBitmapData = (function () {
 		 * @param {float} x Imageの表示範囲の座標x.
 		 * @param {float} y Imageの表示範囲の座標y.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
 		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -540,7 +540,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -579,7 +579,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -618,7 +618,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -675,7 +675,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -714,7 +714,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -753,7 +753,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -816,7 +816,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -842,7 +842,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -868,7 +868,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -905,7 +905,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -931,7 +931,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -957,7 +957,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -1024,7 +1024,7 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
@@ -1052,7 +1052,7 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
@@ -1079,7 +1079,7 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
