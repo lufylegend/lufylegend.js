@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.4
+* @version 1.9.5
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -2372,7 +2372,7 @@ var LWebAudio = (function () {
 				}
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -2388,7 +2388,11 @@ var LWebAudio = (function () {
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
-					return;
+				} else {
+					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
+					var e = new LEvent(LEvent.COMPLETE);
+					e.currentTarget = e.target = s;
+					s.dispatchEvent(e);
 				}
 			}
 		},
@@ -2556,7 +2560,7 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -2574,6 +2578,11 @@ var LMedia = (function () {
 					s.onload();
 					s.data.load();
 					return;
+				} else {
+					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
+					var e = new LEvent(LEvent.COMPLETE);
+					e.currentTarget = e.target = s;
+					s.dispatchEvent(e);
 				}
 			}
 			if (s.oncomplete) {
@@ -4732,12 +4741,12 @@ var LBitmap = (function () {
 	}
 	return LBitmap;
 })();
-var LBitmapData = (function () {
-	function LBitmapData (image, x, y, width, height, dataType) {
+var LBitmapData = (function() {
+	function LBitmapData(image, x, y, width, height, dataType) {
 		var s = this;
-		LExtends (s, LObject, []);
+		LExtends(s, LObject, []);
 		s.type = "LBitmapData";
-		if (typeof dataType == UNDEFINED) {
+		if ( typeof dataType == UNDEFINED) {
 			dataType = LBitmapData.DATA_IMAGE;
 		}
 		s.oncomplete = null;
@@ -4751,18 +4760,18 @@ var LBitmapData = (function () {
 		if (image && typeof image == "object") {
 			s.image = image;
 			s.dataType = LBitmapData.DATA_IMAGE;
-			s.width = (width == null ? s.image.width : width);  
+			s.width = (width == null ? s.image.width : width);
 			s.height = (height == null ? s.image.height : height);
 			s._setDataType(dataType);
 		} else {
 			s._createCanvas();
 			s.dataType = LBitmapData.DATA_CANVAS;
-			s._canvas.width = s.width = (width == null ? 1 : width); 
+			s._canvas.width = s.width = (width == null ? 1 : width);
 			s._canvas.height = s.height = (height == null ? 1 : height);
-			if (typeof image == "string") {
-				image = parseInt(image.replace("#","0x"));
+			if ( typeof image == "string") {
+				image = parseInt(image.replace("#", "0x"));
 			}
-			if (typeof image == "number") {
+			if ( typeof image == "number") {
 				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
@@ -4782,7 +4791,7 @@ var LBitmapData = (function () {
 	LBitmapData.DATA_IMAGE = "data_image";
 	LBitmapData.DATA_CANVAS = "data_canvas";
 	var p = {
-		_setDataType : function (dataType) {
+		_setDataType : function(dataType) {
 			var s = this;
 			if (s.dataType == dataType) {
 				return;
@@ -4802,14 +4811,22 @@ var LBitmapData = (function () {
 			}
 			s.dataType = dataType;
 		},
-		_createCanvas : function () {
+		_createCanvas : function() {
 			var s = this;
 			if (!s._canvas) {
 				s._canvas = document.createElement("canvas");
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		setProperties : function (x, y, width, height) {
+		clear : function() {
+			var s = this;
+			s._createCanvas();
+			s._canvas.width = s.image.width;
+			if (s.dataType == LBitmapData.DATA_IMAGE) {
+				s.image.src = s._canvas.toDataURL();
+			}
+		},
+		setProperties : function(x, y, width, height) {
 			var s = this;
 			s.x = x;
 			s.y = y;
@@ -4817,32 +4834,32 @@ var LBitmapData = (function () {
 			s.height = height;
 			s.resize();
 		},
-		setCoordinate : function (x, y) {
+		setCoordinate : function(x, y) {
 			var s = this;
 			s.x = x;
 			s.y = y;
 			s.resize();
 		},
-		clone : function () {
+		clone : function() {
 			var s = this;
 			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
 		},
-		_ready : function () {
+		_ready : function() {
 			var s = this;
 			s._dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
 			s._data = s._context.getImageData(s.x, s.y, s.width, s.height);
 		},
-		_update : function () {
+		_update : function() {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
 			s._data = null;
 		},
-		getPixel : function (x, y, colorType) {
+		getPixel : function(x, y, colorType) {
 			var s = this, i, d;
-	        x = x >> 0;
-	        y = y >> 0;
+			x = x >> 0;
+			y = y >> 0;
 			if (!s._locked) {
 				s._ready();
 			}
@@ -4857,21 +4874,21 @@ var LBitmapData = (function () {
 				return [d[i], d[i + 1], d[i + 2], d[i + 3]];
 			}
 		},
-		setPixel : function (x, y, data) {
+		setPixel : function(x, y, data) {
 			var s = this;
-	        x = x >> 0;
-	        y = y >> 0;
+			x = x >> 0;
+			y = y >> 0;
 			if (!s._locked) {
 				s._ready();
 			}
 			var d = s._data, i = s.width * 4 * y + x * 4;
-			if (typeof data == "object") {
+			if ( typeof data == "object") {
 				d.data[i + 0] = data[0];
 				d.data[i + 1] = data[1];
 				d.data[i + 2] = data[2];
 				d.data[i + 3] = data[3];
 			} else {
-				if (typeof data == "string") {
+				if ( typeof data == "string") {
 					data = parseInt(data.replace("#", "0x"));
 				}
 				d.data[i + 0] = data >> 16 & 0xFF;
@@ -4883,7 +4900,7 @@ var LBitmapData = (function () {
 				s._update();
 			}
 		},
-		getPixels : function (rect) {
+		getPixels : function(rect) {
 			var s = this, r;
 			if (!s._locked) {
 				s._ready();
@@ -4894,16 +4911,16 @@ var LBitmapData = (function () {
 			}
 			return r;
 		},
-		setPixels : function (rect, data) {
+		setPixels : function(rect, data) {
 			var s = this, i, j, d, w, sd, x, y;
 			if (!s._locked) {
 				s._ready();
 			}
 			d = s._data;
-			if (typeof data == "object") {
+			if ( typeof data == "object") {
 				w = s._canvas.width;
-				for (x = rect.x; x < rect.right; x++) {
-					for (y = rect.y; y < rect.bottom; y++) {
+				for ( x = rect.x; x < rect.right; x++) {
+					for ( y = rect.y; y < rect.bottom; y++) {
 						i = w * 4 * (s.y + y) + (s.x + x) * 4;
 						j = data.width * 4 * (y - rect.y) + (x - rect.x) * 4;
 						d.data[i + 0] = data.data[j + 0];
@@ -4913,13 +4930,13 @@ var LBitmapData = (function () {
 					}
 				}
 			} else {
-				if (typeof data == "string") {
+				if ( typeof data == "string") {
 					data = parseInt(data.replace("#", "0x"));
 				}
 				data = [data >> 16 & 0xFF, data >> 8 & 0xFF, data & 0xFF];
 				w = s._canvas.width;
-				for (x = rect.x; x < rect.right; x++) {
-					for (y = rect.y; y < rect.bottom; y++) {
+				for ( x = rect.x; x < rect.right; x++) {
+					for ( y = rect.y; y < rect.bottom; y++) {
 						i = w * 4 * (s.y + y) + (s.x + x) * 4;
 						d.data[i + 0] = data[0];
 						d.data[i + 1] = data[1];
@@ -4932,24 +4949,24 @@ var LBitmapData = (function () {
 				s._update();
 			}
 		},
-		putPixels : function (rect, data) {
+		putPixels : function(rect, data) {
 			var s = this;
 			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
 				return;
 			}
 			s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
 		},
-		lock : function () {
+		lock : function() {
 			var s = this;
 			s._locked = true;
 			s._ready();
 		},
-		unlock : function () {
+		unlock : function() {
 			var s = this;
 			s._locked = false;
 			s._update();
 		},
-		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+		draw : function(source, matrix, colorTransform, blendMode, clipRect) {
 			var s = this, c, bd = source, x, y, w, h, save = false;
 			var _dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
@@ -4958,7 +4975,7 @@ var LBitmapData = (function () {
 				save = true;
 			}
 			if (clipRect) {
-				if (!(bd instanceof LBitmapData)) {
+				if (!( bd instanceof LBitmapData)) {
 					x = y = 0;
 				} else {
 					x = bd.x;
@@ -4966,8 +4983,8 @@ var LBitmapData = (function () {
 				}
 				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
 			}
-			w = bd.getWidth();
-			h = bd.getHeight();
+			w = bd.getWidth() >>> 0;
+			h = bd.getHeight() >>> 0;
 			if (w == 0 || h == 0) {
 				s._setDataType(_dataType);
 				return;
@@ -4983,41 +5000,32 @@ var LBitmapData = (function () {
 			if (blendMode) {
 				s._context.globalCompositeOperation = blendMode;
 			}
-			s._context.drawImage(c,
-				bd.x,
-				bd.y,
-				w,
-				h,
-				0,
-				0,
-				w,
-				h
-			);
+			s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
 			if (save) {
 				s._context.restore();
 			}
 			s._setDataType(_dataType);
 			s.resize();
 		},
-		getDataCanvas : function () {
+		getDataCanvas : function() {
 			var s = this;
 			var _dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
 			s._setDataType(_dataType);
 			return s._canvas;
 		},
-		getWidth : function () {
+		getWidth : function() {
 			return this.width;
 		},
-		getHeight : function () {
+		getHeight : function() {
 			return this.height;
 		},
-		resize : function () {
+		resize : function() {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
 		},
-		colorTransform : function (rect, colorTransform) {
+		colorTransform : function(rect, colorTransform) {
 			var s = this;
 			if (s.dataType != LBitmapData.DATA_CANVAS) {
 				return;
@@ -5034,7 +5042,7 @@ var LBitmapData = (function () {
 			}
 			s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
 		},
-		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+		copyPixels : function(sourceBitmapData, sourceRect, destPoint) {
 			var s = this, left, top, width, height, bd = sourceBitmapData;
 			if (s.dataType != LBitmapData.DATA_CANVAS) {
 				return;
@@ -5043,17 +5051,8 @@ var LBitmapData = (function () {
 			top = bd.y;
 			width = bd.width;
 			height = bd.height;
-			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
-			s._context.drawImage(bd.image,
-				bd.x,
-				bd.y,
-				bd.width,
-				bd.height,
-				destPoint.x,
-				destPoint.y,
-				bd.width,
-				bd.height
-			);
+			bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
 			bd.x = left;
 			bd.y = top;
 			bd.width = width;
@@ -5064,7 +5063,7 @@ var LBitmapData = (function () {
 		LBitmapData.prototype[k] = p[k];
 	}
 	return LBitmapData;
-})();
+})(); 
 var LDropShadowFilter = (function () {
 	function LDropShadowFilter (distance, angle, color, blur) {
 		var s = this;
@@ -5110,8 +5109,8 @@ var LDropShadowFilter = (function () {
 	}
 	return LDropShadowFilter;
 })();
-var LAnimation = (function () {
-	function LAnimation(layer, data, list){
+var LAnimation = (function() {
+	function LAnimation(layer, data, list) {
 		var s = this;
 		LExtends(s, LSprite, []);
 		s.type = "LAnimation";
@@ -5121,7 +5120,7 @@ var LAnimation = (function () {
 		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
-		s.bitmap =  new LBitmap(data);
+		s.bitmap = new LBitmap(data);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
 		if (layer != null) {
@@ -5131,7 +5130,7 @@ var LAnimation = (function () {
 		s.colIndex = 0;
 	}
 	var p = {
-		setAction : function (rowIndex, colIndex, mode, isMirror){
+		setAction : function(rowIndex, colIndex, mode, isMirror) {
 			var s = this, changed = false;
 			if (rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
 				s.rowIndex = rowIndex;
@@ -5150,7 +5149,7 @@ var LAnimation = (function () {
 				if (s.isMirror) {
 					s.bitmap.x = s.bitmap.getWidth();
 					s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
-				}else{
+				} else {
 					s.bitmap.x = 0;
 					s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
 				}
@@ -5160,11 +5159,11 @@ var LAnimation = (function () {
 				s._ll_stepIndex = 0;
 			}
 		},
-		getAction : function () {
+		getAction : function() {
 			var s = this;
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
-		onframe : function (){
+		onframe : function() {
 			var s = this, arr, stepFrame = null;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
 				s.colIndex = 0;
@@ -5176,19 +5175,29 @@ var LAnimation = (function () {
 				stepFrame = 0;
 			}
 			if (s._ll_stepIndex == 0) {
-				if (typeof arr.script == "function") {
+				if ( typeof arr.script == "function") {
 					arr.script(s, arr.params);
 				}
-				if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
+				if ( typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 				} else {
 					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
 				}
-				if (typeof arr.sx != UNDEFINED) {
+				if ( typeof arr.sx != UNDEFINED) {
 					s.bitmap.x = arr.sx;
 				}
-				if (typeof arr.sy != UNDEFINED) {
+				if ( typeof arr.sy != UNDEFINED) {
 					s.bitmap.y = arr.sy;
+				}
+				if ( typeof arr.mirror != UNDEFINED) {
+					s.bitmap.rotateCenter = false;
+					if (arr.mirror) {
+						s.bitmap.x = s.bitmap.getWidth();
+						s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
+					} else {
+						s.bitmap.x = 0;
+						s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
+					}
 				}
 			}
 			if (s._ll_stepIndex++ < stepFrame) {
@@ -5201,7 +5210,7 @@ var LAnimation = (function () {
 				s.dispatchEvent(LEvent.COMPLETE);
 			}
 		},
-		clone : function () {
+		clone : function() {
 			var s = this, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
@@ -5215,18 +5224,27 @@ var LAnimation = (function () {
 	}
 	return LAnimation;
 })();
-var LAnimationTimeline = (function () {
-	function LAnimationTimeline (data, list) {
+var LAnimationTimeline = (function() {
+	function LAnimationTimeline(data, list) {
 		var s = this;
 		LExtends(s, LAnimation, [null, data, list]);
 		s.type = "LAnimationTimeline";
 		s.speed = 0;
 		s._speedIndex = 0;
 		s.ll_labelList = {};
+		for (var i = 0, sublist, j, child; i < list.length; i++) {
+			sublist = list[i];
+			for ( j = 0; j < sublist.length; j++) {
+				child = sublist[j];
+				if (child.label) {
+					s.setLabel(child.label, i, j, 1, child.isMirror ? true : false);
+				}
+			}
+		}
 		s.addEventListener(LEvent.ENTER_FRAME, s._ll_onframe);
 	};
 	var p = {
-		clone : function () {
+		clone : function() {
 			var s = this, k, o, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
@@ -5234,18 +5252,23 @@ var LAnimationTimeline = (function () {
 			a.addChild(a.bitmap);
 			for (k in s.ll_labelList) {
 				o = s.ll_labelList[k];
-				a.ll_labelList[k] = {rowIndex : o.rowIndex, colIndex : o.colIndex, mode : o.mode, isMirror : o.isMirror};
+				a.ll_labelList[k] = {
+					rowIndex : o.rowIndex,
+					colIndex : o.colIndex,
+					mode : o.mode,
+					isMirror : o.isMirror
+				};
 			}
 			return a;
 		},
-		setFrameSpeedAt : function (rowIndex, colIndex, speed) {
+		setFrameSpeedAt : function(rowIndex, colIndex, speed) {
 			var s = this;
 			if (!s._ll_stepArray[rowIndex]) {
 				s._ll_stepArray[rowIndex] = [];
 			}
 			s._ll_stepArray[rowIndex][colIndex] = speed;
 		},
-		_ll_onframe : function (event) {
+		_ll_onframe : function(event) {
 			var self = event.target;
 			if (self._ll_stop) {
 				return;
@@ -5256,33 +5279,39 @@ var LAnimationTimeline = (function () {
 			self._speedIndex = 0;
 			self.onframe();
 		},
-		setLabel : function (name, _rowIndex, _colIndex, _mode, _isMirror) {
-			this.ll_labelList[name] = {rowIndex : _rowIndex, colIndex : _colIndex, mode : _mode, isMirror : _isMirror};
+		setLabel : function(name, _rowIndex, _colIndex, _mode, _isMirror) {
+			this.ll_labelList[name] = {
+				rowIndex : _rowIndex,
+				colIndex : _colIndex,
+				mode : _mode,
+				isMirror : _isMirror
+			};
 		},
-		play : function () {
+		play : function() {
 			this._ll_stop = false;
 		},
-		stop : function () {
+		stop : function() {
 			this._ll_stop = true;
 		},
-		gotoAndPlay : function (name) {
+		gotoAndPlay : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
 			s.play();
 		},
-		gotoAndStop : function (name) {
+		gotoAndStop : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
 			s.onframe();
 			s.stop();
 		},
-		addFrameScript : function (name, func, params) {
+		addFrameScript : function(name, func, params) {
 			var l = this.ll_labelList[name];
 			var arr = this.imageArray[l.rowIndex][l.colIndex];
 			arr.script = func;
 			arr.params = params ? params : null;
 		},
-		removeFrameScript : function (name) {
+		removeFrameScript : function(name) {
 			var l = this.ll_labelList[name];
 			this.imageArray[l.rowIndex][l.colIndex].script = null;
 		}
@@ -5291,7 +5320,7 @@ var LAnimationTimeline = (function () {
 		LAnimationTimeline.prototype[k] = p[k];
 	}
 	return LAnimationTimeline;
-})();
+})(); 
 var LLoadManage = (function () {
 	function LoadManage(){
 		this.llname="ll.file.";

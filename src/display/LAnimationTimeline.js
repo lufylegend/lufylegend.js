@@ -7,12 +7,14 @@
  * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
  * @param {Array} list <p>每个frame的属性值。</p>
  * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
+ * <p>＊如果需要直接给对象设定label，可以给元素设定label属性，设定label属性时候，可以同时设定isMirror属性。</p>
+ * <p>＊也可以给元素设定mirror（true或者false）属性，设定mirror属性的时候需要同时给所有元素设定mirror属性。</p>
  * <p>如果精灵图表中的每个frame大小都是的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -41,7 +43,7 @@
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -70,7 +72,7 @@
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -85,8 +87,8 @@
  * @since 1.8.0
  * @public
  */
-var LAnimationTimeline = (function () {
-	function LAnimationTimeline (data, list) {
+var LAnimationTimeline = (function() {
+	function LAnimationTimeline(data, list) {
 		var s = this;
 		LExtends(s, LAnimation, [null, data, list]);
 		/** @language chinese
@@ -186,6 +188,15 @@ var LAnimationTimeline = (function () {
 		s.speed = 0;
 		s._speedIndex = 0;
 		s.ll_labelList = {};
+		for (var i = 0, sublist, j, child; i < list.length; i++) {
+			sublist = list[i];
+			for ( j = 0; j < sublist.length; j++) {
+				child = sublist[j];
+				if (child.label) {
+					s.setLabel(child.label, i, j, 1, child.isMirror ? true : false);
+				}
+			}
+		}
 		s.addEventListener(LEvent.ENTER_FRAME, s._ll_onframe);
 	};
 	var p = {
@@ -288,7 +299,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		clone : function () {
+		clone : function() {
 			var s = this, k, o, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
@@ -296,18 +307,23 @@ var LAnimationTimeline = (function () {
 			a.addChild(a.bitmap);
 			for (k in s.ll_labelList) {
 				o = s.ll_labelList[k];
-				a.ll_labelList[k] = {rowIndex : o.rowIndex, colIndex : o.colIndex, mode : o.mode, isMirror : o.isMirror};
+				a.ll_labelList[k] = {
+					rowIndex : o.rowIndex,
+					colIndex : o.colIndex,
+					mode : o.mode,
+					isMirror : o.isMirror
+				};
 			}
 			return a;
 		},
-		setFrameSpeedAt : function (rowIndex, colIndex, speed) {
+		setFrameSpeedAt : function(rowIndex, colIndex, speed) {
 			var s = this;
 			if (!s._ll_stepArray[rowIndex]) {
 				s._ll_stepArray[rowIndex] = [];
 			}
 			s._ll_stepArray[rowIndex][colIndex] = speed;
 		},
-		_ll_onframe : function (event) {
+		_ll_onframe : function(event) {
 			var self = event.target;
 			if (self._ll_stop) {
 				return;
@@ -375,8 +391,13 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/setLabel.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setLabel : function (name, _rowIndex, _colIndex, _mode, _isMirror) {
-			this.ll_labelList[name] = {rowIndex : _rowIndex, colIndex : _colIndex, mode : _mode, isMirror : _isMirror};
+		setLabel : function(name, _rowIndex, _colIndex, _mode, _isMirror) {
+			this.ll_labelList[name] = {
+				rowIndex : _rowIndex,
+				colIndex : _colIndex,
+				mode : _mode,
+				isMirror : _isMirror
+			};
 		},
 		/** @language chinese
 		 * 开始播放 LAnimationTimeline 动画。
@@ -435,7 +456,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		play : function () {
+		play : function() {
 			this._ll_stop = false;
 		},
 		/** @language chinese
@@ -495,7 +516,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/play_stop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		stop : function () {
+		stop : function() {
 			this._ll_stop = true;
 		},
 		/** @language chinese
@@ -558,9 +579,10 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/gotoAndPlay.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		gotoAndPlay : function (name) {
+		gotoAndPlay : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
+			s.onframe();
 			s.play();
 		},
 		/** @language chinese
@@ -584,7 +606,7 @@ var LAnimationTimeline = (function () {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/gotoAndStop.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
-		 * Brings the playhead to the specified frame of the movie clip and stops it there. 
+		 * Brings the playhead to the specified frame of the movie clip and stops it there.
 		 * @method gotoAndStop
 		 * @param {String} label a string representing the label of the frame.
 		 * @since 1.8.0
@@ -623,7 +645,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/gotoAndStop.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		gotoAndStop : function (name) {
+		gotoAndStop : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
 			s.onframe();
@@ -707,7 +729,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/addFrameScript.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		addFrameScript : function (name, func, params) {
+		addFrameScript : function(name, func, params) {
 			var l = this.ll_labelList[name];
 			var arr = this.imageArray[l.rowIndex][l.colIndex];
 			arr.script = func;
@@ -785,7 +807,7 @@ var LAnimationTimeline = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/removeFrameScript.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		removeFrameScript : function (name) {
+		removeFrameScript : function(name) {
 			var l = this.ll_labelList[name];
 			this.imageArray[l.rowIndex][l.colIndex].script = null;
 		}
@@ -794,4 +816,4 @@ var LAnimationTimeline = (function () {
 		LAnimationTimeline.prototype[k] = p[k];
 	}
 	return LAnimationTimeline;
-})();
+})(); 

@@ -11,7 +11,7 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 官网 <a target='_blank' href="http://lufylegend.com/lufylegend">http://lufylegend.com/lufylegend</a>
 =============
 
-※1.9.4版
+※1.9.5版
 
 新版API地址
 

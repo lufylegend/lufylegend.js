@@ -13,7 +13,7 @@
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -46,7 +46,7 @@
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -79,7 +79,7 @@
  * 	LInit(50, "legend", 800, 480, main);
  * 	function main () {
  * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("player.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata(event){
@@ -97,8 +97,8 @@
  * @since 1.3.1
  * @public
  */
-var LAnimation = (function () {
-	function LAnimation(layer, data, list){
+var LAnimation = (function() {
+	function LAnimation(layer, data, list) {
 		var s = this;
 		LExtends(s, LSprite, []);
 		/** @language chinese
@@ -132,7 +132,7 @@ var LAnimation = (function () {
 		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
-		s.bitmap =  new LBitmap(data);
+		s.bitmap = new LBitmap(data);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
 		if (layer != null) {
@@ -141,6 +141,7 @@ var LAnimation = (function () {
 		s.onframe();
 		s.colIndex = 0;
 	}
+
 	var p = {
 		/** @language chinese
 		 * 设置播放的贞动画。
@@ -157,7 +158,7 @@ var LAnimation = (function () {
 		 * 	var player2;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -193,7 +194,7 @@ var LAnimation = (function () {
 		 * 	var player2;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -229,7 +230,7 @@ var LAnimation = (function () {
 		 * 	var player2;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -250,7 +251,7 @@ var LAnimation = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/setAction.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setAction : function (rowIndex, colIndex, mode, isMirror){
+		setAction : function(rowIndex, colIndex, mode, isMirror) {
 			var s = this, changed = false;
 			if (rowIndex != null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
 				s.rowIndex = rowIndex;
@@ -269,7 +270,7 @@ var LAnimation = (function () {
 				if (s.isMirror) {
 					s.bitmap.x = s.bitmap.getWidth();
 					s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
-				}else{
+				} else {
 					s.bitmap.x = 0;
 					s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
 				}
@@ -290,7 +291,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -304,7 +305,7 @@ var LAnimation = (function () {
 		 * 	function onframe(){
 		 * 		player.onframe();
 		 * 		var result = player.getAction();
-		 * 		trace(result);	
+		 * 		trace(result);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/getAction.html" target="_blank">测试链接</a></p>
 		 */
@@ -319,7 +320,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -333,7 +334,7 @@ var LAnimation = (function () {
 		 * 	function onframe(){
 		 * 		player.onframe();
 		 * 		var result = player.getAction();
-		 * 		trace(result);	
+		 * 		trace(result);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/getAction.html" target="_blank">Try it »</a></p>
 		 */
@@ -348,7 +349,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -362,11 +363,11 @@ var LAnimation = (function () {
 		 * 	function onframe(){
 		 * 		player.onframe();
 		 * 		var result = player.getAction();
-		 * 		trace(result);	
+		 * 		trace(result);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/getAction.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getAction : function () {
+		getAction : function() {
 			var s = this;
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
@@ -380,7 +381,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -406,7 +407,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -432,7 +433,7 @@ var LAnimation = (function () {
 		 * 	var player;
 		 * 	function main(){
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("player.png", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata(event){
@@ -448,7 +449,7 @@ var LAnimation = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/onframe.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		onframe : function (){
+		onframe : function() {
 			var s = this, arr, stepFrame = null;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
 				s.colIndex = 0;
@@ -460,19 +461,29 @@ var LAnimation = (function () {
 				stepFrame = 0;
 			}
 			if (s._ll_stepIndex == 0) {
-				if (typeof arr.script == "function") {
+				if ( typeof arr.script == "function") {
 					arr.script(s, arr.params);
 				}
-				if (typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
+				if ( typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
 				} else {
 					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
 				}
-				if (typeof arr.sx != UNDEFINED) {
+				if ( typeof arr.sx != UNDEFINED) {
 					s.bitmap.x = arr.sx;
 				}
-				if (typeof arr.sy != UNDEFINED) {
+				if ( typeof arr.sy != UNDEFINED) {
 					s.bitmap.y = arr.sy;
+				}
+				if ( typeof arr.mirror != UNDEFINED) {
+					s.bitmap.rotateCenter = false;
+					if (arr.mirror) {
+						s.bitmap.x = s.bitmap.getWidth();
+						s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
+					} else {
+						s.bitmap.x = 0;
+						s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
+					}
 				}
 			}
 			if (s._ll_stepIndex++ < stepFrame) {
@@ -584,7 +595,7 @@ var LAnimation = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LAnimation/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		clone : function () {
+		clone : function() {
 			var s = this, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
