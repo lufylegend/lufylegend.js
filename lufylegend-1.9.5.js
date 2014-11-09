@@ -1313,6 +1313,12 @@ function trace() {
 		t.scrollTop = t.scrollHeight;
 	}
 }
+if (!window.console) {
+	window.console = {
+		log : trace,
+		warn : trace
+	};
+}
 function addChild (o) {
 	LGlobal.stage.addChild(o);
 }
