@@ -220,6 +220,21 @@ var LDisplayObject = (function () {
 		 * @default null
 		 * @since 1.6.0
 		 * @public
+		 * @example
+		 * 	function main () {
+		 * 	    var loader = new LLoader();
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.load("face.png", "bitmapData");
+		 * 	}
+		 * 	function loadBitmapdata (event) {
+		 * 		var bitmapdata = new LBitmapData(event.target);  
+		 * 		var bitmap = new LBitmap(bitmapdata);
+		 * 		addChild(bitmap);
+		 * 		var maskObj = new LSprite();
+		 * 		maskObj.graphics.drawRect(0, "#ff0000", [10, 10, 150, 100]);
+		 * 		bitmap.mask = maskObj;
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LDisplayObject/mask.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
 		 * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn. Set mask to null to remove the mask.

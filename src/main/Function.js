@@ -216,6 +216,12 @@ function trace() {
 		t.scrollTop = t.scrollHeight;
 	}
 }
+if (!window.console) {
+	window.console = {
+		log : trace,
+		warn : trace
+	};
+}
 
 /** @language chinese
  * 将一个 DisplayObject 子实例添加到Stage。

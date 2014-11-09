@@ -1,4 +1,3 @@
-
 /** @language chinese
  * <p>创建一个具有指定的宽度和高度的 LBitmapData 对象。</p>
  * <p>使用 LBitmapData 类，您可以处理 LBitmap 对象的数据（像素）。可以使用 LBitmapData 类的方法创建任意大小的Image对象，并在运行时采用多种方式操作这些图像。也可以访问使用 LLoader 类加载的Image对象。</p>
@@ -15,14 +14,14 @@
  * 	Linit(50, "mylegend", 800, 480, main);
  * 	function main () {
  * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
- * 		
+ *
  * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
  * 		var bitmap2 = new LBitmap(bitmapdata2);
  * 		bitmap2.x = 200;
@@ -31,7 +30,7 @@
  * @examplelink <p><a href="../../../api/LBitmapData/index.html" target="_blank">测试链接</a></p>
  * @since 1.0.0
  * @public
-*/
+ */
 /** @language english
  * Creates a BitmapData object with a specified width and height.
  * The BitmapData class lets you work with the data (pixels) of a Bitmap object . You can use the methods of the BitmapData class to create arbitrarily sized an Image object. And You can use an Image object with LLoader。
@@ -48,14 +47,14 @@
  * 	Linit(50, "mylegend", 800, 480, main);
  * 	function main () {
  * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
- * 		
+ *
  * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
  * 		var bitmap2 = new LBitmap(bitmapdata2);
  * 		bitmap2.x = 200;
@@ -81,14 +80,14 @@
  * 	Linit(50, "mylegend", 800, 480, main);
  * 	function main () {
  * 	    var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+ * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
  * 		loader.load("lufylegend.js.png", "bitmapData");
  * 	}
  * 	function loadBitmapdata (event) {
- * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+ * 		var bitmapdata = new LBitmapData(event.target);
  * 		var bitmap = new LBitmap(bitmapdata);
  * 		addChild(bitmap);
- * 		
+ *
  * 		var bitmapdata2 = new LBitmapData("#FF0000", 0, 0, 100, 100);
  * 		var bitmap2 = new LBitmap(bitmapdata2);
  * 		bitmap2.x = 200;
@@ -98,12 +97,12 @@
  * @since 1.0.0
  * @public
  */
-var LBitmapData = (function () {
-	function LBitmapData (image, x, y, width, height, dataType) {
+var LBitmapData = (function() {
+	function LBitmapData(image, x, y, width, height, dataType) {
 		var s = this;
-		LExtends (s, LObject, []);
+		LExtends(s, LObject, []);
 		s.type = "LBitmapData";
-		if (typeof dataType == UNDEFINED) {
+		if ( typeof dataType == UNDEFINED) {
 			dataType = LBitmapData.DATA_IMAGE;
 		}
 		s.oncomplete = null;
@@ -222,18 +221,18 @@ var LBitmapData = (function () {
 		if (image && typeof image == "object") {
 			s.image = image;
 			s.dataType = LBitmapData.DATA_IMAGE;
-			s.width = (width == null ? s.image.width : width);  
+			s.width = (width == null ? s.image.width : width);
 			s.height = (height == null ? s.image.height : height);
 			s._setDataType(dataType);
 		} else {
 			s._createCanvas();
 			s.dataType = LBitmapData.DATA_CANVAS;
-			s._canvas.width = s.width = (width == null ? 1 : width); 
+			s._canvas.width = s.width = (width == null ? 1 : width);
 			s._canvas.height = s.height = (height == null ? 1 : height);
-			if (typeof image == "string") {
-				image = parseInt(image.replace("#","0x"));
+			if ( typeof image == "string") {
+				image = parseInt(image.replace("#", "0x"));
 			}
-			if (typeof image == "number") {
+			if ( typeof image == "number") {
 				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
@@ -243,7 +242,7 @@ var LBitmapData = (function () {
 				}
 				s._context.putImageData(d, 0, 0);
 			}
-			
+
 			s.image = s._canvas;
 			if (dataType == LBitmapData.DATA_IMAGE) {
 				s._setDataType(dataType);
@@ -251,6 +250,7 @@ var LBitmapData = (function () {
 		}
 		s.resize();
 	}
+
 	/** @language chinese
 	 * LBitmapData数据保存形式的一种，以Image对象形式保存。
 	 * @property LBitmapData.DATA_IMAGE
@@ -258,7 +258,7 @@ var LBitmapData = (function () {
 	 * @since 1.8.8
 	 * @static
 	 * @public
-	*/
+	 */
 	/** @language english
 	 * data type of the LBitmapData. Image object。
 	 * @property LBitmapData.DATA_IMAGE
@@ -283,7 +283,7 @@ var LBitmapData = (function () {
 	 * @since 1.8.8
 	 * @static
 	 * @public
-	*/
+	 */
 	/** @language english
 	 * data type of the LBitmapData. Canvas object。
 	 * @property LBitmapData.DATA_CANVAS
@@ -302,7 +302,7 @@ var LBitmapData = (function () {
 	 */
 	LBitmapData.DATA_CANVAS = "data_canvas";
 	var p = {
-		_setDataType : function (dataType) {
+		_setDataType : function(dataType) {
 			var s = this;
 			if (s.dataType == dataType) {
 				return;
@@ -322,11 +322,19 @@ var LBitmapData = (function () {
 			}
 			s.dataType = dataType;
 		},
-		_createCanvas : function () {
+		_createCanvas : function() {
 			var s = this;
 			if (!s._canvas) {
 				s._canvas = document.createElement("canvas");
 				s._context = s._canvas.getContext("2d");
+			}
+		},
+		clear : function() {
+			var s = this;
+			s._createCanvas();
+			s._canvas.width = s.image.width;
+			if (s.dataType == LBitmapData.DATA_IMAGE) {
+				s.image.src = s._canvas.toDataURL();
 			}
 		},
 		/** @language chinese
@@ -337,11 +345,11 @@ var LBitmapData = (function () {
 		 * @param {float} width Image可视范围宽。
 		 * @param {float} height Image可视范围高。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -358,11 +366,11 @@ var LBitmapData = (function () {
 		 * @param {float} width The width of the bitmap image in pixels.
 		 * @param {float} height The height of the bitmap image in pixels.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -379,11 +387,11 @@ var LBitmapData = (function () {
 		 * @param {float} width Imageの表示範囲の幅。
 		 * @param {float} height Imageの表示範囲の高さ。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 0, 0, 200, 200);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 0, 0, 200, 200);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target);
 		 * 	bitmapdata2.setProperties(50, 100, 200, 50);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 240;
@@ -392,7 +400,7 @@ var LBitmapData = (function () {
 		 * @public
 		 * @since 1.0.0
 		 */
-		setProperties : function (x, y, width, height) {
+		setProperties : function(x, y, width, height) {
 			var s = this;
 			s.x = x;
 			s.y = y;
@@ -406,11 +414,11 @@ var LBitmapData = (function () {
 		 * @param {float} x Image可视范围x坐标。
 		 * @param {float} y Image可视范围y坐标。
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -425,11 +433,11 @@ var LBitmapData = (function () {
 		 * @param {float} x The x coordinate of the image.
 		 * @param {float} y The y coordinate of the image.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -444,11 +452,11 @@ var LBitmapData = (function () {
 		 * @param {float} x Imageの表示範囲の座標x.
 		 * @param {float} y Imageの表示範囲の座標y.
 		 * @example
-		 * 	var bitmapdata1 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 * 	var bitmapdata1 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	var bitmap1 = new LBitmap(bitmapdata1);
 		 * 	addChild(bitmap1);
-		 * 	
-		 * 	var bitmapdata2 = new LBitmapData(event.currentTarget, 20, 20, 100, 100);
+		 *
+		 * 	var bitmapdata2 = new LBitmapData(event.target, 20, 20, 100, 100);
 		 * 	bitmapdata2.setCoordinate(100, 100);
 		 * 	var bitmap2 = new LBitmap(bitmapdata2);
 		 * 	bitmap2.x = 120;
@@ -457,7 +465,7 @@ var LBitmapData = (function () {
 		 * @public
 		 * @examplelink <p><a href="../../../api/LBitmapData/setCoordinate.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setCoordinate : function (x, y) {
+		setCoordinate : function(x, y) {
 			var s = this;
 			s.x = x;
 			s.y = y;
@@ -473,7 +481,7 @@ var LBitmapData = (function () {
 		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
 		 * 	var bm1 = new LBitmap(bmd1);
 		 * 	addChild(bm1);
-		 * 	
+		 *
 		 * 	var bmd2 = bmd1.clone();
 		 * 	var bm2 = new LBitmap(bmd2);
 		 * 	bm2.x = 120;
@@ -490,7 +498,7 @@ var LBitmapData = (function () {
 		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
 		 * 	var bm1 = new LBitmap(bmd1);
 		 * 	addChild(bm1);
-		 * 	
+		 *
 		 * 	var bmd2 = bmd1.clone();
 		 * 	var bm2 = new LBitmap(bmd2);
 		 * 	bm2.x = 120;
@@ -507,24 +515,24 @@ var LBitmapData = (function () {
 		 * 	var bmd1 = new LBitmapData("#FF0000", 0, 0, 100, 100);
 		 * 	var bm1 = new LBitmap(bmd1);
 		 * 	addChild(bm1);
-		 * 	
+		 *
 		 * 	var bmd2 = bmd1.clone();
 		 * 	var bm2 = new LBitmap(bmd2);
 		 * 	bm2.x = 120;
 		 * 	addChild(bm2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		clone : function () {
+		clone : function() {
 			var s = this;
 			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
 		},
-		_ready : function () {
+		_ready : function() {
 			var s = this;
 			s._dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
 			s._data = s._context.getImageData(s.x, s.y, s.width, s.height);
 		},
-		_update : function () {
+		_update : function() {
 			var s = this;
 			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
 			s._setDataType(s._dataType);
@@ -540,7 +548,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -579,7 +587,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -618,7 +626,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -647,10 +655,10 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixel.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getPixel : function (x, y, colorType) {
+		getPixel : function(x, y, colorType) {
 			var s = this, i, d;
-	        x = x >> 0;
-	        y = y >> 0;
+			x = x >> 0;
+			y = y >> 0;
 			if (!s._locked) {
 				s._ready();
 			}
@@ -675,7 +683,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -714,7 +722,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -753,7 +761,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img, imgs = [], arr;
 		 * 	bitmapData.lock();
@@ -782,21 +790,21 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixel.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setPixel : function (x, y, data) {
+		setPixel : function(x, y, data) {
 			var s = this;
-	        x = x >> 0;
-	        y = y >> 0;
+			x = x >> 0;
+			y = y >> 0;
 			if (!s._locked) {
 				s._ready();
 			}
 			var d = s._data, i = s.width * 4 * y + x * 4;
-			if (typeof data == "object") {
+			if ( typeof data == "object") {
 				d.data[i + 0] = data[0];
 				d.data[i + 1] = data[1];
 				d.data[i + 2] = data[2];
 				d.data[i + 3] = data[3];
 			} else {
-				if (typeof data == "string") {
+				if ( typeof data == "string") {
 					data = parseInt(data.replace("#", "0x"));
 				}
 				d.data[i + 0] = data >> 16 & 0xFF;
@@ -816,7 +824,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -824,11 +832,11 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -842,7 +850,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -850,11 +858,11 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -868,7 +876,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -876,17 +884,17 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/getPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getPixels : function (rect) {
+		getPixels : function(rect) {
 			var s = this, r;
 			if (!s._locked) {
 				s._ready();
@@ -905,7 +913,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -913,11 +921,11 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -931,7 +939,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -939,11 +947,11 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -957,7 +965,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData2.lock();
@@ -965,26 +973,26 @@ var LBitmapData = (function () {
 		 * 	bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
 		 * 	bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
-		 * 	bitmapData2.unlock(); 
-		 * 	
+		 * 	bitmapData2.unlock();
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/setPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setPixels : function (rect, data) {
+		setPixels : function(rect, data) {
 			var s = this, i, j, d, w, sd, x, y;
 			if (!s._locked) {
 				s._ready();
 			}
 			d = s._data;
-			if (typeof data == "object") {
+			if ( typeof data == "object") {
 				w = s._canvas.width;
-				for (x = rect.x; x < rect.right; x++) {
-					for (y = rect.y; y < rect.bottom; y++) {
+				for ( x = rect.x; x < rect.right; x++) {
+					for ( y = rect.y; y < rect.bottom; y++) {
 						i = w * 4 * (s.y + y) + (s.x + x) * 4;
 						j = data.width * 4 * (y - rect.y) + (x - rect.x) * 4;
 						d.data[i + 0] = data.data[j + 0];
@@ -994,13 +1002,13 @@ var LBitmapData = (function () {
 					}
 				}
 			} else {
-				if (typeof data == "string") {
+				if ( typeof data == "string") {
 					data = parseInt(data.replace("#", "0x"));
 				}
 				data = [data >> 16 & 0xFF, data >> 8 & 0xFF, data & 0xFF];
 				w = s._canvas.width;
-				for (x = rect.x; x < rect.right; x++) {
-					for (y = rect.y; y < rect.bottom; y++) {
+				for ( x = rect.x; x < rect.right; x++) {
+					for ( y = rect.y; y < rect.bottom; y++) {
 						i = w * 4 * (s.y + y) + (s.x + x) * 4;
 						d.data[i + 0] = data[0];
 						d.data[i + 1] = data[1];
@@ -1024,17 +1032,17 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData.unlock();
-		 * 	
+		 *
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
-		 * 	
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -1052,17 +1060,17 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData.unlock();
-		 * 	
+		 *
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
-		 * 	
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
@@ -1079,23 +1087,23 @@ var LBitmapData = (function () {
 		 * @since 1.9.1
 		 * @public
 		 * @example
-		 * 	var bitmapData = new LBitmapData(event.currentTarget);
+		 * 	var bitmapData = new LBitmapData(event.target);
 		 * 	bitmapData2 = new LBitmapData(null, 0, 0, 500, 400,LBitmapData.DATA_CANVAS);
 		 * 	bitmapData.lock();
 		 * 	var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
 		 * 	bitmapData.unlock();
-		 * 	
+		 *
 		 * 	bitmapData2.putPixels(new LRectangle(50, 30, 50, 50), img);
-		 * 	
+		 *
 		 * 	var bitmap = new LBitmap(bitmapData);
 		 * 	addChild(bitmap);
-		 * 	
+		 *
 		 * 	var bitmap2 = new LBitmap(bitmapData2);
 		 * 	bitmap2.y = 250;
 		 * 	addChild(bitmap2);
 		 * @examplelink <p><a href="../../../api/LBitmapData/putPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		putPixels : function (rect, data) {
+		putPixels : function(rect, data) {
 			var s = this;
 			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
 				return;
@@ -1120,7 +1128,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 */
-		lock : function () {
+		lock : function() {
 			var s = this;
 			s._locked = true;
 			s._ready();
@@ -1143,7 +1151,7 @@ var LBitmapData = (function () {
 		 * @since 1.5.1
 		 * @public
 		 */
-		unlock : function () {
+		unlock : function() {
 			var s = this;
 			s._locked = false;
 			s._update();
@@ -1163,7 +1171,7 @@ var LBitmapData = (function () {
 		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
 		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
 		 * 	addChild(layer);
-		 * 	
+		 *
 		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	bitmapData.draw(layer);
 		 * 	var bitmap = new LBitmap(bitmapData);
@@ -1186,7 +1194,7 @@ var LBitmapData = (function () {
 		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
 		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
 		 * 	addChild(layer);
-		 * 	
+		 *
 		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	bitmapData.draw(layer);
 		 * 	var bitmap = new LBitmap(bitmapData);
@@ -1209,7 +1217,7 @@ var LBitmapData = (function () {
 		 * 	layer.graphics.drawRect(1, "#000000", [0, 0, 100, 100], true, "#000000");
 		 * 	layer.graphics.drawRect(1, "#FF0000", [100, 0, 100, 100], true, "#FF0000");
 		 * 	addChild(layer);
-		 * 	
+		 *
 		 * 	var bitmapData = new LBitmapData(null, 0, 0, 500, 400);
 		 * 	bitmapData.draw(layer);
 		 * 	var bitmap = new LBitmap(bitmapData);
@@ -1217,7 +1225,7 @@ var LBitmapData = (function () {
 		 * 	addChild(bitmap);
 		 * @examplelink <p><a href="../../../api/LBitmapData/draw.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		draw : function (source, matrix, colorTransform, blendMode, clipRect) {
+		draw : function(source, matrix, colorTransform, blendMode, clipRect) {
 			var s = this, c, bd = source, x, y, w, h, save = false;
 			var _dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
@@ -1226,7 +1234,7 @@ var LBitmapData = (function () {
 				save = true;
 			}
 			if (clipRect) {
-				if (!(bd instanceof LBitmapData)) {
+				if (!( bd instanceof LBitmapData)) {
 					x = y = 0;
 				} else {
 					x = bd.x;
@@ -1234,8 +1242,8 @@ var LBitmapData = (function () {
 				}
 				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
 			}
-			w = bd.getWidth();
-			h = bd.getHeight();
+			w = bd.getWidth() >>> 0;
+			h = bd.getHeight() >>> 0;
 			if (w == 0 || h == 0) {
 				s._setDataType(_dataType);
 				return;
@@ -1251,36 +1259,27 @@ var LBitmapData = (function () {
 			if (blendMode) {
 				s._context.globalCompositeOperation = blendMode;
 			}
-			s._context.drawImage(c,
-				bd.x,
-				bd.y,
-				w,
-				h,
-				0,
-				0,
-				w,
-				h
-			);
+			s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
 			if (save) {
 				s._context.restore();
 			}
 			s._setDataType(_dataType);
 			s.resize();
 		},
-		getDataCanvas : function () {
+		getDataCanvas : function() {
 			var s = this;
 			var _dataType = s.dataType;
 			s._setDataType(LBitmapData.DATA_CANVAS);
 			s._setDataType(_dataType);
 			return s._canvas;
 		},
-		getWidth : function () {
+		getWidth : function() {
 			return this.width;
 		},
-		getHeight : function () {
+		getHeight : function() {
 			return this.height;
 		},
-		resize : function () {
+		resize : function() {
 			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
 			s.width = s.width < w ? s.width : w;
 			s.height = s.height < h ? s.height : h;
@@ -1297,7 +1296,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1322,7 +1321,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1347,7 +1346,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1360,7 +1359,7 @@ var LBitmapData = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LBitmapData/colorTransform.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		colorTransform : function (rect, colorTransform) {
+		colorTransform : function(rect, colorTransform) {
 			var s = this;
 			if (s.dataType != LBitmapData.DATA_CANVAS) {
 				return;
@@ -1390,7 +1389,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1399,10 +1398,10 @@ var LBitmapData = (function () {
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
-		 * 		
+		 *
 		 * 		var bitmap = new LBitmap(bitmapData);
 		 * 		addChild(bitmap);
-		 * 		
+		 *
 		 * 		var bitmap2 = new LBitmap(bitmapData2);
 		 * 		bitmap2.y = 250;
 		 * 		addChild(bitmap2);
@@ -1422,7 +1421,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1431,10 +1430,10 @@ var LBitmapData = (function () {
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
-		 * 		
+		 *
 		 * 		var bitmap = new LBitmap(bitmapData);
 		 * 		addChild(bitmap);
-		 * 		
+		 *
 		 * 		var bitmap2 = new LBitmap(bitmapData2);
 		 * 		bitmap2.y = 250;
 		 * 		addChild(bitmap2);
@@ -1454,7 +1453,7 @@ var LBitmapData = (function () {
 		 * 	LInit(50, "legend", 800, 480, main);
 		 * 	function main () {
 		 * 		var loader = new LLoader();
-		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+		 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
 		 * 		loader.load("face.jpg", "bitmapData");
 		 * 	}
 		 * 	function loadBitmapdata (event) {
@@ -1463,17 +1462,17 @@ var LBitmapData = (function () {
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
 		 * 		bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
-		 * 		
+		 *
 		 * 		var bitmap = new LBitmap(bitmapData);
 		 * 		addChild(bitmap);
-		 * 		
+		 *
 		 * 		var bitmap2 = new LBitmap(bitmapData2);
 		 * 		bitmap2.y = 250;
 		 * 		addChild(bitmap2);
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LBitmapData/copyPixels.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		copyPixels : function (sourceBitmapData, sourceRect, destPoint) {
+		copyPixels : function(sourceBitmapData, sourceRect, destPoint) {
 			var s = this, left, top, width, height, bd = sourceBitmapData;
 			if (s.dataType != LBitmapData.DATA_CANVAS) {
 				return;
@@ -1482,17 +1481,8 @@ var LBitmapData = (function () {
 			top = bd.y;
 			width = bd.width;
 			height = bd.height;
-			bd.setProperties(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
-			s._context.drawImage(bd.image,
-				bd.x,
-				bd.y,
-				bd.width,
-				bd.height,
-				destPoint.x,
-				destPoint.y,
-				bd.width,
-				bd.height
-			);
+			bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
+			s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
 			bd.x = left;
 			bd.y = top;
 			bd.width = width;
@@ -1503,4 +1493,4 @@ var LBitmapData = (function () {
 		LBitmapData.prototype[k] = p[k];
 	}
 	return LBitmapData;
-})();
+})(); 

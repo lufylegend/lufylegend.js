@@ -145,7 +145,7 @@ var LMedia = (function () {
 				s.onload();
 				return;
 			}
-			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "ogv" : ["ogg"], "m4a" : ["mpeg"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4"]};
+			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
 			for (k in a) {
 				b = a[k].split('.');
@@ -163,6 +163,11 @@ var LMedia = (function () {
 					s.onload();
 					s.data.load();
 					return;
+				} else {
+					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
+					var e = new LEvent(LEvent.COMPLETE);
+					e.currentTarget = e.target = s;
+					s.dispatchEvent(e);
 				}
 			}
 			if (s.oncomplete) {
