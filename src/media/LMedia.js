@@ -147,7 +147,7 @@ var LMedia = (function () {
 			}
 			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
-			for (k in a) {
+			for (k = 0; k < a.length; k++) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
