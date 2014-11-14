@@ -510,7 +510,7 @@ var LDisplayObject = (function () {
 			return new LRectangle(x, y, w, h);
 		},
 		getDataCanvas : function () {
-			var s = this, _o, o, _c, c;
+			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
@@ -523,7 +523,12 @@ var LDisplayObject = (function () {
 			_c.clearRect(0, 0, s.width, s.height);
 			LGlobal.canvasObj = s._canvas;
 			LGlobal.canvas = s._context;
+			_x = s.x;
+			_y = s.y;
+			s.x = s.y = 0;
 			s.ll_show();
+			s.x = _x;
+			s.y = _y;
 			s._canvas = _o;
 			s._context = _c;
 			LGlobal.canvasObj = o;
@@ -553,7 +558,7 @@ var LDisplayObject = (function () {
 		 */
 		getDataURL : function () {
 			var s = this, r = s.getDataCanvas();
-			return r.toDataURL();
+			return r.toDataURL.apply(r, arguments);
 		},
 		ismouseonShapes : function (shapes, mx, my) {
 			var s = this, parent = s, m, child, j, v, arg;
