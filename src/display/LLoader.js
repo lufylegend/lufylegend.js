@@ -44,9 +44,9 @@ var LLoader = (function () {
 	 * 		loader.load("lufylegend.js.png", "bitmapData");
 	 * 	}
 	 * 	function loadBitmapdata (event) {
-	 * 		trace(loader.objectIndex == event.target.objectIndex);//true
-	 * 		trace(event.target.content == event.currentTarget);//true
-	 * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.target.content == event.target);//true
+	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
 	 * 	}
@@ -69,9 +69,9 @@ var LLoader = (function () {
 	 * 		loader.load("lufylegend.js.png", "bitmapData");
 	 * 	}
 	 * 	function loadBitmapdata (event) {
-	 * 		trace(loader.objectIndex == event.target.objectIndex);//true
-	 * 		trace(event.target.content == event.currentTarget);//true
-	 * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.target.content == event.target);//true
+	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
 	 * 	}
@@ -94,9 +94,9 @@ var LLoader = (function () {
 	 * 		loader.load("lufylegend.js.png", "bitmapData");
 	 * 	}
 	 * 	function loadBitmapdata (event) {
-	 * 		trace(loader.objectIndex == event.target.objectIndex);//true
-	 * 		trace(event.target.content == event.currentTarget);//true
-	 * 		var bitmapdata = new LBitmapData(event.currentTarget);  
+	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
+	 * 		trace(event.target.content == event.target);//true
+	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
 	 * 	}
