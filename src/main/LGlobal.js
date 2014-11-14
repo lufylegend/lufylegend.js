@@ -819,11 +819,11 @@ var LGlobal = ( function () {
 			canvasY = parseInt(rectangle.top);
 		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
-			LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
+			eve = LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
 			for (var i = 0,l = event.touches.length; i < l; i++) {
 				if(!LMultitouch.touchs["touch" + event.touches[i].identifier]){
-					LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
+					eve = LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
 				}
 			}
 		}
@@ -852,6 +852,7 @@ var LGlobal = ( function () {
 		LMultitouch.touchs["touch" + eve.touchPointID] = eve;
 		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_DOWN);
 		LGlobal.buttonStatusEvent = eve;
+		return eve;
 	};
 	LGlobal.ll_touchEnd = function (event) {
 		var e, eve, k, i, l, h;
