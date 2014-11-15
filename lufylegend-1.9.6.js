@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.5
+* @version 1.9.6
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -583,11 +583,11 @@ var LGlobal = ( function () {
 			canvasY = parseInt(rectangle.top);
 		}
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
-			LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
+			eve = LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
 			for (var i = 0,l = event.touches.length; i < l; i++) {
 				if(!LMultitouch.touchs["touch" + event.touches[i].identifier]){
-					LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
+					eve = LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
 				}
 			}
 		}
@@ -616,6 +616,7 @@ var LGlobal = ( function () {
 		LMultitouch.touchs["touch" + eve.touchPointID] = eve;
 		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_DOWN);
 		LGlobal.buttonStatusEvent = eve;
+		return eve;
 	};
 	LGlobal.ll_touchEnd = function (event) {
 		var e, eve, k, i, l, h;
@@ -1894,7 +1895,7 @@ var LDisplayObject = (function () {
 			return new LRectangle(x, y, w, h);
 		},
 		getDataCanvas : function () {
-			var s = this, _o, o, _c, c;
+			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
@@ -1907,7 +1908,12 @@ var LDisplayObject = (function () {
 			_c.clearRect(0, 0, s.width, s.height);
 			LGlobal.canvasObj = s._canvas;
 			LGlobal.canvas = s._context;
+			_x = s.x;
+			_y = s.y;
+			s.x = s.y = 0;
 			s.ll_show();
+			s.x = _x;
+			s.y = _y;
 			s._canvas = _o;
 			s._context = _c;
 			LGlobal.canvasObj = o;
@@ -1916,7 +1922,7 @@ var LDisplayObject = (function () {
 		},
 		getDataURL : function () {
 			var s = this, r = s.getDataCanvas();
-			return r.toDataURL();
+			return r.toDataURL.apply(r, arguments);
 		},
 		ismouseonShapes : function (shapes, mx, my) {
 			var s = this, parent = s, m, child, j, v, arg;
@@ -2380,7 +2386,7 @@ var LWebAudio = (function () {
 			}
 			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
-			for (k in a) {
+			for (k = 0; k < a.length; k++) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {
@@ -2568,7 +2574,7 @@ var LMedia = (function () {
 			}
 			var a, b, c, k, d, q = {"mov" : ["quicktime"], "3gp" : ["3gpp"], "midi" : ["midi"], "mid" : ["midi"], "ogv" : ["ogg"], "m4a" : ["acc"], "mp3" : ["mpeg"], "wav" : ["wav", "x-wav", "wave"], "wave" : ["wav", "x-wav", "wave"], "aac" : ["mp4", "aac"]};
 			a = u.split(',');
-			for (k in a) {
+			for (k = 0; k < a.length; k++) {
 				b = a[k].split('.');
 				d = b[b.length - 1];
 				if (q[d]) {

@@ -510,7 +510,7 @@ var LDisplayObject = (function () {
 			return new LRectangle(x, y, w, h);
 		},
 		getDataCanvas : function () {
-			var s = this, _o, o, _c, c;
+			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
@@ -523,7 +523,12 @@ var LDisplayObject = (function () {
 			_c.clearRect(0, 0, s.width, s.height);
 			LGlobal.canvasObj = s._canvas;
 			LGlobal.canvas = s._context;
+			_x = s.x;
+			_y = s.y;
+			s.x = s.y = 0;
 			s.ll_show();
+			s.x = _x;
+			s.y = _y;
 			s._canvas = _o;
 			s._context = _c;
 			LGlobal.canvasObj = o;
@@ -533,6 +538,8 @@ var LDisplayObject = (function () {
 		/** @language chinese
 		 * 将该对象转换成base64编码的image字符串。
 		 * @method getDataURL
+		 * @param {String} type 参数type在image/png，image/jpeg,image/svg+xml等 MIME类型中选择（可以不填，默认是image/png）。
+		 * @param {float} ratio 如果是type = “image/jpeg”，可以有第二个参数，如果第二个参数ratio的值在0-1之间，则表示JPEG的质量等级，否则使用浏览器内置默认质量等级。
 		 * @return {Base64 Image} base64编码的image字符串。
 		 * @since 1.7.7
 		 * @public
@@ -553,7 +560,7 @@ var LDisplayObject = (function () {
 		 */
 		getDataURL : function () {
 			var s = this, r = s.getDataCanvas();
-			return r.toDataURL();
+			return r.toDataURL.apply(r, arguments);
 		},
 		ismouseonShapes : function (shapes, mx, my) {
 			var s = this, parent = s, m, child, j, v, arg;
