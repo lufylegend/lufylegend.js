@@ -500,7 +500,7 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
+			if (LGlobal.os == OS_PC && s._ll_cursorEnabled && s.parent) {
 				document.body.style.cursor = "pointer";
 			}
 		},
