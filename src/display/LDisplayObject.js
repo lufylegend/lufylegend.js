@@ -538,6 +538,8 @@ var LDisplayObject = (function () {
 		/** @language chinese
 		 * 将该对象转换成base64编码的image字符串。
 		 * @method getDataURL
+		 * @param {String} type 参数type在image/png，image/jpeg,image/svg+xml等 MIME类型中选择（可以不填，默认是image/png）。
+		 * @param {float} ratio 如果是type = “image/jpeg”，可以有第二个参数，如果第二个参数ratio的值在0-1之间，则表示JPEG的质量等级，否则使用浏览器内置默认质量等级。
 		 * @return {Base64 Image} base64编码的image字符串。
 		 * @since 1.7.7
 		 * @public
