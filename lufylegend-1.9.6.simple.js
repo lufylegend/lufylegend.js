@@ -1314,6 +1314,12 @@ function trace() {
 		t.scrollTop = t.scrollHeight;
 	}
 }
+if (!window.console) {
+	window.console = {
+		log : trace,
+		warn : trace
+	};
+}
 function addChild (o) {
 	LGlobal.stage.addChild(o);
 }
@@ -5893,7 +5899,7 @@ var LAjax = (function () {
 					a = "&";	
 				}
 			}
-			if (t.toLowerCase() == "get") {
+			if (t.toLowerCase() == "get" && data.length > 0) {
 				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
 				data = null;
 			}
