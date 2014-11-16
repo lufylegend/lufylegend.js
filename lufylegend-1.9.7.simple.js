@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.6
+* @version 1.9.7
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -719,7 +719,9 @@ var LGlobal = ( function () {
 		LGlobal.buttonStatusEvent = event;
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
+		LGlobal.cursor = "default";
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
+		document.body.style.cursor = LGlobal.cursor;
 		if (LGlobal.mouseJoint_move) {
 			LGlobal.mouseJoint_move(event);
 		}
@@ -2385,6 +2387,7 @@ var LWebAudio = (function () {
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
+					return;
 				} else {
 					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
 					var e = new LEvent(LEvent.COMPLETE);
@@ -4197,7 +4200,7 @@ var LButton = (function () {
 			s.downState.visible = false;
 			s.overState.visible = true;
 			if (LGlobal.os == OS_PC && s._ll_cursorEnabled && s.parent) {
-				document.body.style.cursor = "pointer";
+				LGlobal.cursor = "pointer";
 			}
 		},
 		ll_modeOut : function (e){
@@ -4219,15 +4222,9 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
-				document.body.style.cursor = "default";
-			}
 		},
 		setCursorEnabled : function (value) {
 			this._ll_cursorEnabled = value;
-			if(!value && document.body.style.cursor != "default"){
-				document.body.style.cursor = "default";
-			}
 		},
 		clone : function () {
 			var s = this;
@@ -4235,9 +4232,6 @@ var LButton = (function () {
 		},
 		die : function () {
 			var s = this;
-			if (LGlobal.os == OS_PC && !s.upState.visible) {
-				document.body.style.cursor = "default";
-			}
 			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeButton(s);
 			}
