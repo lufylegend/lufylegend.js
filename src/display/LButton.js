@@ -501,7 +501,7 @@ var LButton = (function () {
 			s.downState.visible = false;
 			s.overState.visible = true;
 			if (LGlobal.os == OS_PC && s._ll_cursorEnabled && s.parent) {
-				document.body.style.cursor = "pointer";
+				LGlobal.cursor = "pointer";
 			}
 		},
 		ll_modeOut : function (e){
@@ -523,15 +523,9 @@ var LButton = (function () {
 			s.overState.visible = false;
 			s.downState.visible = false;
 			s.upState.visible = true;
-			if (LGlobal.os == OS_PC && s._ll_cursorEnabled) {
-				document.body.style.cursor = "default";
-			}
 		},
 		setCursorEnabled : function (value) {
 			this._ll_cursorEnabled = value;
-			if(!value && document.body.style.cursor != "default"){
-				document.body.style.cursor = "default";
-			}
 		},
 		clone : function () {
 			var s = this;
@@ -539,9 +533,6 @@ var LButton = (function () {
 		},
 		die : function () {
 			var s = this;
-			if (LGlobal.os == OS_PC && !s.upState.visible) {
-				document.body.style.cursor = "default";
-			}
 			if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 				LMouseEventContainer.removeButton(s);
 			}

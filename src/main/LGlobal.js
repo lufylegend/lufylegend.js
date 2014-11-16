@@ -955,7 +955,9 @@ var LGlobal = ( function () {
 		LGlobal.buttonStatusEvent = event;
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
+		LGlobal.cursor = "default";
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
+		document.body.style.cursor = LGlobal.cursor;
 		if (LGlobal.mouseJoint_move) {
 			LGlobal.mouseJoint_move(event);
 		}
