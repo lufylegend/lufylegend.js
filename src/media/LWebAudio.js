@@ -203,6 +203,7 @@ var LWebAudio = (function () {
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
 					LAjax.get(a[k], {}, s.onload.bind(s));
+					return;
 				} else {
 					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
 					var e = new LEvent(LEvent.COMPLETE);
