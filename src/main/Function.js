@@ -512,7 +512,10 @@ function base (d, b, a) {
 	if(d.constructor.name == "Object"){
 		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
-	d.__ll__parent__ = d.__ll__parent__ || [];
+	if (typeof d.__ll__parent__ == UNDEFINED) {
+		d.__ll__parent__ = [];
+		d.__ll__parent__ = [];
+	}
 	d.__ll__parent__.push(b.prototype);
 	for (p in o) {
 		h[p] = 1;

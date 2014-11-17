@@ -574,14 +574,8 @@ var LGlobal = ( function () {
 			LGlobal.inputTextField._ll_getValue();
 		}
 		var canvasX, canvasY, eve, k, i;
-		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
-			canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
-			canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
-		} else {
-			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
-			canvasX = parseInt(rectangle.left);
-			canvasY = parseInt(rectangle.top);
-		}
+		canvasX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+		canvasY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			eve = LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
@@ -650,14 +644,8 @@ var LGlobal = ( function () {
 	};
 	LGlobal.ll_touchMove = function (e) {
 		var cX, cY, eve, l, ll = e.touches.length;
-		if (typeof LGlobal.object.getBoundingClientRect == UNDEFINED) {
-			cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
-			cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
-		} else {
-			var rectangle = LGlobal.canvasObj.getBoundingClientRect();
-			cX = parseInt(rectangle.left);
-			cY = parseInt(rectangle.top);
-		}
+		cX = parseInt(0 + LGlobal.object.style.left) + parseInt(LGlobal.canvasObj.style.marginLeft);
+		cY = parseInt(0 + LGlobal.object.style.top) + parseInt(LGlobal.canvasObj.style.marginTop);
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;
 		}
@@ -1362,7 +1350,10 @@ function base (d, b, a) {
 	if(d.constructor.name == "Object"){
 		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
-	d.__ll__parent__ = d.__ll__parent__ || [];
+	if (typeof d.__ll__parent__ == UNDEFINED) {
+		d.__ll__parent__ = [];
+		d.__ll__parent__ = [];
+	}
 	d.__ll__parent__.push(b.prototype);
 	for (p in o) {
 		h[p] = 1;
