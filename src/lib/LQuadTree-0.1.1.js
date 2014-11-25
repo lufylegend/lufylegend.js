@@ -23,7 +23,7 @@ var LQuadTree = (function() {
 		s.rect = rect;
 		s.root = s;
 	}
-	LQuadTree.prototype = {
+	var p = {
 		/** @language chinese
 		 * 矩形分割
 		 * @method createChildren
@@ -168,5 +168,8 @@ var LQuadTree = (function() {
 			return r;
 		}
 	};
+	for (var k in p) {
+		LQuadTree.prototype[k] = p[k];
+	}
 	return LQuadTree;
 })();
