@@ -21,7 +21,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimationTimeline(data,list);
  * 		backLayer.addChild(player);
  * 	}
@@ -50,7 +50,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimationTimeline(data,list);
  * 		backLayer.addChild(player);
  * 	}
@@ -79,7 +79,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimationTimeline(data,list);
  * 		backLayer.addChild(player);
  * 	}
@@ -127,7 +127,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(data,list);
 		 * 		player.speed = 10;
 		 * 		backLayer.addChild(player);
@@ -150,7 +150,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(data,list);
 		 * 		player.speed = 10;
 		 * 		backLayer.addChild(player);
@@ -173,7 +173,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(data,list);
 		 * 		player.speed = 10;
 		 * 		backLayer.addChild(player);
@@ -219,7 +219,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);
@@ -252,7 +252,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);
@@ -285,7 +285,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);
@@ -345,7 +345,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -364,7 +364,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -383,7 +383,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -410,7 +410,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -429,7 +429,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -448,7 +448,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -470,7 +470,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -489,7 +489,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -508,7 +508,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -531,7 +531,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -551,7 +551,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -571,7 +571,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -597,7 +597,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -617,7 +617,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -637,7 +637,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		backLayer.addChild(player);
@@ -665,7 +665,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
@@ -691,7 +691,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
@@ -717,7 +717,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
@@ -747,7 +747,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
@@ -771,7 +771,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
@@ -795,7 +795,7 @@ var LAnimationTimeline = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		var player = new LAnimationTimeline(backLayer,data,list);
 		 * 		player.setLabel("right",2,0,1,true);
 		 * 		player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
