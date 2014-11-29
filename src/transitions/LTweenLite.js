@@ -122,17 +122,21 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					s.target.target = s.target;
-					s.target.currentTarget = s;
-					s.onComplete(s.target);
-					delete s.target.currentTarget;
-					delete s.target.target;
+					s._dispatchEvent(s.onComplete);
 				}
 				return true;
 			} else if (s.onUpdate) {
-				s.onUpdate(s.target);
+				s._dispatchEvent(s.onUpdate);
 			}
 			return false;
+		},
+		_dispatchEvent : function (f) {
+			var s = this;
+			s.target.target = s.target;
+			s.target.currentTarget = s;
+			f(s.target);
+			delete s.target.currentTarget;
+			delete s.target.target;
 		},
 		to : function ($target, $duration, $vars) {
 			var s = this;
