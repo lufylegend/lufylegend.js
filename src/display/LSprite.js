@@ -1081,8 +1081,9 @@ var LSprite = (function () {
 		 * <p>添加圆形 : addShape(LShape.ARC,[110,80,60])</p>
 		 * <p>添加多边形 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
 		 * @method addShape
-		 * @param {string} type The shape's type.
-		 * @param {Array} arg The shape's parameters.
+		 * @param {string} type 形状的类型.
+		 * @param {Array} arg 形状参数.
+		 * @return {Array} 被添加的形状组.
 		 * @since 1.9.0
 		 * @public
 		 * @example
@@ -1133,6 +1134,7 @@ var LSprite = (function () {
 		 * @method addShape
 		 * @param {string} type The shape's type.
 		 * @param {Array} arg The shape's parameters.
+		 * @return {Array} The shapes.
 		 * @since 1.9.0
 		 * @public
 		 * @example
@@ -1183,6 +1185,7 @@ var LSprite = (function () {
 		 * @method addShape
 		 * @param {string} type 衝突の形状。
 		 * @param {Array} arg 具体的なパラメータ。
+		 * @return {Array} 追加した形状グルプ.
 		 * @since 1.9.0
 		 * @public
 		 * @example
@@ -1231,6 +1234,23 @@ var LSprite = (function () {
 				return;
 			}
 			s.shapes.push({"type" : type, "arg" : arg});
+			return s.shapes;
+		},
+		/** @language chinese
+		 * <p>添加碰撞形状组，指定碰撞的范围。</p>
+		 * @method addShapes
+		 * @param {Array} shapes 形状组.
+		 * <p>例如 : [{"type" : LShape.RECT, "arg" : [20,140,200,100]},{"type" : LShape.ARC, "arg" : [110,80,60]},{"type" : LShape.VERTICES, "arg" : [[10,10],[50,100],[100,70]]}]</p>
+		 * @since 1.9.8
+		 * @public
+		 */
+		addShapes : function (shapes) {
+			var s = this;
+			if(s.shapes.length == 0){
+				s.shapes = shapes;
+			}else{
+				s.shapes = s.shapes.concat(shapes);
+			}
 		},
 		/** @language chinese
 		 * <p>清空所有碰撞形状。</p>
@@ -1299,8 +1319,7 @@ var LSprite = (function () {
 		 * @examplelink <p><a href="../../../api/LSprite/clearShape.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		clearShape : function () {
-			var s = this;
-			s.shapes.length = 0;
+			this.shapes = [];
 		},
 		_ll_debugShape : function () {
 			var s = this, i, l, child, c, arg, j, ll;

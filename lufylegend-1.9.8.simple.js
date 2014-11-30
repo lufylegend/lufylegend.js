@@ -3958,10 +3958,18 @@ var LSprite = (function () {
 				return;
 			}
 			s.shapes.push({"type" : type, "arg" : arg});
+			return s.shapes;
+		},
+		addShapes : function (shapes) {
+			var s = this;
+			if(s.shapes.length == 0){
+				s.shapes = shapes;
+			}else{
+				s.shapes = s.shapes.concat(shapes);
+			}
 		},
 		clearShape : function () {
-			var s = this;
-			s.shapes.length = 0;
+			this.shapes = [];
 		},
 		_ll_debugShape : function () {
 			var s = this, i, l, child, c, arg, j, ll;
