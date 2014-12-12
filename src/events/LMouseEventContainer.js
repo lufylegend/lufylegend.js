@@ -512,7 +512,7 @@ var LMouseEventContainer = (function () {
 			}
 			var p = sp.parent;
 			while (p != "root") {
-				if (!p.mouseEnabled || !p.mouseChildren) {
+				if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
 					return false;
 				}
 				p = p.parent;
