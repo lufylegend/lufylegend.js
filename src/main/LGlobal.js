@@ -1009,6 +1009,18 @@ var LGlobal = ( function () {
 			c = s.getAbsoluteScale();
 			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
 			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
+			if (s.dragRange) {
+				if (typeof s.dragRange.minX != UNDEFINED && s.x < s.dragRange.minX) {
+					s.x = s.dragRange.minX;
+				} else if(typeof s.dragRange.maxX != UNDEFINED && s.x > s.dragRange.maxX){
+					s.x = s.dragRange.maxX;
+				}
+				if (typeof s.dragRange.minY != UNDEFINED && s.y < s.dragRange.minY) {
+					s.y = s.dragRange.minY;
+				} else if(typeof s.dragRange.maxY != UNDEFINED && s.y > s.dragRange.maxY){
+					s.y = s.dragRange.maxY;
+				}
+			}
 			break;
 		}
 	};

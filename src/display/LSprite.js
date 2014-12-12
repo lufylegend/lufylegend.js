@@ -219,6 +219,14 @@ var LSprite = (function () {
 		 * @public
 		 */
 		s.shapes = new Array();
+		/** @language chinese
+		 * 用户拖动该对象时的拖动范围。格式为{minX:0,maxX:100,minY:0,maxY:100}，也可以只指定所需属性，如{minX:0,minY:0}。
+		 * @property dragRange
+		 * @type Object
+		 * @since 1.9.8
+		 * @public
+		 */
+		s.dragRange = null;
 	}
 	var p = {
 		/** @language chinese
