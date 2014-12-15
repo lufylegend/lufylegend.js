@@ -32,10 +32,14 @@
  * @public
  */
 var LPanel = (function () {
-	function LPanel (bitmapData, w, h, x1, x2, y1, y2) {
+	function LPanel (bitmapData, w, h, x1, x2, y1, y2, overlapping) {
 		var s = this;
 		LExtends(s, LSprite, []);
 		s.type = "LPanel";
+		if(typeof overlapping == UNDEFINED){
+			overlapping = 0;
+		}
+		self.overlapping = overlapping;
 		if (typeof bitmapData == "string") {
 			var d = new LShape();
 			d.graphics.drawRoundRect(1, "#000000", [0, 0, 20, 20, 5], true, bitmapData);
@@ -59,26 +63,26 @@ var LPanel = (function () {
 		s.ltBitmap = new LBitmap(ltData);
 		s.addChild(s.ltBitmap);
 		s.mtBitmap = new LBitmap(mtData);
-		s.mtBitmap.x = s.x1 - 1;
+		s.mtBitmap.x = s.x1 - overlapping;
 		s.addChild(s.mtBitmap);
 		s.rtBitmap = new LBitmap(rtData);
 		s.addChild(s.rtBitmap);
 		
 		s.lmBitmap = new LBitmap(lmData);
-		s.lmBitmap.y = s.y1 - 1;
+		s.lmBitmap.y = s.y1 - overlapping;
 		s.addChild(s.lmBitmap);
 		s.mmBitmap = new LBitmap(mmData);
-		s.mmBitmap.x = s.x1 - 1;
-		s.mmBitmap.y = s.y1 - 1;
+		s.mmBitmap.x = s.x1 - overlapping;
+		s.mmBitmap.y = s.y1 - overlapping;
 		s.addChild(s.mmBitmap);
 		s.rmBitmap = new LBitmap(rmData);
-		s.rmBitmap.y = s.y1 - 1;
+		s.rmBitmap.y = s.y1 - overlapping;
 		s.addChild(s.rmBitmap);
 		
 		s.lbBitmap = new LBitmap(lbData);
 		s.addChild(s.lbBitmap);
 		s.mbBitmap = new LBitmap(mbData);
-		s.mbBitmap.x = s.x1 - 1;
+		s.mbBitmap.x = s.x1 - overlapping;
 		s.addChild(s.mbBitmap);
 		s.rbBitmap = new LBitmap(rbData);
 		s.addChild(s.rbBitmap);
@@ -99,12 +103,12 @@ var LPanel = (function () {
 		s._ll_h = h;
 		s.rtBitmap.x = s.rmBitmap.x = s.rbBitmap.x = w - (s.bitmapData.width - s.x2);
 		s.lbBitmap.y = s.mbBitmap.y = s.rbBitmap.y = h - (s.bitmapData.height - s.y2);
-		s.lmBitmap.scaleY = s.mmBitmap.scaleY = s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2) + 2) / (s.y2 - s.y1);
-		s.mtBitmap.scaleX = s.mmBitmap.scaleX = s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2) + 2) / (s.x2 - s.x1);
+		s.lmBitmap.scaleY = s.mmBitmap.scaleY = s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2) + self.overlapping * 2) / (s.y2 - s.y1);
+		s.mtBitmap.scaleX = s.mmBitmap.scaleX = s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2) + self.overlapping * 2) / (s.x2 - s.x1);
 	};
 	LPanel.prototype.clone = function () {
 		var s = this;
-		return new LPanel(s.bitmapData.clone(), s._ll_w, s._ll_h, s.x1, s.x2, s.y1, s.y2);
+		return new LPanel(s.bitmapData.clone(), s._ll_w, s._ll_h, s.x1, s.x2, s.y1, s.y2, self.overlapping);
 	};
 	return LPanel;
 })();
