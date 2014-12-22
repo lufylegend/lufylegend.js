@@ -28,25 +28,46 @@
  * @public
  */
 var LWindow = (function () {
-	function LWindow(width,height,title){
+	function LWindow(){
 		var s = this;
 		LExtends(s, LSprite, []);
 		s.type = "LWindow";
-		s.w = width;
-		s.h = height;
-		s.bar = new LSprite();
-		s.bar.alpha = 0.7;
-		s.barColor = "#0000FF";
-		s.bar.w = s.w;
-		s.bar.h = 30;
+		var style;
+		/*{width:nunber,height:number,title:string,header:LSprite,closeButton:LSprite}*/
+		if(typeof arguments[0] == "object"){
+			style = arguments[0];
+		}else{
+			/*width,height,title*/
+			style = {width:arguments[0],height:arguments[1],title:arguments[2]};
+		}
+		s.style = style;
+		s.w = style.width;
+		s.h = style.height;
+		if(style.header){
+			s.bar = style.header;
+			s.bar.w = s.bar.getWidth();
+			s.bar.h = s.bar.getHeight();
+		}else{
+			s.bar = new LSprite();
+			s.bar.alpha = 0.7;
+			s.barColor = "#0000FF";
+			s.bar.w = s.w;
+			s.bar.h = 30;
+		}
 		s.addChild(s.bar);
 		s.bar.addEventListener(LMouseEvent.MOUSE_DOWN, s._onBarDown);
 		s.title = new LTextField();
-		s.title.x = s.title.y = 3;
 		s.title.size = 16;
-		s.title.text = title ? title : "";
+		s.title.text = style.title ? style.title : "";
+		s.title.x = s.title.getHeight() * 0.5;
+		s.title.y = (s.bar.h - s.title.getHeight()) * 0.5;
 		s.bar.addChild(s.title);
 		
+		if(style.closeButton){
+			
+		}else{
+			
+		}
 		s.close = new LSprite();
 		s.closeColor = "#800000";
 		s.close.w = 50;
@@ -113,6 +134,9 @@ var LWindow = (function () {
 	};
 	LWindow.prototype._onDraw = function (event) {
 		var s = event.target;
+		if(s.style.header){
+			return;
+		}
 		var co = s.getRootCoordinate();
 		if (s.barColorSet == s.barColor) {
 			return;
