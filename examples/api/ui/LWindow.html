@@ -12,7 +12,7 @@
 <script type="text/javascript">
 init(1000/60,"legend",800,600,main);
 function main(){
-	var myWindow = new LWindow(350,250);
+	var myWindow = new LWindow({width:350,height:250,title:"TEST"});
 	myWindow.x = 200;
 	myWindow.y = 100;
 	addChild(myWindow);
@@ -30,8 +30,9 @@ function main(){
 	nameLabel.y = 70;
 	myWindow.layer.addChild(nameLabel);
 	var name = new LTextField();
-	name.x = 150;name.setWordWrap(true);
+	name.x = 150;
 	name.y = 70;
+	name.setWordWrap(true);
 	name.setType(LTextFieldType.INPUT);
 	myWindow.layer.addChild(name);
 	name.focus();
@@ -61,6 +62,7 @@ function main(){
 	button02.x = 200;
 	button02.y = 150;
 	myWindow.layer.addChild(button02);
+	
 }
 </script>
 	</body>

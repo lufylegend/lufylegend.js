@@ -8,8 +8,12 @@ LEvent.REMOVED_FROM_STAGE = "removedFromStage";
 LDisplayObjectContainer.prototype._ll_added_addChild = LDisplayObjectContainer.prototype.addChild;
 LDisplayObjectContainer.prototype.addChild = function (d) {
 	var r = this._ll_added_addChild(d);
-	r.dispatchEvent(LEvent.ADDED);
-	r.dispatchEventAddToStage();
+	if (r.dispatchEvent) {
+		r.dispatchEvent(LEvent.ADDED);
+	}
+	if (r.dispatchEventAddToStage) {
+		r.dispatchEventAddToStage();
+	}
 	return r;
 };
 LDisplayObjectContainer.prototype._ll_added_addChildAt = LDisplayObjectContainer.prototype.addChildAt;
@@ -18,8 +22,12 @@ LDisplayObjectContainer.prototype.addChildAt = function (d, i) {
 	if (!r) {
 		return;
 	}
-	r.dispatchEvent(LEvent.ADDED);
-	r.dispatchEventAddToStage();
+	if (r.dispatchEvent) {
+		r.dispatchEvent(LEvent.ADDED);
+	}
+	if (r.dispatchEventAddToStage) {
+		r.dispatchEventAddToStage();
+	}
 	return r;
 };
 LInteractiveObject.prototype.dispatchEventAddToStage = function () {
@@ -29,7 +37,11 @@ LInteractiveObject.prototype.dispatchEventAddToStage = function () {
 	}
 	if (p == "root") {
 		s._dispatchEventAddToStage();
-		s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+		/*
+		if(s.hasEventListener(LEvent.ADDED_TO_STAGE)){
+			console.log("dispatchEventAddToStage",s);
+			s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+		}*/
 	}
 };
 LInteractiveObject.prototype._dispatchEventAddToStage = function () {
@@ -37,11 +49,16 @@ LInteractiveObject.prototype._dispatchEventAddToStage = function () {
 	if (!s.dispatchEvent) {
 		return;
 	}
-	s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+	if(s.hasEventListener(LEvent.ADDED_TO_STAGE)){
+		s.dispatchEvent(LEvent.ADDED_TO_STAGE);
+	}
 	if (!s.childList) {
 		return;
 	}
 	for (i = 0, l = s.childList.length; i < l; i++) {
+		if(!s.childList[i]._dispatchEventAddToStage){
+			continue;
+		}
 		s.childList[i]._dispatchEventAddToStage();
 	}
 };
@@ -61,6 +78,9 @@ LDisplayObjectContainer.prototype._dispatchEventRemovedFromStage = function () {
 	}
 	s.dispatchEvent(LEvent.REMOVED_FROM_STAGE);
 	for (i = 0, l = s.childList.length; i < l; i++) {
+		if(!s.childList[i]._dispatchEventRemovedFromStage){
+			continue;
+		}
 		s.childList[i]._dispatchEventRemovedFromStage();
 	}
 };
