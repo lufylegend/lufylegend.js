@@ -68,6 +68,9 @@ var LGraphics = (function () {
 			}
 			for (k = 0; k < l; k++) {
 				s.setList[k]();
+				if (LGlobal.fpsStatus) {
+					LGlobal.fpsStatus.graphics++;
+				}
 			}
 		},
 		clone : function () {

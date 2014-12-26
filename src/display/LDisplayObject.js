@@ -317,6 +317,7 @@ var LDisplayObject = (function () {
 			if (!s._canShow()) {
 				return;
 			}
+			s._ll_trans = false;
 			if (!LGlobal.box2d && typeof s._ll_loopframe == "function") {
 				s._ll_loopframe();
 			}
@@ -337,7 +338,14 @@ var LDisplayObject = (function () {
 			s._transformScale();
 			s._coordinate(c);
 			if (s.alpha < 1) {
+				s._ll_trans = true;
 				c.globalAlpha = s.alpha;
+			}
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.display++;
+				if (s._ll_trans) {
+					LGlobal.fpsStatus.transform++;
+				}
 			}
 			s._ll_show(c);
 			c.restore();
@@ -351,6 +359,7 @@ var LDisplayObject = (function () {
 		_coordinate : function (c) {
 			var s = this;
 			if (s.x != 0 || s.y != 0) {
+				s._ll_trans = true;
 				c.transform(1, 0, 0, 1, s.x, s.y);
 			}
 		},
@@ -371,6 +380,7 @@ var LDisplayObject = (function () {
 			if (s.rotate == 0) {
 				return;
 			}
+			s._ll_trans = true;
 			c = LGlobal.canvas, rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
 			if ((typeof s.rotatex) == UNDEFINED) {
 				s.rotatex = 0;
@@ -392,6 +402,7 @@ var LDisplayObject = (function () {
 			if (s.scaleX == 1 && s.scaleY == 1) {
 				return;
 			}
+			s._ll_trans = true;
 			scaleObj = new LMatrix();
 			if (s.scaleX != 1) {
 				scaleObj.tx = s.x;

@@ -704,6 +704,9 @@ var LTextField = (function () {
 					return;
 				}
 			}
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.text++;
+			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
 				lbl = '';

@@ -287,7 +287,7 @@ var LMouseEventContainer = (function () {
 			}
 			var p = sp.parent;
 			while (p != "root") {
-				if (!p.mouseEnabled || !p.mouseChildren) {
+				if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
 					return false;
 				}
 				p = p.parent;
@@ -427,6 +427,7 @@ var LGlobal = ( function () {
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
 	LGlobal.excludingContainer = new Array();
+	LGlobal.fpsStatus = null;
 	LGlobal.stageScale = "noScale";
 	LGlobal.align = "M";
 	LGlobal.mobile = false;
@@ -490,7 +491,7 @@ var LGlobal = ( function () {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
-			LEvent.addEventListener(document,LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
+			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
 		} else {
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
@@ -773,6 +774,18 @@ var LGlobal = ( function () {
 			c = s.getAbsoluteScale();
 			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
 			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
+			if (s.dragRange) {
+				if (typeof s.dragRange.minX != UNDEFINED && s.x < s.dragRange.minX) {
+					s.x = s.dragRange.minX;
+				} else if(typeof s.dragRange.maxX != UNDEFINED && s.x > s.dragRange.maxX){
+					s.x = s.dragRange.maxX;
+				}
+				if (typeof s.dragRange.minY != UNDEFINED && s.y < s.dragRange.minY) {
+					s.y = s.dragRange.minY;
+				} else if(typeof s.dragRange.maxY != UNDEFINED && s.y > s.dragRange.maxY){
+					s.y = s.dragRange.maxY;
+				}
+			}
 			break;
 		}
 	};
@@ -841,6 +854,9 @@ var LGlobal = ( function () {
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {
 			return;
+		}
+		if (LGlobal.fpsStatus) {
+			LGlobal.fpsStatus.reset();
 		}
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
@@ -1656,6 +1672,9 @@ var LEventDispatcher = (function () {
 						s.currentTarget = s.target = s;
 						s.eventType = s.event_type = ctype;
 						s._eventList[i].listener(s);
+						delete s.currentTarget;
+						delete s.target;
+						delete s.eventType;
 					}else{
 						if (!event.target) {
 							event.target = s;
@@ -1725,6 +1744,7 @@ var LDisplayObject = (function () {
 			if (!s._canShow()) {
 				return;
 			}
+			s._ll_trans = false;
 			if (!LGlobal.box2d && typeof s._ll_loopframe == "function") {
 				s._ll_loopframe();
 			}
@@ -1745,7 +1765,14 @@ var LDisplayObject = (function () {
 			s._transformScale();
 			s._coordinate(c);
 			if (s.alpha < 1) {
+				s._ll_trans = true;
 				c.globalAlpha = s.alpha;
+			}
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.display++;
+				if (s._ll_trans) {
+					LGlobal.fpsStatus.transform++;
+				}
 			}
 			s._ll_show(c);
 			c.restore();
@@ -1759,6 +1786,7 @@ var LDisplayObject = (function () {
 		_coordinate : function (c) {
 			var s = this;
 			if (s.x != 0 || s.y != 0) {
+				s._ll_trans = true;
 				c.transform(1, 0, 0, 1, s.x, s.y);
 			}
 		},
@@ -1779,6 +1807,7 @@ var LDisplayObject = (function () {
 			if (s.rotate == 0) {
 				return;
 			}
+			s._ll_trans = true;
 			c = LGlobal.canvas, rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
 			if ((typeof s.rotatex) == UNDEFINED) {
 				s.rotatex = 0;
@@ -1800,6 +1829,7 @@ var LDisplayObject = (function () {
 			if (s.scaleX == 1 && s.scaleY == 1) {
 				return;
 			}
+			s._ll_trans = true;
 			scaleObj = new LMatrix();
 			if (s.scaleX != 1) {
 				scaleObj.tx = s.x;
@@ -2961,6 +2991,9 @@ var LGraphics = (function () {
 			}
 			for (k = 0; k < l; k++) {
 				s.setList[k]();
+				if (LGlobal.fpsStatus) {
+					LGlobal.fpsStatus.graphics++;
+				}
 			}
 		},
 		clone : function () {
@@ -3651,6 +3684,7 @@ var LSprite = (function () {
 		s.graphics.parent = s;
 		s.box2dBody = null;
 		s.shapes = new Array();
+		s.dragRange = null;
 	}
 	var p = {
 		setRotate : function (angle) {
@@ -4307,6 +4341,9 @@ var LTextField = (function () {
 					return;
 				}
 			}
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.text++;
+			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
 				lbl = '';
@@ -4649,6 +4686,9 @@ var LBitmap = (function () {
 		},
 		ll_draw : function () {
 			var s = this;
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.bitmapData++;
+			}
 			LGlobal.canvas.drawImage(s.bitmapData.image,
 				s.bitmapData.x,
 				s.bitmapData.y,
@@ -5319,6 +5359,10 @@ var LLoadManage = (function () {
 	LoadManage.prototype = {
 		load : function (l, u, c) {
 			var s = this;
+			if (!l || l.length == 0) {
+				c([]);
+				return;
+			}
 			s.list = l, s.onupdate = u, s.oncomplete = c;
 			s.loader = s, s.index = 0, s.loadIndex = 0, s.result = [], s.lresult = [];
 			s.loadInit();
@@ -6002,22 +6046,64 @@ var FPS = (function () {
 	function FPS(){
 		var s = this;
 		LExtends(s,LSprite,[]);
-		s.fps = new LTextField();
+		if (!LGlobal.fpsStatus) {
+			LGlobal.fpsStatus = {
+				a : 0,
+				b : 0,
+				c : 0,
+				d : 0,
+				e : 0,
+				bitmapData : 0,
+				display : 0,
+				transform : 0,
+				graphics : 0,
+				text : 0,
+				reset : function () {
+					this.a = this.bitmapData;
+					this.b = this.display - 1;
+					this.c = this.transform - 1;
+					this.d = this.graphics - 1;
+					this.e = this.text - 5;
+					this.bitmapData = 0;
+					this.display = 0;
+					this.transform = 0;
+					this.graphics = 0;
+					this.text = 0;
+				}
+			};
+		}
+		s.fps = [];
+		for(var i=0;i<5;i++){
+			var f = new LTextField();
+			f.color = "#ffffff";
+			f.y = i * 20;
+			s.addChild(f);
+			s.fps.push(f);
+		}
 		s.fpsCount = 0;
 		s.fpsTime = (new Date()).getTime();
-		s.fps.color = "#ffffff";
-		s.addChild(s.fps);
 		s.addEventListener(LEvent.ENTER_FRAME,s.showFPS);
 	}
-	FPS.prototype.showFPS = function(s){
+	FPS.prototype.showFPS = function(e){
+		var s = e.currentTarget, t, f;
 		s.fpsCount++;
-		var t = (new Date()).getTime();
+		t = (new Date()).getTime();
 		if(t - s.fpsTime < 1000)return;
-		s.fps.text = Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
+		s.fps[0].text = "FPS : " + Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
+		f = LGlobal.fpsStatus;
+		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b; 
+		s.fps[2].text = "Draw image : " + f.a; 
+		s.fps[3].text = "Drwa graphics : " + f.d; 
+		s.fps[4].text = "Draw text : " + f.e; 
 		s.fpsTime = t;
 		s.fpsCount = 0;
 		s.graphics.clear();
-		s.graphics.drawRect(0,"#000000",[0,0,s.fps.getWidth(),20],true,"#000000");
+		s.graphics.drawRect(0,"#000000",[0,0,s.fps[1].getWidth(),100],true,"#000000");
+	};
+	FPS.prototype.die = function(){
+		var s = this;
+		LGlobal.fpsStatus = null;
+		s.callParent("die",arguments);
 	};
 	return FPS;
 })();

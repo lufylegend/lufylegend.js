@@ -267,6 +267,7 @@ var LGlobal = ( function () {
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
 	LGlobal.excludingContainer = new Array();
+	LGlobal.fpsStatus = null;
 	/** @language chinese
 	 * <p>一个 LStageScaleMode 类中指定要使用哪种缩放模式的值。</p>
 	 * @property LGlobal.stageScale
@@ -726,7 +727,7 @@ var LGlobal = ( function () {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
-			LEvent.addEventListener(document,LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
+			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
 		} else {
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
@@ -1091,6 +1092,9 @@ var LGlobal = ( function () {
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {
 			return;
+		}
+		if (LGlobal.fpsStatus) {
+			LGlobal.fpsStatus.reset();
 		}
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
