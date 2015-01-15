@@ -1,26 +1,12 @@
-/** @language chinese
- * <p>LTweenLite是比较常用的一个动画库，包含各种缓动效果，使用LTweenLite能够简化动画制作的代码编写工作。</p>
- * @class LTweenLite
- * @constructor
- * @since 1.4.0
- * @public
- */
-/** @language english
- * <p>LTweenLite is an extremely fast, lightweight, and flexible animation tool that serves as the foundation Animation Platform.</p>
- * @class LTweenLite
- * @constructor
- * @since 1.4.0
- * @public
- */
-/** @language japanese
- * <p>LTweenLiteはアニメーショントゥイーン用ライブラリです。高速・軽量がウリなんです。</p>
- * @class LTweenLite
- * @constructor
- * @since 1.4.0
- * @public
- */
 var LTweenLiteTimeline;
 var LTweenLite = (function () {
+	/** @language chinese
+	 * <p>LTweenLite用来控制动画的一个单位。</p>
+	 * @class LTweenLiteChild
+	 * @constructor
+	 * @since 1.4.0
+	 * @public
+	 */
 	function LTweenLiteChild ($target, $duration, $vars) {
 		var s = this;
 		LExtends (s, LObject, []);
@@ -74,9 +60,32 @@ var LTweenLite = (function () {
 				s.varsfrom[k] = s.target[k];
 			}
 		},
+		/** @language chinese
+		 * 将动画暂停。
+		 * @method pause
+		 * @example
+		 * 	var tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME})
+		 * 	.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 	tween.pause();
+		 * @examplelink <p><a href="../../../api/LTweenLite/pause_resume.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.9.1
+		 */
 		pause : function () {
 			this.stop = true;
 		},
+		/** @language chinese
+		 * 将暂停的动画重新播放。
+		 * @method resume
+		 * @example
+		 * 	var tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME})
+		 * 	.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+		 * 	tween.pause();
+		 * 	tween.resume();
+		 * @examplelink <p><a href="../../../api/LTweenLite/pause_resume.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.9.1
+		 */
 		resume : function () {
 			this.stop = false;
 		},
@@ -166,6 +175,27 @@ var LTweenLite = (function () {
 	for (var k in p) {
 		LTweenLiteChild.prototype[k] = p[k];
 	}
+	/** @language chinese
+	 * <p>LTweenLite是比较常用的一个动画库，包含各种缓动效果，使用LTweenLite能够简化动画制作的代码编写工作。</p>
+	 * @class LTweenLite
+	 * @constructor
+	 * @since 1.4.0
+	 * @public
+	 */
+	/** @language english
+	 * <p>LTweenLite is an extremely fast, lightweight, and flexible animation tool that serves as the foundation Animation Platform.</p>
+	 * @class LTweenLite
+	 * @constructor
+	 * @since 1.4.0
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>LTweenLiteはアニメーショントゥイーン用ライブラリです。高速・軽量がウリなんです。</p>
+	 * @class LTweenLite
+	 * @constructor
+	 * @since 1.4.0
+	 * @public
+	 */
 	function LTweenLite () {
 		LExtends (this, LObject, []);
 		this.type = "LTweenLite";
@@ -478,7 +508,7 @@ var LTweenLite = (function () {
 		 * 	function stopTween(e){
 		 * 		LTweenLite.removeAll();
 		 * 	}
-		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">测试链接</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/removeAll.html" target="_blank">测试链接</a></p>
 		 * @public
 		 * @since 1.8.0
 		 */
@@ -506,9 +536,9 @@ var LTweenLite = (function () {
 		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
 		 * 	}
 		 * 	function stopTween(e){
-		 * 		LTweenLite.remove(tween);
+		 * 		LTweenLite.removeAll(tween);
 		 * 	}
-		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">Try it »</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/removeAll.html" target="_blank">Try it »</a></p>
 		 * @public
 		 * @since 1.8.0
 		 */
@@ -536,14 +566,45 @@ var LTweenLite = (function () {
 		 * 		stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
 		 * 	}
 		 * 	function stopTween(e){
-		 * 		LTweenLite.remove(tween);
+		 * 		LTweenLite.removeAll(tween);
 		 * 	}
-		 * @examplelink <p><a href="../../../api/LTweenLite/remove.html" target="_blank">実際のサンプルを見る</a></p>
+		 * @examplelink <p><a href="../../../api/LTweenLite/removeAll.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 * @since 1.8.0
 		 */
 		removeAll : function () {
 			this.tweens.splice(0, this.tweens.length);
+		},
+		/** @language chinese
+		 * ［静态方法］暂停所有正在进行的缓动动画。
+		 * @method LTweenLite.pauseAll
+		 * @static
+		 * @example
+		 * 	LTweenLite.pauseAll();
+		 * @examplelink <p><a href="../../../api/LTweenLite/pauseAll_resumeAll.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.0
+		 */
+		pauseAll : function () {
+			for(var i = 0, l = this.tweens.length; i < l; i++){
+				this.tweens[i].pause();
+			}
+		},
+		/** @language chinese
+		 * ［静态方法］重新播放被暂停的所有缓动动画。
+		 * @method LTweenLite.resumeAll
+		 * @static
+		 * @example
+		 * 	LTweenLite.pauseAll();
+		 * 	LTweenLite.resumeAll();
+		 * @examplelink <p><a href="../../../api/LTweenLite/pauseAll_resumeAll.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.8.0
+		 */
+		resumeAll : function () {
+			for(var i = 0, l = this.tweens.length; i < l; i++){
+				this.tweens[i].resume();
+			}
 		}
 	};
 	for (var k in p) {
