@@ -468,7 +468,7 @@ var LTweenLite = (function () {
 			if (typeof tween == UNDEFINED) {
 				return;
 			}
-			for (i = 0, l = s.tweens.length; i < l; i++) {
+			for (var i = 0, l = s.tweens.length; i < l; i++) {
 				if (tween.objectIndex == s.tweens[i].objectIndex) {
 					s.tweens.splice(i, 1);
 					break;
