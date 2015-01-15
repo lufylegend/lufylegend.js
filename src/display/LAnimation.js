@@ -5,9 +5,9 @@
  * @extends LSprite
  * @constructor
  * @param {LSprite} layer 一个LSprite对象。
- * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
+ * @param {LBitmapData | Array} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。或者是一个LBitmapData对象的数组。
  * @param {Array} list <p>每个frame的属性值。</p>
- * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
+ * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0, dataIndex : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标，当data是一个LBitmapData对象的数组的时候，dataIndex表示该数组的索引，用来指定使用哪个LBitmapData对象。</p>
  * <p>如果精灵图表中的每个frame大小都是一样的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
@@ -132,7 +132,12 @@ var LAnimation = (function() {
 		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
-		s.bitmap = new LBitmap(data);
+		if (Array.isArray(data)) {
+			s.bitmapList = data;
+		} else {
+			s.bitmapList = [data];
+		}
+		s.bitmap = new LBitmap(s.bitmapList[0]);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
 		if (layer != null) {
@@ -461,6 +466,9 @@ var LAnimation = (function() {
 				stepFrame = 0;
 			}
 			if (s._ll_stepIndex == 0) {
+				if ( typeof arr.dataIndex == "number" && Array.isArray(s.bitmapList) && arr.dataIndex < s.bitmapList.length) {
+					s.bitmap.bitmapData = s.bitmapList[arr.dataIndex];
+				}
 				if ( typeof arr.script == "function") {
 					arr.script(s, arr.params);
 				}

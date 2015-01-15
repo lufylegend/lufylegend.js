@@ -117,7 +117,7 @@ var LTweenLite = (function () {
 				}
 			}
 			if (s.onStart) {
-				s.onStart(s.target);
+				s._dispatchEvent(s.onStart);
 				delete s.onStart;
 			}
 			var e;

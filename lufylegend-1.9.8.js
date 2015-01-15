@@ -5165,7 +5165,12 @@ var LAnimation = (function() {
 		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
-		s.bitmap = new LBitmap(data);
+		if (Array.isArray(data)) {
+			s.bitmapList = data;
+		} else {
+			s.bitmapList = [data];
+		}
+		s.bitmap = new LBitmap(s.bitmapList[0]);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
 		if (layer != null) {
@@ -5220,6 +5225,9 @@ var LAnimation = (function() {
 				stepFrame = 0;
 			}
 			if (s._ll_stepIndex == 0) {
+				if ( typeof arr.dataIndex == "number" && Array.isArray(s.bitmapList) && arr.dataIndex < s.bitmapList.length) {
+					s.bitmap.bitmapData = s.bitmapList[arr.dataIndex];
+				}
 				if ( typeof arr.script == "function") {
 					arr.script(s, arr.params);
 				}
@@ -5802,7 +5810,7 @@ var LTweenLite = (function () {
 				}
 			}
 			if (s.onStart) {
-				s.onStart(s.target);
+				s._dispatchEvent(s.onStart);
 				delete s.onStart;
 			}
 			var e;

@@ -200,6 +200,9 @@ var LScrollbar = (function () {
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {
 				s.addEventListener(LMouseEvent.MOUSE_DOWN, s.mouseDown);
 			}
+			if (!s.hasEventListener(LMouseEvent.MOUSE_UP)) {
+				s.addEventListener(LMouseEvent.MOUSE_UP, s.mouseUpW);
+			}
 		}
 	};
 	LScrollbar.prototype.resizeHeight = function (value) {
@@ -267,6 +270,9 @@ var LScrollbar = (function () {
 			}
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {
 				s.addEventListener(LMouseEvent.MOUSE_DOWN, s.mouseDown);
+			}
+			if (!s.hasEventListener(LMouseEvent.MOUSE_UP)) {
+				s.addEventListener(LMouseEvent.MOUSE_UP, s.mouseUpH);
 			}
 		}
 	};
@@ -399,6 +405,8 @@ var LScrollbar = (function () {
 		s._showObject.x -= s._speed;
 		s.setScroll_w();
 		s.setSpeed();
+	};
+	LScrollbar.prototype.mouseUp = function (event) {
 	};
 	LScrollbar.prototype.mouseDown = function (event) {
 		var s = event.clickTarget;
