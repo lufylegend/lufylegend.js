@@ -1015,11 +1015,11 @@ var LTextField = (function () {
 		},
 		mouseEvent : function (event, type, cood) {
 			var s = this, on;
-			if (s.inputBackLayer == null) {
+			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
 				return;
 			}
 			on = s.ismouseon(event, cood);
-			if (type != LMouseEvent.MOUSE_DOWN || !on) {
+			if (!on) {
 				return;
 			}
 			s.focus();

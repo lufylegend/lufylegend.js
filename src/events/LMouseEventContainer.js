@@ -522,6 +522,23 @@ var LMouseEventContainer = (function () {
 			}
 			return true;
 		},
+		_dispatchEvent : function(event, type, st, index, fromIndex, endIndex) {
+			var self = this, i, j, l = st.length;
+			for (i = fromIndex; i <= endIndex && i < l; i++) {
+				o = st[i];
+				if (o.sp.objectIndex != index) {
+					continue;
+				}
+				event.currentTarget = event.clickTarget = o.sp;
+				if (!event.target) {
+					event.target = o.sp;
+				}
+				event.event_type = type;
+				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
+				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
+				o.listener(event, o.sp);
+			}
+		},
 		dispatchEvent : function (event, list, type) {
 			var self = this, sp, co, st = [], o, i, l;
 			for (i = 0, l = list.length; i < l; i++) {
@@ -564,20 +581,32 @@ var LMouseEventContainer = (function () {
 			if (st.length > 1) {
 				st = st.sort(self._sort.bind(self));
 			}
-			l = self.dispatchAllEvent ? st.length : 1;
-			for (i = 0; i < l && i < st.length; i++) {
+			l = st.length;
+			for (i = 0; i < l; i++) {
 				o = st[i];
-				event.currentTarget = event.clickTarget = o.sp;
-				if (!event.target) {
-					event.target = o.sp;
-				}
-				event.event_type = type;
-				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
-				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
-				o.listener(event, o.sp);
-				if (l == 1 && i<st.length-1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
+				self._dispatchEvent(event, type, st, o.sp.objectIndex, i, self.dispatchAllEvent ? l - 1 : i);
+				if (i < st.length - 1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
 					st.splice(i, 1);
 					i--;
+					continue;
+				}
+				var p;
+				while (true) {
+					if (!p) {
+						p = o.sp.parent;
+						event.target = o.sp;
+					}
+					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
+					event.target = p;
+					p = p.parent;
+					if (p == "root") {
+						break;
+					}
+				}
+				if (!self.dispatchAllEvent) {
+					break;
+				} else {
+					continue;
 				}
 			}
 		},

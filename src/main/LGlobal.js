@@ -1011,15 +1011,15 @@ var LGlobal = ( function () {
 			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
 			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
 			if (s.dragRange) {
-				if (typeof s.dragRange.minX != UNDEFINED && s.x < s.dragRange.minX) {
-					s.x = s.dragRange.minX;
-				} else if(typeof s.dragRange.maxX != UNDEFINED && s.x > s.dragRange.maxX){
-					s.x = s.dragRange.maxX;
+				if (s.x < s.dragRange.left) {
+					s.x = s.dragRange.left;
+				} else if(s.x > s.dragRange.right){
+					s.x = s.dragRange.right;
 				}
-				if (typeof s.dragRange.minY != UNDEFINED && s.y < s.dragRange.minY) {
-					s.y = s.dragRange.minY;
-				} else if(typeof s.dragRange.maxY != UNDEFINED && s.y > s.dragRange.maxY){
-					s.y = s.dragRange.maxY;
+				if (s.y < s.dragRange.top) {
+					s.y = s.dragRange.top;
+				} else if(s.y > s.dragRange.bottom){
+					s.y = s.dragRange.bottom;
 				}
 			}
 			break;
@@ -1104,6 +1104,7 @@ var LGlobal = ( function () {
 			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
 			LGlobal.forceRefresh = false;
 		}
+		LGlobal.canvas.beginPath();
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
 			if (!LGlobal.traceDebug && LGlobal.keepClear) {

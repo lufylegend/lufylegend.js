@@ -297,6 +297,23 @@ var LMouseEventContainer = (function () {
 			}
 			return true;
 		},
+		_dispatchEvent : function(event, type, st, index, fromIndex, endIndex) {
+			var self = this, i, j, l = st.length;
+			for (i = fromIndex; i <= endIndex && i < l; i++) {
+				o = st[i];
+				if (o.sp.objectIndex != index) {
+					continue;
+				}
+				event.currentTarget = event.clickTarget = o.sp;
+				if (!event.target) {
+					event.target = o.sp;
+				}
+				event.event_type = type;
+				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
+				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
+				o.listener(event, o.sp);
+			}
+		},
 		dispatchEvent : function (event, list, type) {
 			var self = this, sp, co, st = [], o, i, l;
 			for (i = 0, l = list.length; i < l; i++) {
@@ -339,20 +356,32 @@ var LMouseEventContainer = (function () {
 			if (st.length > 1) {
 				st = st.sort(self._sort.bind(self));
 			}
-			l = self.dispatchAllEvent ? st.length : 1;
-			for (i = 0; i < l && i < st.length; i++) {
+			l = st.length;
+			for (i = 0; i < l; i++) {
 				o = st[i];
-				event.currentTarget = event.clickTarget = o.sp;
-				if (!event.target) {
-					event.target = o.sp;
-				}
-				event.event_type = type;
-				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
-				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
-				o.listener(event, o.sp);
-				if (l == 1 && i<st.length-1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
+				self._dispatchEvent(event, type, st, o.sp.objectIndex, i, self.dispatchAllEvent ? l - 1 : i);
+				if (i < st.length - 1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
 					st.splice(i, 1);
 					i--;
+					continue;
+				}
+				var p;
+				while (true) {
+					if (!p) {
+						p = o.sp.parent;
+						event.target = o.sp;
+					}
+					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
+					event.target = p;
+					p = p.parent;
+					if (p == "root") {
+						break;
+					}
+				}
+				if (!self.dispatchAllEvent) {
+					break;
+				} else {
+					continue;
 				}
 			}
 		},
@@ -775,15 +804,15 @@ var LGlobal = ( function () {
 			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
 			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
 			if (s.dragRange) {
-				if (typeof s.dragRange.minX != UNDEFINED && s.x < s.dragRange.minX) {
-					s.x = s.dragRange.minX;
-				} else if(typeof s.dragRange.maxX != UNDEFINED && s.x > s.dragRange.maxX){
-					s.x = s.dragRange.maxX;
+				if (s.x < s.dragRange.left) {
+					s.x = s.dragRange.left;
+				} else if(s.x > s.dragRange.right){
+					s.x = s.dragRange.right;
 				}
-				if (typeof s.dragRange.minY != UNDEFINED && s.y < s.dragRange.minY) {
-					s.y = s.dragRange.minY;
-				} else if(typeof s.dragRange.maxY != UNDEFINED && s.y > s.dragRange.maxY){
-					s.y = s.dragRange.maxY;
+				if (s.y < s.dragRange.top) {
+					s.y = s.dragRange.top;
+				} else if(s.y > s.dragRange.bottom){
+					s.y = s.dragRange.bottom;
 				}
 			}
 			break;
@@ -866,6 +895,7 @@ var LGlobal = ( function () {
 			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
 			LGlobal.forceRefresh = false;
 		}
+		LGlobal.canvas.beginPath();
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
 			if (!LGlobal.traceDebug && LGlobal.keepClear) {
@@ -4484,11 +4514,11 @@ var LTextField = (function () {
 		},
 		mouseEvent : function (event, type, cood) {
 			var s = this, on;
-			if (s.inputBackLayer == null) {
+			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
 				return;
 			}
 			on = s.ismouseon(event, cood);
-			if (type != LMouseEvent.MOUSE_DOWN || !on) {
+			if (!on) {
 				return;
 			}
 			s.focus();
@@ -5914,7 +5944,7 @@ var LTweenLite = (function () {
 			if (typeof tween == UNDEFINED) {
 				return;
 			}
-			for (i = 0, l = s.tweens.length; i < l; i++) {
+			for (var i = 0, l = s.tweens.length; i < l; i++) {
 				if (tween.objectIndex == s.tweens[i].objectIndex) {
 					s.tweens.splice(i, 1);
 					break;
@@ -5923,6 +5953,16 @@ var LTweenLite = (function () {
 		},
 		removeAll : function () {
 			this.tweens.splice(0, this.tweens.length);
+		},
+		pauseAll : function () {
+			for(var i = 0, l = this.tweens.length; i < l; i++){
+				this.tweens[i].pause();
+			}
+		},
+		resumeAll : function () {
+			for(var i = 0, l = this.tweens.length; i < l; i++){
+				this.tweens[i].resume();
+			}
 		}
 	};
 	for (var k in p) {

@@ -220,9 +220,9 @@ var LSprite = (function () {
 		 */
 		s.shapes = new Array();
 		/** @language chinese
-		 * 用户拖动该对象时的拖动范围。格式为{minX:0,maxX:100,minY:0,maxY:100}，也可以只指定所需属性，如{minX:0,minY:0}。
+		 * 用户拖动该对象时的拖动范围。
 		 * @property dragRange
-		 * @type Object
+		 * @type LRectangle
 		 * @since 1.9.8
 		 * @public
 		 */
@@ -1372,19 +1372,17 @@ var LSprite = (function () {
 				return s.ismouseonShapes(s.shapes, e.offsetX, e.offsetY);
 			}
 			var k, i = false, l = s.childList, sc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
-			if (s.graphics) {
-				i = s.graphics.ismouseon(e, sc);
+			for (k = l.length - 1; k >= 0; k--) {
+				if (l[k].ismouseon) {
+					i = l[k].ismouseon(e, sc);
+				}
+				if (i) {
+					e.target = s.childList[k];
+					break;
+				}
 			}
 			if (!i) {
-				for (k = l.length - 1; k >= 0; k--) {
-					if (l[k].ismouseon) {
-						i = l[k].ismouseon(e, sc);
-					}
-					if (i) {
-						e.target = s.childList[k];
-						break;
-					}
-				}
+				i = s.graphics.ismouseon(e, sc);
 			}
 			return i;
 		},
