@@ -98,6 +98,7 @@ var LTextField = (function () {
 		 * @public
 		 */
 		s.text = "";
+		s.htmlText = "";
 		/** @language chinese
 		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
 		 * @property font
@@ -691,8 +692,45 @@ var LTextField = (function () {
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
 		},
+		ll_getStyleSheet : function (styleSheet, tabName, attribute, text) {
+			return {styleSheet:ss.clone(),text:text};
+			var s = this;
+			
+			if(tabName == "span"){
+				return {tab:tabName,att:att,font:"fSpan",size:"sSpan",text:text};
+			}else if(tabName == "b"){
+				return {tab:tabName,att:att,font:"fB",size:"sB",text:text};
+			}else if(tabName == "p"){
+				return {tab:tabName,att:att,font:"fP",size:"sP",text:text};
+			}else{
+				
+			}
+			return {tab:tabName,att:att,font:"default",size:"default",text:text};
+		},
+		ll_getHtmlText : function (ss, text) {
+			var s = this, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+			if(!arr){
+				s.ll_htmlTexts.push({styleSheet:ss.clone(),text:text});
+				return;
+			}
+			if(arr.index > 0){
+				s.ll_htmlTexts.push({styleSheet:ss.clone(),text:text.substring(0,arr.index)});
+			}
+			s.ll_getStyleSheet(ss,arr[1],arr[3],arr[4]);
+			s.ll_getHtmlText(ss,text.substring(arr.index + arr[0].length));
+		},
 		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, enter;
+			var s = this, d, lbl, i, rc, j, l, k, m, b, enter, ss;
+			if (s.htmlText) {
+				if (s.ll_htmlText != s.htmlText) {
+					ss = new LStyleSheet();
+					s.ll_htmlTexts = [];
+					s.ll_get_htmlText(ss, s.htmlText);
+					s.ll_htmlText = s.htmlText;
+					console.log(s.ll_htmlTexts);
+				}
+				return;
+			}
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
