@@ -589,6 +589,7 @@ var LTransition = (function() {
 			var self = this, g = self.child.mask, c = LGlobal.canvas, list;
 			g.clear();
 			g.add(function() {
+				c.beginPath();
 				c.save();
 				for (var i = 0; i < self.index; i++) {
 					list = self.list[i];

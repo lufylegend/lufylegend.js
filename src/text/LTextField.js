@@ -693,40 +693,79 @@ var LTextField = (function () {
 			c.textBaseline = s.textBaseline;
 		},
 		ll_getStyleSheet : function (styleSheet, tabName, attribute, text) {
-			return {styleSheet:ss.clone(),text:text};
-			var s = this;
-			
-			if(tabName == "span"){
-				return {tab:tabName,att:att,font:"fSpan",size:"sSpan",text:text};
-			}else if(tabName == "b"){
-				return {tab:tabName,att:att,font:"fB",size:"sB",text:text};
-			}else if(tabName == "p"){
-				return {tab:tabName,att:att,font:"fP",size:"sP",text:text};
-			}else{
-				
+			var s = this, pattern, ss = styleSheet.clone();
+			if (tabName == "font") {
+				var i = 0;
+				while (attribute) {
+					if (i++ > 4)
+						break;
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (!arr || !arr[0]) {
+						break;
+					}
+					switch(arr[0]) {
+						case "face":
+							ss.textFormat.font = arr[6];
+							break;
+						case "color":
+							ss.textFormat.color = arr[6];
+							break;
+						case "size":
+							ss.textFormat.size = arr[6];
+							break;
+					}
+					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+				}
+			} else if (tabName == "b") {
+				ss.textFormat.bold = true;
+			} else if (tabName == "u") {
+				ss.textFormat.underline = true;
+			} else if (tabName == "i") {
+				ss.textFormat.italic = true;
+			} else if (tabName == "span") {
+				//LStyleSheet
 			}
-			return {tab:tabName,att:att,font:"default",size:"default",text:text};
+			s.ll_getHtmlText(ss, text); 
 		},
 		ll_getHtmlText : function (ss, text) {
-			var s = this, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
-			if(!arr){
-				s.ll_htmlTexts.push({styleSheet:ss.clone(),text:text});
+			//console.log("ll_getHtmlText text",text);
+			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+			//console.log("ll_getHtmlText",arr);
+			if (!arr || !arr[0]) {
+				s.ll_htmlTexts.push({
+					styleSheet : ss.clone(),
+					text : text
+				});
 				return;
 			}
-			if(arr.index > 0){
-				s.ll_htmlTexts.push({styleSheet:ss.clone(),text:text.substring(0,arr.index)});
+			if (arr.index > 0) {
+				s.ll_htmlTexts.push({
+					styleSheet : ss.clone(),
+					text : text.substring(0, arr.index)
+				});
 			}
-			s.ll_getStyleSheet(ss,arr[1],arr[3],arr[4]);
-			s.ll_getHtmlText(ss,text.substring(arr.index + arr[0].length));
+			tabName = arr[1];
+			start = arr.index;
+			end = start;
+			do {
+				end = text.indexOf("</" + tabName, end + 1);
+				start = text.indexOf("<" + tabName, start + 1);
+			} while(start > 0 && start < end);
+
+			content = text.substring(text.indexOf(">", arr.index) + 1, end);
+			s.ll_getStyleSheet(ss, tabName, arr[3], content);
+			s.ll_getHtmlText(ss, text.substring(end + tabName.length + 3));
 		},
+
 		_ll_show : function (c) {
 			var s = this, d, lbl, i, rc, j, l, k, m, b, enter, ss;
 			if (s.htmlText) {
 				if (s.ll_htmlText != s.htmlText) {
 					ss = new LStyleSheet();
 					s.ll_htmlTexts = [];
-					s.ll_get_htmlText(ss, s.htmlText);
 					s.ll_htmlText = s.htmlText;
+					s.ll_getHtmlText(ss, s.htmlText);
 					console.log(s.ll_htmlTexts);
 				}
 				return;

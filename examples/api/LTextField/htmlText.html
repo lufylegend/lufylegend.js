@@ -4,6 +4,25 @@
 		<meta charset="utf-8" />
 		<title>htmlText</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript">
+		LObject.prototype.copyProperty = function (a) {
+			var s = this, k;
+			for (k in a) {
+				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
+					if (k == "objectindex" || k == "objectIndex") {
+						continue;
+					}
+					s[k] = a[k];
+				} else if (Array.isArray(a[k])) {
+					s[k] = a[k].slice();
+				} 
+			}
+			if (a.mask) {
+				s.mask = a.mask.clone();
+			}
+		};
+		</script>
+		<script type="text/javascript" src="../../../src/text/LTextFormat.js"></script>
 		<script type="text/javascript" src="../../../src/text/LStyleSheet.js"></script>
 		<script type="text/javascript" src="../../../src/text/LTextField.js"></script>
 	</head>
@@ -15,7 +34,8 @@
 			function main () {
 				var theTextField = new LTextField();
 				//theTextField.text = "font test";
-				theTextField.htmlText = "<font face='Book Antiqua' color=\"#FF0000\" size='20'>This <font color='#008800' size='24'>is</font></font> a test.<b>This </b>is <u>a test.</u>";
+				theTextField.htmlText = "DD<font face='Book Antiqua' color=\"#FF0000\" size='20'>This <font color='#008800' size='24'>idddd<font size='10'>ss<font size='10'>aaa</font>s</font>fffs</font>F</font> a Atest.<b>This </b>is <u>a test.</u>";
+				//theTextField.htmlText = "This <font color='#008800' size='24'>idddd<font size='10'>ss<font size='10'>aaa</font>s</font>fffs</font>F";
 				theTextField.x = 10;
 				theTextField.y = 10;
 				theTextField.font = "Georgia";

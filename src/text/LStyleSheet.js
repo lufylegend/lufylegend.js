@@ -2,11 +2,15 @@ LStyleSheet = (function() {
 	function LStyleSheet() {
 		var s = this;
 		LExtends(s, LObject, []);
-		s.fontFamily = "Arial";
-		s.size = 11;
-		s.color = "#000000";
+		s.textFormat = new LTextFormat();
 		this._cssList = [];
 	}
+	LStyleSheet.prototype.clone = function() {
+		var s = this, a = new s.constructor();
+		a.copyProperty(s);
+		a.textFormat = s.textFormat.clone();
+		return a;
+	};
 	LStyleSheet.prototype.setStyle = function(key, obj) {
 		this._cssList[key] = obj;
 	};
