@@ -723,8 +723,45 @@ var LTextField = (function () {
 				tf.underline = true;
 			} else if (tabName == "i") {
 				tf.italic = true;
+			} else if (tabName == "p") {
+				//换行
 			} else if (tabName == "span") {
-				//LStyleSheet
+				//LStyleSheet class
+				while (attribute) {
+					if (i++ > 4)
+						break;
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (!arr || !arr[0]) {
+						break;
+					}
+					switch(arr[2]) {
+						case "class":
+							tf = setTextFormat(arr[6]);
+							break;
+					}
+					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+				}
+				
+			} else if(s.styleSheet){
+				var sheetObj;
+				if (tabName == "span"){
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (!arr || !arr[0]) {
+						break;
+					}
+					switch(arr[2]) {
+						case "class":
+							sheetObj = s.styleSheet.getStyle("." + arr[6]);
+							break;
+					}
+				}else if(s.styleSheet.getStyle(tabName)){
+					sheetObj = s.styleSheet.getStyle(tabName);
+				}
+				if(sheetObj){
+					tf.setCss(sheetObj);
+				}
 			}
 			s.ll_getHtmlText(tf, text); 
 		},

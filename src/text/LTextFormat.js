@@ -18,5 +18,8 @@ LTextFormat = (function() {
 		var s = this;
 		return (s.italic ? "italic " : "") + (s.bold ? "bold " : "") + s.size + "px " + s.font;
 	};
+	LTextFormat.prototype.setCss = function(css) {
+		var s = this;
+	};
 	return LTextFormat;
 })(); 

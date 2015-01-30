@@ -17,7 +17,7 @@ LStyleSheet = (function() {
 	LStyleSheet.prototype.getStyle = function(styleName) {
 		return this._cssList[styleName];
 	};
-	LStyleSheet.prototype.getTextBitmap = function(textField) {
+	LStyleSheet.prototype.setTextFormat = function(tf) {
 	};
 	return LStyleSheet;
 })(); 
