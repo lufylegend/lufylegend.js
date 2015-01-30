@@ -335,6 +335,7 @@ var LTransition = (function() {
 			g.clear();
 			if (self.trans.dimension) {
 				g.add(function() {
+					c.beginPath();
 					c.save();
 					c.rect(0, 0, self.width, self.child.getHeight());
 					c.rect(self.child.getWidth() - self.width, 0, self.width, self.child.getHeight());
@@ -342,6 +343,7 @@ var LTransition = (function() {
 				});
 			} else {
 				g.add(function() {
+					c.beginPath();
 					c.save();
 					c.rect(0, 0, self.child.getWidth(), self.height);
 					c.rect(0, self.child.getHeight() - self.height, self.child.getWidth(), self.height);
