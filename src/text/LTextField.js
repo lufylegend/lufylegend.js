@@ -196,7 +196,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.size = "11";
+		s.size = 15;
 		/** @language chinese
 		 * 表示文本的颜色。
 		 * @property color
@@ -688,7 +688,7 @@ var LTextField = (function () {
 	var p = {
 		_showReady : function (c) {
 			var s = this;
-			c.font = s.weight + " " + s.size + "pt " + s.font;  
+			c.font = s.weight + " " + s.size + "px " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
 		},
@@ -704,12 +704,12 @@ var LTextField = (function () {
 					if (!arr || !arr[0]) {
 						break;
 					}
-					switch(arr[0]) {
+					switch(arr[2]) {
 						case "face":
 							tf.font = arr[6];
 							break;
 						case "color":
-							tf.color = arr[6];
+							tf.color = arr[6];console.log(tf.color);
 							break;
 						case "size":
 							tf.size = arr[6];
@@ -776,6 +776,11 @@ var LTextField = (function () {
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.text++;
 			}
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
+			}
 			if (s.htmlText) {
 				if (s.ll_htmlText != s.htmlText) {
 					tf = new LTextFormat();
@@ -783,10 +788,43 @@ var LTextField = (function () {
 					s.ll_htmlText = s.htmlText;
 					s.ll_getHtmlText(tf, s.htmlText);
 					console.log(s.ll_htmlTexts);
-				s.ll_htmlTexts.forEach(function(element){
-					console.log(element);
-				});
 				}
+				j = 0, k = 0, m = 0, b = 0;s.wordHeight = 30;
+				s.ll_htmlTexts.forEach(function(element){
+					//console.log(element);
+					var textFormat = element.textFormat, text = element.text;
+					c.font = textFormat.getFontText();
+					c.fillStyle = textFormat.color;
+					for (i = 0, l = text.length; i < l; i++) {
+						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+						if (enter) {
+							j = 0;
+							k = i + 1;
+							m++;
+						} else {
+							if (s.stroke) {
+								c.strokeText(text.substr(i, 1), j, m * s.wordHeight);
+							}
+							c.fillText(text.substr(i, 1), j, m * s.wordHeight);
+							if(textFormat.underline){
+								c.beginPath();
+								c.moveTo(j,0);
+								c.lineTo(j + c.measureText(text.substr(i, 1)).width,0);
+								c.stroke();
+							}
+						}
+						j += c.measureText(text.substr(i, 1)).width;
+						continue;
+						s.numLines = m;
+						j = c.measureText(text.substr(k, i + 1 - k)).width;
+						if (s.wordWrap && j + c.measureText(text.substr(i, 1)).width > s.width) {
+							j = 0;
+							k = i + 1;
+							m++;
+						}
+					}
+					s.height = (m + 1) * s.wordHeight;
+				});
 				return;
 			}
 			lbl = s.text;
@@ -795,11 +833,6 @@ var LTextField = (function () {
 				for (i=0, l = s.text.length; i < l; i++) {
 					lbl += '*';
 				}
-			}
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
 			}
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
