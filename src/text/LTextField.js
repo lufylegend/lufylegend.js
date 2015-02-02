@@ -98,6 +98,48 @@ var LTextField = (function () {
 		 * @public
 		 */
 		s.text = "";
+		/** @language chinese
+		 * 包含文本字段内容的 HTML 表示形式。
+		 * 目前支持以下 HTML 标签：
+		 * <table>
+		 * <tr><th>标签</th><th>说明</th></tr>
+		 * <tr><td>粗体标签</td><td><b> 标签以粗体形式呈现文本。粗体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>字体标签</td><td><font> 标签指定一种字体或一个字体列表来显示文本。字体标签支持以下属性：
+		 *  <p>・color：字体的颜色。</p>
+		 *  <p>・face：指定要使用的字体的名称。</p>
+		 *  <p>・size：指定字体的大小。</p>
+		 * 	</td></tr>
+		 * <tr><td>斜体标签</td><td><i> 标签以斜体形式显示标签中的文本。斜体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>段落标签</td><td><p> 标签创建一个新段落。必须将文本字段设置为多行文本字段才能使用此标签。</td></tr>
+		 * <tr><td>Span 标签</td><td><span> 标签只可用于 CSS 文本样式。它支持以下属性：<p>・class：指定 LStyleSheet 对象定义的 CSS 样式类。</p></td></tr>
+		 * <tr><td>下划线标签</td><td><u> 标签为标签文本添加下划线。</td></tr>
+		 * </table>
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 100;
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/htmlText.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * ......
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
 		s.htmlText = "";
 		/** @language chinese
 		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
@@ -723,38 +765,19 @@ var LTextField = (function () {
 				tf.underline = true;
 			} else if (tabName == "i") {
 				tf.italic = true;
-			} else if (tabName == "p") {
-				//换行
-			} else if (tabName == "span") {
-				//LStyleSheet class
-				while (attribute) {
-					if (i++ > 4)
-						break;
-					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
-					var arr = pattern.exec(attribute);
-					if (!arr || !arr[0]) {
-						break;
-					}
-					switch(arr[2]) {
-						case "class":
-							tf = setTextFormat(arr[6]);
-							break;
-					}
-					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
-				}
-				
+			} else if (tabName == "p" && s.wordWrap) {
+				text = "\n" + text + "\n";
 			} else if(s.styleSheet){
 				var sheetObj;
 				if (tabName == "span"){
 					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
 					var arr = pattern.exec(attribute);
-					if (!arr || !arr[0]) {
-						break;
-					}
-					switch(arr[2]) {
-						case "class":
-							sheetObj = s.styleSheet.getStyle("." + arr[6]);
-							break;
+					if (arr && arr[0]) {
+						switch(arr[2]) {
+							case "class":
+								sheetObj = s.styleSheet.getStyle("." + arr[6]);
+								break;
+						}
 					}
 				}else if(s.styleSheet.getStyle(tabName)){
 					sheetObj = s.styleSheet.getStyle(tabName);
@@ -766,12 +789,10 @@ var LTextField = (function () {
 			s.ll_getHtmlText(tf, text); 
 		},
 		ll_getHtmlText : function (tf, text) {
-			//console.log("ll_getHtmlText text",text);
 			if (!text) {
 				return;
 			}
 			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
-			//console.log("ll_getHtmlText",arr);
 			if (!arr || !arr[0]) {
 				s.ll_htmlTexts.push({
 					textFormat : tf.clone(),
@@ -828,7 +849,6 @@ var LTextField = (function () {
 				}
 				j = 0, k = 0, m = 0, b = 0;s.wordHeight = 30;
 				s.ll_htmlTexts.forEach(function(element){
-					//console.log(element);
 					var textFormat = element.textFormat, text = element.text;
 					c.font = textFormat.getFontText();
 					c.fillStyle = textFormat.color;
