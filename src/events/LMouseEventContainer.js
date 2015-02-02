@@ -491,7 +491,7 @@ var LMouseEventContainer = (function () {
 		},
 		getRootParams : function (s) {
 			var p = s.parent, r = {x : 0, y : 0, scaleX : 1, scaleY : 1};
-			while (p != "root") {
+			while (p && p != "root") {
 				r.x *= p.scaleX;
 				r.y *= p.scaleY;
 				r.x += p.x;
@@ -511,7 +511,7 @@ var LMouseEventContainer = (function () {
 				return false;
 			}
 			var p = sp.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
 					return false;
 				}
@@ -599,7 +599,7 @@ var LMouseEventContainer = (function () {
 					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
 					event.target = p;
 					p = p.parent;
-					if (p == "root") {
+					if (!p || p == "root") {
 						break;
 					}
 				}
@@ -723,7 +723,7 @@ var LMouseEventContainer = (function () {
 		},
 		_getSort : function (layer) {
 			var p = layer.parent, list = [layer];
-			while (p != "root") {
+			while (p && p != "root") {
 				list.unshift(p);
 				p = p.parent;
 			}
