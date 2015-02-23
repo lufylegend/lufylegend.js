@@ -197,15 +197,18 @@ var LTweenLite = (function () {
 	 * @public
 	 */
 	function LTweenLite () {
-		LExtends (this, LObject, []);
-		this.type = "LTweenLite";
+		var s = this;
+		LExtends (s, LObject, []);
+		s.type = "LTweenLite";
+		s.tweens = [];
 	}
 	LTweenLite.TYPE_FRAME = "type_frame";
 	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
-		tweens : [],
-		ll_show : null,
-		frame : function(){
+		count : function(){
+			return this.tweens.length;
+		},
+		ll_show : function(){
 			var s = this;
 			var i, length = s.tweens.length, t;
 			for (i = 0; i < length; i++) {
@@ -218,9 +221,6 @@ var LTweenLite = (function () {
 						s.add(t);
 					}
 				}
-			}
-			if (s.tweens.length == 0) {
-				s.ll_show = null;
 			}
 		},
 		/** @language chinese
@@ -363,7 +363,6 @@ var LTweenLite = (function () {
 			var s = this;
 			var tween = new LTweenLiteChild({}, 0, {});
 			s.tweens.push(tween);
-			s.ll_show = s.frame;
 			tween.to($target, $duration, $vars);
 			return tween;
 		},

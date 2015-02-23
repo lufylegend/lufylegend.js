@@ -596,6 +596,9 @@ var LMouseEventContainer = (function () {
 						p = o.sp.parent;
 						event.target = o.sp;
 					}
+					if (!p || p == "root") {
+						break;
+					}
 					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
 					event.target = p;
 					p = p.parent;
