@@ -504,7 +504,7 @@ var LMouseEventContainer = (function () {
 		},
 		_mouseEnabled : function (sp) {
 			var self = this;
-			if (!sp || !sp.parent || sp.parent == "root") {
+			if (!sp || !sp.parent) {
 				return false;
 			}
 			if (!sp.visible || (typeof sp.mouseEnabled != UNDEFINED && !sp.mouseEnabled)) {
