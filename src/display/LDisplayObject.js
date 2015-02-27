@@ -659,6 +659,7 @@ var LDisplayObject = (function () {
 				return;
 			}
 			p.removeChild(s);
+			s._ll_removeFromSelf = true;
 		}
 	};
 	for (var k in p) {

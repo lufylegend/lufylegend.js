@@ -1122,9 +1122,14 @@ var LGlobal = ( function () {
 		LGlobal.show(LGlobal.childList);
 	};
 	LGlobal.show = function (s) {
-		for (var i = 0, l = s.length; i < l; i++) {
-			if (s[i] && s[i].ll_show) {
-				s[i].ll_show();
+		for (var i = 0, l = s.length, c; i < l; i++) {
+			c = s[i];
+			if (c && c.ll_show) {
+				c.ll_show();
+				if(c._ll_removeFromSelf){
+					i--;
+					l--;
+				}
 			}
 		}
 	};
