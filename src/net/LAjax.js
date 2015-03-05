@@ -21,11 +21,135 @@
  */
 var LAjax = (function () {
 	function LAjax () {
+		/** @language chinese
+		 * 服务器响应的数据类型，支持LAjax.TEXT，LAjax.JSON，LAjax.ARRAY_BUFFER，LAjax.BLOB四种类型。
+		 * @property LAjax.responseType
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	LAjax.responseType = LAjax.JSON;
+		 * 	LAjax.get("test.txt",{},success);
+		 * 	function success (data) {
+		 * 		trace(data.name);
+		 * 	}
+		 */
+		/** @language english
+		 * ......
+		 * @property LAjax.responseType
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property LAjax.responseType
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
 		this.responseType = null;
 	}
 	LAjax.prototype = {
+		/** @language chinese
+		 * 服务器响应的数据类型的一种，TEXT。
+		 * @property LAjax.TEXT
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @property LAjax.TEXT
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property LAjax.TEXT
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
 		TEXT : "text",
+		/** @language chinese
+		 * 服务器响应的数据类型的一种，JSON。
+		 * @property LAjax.JSON
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @property LAjax.JSON
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property LAjax.JSON
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		JSON : "json",
+		/** @language chinese
+		 * 服务器响应的数据类型的一种，ARRAY_BUFFER。
+		 * @property LAjax.ARRAY_BUFFER
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @property LAjax.ARRAY_BUFFER
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property LAjax.ARRAY_BUFFER
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
 		ARRAY_BUFFER : "arraybuffer",
+		/** @language chinese
+		 * 服务器响应的数据类型的一种，BLOB。
+		 * @property LAjax.BLOB
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @property LAjax.BLOB
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property LAjax.BLOB
+		 * @type String
+		 * @since 1.9.8
+		 * @static
+		 * @public
+		 */
 		BLOB : "blob",
 		/** @language chinese
 		 * 通过远程 HTTP GET 请求载入信息。
@@ -206,6 +330,12 @@ var LAjax = (function () {
 						if (oncomplete) {
 							if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB) {
 								oncomplete(ajax.response);
+							} else if (ajax.responseType == s.JSON) {
+								if(JSON && typeof JSON.parse == "function"){
+									oncomplete(JSON.parse(ajax.responseText));
+								}else{
+									oncomplete(eval('(' + ajax.responseText + ')'));
+								}
 							} else if (ajax.responseText.length > 0) {
 								oncomplete(ajax.responseText);
 							} else {
