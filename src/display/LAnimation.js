@@ -137,6 +137,27 @@ var LAnimation = (function() {
 		} else {
 			s.bitmapList = [data];
 		}
+		/** @language chinese
+		 * 一个LBitmap对象，LAnimation对象用它来显示纹理图
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
+		/** @language english
+		 * a LBitmap object
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
+		/** @language japanese
+		 * LBitmapオブジェクト
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
 		s.bitmap = new LBitmap(s.bitmapList[0]);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
