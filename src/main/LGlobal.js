@@ -240,28 +240,59 @@ var LGlobal = ( function () {
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
 	/** @language chinese
-	 * <p>移动网页中，是否禁止滚屏，默认为true(禁止)。</p>
-	 * @property LGlobal.preventDefault
+	 * <p>该方法将停止事件的传播，阻止它被分派到其他 Document 节点。</p>
+	 * @property LGlobal.stopPropagation
 	 * @type Boolean
 	 * @static
-	 * @since 1.3.1
+	 * @since 1.9.8
 	 * @public
+	 * @default false
 	 */
 	/** @language english
-	 * <p>Mobile web page, Sets scroll gestures to disabled., default true. (scroll disabled)</p>
-	 * @property LGlobal.preventDefault
+	 * <p>Prevents further propagation of the current event.</p>
+	 * @property LGlobal.stopPropagation
 	 * @type Boolean
 	 * @static
-	 * @since 1.3.1
+	 * @since 1.9.8
 	 * @public
+	 * @default false
 	 */
 	/** @language japanese
-	 * <p>モバイルページのスクロールを禁止するかどうか設定する。ディフォルトは true。（スクロール禁止）</p>
+	 * <p>現在のイベントのさらなる伝播 (propagation) を止めます。</p>
+	 * @property LGlobal.stopPropagation
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.8
+	 * @public
+	 * @default false
+	 */
+	LGlobal.stopPropagation = false;
+	/** @language chinese
+	 * <p>如果事件对象的cancelable属性为true,则该方法可以取消事件的默认动作.但并不取消事件的冒泡行为。移动网页中用来禁止滚屏，默认为true(禁止)，如果需要使用滚屏功能，则需要将其设置为fasle。</p>
 	 * @property LGlobal.preventDefault
 	 * @type Boolean
 	 * @static
 	 * @since 1.3.1
 	 * @public
+	 * @default true
+	 */
+	/** @language english
+	 * <p>Cancels the event if it is cancelable, without stopping further propagation of the event.Mobile web page, Sets scroll gestures to disabled., default true. (scroll disabled)</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.3.1
+	 * @public
+	 * @default true
+	 */
+	/** @language japanese
+	 * <p>イベントがキャンセル可能である場合、上位ノードへのイベントの 伝播 (propagation) を止めずに、そのイベントをキャンセルします。モバイルページのスクロールを禁止するかどうか設定する。ディフォルトは true。（スクロール禁止）</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.3.1
+	 * @public
+	 * @default true
 	 */
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
@@ -977,7 +1008,9 @@ var LGlobal = ( function () {
 		LGlobal.IS_MOUSE_DOWN = false;
 	};
 	LGlobal.touchHandler = function (e) {
-		e.stopPropagation();
+		if (LGlobal.stopPropagation) {
+			e.stopPropagation();
+		}
 		if (LGlobal.preventDefault) {
 			e.preventDefault();
 		}
