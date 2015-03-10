@@ -627,6 +627,33 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.destroy = true;
+	/** @language chinese
+	 * <p>强制将画面彻底刷新，如果游戏中没有背景，有些手机上清空画面时偶尔会留下残影，如果遇到情况，可以在清空画面时将此属性设置为true来强制刷新画面一次。</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
+	/** @language english
+	 * <p>......</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>......</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
 	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;

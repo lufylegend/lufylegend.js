@@ -49,6 +49,7 @@ LStyleSheet = (function() {
 	function LStyleSheet() {
 		var s = this;
 		LExtends(s, LObject, []);
+		s.styleIndex = 0;
 		s.styleNames  = {};
 	}
 	LStyleSheet.prototype.clone = function() {
@@ -88,6 +89,7 @@ LStyleSheet = (function() {
 	 * @public
 	 */
 	LStyleSheet.prototype.setStyle = function(styleName, styleObject) {
+		this.styleIndex++;
 		if (styleObject === null) {
 			if (this.styleNames[styleName]) {
 				delete this.styleNames[styleName];

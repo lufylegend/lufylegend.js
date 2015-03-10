@@ -123,6 +123,7 @@ var LTextField = (function () {
 		 * 	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
 		 * 	theTextField.x = 10;
 		 * 	theTextField.y = 100;
+		 * 	theTextField.textBaseline = "alphabetic";
 		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/htmlText.html" target="_blank">测试链接</a></p>
 		 */
@@ -141,6 +142,39 @@ var LTextField = (function () {
 		 * @public
 		 */
 		s.htmlText = "";
+		/** @language chinese
+		 * 将样式表附加到文本字段。有关创建样式表的信息，请参阅 <a href="LStyleSheet.html">LStyleSheet</a> 类
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	var styleSheet = new LStyleSheet();
+		 * 	styleSheet.setStyle(".test","{color:#FF0000;font-size:40}");
+		 * 	styleSheet.setStyle("myText","{color:#008800;font-size:30}");
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.htmlText = "ABC<span class='test'>ABC<myText><i>ABC</i>ABC</myText>ABC</span>ABC<b>ABC</b><u>ABC</u>";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 100;
+		 * 	theTextField.styleSheet = styleSheet;
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/styleSheet.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * ......
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 */
+		s.styleSheet = "";
 		/** @language chinese
 		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
 		 * @property font
@@ -765,7 +799,7 @@ var LTextField = (function () {
 				tf.underline = true;
 			} else if (tabName == "i") {
 				tf.italic = true;
-			} else if (tabName == "p" && s.wordWrap) {
+			} else if (tabName == "p") {
 				text = "\n" + text + "\n";
 			} else if(s.styleSheet){
 				var sheetObj;
@@ -819,7 +853,7 @@ var LTextField = (function () {
 			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
 		},
 		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, enter, tf;
+			var s = this, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -840,14 +874,21 @@ var LTextField = (function () {
 				c.lineWidth = s.lineWidth + 1;  
 			}
 			if (s.htmlText) {
-				if (s.ll_htmlText != s.htmlText) {
+				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
 					tf = new LTextFormat();
 					s.ll_htmlTexts = [];
 					s.ll_htmlText = s.htmlText;
+					if(s.styleSheet){
+						s.ll_style_objectIndex = s.styleSheet.objectIndex;
+						s.ll_styleIndex = s.styleSheet.styleIndex;
+					}
 					s.ll_getHtmlText(tf, s.htmlText);
-					console.log(s.ll_htmlTexts);
 				}
-				j = 0, k = 0, m = 0, b = 0;s.wordHeight = 30;
+				j = 0, k = 0, m = 0, b = 0;
+				s._wordHeight = s.wordHeight;
+				if(!LTextField.underlineY){
+					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
+				}
 				s.ll_htmlTexts.forEach(function(element){
 					var textFormat = element.textFormat, text = element.text;
 					c.font = textFormat.getFontText();
@@ -858,27 +899,25 @@ var LTextField = (function () {
 							j = 0;
 							k = i + 1;
 							m++;
+							s._wordHeight = 0;
 						} else {
-							if (s.stroke) {
-								c.strokeText(text.substr(i, 1), j, m * s.wordHeight);
+							h = c.measureText("O").width * 1.2;
+							if(s._wordHeight < h){
+								s._wordHeight = h;
 							}
-							c.fillText(text.substr(i, 1), j, m * s.wordHeight);
+							if (s.stroke) {
+								c.strokeText(text.substr(i, 1), j, m * s._wordHeight);
+							}
+							c.fillText(text.substr(i, 1), j, m * s._wordHeight);
 							if(textFormat.underline){
 								c.beginPath();
-								c.moveTo(j,0);
-								c.lineTo(j + c.measureText(text.substr(i, 1)).width,0);
+								underlineY = h * LTextField.underlineY[s.textBaseline];
+								c.moveTo(j, underlineY);
+								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
 								c.stroke();
 							}
 						}
 						j += c.measureText(text.substr(i, 1)).width;
-						continue;
-						s.numLines = m;
-						j = c.measureText(text.substr(k, i + 1 - k)).width;
-						if (s.wordWrap && j + c.measureText(text.substr(i, 1)).width > s.width) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
 					}
 					s.height = (m + 1) * s.wordHeight;
 				});
