@@ -718,6 +718,9 @@ var LSprite = (function () {
 		},
 		ll_dispatchMouseEvent : function (type, e, cd, ox, oy) {
 			var s = this;
+			if (!s.mouseEnabled) {
+				return;
+			}
 			for (k = 0; k < s.mouseList.length; k++) {
 				var o = s.mouseList[k];
 				if (o.type == type) {
@@ -752,7 +755,7 @@ var LSprite = (function () {
 				return false;
 			}
 			var s = this, i, k, ox = e.offsetX, oy = e.offsetY, on, mc;
-			if (!s.mouseEnabled || !s.visible) {
+			if (!s.visible) {
 				return false;
 			}
 			if (cd == null) {
