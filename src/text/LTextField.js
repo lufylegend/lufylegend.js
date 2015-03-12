@@ -785,7 +785,7 @@ var LTextField = (function () {
 							tf.font = arr[6];
 							break;
 						case "color":
-							tf.color = arr[6];console.log(tf.color);
+							tf.color = arr[6];
 							break;
 						case "size":
 							tf.size = arr[6];
@@ -799,7 +799,7 @@ var LTextField = (function () {
 				tf.underline = true;
 			} else if (tabName == "i") {
 				tf.italic = true;
-			} else if (tabName == "p") {
+			} else if (tabName == "p" && s.wordWrap) {
 				text = "\n" + text + "\n";
 			} else if(s.styleSheet){
 				var sheetObj;
@@ -885,7 +885,7 @@ var LTextField = (function () {
 					s.ll_getHtmlText(tf, s.htmlText);
 				}
 				j = 0, k = 0, m = 0, b = 0;
-				s._wordHeight = s.wordHeight;
+				s._wordHeight = s.wordHeight || 30;
 				if(!LTextField.underlineY){
 					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
 				}
@@ -899,27 +899,28 @@ var LTextField = (function () {
 							j = 0;
 							k = i + 1;
 							m++;
-							s._wordHeight = 0;
 						} else {
 							h = c.measureText("O").width * 1.2;
-							if(s._wordHeight < h){
-								s._wordHeight = h;
-							}
 							if (s.stroke) {
 								c.strokeText(text.substr(i, 1), j, m * s._wordHeight);
 							}
 							c.fillText(text.substr(i, 1), j, m * s._wordHeight);
 							if(textFormat.underline){
 								c.beginPath();
-								underlineY = h * LTextField.underlineY[s.textBaseline];
+								underlineY = m * s._wordHeight + h * LTextField.underlineY[s.textBaseline];
 								c.moveTo(j, underlineY);
 								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
 								c.stroke();
 							}
 						}
 						j += c.measureText(text.substr(i, 1)).width;
+						if (s.wordWrap && j + c.measureText(text.substr(i + 1, 1)).width > s.width) {
+							j = 0;
+							k = i + 1;
+							m++;
+						}
 					}
-					s.height = (m + 1) * s.wordHeight;
+					s.height = (m + 1) * s._wordHeight;
 				});
 				return;
 			}
