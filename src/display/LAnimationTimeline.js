@@ -732,8 +732,10 @@ var LAnimationTimeline = (function() {
 		addFrameScript : function(name, func, params) {
 			var l = this.ll_labelList[name];
 			var arr = this.imageArray[l.rowIndex][l.colIndex];
-			arr.script = func;
-			arr.params = params ? params : null;
+			if (!arr.script) {
+				arr.script = [];
+			}
+			arr.script.push({func : func, params : params, name : name});
 		},
 		/** @language chinese
 		 * 删除指定标签位置的执行脚本。
@@ -808,8 +810,18 @@ var LAnimationTimeline = (function() {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/removeFrameScript.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		removeFrameScript : function(name) {
-			var l = this.ll_labelList[name];
-			this.imageArray[l.rowIndex][l.colIndex].script = null;
+			var l = this.ll_labelList[name], obj, script, i;
+			script = this.imageArray[l.rowIndex][l.colIndex].script;
+			if (!script) {
+				return;
+			}
+			for(i = 0; i < script.length; i++){
+				obj = script[i];
+				if(obj.name == name){
+					script.splice(i, 1);
+					break;
+				}
+			}
 		}
 	};
 	for (var k in p) {

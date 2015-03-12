@@ -490,8 +490,15 @@ var LAnimation = (function() {
 				if ( typeof arr.dataIndex == "number" && Array.isArray(s.bitmapList) && arr.dataIndex < s.bitmapList.length) {
 					s.bitmap.bitmapData = s.bitmapList[arr.dataIndex];
 				}
-				if ( typeof arr.script == "function") {
-					arr.script(s, arr.params);
+				if (arr.script) {
+					for(i = 0; i < arr.script.length; i++){
+						obj = arr.script[i];
+						l = s.ll_labelList[obj.name];
+						console.log(arr.mode , arr.mode , l.isMirror, arr.mirror);
+						if(l && l.rowIndex == s.rowIndex && l.colIndex == s.colIndex && arr.mode == arr.mode && l.isMirror == arr.mirror){
+							obj.func(s, obj.params);
+						}
+					}
 				}
 				if ( typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
@@ -507,13 +514,12 @@ var LAnimation = (function() {
 				if ( typeof arr.mirror != UNDEFINED) {
 					s.bitmap.rotateCenter = false;
 					if (arr.mirror) {
-						sx += s.bitmap.getWidth();
-						s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
+						s.bitmap.scaleX = -1;
 					} else {
-						s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
+						s.bitmap.scaleX = 1;
 					}
 				}
-				s.bitmap.x = sx;
+				s.bitmap.x = sx + (s.bitmap.scaleX == 1 ? 0 : s.bitmap.getWidth());
 			}
 			if (s._ll_stepIndex++ < stepFrame) {
 				return;
