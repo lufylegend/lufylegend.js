@@ -303,6 +303,43 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		s.filters = null;
+		/** @language chinese
+		 * <p>一个对象，具有与显示对象的矩阵有关的属性。在 LTransform 类的条目中对特定属性 matrix 进行了说明。</p>
+		 * <p>transform 对象的每个属性本身都是一个对象。此概念很重要，因为设置 matrix 对象的新值的唯一方法是，创建新对象并将该对象复制到 transform.matrix 属性。</p>
+		 * @property transform
+		 * @type LTransform
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	function main () {
+		 * 	    var square = new LSprite();
+		 * 		square.graphics.drawRect(1, "#ff0000", [0, 0, 150, 100],true);
+		 * 		addChild(square);
+		 * 		square.addEventListener(LMouseEvent.MOUSE_UP, transformer);
+		 * 	}
+		 * 	function transformer(event) {
+		 * 		var square = event.currentTarget;
+		 * 		var tempMatrix = new LMatrix();
+		 * 		tempMatrix.skew(0.3, 0).translate(30,50);
+		 * 		square.transform.matrix = tempMatrix;
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LDisplayObject/transform_matrix.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * ......
+		 * @property transform
+		 * @type LTransform
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property transform
+		 * @type LTransform
+		 * @since 1.9.8
+		 * @public
+		 */
+		s.transform = new LTransform();
 	}
 	var p = {
 		_createCanvas:function(){
@@ -337,6 +374,9 @@ var LDisplayObject = (function () {
 			s._transformRotate();
 			s._transformScale();
 			s._coordinate(c);
+			if (s.transform.matrix) {
+				s.transform.matrix.transform(c);
+			}
 			if (s.alpha < 1) {
 				s._ll_trans = true;
 				c.globalAlpha = s.alpha;
