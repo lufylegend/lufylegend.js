@@ -331,6 +331,13 @@ var LAnimationTimeline = (function() {
 			if (self._speedIndex++ < self.speed) {
 				return;
 			}
+			if(self._send_complete){
+				self.dispatchEvent(LEvent.COMPLETE);
+				self._send_complete = false;
+				if (self._ll_stop) {
+					return;
+				}
+			}
 			self._speedIndex = 0;
 			self.onframe();
 		},
@@ -395,8 +402,8 @@ var LAnimationTimeline = (function() {
 			this.ll_labelList[name] = {
 				rowIndex : _rowIndex,
 				colIndex : _colIndex,
-				mode : _mode,
-				isMirror : _isMirror
+				mode : (typeof _mode == UNDEFINED ? 1 : _mode),
+				isMirror : (typeof _isMirror == UNDEFINED ? false : _isMirror)
 			};
 		},
 		/** @language chinese

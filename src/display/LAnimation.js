@@ -494,8 +494,7 @@ var LAnimation = (function() {
 					for(i = 0; i < arr.script.length; i++){
 						obj = arr.script[i];
 						l = s.ll_labelList[obj.name];
-						console.log(arr.mode , arr.mode , l.isMirror, arr.mirror);
-						if(l && l.rowIndex == s.rowIndex && l.colIndex == s.colIndex && arr.mode == arr.mode && l.isMirror == arr.mirror){
+						if(l && l.rowIndex == s.rowIndex && l.colIndex == s.colIndex && l.mode == s.mode && l.isMirror == (s.bitmap.scaleX == -1)){
 							obj.func(s, obj.params);
 						}
 					}
@@ -513,11 +512,7 @@ var LAnimation = (function() {
 				}
 				if ( typeof arr.mirror != UNDEFINED) {
 					s.bitmap.rotateCenter = false;
-					if (arr.mirror) {
-						s.bitmap.scaleX = -1;
-					} else {
-						s.bitmap.scaleX = 1;
-					}
+					s.bitmap.scaleX = arr.mirror ? -1 : 1;
 				}
 				s.bitmap.x = sx + (s.bitmap.scaleX == 1 ? 0 : s.bitmap.getWidth());
 			}
@@ -528,7 +523,7 @@ var LAnimation = (function() {
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
-				s.dispatchEvent(LEvent.COMPLETE);
+				s._send_complete = true;
 			}
 		},
 		/** @language chinese
