@@ -320,7 +320,16 @@ var LAjax = (function () {
 			}
 			ajax.open(t, url, true);
 			if (s.responseType) {
-				ajax.responseType = s.responseType;
+				if(s.responseType == s.JSON){
+					try{
+						ajax.responseType = s.responseType;
+					}catch(e){
+						ajax.responseType = s.TEXT;
+						ajax._responseType = "json";
+					}
+				}else{
+					ajax.responseType = s.responseType;
+				}
 				s.responseType = s.TEXT;
 			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -328,14 +337,11 @@ var LAjax = (function () {
 				if (ajax.readyState == 4) {
 					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
 						if (oncomplete) {
-							if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB) {
+							if(ajax._responseType == s.JSON){
+								ajax._responseType = s.TEXT;
+								oncomplete(JSON.parse(ajax.responseText));
+							}else if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB || ajax.responseType == s.JSON) {
 								oncomplete(ajax.response);
-							} else if (ajax.responseType == s.JSON) {
-								if(JSON && typeof JSON.parse == "function"){
-									oncomplete(JSON.parse(ajax.responseText));
-								}else{
-									oncomplete(eval('(' + ajax.responseText + ')'));
-								}
 							} else if (ajax.responseText.length > 0) {
 								oncomplete(ajax.responseText);
 							} else {
