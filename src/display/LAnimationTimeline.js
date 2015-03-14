@@ -14,18 +14,31 @@
  * <p>如果精灵图表中的每个frame大小都是的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
+ * 	var imgData = [
+ * 		{name : "player-0", path : "./player-0.png"}, 
+ * 		{name : "player-1", path : "./player-1.png"}, 
+ * 		{name : "player-2", path : "./player-2.png"}, 
+ * 		{name : "player-3", path : "./player-3.png"}, 
+ * 		{name : "player-4", path : "./player-4.png"}
+ * 	];
  * 	function main () {
- * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
- * 		loader.load("player.png", "bitmapData");
+ * 		LLoadManage.load(imgData, null, gameInit);
  * 	}
- * 	function loadBitmapdata(event){
- * 		var backLayer = new LSprite();
- * 		addChild(backLayer);
- * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.target,0,0,120,210);
- * 		player = new LAnimationTimeline(data,list);
- * 		backLayer.addChild(player);
+ * 	function gameInit(result) {
+ * 		var list = LGlobal.divideCoordinate(480, 210, 1, 4);
+ * 		var data = new LBitmapData(result["player-0"], 0, 0, 120, 210);
+ * 		var playerLeft = new LAnimationTimeline(data, list);
+ * 		addChild(playerLeft);
+ * 		
+ * 		var datas = [];
+ * 		var listChild = [];
+ * 		for (var i = 0; i < 4; i++) {
+ * 			datas.push(new LBitmapData(result["player-" + (i + 1)]));
+ * 			listChild.push({dataIndex : i, x : 0, y : 0, width : 120, height : 210, sx : 0, sy : 0});
+ * 		}
+ * 		var playerRight = new LAnimationTimeline(datas, [listChild]);
+ * 		playerRight.x = 200;
+ * 		addChild(playerRight);
  * 	}
  * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">测试链接</a></p>
  * @since 1.8.0
@@ -43,18 +56,31 @@
  * <p>If the frames all of the same size, you can use LGlobal.divideCoordinate function to split the SpriteSheets.</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
+ * 	var imgData = [
+ * 		{name : "player-0", path : "./player-0.png"}, 
+ * 		{name : "player-1", path : "./player-1.png"}, 
+ * 		{name : "player-2", path : "./player-2.png"}, 
+ * 		{name : "player-3", path : "./player-3.png"}, 
+ * 		{name : "player-4", path : "./player-4.png"}
+ * 	];
  * 	function main () {
- * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
- * 		loader.load("player.png", "bitmapData");
+ * 		LLoadManage.load(imgData, null, gameInit);
  * 	}
- * 	function loadBitmapdata(event){
- * 		var backLayer = new LSprite();
- * 		addChild(backLayer);
- * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.target,0,0,120,210);
- * 		player = new LAnimationTimeline(data,list);
- * 		backLayer.addChild(player);
+ * 	function gameInit(result) {
+ * 		var list = LGlobal.divideCoordinate(480, 210, 1, 4);
+ * 		var data = new LBitmapData(result["player-0"], 0, 0, 120, 210);
+ * 		var playerLeft = new LAnimationTimeline(data, list);
+ * 		addChild(playerLeft);
+ * 		
+ * 		var datas = [];
+ * 		var listChild = [];
+ * 		for (var i = 0; i < 4; i++) {
+ * 			datas.push(new LBitmapData(result["player-" + (i + 1)]));
+ * 			listChild.push({dataIndex : i, x : 0, y : 0, width : 120, height : 210, sx : 0, sy : 0});
+ * 		}
+ * 		var playerRight = new LAnimationTimeline(datas, [listChild]);
+ * 		playerRight.x = 200;
+ * 		addChild(playerRight);
  * 	}
  * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">Try it »</a></p>
  * @since 1.8.0
@@ -72,18 +98,31 @@
  * <p>もしスプライトシートのframeの大きさが全部同じであれば、LGlobal.divideCoordinate関数を使って画像を分割することができます。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
+ * 	var imgData = [
+ * 		{name : "player-0", path : "./player-0.png"}, 
+ * 		{name : "player-1", path : "./player-1.png"}, 
+ * 		{name : "player-2", path : "./player-2.png"}, 
+ * 		{name : "player-3", path : "./player-3.png"}, 
+ * 		{name : "player-4", path : "./player-4.png"}
+ * 	];
  * 	function main () {
- * 		var loader = new LLoader();
- * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
- * 		loader.load("player.png", "bitmapData");
+ * 		LLoadManage.load(imgData, null, gameInit);
  * 	}
- * 	function loadBitmapdata(event){
- * 		var backLayer = new LSprite();
- * 		addChild(backLayer);
- * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.target,0,0,120,210);
- * 		player = new LAnimationTimeline(data,list);
- * 		backLayer.addChild(player);
+ * 	function gameInit(result) {
+ * 		var list = LGlobal.divideCoordinate(480, 210, 1, 4);
+ * 		var data = new LBitmapData(result["player-0"], 0, 0, 120, 210);
+ * 		var playerLeft = new LAnimationTimeline(data, list);
+ * 		addChild(playerLeft);
+ * 		
+ * 		var datas = [];
+ * 		var listChild = [];
+ * 		for (var i = 0; i < 4; i++) {
+ * 			datas.push(new LBitmapData(result["player-" + (i + 1)]));
+ * 			listChild.push({dataIndex : i, x : 0, y : 0, width : 120, height : 210, sx : 0, sy : 0});
+ * 		}
+ * 		var playerRight = new LAnimationTimeline(datas, [listChild]);
+ * 		playerRight.x = 200;
+ * 		addChild(playerRight);
  * 	}
  * @examplelink <p><a href="../../../api/LAnimationTimeline/index.html" target="_blank">実際のサンプルを見る</a></p>
  * @since 1.8.0
