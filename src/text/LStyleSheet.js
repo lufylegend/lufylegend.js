@@ -1,6 +1,6 @@
 /** @language chinese
- * <p>使用 StyleSheet 类可以创建包含文本格式设置规则（例如，字体大小、颜色和其他格式样式）的 StyleSheet 对象。然后，可以将样式表定义的样式应用到包含 HTML 或 XML 格式文本的 TextField 对象。根据 StyleSheet 对象定义的标签样式自动设置 TextField 对象中文本的格式。可以使用文本样式来定义新的格式标签，重新定义内置的 HTML 标签，或创建可应用到某些 HTML 标签的样式类。</p>
- * <p>要对一个 TextField 对象应用样式，请将该 StyleSheet 对象赋给 TextField 对象的 styleSheet 属性。</p>
+ * <p>使用 LStyleSheet 类可以创建包含文本格式设置规则（例如，字体大小、颜色和其他格式样式）的 LStyleSheet 对象。然后，可以将样式表定义的样式应用到包含 HTML 或 XML 格式文本的 LTextField 对象。根据 LStyleSheet 对象定义的标签样式自动设置 LTextField 对象中文本的格式。可以使用文本样式来定义新的格式标签，重新定义内置的 HTML 标签，或创建可应用到某些 HTML 标签的样式类。</p>
+ * <p>要对一个 LTextField 对象应用样式，请将该 LStyleSheet 对象赋给 LTextField 对象的 styleSheet 属性。</p>
  * <p>注意：具有样式表的文本字段不可编辑。</p>
  * <p>下表显示目前支持的层叠样式表 (CSS) 属性和值。</p>
  * <table>

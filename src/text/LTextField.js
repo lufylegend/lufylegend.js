@@ -103,16 +103,16 @@ var LTextField = (function () {
 		 * 目前支持以下 HTML 标签：
 		 * <table>
 		 * <tr><th>标签</th><th>说明</th></tr>
-		 * <tr><td>粗体标签</td><td><b> 标签以粗体形式呈现文本。粗体必须可用于所使用的字体。</td></tr>
-		 * <tr><td>字体标签</td><td><font> 标签指定一种字体或一个字体列表来显示文本。字体标签支持以下属性：
+		 * <tr><td>粗体标签</td><td>&lt;b> 标签以粗体形式呈现文本。粗体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>字体标签</td><td>&lt;font> 标签指定一种字体或一个字体列表来显示文本。字体标签支持以下属性：
 		 *  <p>・color：字体的颜色。</p>
 		 *  <p>・face：指定要使用的字体的名称。</p>
 		 *  <p>・size：指定字体的大小。</p>
 		 * 	</td></tr>
-		 * <tr><td>斜体标签</td><td><i> 标签以斜体形式显示标签中的文本。斜体必须可用于所使用的字体。</td></tr>
-		 * <tr><td>段落标签</td><td><p> 标签创建一个新段落。必须将文本字段设置为多行文本字段才能使用此标签。</td></tr>
-		 * <tr><td>Span 标签</td><td><span> 标签只可用于 CSS 文本样式。它支持以下属性：<p>・class：指定 LStyleSheet 对象定义的 CSS 样式类。</p></td></tr>
-		 * <tr><td>下划线标签</td><td><u> 标签为标签文本添加下划线。</td></tr>
+		 * <tr><td>斜体标签</td><td>&lt;i> 标签以斜体形式显示标签中的文本。斜体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>段落标签</td><td>&lt;p> 标签创建一个新段落。必须将文本字段设置为多行文本字段才能使用此标签。</td></tr>
+		 * <tr><td>span 标签</td><td>&lt;span> 标签只可用于 CSS 文本样式。它支持以下属性：<p>・class：指定 LStyleSheet 对象定义的 CSS 样式类。</p></td></tr>
+		 * <tr><td>下划线标签</td><td>&lt;u> 标签为标签文本添加下划线。</td></tr>
 		 * </table>
 		 * @property htmlText
 		 * @type String

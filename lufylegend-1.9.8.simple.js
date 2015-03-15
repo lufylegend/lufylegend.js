@@ -266,7 +266,7 @@ var LMouseEventContainer = (function () {
 		},
 		getRootParams : function (s) {
 			var p = s.parent, r = {x : 0, y : 0, scaleX : 1, scaleY : 1};
-			while (p != "root") {
+			while (p && p != "root") {
 				r.x *= p.scaleX;
 				r.y *= p.scaleY;
 				r.x += p.x;
@@ -279,14 +279,14 @@ var LMouseEventContainer = (function () {
 		},
 		_mouseEnabled : function (sp) {
 			var self = this;
-			if (!sp || !sp.parent || sp.parent == "root") {
+			if (!sp || !sp.parent) {
 				return false;
 			}
 			if (!sp.visible || (typeof sp.mouseEnabled != UNDEFINED && !sp.mouseEnabled)) {
 				return false;
 			}
 			var p = sp.parent;
-			while (p != "root") {
+			while (p && p != "root") {
 				if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
 					return false;
 				}
@@ -371,10 +371,13 @@ var LMouseEventContainer = (function () {
 						p = o.sp.parent;
 						event.target = o.sp;
 					}
+					if (!p || p == "root") {
+						break;
+					}
 					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
 					event.target = p;
 					p = p.parent;
-					if (p == "root") {
+					if (!p || p == "root") {
 						break;
 					}
 				}
@@ -402,7 +405,7 @@ var LMouseEventContainer = (function () {
 		},
 		_getSort : function (layer) {
 			var p = layer.parent, list = [layer];
-			while (p != "root") {
+			while (p && p != "root") {
 				list.unshift(p);
 				p = p.parent;
 			}
@@ -452,6 +455,7 @@ var LGlobal = ( function () {
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
+	LGlobal.stopPropagation = false;
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
@@ -770,7 +774,9 @@ var LGlobal = ( function () {
 		LGlobal.IS_MOUSE_DOWN = false;
 	};
 	LGlobal.touchHandler = function (e) {
-		e.stopPropagation();
+		if (LGlobal.stopPropagation) {
+			e.stopPropagation();
+		}
 		if (LGlobal.preventDefault) {
 			e.preventDefault();
 		}
@@ -913,9 +919,14 @@ var LGlobal = ( function () {
 		LGlobal.show(LGlobal.childList);
 	};
 	LGlobal.show = function (s) {
-		for (var i = 0, l = s.length; i < l; i++) {
-			if (s[i] && s[i].ll_show) {
-				s[i].ll_show();
+		for (var i = 0, l = s.length, c; i < l; i++) {
+			c = s[i];
+			if (c && c.ll_show) {
+				c.ll_show();
+				if(c._ll_removeFromSelf){
+					i--;
+					l--;
+				}
 			}
 		}
 	};
@@ -1463,9 +1474,33 @@ var LObject = (function () {
 	};
 	return LObject;
 })();
+var LColorTransform = (function () {
+	function LColorTransform (redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
+		var s = this;
+		LExtends (s, LObject, []);
+		s.redMultiplier = redMultiplier;
+		s.greenMultiplier = greenMultiplier;
+		s.blueMultiplier = blueMultiplier;
+		s.alphaMultiplier = alphaMultiplier;
+		s.redOffset = redOffset;
+		s.greenOffset = greenOffset;
+		s.blueOffset = blueOffset;
+		s.alphaOffset = alphaOffset;
+	}
+	return LColorTransform;
+})();
+var LTransform = (function () {
+	function LTransform () {
+		var s = this;
+		LExtends (s, LObject, []);
+		s.matrix = null;
+	}
+	return LTransform;
+})();
 var LMatrix = (function () {
 	function LMatrix (a, b, c, d, tx, ty, u, v, w) {
 		var s = this;
+		LExtends (s, LObject, []);
 		s.a = 1;
 		s.b = 0;
 		s.u = 0;
@@ -1503,7 +1538,7 @@ var LMatrix = (function () {
 			s.w = w;
 		}
 	}
-	LMatrix.prototype = {
+	var p = {
 		setTo : function (a, b, c, d, tx, ty, u, v, w) {
 			var s = this;
 			if (typeof a != UNDEFINED) {
@@ -1544,9 +1579,6 @@ var LMatrix = (function () {
 			c.transform(s.a, s.b, s.c, s.d, s.tx, s.ty);
 			return s;
 		},
-		toString : function () {
-			return "[object LMatrix]";
-		},
 		identity : function () {
 			this.setTo(1, 0, 0, 1, 0, 0, 0, 0, 1);
 		},
@@ -1557,20 +1589,25 @@ var LMatrix = (function () {
 			sin = Math.sin(radian),
 			mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
 		scale : function (sx, sy) {
 			var s = this,
 			mtx = new LMatrix(sx, 0, 0, sy, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
 		translate : function (tx, ty) {
 			var s = this,
 			mtx = new LMatrix(1, 0, 0, 1, tx, ty, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
 		skew : function (kx, ky) {
-			mtx = new LMatrix(0, ky, kx, 0, 0, 0, 0, 0, 1);
+			var s = this,
+			mtx = new LMatrix(1, ky, kx, 1, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
 		add : function (mtx) {
 			var s = this, a, b, c, d, tx, ty, u, v, w;
@@ -1610,6 +1647,9 @@ var LMatrix = (function () {
 			return new LMatrix(s.a, s.b, s.c, s.d, s.tx, s.ty, s.u, s.v, s.w);
 		}
 	};
+	for (var k in p) {
+		LMatrix.prototype[k] = p[k];
+	}
 	return LMatrix;
 })();
 var LVec2 = (function () {
@@ -1760,6 +1800,7 @@ var LDisplayObject = (function () {
 		s.mask = null;
 		s.blendMode = null;
 		s.filters = null;
+		s.transform = new LTransform();
 	}
 	var p = {
 		_createCanvas:function(){
@@ -1794,6 +1835,9 @@ var LDisplayObject = (function () {
 			s._transformRotate();
 			s._transformScale();
 			s._coordinate(c);
+			if (s.transform.matrix) {
+				s.transform.matrix.transform(c);
+			}
 			if (s.alpha < 1) {
 				s._ll_trans = true;
 				c.globalAlpha = s.alpha;
@@ -2030,6 +2074,7 @@ var LDisplayObject = (function () {
 				return;
 			}
 			p.removeChild(s);
+			s._ll_removeFromSelf = true;
 		}
 	};
 	for (var k in p) {
@@ -2144,6 +2189,7 @@ var LDisplayObjectContainer = (function () {
 			d.parent = s;
 			s.childList.push(d);
 			s.numChildren = s.childList.length;
+			s._ll_removeFromSelf = false;
 			return d;
 		},
 		addChildAt : function (d, i) {
@@ -2160,6 +2206,7 @@ var LDisplayObjectContainer = (function () {
 			d.parent = s;
 			s.childList.splice(i, 0, d);
 			s.numChildren = s.childList.length;
+			s._ll_removeFromSelf = false;
 			return d;
 		},
 		removeChild : function (d) {
@@ -2401,10 +2448,9 @@ var LWebAudio = (function () {
 		_onended : function () {
 			var s = this;
 			s.dispatchEvent(LEvent.SOUND_COMPLETE);
+			s.close();
 			if (++s.loopIndex < s.loopLength) {
 				s.play(s.currentStart, undefined, s.currentTimeTo);
-			} else {
-				s.close();
 			}
 		},
 		load : function (u) {
@@ -2717,6 +2763,10 @@ var LMedia = (function () {
 			var s = this;
 			if (!s.playing) {
 				return;
+			}
+			if(s.data.duration != s._ll_duration){
+				s._ll_duration = s.data.duration;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
 			}
 			if (s.currentTimeTo < s.data.currentTime + LSound.Container.time * 0.005) {
 				s._onended();
@@ -3891,6 +3941,9 @@ var LSprite = (function () {
 		},
 		ll_dispatchMouseEvent : function (type, e, cd, ox, oy) {
 			var s = this;
+			if (!s.mouseEnabled) {
+				return;
+			}
 			for (k = 0; k < s.mouseList.length; k++) {
 				var o = s.mouseList[k];
 				if (o.type == type) {
@@ -3925,7 +3978,7 @@ var LSprite = (function () {
 				return false;
 			}
 			var s = this, i, k, ox = e.offsetX, oy = e.offsetY, on, mc;
-			if (!s.mouseEnabled || !s.visible) {
+			if (!s.visible) {
 				return false;
 			}
 			if (cd == null) {
@@ -4078,19 +4131,17 @@ var LSprite = (function () {
 				return s.ismouseonShapes(s.shapes, e.offsetX, e.offsetY);
 			}
 			var k, i = false, l = s.childList, sc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
-			if (s.graphics) {
-				i = s.graphics.ismouseon(e, sc);
+			for (k = l.length - 1; k >= 0; k--) {
+				if (l[k].ismouseon) {
+					i = l[k].ismouseon(e, sc);
+				}
+				if (i) {
+					e.target = s.childList[k];
+					break;
+				}
 			}
 			if (!i) {
-				for (k = l.length - 1; k >= 0; k--) {
-					if (l[k].ismouseon) {
-						i = l[k].ismouseon(e, sc);
-					}
-					if (i) {
-						e.target = s.childList[k];
-						break;
-					}
-				}
+				i = s.graphics.ismouseon(e, sc);
 			}
 			return i;
 		},
@@ -4323,6 +4374,92 @@ LBlendMode.NORMAL = null;
 var LTextFieldType = function (){throw "LTextFieldType cannot be instantiated";};
 LTextFieldType.INPUT = "input";
 LTextFieldType.DYNAMIC = null;
+LStyleSheet = (function() {
+	function LStyleSheet() {
+		var s = this;
+		LExtends(s, LObject, []);
+		s.styleIndex = 0;
+		s.styleNames  = {};
+	}
+	LStyleSheet.prototype.clone = function() {
+		var s = this, a = new s.constructor();
+		a.copyProperty(s);
+		return a;
+	};
+	LStyleSheet.prototype.setStyle = function(styleName, styleObject) {
+		this.styleIndex++;
+		if (styleObject === null) {
+			if (this.styleNames[styleName]) {
+				delete this.styleNames[styleName];
+			}
+			return;
+		}
+		var arr = styleObject.replace(/(^\{)|(\}$)/g, "").split(";"), i, styleObjects;
+		styleObject = {};
+		for ( i = 0; i < arr.length; i++) {
+			if (!arr[i]) {
+				continue;
+			}
+			var styleObjects = arr[i].split(":");
+			if (!styleObjects[0]) {
+				continue;
+			}
+			styleObject[styleObjects[0]] = styleObjects[1];
+		}
+		this.styleNames[styleName] = styleObject;
+	};
+	LStyleSheet.prototype.getStyle = function(styleName) {
+		return this.styleNames[styleName];
+	};
+	return LStyleSheet;
+})();
+LTextFormat = (function() {
+	function LTextFormat(font, size, color, bold, italic, underline) {
+		var s = this;
+		LExtends(s, LObject, []);
+		s.font = font ? font : "Arial";
+		s.size = size ? size : 15;
+		s.color = color ? color : "#000000";
+		s.bold = bold ? bold : false;
+		s.italic = italic ? italic : false;
+		s.underline = underline ? underline : false;
+	}
+	LTextFormat.prototype.clone = function() {
+		var s = this, a = new s.constructor();
+		a.copyProperty(s);
+		return a;
+	};
+	LTextFormat.prototype.getFontText = function() {
+		var s = this;
+		return (s.italic ? "italic " : "") + (s.bold ? "bold " : "") + s.size + "px " + s.font;
+	};
+	LTextFormat.prototype.setCss = function(css) {
+		var s = this, k;
+		for (k in css) {
+			switch (k) {
+				case "color":
+					s.color = css[k];
+					break;
+				case "font-family":
+					s.font = css[k];
+					break;
+				case "font-size":
+					s.size = css[k];
+					break;
+				case "font-style":
+					s.italic = (css[k] == "italic");
+					break;
+				case "font-weight":
+					s.bold = (css[k] == "bold");
+					break;
+				case "text-decoration":
+					s.color = (css[k] == "underline");
+					break;
+			}
+		}
+	};
+	return LTextFormat;
+})();
 var LTextField = (function () {
 	function LTextField () {
 		var s = this;
@@ -4330,8 +4467,10 @@ var LTextField = (function () {
 		s.type = "LTextField";
 		s.texttype = null;
 		s.text = "";
+		s.htmlText = "";
+		s.styleSheet = "";
 		s.font = "Arial";
-		s.size = "11";
+		s.size = 15;
 		s.color = "#000000";
 		s.weight = "normal";
 		s.textAlign = "left";
@@ -4354,12 +4493,95 @@ var LTextField = (function () {
 	var p = {
 		_showReady : function (c) {
 			var s = this;
-			c.font = s.weight + " " + s.size + "pt " + s.font;  
+			c.font = s.weight + " " + s.size + "px " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
 		},
+		ll_getStyleSheet : function (textFormat, tabName, attribute, text) {
+			var s = this, pattern, tf = textFormat.clone();
+			if (tabName == "font") {
+				var i = 0;
+				while (attribute) {
+					if (i++ > 4)
+						break;
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (!arr || !arr[0]) {
+						break;
+					}
+					switch(arr[2]) {
+						case "face":
+							tf.font = arr[6];
+							break;
+						case "color":
+							tf.color = arr[6];
+							break;
+						case "size":
+							tf.size = arr[6];
+							break;
+					}
+					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+				}
+			} else if (tabName == "b") {
+				tf.bold = true;
+			} else if (tabName == "u") {
+				tf.underline = true;
+			} else if (tabName == "i") {
+				tf.italic = true;
+			} else if (tabName == "p" && s.wordWrap) {
+				text = "\n" + text + "\n";
+			} else if(s.styleSheet){
+				var sheetObj;
+				if (tabName == "span"){
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (arr && arr[0]) {
+						switch(arr[2]) {
+							case "class":
+								sheetObj = s.styleSheet.getStyle("." + arr[6]);
+								break;
+						}
+					}
+				}else if(s.styleSheet.getStyle(tabName)){
+					sheetObj = s.styleSheet.getStyle(tabName);
+				}
+				if(sheetObj){
+					tf.setCss(sheetObj);
+				}
+			}
+			s.ll_getHtmlText(tf, text); 
+		},
+		ll_getHtmlText : function (tf, text) {
+			if (!text) {
+				return;
+			}
+			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+			if (!arr || !arr[0]) {
+				s.ll_htmlTexts.push({
+					textFormat : tf.clone(),
+					text : text
+				});
+				return;
+			}
+			if (arr.index > 0) {
+				s.ll_htmlTexts.push({
+					textFormat : tf.clone(),
+					text : text.substring(0, arr.index)
+				});
+			}
+			tabName = arr[1];
+			start = arr.index;
+			end = start;
+			do {
+				end = text.indexOf("</" + tabName, end + 1);
+				start = text.indexOf("<" + tabName, start + 1);
+			} while(start > 0 && start < end);
+			content = text.substring(text.indexOf(">", arr.index) + 1, end);
+			s.ll_getStyleSheet(tf, tabName, arr[3], content);
+			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+		},
 		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, enter;
+			var s = this, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -4374,17 +4596,68 @@ var LTextField = (function () {
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.text++;
 			}
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
+			}
+			if (s.htmlText) {
+				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
+					tf = new LTextFormat();
+					s.ll_htmlTexts = [];
+					s.ll_htmlText = s.htmlText;
+					if(s.styleSheet){
+						s.ll_style_objectIndex = s.styleSheet.objectIndex;
+						s.ll_styleIndex = s.styleSheet.styleIndex;
+					}
+					s.ll_getHtmlText(tf, s.htmlText);
+				}
+				j = 0, k = 0, m = 0, b = 0;
+				s._wordHeight = s.wordHeight || 30;
+				if(!LTextField.underlineY){
+					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
+				}
+				s.ll_htmlTexts.forEach(function(element){
+					var textFormat = element.textFormat, text = element.text;
+					c.font = textFormat.getFontText();
+					c.fillStyle = textFormat.color;
+					for (i = 0, l = text.length; i < l; i++) {
+						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+						if (enter) {
+							j = 0;
+							k = i + 1;
+							m++;
+						} else {
+							h = c.measureText("O").width * 1.2;
+							if (s.stroke) {
+								c.strokeText(text.substr(i, 1), j, m * s._wordHeight);
+							}
+							c.fillText(text.substr(i, 1), j, m * s._wordHeight);
+							if(textFormat.underline){
+								c.beginPath();
+								underlineY = m * s._wordHeight + h * LTextField.underlineY[s.textBaseline];
+								c.moveTo(j, underlineY);
+								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+								c.stroke();
+							}
+						}
+						j += c.measureText(text.substr(i, 1)).width;
+						if (s.wordWrap && j + c.measureText(text.substr(i + 1, 1)).width > s.width) {
+							j = 0;
+							k = i + 1;
+							m++;
+						}
+					}
+					s.height = (m + 1) * s._wordHeight;
+				});
+				return;
+			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
 				lbl = '';
 				for (i=0, l = s.text.length; i < l; i++) {
 					lbl += '*';
 				}
-			}
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
 			}
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
@@ -4394,8 +4667,7 @@ var LTextField = (function () {
 						j = 0;
 						k = i + 1;
 						m++;
-					}
-					if (!enter) {
+					} else {
 						if (s.stroke) {
 							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
 						}
@@ -5229,7 +5501,7 @@ var LAnimation = (function() {
 			return [s.rowIndex, s.colIndex, s.mode, s.isMirror];
 		},
 		onframe : function() {
-			var s = this, arr, stepFrame = null;
+			var s = this, arr, sx = 0, stepFrame = null;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
 				s.colIndex = 0;
 			}
@@ -5243,8 +5515,14 @@ var LAnimation = (function() {
 				if ( typeof arr.dataIndex == "number" && Array.isArray(s.bitmapList) && arr.dataIndex < s.bitmapList.length) {
 					s.bitmap.bitmapData = s.bitmapList[arr.dataIndex];
 				}
-				if ( typeof arr.script == "function") {
-					arr.script(s, arr.params);
+				if (arr.script) {
+					for(i = 0; i < arr.script.length; i++){
+						obj = arr.script[i];
+						l = s.ll_labelList[obj.name];
+						if(l && l.rowIndex == s.rowIndex && l.colIndex == s.colIndex && l.mode == s.mode && l.isMirror == (s.bitmap.scaleX == -1)){
+							obj.func(s, obj.params);
+						}
+					}
 				}
 				if ( typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
@@ -5252,21 +5530,16 @@ var LAnimation = (function() {
 					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
 				}
 				if ( typeof arr.sx != UNDEFINED) {
-					s.bitmap.x = arr.sx;
+					sx = arr.sx;
 				}
 				if ( typeof arr.sy != UNDEFINED) {
 					s.bitmap.y = arr.sy;
 				}
 				if ( typeof arr.mirror != UNDEFINED) {
 					s.bitmap.rotateCenter = false;
-					if (arr.mirror) {
-						s.bitmap.x = s.bitmap.getWidth();
-						s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
-					} else {
-						s.bitmap.x = 0;
-						s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
-					}
+					s.bitmap.scaleX = arr.mirror ? -1 : 1;
 				}
+				s.bitmap.x = sx + (s.bitmap.scaleX == 1 ? 0 : s.bitmap.getWidth());
 			}
 			if (s._ll_stepIndex++ < stepFrame) {
 				return;
@@ -5275,7 +5548,7 @@ var LAnimation = (function() {
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
-				s.dispatchEvent(LEvent.COMPLETE);
+				s._send_complete = true;
 			}
 		},
 		clone : function() {
@@ -5344,6 +5617,13 @@ var LAnimationTimeline = (function() {
 			if (self._speedIndex++ < self.speed) {
 				return;
 			}
+			if(self._send_complete){
+				self.dispatchEvent(LEvent.COMPLETE);
+				self._send_complete = false;
+				if (self._ll_stop) {
+					return;
+				}
+			}
 			self._speedIndex = 0;
 			self.onframe();
 		},
@@ -5351,8 +5631,8 @@ var LAnimationTimeline = (function() {
 			this.ll_labelList[name] = {
 				rowIndex : _rowIndex,
 				colIndex : _colIndex,
-				mode : _mode,
-				isMirror : _isMirror
+				mode : (typeof _mode == UNDEFINED ? 1 : _mode),
+				isMirror : (typeof _isMirror == UNDEFINED ? false : _isMirror)
 			};
 		},
 		play : function() {
@@ -5376,12 +5656,24 @@ var LAnimationTimeline = (function() {
 		addFrameScript : function(name, func, params) {
 			var l = this.ll_labelList[name];
 			var arr = this.imageArray[l.rowIndex][l.colIndex];
-			arr.script = func;
-			arr.params = params ? params : null;
+			if (!arr.script) {
+				arr.script = [];
+			}
+			arr.script.push({func : func, params : params, name : name});
 		},
 		removeFrameScript : function(name) {
-			var l = this.ll_labelList[name];
-			this.imageArray[l.rowIndex][l.colIndex].script = null;
+			var l = this.ll_labelList[name], obj, script, i;
+			script = this.imageArray[l.rowIndex][l.colIndex].script;
+			if (!script) {
+				return;
+			}
+			for(i = 0; i < script.length; i++){
+				obj = script[i];
+				if(obj.name == name){
+					script.splice(i, 1);
+					break;
+				}
+			}
 		}
 	};
 	for (var k in p) {
@@ -5884,15 +6176,18 @@ var LTweenLite = (function () {
 		LTweenLiteChild.prototype[k] = p[k];
 	}
 	function LTweenLite () {
-		LExtends (this, LObject, []);
-		this.type = "LTweenLite";
+		var s = this;
+		LExtends (s, LObject, []);
+		s.type = "LTweenLite";
+		s.tweens = [];
 	}
 	LTweenLite.TYPE_FRAME = "type_frame";
 	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
-		tweens : [],
-		ll_show : null,
-		frame : function(){
+		count : function(){
+			return this.tweens.length;
+		},
+		ll_show : function(){
 			var s = this;
 			var i, length = s.tweens.length, t;
 			for (i = 0; i < length; i++) {
@@ -5906,9 +6201,6 @@ var LTweenLite = (function () {
 					}
 				}
 			}
-			if (s.tweens.length == 0) {
-				s.ll_show = null;
-			}
 		},
 		to : function ($target, $duration, $vars) {
 			if (!$target) {
@@ -5917,7 +6209,6 @@ var LTweenLite = (function () {
 			var s = this;
 			var tween = new LTweenLiteChild({}, 0, {});
 			s.tweens.push(tween);
-			s.ll_show = s.frame;
 			tween.to($target, $duration, $vars);
 			return tween;
 		},
@@ -5967,6 +6258,7 @@ var LAjax = (function () {
 	}
 	LAjax.prototype = {
 		TEXT : "text",
+		JSON : "json",
 		ARRAY_BUFFER : "arraybuffer",
 		BLOB : "blob",
 		get : function (url, data, oncomplete, onerror) {
@@ -5994,7 +6286,16 @@ var LAjax = (function () {
 			}
 			ajax.open(t, url, true);
 			if (s.responseType) {
-				ajax.responseType = s.responseType;
+				if(s.responseType == s.JSON){
+					try{
+						ajax.responseType = s.responseType;
+					}catch(e){
+						ajax.responseType = s.TEXT;
+						ajax._responseType = "json";
+					}
+				}else{
+					ajax.responseType = s.responseType;
+				}
 				s.responseType = s.TEXT;
 			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -6002,7 +6303,10 @@ var LAjax = (function () {
 				if (ajax.readyState == 4) {
 					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
 						if (oncomplete) {
-							if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB) {
+							if(ajax._responseType == s.JSON){
+								ajax._responseType = s.TEXT;
+								oncomplete(JSON.parse(ajax.responseText));
+							}else if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB || ajax.responseType == s.JSON) {
 								oncomplete(ajax.response);
 							} else if (ajax.responseText.length > 0) {
 								oncomplete(ajax.responseText);
@@ -6049,6 +6353,10 @@ var LStageWebView = (function () {
 		s.display.style.marginTop = "0px";
 		s.display.style.marginLeft = "0px";
 		s.display.style.zIndex = 11;
+		if(LGlobal.ios){
+			s.display.style.overflow = "auto";
+			s.display.style.webkitOverflowScrolling = "touch";
+		}
 		s.display.appendChild(s.iframe);
 		s.idAdded = false;
 	}

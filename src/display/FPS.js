@@ -1,11 +1,11 @@
 /** @language chinese
- * ?ﾈﾏFPS
+ * 确认FPS
  * @class FPS
  * @extends LSprite
  * @constructor
  * @example
  * 	addChild(new FPS());
- * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">ｲ簗ﾔﾁｴｽﾓ</a></p>
+ * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">测试链接</a></p>
  * @since 1.7.6
  * @public
  */
@@ -16,7 +16,7 @@
  * @constructor
  * @example
  * 	addChild(new FPS());
- * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">Try it ﾈ</a></p>
+ * @examplelink <p><a href="../../../api/FPS/index.html" target="_blank">Try it »</a></p>
  * @since 1.7.6
  * @public
  */
