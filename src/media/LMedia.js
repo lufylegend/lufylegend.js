@@ -429,6 +429,10 @@ var LMedia = (function () {
 			if (!s.playing) {
 				return;
 			}
+			if(s.data.duration != s._ll_duration){
+				s._ll_duration = s.data.duration;
+				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
+			}
 			if (s.currentTimeTo < s.data.currentTime + LSound.Container.time * 0.005) {
 				s._onended();
 			}

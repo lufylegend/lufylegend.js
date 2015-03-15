@@ -50,6 +50,10 @@ var LStageWebView = (function () {
 		s.display.style.marginTop = "0px";
 		s.display.style.marginLeft = "0px";
 		s.display.style.zIndex = 11;
+		if(LGlobal.ios){
+			s.display.style.overflow = "auto";
+			s.display.style.webkitOverflowScrolling = "touch";
+		}
 		s.display.appendChild(s.iframe);
 		s.idAdded = false;
 	}

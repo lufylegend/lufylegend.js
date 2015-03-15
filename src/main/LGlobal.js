@@ -240,33 +240,65 @@ var LGlobal = ( function () {
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
 	/** @language chinese
-	 * <p>移动网页中，是否禁止滚屏，默认为true(禁止)。</p>
-	 * @property LGlobal.preventDefault
+	 * <p>该方法将停止事件的传播，阻止它被分派到其他 Document 节点。</p>
+	 * @property LGlobal.stopPropagation
 	 * @type Boolean
 	 * @static
-	 * @since 1.3.1
+	 * @since 1.9.8
 	 * @public
+	 * @default false
 	 */
 	/** @language english
-	 * <p>Mobile web page, Sets scroll gestures to disabled., default true. (scroll disabled)</p>
-	 * @property LGlobal.preventDefault
+	 * <p>Prevents further propagation of the current event.</p>
+	 * @property LGlobal.stopPropagation
 	 * @type Boolean
 	 * @static
-	 * @since 1.3.1
+	 * @since 1.9.8
 	 * @public
+	 * @default false
 	 */
 	/** @language japanese
-	 * <p>モバイルページのスクロールを禁止するかどうか設定する。ディフォルトは true。（スクロール禁止）</p>
+	 * <p>現在のイベントのさらなる伝播 (propagation) を止めます。</p>
+	 * @property LGlobal.stopPropagation
+	 * @type Boolean
+	 * @static
+	 * @since 1.9.8
+	 * @public
+	 * @default false
+	 */
+	LGlobal.stopPropagation = false;
+	/** @language chinese
+	 * <p>如果事件对象的cancelable属性为true,则该方法可以取消事件的默认动作.但并不取消事件的冒泡行为。移动网页中用来禁止滚屏，默认为true(禁止)，如果需要使用滚屏功能，则需要将其设置为fasle。</p>
 	 * @property LGlobal.preventDefault
 	 * @type Boolean
 	 * @static
 	 * @since 1.3.1
 	 * @public
+	 * @default true
+	 */
+	/** @language english
+	 * <p>Cancels the event if it is cancelable, without stopping further propagation of the event.Mobile web page, Sets scroll gestures to disabled., default true. (scroll disabled)</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.3.1
+	 * @public
+	 * @default true
+	 */
+	/** @language japanese
+	 * <p>イベントがキャンセル可能である場合、上位ノードへのイベントの 伝播 (propagation) を止めずに、そのイベントをキャンセルします。モバイルページのスクロールを禁止するかどうか設定する。ディフォルトは true。（スクロール禁止）</p>
+	 * @property LGlobal.preventDefault
+	 * @type Boolean
+	 * @static
+	 * @since 1.3.1
+	 * @public
+	 * @default true
 	 */
 	LGlobal.preventDefault = true;
 	LGlobal.childList = new Array();
 	LGlobal.dragList = new Array();
 	LGlobal.excludingContainer = new Array();
+	LGlobal.fpsStatus = null;
 	/** @language chinese
 	 * <p>一个 LStageScaleMode 类中指定要使用哪种缩放模式的值。</p>
 	 * @property LGlobal.stageScale
@@ -595,6 +627,33 @@ var LGlobal = ( function () {
 	 * @public
 	 */
 	LGlobal.destroy = true;
+	/** @language chinese
+	 * <p>强制将画面彻底刷新，如果游戏中没有背景，有些手机上清空画面时偶尔会留下残影，如果遇到情况，可以在清空画面时将此属性设置为true来强制刷新画面一次。</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
+	/** @language english
+	 * <p>......</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
+	/** @language japanese
+	 * <p>......</p>
+	 * @property LGlobal.forceRefresh
+	 * @type Boolean
+	 * @default false
+	 * @static
+	 * @since 1.9.1
+	 * @public
+	 */
 	LGlobal.forceRefresh = false;
 	LGlobal.devicePixelRatio = window.devicePixelRatio || 1;
 	LGlobal.startTimer = 0;
@@ -726,7 +785,7 @@ var LGlobal = ( function () {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
-			LEvent.addEventListener(document,LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
+			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
 		} else {
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
@@ -976,7 +1035,9 @@ var LGlobal = ( function () {
 		LGlobal.IS_MOUSE_DOWN = false;
 	};
 	LGlobal.touchHandler = function (e) {
-		e.stopPropagation();
+		if (LGlobal.stopPropagation) {
+			e.stopPropagation();
+		}
 		if (LGlobal.preventDefault) {
 			e.preventDefault();
 		}
@@ -1009,6 +1070,18 @@ var LGlobal = ( function () {
 			c = s.getAbsoluteScale();
 			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
 			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
+			if (s.dragRange) {
+				if (s.x < s.dragRange.left) {
+					s.x = s.dragRange.left;
+				} else if(s.x > s.dragRange.right){
+					s.x = s.dragRange.right;
+				}
+				if (s.y < s.dragRange.top) {
+					s.y = s.dragRange.top;
+				} else if(s.y > s.dragRange.bottom){
+					s.y = s.dragRange.bottom;
+				}
+			}
 			break;
 		}
 	};
@@ -1080,6 +1153,9 @@ var LGlobal = ( function () {
 		if (LGlobal.canvas == null) {
 			return;
 		}
+		if (LGlobal.fpsStatus) {
+			LGlobal.fpsStatus.reset();
+		}
 		if (LGlobal.stage.onresizeEvent) {
 			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			delete LGlobal.stage.onresizeEvent;
@@ -1088,6 +1164,7 @@ var LGlobal = ( function () {
 			LGlobal.canvasObj.width = LGlobal.canvasObj.width;
 			LGlobal.forceRefresh = false;
 		}
+		LGlobal.canvas.beginPath();
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
 			if (!LGlobal.traceDebug && LGlobal.keepClear) {
@@ -1105,9 +1182,14 @@ var LGlobal = ( function () {
 		LGlobal.show(LGlobal.childList);
 	};
 	LGlobal.show = function (s) {
-		for (var i = 0, l = s.length; i < l; i++) {
-			if (s[i] && s[i].ll_show) {
-				s[i].ll_show();
+		for (var i = 0, l = s.length, c; i < l; i++) {
+			c = s[i];
+			if (c && c.ll_show) {
+				c.ll_show();
+				if(c._ll_removeFromSelf){
+					i--;
+					l--;
+				}
 			}
 		}
 	};

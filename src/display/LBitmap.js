@@ -182,6 +182,9 @@ var LBitmap = (function () {
 		},
 		ll_draw : function () {
 			var s = this;
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.bitmapData++;
+			}
 			LGlobal.canvas.drawImage(s.bitmapData.image,
 				s.bitmapData.x,
 				s.bitmapData.y,

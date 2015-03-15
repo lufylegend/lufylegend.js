@@ -234,6 +234,9 @@ var LEventDispatcher = (function () {
 						s.currentTarget = s.target = s;
 						s.eventType = s.event_type = ctype;
 						s._eventList[i].listener(s);
+						delete s.currentTarget;
+						delete s.target;
+						delete s.eventType;
 					}else{
 						if (!event.target) {
 							event.target = s;

@@ -141,6 +141,8 @@ var LButtonSample1 = (function () {
 		var s = this, name = s.labelText.text, size = s.labelText.size, font = s.labelText.font, color = s.labelText.color,
 		a = new LButtonSample1(name, size, font, color);
 		a.backgroundColor = s.backgroundColor;
+		a.x = s.x;
+		a.y = s.y;
 		return a;
 	};
 	/** @language chinese
@@ -247,6 +249,8 @@ var LButtonSample2 = (function () {
 		var s = this, name = s.labelText.text, size = s.labelText.size, font = s.labelText.font, color = s.labelText.color,
 		a = new LButtonSample2(name, size, font, color);
 		a.backgroundColor = s.backgroundColor;
+		a.x = s.x;
+		a.y = s.y;
 		return a;
 	};
 	LButtonSample2.prototype._onDraw = function (s) {

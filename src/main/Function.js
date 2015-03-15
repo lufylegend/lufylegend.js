@@ -421,9 +421,50 @@ function init (s, c, w, h, f, t) {
 var LInit = init;
 
 /** @language chinese
+ * 等同于 LExtends
+ * @method base
+ * @since 1.0.0
+ * @public
+ */
+/** @language english
+ * Equivalent to LExtends
+ * @method base
+ * @since 1.0.0
+ * @public
+ */
+/** @language japanese
+ * LExtends と同等。
+ * @method base
+ * @since 1.0.0
+ * @public
+ */
+function base (d, b, a) {
+	var p = null, o = d.constructor.prototype, h = {};
+	if(d.constructor.name == "Object"){
+		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
+	}
+	if (typeof d.__ll__parent__ == UNDEFINED) {
+		d.__ll__parent__ = [];
+		d.__ll__parent__ = [];
+	}
+	d.__ll__parent__.push(b.prototype);
+	for (p in o) {
+		h[p] = 1;
+	}
+	for (p in b.prototype) {
+		if (!h[p]) {
+			o[p] = b.prototype[p];
+		}
+	}
+	if (o.toString == Object.prototype.toString) {
+		o.toString = LObject.prototype.toString;
+	}
+	b.apply(d, a);
+}
+/** @language chinese
  * 对象继承。等同于 base。
  * @method LExtends
- * @param {LDisplayObject} child 子对象本身。
+ * @param {Object} child 子对象本身。
  * @param {Object} parent 父对象。
  * @param {Array} params 参数。
  * @example
@@ -507,29 +548,6 @@ var LInit = init;
  * @since 1.0.0
  * @public
  */
-function base (d, b, a) {
-	var p = null, o = d.constructor.prototype, h = {};
-	if(d.constructor.name == "Object"){
-		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
-	}
-	if (typeof d.__ll__parent__ == UNDEFINED) {
-		d.__ll__parent__ = [];
-		d.__ll__parent__ = [];
-	}
-	d.__ll__parent__.push(b.prototype);
-	for (p in o) {
-		h[p] = 1;
-	}
-	for (p in b.prototype) {
-		if (!h[p]) {
-			o[p] = b.prototype[p];
-		}
-	}
-	if (o.toString == Object.prototype.toString) {
-		o.toString = LObject.prototype.toString;
-	}
-	b.apply(d, a);
-}
 var LExtends = base;
 
 /** @language chinese

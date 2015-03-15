@@ -22,6 +22,7 @@
 var LMatrix = (function () {
 	function LMatrix (a, b, c, d, tx, ty, u, v, w) {
 		var s = this;
+		LExtends (s, LObject, []);
 		s.a = 1;
 		s.b = 0;
 		s.u = 0;
@@ -59,7 +60,7 @@ var LMatrix = (function () {
 			s.w = w;
 		}
 	}
-	LMatrix.prototype = {
+	var p = {
 		setTo : function (a, b, c, d, tx, ty, u, v, w) {
 			var s = this;
 			if (typeof a != UNDEFINED) {
@@ -91,6 +92,25 @@ var LMatrix = (function () {
 			}
 			return s;
 		},
+		/** @language chinese
+		 * 检验矩阵是否是空，即不发生变换。
+		 * @method isIdentity
+		 * @return {Boolean} 返回矩阵是否是空。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method isIdentity
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method isIdentity
+		 * @since 1.9.8
+		 * @public
+		 */
 		isIdentity : function () {
 			var s = this;
 			return (s.a == 1 && s.b == 0 && s.c == 0 && s.d == 1 && s.tx == 0 && s.ty == 0 && u == 0 && v == 0 && w == 1);
@@ -100,12 +120,47 @@ var LMatrix = (function () {
 			c.transform(s.a, s.b, s.c, s.d, s.tx, s.ty);
 			return s;
 		},
-		toString : function () {
-			return "[object LMatrix]";
-		},
+		/** @language chinese
+		 * 为每个矩阵属性设置一个值，该值将导致 null 转换。
+		 * @method identity
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method identity
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method identity
+		 * @since 1.9.8
+		 * @public
+		 */
 		identity : function () {
 			this.setTo(1, 0, 0, 1, 0, 0, 0, 0, 1);
 		},
+		/** @language chinese
+		 * 对 LMatrix 对象应用旋转转换。
+		 * @method rotate
+		 * @param {float} angle 旋转角度。
+		 * @return {LMatrix} 矩阵本身。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method rotate
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method rotate
+		 * @since 1.9.8
+		 * @public
+		 */
 		rotate : function (q) {
 			var s = this,
 			radian = q * Math.PI / 180,
@@ -113,21 +168,109 @@ var LMatrix = (function () {
 			sin = Math.sin(radian),
 			mtx = new LMatrix(cos, sin, -sin, cos, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
+		/** @language chinese
+		 * 对 LMatrix 对矩阵应用缩放转换。
+		 * @method scale
+		 * @param {float} sx 用于沿 x 轴缩放对象的乘数。
+		 * @param {float} sy 用于沿 y 轴缩放对象的乘数。
+		 * @return {LMatrix} 矩阵本身。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method scale
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method scale
+		 * @since 1.9.8
+		 * @public
+		 */
 		scale : function (sx, sy) {
 			var s = this,
 			mtx = new LMatrix(sx, 0, 0, sy, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
+		/** @language chinese
+		 * 沿 x 和 y 轴平移矩阵，由 dx 和 dy 参数指定。
+		 * @method translate
+		 * @param {float} dx 沿 x 轴向右移动的量（以像素为单位）。
+		 * @param {float} dy 沿 y 轴向下移动的量（以像素为单位）。
+		 * @return {LMatrix} 矩阵本身。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method translate
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method translate
+		 * @since 1.9.8
+		 * @public
+		 */
 		translate : function (tx, ty) {
 			var s = this,
 			mtx = new LMatrix(1, 0, 0, 1, tx, ty, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
+		/** @language chinese
+		 * 沿 x 和 y 轴倾斜。
+		 * @method translate
+		 * @param {float} kx 沿 x 轴倾斜的量。
+		 * @param {float} ky 沿 y 轴倾斜的量。
+		 * @return {LMatrix} 矩阵本身。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method translate
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method translate
+		 * @since 1.9.8
+		 * @public
+		 */
 		skew : function (kx, ky) {
-			mtx = new LMatrix(0, ky, kx, 0, 0, 0, 0, 0, 1);
+			var s = this,
+			mtx = new LMatrix(1, ky, kx, 1, 0, 0, 0, 0, 1);
 			s.add(mtx);
+			return s;
 		},
+		/** @language chinese
+		 * 与另一个矩阵相加。
+		 * @method add
+		 * @param {LMatrix} matrix 一个LMatrix对象。
+		 * @return {LMatrix} 矩阵本身。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method add
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method add
+		 * @since 1.9.8
+		 * @public
+		 */
 		add : function (mtx) {
 			var s = this, a, b, c, d, tx, ty, u, v, w;
 			a = s.a * mtx.a + s.b * mtx.c + s.u * mtx.tx;
@@ -161,10 +304,32 @@ var LMatrix = (function () {
 				return [a, b, c, d, tx, ty, u, v, w];
 			}
 		},
+		/** @language chinese
+		 * 对象复制。
+		 * @method clone
+		 * @return {LMatrix} 一个LMatrix对象。
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language english
+		 * ......
+		 * @method clone
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @method clone
+		 * @since 1.9.8
+		 * @public
+		 */
 		clone : function () {
 			var s = this;
 			return new LMatrix(s.a, s.b, s.c, s.d, s.tx, s.ty, s.u, s.v, s.w);
 		}
 	};
+	for (var k in p) {
+		LMatrix.prototype[k] = p[k];
+	}
 	return LMatrix;
 })();

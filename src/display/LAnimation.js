@@ -5,9 +5,9 @@
  * @extends LSprite
  * @constructor
  * @param {LSprite} layer 一个LSprite对象。
- * @param {LBitmapData} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。
+ * @param {LBitmapData | Array} data 一个LBitmapData对象，既包含一组或多组frame的精灵图表。或者是一个LBitmapData对象的数组。
  * @param {Array} list <p>每个frame的属性值。</p>
- * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标。</p>
+ * <p>每个数组元素格式为{x : 0, y : 0, width : 100, height : 100, sx : 0, sy : 0, dataIndex : 0}。 x, y, width, height分别对应LBitmapData对象的属性值，sx, sy是图像显示时的起始点坐标，当data是一个LBitmapData对象的数组的时候，dataIndex表示该数组的索引，用来指定使用哪个LBitmapData对象。</p>
  * <p>如果精灵图表中的每个frame大小都是一样的，你可以使用LGlobal.divideCoordinate函数来直接对图表进行分割。</p>
  * @example
  * 	LInit(50, "legend", 800, 480, main);
@@ -20,7 +20,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimation(backLayer,data,list);
  * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
  * 	}
@@ -53,7 +53,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimation(backLayer,data,list);
  * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
  * 	}
@@ -86,7 +86,7 @@
  * 		var backLayer = new LSprite();
  * 		addChild(backLayer);
  * 		var list = LGlobal.divideCoordinate(480,630,3,4);
- * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+ * 		var data = new LBitmapData(event.target,0,0,120,210);
  * 		player = new LAnimation(backLayer,data,list);
  * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
  * 	}
@@ -132,7 +132,33 @@ var LAnimation = (function() {
 		s._ll_stepArray = [];
 		s.mode = 1;
 		s.isMirror = false;
-		s.bitmap = new LBitmap(data);
+		if (Array.isArray(data)) {
+			s.bitmapList = data;
+		} else {
+			s.bitmapList = [data];
+		}
+		/** @language chinese
+		 * 一个LBitmap对象，LAnimation对象用它来显示纹理图
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
+		/** @language english
+		 * a LBitmap object
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
+		/** @language japanese
+		 * LBitmapオブジェクト
+		 * @property bitmap
+		 * @type LBitmap
+		 * @since 1.3.1
+		 * @public
+		 */
+		s.bitmap = new LBitmap(s.bitmapList[0]);
 		s.imageArray = list;
 		s.addChild(s.bitmap);
 		if (layer != null) {
@@ -165,7 +191,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = new LAnimation(backLayer,data.clone(),list);
 		 * 		player.setAction(2,0,1,true);
@@ -201,7 +227,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = new LAnimation(backLayer,data.clone(),list);
 		 * 		player.setAction(2,0,1,true);
@@ -237,7 +263,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = new LAnimation(backLayer,data.clone(),list);
 		 * 		player.setAction(2,0,1,true);
@@ -298,7 +324,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -327,7 +353,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -356,7 +382,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -388,7 +414,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -414,7 +440,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -440,7 +466,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 		 * 	}
@@ -450,7 +476,7 @@ var LAnimation = (function() {
 		 * @examplelink <p><a href="../../../api/LAnimation/onframe.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		onframe : function() {
-			var s = this, arr, stepFrame = null;
+			var s = this, arr, sx = 0, stepFrame = null;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length) {
 				s.colIndex = 0;
 			}
@@ -461,8 +487,17 @@ var LAnimation = (function() {
 				stepFrame = 0;
 			}
 			if (s._ll_stepIndex == 0) {
-				if ( typeof arr.script == "function") {
-					arr.script(s, arr.params);
+				if ( typeof arr.dataIndex == "number" && Array.isArray(s.bitmapList) && arr.dataIndex < s.bitmapList.length) {
+					s.bitmap.bitmapData = s.bitmapList[arr.dataIndex];
+				}
+				if (arr.script) {
+					for(i = 0; i < arr.script.length; i++){
+						obj = arr.script[i];
+						l = s.ll_labelList[obj.name];
+						if(l && l.rowIndex == s.rowIndex && l.colIndex == s.colIndex && l.mode == s.mode && l.isMirror == (s.bitmap.scaleX == -1)){
+							obj.func(s, obj.params);
+						}
+					}
 				}
 				if ( typeof arr.width != UNDEFINED && typeof arr.height != UNDEFINED) {
 					s.bitmap.bitmapData.setProperties(arr.x, arr.y, arr.width, arr.height);
@@ -470,21 +505,16 @@ var LAnimation = (function() {
 					s.bitmap.bitmapData.setCoordinate(arr.x, arr.y);
 				}
 				if ( typeof arr.sx != UNDEFINED) {
-					s.bitmap.x = arr.sx;
+					sx = arr.sx;
 				}
 				if ( typeof arr.sy != UNDEFINED) {
 					s.bitmap.y = arr.sy;
 				}
 				if ( typeof arr.mirror != UNDEFINED) {
 					s.bitmap.rotateCenter = false;
-					if (arr.mirror) {
-						s.bitmap.x = s.bitmap.getWidth();
-						s.bitmap.scaleX = -1 * Math.abs(s.bitmap.scaleX);
-					} else {
-						s.bitmap.x = 0;
-						s.bitmap.scaleX = Math.abs(s.bitmap.scaleX);
-					}
+					s.bitmap.scaleX = arr.mirror ? -1 : 1;
 				}
+				s.bitmap.x = sx + (s.bitmap.scaleX == 1 ? 0 : s.bitmap.getWidth());
 			}
 			if (s._ll_stepIndex++ < stepFrame) {
 				return;
@@ -493,7 +523,11 @@ var LAnimation = (function() {
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
-				s.dispatchEvent(LEvent.COMPLETE);
+				if (s.constructor.name == "LAnimationTimeline") {
+					s._send_complete = true;
+				} else {
+					s.dispatchEvent(LEvent.COMPLETE);
+				}
 			}
 		},
 		/** @language chinese
@@ -515,7 +549,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);
@@ -548,7 +582,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);
@@ -581,7 +615,7 @@ var LAnimation = (function() {
 		 * 		var backLayer = new LSprite();
 		 * 		addChild(backLayer);
 		 * 		var list = LGlobal.divideCoordinate(480,630,3,4);
-		 * 		var data = new LBitmapData(event.currentTarget,0,0,120,210);
+		 * 		var data = new LBitmapData(event.target,0,0,120,210);
 		 * 		player = new LAnimation(backLayer,data,list);
 		 * 		player2 = player.clone();
 		 * 		player2.setAction(2,0);

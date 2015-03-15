@@ -183,6 +183,10 @@ var LLoadManage = (function () {
 		 */
 		load : function (l, u, c) {
 			var s = this;
+			if (!l || l.length == 0) {
+				c([]);
+				return;
+			}
 			s.list = l, s.onupdate = u, s.oncomplete = c;
 			s.loader = s, s.index = 0, s.loadIndex = 0, s.result = [], s.lresult = [];
 			s.loadInit();

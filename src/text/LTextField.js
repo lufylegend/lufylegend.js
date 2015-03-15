@@ -99,6 +99,83 @@ var LTextField = (function () {
 		 */
 		s.text = "";
 		/** @language chinese
+		 * 包含文本字段内容的 HTML 表示形式。
+		 * 目前支持以下 HTML 标签：
+		 * <table>
+		 * <tr><th>标签</th><th>说明</th></tr>
+		 * <tr><td>粗体标签</td><td>&lt;b> 标签以粗体形式呈现文本。粗体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>字体标签</td><td>&lt;font> 标签指定一种字体或一个字体列表来显示文本。字体标签支持以下属性：
+		 *  <p>・color：字体的颜色。</p>
+		 *  <p>・face：指定要使用的字体的名称。</p>
+		 *  <p>・size：指定字体的大小。</p>
+		 * 	</td></tr>
+		 * <tr><td>斜体标签</td><td>&lt;i> 标签以斜体形式显示标签中的文本。斜体必须可用于所使用的字体。</td></tr>
+		 * <tr><td>段落标签</td><td>&lt;p> 标签创建一个新段落。必须将文本字段设置为多行文本字段才能使用此标签。</td></tr>
+		 * <tr><td>span 标签</td><td>&lt;span> 标签只可用于 CSS 文本样式。它支持以下属性：<p>・class：指定 LStyleSheet 对象定义的 CSS 样式类。</p></td></tr>
+		 * <tr><td>下划线标签</td><td>&lt;u> 标签为标签文本添加下划线。</td></tr>
+		 * </table>
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 100;
+		 * 	theTextField.textBaseline = "alphabetic";
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/htmlText.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * ......
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property htmlText
+		 * @type String
+		 * @since 1.9.8
+		 * @public
+		 */
+		s.htmlText = "";
+		/** @language chinese
+		 * 将样式表附加到文本字段。有关创建样式表的信息，请参阅 <a href="LStyleSheet.html">LStyleSheet</a> 类
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 * @example
+		 * 	var styleSheet = new LStyleSheet();
+		 * 	styleSheet.setStyle(".test","{color:#FF0000;font-size:40}");
+		 * 	styleSheet.setStyle("myText","{color:#008800;font-size:30}");
+		 * 	var theTextField = new LTextField();
+		 * 	theTextField.htmlText = "ABC<span class='test'>ABC<myText><i>ABC</i>ABC</myText>ABC</span>ABC<b>ABC</b><u>ABC</u>";
+		 * 	theTextField.x = 10;
+		 * 	theTextField.y = 100;
+		 * 	theTextField.styleSheet = styleSheet;
+		 * 	addChild(theTextField);
+		 * @examplelink <p><a href="../../../api/LTextField/styleSheet.html" target="_blank">测试链接</a></p>
+		 */
+		/** @language english
+		 * ......
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property styleSheet
+		 * @type LStyleSheet
+		 * @since 1.9.8
+		 * @public
+		 */
+		s.styleSheet = "";
+		/** @language chinese
 		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
 		 * @property font
 		 * @type String
@@ -195,7 +272,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.size = "11";
+		s.size = 15;
 		/** @language chinese
 		 * 表示文本的颜色。
 		 * @property color
@@ -687,12 +764,96 @@ var LTextField = (function () {
 	var p = {
 		_showReady : function (c) {
 			var s = this;
-			c.font = s.weight + " " + s.size + "pt " + s.font;  
+			c.font = s.weight + " " + s.size + "px " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
 		},
+		ll_getStyleSheet : function (textFormat, tabName, attribute, text) {
+			var s = this, pattern, tf = textFormat.clone();
+			if (tabName == "font") {
+				var i = 0;
+				while (attribute) {
+					if (i++ > 4)
+						break;
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (!arr || !arr[0]) {
+						break;
+					}
+					switch(arr[2]) {
+						case "face":
+							tf.font = arr[6];
+							break;
+						case "color":
+							tf.color = arr[6];
+							break;
+						case "size":
+							tf.size = arr[6];
+							break;
+					}
+					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+				}
+			} else if (tabName == "b") {
+				tf.bold = true;
+			} else if (tabName == "u") {
+				tf.underline = true;
+			} else if (tabName == "i") {
+				tf.italic = true;
+			} else if (tabName == "p" && s.wordWrap) {
+				text = "\n" + text + "\n";
+			} else if(s.styleSheet){
+				var sheetObj;
+				if (tabName == "span"){
+					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+					var arr = pattern.exec(attribute);
+					if (arr && arr[0]) {
+						switch(arr[2]) {
+							case "class":
+								sheetObj = s.styleSheet.getStyle("." + arr[6]);
+								break;
+						}
+					}
+				}else if(s.styleSheet.getStyle(tabName)){
+					sheetObj = s.styleSheet.getStyle(tabName);
+				}
+				if(sheetObj){
+					tf.setCss(sheetObj);
+				}
+			}
+			s.ll_getHtmlText(tf, text); 
+		},
+		ll_getHtmlText : function (tf, text) {
+			if (!text) {
+				return;
+			}
+			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+			if (!arr || !arr[0]) {
+				s.ll_htmlTexts.push({
+					textFormat : tf.clone(),
+					text : text
+				});
+				return;
+			}
+			if (arr.index > 0) {
+				s.ll_htmlTexts.push({
+					textFormat : tf.clone(),
+					text : text.substring(0, arr.index)
+				});
+			}
+			tabName = arr[1];
+			start = arr.index;
+			end = start;
+			do {
+				end = text.indexOf("</" + tabName, end + 1);
+				start = text.indexOf("<" + tabName, start + 1);
+			} while(start > 0 && start < end);
+
+			content = text.substring(text.indexOf(">", arr.index) + 1, end);
+			s.ll_getStyleSheet(tf, tabName, arr[3], content);
+			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+		},
 		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, enter;
+			var s = this, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -704,17 +865,71 @@ var LTextField = (function () {
 					return;
 				}
 			}
+			if (LGlobal.fpsStatus) {
+				LGlobal.fpsStatus.text++;
+			}
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
+			}
+			if (s.htmlText) {
+				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
+					tf = new LTextFormat();
+					s.ll_htmlTexts = [];
+					s.ll_htmlText = s.htmlText;
+					if(s.styleSheet){
+						s.ll_style_objectIndex = s.styleSheet.objectIndex;
+						s.ll_styleIndex = s.styleSheet.styleIndex;
+					}
+					s.ll_getHtmlText(tf, s.htmlText);
+				}
+				j = 0, k = 0, m = 0, b = 0;
+				s._wordHeight = s.wordHeight || 30;
+				if(!LTextField.underlineY){
+					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
+				}
+				s.ll_htmlTexts.forEach(function(element){
+					var textFormat = element.textFormat, text = element.text;
+					c.font = textFormat.getFontText();
+					c.fillStyle = textFormat.color;
+					for (i = 0, l = text.length; i < l; i++) {
+						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+						if (enter) {
+							j = 0;
+							k = i + 1;
+							m++;
+						} else {
+							h = c.measureText("O").width * 1.2;
+							if (s.stroke) {
+								c.strokeText(text.substr(i, 1), j, m * s._wordHeight);
+							}
+							c.fillText(text.substr(i, 1), j, m * s._wordHeight);
+							if(textFormat.underline){
+								c.beginPath();
+								underlineY = m * s._wordHeight + h * LTextField.underlineY[s.textBaseline];
+								c.moveTo(j, underlineY);
+								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+								c.stroke();
+							}
+						}
+						j += c.measureText(text.substr(i, 1)).width;
+						if (s.wordWrap && j + c.measureText(text.substr(i + 1, 1)).width > s.width) {
+							j = 0;
+							k = i + 1;
+							m++;
+						}
+					}
+					s.height = (m + 1) * s._wordHeight;
+				});
+				return;
+			}
 			lbl = s.text;
 			if (s.displayAsPassword) {
 				lbl = '';
 				for (i=0, l = s.text.length; i < l; i++) {
 					lbl += '*';
 				}
-			}
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
 			}
 			if (s.wordWrap || s.multiline) {
 				j = 0, k = 0, m = 0, b = 0;
@@ -724,8 +939,7 @@ var LTextField = (function () {
 						j = 0;
 						k = i + 1;
 						m++;
-					}
-					if (!enter) {
+					} else {
 						if (s.stroke) {
 							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
 						}
@@ -1012,11 +1226,11 @@ var LTextField = (function () {
 		},
 		mouseEvent : function (event, type, cood) {
 			var s = this, on;
-			if (s.inputBackLayer == null) {
+			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
 				return;
 			}
 			on = s.ismouseon(event, cood);
-			if (type != LMouseEvent.MOUSE_DOWN || !on) {
+			if (!on) {
 				return;
 			}
 			s.focus();
