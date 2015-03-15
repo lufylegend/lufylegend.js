@@ -5548,7 +5548,11 @@ var LAnimation = (function() {
 			s.colIndex += s.mode;
 			if (s.colIndex >= s.imageArray[s.rowIndex].length || s.colIndex < 0) {
 				s.colIndex = s.mode > 0 ? 0 : s.imageArray[s.rowIndex].length - 1;
-				s._send_complete = true;
+				if (s.constructor.name == "LAnimationTimeline") {
+					s._send_complete = true;
+				} else {
+					s.dispatchEvent(LEvent.COMPLETE);
+				}
 			}
 		},
 		clone : function() {
