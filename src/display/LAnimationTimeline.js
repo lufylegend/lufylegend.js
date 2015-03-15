@@ -385,6 +385,11 @@ var LAnimationTimeline = (function() {
 		/** @language chinese
 		 * 在LAnimationTimeline实例的时间轴中设置标签。
 		 * @method setLabel
+		 * @param {String} name 标签名称.
+		 * @param {int} rowIndex 行号.
+		 * @param {int} colIndex 列号.
+		 * @param {int} mode (1,0,-1)分别代表(正序播放,静止,倒序播放)。
+		 * @param {Boolean} isMirror 是否使用镜像来水平翻转显示对象。
 		 * @since 1.8.0
 		 * @public
 		 * @example
@@ -404,6 +409,11 @@ var LAnimationTimeline = (function() {
 		/** @language english
 		 * Add a current label in the timeline of the LAnimationTimeline instance.
 		 * @method setLabel
+		 * @param {String} label a string representing the label of the frame.
+		 * @param {int} rowIndex Row index.
+		 * @param {int} colIndex Column index.
+		 * @param {int} mode You can set the value like this. (1,0,-1)：(Promote positive sequence ,Stop, Promote reverse sequence).
+		 * @param {Boolean} isMirror Flip Horizontal.
 		 * @since 1.8.0
 		 * @public
 		 * @example
@@ -423,6 +433,11 @@ var LAnimationTimeline = (function() {
 		/** @language japanese
 		 * LAnimationTimeline インスタンスのタイムライン内にラベルを追加します。
 		 * @method setLabel
+		 * @param {String} label 再生ヘッドの送り先となるフレームのラベルを表すストリングです。
+		 * @param {int} rowIndex 行番号。
+		 * @param {int} colIndex 列番号。
+		 * @param {int} mode 下記の三つの値を設定することができます。(1,0,-1)：(正シーケンス進める,ストップ,逆シーケンス進める)。
+		 * @param {Boolean} isMirror 水平方向に反転するかどうか。
 		 * @since 1.8.0
 		 * @public
 		 * @example
