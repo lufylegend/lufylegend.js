@@ -119,12 +119,13 @@ var LTextField = (function () {
 		 * @since 1.9.8
 		 * @public
 		 * @example
-		 * 	var theTextField = new LTextField();
-		 * 	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
-		 * 	theTextField.x = 10;
-		 * 	theTextField.y = 100;
-		 * 	theTextField.textBaseline = "alphabetic";
-		 * 	addChild(theTextField);
+		 *	var theTextField = new LTextField();
+		 *	theTextField.setWordWrap(true,30);
+		 *	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>A<p>B</p>C<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
+		 *	theTextField.x = 10;
+		 *	theTextField.y = 100;
+		 *	theTextField.textBaseline = "alphabetic";
+		 *	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/htmlText.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
