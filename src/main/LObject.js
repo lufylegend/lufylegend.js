@@ -179,6 +179,22 @@ var LObject = (function () {
 			}
 			return r;
 		},
+		copyProperty : function (a) {
+			var s = this, k;
+			for (k in a) {
+				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
+					if (k == "objectindex" || k == "objectIndex") {
+						continue;
+					}
+					s[k] = a[k];
+				} else if (Array.isArray(a[k])) {
+					s[k] = a[k].slice();
+				} 
+			}
+			if (a.mask) {
+				s.mask = a.mask.clone();
+			}
+		},
 		toString : function () {
 			return "[object " + this.constructor.name + "]";
 		}

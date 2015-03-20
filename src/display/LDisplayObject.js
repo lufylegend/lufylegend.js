@@ -454,22 +454,6 @@ var LDisplayObject = (function () {
 			scaleObj.d = s.scaleY;
 			scaleObj.transform(c).setTo(1, 0, 0, 1, -scaleObj.tx, -scaleObj.ty).transform(c);
 		},
-		copyProperty : function (a) {
-			var s = this, k;
-			for (k in a) {
-				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
-					if (k == "objectindex" || k == "objectIndex") {
-						continue;
-					}
-					s[k] = a[k];
-				} else if (Array.isArray(a[k])) {
-					s[k] = a[k].slice();
-				} 
-			}
-			if (a.mask) {
-				s.mask = a.mask.clone();
-			}
-		},
 		getAbsoluteScale : function () {
 			var s = this, sX, sY, p;
 			sX = s.scaleX;
