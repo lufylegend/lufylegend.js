@@ -339,7 +339,7 @@ var LAnimationTimeline = (function() {
 		 * @examplelink <p><a href="../../../api/LAnimationTimeline/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		clone : function() {
-			var s = this, k, o, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
+			var s = this, k, o, a = new s.constructor(s.bitmapList, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
 			a.bitmap = s.bitmap.clone();
