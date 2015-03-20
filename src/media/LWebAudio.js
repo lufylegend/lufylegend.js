@@ -96,16 +96,16 @@ var LWebAudio = (function () {
 			if(LWebAudio.containerCount > 0){
 				data = LWebAudio.container.shift();
 			} else {
-				if (typeof webkitAudioContext !== UNDEFINED) {
+				if (typeof AudioContext !== UNDEFINED) {
 					try {
-						data = new webkitAudioContext();
+						data = new AudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
 					}
-				} else if (typeof AudioContext !== UNDEFINED) {
+				} else if (typeof webkitAudioContext !== UNDEFINED) {
 					try {
-						data = new AudioContext();
+						data = new webkitAudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
