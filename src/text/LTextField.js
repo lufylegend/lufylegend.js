@@ -1508,7 +1508,7 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				return s.width;
 			}
-			LGlobal.canvas.font = s.size + "pt " + s.font;
+			LGlobal.canvas.font = s.size + "px " + s.font;
 			return LGlobal.canvas.measureText(s.text).width;
 		},
 		/** @language chinese
@@ -1570,7 +1570,7 @@ var LTextField = (function () {
 		_getHeight : function () {
 			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
-				c.font = s.weight + " " + s.size + "pt " + s.font;
+				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
 					j = 0, k = 0, m = 0;
 					for (i = 0, l = s.text.length; i < l; i++) {
@@ -1589,7 +1589,7 @@ var LTextField = (function () {
 				}
 				return s.height;
 			}
-			c.font = s.weight + " " + s.size + "pt " + s.font; 
+			c.font = s.weight + " " + s.size + "px " + s.font; 
 			l = c.measureText("O").width * 1.2;
 			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
 				l = l * 1.2;
