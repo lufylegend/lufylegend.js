@@ -22,8 +22,6 @@
 					var data = new LBitmapData(event.target,0,0,120,210);
 					player = new LAnimation(backLayer,data,list);
 					backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
-					var shadow = new LDropShadowFilter(5,45,"#000000");
-					player.filters = [shadow];
 				}
 				function onframe(){
 					player.onframe();
