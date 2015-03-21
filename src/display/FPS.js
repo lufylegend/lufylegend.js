@@ -62,6 +62,9 @@ var FPS = (function () {
 			};
 		}
 		s.fps = [];
+		s.back = new LShape();
+		s.back.alpha = 0.5;
+		s.addChild(s.back);
 		for(var i=0;i<5;i++){
 			var f = new LTextField();
 			f.color = "#ffffff";
@@ -86,8 +89,8 @@ var FPS = (function () {
 		s.fps[4].text = "Draw text : " + f.e; 
 		s.fpsTime = t;
 		s.fpsCount = 0;
-		s.graphics.clear();
-		s.graphics.drawRect(0,"#000000",[0,0,s.fps[1].getWidth(),100],true,"#000000");
+		s.back.graphics.clear();
+		s.back.graphics.drawRect(0,"#000000",[0,0,s.fps[1].getWidth(),100],true,"#000000");
 	};
 	FPS.prototype.die = function(){
 		var s = this;
