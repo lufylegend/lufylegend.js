@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.9.8
+* @version 1.9.9
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -1468,6 +1468,22 @@ var LObject = (function () {
 			}
 			return r;
 		},
+		copyProperty : function (a) {
+			var s = this, k;
+			for (k in a) {
+				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
+					if (k == "objectindex" || k == "objectIndex") {
+						continue;
+					}
+					s[k] = a[k];
+				} else if (Array.isArray(a[k])) {
+					s[k] = a[k].slice();
+				} 
+			}
+			if (a.mask) {
+				s.mask = a.mask.clone();
+			}
+		},
 		toString : function () {
 			return "[object " + this.constructor.name + "]";
 		}
@@ -1914,22 +1930,6 @@ var LDisplayObject = (function () {
 			scaleObj.a = s.scaleX;
 			scaleObj.d = s.scaleY;
 			scaleObj.transform(c).setTo(1, 0, 0, 1, -scaleObj.tx, -scaleObj.ty).transform(c);
-		},
-		copyProperty : function (a) {
-			var s = this, k;
-			for (k in a) {
-				if (typeof a[k] == "number" || typeof a[k] == "string" || typeof a[k] == "boolean") {
-					if (k == "objectindex" || k == "objectIndex") {
-						continue;
-					}
-					s[k] = a[k];
-				} else if (Array.isArray(a[k])) {
-					s[k] = a[k].slice();
-				} 
-			}
-			if (a.mask) {
-				s.mask = a.mask.clone();
-			}
 		},
 		getAbsoluteScale : function () {
 			var s = this, sX, sY, p;
@@ -2405,16 +2405,16 @@ var LWebAudio = (function () {
 			if(LWebAudio.containerCount > 0){
 				data = LWebAudio.container.shift();
 			} else {
-				if (typeof webkitAudioContext !== UNDEFINED) {
+				if (typeof AudioContext !== UNDEFINED) {
 					try {
-						data = new webkitAudioContext();
+						data = new AudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
 					}
-				} else if (typeof AudioContext !== UNDEFINED) {
+				} else if (typeof webkitAudioContext !== UNDEFINED) {
 					try {
-						data = new AudioContext();
+						data = new webkitAudioContext();
 					} catch (e) {
 						LWebAudio.containerCount = LWebAudio.container.length;
 						data = LWebAudio.container.shift();
@@ -2802,14 +2802,14 @@ var LSound = (function () {
 	LSound.webAudioEnabled = false;
 	var protocol = location.protocol;
 	if (protocol == "http:" || protocol == "https:") {
-		if (typeof webkitAudioContext !== UNDEFINED) {
-			try {
-				LWebAudio._context = new webkitAudioContext();
-			} catch (e) {
-			}
-		} else if (typeof AudioContext !== UNDEFINED) {
+		if (typeof AudioContext !== UNDEFINED) {
 			try {
 				LWebAudio._context = new AudioContext();
+			} catch (e) {
+			}
+		} else if (typeof webkitAudioContext !== UNDEFINED) {
+			try {
+				LWebAudio._context = new webkitAudioContext();
 			} catch (e) {
 			}
 		}
@@ -4857,7 +4857,7 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				return s.width;
 			}
-			LGlobal.canvas.font = s.size + "pt " + s.font;
+			LGlobal.canvas.font = s.size + "px " + s.font;
 			return LGlobal.canvas.measureText(s.text).width;
 		},
 		getWidth : function (maskSize) {
@@ -4880,7 +4880,7 @@ var LTextField = (function () {
 		_getHeight : function () {
 			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
-				c.font = s.weight + " " + s.size + "pt " + s.font;
+				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
 					j = 0, k = 0, m = 0;
 					for (i = 0, l = s.text.length; i < l; i++) {
@@ -4899,7 +4899,7 @@ var LTextField = (function () {
 				}
 				return s.height;
 			}
-			c.font = s.weight + " " + s.size + "pt " + s.font; 
+			c.font = s.weight + " " + s.size + "px " + s.font; 
 			l = c.measureText("O").width * 1.2;
 			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
 				l = l * 1.2;
@@ -5556,7 +5556,7 @@ var LAnimation = (function() {
 			}
 		},
 		clone : function() {
-			var s = this, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
+			var s = this, a = new s.constructor(null, s.bitmapList, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
 			a.bitmap = s.bitmap.clone();
@@ -5590,7 +5590,7 @@ var LAnimationTimeline = (function() {
 	};
 	var p = {
 		clone : function() {
-			var s = this, k, o, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
+			var s = this, k, o, a = new s.constructor(s.bitmapList, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
 			a.bitmap = s.bitmap.clone();
@@ -6433,6 +6433,9 @@ var FPS = (function () {
 			};
 		}
 		s.fps = [];
+		s.back = new LShape();
+		s.back.alpha = 0.5;
+		s.addChild(s.back);
 		for(var i=0;i<5;i++){
 			var f = new LTextField();
 			f.color = "#ffffff";
@@ -6457,8 +6460,8 @@ var FPS = (function () {
 		s.fps[4].text = "Draw text : " + f.e; 
 		s.fpsTime = t;
 		s.fpsCount = 0;
-		s.graphics.clear();
-		s.graphics.drawRect(0,"#000000",[0,0,s.fps[1].getWidth(),100],true,"#000000");
+		s.back.graphics.clear();
+		s.back.graphics.drawRect(0,"#000000",[0,0,s.fps[1].getWidth(),100],true,"#000000");
 	};
 	FPS.prototype.die = function(){
 		var s = this;
