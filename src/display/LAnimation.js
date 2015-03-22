@@ -630,7 +630,7 @@ var LAnimation = (function() {
 		 * @examplelink <p><a href="../../../api/LAnimation/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		clone : function() {
-			var s = this, a = new LAnimation(null, s.bitmap.bitmapData, s.imageArray.slice(0));
+			var s = this, a = new s.constructor(null, s.bitmapList, s.imageArray.slice(0));
 			a.copyProperty(s);
 			a.childList.length = 0;
 			a.bitmap = s.bitmap.clone();

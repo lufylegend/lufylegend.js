@@ -119,12 +119,13 @@ var LTextField = (function () {
 		 * @since 1.9.8
 		 * @public
 		 * @example
-		 * 	var theTextField = new LTextField();
-		 * 	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
-		 * 	theTextField.x = 10;
-		 * 	theTextField.y = 100;
-		 * 	theTextField.textBaseline = "alphabetic";
-		 * 	addChild(theTextField);
+		 *	var theTextField = new LTextField();
+		 *	theTextField.setWordWrap(true,30);
+		 *	theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>A<p>B</p>C<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
+		 *	theTextField.x = 10;
+		 *	theTextField.y = 100;
+		 *	theTextField.textBaseline = "alphabetic";
+		 *	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/htmlText.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
@@ -1507,7 +1508,7 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				return s.width;
 			}
-			LGlobal.canvas.font = s.size + "pt " + s.font;
+			LGlobal.canvas.font = s.size + "px " + s.font;
 			return LGlobal.canvas.measureText(s.text).width;
 		},
 		/** @language chinese
@@ -1569,7 +1570,7 @@ var LTextField = (function () {
 		_getHeight : function () {
 			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
-				c.font = s.weight + " " + s.size + "pt " + s.font;
+				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
 					j = 0, k = 0, m = 0;
 					for (i = 0, l = s.text.length; i < l; i++) {
@@ -1588,7 +1589,7 @@ var LTextField = (function () {
 				}
 				return s.height;
 			}
-			c.font = s.weight + " " + s.size + "pt " + s.font; 
+			c.font = s.weight + " " + s.size + "px " + s.font; 
 			l = c.measureText("O").width * 1.2;
 			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
 				l = l * 1.2;
