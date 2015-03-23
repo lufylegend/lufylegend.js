@@ -567,7 +567,7 @@ var LDisplayObjectContainer = (function () {
 		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/getChildByName.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		getChildByName : function (n) {
-			var s  = this, c = s.childList;
+			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {
 				if (!c[i]) {
 					continue;
