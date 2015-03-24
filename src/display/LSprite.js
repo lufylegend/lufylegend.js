@@ -220,7 +220,8 @@ var LSprite = (function () {
 		 */
 		s.shapes = new Array();
 		/** @language chinese
-		 * 用户拖动该对象时的拖动范围。
+		 * <p>用户拖动该对象时的拖动范围。</p>
+		 * <p>LRectangle对象的x，y分别是对象可以拖动的起始坐标，width，height分别表示从起始坐标开始可以拖动的范围。</p>
 		 * @property dragRange
 		 * @type LRectangle
 		 * @since 1.9.8
