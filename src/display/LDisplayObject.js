@@ -340,6 +340,43 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		s.transform = new LTransform();
+		/** @language chinese
+		 * <p>[只读] 表示包含此显示对象的 DisplayObjectContainer 对象。</p>
+		 * <p>使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。</p>
+		 * <p>可以使用 parent 在显示列表中上移多个级别，如下所示：</p>
+		 * <p>this.parent.parent.x = 20;</p>
+		 * @property parent
+		 * @type LDisplayObjectContainer
+		 * @since 1.0.0
+		 * @public
+		 * @example
+		 * 	var sprite1 = new LSprite();
+		 * 	sprite1.name = "sprite1";
+		 * 	var sprite2 = new LSprite();
+		 * 	sprite2.name = "sprite2";
+		 * 	var sprite3 = new LSprite();
+		 * 	sprite3.name = "sprite3";
+		 * 	sprite1.addChild(sprite2);
+		 * 	sprite2.addChild(sprite3);
+		 * 	trace(sprite2.parent.name); // sprite1
+		 * 	trace(sprite3.parent.name); // sprite2
+		 * 	trace(sprite3.parent.parent.name); // sprite1
+		 */
+		/** @language english
+		 * ......
+		 * @property parent
+		 * @type LDisplayObjectContainer
+		 * @since 1.0.0
+		 * @public
+		 */
+		/** @language japanese
+		 * ......
+		 * @property parent
+		 * @type LDisplayObjectContainer
+		 * @since 1.0.0
+		 * @public
+		 */
+		s.parent = null;
 	}
 	var p = {
 		_createCanvas:function(){
