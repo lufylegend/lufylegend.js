@@ -38,7 +38,7 @@ var LScrollbar = (function () {
 		s.type = "LScrollbar";
 		s._showLayer = new LSprite();
 		s._mask = new LGraphics();
-		s._mask.drawRect(1, "#ffffff", [0, 0, maskW, maskH], true, "#ffffff");
+		s._mask.drawRect(1, "#ffffff", [0, 0, maskW, maskH]);
 		s._showLayer.graphics.drawRect(1, "#ffffff", [0, 0, maskW, maskH], true, "#ffffff");
 		s._wVisible = typeof wVisible == UNDEFINED ? true : wVisible;
 		s._hVisible = typeof hVisible == UNDEFINED ? true : wVisible;
@@ -47,12 +47,14 @@ var LScrollbar = (function () {
 		s._height = 0;
 		s._showObject = showObject;
 		s._showLayer.addChild(showObject);
-		s._showObject.addEventListener(LMouseEvent.MOUSE_DOWN, function(e){
-			e.currentTarget.startDrag(e.touchPointID);
-		});
-		s._showObject.addEventListener(LMouseEvent.MOUSE_UP, function(e){
-			e.currentTarget.stopDrag();
-		});
+		if(LGlobal.mobile){
+			s._showObject.addEventListener(LMouseEvent.MOUSE_DOWN, function(e){
+				e.currentTarget.startDrag(e.touchPointID);
+			});
+			s._showObject.addEventListener(LMouseEvent.MOUSE_UP, function(e){
+				e.currentTarget.stopDrag();
+			});
+		}
 		s._showObject.mask = s._mask;
 		if (!param) {
 			s._scrollWidth = 20;
