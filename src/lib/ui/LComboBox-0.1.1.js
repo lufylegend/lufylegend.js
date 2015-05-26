@@ -295,7 +295,8 @@ var LComboBox = (function () {
 		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
 		if (s.list.length > s.maxIndex) {
-			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, 20, false);
+			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, {overflowX:false,mode:"pc"});
+			sc.mode = "pc";
 			sc.x = coordinate.x;
 			sc.y = coordinate.y + s.layer.getHeight();
 			if (sc.y + textLayer.childHeight * s.maxIndex > LGlobal.height) {
