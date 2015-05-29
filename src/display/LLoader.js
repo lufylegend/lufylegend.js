@@ -45,7 +45,7 @@ var LLoader = (function () {
 	 * 	}
 	 * 	function loadBitmapdata (event) {
 	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
-	 * 		trace(event.target.content == event.target);//true
+	 * 		trace(event.currentTarget.content == event.target);//true
 	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
@@ -70,7 +70,7 @@ var LLoader = (function () {
 	 * 	}
 	 * 	function loadBitmapdata (event) {
 	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
-	 * 		trace(event.target.content == event.target);//true
+	 * 		trace(event.currentTarget.content == event.target);//true
 	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
@@ -95,7 +95,7 @@ var LLoader = (function () {
 	 * 	}
 	 * 	function loadBitmapdata (event) {
 	 * 		trace(loader.objectIndex == event.currentTarget.objectIndex);//true
-	 * 		trace(event.target.content == event.target);//true
+	 * 		trace(event.currentTarget.content == event.target);//true
 	 * 		var bitmapdata = new LBitmapData(event.target);  
 	 * 		var bitmap = new LBitmap(bitmapdata);
 	 * 		addChild(bitmap);
