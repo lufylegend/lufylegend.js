@@ -79,10 +79,12 @@ var LCheckBox = (function () {
 		s.layerSelect.visible = s.checked = false;
 		s.addEventListener(LMouseEvent.MOUSE_UP, s._onChange);
 	}
+	LCheckBox.ON_CHANGE = "onchange";
 	LCheckBox.prototype._onChange = function (e) {
 		var s = e.clickTarget;
 		s.checked = !s.checked;
 		s.layerSelect.visible = s.checked;
+		s.dispatchEvent(LCheckBox.ON_CHANGE);
 	};
 	/** @language chinese
 	 * 设置按钮选中状态。
