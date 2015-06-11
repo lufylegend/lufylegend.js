@@ -75,6 +75,24 @@ var LView = (function() {
 			self.controller.ll_viewList = [];
 		}
 		self.callParent("die",arguments);
+		if(!LGlobal.destroy){
+			return;
+		}
+		var dieList = [];
+		if (self.controller && self.controller.view && self.controller.view.objectIndex == self.objectIndex) {
+			dieList.push(self.controller);
+			dieList.push(self.controller.model);
+		}
+		dieList.push(self);
+		if (dieList.length == 1) {
+			return;
+		}
+		for (var i = 0; i < dieList.length; i++) {
+			var obj = dieList[i];
+			for (var k in obj) {
+				delete obj[k];
+			}
+		}
 	};
 	/** @language chinese
 	 * 在自己控制器发送LController.NOTIFY消息的时候，则自动调用自己的updateView函数

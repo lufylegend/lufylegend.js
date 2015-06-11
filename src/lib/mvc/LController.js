@@ -18,6 +18,7 @@ var LController = (function() {
 		self.ll_viewList = [];
 		self.ll_dispatcher = {};
 		self.addEventListener(LController.NOTIFY,self.notify);
+		self.addEventListener(LController.NOTIFY_ALL,self.notifyAll);
 		var conName = self.constructor.name,length = conName.length;name = conName.substr(0,length - 10);
 		self.load = new LMvcLoader(self);
 		var model = window[name+"Model"];
@@ -49,7 +50,7 @@ var LController = (function() {
 		self.construct();
 	}
 	/** @language chinese
-	 * <p>通知器，该消息发送之后，会直接运行控制器Controller关联的所有视图View的updateView函数。</p>
+	 * <p>通知器，该消息发送之后，会直接运行控制器Controller同名视图View的updateView函数。</p>
 	 * @event LController.NOTIFY
 	 * @type String
 	 * @static
@@ -57,12 +58,42 @@ var LController = (function() {
 	 * @public
 	 */
 	LController.NOTIFY = "notify";
+	/** @language chinese
+	 * <p>通知器，该消息发送之后，会直接运行控制器Controller关联的所有视图View的updateView函数。</p>
+	 * @event LController.NOTIFY_ALL
+	 * @type String
+	 * @static
+	 * @since 1.9.10
+	 * @public
+	 */
+	LController.NOTIFY_ALL = "notify_all";
 	LController.prototype.notify = function(event){
 		var self = event.currentTarget;
 		for(var i=0,l=self.ll_viewList.length;i<l;i++){
-			var view = self.ll_viewList[i];
-			if(view && view.mvcType == "view"){
+			LController._notify(self.ll_viewList[i], false);
+		}
+	};
+	LController.prototype.notifyAll = function(event){
+		var self = event.currentTarget;
+		for(var i=0,l=self.ll_viewList.length;i<l;i++){
+			LController._notify(self.ll_viewList[i], true);
+		}
+	};
+	LController._notify = function(view, depth){
+		if(view && view.visible){
+			if(view.mvcType == "view"){
 				view.updateView();
+			}
+			if(!depth){
+				return;
+			}
+			var childList = view.childList;
+			if(!childList || !childList.length){
+				return;
+			}
+			for(var i=0;i<childList.length;i++){
+				var child = childList[i];
+				LController._notify(child, depth);
 			}
 		}
 	};
