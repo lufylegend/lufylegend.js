@@ -1037,12 +1037,12 @@ var LGlobal = ( function () {
 	LGlobal.touchHandler = function (e) {
 		if (LGlobal.stopPropagation) {
 			e.stopPropagation();
+			if (e.stopImmediatePropagation) {
+				e.stopImmediatePropagation();
+			}
 		}
 		if (LGlobal.preventDefault) {
 			e.preventDefault();
-		}
-		if (e.stopImmediatePropagation) {
-			e.stopImmediatePropagation();
 		}
 		return e;
 	};
