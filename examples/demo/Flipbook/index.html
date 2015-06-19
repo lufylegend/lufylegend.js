@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>数独</title>
+	<meta content="lufylegend.js,html5,game" name="description" />
+	<meta content="lufylegend.js,html5,game" name="keywords" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="http://lufylegend.com/js/lufylegend-1.9.9.min.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script type="text/javascript">
+			var contents = "<font size='30'>相信未来</font>\n"
+			+"<font size='20'>作者 食指</font>\n"
+			+"<font size='24'>当蜘蛛网无情地查封了我的炉台，\n"
+			+"当灰烬的余烟叹息着贫困的悲哀，\n"
+			+"我依然固执地铺平失望的灰烬，\n"
+			+"用美丽的雪花写下：相信未来。\n"
+			+"当我的紫葡萄化为深秋的露水，\n"
+			+"当我的鲜花依偎在别人的情怀，\n"
+			+"我依然固执地用凝霜的枯藤，\n"
+			+"在凄凉的大地上写下：相信未来。\n"
+			+"我要用手指那涌向天边的排浪，\n"
+			+"我要用手掌那托起太阳的大海，\n"
+			+"摇曳着曙光那支温暖漂亮的笔杆，\n"
+			+"用孩子的笔体写下：相信未来。\n"
+			+"我之所以坚定地相信未来，\n"
+			+"是我相信未来人们的眼睛——\n"
+			+"她有拨开历史风尘的睫毛，\n"
+			+"她有看透岁月篇章的瞳孔。\n"
+			+"不管人们对于我们腐烂的皮肉，\n"
+			+"那些迷途的惆怅，失败的苦痛，\n"
+			+"是寄予感动的热泪，深切的同情，\n"
+			+"还是给以轻蔑的微笑，辛辣的嘲讽。\n"
+			+"我坚信人们对于我们的脊骨，\n"
+			+"那无数次地探索、迷途、失败和成功，\n"
+			+"一定会给予热情、客观、公正的评定，\n"
+			+"是的，我焦急地等待着他们的评定。\n"
+			+"朋友，坚定地相信未来吧，\n"
+			+"相信不屈不挠的努力，\n"
+			+"相信战胜死亡的年轻，\n"
+			+"相信未来，热爱生命。</font>";
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.width = 480;
+				theTextField.setWordWrap(true,30);
+				theTextField.htmlText = contents;
+				theTextField.x = 10;
+				theTextField.y = 30;
+				theTextField.textBaseline = "alphabetic";
+				addChild(theTextField);
+			}
+		</script> 
+	</body>
+</html>
