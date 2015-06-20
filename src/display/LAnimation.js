@@ -304,6 +304,7 @@ var LAnimation = (function() {
 			}
 			if (changed) {
 				s._ll_stepIndex = 0;
+				s._send_complete = false;
 			}
 		},
 		/** @language chinese
