@@ -37,6 +37,11 @@ var LTweenLite = (function () {
 			s.active = s.duration == 0 && s.delay == 0;
 			s.varsto = {};
 			s.varsfrom = {};
+			s.varsDiff = {};
+			s.varsListIndex = {};
+			s.varsListCurr = {};
+			s.varsListTo = {};
+			s.varsListLength = {};
 			s.stop = false;
 			if (typeof(s.vars.ease) != "function") {
 				s.vars.ease = LEasing.None.easeIn;
@@ -56,8 +61,23 @@ var LTweenLite = (function () {
 				delete s.vars.onStart;
 			}
 			for (k in s.vars) {
+				if (Array.isArray(s.vars[k])) {
+					s.vars[k].unshift(s.target[k]);
+					var diff = 0, curr = s.target[k];
+					for (var i = 0, l = s.vars[k].length; i < l; i++) {
+						var v = s.vars[k][i];
+						diff += (v > curr ? v - curr : curr - v);
+						curr = v;
+					}
+					s.varsListIndex[k] = 0;
+					s.varsListCurr[k] = 0;
+					s.varsListTo[k] = diff;
+				} else if (typeof s.vars[k] != "number") {
+					continue;
+				}
 				s.varsto[k] = s.vars[k];
 				s.varsfrom[k] = s.target[k];
+				s.varsDiff[k] = s.vars[k] - s.target[k];
 			}
 		},
 		/** @language chinese
@@ -106,15 +126,21 @@ var LTweenLite = (function () {
 					return;
 				}
 			}
-			for (tweentype in s.varsto) {
-				if (tweentype == "tweenTimeline") {
+			for (k in s.varsto) {
+				if (typeof s.varsListTo[k] != UNDEFINED){
+					var curr = s.ease(type_timer ? etime : s.currentTime, 0, s.varsListTo[k], s.duration);
+					var c = s.varsListIndex[k] > 0 ? s.vars[k][s.varsListIndex[k] - 1] : s.varsfrom[k];
+					var v = s.vars[k][s.varsListIndex[k]];
+					while(s.varsListCurr[k] + (v > c ? v - c : c - v) < curr){
+						s.varsListCurr[k] += (v > c ? v - c : c - v);
+						c = v;
+						s.varsListIndex[k]++;
+						v = s.vars[k][s.varsListIndex[k]];
+					}
+					s.target[k] = s.vars[k][s.varsListIndex[k] - 1] + (curr - s.varsListCurr[k]) * (v > c ? 1 : -1);
 					continue;
 				}
-				if (type_timer) {
-					s.target[tweentype] = s.ease(etime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
-				} else {
-					s.target[tweentype] = s.ease(s.currentTime, s.varsfrom[tweentype], s.varsto[tweentype] - s.varsfrom[tweentype], s.duration);
-				}
+				s.target[k] = s.ease(type_timer ? etime : s.currentTime, s.varsfrom[k], s.varsDiff[k], s.duration);
 			}
 			if (s.onStart) {
 				s._dispatchEvent(s.onStart);
@@ -128,6 +154,10 @@ var LTweenLite = (function () {
 			}
 			if (e) {
 				for (tweentype in s.varsto) {
+					if (typeof s.varsListTo[tweentype] != UNDEFINED){
+						s.target[tweentype] = s.varsto[tweentype][s.vars[tweentype].length - 1];
+						continue;
+					}
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {

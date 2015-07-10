@@ -88,7 +88,13 @@ var LWebAudio = (function () {
 	}
 	LWebAudio.container = [];
 	LWebAudio.containerCount = 0;
-	LWebAudio.audioTag = new Audio();
+	try {
+		LWebAudio.audioTag = new Audio();
+	} catch (e) {
+		console.warn( "ReferenceError: Can't find variable: Audio");
+		LWebAudio.audioTag = {canPlayType : function () { return false; }};
+	}
+	
 	LWebAudio._context = null;
 	var p = {
 		getWebAudio : function () {
