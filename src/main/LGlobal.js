@@ -692,7 +692,14 @@ var LGlobal = ( function () {
 	LGlobal.left = 0;
 	LGlobal.window = window;
 	(function (n) {
-		LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
+		LGlobal.isOldFirefox = (function(un){
+			var i = un.toLowerCase().indexOf('firefox');
+			if (i < 0) {
+				return false;
+			}
+			var v = un.substring(i + 8, un.length);
+			return parseFloat(v) < 39.0;
+		})(n);
 		if (n.indexOf(OS_IPHONE) > 0) {
 			LGlobal.os = OS_IPHONE;
 			LGlobal.canTouch = true;
@@ -2031,7 +2038,7 @@ var LGlobal = ( function () {
 		}
 		LGlobal.canvasObj.style.marginTop = t + "px";
 		LGlobal.canvasObj.style.marginLeft = l + "px";
-		if (LGlobal.isFirefox) {
+		if (LGlobal.isOldFirefox) {
 			LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
 			LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
 		}

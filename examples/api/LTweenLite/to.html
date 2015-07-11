@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<title>LTweenLite.to</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../../../src/transitions/LTweenLite.js"></script>
 	</head>
 	<body>
 			<div id="legend">
@@ -29,6 +30,14 @@
 				},tweenTimeline:LTweenLite.TYPE_TIMER});
 				LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
 				.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+				
+				
+				var circleTest = new LSprite();
+				circleTest.x = 100;
+				circleTest.y = 50;
+				circleTest.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+				addChild(circleTest);
+				LTweenLite.to(circleTest,4,{x:[200,0,200,400,500],y:[150,250,400,50,300],ease:LEasing.Strong.easeInOut,tweenTimeline:LTweenLite.TYPE_TIMER});
 			}
 			</script>
 	</body>

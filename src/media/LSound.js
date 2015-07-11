@@ -211,12 +211,17 @@ var LSound = (function () {
 	function LSound (u) {
 		var s = this;
 		s.type = "LSound";
-		s._type="audio";
+		s._type = "audio";
 		if (LSound.webAudioEnabled && LGlobal.webAudio) {
 			LExtends(s, LWebAudio, []);
 		} else {
 			LExtends(s, LMedia, []);
-			s.data = new Audio();
+			try {
+				s.data = new Audio();
+			} catch (e) {
+				console.warn( "ReferenceError: Can't find variable: Audio");
+				s.data = {};
+			}
 			s.data.loop = false;
 			s.data.autoplay = false;
 		}
