@@ -425,9 +425,23 @@ var LMouseEventContainer = (function () {
 				s.addMouseDblEvent(o, f);
 			}
 		},
-		hasEvent : function (o, list) {
+		hasEventListener : function(o, t, f){
+			var s = this, list;
+			if (t == LMouseEvent.MOUSE_DOWN) {
+				list = s.mouseDownContainer;
+			} else if (t == LMouseEvent.MOUSE_UP) {
+				list = s.mouseUpContainer;
+			} else if (t == LMouseEvent.MOUSE_OVER) {
+				list = s.mouseOverContainer;
+			} else if (t == LMouseEvent.MOUSE_OUT) {
+				list = s.mouseOutContainer;
+			} else if (t == LMouseEvent.MOUSE_MOVE) {
+				list = s.mouseMoveContainer;
+			} else {
+				list = s.mouseDblContainer;
+			}
 			for (var i = 0, l = list.length; i < l; i++) {
-				if (list[i].container.objectIndex === o.objectIndex) {
+				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)) {
 					return true;
 				}
 			}

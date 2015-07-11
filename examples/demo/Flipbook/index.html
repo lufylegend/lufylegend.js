@@ -19,23 +19,20 @@
 			var moveType = "";
 			var minPage = 0, maxPage = 4;
 			var testLayer;
+			var maskPoints;
+			var currentPage;
+			var nextPage;
+			var desk;
 			function main() {
 				var back = new LSprite();
 				back.graphics.drawRect(1, "#000000", [0, 0, LGlobal.width, LGlobal.height]);
 				back.graphics.drawLine(1, "#000000", [LGlobal.width * 0.5, 0, LGlobal.width * 0.5, LGlobal.height]);
 				addChild(back);
-				testLayer = new LSprite();
-				testLayer.x = LGlobal.width * 0.5;
-				testLayer.y = 20;
-				testLayer.graphics.drawRect(1, "#000000", [0, 0, bookWidth, bookHeight]);
-				addChild(testLayer);
-				
-				testLayer.addEventListener(LMouseEvent.MOUSE_DOWN, onmousedown);
-				testLayer.addEventListener(LMouseEvent.MOUSE_UP, onmouseup);
-				return;
+				desk = new LSprite();
+				addChild(desk);
 				book = new LSprite();
-				book.x = LGlobal.width * 0.5;
-				book.y = 20;
+				desk.x = book.x = LGlobal.width * 0.5;
+				desk.y = book.y = 20;
 				addChild(book);
 				
 				var page = getPage(pageIndex);
@@ -43,21 +40,49 @@
 				
 				book.addEventListener(LMouseEvent.MOUSE_DOWN, onmousedown);
 				book.addEventListener(LMouseEvent.MOUSE_UP, onmouseup);
+				book.addEventListener(LMouseEvent.MOUSE_MOVE, onmousemove);
+				book.addEventListener(LEvent.ENTER_FRAME, onframe);
+			}
+			function onframe(event){
+				if(maskPoints == null){
+					return;
+				}
+				if(!book.mask){
+					var mask = new LSprite();
+					mask.x = book.x;
+					mask.y = book.y;
+					book.mask = mask;
+				}
+				book.mask.graphics.clear();
+				book.mask.graphics.drawVertices(0, "#ff0000", [
+				[-bookWidth, -bookHeight], 
+				[maskPoints[0].x > 0 ? maskPoints[0].x : 0, 0], 
+				[bookWidth, maskPoints[1].y], 
+				[bookWidth, bookHeight*2], 
+				[-bookWidth, bookHeight*2]
+				]);
+				var currentPageData = currentPage.getChildAt(0);
+				currentPageData.x = maskPoints[0].x - bookWidth;
+				currentPage.x = maskPoints[0].x;
+				
+				var angle = Math.atan2(maskPoints[1].y - maskPoints[0].y, maskPoints[1].x - maskPoints[0].x);
+				currentPage.rotate = -(180-angle*360/Math.PI);
+			}
+			function onmousemove(event){
+				if(!LGlobal.IS_MOUSE_DOWN)return;
+				var point = new LPoint(event.selfX,event.selfY);
+				var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
+				maskPoints = getPoints(middlePoint);
 			}
 			function onmousedown(event){
-				console.log("event ",event);
-				var point = new LPoint(event.selfX,event.selfY);
-				testLayer.graphics.drawLine(1, "#000000", [point.x, point.y, bookWidth, 0]);
-				var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
-				testLayer.graphics.drawArc(2, "#ff0000", [middlePoint.x, middlePoint.y, 2, 0, 2*Math.PI]);
-				return;
 				if(event.selfX > 0){
 					var page = getPage(pageIndex + 1);
 					page.x = -bookWidth;
 					book.addChild(page);
+					currentPage = page;
 					if(pageIndex + 2 <= maxPage){
-						page = getPage(pageIndex + 2);
-						book.addChild(page);
+						nextPage = getPage(pageIndex + 2);
+						desk.addChild(nextPage);
 					}
 					moveType = "plus";
 				}else{
@@ -72,15 +97,50 @@
 				}
 			}
 			function onmouseup(event){
-				testLayer.graphics.clear();
-				testLayer.graphics.drawRect(1, "#000000", [0, 0, bookWidth, bookHeight]);
-				console.log("event ",event);
-				return;
-				if(event.selfX > 0){
-					pageIndex += 2;
+				var point = new LPoint(event.selfX,event.selfY);
+				if(event.selfX > bookWidth * 0.5){
+					LTweenLite.to(point,0.3,{x:bookWidth,y:0,onUpdate:function(event){
+						var currentPoint = event.target;
+						var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
+						maskPoints = getPoints(middlePoint);
+					},onComplete:function(event){
+						currentPage.remove();
+						maskPoints = null;
+						book.mask=null;
+					}})
 				}else{
-					pageIndex -= 2;
+					LTweenLite.to(point,0.4,{x:-bookWidth,y:0,onUpdate:function(event){
+						var currentPoint = event.target;
+						var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
+						maskPoints = getPoints(middlePoint);
+					},onComplete:function(event){
+						currentPage.rotate = 0;
+						currentPage.x = -bookWidth;
+						currentPage.getChildAt(0).x = 0;
+						maskPoints = null;
+						book.mask=null;
+						book.removeChildAt(0);
+						LGlobal.destroy = false;
+						desk.removeChildAt(0);
+						book.addChild(nextPage);
+						LGlobal.destroy = true;
+						
+					}})
+					pageIndex += 2;
 				}
+			}
+			function getPoints(middlePoint){
+				var point1 = new LPoint(bookWidth - ((Math.pow(bookWidth - middlePoint.x,2) + Math.pow(middlePoint.y,2))/(bookWidth - middlePoint.x)), 0);
+				var point2 = new LPoint(bookWidth, ((Math.pow(bookWidth - middlePoint.x,2) + Math.pow(middlePoint.y,2))/middlePoint.y));
+				if(point1.x < 0){
+					point2 = new LPoint(bookWidth, bookWidth * point2.y / (bookWidth - point1.x));
+					point1 = new LPoint(0, 0);
+				}
+				/*if(point2.y > bookHeight){
+					point1 = new LPoint(bookWidth - ((bookWidth - point1.x) * bookHeight / point2.y), 0);
+					point2 = new LPoint(bookWidth, bookHeight);
+				}*/
+				return [point1, point2]
 			}
 			function getPage(index) {
 				var layer = new LSprite();
@@ -114,7 +174,9 @@
 					theTextField.text = "朋友，坚定地相信未来吧，\n" + "相信不屈不挠的努力，\n" + "相信战胜死亡的年轻，\n" + "相信未来，热爱生命。";
 				}
 				layer.addChild(theTextField);
-				return getBitmap(layer);
+				var pageLayer = new LSprite();
+				pageLayer.addChild(getBitmap(layer));
+				return pageLayer;
 			}
 			function getBitmap(displayObject){
 				var bitmapData = new LBitmapData(null,0,0,displayObject.getWidth(),displayObject.getHeight(),LBitmapData.DATA_CANVAS);
