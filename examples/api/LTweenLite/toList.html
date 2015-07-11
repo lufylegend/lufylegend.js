@@ -2,10 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>LTweenLite.to</title>
+		<title>LTweenLite.to自定义路径</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
 		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
-		<script type="text/javascript" src="../../../src/transitions/LTweenLite.js"></script>
 	</head>
     <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;font-size: 0;">
 			<div id="legend">
@@ -46,16 +45,15 @@
 				if(pointList.length == 0){
 					return;
 				}
-				backgroundLayer.graphics.clear();
-				backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
-				var xList = [], yList = [];
+				
 				for(var i=0;i<pointList.length;i++){
 					var point = pointList[i];
-					xList.push(point.x);
-					yList.push(point.y);
 				}
-				LTweenLite.to(circle,5,{x:xList,y:yList,ease:LEasing.Cubic.easeInOut});
-				pointList.length = 0;
+				LTweenLite.to(circle,2,{coordinate:pointList,ease:LEasing.Cubic.easeIn,onComplete:function(){
+					backgroundLayer.graphics.clear();
+					backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
+				}});
+				pointList = [];
 			}
 			function clearTweenPoint(event){
 				pointList.length = 0;

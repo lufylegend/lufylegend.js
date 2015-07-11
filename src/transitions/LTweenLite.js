@@ -61,17 +61,19 @@ var LTweenLite = (function () {
 				delete s.vars.onStart;
 			}
 			for (k in s.vars) {
-				if (Array.isArray(s.vars[k])) {
-					s.vars[k].unshift(s.target[k]);
-					var diff = 0, curr = s.target[k];
+				if (k == "coordinate" && Array.isArray(s.vars[k])) {
+					var diff = 0, curr = {x:s.target.x,y:s.target.y};
 					for (var i = 0, l = s.vars[k].length; i < l; i++) {
-						var v = s.vars[k][i];
-						diff += (v > curr ? v - curr : curr - v);
-						curr = v;
+						var p = s.vars[k][i];
+						diff += LPoint.distance(p,curr);
+						curr = p;
 					}
 					s.varsListIndex[k] = 0;
 					s.varsListCurr[k] = 0;
 					s.varsListTo[k] = diff;
+					s.varsto[k] = s.vars[k];
+					s.varsfrom[k] = {x:s.target.x,y:s.target.y};
+					continue;
 				} else if (typeof s.vars[k] != "number") {
 					continue;
 				}
@@ -129,15 +131,27 @@ var LTweenLite = (function () {
 			for (k in s.varsto) {
 				if (typeof s.varsListTo[k] != UNDEFINED){
 					var curr = s.ease(type_timer ? etime : s.currentTime, 0, s.varsListTo[k], s.duration);
+					if(curr > s.varsListTo[k]){
+						curr = s.varsListTo[k];
+					}
 					var c = s.varsListIndex[k] > 0 ? s.vars[k][s.varsListIndex[k] - 1] : s.varsfrom[k];
 					var v = s.vars[k][s.varsListIndex[k]];
-					while(s.varsListCurr[k] + (v > c ? v - c : c - v) < curr){
-						s.varsListCurr[k] += (v > c ? v - c : c - v);
+					var d = LPoint.distance(c,v);
+					while(s.varsListCurr[k] + d < curr){
+						s.varsListCurr[k] += d;
 						c = v;
 						s.varsListIndex[k]++;
 						v = s.vars[k][s.varsListIndex[k]];
+						d = LPoint.distance(c,v);
 					}
-					s.target[k] = s.vars[k][s.varsListIndex[k] - 1] + (curr - s.varsListCurr[k]) * (v > c ? 1 : -1);
+					s.target.x = c.x;
+					s.target.y = c.y;
+					if(d != 0 && v.x - c.x != 0){
+						s.target.x += (v.x - c.x)*(curr - s.varsListCurr[k])/d;
+					}
+					if(d != 0 && v.y - c.y != 0){
+						s.target.y += (v.y - c.y)*(curr - s.varsListCurr[k])/d;
+					}
 					continue;
 				}
 				s.target[k] = s.ease(type_timer ? etime : s.currentTime, s.varsfrom[k], s.varsDiff[k], s.duration);
@@ -155,7 +169,9 @@ var LTweenLite = (function () {
 			if (e) {
 				for (tweentype in s.varsto) {
 					if (typeof s.varsListTo[tweentype] != UNDEFINED){
-						s.target[tweentype] = s.varsto[tweentype][s.vars[tweentype].length - 1];
+						var p = s.varsto[tweentype][s.vars[tweentype].length - 1];
+						s.target.x = p.x;
+						s.target.y = p.y;
 						continue;
 					}
 					s.target[tweentype] = s.varsto[tweentype];
@@ -270,6 +286,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
+		 * <tr><td>coordinate</td><td>Array</td><td>You can implement a custom path，The Array must be a LPoint Objects, or like the {x:1,y:2}，<a href="../../../api/LTweenLite/toList.html" target="_blank">测试链接</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例
 		 * @example
@@ -314,6 +331,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
+		 * <tr><td>coordinate</td><td>Array</td><td>move pathsパスを自由に定義することができます，配列のデータはLPointか{x:1,y:2}のようなオブジェクトになります，<a href="../../../api/LTweenLite/toList.html" target="_blank">Try it »</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
@@ -358,6 +376,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>トゥイーンがスタートする時、呼び出す関数</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>トゥイーン中、呼び出す関数</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>trueを設定したら、トゥイーンはループします</td></tr>
+		 * <tr><td>coordinate</td><td>Array</td><td>移動するパスを自由に定義することができます，配列のデータはLPointか{x:1,y:2}のようなオブジェクトになります，<a href="../../../api/LTweenLite/toList.html" target="_blank">実際のサンプルを見る</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
