@@ -180,6 +180,16 @@ if (!String.format) {
 	    });
 	};
 }
+if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
+	Object.defineProperty(Function.prototype, 'name', {
+		get:function() {
+			var funcNameRegex = /function\s([^(]{1,})\(/;
+			var results = (funcNameRegex).exec((this).toString());
+			return (results && results.length > 1) ? results[1].trim() : "";
+		},
+		set:function(value) {}
+	});
+}
 /** @language chinese
  * 您可以在测试环境下捕获来自 trace() 函数的输出并显示结果。如果 trace 语句中的任何参数包含 String 之外的数据类型，则 trace 函数将调用与该数据类型关联的 toString() 方法。例如，如果该参数是一个布尔值，则跟踪函数将调用 Boolean.toString() 并显示返回值。
  * @method trace
