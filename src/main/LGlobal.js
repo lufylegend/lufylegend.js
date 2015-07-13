@@ -791,6 +791,8 @@ var LGlobal = ( function () {
 		if (LGlobal.canTouch) {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
+			LGlobal.innerWidth = window.innerWidth;
+			LGlobal.innerHeight = window.innerHeight;
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
 			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
@@ -870,8 +872,12 @@ var LGlobal = ( function () {
 				LGlobal.stage.baseRemoveEvent(type, listener);
 			}
 		};
+		LEvent.addEventListener(LGlobal.window, "blur", function(){
+			LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+		});
 	};
 	LGlobal.ll_touchStart = function (event) {
+		LGlobal._outStageCheckCount = 1;
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
@@ -943,6 +949,7 @@ var LGlobal = ( function () {
 		if (LGlobal.mouseJoint_end) {
 			LGlobal.mouseJoint_end();
 		}
+		LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 	};
 	LGlobal.ll_touchMove = function (e) {
 		var cX, cY, eve, l, ll = e.touches.length;
@@ -964,6 +971,11 @@ var LGlobal = ( function () {
 			}
 			LGlobal.buttonStatusEvent = eve;
 			LMultitouch.touchs["touch" + eve.touchPointID] = eve;
+			if(eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.height){
+				LGlobal._outStageCheckCount = 0;
+			}else{
+				LGlobal._outStageCheckCount = 1;
+			}
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
 		}
 		LGlobal.touchHandler(e);
@@ -1159,6 +1171,13 @@ var LGlobal = ( function () {
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {
 			return;
+		}
+		if(LGlobal._outStageCheckCount <= 0){
+			LGlobal._outStageCheckCount--;
+			if(LGlobal._outStageCheckCount < -2){
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+				LGlobal._outStageCheckCount = 1;
+			}
 		}
 		if (LGlobal.fpsStatus) {
 			LGlobal.fpsStatus.reset();
