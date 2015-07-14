@@ -269,6 +269,7 @@ var LButton = (function () {
 			LMouseEventContainer.pushButton(s);
 		}
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s.ll_modeDown);
+		s.setCursorEnabled(true);
 	}
 	/** @language chinese
 	 * [静态] 按钮的不可用状态
