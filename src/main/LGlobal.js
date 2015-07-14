@@ -791,8 +791,6 @@ var LGlobal = ( function () {
 		if (LGlobal.canTouch) {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
-			LGlobal.innerWidth = window.innerWidth;
-			LGlobal.innerHeight = window.innerHeight;
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
 			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
 			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
@@ -872,12 +870,16 @@ var LGlobal = ( function () {
 				LGlobal.stage.baseRemoveEvent(type, listener);
 			}
 		};
+		LGlobal.innerWidth = window.innerWidth;
+		LGlobal.innerHeight = window.innerHeight;
 		LEvent.addEventListener(LGlobal.window, "blur", function(){
 			LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 		});
 	};
 	LGlobal.ll_touchStart = function (event) {
 		LGlobal._outStageCheckCount = 1;
+		LGlobal.IS_MOUSE_DOWN = true;
+		LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
@@ -901,7 +903,6 @@ var LGlobal = ( function () {
 			LGlobal.mouseEvent(eve, LMouseEvent.DOUBLE_CLICK);
 			LGlobal.ll_clicks = 0;
 		}
-		LGlobal.IS_MOUSE_DOWN = true;
 		if (LGlobal.mouseJoint_start) {
 			LGlobal.mouseJoint_start(eve);
 		}
@@ -922,6 +923,7 @@ var LGlobal = ( function () {
 	};
 	LGlobal.ll_touchEnd = function (event) {
 		var e, eve, k, i, l, h;
+		LGlobal.IS_MOUSE_DOWN = false;
 		if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
 			for (k in LMultitouch.touchs) {
 				e = LMultitouch.touchs[k];
@@ -944,7 +946,6 @@ var LGlobal = ( function () {
 		}
 		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		LGlobal.touchHandler(event);
-		LGlobal.IS_MOUSE_DOWN = false;
 		LGlobal.buttonStatusEvent = null;
 		if (LGlobal.mouseJoint_end) {
 			LGlobal.mouseJoint_end();
@@ -1022,6 +1023,17 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.cursor = "default";
+		if(mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.height){
+			if(LGlobal._outStageCheckCount){
+				LGlobal._outStageCheckCount = 0;
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+			}
+		}else{
+			if(!LGlobal._outStageCheckCount){
+				LGlobal._outStageCheckCount = 1;
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
+			}
+		}
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
 		document.body.style.cursor = LGlobal.cursor;
 		if (LGlobal.mouseJoint_move) {
@@ -1988,6 +2000,8 @@ var LGlobal = ( function () {
 	 */
 	LGlobal.resize = function (canvasW, canvasH) {
 		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
+		LGlobal.innerWidth = ww;
+		LGlobal.innerHeight = wh;
 		if (canvasW) {
 			w = canvasW;
 		}
