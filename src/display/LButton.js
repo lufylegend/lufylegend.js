@@ -264,7 +264,6 @@ var LButton = (function () {
 		 * @public
 		 */
 		s.staticMode = false;
-		s._ll_cursorEnabled = true;
 		s.setState(LButton.STATE_ENABLE);
 		if (LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE]) {
 			LMouseEventContainer.pushButton(s);
@@ -500,9 +499,6 @@ var LButton = (function () {
 			s.upState.visible = false;
 			s.downState.visible = false;
 			s.overState.visible = true;
-			if (LGlobal.os == OS_PC && s._ll_cursorEnabled && s.parent) {
-				LGlobal.cursor = "pointer";
-			}
 		},
 		ll_modeOut : function (e){
 			var s = e.clickTarget;
@@ -525,7 +521,7 @@ var LButton = (function () {
 			s.upState.visible = true;
 		},
 		setCursorEnabled : function (value) {
-			this._ll_cursorEnabled = value;
+			this.useCursor = value ? "pointer" : null;
 		},
 		clone : function () {
 			var s = this;

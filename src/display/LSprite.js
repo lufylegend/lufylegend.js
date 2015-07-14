@@ -228,6 +228,7 @@ var LSprite = (function () {
 		 * @public
 		 */
 		s.dragRange = null;
+		s.useCursor = null;
 	}
 	var p = {
 		/** @language chinese
@@ -764,6 +765,9 @@ var LSprite = (function () {
 			}
 			on = s.ismouseon(e, cd);
 			if (on) {
+				if(LGlobal.os == OS_PC && s.useCursor && type == LMouseEvent.MOUSE_MOVE){
+					LGlobal.cursor = s.useCursor;
+				}
 				if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
 					s.ll_mousein = true;
 					if (s._mevent(LMouseEvent.MOUSE_OVER)) {
