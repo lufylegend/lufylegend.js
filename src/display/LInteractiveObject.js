@@ -170,7 +170,7 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type && (!listener || s.mouseList[i].listener == listener) {
+					if (type == s.mouseList[i].type && (!listener || s.mouseList[i].listener == listener)) {
 						return true;
 					}
 				}
