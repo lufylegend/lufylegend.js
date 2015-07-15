@@ -1,5 +1,6 @@
 /** @language chinese
- * <p>用户将焦点从显示列表中的一个对象更改到另一个对象时，对象将调度 LFocusEvent 对象。</p>
+ * <p>用户将焦点从显示列表中的一个LTextField对象更改到另一个LTextField对象时，对象将调度 LFocusEvent 对象。</p>
+ * <p>※ LGlobal.stage作为舞台，也可以添加LFocusEvent事件，LFocusEvent.FOCUS_IN表示鼠标(或手指)进入舞台，反之，LFocusEvent.FOCUS_OUT则指的是舞台失去焦点，包括移动端手指移出屏幕，或者因为alert等弹出框而使得画面失去焦点后触发。</p>
  * @class LFocusEvent
  * @constructor
  * @since 1.9.0

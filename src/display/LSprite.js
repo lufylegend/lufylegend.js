@@ -228,6 +228,21 @@ var LSprite = (function () {
 		 * @public
 		 */
 		s.dragRange = null;
+		/** @language chinese
+		 * <p>表示当指针滑过sprite时是否显示的指针光标。</p>
+		 * @property useCursor
+		 * @type String
+		 * @default null
+		 * @since 1.9.10
+		 * @public
+		 * @example
+		 * 	var layer01 = new LSprite();
+		 * 	layer01.useCursor = "pointer";
+		 * 	addChild(layer01);
+		 * 	var bm01 = new LBitmap(new LBitmapData("#FF0000", 0, 0, 100, 100));
+		 * 	layer01.addChild(bm01);
+		 * @examplelink <p><a href="../../../api/LSprite/useCursor.html" target="_blank">测试链接</a></p>
+		 */
 		s.useCursor = null;
 	}
 	var p = {
