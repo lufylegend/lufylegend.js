@@ -239,6 +239,9 @@ var LMenubar = (function () {
 			menu.graphics.drawRect(0, s.style.backgroundColor, [0, 0, label.getWidth() + s.style.horizontalIndent * 2, label.getHeight() + s.style.verticalIndent * 2], true, s.style.backgroundColor);
 			menu.addEventListener(LMouseEvent.MOUSE_DOWN, s.mousedown);
 			menu.addEventListener(LMouseEvent.MOUSE_MOVE, s.mousemove);
+			if(LGlobal.mobile){
+				menu.addEventListener(LMouseEvent.MOUSE_DOWN, s.mousemove);
+			}
 			if (s.objectIndex == layer.objectIndex) {
 				menu.x = w + sx;
 				menu.y = 0 + sy;

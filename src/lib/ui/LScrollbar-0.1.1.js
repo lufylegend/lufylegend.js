@@ -38,7 +38,7 @@ var LScrollbar = (function () {
 		s.type = "LScrollbar";
 		s._showLayer = new LSprite();
 		s._mask = new LGraphics();
-		s._mask.drawRect(1, "#ffffff", [0, 0, maskW, maskH], true, "#ffffff");
+		s._mask.drawRect(1, "#ffffff", [0, 0, maskW, maskH]);
 		s._showLayer.graphics.drawRect(1, "#ffffff", [0, 0, maskW, maskH], true, "#ffffff");
 		s._wVisible = typeof wVisible == UNDEFINED ? true : wVisible;
 		s._hVisible = typeof hVisible == UNDEFINED ? true : wVisible;
@@ -47,12 +47,7 @@ var LScrollbar = (function () {
 		s._height = 0;
 		s._showObject = showObject;
 		s._showLayer.addChild(showObject);
-		s._showObject.addEventListener(LMouseEvent.MOUSE_DOWN, function(e){
-			e.currentTarget.startDrag(e.touchPointID);
-		});
-		s._showObject.addEventListener(LMouseEvent.MOUSE_UP, function(e){
-			e.currentTarget.stopDrag();
-		});
+		s.mode = "touch";
 		s._showObject.mask = s._mask;
 		if (!param) {
 			s._scrollWidth = 20;
@@ -61,11 +56,37 @@ var LScrollbar = (function () {
 			s._scrollWidth = param;
 			s._selectHeight = s._scrollWidth * 1.5;
 		} else if (typeof param == "object") {
-			s._ll_bar_back = param["back"];
-			s._ll_bar_select = param["select"];
-			s._ll_bar_arraw = param["arraw"];
-			s._scrollWidth = s._ll_bar_back.getWidth();
-			s._selectHeight = s._ll_bar_select.getHeight();
+			if(typeof param["back"] != UNDEFINED && typeof param["select"] != UNDEFINED && typeof param["arraw"] != UNDEFINED){
+				s._ll_bar_back = param["back"];
+				s._ll_bar_select = param["select"];
+				s._ll_bar_arraw = param["arraw"];
+				s._scrollWidth = s._ll_bar_back.getWidth();
+				s._selectHeight = s._ll_bar_select.getHeight();
+			}else if(typeof param["scrollbarWidth"] != UNDEFINED){
+				s._scrollWidth = param["scrollbarWidth"];
+				s._selectHeight = s._scrollWidth * 1.5;
+			}else{
+				s._scrollWidth = 20;
+				s._selectHeight = s._scrollWidth * 1.5;
+			}
+			
+			if(typeof param["overflowX"] != UNDEFINED){
+				s._wVisible = param["overflowX"];
+			}
+			if(typeof param["overflowY"] != UNDEFINED){
+				s._hVisible = param["overflowY"];
+			}
+			if(typeof param["mode"] != UNDEFINED){
+				s.mode = param["mode"];
+			}
+		}
+		if(LGlobal.mobile){
+			s._showObject.addEventListener(LMouseEvent.MOUSE_DOWN, function(e){
+				e.currentTarget.startDrag(e.touchPointID);
+			});
+			s._showObject.addEventListener(LMouseEvent.MOUSE_UP, function(e){
+				e.currentTarget.stopDrag();
+			});
 		}
 		s._target = {x : 0, y : 0};
 		s._maskW = maskW;
@@ -136,7 +157,7 @@ var LScrollbar = (function () {
 		if (s._key["right"]) {
 			s.moveRight();
 		}
-		if (LGlobal.mobile) {
+		if (LGlobal.mobile && s.mode == "touch") {
 			m = LGlobal.IS_MOUSE_DOWN;
 			if (s._scroll_h) {
 				s._scroll_h.visible = s._scroll_h_bar.visible = m;
@@ -176,7 +197,7 @@ var LScrollbar = (function () {
 			s._scroll_w.y = s._maskH;
 			s._scroll_w_bar.x = s._scrollWidth;
 			s._scroll_w_bar.y = s._maskH;
-			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth * (LGlobal.mobile ? 1 : 2), 0);
+			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth * ((LGlobal.mobile && s.mode == "touch") ? 1 : 2), 0);
 			grd.addColorStop(0, "#FFFFFF");
 			grd.addColorStop(1, "#008000");
 			grdb = LGlobal.canvas.createLinearGradient(0, 0, 0, s._scrollWidth);
@@ -226,7 +247,7 @@ var LScrollbar = (function () {
 				s._scroll_w.graphics.drawRect(0, "#000000", [s._mask.getWidth() - s._scrollWidth, 0, s._scrollWidth, s._scrollWidth]);
 				s._scroll_w.graphics.drawVertices(1, "#CCCCCC", [[s._mask.getWidth() - s._scrollWidth * 0.75, s._scrollWidth * 0.25], [s._mask.getWidth() - s._scrollWidth * 0.75, s._scrollWidth * 0.75], [s._mask.getWidth() - s._scrollWidth * 0.25, s._scrollWidth * 0.5]], true, grd);
 			}
-			if (LGlobal.mobile) {
+			if (LGlobal.mobile && s.mode == "touch") {
 				return;
 			}
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {
@@ -259,7 +280,7 @@ var LScrollbar = (function () {
 			s._scroll_h.y = 0;
 			s._scroll_h_bar.x = s._maskW;
 			s._scroll_h_bar.y = s._scrollWidth;
-			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth * (LGlobal.mobile ? 1 : 2), 0);
+			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth * ((LGlobal.mobile && s.mode == "touch") ? 1 : 2), 0);
 			grd.addColorStop(0, "#FFFFFF");
 			grd.addColorStop(1, "#008000");
 			grdb = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth, 0);
@@ -297,7 +318,7 @@ var LScrollbar = (function () {
 				s._scroll_h.graphics.drawRect(0, "#000000", [0, s._mask.getHeight() - s._scrollWidth, s._scrollWidth, s._scrollWidth]);
 				s._scroll_h.graphics.drawVertices(1, "#CCCCCC", [[s._scrollWidth / 4, s._mask.getHeight() - s._scrollWidth * 0.75], [s._scrollWidth / 2, s._mask.getHeight() - s._scrollWidth * 0.25], [s._scrollWidth * 0.75, s._mask.getHeight() - s._scrollWidth * 0.75]], true, grd);
 			}
-			if (LGlobal.mobile) {
+			if (LGlobal.mobile && s.mode == "touch") {
 				return;
 			}
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {

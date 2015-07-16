@@ -1,5 +1,14 @@
 /** @language chinese
- * 确认FPS
+ * <p>确认FPS</p>
+ * <p>各属性如下：</p>
+ * <table>
+ * <tr><th>属性</th><th>说明</th></tr>
+ * <tr><td>FPS</td><td>每秒传输帧数(Frames Per Second)。</td></tr>
+ * <tr><td>DisplayObject</td><td>画面中有属性变换的LDisplayObject对象的数量 / 画面中LDisplayObject对象的总数量。</td></tr>
+ * <tr><td>Draw image</td><td>画面中LBitmap对象的总数量。</td></tr>
+ * <tr><td>Draw graphics</td><td>画面中LGraphics的绘图次数。</td></tr>
+ * <tr><td>Draw text</td><td>画面中LTextField对象的总数量。</td></tr>
+ * </table>
  * @class FPS
  * @extends LSprite
  * @constructor
@@ -85,7 +94,7 @@ var FPS = (function () {
 		f = LGlobal.fpsStatus;
 		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b; 
 		s.fps[2].text = "Draw image : " + f.a; 
-		s.fps[3].text = "Drwa graphics : " + f.d; 
+		s.fps[3].text = "Draw graphics : " + f.d; 
 		s.fps[4].text = "Draw text : " + f.e; 
 		s.fpsTime = t;
 		s.fpsCount = 0;

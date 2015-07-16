@@ -20,11 +20,11 @@
  * @public
  */
 var LLoadManage = (function () {
-	function LoadManage(){
+	function LLoadManage(){
 		this.llname="ll.file.";
 		this.llload="ll.load.";
 	}
-	LoadManage.prototype = {
+	LLoadManage.prototype = {
 		/** @language chinese
 		 * 从指定的 list 加载数据。
 		 * @method load
@@ -274,5 +274,9 @@ var LLoadManage = (function () {
 			return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + (new Date()).getTime();
 		}
 	};
-	return new LoadManage();
+	LLoadManage.load = function(l, u, c){
+		var loadObj = new LLoadManage();
+		loadObj.load(l, u, c);
+	};
+	return LLoadManage;
 })();

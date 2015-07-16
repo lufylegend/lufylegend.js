@@ -131,7 +131,8 @@ var LMvcLoader = (function() {
 				names = [names];
 			for ( i = 0, l = names.length; i < l; i++) {
 				var name = names[i] + ( classType ? classType : "");
-				if (window[name]) {
+				var patts = name.split("/");
+				if(window[patts[patts.length - 1]]){
 					continue;
 				}
 				list.push({

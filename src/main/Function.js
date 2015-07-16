@@ -169,6 +169,27 @@ if (!Array.prototype.some) {
 		return false;
 	};
 }
+if (!String.format) {
+	String.format = function(format) {
+	    var args = Array.prototype.slice.call(arguments, 1);
+	    return format.replace(/{(\d+)}/g, function(match, number) { 
+	      return typeof args[number] != 'undefined'
+	        ? args[number] 
+	        : match
+	      ;
+	    });
+	};
+}
+if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
+	Object.defineProperty(Function.prototype, 'name', {
+		get:function() {
+			var funcNameRegex = /function\s([^(]{1,})\(/;
+			var results = (funcNameRegex).exec((this).toString());
+			return (results && results.length > 1) ? results[1].trim() : "";
+		},
+		set:function(value) {}
+	});
+}
 /** @language chinese
  * 您可以在测试环境下捕获来自 trace() 函数的输出并显示结果。如果 trace 语句中的任何参数包含 String 之外的数据类型，则 trace 函数将调用与该数据类型关联的 toString() 方法。例如，如果该参数是一个布尔值，则跟踪函数将调用 Boolean.toString() 并显示返回值。
  * @method trace
@@ -297,7 +318,7 @@ function removeChild (o) {
 /** @language chinese
  * 引擎初始化函数。等同于 init。
  * @method LInit
- * @param {float} speed 游戏速度,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。
+ * @param {float} speed <p>游戏速度,每次页面刷新间隔（单位毫秒）, FPS = 1000 / speed。</p> <p style="color:#FF0000;">*也可以直接将此参数设定为requestAnimationFrame，引擎会切换到requestAnimationFrame来循环刷新。</p>
  * @param {String} divid 传入一个div的id，库件进行初始化的时候，会自动将canvas加入到此div内部。
  * @param {int} width 游戏界面宽。
  * @param {int} height 游戏界面高。
@@ -329,7 +350,7 @@ function removeChild (o) {
 /** @language english
  * Engine initialization. Equivalent to init.
  * @method LInit
- * @param {float} speed game speed(milliseconds), FPS = 1000 / speed.
+ * @param {float} speed <p>game speed(milliseconds), FPS = 1000 / speed.</p><p style="color:#FF0000;">*You can also set this parameter to requestAnimationFrame.</p>
  * @param {String} divid Specifies a unique id for a div tag.
  * @param {int} width Game Interface's width.
  * @param {int} height Game Interface's height.
@@ -361,7 +382,7 @@ function removeChild (o) {
 /** @language japanese
  * ライブラリの初期化。init と同等。
  * @method LInit
- * @param {float} speed ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。
+ * @param {float} speed <p>ゲームスピード（单位：ミリ秒）, FPS = 1000 / speed。</p><p style="color:#FF0000;">*このパラメータをrequestAnimationFrameに設定することも可能です，自動的にrequestAnimationFrameを使うようになります</p>
  * @param {String} divid divタブのid，ライブラリの初期化をする時，自動的にこのdivタブの中にcanvasを生成する。
  * @param {int} width ゲーム画面の幅。
  * @param {int} height ゲーム画面の高さ。
@@ -402,19 +423,28 @@ function init (s, c, w, h, f, t) {
 		}
 		LGlobal.startTimer = (new Date()).getTime();
 	};
-	if (t != null && t == LEvent.INIT) {
-		LGlobal.frameRate = setInterval(function () {
-			LGlobal.onShow();
-		}, s);
+	var loop;
+	if(typeof s == "function"){
 		LGlobal.setCanvas(c, w, h);
 		_f();
+		loop = function(){
+			s(loop);
+			LGlobal.onShow();
+		}
 	}else{
-		LEvent.addEventListener(window, "load", function () {
+		loop = function(){
 			LGlobal.frameRate = setInterval(function () {
 				LGlobal.onShow();
 			}, s);
 			LGlobal.setCanvas(c, w, h);
 			_f();
+		};
+	}
+	if (t != null && t == LEvent.INIT) {
+		loop();
+	}else{
+		LEvent.addEventListener(window, "load", function () {
+			loop();
 		});
 	}
 }

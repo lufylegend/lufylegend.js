@@ -220,13 +220,30 @@ var LSprite = (function () {
 		 */
 		s.shapes = new Array();
 		/** @language chinese
-		 * 用户拖动该对象时的拖动范围。
+		 * <p>用户拖动该对象时的拖动范围。</p>
+		 * <p>LRectangle对象的x，y分别是对象可以拖动的起始坐标，width，height分别表示从起始坐标开始可以拖动的范围。</p>
 		 * @property dragRange
 		 * @type LRectangle
 		 * @since 1.9.8
 		 * @public
 		 */
 		s.dragRange = null;
+		/** @language chinese
+		 * <p>表示当指针滑过sprite时是否显示的指针光标。</p>
+		 * @property useCursor
+		 * @type String
+		 * @default null
+		 * @since 1.9.10
+		 * @public
+		 * @example
+		 * 	var layer01 = new LSprite();
+		 * 	layer01.useCursor = "pointer";
+		 * 	addChild(layer01);
+		 * 	var bm01 = new LBitmap(new LBitmapData("#FF0000", 0, 0, 100, 100));
+		 * 	layer01.addChild(bm01);
+		 * @examplelink <p><a href="../../../api/LSprite/useCursor.html" target="_blank">测试链接</a></p>
+		 */
+		s.useCursor = null;
 	}
 	var p = {
 		/** @language chinese
@@ -763,6 +780,9 @@ var LSprite = (function () {
 			}
 			on = s.ismouseon(e, cd);
 			if (on) {
+				if(LGlobal.os == OS_PC && s.useCursor && type == LMouseEvent.MOUSE_MOVE){
+					LGlobal.cursor = s.useCursor;
+				}
 				if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
 					s.ll_mousein = true;
 					if (s._mevent(LMouseEvent.MOUSE_OVER)) {

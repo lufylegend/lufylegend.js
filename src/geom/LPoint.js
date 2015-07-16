@@ -280,7 +280,7 @@ var LPoint = (function () {
 		 * @public
 		 */
 		add : function (v) {
-			return LPoint(this.x + v.x, this.y + v.y);
+			return new LPoint(this.x + v.x, this.y + v.y);
 		},
 		/** @language chinese
 		 * 创建此 LPoint 对象的副本。

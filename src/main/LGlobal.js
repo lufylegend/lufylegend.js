@@ -692,7 +692,14 @@ var LGlobal = ( function () {
 	LGlobal.left = 0;
 	LGlobal.window = window;
 	(function (n) {
-		LGlobal.isFirefox = (n.toLowerCase().indexOf('firefox') >= 0);
+		LGlobal.isOldFirefox = (function(un){
+			var i = un.toLowerCase().indexOf('firefox');
+			if (i < 0) {
+				return false;
+			}
+			var v = un.substring(i + 8, un.length);
+			return parseFloat(v) < 39.0;
+		})(n);
 		if (n.indexOf(OS_IPHONE) > 0) {
 			LGlobal.os = OS_IPHONE;
 			LGlobal.canTouch = true;
@@ -863,8 +870,16 @@ var LGlobal = ( function () {
 				LGlobal.stage.baseRemoveEvent(type, listener);
 			}
 		};
+		LGlobal.innerWidth = window.innerWidth;
+		LGlobal.innerHeight = window.innerHeight;
+		LEvent.addEventListener(LGlobal.window, "blur", function(){
+			LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+		});
 	};
 	LGlobal.ll_touchStart = function (event) {
+		LGlobal._outStageCheckCount = 1;
+		LGlobal.IS_MOUSE_DOWN = true;
+		LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
 		if (LGlobal.inputBox.style.display != NONE) {
 			LGlobal.inputTextField._ll_getValue();
 		}
@@ -888,7 +903,6 @@ var LGlobal = ( function () {
 			LGlobal.mouseEvent(eve, LMouseEvent.DOUBLE_CLICK);
 			LGlobal.ll_clicks = 0;
 		}
-		LGlobal.IS_MOUSE_DOWN = true;
 		if (LGlobal.mouseJoint_start) {
 			LGlobal.mouseJoint_start(eve);
 		}
@@ -909,6 +923,7 @@ var LGlobal = ( function () {
 	};
 	LGlobal.ll_touchEnd = function (event) {
 		var e, eve, k, i, l, h;
+		LGlobal.IS_MOUSE_DOWN = false;
 		if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
 			for (k in LMultitouch.touchs) {
 				e = LMultitouch.touchs[k];
@@ -931,11 +946,11 @@ var LGlobal = ( function () {
 		}
 		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		LGlobal.touchHandler(event);
-		LGlobal.IS_MOUSE_DOWN = false;
 		LGlobal.buttonStatusEvent = null;
 		if (LGlobal.mouseJoint_end) {
 			LGlobal.mouseJoint_end();
 		}
+		LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 	};
 	LGlobal.ll_touchMove = function (e) {
 		var cX, cY, eve, l, ll = e.touches.length;
@@ -957,6 +972,11 @@ var LGlobal = ( function () {
 			}
 			LGlobal.buttonStatusEvent = eve;
 			LMultitouch.touchs["touch" + eve.touchPointID] = eve;
+			if(eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.height){
+				LGlobal._outStageCheckCount = 0;
+			}else{
+				LGlobal._outStageCheckCount = 1;
+			}
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
 		}
 		LGlobal.touchHandler(e);
@@ -1003,6 +1023,17 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.cursor = "default";
+		if(mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.height){
+			if(LGlobal._outStageCheckCount){
+				LGlobal._outStageCheckCount = 0;
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+			}
+		}else{
+			if(!LGlobal._outStageCheckCount){
+				LGlobal._outStageCheckCount = 1;
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
+			}
+		}
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_MOVE);
 		document.body.style.cursor = LGlobal.cursor;
 		if (LGlobal.mouseJoint_move) {
@@ -1037,12 +1068,12 @@ var LGlobal = ( function () {
 	LGlobal.touchHandler = function (e) {
 		if (LGlobal.stopPropagation) {
 			e.stopPropagation();
+			if (e.stopImmediatePropagation) {
+				e.stopImmediatePropagation();
+			}
 		}
 		if (LGlobal.preventDefault) {
 			e.preventDefault();
-		}
-		if (e.stopImmediatePropagation) {
-			e.stopImmediatePropagation();
 		}
 		return e;
 	};
@@ -1152,6 +1183,13 @@ var LGlobal = ( function () {
 	LGlobal.onShow = function () {
 		if (LGlobal.canvas == null) {
 			return;
+		}
+		if(LGlobal._outStageCheckCount <= 0){
+			LGlobal._outStageCheckCount--;
+			if(LGlobal._outStageCheckCount < -2){
+				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
+				LGlobal._outStageCheckCount = 1;
+			}
 		}
 		if (LGlobal.fpsStatus) {
 			LGlobal.fpsStatus.reset();
@@ -1962,6 +2000,8 @@ var LGlobal = ( function () {
 	 */
 	LGlobal.resize = function (canvasW, canvasH) {
 		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
+		LGlobal.innerWidth = ww;
+		LGlobal.innerHeight = wh;
 		if (canvasW) {
 			w = canvasW;
 		}
@@ -2031,7 +2071,7 @@ var LGlobal = ( function () {
 		}
 		LGlobal.canvasObj.style.marginTop = t + "px";
 		LGlobal.canvasObj.style.marginLeft = l + "px";
-		if (LGlobal.isFirefox) {
+		if (LGlobal.isOldFirefox) {
 			LGlobal.left = parseInt(LGlobal.canvasObj.style.marginLeft);
 			LGlobal.top = parseInt(LGlobal.canvasObj.style.marginTop);
 		}

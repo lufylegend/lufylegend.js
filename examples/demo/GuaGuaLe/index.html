@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="../load_lufylegend.js"></script> 
+<title>demo</title>
+</head>
+<body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;">
+<div id="mylegend">loading……</div>
+<script>
+init(1000/30,"mylegend",480,800,main);
+var outBitmapData;
+var drawSprite;
+var drawBitmapData;
+var paintbrush;
+var paintbrushSize = 20;
+var isMouseDown = false;
+var mousePoint;
+var imgData = [
+	{name:"fb01",path:"./img/fb01.png"},
+	{name:"fb02",path:"./img/fb02.png"}
+];
+function main(){  
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	if(LGlobal.mobile){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+	}else{
+		LGlobal.stageScale = LStageScaleMode.NO_SCALE;
+	}
+	LSystem.screen(LStage.FULL_SCREEN);
+    loadingLayer = new LoadingSample1();
+    addChild(loadingLayer);
+	LLoadManage.load(imgData,function(progress){
+            loadingLayer.setProgress(progress);
+         },gameInit);
+}  
+function gameInit(result){  
+	var bitmapData;
+	var bitmap;
+	var sprite;
+	var shape;
+	
+	sprite = new LSprite();
+	sprite.addEventListener(LMouseEvent.MOUSE_MOVE, onmove);
+	sprite.addEventListener(LMouseEvent.MOUSE_DOWN, ondown);
+	sprite.addEventListener(LMouseEvent.MOUSE_UP, onup);
+	sprite.addEventListener(LEvent.ENTER_FRAME, onframe);
+	bitmapData = new LBitmapData(result["fb01"]);
+	bitmap = new LBitmap(bitmapData);
+	sprite.addChild(bitmap);
+	
+	outBitmapData = new LBitmapData(null,0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);
+	bitmap = new LBitmap(outBitmapData);
+	sprite.addChild(bitmap);
+	
+	addChild(sprite);
+	
+	//刷子做成
+	shape = new LShape();
+	shape.graphics.drawArc(0, "#000000", [paintbrushSize*0.5, paintbrushSize*0.5, paintbrushSize*0.5, 0, 2*Math.PI],true,"#000000");
+	paintbrush = new LBitmapData(null, 0, 0, paintbrushSize, paintbrushSize, LBitmapData.DATA_CANVAS);
+	paintbrush.draw(shape);
+	
+	//隐藏画板
+	drawSprite = new LSprite();
+	drawBitmapData = new LBitmapData(null,0,0,LGlobal.width,LGlobal.height,LBitmapData.DATA_CANVAS);
+	var back = new LBitmap(drawBitmapData);
+	drawSprite.addChild(back);
+	bitmapData = new LBitmapData(result["fb02"]);
+	bitmap = new LBitmap(bitmapData);
+	drawSprite.addChild(bitmap);
+	bitmap.blendMode = LBlendMode.SOURCE_IN;
+}
+function onmove(event){
+	if(!isMouseDown)return;
+	var w = Math.abs(event.selfX - mousePoint.x);
+	var h = Math.abs(event.selfY - mousePoint.y);
+	var cnt = w > h ? Math.ceil(w / paintbrushSize) : Math.ceil(h / paintbrushSize);
+	cnt *= 1.5;
+	var minW = (event.selfX - mousePoint.x) / cnt;
+	var minH = (event.selfY - mousePoint.y) / cnt;
+	for(var i=0;i<cnt;i++){
+		var pointX = mousePoint.x + minW * i;
+		var pointY = mousePoint.y + minH * i;
+		drawBitmapData.copyPixels(paintbrush, new LRectangle(0, 0, paintbrushSize, paintbrushSize), new LPoint(pointX,pointY));
+	}
+	mousePoint = new LPoint(event.selfX,event.selfY);
+	
+}
+function onframe(){
+	//显示
+	outBitmapData.draw(drawSprite);
+}
+function ondown(event){
+	if(isMouseDown)return;
+	isMouseDown = true;
+	mousePoint = new LPoint(event.selfX,event.selfY);
+}
+function onup(event){
+	isMouseDown = false;
+}
+</script>
+</body>
+</html>

@@ -84,6 +84,7 @@ var LRange = (function () {
 		s.sign.x = -s.sign.getWidth() * 0.5;
 		s.addEventListener(LMouseEvent.MOUSE_DOWN, s._onDown);
 	}
+	LRange.ON_CHANGE = "onchange";
 	LRange.prototype.clone = function () {
 		var s = this, a = new LRange(s.w);
 		a.copyProperty(s);
@@ -114,7 +115,16 @@ var LRange = (function () {
 	};
 	LRange.prototype._getValue = function () {
 		var s = this;
+		var value = s.value;
 		s.value = Math.floor((s.sign.x + s.sign.getWidth() * 0.5) * 100 / s.w);
+		if(value != s.value){
+			s.dispatchEvent(LRange.ON_CHANGE);
+		}
+	};
+	LRange.prototype.setValue = function (value) {
+		var s = this;
+		s.sign.x = s.w * value * 0.01 - s.sign.getWidth() * 0.5;
+		s._getValue();
 	};
 	LRange.prototype._onMove = function (event) {
 		var s = event.clickTarget;

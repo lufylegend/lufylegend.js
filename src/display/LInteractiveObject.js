@@ -159,15 +159,18 @@ var LInteractiveObject = (function() {
 				LMouseEventContainer.removeMouseEvent(s, LMouseEvent.MOUSE_OUT);
 			}
 		},
-		hasEventListener : function(type) {
+		hasEventListener : function(type, listener) {
 			var s = this, i, length;
+			if (LMouseEventContainer.container[type]) {
+				return LMouseEventContainer.hasEventListener(s, type, listener);
+			}
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				length = s.mouseList.length;
 				for ( i = 0; i < length; i++) {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type) {
+					if (type == s.mouseList[i].type && (!listener || s.mouseList[i].listener == listener)) {
 						return true;
 					}
 				}
