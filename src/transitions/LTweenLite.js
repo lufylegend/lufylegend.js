@@ -286,7 +286,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
-		 * <tr><td>coordinate</td><td>Array</td><td>You can implement a custom path，The Array must be a LPoint Objects, or like the {x:1,y:2}，<a href="../../../api/LTweenLite/toList.html" target="_blank">测试链接</a></td></tr>
+		 * <tr><td>coordinate</td><td>Array</td><td>你可以自定义缓动路径，路径的每个点必须是LPoint对象,或者类似于{x:1,y:2}的形式，<a href="../../../api/LTweenLite/toList.html" target="_blank">测试链接</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例
 		 * @example
@@ -331,7 +331,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>A function that should be called when the tween begins (when its time changes from 0 to some other value which can happen more than once if the tween is restarted multiple times).</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>A function that should be called every time the tween updates (on every frame while the tween is active)</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>If true, the tween will loop when it reaches the end. Can be set via the props param.</td></tr>
-		 * <tr><td>coordinate</td><td>Array</td><td>move pathsパスを自由に定義することができます，配列のデータはLPointか{x:1,y:2}のようなオブジェクトになります，<a href="../../../api/LTweenLite/toList.html" target="_blank">Try it »</a></td></tr>
+		 * <tr><td>coordinate</td><td>Array</td><td>You can implement a custom path，The Array must be a LPoint Objects, or like the {x:1,y:2}，<a href="../../../api/LTweenLite/toList.html" target="_blank">Try it »</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} LTweenLiteChild instance
 		 * @example
