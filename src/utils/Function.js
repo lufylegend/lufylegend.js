@@ -224,13 +224,46 @@ function trace() {
 	if (!LGlobal.traceDebug) return;
 	var t = document.getElementById("traceObject"), i;
 	if (trace.arguments.length > 0 && t == null) {
+		var d = document.createElement("DIV");
+		d.position=0;
+		d.style.position = "absolute";
+		document.body.appendChild(d);
 		t = document.createElement("TEXTAREA");
 		t.id = "traceObject";
-		t.style.position = "absolute";
-		t.style.top = (LGlobal.height + 20) + "px";
-		t.style.width = LGlobal.width + "px";
+		t.style.width = (window.innerWidth*0.5) + "px";
 		t.style.height = "200px";
-		document.body.appendChild(t);
+		var b = document.createElement("BUTTON");
+		b.style.width = (window.innerWidth*0.25) + "px";
+		b.innerHTML="Hide";
+		d.appendChild(b);
+		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", function(e){
+			t.style.display = (t.style.display == "none" ? "":"none");
+		});
+		b = document.createElement("BUTTON");
+		b.style.width = (window.innerWidth*0.25) + "px";
+		b.innerHTML="position";
+		d.appendChild(b);
+		var f = function(e){
+			d.position++;
+			if(d.position == 0){
+				d.style.top = "5px";
+				d.style.left = "5px";
+			}else if(d.position == 1){
+				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
+				d.style.left = "5px";
+			}else if(d.position == 2){
+				d.style.top = "5px";
+				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
+			}else{
+				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
+				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
+				d.position = -1;
+			}
+		};
+		f();
+		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", f);
+		d.appendChild(document.createElement("BR"));
+		d.appendChild(t);
 	}
 	for (i = 0; i < trace.arguments.length; i++) {
 		t.value = t.value + trace.arguments[i] + "\r\n";
