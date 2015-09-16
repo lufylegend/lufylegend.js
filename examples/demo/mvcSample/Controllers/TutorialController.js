@@ -27,7 +27,7 @@ TutorialController.prototype.stepLoadStart=function(){
 TutorialController.prototype.stepLoadComplete=function(){
 	var self = this;
 	self.view.removeAllChild();
-	self.view.die();
+	self.view.removeAllEventListener();
 	console.log("new Tutorial"+(self.step > 9 ? self.step : ("0"+self.step))+"Controller();");
 	var stepController = eval("new Tutorial"+(self.step > 9 ? self.step : ("0"+self.step))+"Controller();");
 	console.log("stepController=",stepController,stepController.view);
