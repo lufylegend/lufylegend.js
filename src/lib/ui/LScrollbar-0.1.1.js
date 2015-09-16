@@ -38,8 +38,8 @@ var LScrollbar = (function () {
 		s.type = "LScrollbar";
 		s._showLayer = new LSprite();
 		s._mask = new LGraphics();
-		s._mask.drawRect(1, "#ffffff", [0, 0, maskW, maskH]);
-		s._showLayer.graphics.drawRect(1, "#ffffff", [0, 0, maskW, maskH], true, "#ffffff");
+		s._mask.drawRect(0, "#ffffff", [0, 0, maskW, maskH]);
+		s._showLayer.graphics.drawRect(0, "#ffffff", [0, 0, maskW, maskH]);
 		s._wVisible = typeof wVisible == UNDEFINED ? true : wVisible;
 		s._hVisible = typeof hVisible == UNDEFINED ? true : wVisible;
 		s.addChild(s._showLayer);
@@ -94,15 +94,25 @@ var LScrollbar = (function () {
 		s.excluding = false;
 		s.addEventListener(LEvent.ENTER_FRAME, s.onFrame);
 		s.dispatchEvent(LEvent.ENTER_FRAME);
-		var w = s._showObject.getWidth(), h = s._showObject.getHeight();
-		s._showObject.dragRange = new LRectangle(w < s._maskW ? 0 : s._maskW - w,
-		h < s._maskH ? 0 : s._maskH - h,
-		w - s._maskW, h - s._maskH);
+		s.dragRangeUpdate();
 	}
 	LScrollbar.prototype.clone = function () {
 		var s = this, a = new LScrollbar(s._showObject.clone(), s._maskW, s._maskH, s._scrollWidth, s._wVisible, s._hVisible);
 		a.copyProperty(s);
 		return a;
+	};
+	LScrollbar.prototype.dragRangeUpdate = function (w,h) {
+		var s = this;
+		if(typeof w == UNDEFINED) {
+			w = s._showObject.getWidth();
+		}
+		if(typeof h == UNDEFINED) {
+			h = s._showObject.getHeight();
+		}
+		s._showObject.dragRange = new LRectangle(w < s._maskW ? 0 : s._maskW - w,
+		h < s._maskH ? 0 : s._maskH - h,
+		w > s._maskW ? w - s._maskW : 0, 
+			h > s._maskH ? h - s._maskH : 0);
 	};
 	LScrollbar.prototype.onFrame = function (event) {
 		var s = event.currentTarget, w, h, i, l, child, m;
@@ -116,9 +126,7 @@ var LScrollbar = (function () {
 			} else {
 				s.resizeWidth(false);
 			}
-			s._showObject.dragRange = new LRectangle(w < s._maskW ? 0 : s._maskW - w,
-			h < s._maskH ? 0 : s._maskH - h,
-			w - s._maskW, h - s._maskH);
+			s.dragRangeUpdate(w,h);
 		}
 		if (s._hVisible && s._height != h) {
 			s._height = h;
@@ -128,9 +136,7 @@ var LScrollbar = (function () {
 			} else {
 				s.resizeHeight(false);
 			}
-			s._showObject.dragRange = new LRectangle(w < s._maskW ? 0 : s._maskW - w,
-			h < s._maskH ? 0 : s._maskH - h,
-			w - s._maskW, h - s._maskH);
+			s.dragRangeUpdate(w,h);
 		}
 		if (s.excluding) {
 			for (i = 0, l = s._showObject.numChildren; i < l; i++) {
