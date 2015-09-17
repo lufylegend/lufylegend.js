@@ -847,12 +847,18 @@ var LGlobal = ( function () {
 		LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
 		LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
 		LGlobal.stage.addEventListener = function (type, listener) {
-			if (type == LEvent.WINDOW_RESIZE) {
-				LGlobal.stage.onresizeListener = listener;
-				LGlobal.stage.onresize = function (e) {
-					LGlobal.stage.onresizeEvent = e;
-				};
-				LEvent.addEventListener(LGlobal.window, type,LGlobal.stage.onresize);
+			if (type == LEvent.WINDOW_RESIZE || type == LEvent.WINDOW_ORIENTATIONCHANGE) {
+				if(type == LEvent.WINDOW_RESIZE){
+					LGlobal.stage.onresizeListener = listener;
+				}else{
+					LGlobal.stage.onorientationchangeListener = listener;
+				}
+				if(!LGlobal.stage.onresize){
+					LGlobal.stage.onresize = function (e) {
+						LGlobal.stage.onresizeEvent = e;
+					};
+					LEvent.addEventListener(LGlobal.window, type,LGlobal.stage.onresize);
+				}
 			} else if (type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS) {
 				LEvent.addEventListener(LGlobal.window, type, listener);
 			} else {
@@ -860,10 +866,20 @@ var LGlobal = ( function () {
 			}
 		};
 		LGlobal.stage.removeEventListener = function (type, listener) {
-			if (type == LEvent.WINDOW_RESIZE) {
+			if (type == LEvent.WINDOW_RESIZE || type == LEvent.WINDOW_ORIENTATIONCHANGE) {
+				if(type == LEvent.WINDOW_RESIZE){
+					delete LGlobal.stage.onresizeListener;
+					if(LGlobal.stage.onorientationchangeListener){
+						return;
+					}
+				}else{
+					delete LGlobal.stage.onorientationchangeListener;
+					if(LGlobal.stage.onresizeListener){
+						return;
+					}
+				}
 				LEvent.removeEventListener(LGlobal.window, LEvent.WINDOW_RESIZE, LGlobal.stage.onresize);
 				delete LGlobal.stage.onresize;
-				delete LGlobal.stage.onresizeListener;
 			} else if (type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS) {
 				LEvent.removeEventListener(LGlobal.window, type, listener);
 			} else {
@@ -1195,7 +1211,12 @@ var LGlobal = ( function () {
 			LGlobal.fpsStatus.reset();
 		}
 		if (LGlobal.stage.onresizeEvent) {
-			LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
+			if(LGlobal.stage.onresizeListener){
+				LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
+			}
+			if(LGlobal.stage.onorientationchangeListener){
+				LGlobal.stage.onorientationchangeListener({orientation:(window.innerWidth > window.innerHeight ? LANDSCAPE : PORTRAIT)});
+			}
 			delete LGlobal.stage.onresizeEvent;
 		}
 		if (LGlobal.forceRefresh) {

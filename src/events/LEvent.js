@@ -348,6 +348,29 @@ LEvent.ENTER_FRAME = "enter_frame";
  * @public
  */
 LEvent.WINDOW_RESIZE = "resize";
+/** @language chinese
+ * <p>当屏幕旋转时，发生orientationchange 事件。</p>
+ * @property WINDOW_ORIENTATIONCHANGE
+ * @type String
+ * @static
+ * @since 1.9.11
+ * @example
+ * 	LInit(1000/60, "legend", 400,400, main);
+ * 	var label;
+ * 	function main () {
+ * 		label = new LTextField();
+ * 		label.x = label.y = 20;
+ * 		label.text = "orientationchange test";
+ * 		addChild(label);
+ * 		LGlobal.stage.addEventListener(LEvent.WINDOW_ORIENTATIONCHANGE,orientationIsChange);
+ * 	}
+ * 	function orientationIsChange(e){
+ * 		label.text = e.orientation;
+ * 	}
+ * @examplelink <p><a href="../../../api/LEvent/WINDOW_ORIENTATIONCHANGE.html" target="_blank">测试链接</a></p>
+ * @public
+ */
+LEvent.WINDOW_ORIENTATIONCHANGE = "orientationchange";
 LEvent.SOUND_COMPLETE = "sound_complete";
 LEvent.END_CONTACT = "endContact";
 LEvent.PRE_SOLVE = "preSolve";
