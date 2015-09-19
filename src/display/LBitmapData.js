@@ -551,30 +551,9 @@ var LBitmapData = (function() {
 		 */
 		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
 			var s = this;
-			x = x >> 0;
-			y = y >> 0;
-			if (!s._locked) {
-				s._ready();
-			}
-			var d = s._data, i = s.width * 4 * y + x * 4;
-			if ( typeof data == "object") {
-				d.data[i + 0] = data[0];
-				d.data[i + 1] = data[1];
-				d.data[i + 2] = data[2];
-				d.data[i + 3] = data[3];
-			} else {
-				if ( typeof data == "string") {
-					data = parseInt(data.replace("#", "0x"));
-				}
-				d.data[i + 0] = data >> 16 & 0xFF;
-				d.data[i + 1] = data >> 8 & 0xFF;
-				d.data[i + 2] = data & 0xFF;
-				d.data[i + 3] = 255;
-			}
-			if (!s._locked) {
-				s._update();
-			}
-			
+			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
+			var data = filter.convolve(r,s.width);
+			s.putPixels(new LRectangle(sourceRect.x + destPoint.x, sourceRect.y + destPoint.y, sourceRect.width, sourceRect.height), data);
 		},
 		/** @language chinese
 		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。

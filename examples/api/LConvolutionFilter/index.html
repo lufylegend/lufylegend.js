@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LBitmap</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../../../src/filters/LBitmapFilter.js"></script>
+		<script type="text/javascript" src="../../../src/filters/LConvolutionFilter.js"></script>
+		<!--<script type="text/javascript" src="../../../src/display/LDisplayObject.js"></script>-->
+		<script type="text/javascript" src="../../../src/display/LBitmapData.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+				//loader.load("zlati-nathalie.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240,LBitmapData.DATA_CANVAS); 
+				var bitmapData2 = bitmapData.clone();  
+				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[1, 2, 1, 2, 4, 2, 1, 2, 1]));
+				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[-5, 0, 0, 0, 0, 0, 0, 0, 5]));
+				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[2, 0, 0, 0, -1, 0, 0, 0, -1],1,127));
+				bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height/2), new LPoint(100,100), new LConvolutionFilter(3,3,[1, 2, 1, 2, 4, 2, 1, 2, 1]));
+
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				var bitmap = new LBitmap(bitmapData2);
+				bitmap.x = 240;
+				addChild(bitmap);
+				return;
+				bitmap.filters = [new LConvolutionFilter(3,3,[1, 2, 1, 2, 4, 2, 1, 2, 1])];
+			}
+			</script>
+	</body>
+</html>

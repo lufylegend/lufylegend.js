@@ -24,52 +24,33 @@
 var LConvolutionFilter = (function () {
 	function LConvolutionFilter (matrixX, matrixY, matrix, divisor, bias, preserveAlpha, clamp, color, alpha) {
 		var s = this;
-		LExtends(s, LObject, []);
+		LExtends(s, LBitmapFilter, []);
 		s.type = "LConvolutionFilter";
 		s.matrixX = matrixX ? matrixX : 0;
 		s.matrixY = matrixY ? matrixY : 0;
 		s.matrix = matrix;
-		s.divisor = divisor ? divisor : 1;
+		if (!divisor) {
+			divisor = matrix.reduce(function(a, b) {return a + b;}) || 1;
+		}
+		s.divisor = divisor;
 		s.bias = bias ? bias : 0;
-		s.m = [matrix[0], matrix[1], matrix[2]];
+
 	}
 	var p = {
-		convolve : function (olddata,bitmapData) {
-			var s = this, c = LGlobal.canvas;
-			var oldpx = olddata.data;
-			var newdata = c.createImageData(olddata);
-			var newpx = newdata.data
-			var len = newpx.length;
-			var w = bitmapData.width;
-			for (var i = 0; i < len; i++) {
-				if ((i + 1) % 4 === 0) {
-					newpx[i] = oldpx[i];
-					continue;
+		ll_show : function (displayObject) {
+			var s = this, c = LGlobal.canvas, d = displayObject, bitmapData;
+			if(d.constructor.name == "LBitmap"){
+				bitmapData = d.bitmapData;
+			}else{
+				if(!d._ll_cacheAsBitmap){
+					d.cacheAsBitmap(true);
 				}
-				res = 0;
-				var these = [
-					oldpx[i - w * 4 - 4] || oldpx[i],
-					oldpx[i - w * 4]     || oldpx[i],
-					oldpx[i - w * 4 + 4] || oldpx[i],
-					oldpx[i - 4]         || oldpx[i],
-					oldpx[i],
-					oldpx[i + 4]         || oldpx[i],
-					oldpx[i + w * 4 - 4] || oldpx[i],
-					oldpx[i + w * 4]     || oldpx[i],
-					oldpx[i + w * 4 + 4] || oldpx[i]
-				];
-				for (var j = 0; j < 9; j++) {
-					res += these[j] * m[j];
-				}
-				res /= divisor;
-				if (offset) {
-					res += offset;
-				}
-				newpx[i] = res;
+				bitmapData = d._ll_cacheAsBitmap.bitmapData;
 			}
+			bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
 		},
-		ll_show : function () {
-			var s = this, c = LGlobal.canvas;
+		filter : function(){
+			
 		}
 	};
 	for (var k in p) {

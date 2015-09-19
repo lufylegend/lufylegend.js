@@ -14,5 +14,39 @@ var LBitmapFilter = (function () {
 		LExtends(s, LObject, []);
 		s.type = "LBitmapFilter";
 	}
+	LBitmapFilter.prototype.convolve = function (olddata, w) {
+		var s = this, c = LGlobal.canvas;
+		var oldpx = olddata.data;
+		var newdata = c.createImageData(olddata);
+		var newpx = newdata.data;
+		var len = newpx.length;
+		for (var i = 0; i < len; i++) {
+			if ((i + 1) % 4 === 0) {
+				newpx[i] = oldpx[i];
+				continue;
+			}
+			res = 0;
+			var these = [
+				oldpx[i - w * 4 - 4] || oldpx[i],
+				oldpx[i - w * 4]     || oldpx[i],
+				oldpx[i - w * 4 + 4] || oldpx[i],
+				oldpx[i - 4]         || oldpx[i],
+				oldpx[i],
+				oldpx[i + 4]         || oldpx[i],
+				oldpx[i + w * 4 - 4] || oldpx[i],
+				oldpx[i + w * 4]     || oldpx[i],
+				oldpx[i + w * 4 + 4] || oldpx[i]
+			];
+			for (var j = 0; j < 9; j++) {
+				res += these[j] * s.matrix[j];
+			}
+			res /= s.divisor;
+			if (s.bias) {
+				res += s.bias;
+			}
+			newpx[i] = res;
+		}
+		return newdata;
+	};
 	return LBitmapFilter;
 })();
