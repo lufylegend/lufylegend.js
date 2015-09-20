@@ -424,7 +424,11 @@ var LDisplayObject = (function () {
 					LGlobal.fpsStatus.transform++;
 				}
 			}
-			s._ll_show(c);
+			if(s._ll_cacheAsBitmap){
+				s._ll_cacheAsBitmap._ll_show();
+			}else{
+				s._ll_show(c);
+			}
 			c.restore();
 			if (LGlobal.box2d != null && typeof s._ll_loopframe == "function") {
 				s._ll_loopframe();
@@ -452,6 +456,10 @@ var LDisplayObject = (function () {
 				f[i].ll_show(s);
 			}
 		},
+		startX : function(){return 0;},
+		startY : function(){return 0;},
+		getWidth : function(){return 1;},
+		getHeight : function(){return 1;},
 		_transformRotate : function () {
 			var s = this, c;
 			if (s.rotate == 0) {
@@ -581,15 +589,29 @@ var LDisplayObject = (function () {
 			}
 			return new LRectangle(x, y, w, h);
 		},
-		getDataCanvas : function () {
+		cacheAsBitmap : function (value) {
+			var s = this;
+			if(!value){
+				s._ll_cacheAsBitmap = null;
+				return;
+			}
+			var sx = s.x - s.startX(), sy = s.y - s.startY();
+			var data = s.getDataCanvas(sx, sy, s.getWidth(), s.getHeight());
+			var b = new LBitmapData(data, 0, 0, null, null, LBitmapData.DATA_CANVAS);
+			var cache = new LBitmap(b);
+			cache.x = -sx;
+			cache.y = -sy;
+			s._ll_cacheAsBitmap = cache;
+		},
+		getDataCanvas : function (x,y,w,h) {
 			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
 			_o = s._canvas;
 			_c = s._context;
-			s.width = s.getWidth();
-			s.height = s.getHeight();
+			s.width = w || s.getWidth();
+			s.height = h || s.getHeight();
 			_o.width = s.width;
 			_o.height = s.height;
 			_c.clearRect(0, 0, s.width, s.height);
@@ -597,7 +619,8 @@ var LDisplayObject = (function () {
 			LGlobal.canvas = s._context;
 			_x = s.x;
 			_y = s.y;
-			s.x = s.y = 0;
+			s.x = x || 0;
+			s.y = y || 0;
 			s.ll_show();
 			s.x = _x;
 			s.y = _y;

@@ -34,21 +34,8 @@ var LConvolutionFilter = (function () {
 		}
 		s.divisor = divisor;
 		s.bias = bias ? bias : 0;
-
 	}
 	var p = {
-		ll_show : function (displayObject) {
-			var s = this, c = LGlobal.canvas, d = displayObject, bitmapData;
-			if(d.constructor.name == "LBitmap"){
-				bitmapData = d.bitmapData;
-			}else{
-				if(!d._ll_cacheAsBitmap){
-					d.cacheAsBitmap(true);
-				}
-				bitmapData = d._ll_cacheAsBitmap.bitmapData;
-			}
-			bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
-		},
 		filter : function(olddata, w){
 			var s = this, c = LGlobal.canvas;
 			var oldpx = olddata.data;

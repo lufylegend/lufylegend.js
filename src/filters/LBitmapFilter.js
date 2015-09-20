@@ -14,39 +14,27 @@ var LBitmapFilter = (function () {
 		LExtends(s, LObject, []);
 		s.type = "LBitmapFilter";
 	}
-	LBitmapFilter.prototype.convolve = function (olddata, w) {
-		var s = this, c = LGlobal.canvas;
-		var oldpx = olddata.data;
-		var newdata = c.createImageData(olddata);
-		var newpx = newdata.data;
-		var len = newpx.length;
-		for (var i = 0; i < len; i++) {
-			if ((i + 1) % 4 === 0) {
-				newpx[i] = oldpx[i];
-				continue;
-			}
-			res = 0;
-			var these = [
-				oldpx[i - w * 4 - 4] || oldpx[i],
-				oldpx[i - w * 4]     || oldpx[i],
-				oldpx[i - w * 4 + 4] || oldpx[i],
-				oldpx[i - 4]         || oldpx[i],
-				oldpx[i],
-				oldpx[i + 4]         || oldpx[i],
-				oldpx[i + w * 4 - 4] || oldpx[i],
-				oldpx[i + w * 4]     || oldpx[i],
-				oldpx[i + w * 4 + 4] || oldpx[i]
-			];
-			for (var j = 0; j < 9; j++) {
-				res += these[j] * s.matrix[j];
-			}
-			res /= s.divisor;
-			if (s.bias) {
-				res += s.bias;
-			}
-			newpx[i] = res;
+	LBitmapFilter.prototype.ll_show = function (displayObject) {
+		var s = this;
+		if(s.cacheMaking){
+			return;
 		}
-		return newdata;
+		var c = LGlobal.canvas, d = displayObject, bitmapData;
+		if(d.constructor.name == "LBitmap"){
+			bitmapData = d.bitmapData;
+		}else{
+			if(!d._ll_cacheAsBitmap){
+				s.cacheMaking = true;
+				d.cacheAsBitmap(true);
+				s.cacheMaking = false;
+			}
+			bitmapData = d._ll_cacheAsBitmap.bitmapData;
+		}
+		if(s.bitmapDataIndex === bitmapData.objectIndex){
+			return;
+		}
+		s.bitmapDataIndex = bitmapData.objectIndex;
+		bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
 	};
 	return LBitmapFilter;
 })();

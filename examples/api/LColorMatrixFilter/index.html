@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>LConvolutionFilter</title>
+		<title>LColorMatrixFilter</title>
 		<script type="text/javascript" src="../load_lufylegend.js"></script>
 		<script type="text/javascript" src="../../../src/filters/LBitmapFilter.js"></script>
 		<script type="text/javascript" src="../../../src/filters/LConvolutionFilter.js"></script>
@@ -36,7 +36,7 @@
 		  		sprite.x = -100;
 				layer.addChild(sprite);
 				
-				layer.filters = [new LConvolutionFilter(3,3,[-5, 0, 0, 0, 0, 0, 0, 0, 5])];
+				layer.filters = [new LColorMatrixFilter([0.3086,0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0, 0, 0, 1, 0])];
 			}
 			</script>
 	</body>
