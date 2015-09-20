@@ -552,8 +552,8 @@ var LBitmapData = (function() {
 		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
 			var s = this;
 			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
-			var data = filter.convolve(r,s.width);
-			s.putPixels(new LRectangle(sourceRect.x + destPoint.x, sourceRect.y + destPoint.y, sourceRect.width, sourceRect.height), data);
+			var data = filter.filter(r,sourceRect.width);
+			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
 		},
 		/** @language chinese
 		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。

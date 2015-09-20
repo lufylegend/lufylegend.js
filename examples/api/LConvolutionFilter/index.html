@@ -13,16 +13,27 @@
 			<div id="legend">
 			</div>
 			<script>
-			LInit(50, "legend", 800, 480, main);
+			LInit(50, "legend", 480, 800, main);
 			function main () {
 				var loader = new LLoader();
 				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
 				loader.load("face.jpg", "bitmapData");
-				//loader.load("zlati-nathalie.jpg", "bitmapData");
 			}
 			function loadBitmapdata (event) {
-				var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240,LBitmapData.DATA_CANVAS); 
-				var bitmapData2 = bitmapData.clone();  
+				var bitmapData = new LBitmapData(event.target, null, null, null, null,LBitmapData.DATA_CANVAS);
+				var bitmapData2 = bitmapData.clone();
+				var bitmapData3 = bitmapData.clone();
+				var bitmapData4 = bitmapData.clone();
+				var bitmapData5 = bitmapData.clone();
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				
+				bitmapData2.applyFilter(bitmapData2, new LRectangle(0,0,bitmapData2.width,bitmapData2.height), new LPoint(0,0), new LConvolutionFilter(3,3,[1, 2, 1, 2, 4, 2, 1, 2, 1]));
+				bitmap = new LBitmap(bitmapData2);
+				bitmap.x = 240;
+				addChild(bitmap);
+				
+				return;
 				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[1, 2, 1, 2, 4, 2, 1, 2, 1]));
 				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[-5, 0, 0, 0, 0, 0, 0, 0, 5]));
 				//bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), new LConvolutionFilter(3,3,[2, 0, 0, 0, -1, 0, 0, 0, -1],1,127));

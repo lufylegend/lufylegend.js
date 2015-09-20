@@ -4,7 +4,7 @@
  * <p>・要对 LBitmapData 对象应用滤镜，请使用 LBitmapData.applyFilter() 方法。对 LBitmapData 对象调用 applyFilter() 会取得源 LBitmapData 对象和滤镜对象，并最终生成一个过滤图像。</p>
  * <p>如果对显示对象应用滤镜，则会自动调用该对象的 cacheAsBitmap(true) 。如果清除所有滤镜，将恢复 cacheAsBitmap(false)。</p>
  * @class LConvolutionFilter
- * @extends LObject
+ * @extends LBitmapFilter
  * @constructor
  * @param {int} matrixX 矩阵的 x 维度（矩阵中列的数目）。默认值为 0。
  * @param {int} matrixY 矩阵的 y 维度（矩阵中行的数目）。默认值为 0。
@@ -49,8 +49,39 @@ var LConvolutionFilter = (function () {
 			}
 			bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
 		},
-		filter : function(){
-			
+		filter : function(olddata, w){
+			var s = this, c = LGlobal.canvas;
+			var oldpx = olddata.data;
+			var newdata = c.createImageData(olddata);
+			var newpx = newdata.data;
+			var len = newpx.length;
+			for (var i = 0; i < len; i++) {
+				if ((i + 1) % 4 === 0) {
+					newpx[i] = oldpx[i];
+					continue;
+				}
+				res = 0;
+				var these = [
+					oldpx[i - w * 4 - 4] || oldpx[i],
+					oldpx[i - w * 4]     || oldpx[i],
+					oldpx[i - w * 4 + 4] || oldpx[i],
+					oldpx[i - 4]         || oldpx[i],
+					oldpx[i],
+					oldpx[i + 4]         || oldpx[i],
+					oldpx[i + w * 4 - 4] || oldpx[i],
+					oldpx[i + w * 4]     || oldpx[i],
+					oldpx[i + w * 4 + 4] || oldpx[i]
+				];
+				for (var j = 0; j < 9; j++) {
+					res += these[j] * s.matrix[j];
+				}
+				res /= s.divisor;
+				if (s.bias) {
+					res += s.bias;
+				}
+				newpx[i] = res;
+			}
+			return newdata;
 		}
 	};
 	for (var k in p) {
