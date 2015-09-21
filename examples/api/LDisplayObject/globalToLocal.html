@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>globalToLocal</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var circle = new LSprite();
+				circle.x = 10;
+				addChild(circle);
+				
+				var point1 = new LPoint(0, 0);
+				trace(circle.globalToLocal(point1)); // [x=-10, y=0]
+				
+				var point2 = new LPoint(10, 1);
+				trace(circle.globalToLocal(point2)); // [x=0, y=1]
+				
+				var point3 = new LPoint(30, 20);
+				trace(circle.globalToLocal(point3)); // [x=20, y=20]
+			}
+			</script>
+	</body>
+</html>

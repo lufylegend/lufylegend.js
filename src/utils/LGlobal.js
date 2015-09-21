@@ -1114,9 +1114,9 @@ var LGlobal = ( function () {
 			if (LGlobal.canTouch && s.ll_touchPointID != e.touchPointID) {
 				continue;
 			}
-			c = s.getAbsoluteScale();
-			s.x = s.ll_dragStartX + (e.offsetX - s.ll_dragMX) * s.scaleX / c.scaleX;
-			s.y = s.ll_dragStartY + (e.offsetY - s.ll_dragMY) * s.scaleY / c.scaleY;
+			c = s.parent.globalToLocal(new LPoint(e.offsetX - s.ll_dragMX + s.ll_dragGlobalPoint.x, e.offsetY - s.ll_dragMY + s.ll_dragGlobalPoint.y));
+			s.x = c.x;
+			s.y = c.y;
 			if (s.dragRange) {
 				if (s.x < s.dragRange.left) {
 					s.x = s.dragRange.left;

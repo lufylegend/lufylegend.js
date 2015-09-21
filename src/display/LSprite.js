@@ -374,13 +374,12 @@ var LSprite = (function () {
 		 * @since 1.8.9
 		 */
 		startDrag : function (touchPointID) {
-			var s = this, r, c;
+			var s = this;
 			if (s.ll_dragStart) {
 				return;
 			}
 			s.ll_touchPointID = touchPointID;
-			s.ll_dragStartX = s.x;
-			s.ll_dragStartY = s.y;
+			s.ll_dragGlobalPoint = s.parent.localToGlobal(new LPoint(s.x, s.y));
 			s.ll_dragMX = mouseX;
 			s.ll_dragMY = mouseY;
 			s.ll_dragStart = true;
