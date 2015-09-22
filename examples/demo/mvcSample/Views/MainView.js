@@ -2,275 +2,103 @@ function MainView(){
 	base(this,LView,[]);
 }
 MainView.prototype.construct=function(){
+	this.controller.addEventListener(LEvent.COMPLETE, this.init.bind(this));
+};
+MainView.prototype.layerInit=function(){
+	var self = this;
+	self.baseLayer = new LSprite();
+	self.addChild(self.baseLayer);
+	self.backLayer = new LSprite();
+	self.baseLayer.addChild(self.backLayer);
+	self.buildLayer = new LSprite();
+	self.baseLayer.addChild(self.buildLayer);
+	
+	self.menuLayer = new LSprite();
+	self.addChild(self.menuLayer);
+	
+	self.menuListLayer = new LSprite();
+	self.addChild(self.menuListLayer);
+};
+MainView.prototype.backLayerInit=function(){
+	var self = this;
+	var bitmap = new LBitmap(new LBitmapData(LMvc.datalist["main-background"]));
+	self.backLayer.addChild(bitmap);
+};
+MainView.prototype.buildLayerInit=function(){
+	var self = this;
+	var bitmapOfficial = new BuildOfficialView(self.controller);
+	self.buildLayer.addChild(bitmapOfficial);
+	var bitmapTavern = new BuildTavernView(self.controller);
+	self.buildLayer.addChild(bitmapTavern);
+	var bitmapShop = new BuildShopView(self.controller);
+	self.buildLayer.addChild(bitmapShop);
+};
+MainView.prototype.statusLayerInit=function(){
+	var self = this;
+	var status = new HeaderStatusView(self.controller,true);
+	self.baseLayer.addChild(status);
+};
+MainView.prototype.menuLayerInit=function(){
+	var self = this;
+	var menu = new MainmenuView(self.controller);
+	self.baseLayer.addChild(menu);
+};
+MainView.prototype.menuListShow=function(){
+	var self = this;
+	self.controller.webview.die();
+	//self.baseLayer.visible = false;
+	self.menuLayer.visible = false;
+	if(!self.menulist){
+		var menulist = new MenuListView(self.controller);
+		self.menuListLayer.addChild(menulist);
+		self.menulist = menulist;
+	}
+	self.menuListLayer.visible = true;
+};
+MainView.prototype.menuListClose=function(){
+	var self = this;
+	self.menuListLayer.visible = false;
+	//self.baseLayer.visible = true;
+	self.menuLayer.visible = true;
+	self.controller.webview.show();
+};
+MainView.prototype.chatLayerInit=function(){
+	var self = this;
+	var bitmapWin = new LPanel(new LBitmapData(LMvc.datalist["win03"]),300,200);
+	bitmapWin.y = LGlobal.height - 250;
+	self.menuLayer.addChild(bitmapWin);
+	
+	var bitmapWin = new LPanel(new LBitmapData(LMvc.datalist["win03"]),230,50);
+	bitmapWin.y = LGlobal.height - 50;
+	self.menuLayer.addChild(bitmapWin);
+	var inputText = new LTextField();
+	inputText.size = 20;
+	var inputLayer = new LSprite();
+	inputLayer.graphics.drawRect(0,"#000000",[0, 0, 224, 40]);
+	inputText.setType(LTextFieldType.INPUT,inputLayer);
+	inputText.x = 3;
+	inputText.y = bitmapWin.y + 5;
+	self.menuLayer.addChild(inputText);
+	var bitmapWin = new LButtonSample1(Language.get("send"));
+	bitmapWin.x = 230;
+	bitmapWin.y = LGlobal.height - 50;
+	self.menuLayer.addChild(bitmapWin);
+	var webview = new LStageWebView();
+	webview.setViewPort(new LRectangle(0,LGlobal.height - 245,290,190));
+	webview.loadURL("./chat.html");
+	webview.show();
+	self.controller.webview = webview;
+	webview.display.style.border = 0;
+	webview.iframe.style.border = 0;
 };
 MainView.prototype.init=function(){
 	var self = this;
-	self.backLayer = new LSprite();
-	self.backLayer.x = -304;
-	self.backLayer.y = 140;
-	self.addChild(self.backLayer);
-
-	self.backgroundInit();
+	self.layerInit();
+	self.backLayerInit();
+	self.buildLayerInit();
+	self.statusLayerInit();
 	
-	self.statusInit();
-	self.menuInit();
+	self.chatLayerInit();
 	
-	
-	self.cloudsInit();
-	
-	self.buildLayer = new LSprite();
-	self.addChild(self.buildLayer);
-	//buildLayer.x = LGlobal.width;
-	
-	self.handLayer = new LSprite();
-	self.addChild(self.handLayer);
-	
-	self.addEvent();
-};
-MainView.prototype.talkChangeEvent=function(){
-	var self = this;
-	self.addEventListener(LMouseEvent.MOUSE_UP,self.talkChange);
-};
-MainView.prototype.talkChange=function(event){
-	var self = event.clickTarget;
-	self.removeEventListener(LMouseEvent.MOUSE_UP,self.talkChange);
-	self.controller.talkChange();
-};
-MainView.prototype.setTalk=function(data){
-	var self = this;
-	Talk(self,data.index,data.sub_index,data.message,function(){
-		self.talkChangeEvent();
-	});
-};
-MainView.prototype.handShow=function(){
-	var self = this;
-	self.addHand(250,200);
-	Talk(0,1,"じゃあ、まず官府をクリックして、レベルアップしましょう。",function(){
-		self.addEvent();
-	});
-};
-
-MainView.prototype.addHand=function(x,y){
-	var self = this;
-	var hand = new Hand();
-	hand.x = x;
-	hand.y = y;
-	self.handLayer.addChild(hand);
-};
-MainView.prototype.menuInit=function(){
-	var self = this;
-	var menuLayer = new LSprite();
-	
-	var bLayer = new LSprite();
-	bLayer.alpha = 0.8;
-	bLayer.graphics.drawRect(0,"#000000",[0,0,LGlobal.width,100],true,"#000000");
-	bLayer.y = LGlobal.height - bLayer.getHeight();
-	menuLayer.addChild(bLayer);
-	
-	var menuBar = new Bar(LGlobal.width,100);
-	menuLayer.addChild(menuBar);
-	menuBar.y = LGlobal.height - menuBar.getHeight();
-	self.addChild(menuLayer);
-	
-	var buttonMap = new LButtonSample2("作戦",26);
-	buttonMap.backgroundCorl = "red";
-	menuLayer.addChild(buttonMap);
-	buttonMap.x = 50;
-	buttonMap.y = menuBar.y + 20;
-	var buttonMain = new LButtonSample2("メイン",26);
-	buttonMain.backgroundCorl = "red";
-	menuLayer.addChild(buttonMain);
-	buttonMain.x = 300;
-	buttonMain.y = menuBar.y + 20;
-	
-	self.menuLayer = menuLayer;
-};
-/* 
- * 背景
- */
-MainView.prototype.backgroundInit=function(){
-	var self = this;
-	var backgroundLayer = new LSprite();
-	var bitmap = new LBitmap(new LBitmapData(LMvc.datalist["background"]));
-	backgroundLayer.addChild(bitmap);
-	self.backLayer.addChild(backgroundLayer);
-	self.backgroundLayer = backgroundLayer;
-	
-	self.buildInit();
-};
-MainView.prototype.buildInit = function(){
-	var self = this,i,l,buildList,build;
-	buildList = self.model.getBuildList();
-	self.buildList = buildList;
-	for(i=0,l=buildList.length;i<l;i++){
-		build = buildList[i];
-		self.setBuild(build.path,build.point.x,build.point.y,build.name,build.lv);
-	}
-};
-MainView.prototype.setBuild=function(path,x,y,name,lv){
-	var self = this;
-	var layer = new LSprite();
-	layer.x = x;
-	layer.y = y;
-	self.backLayer.addChild(layer);
-	
-	layer.addChild(new BitmapSprite(path));
-	var nameLabel = new LTextField();
-	nameLabel.text = name;
-	nameLabel.color = "#FFFFFF";
-	nameLabel.x = 50;
-	layer.addChild(nameLabel);
-	if(lv >= 0){
-		var lvLabel = new LTextField();
-		lvLabel.text = "Lv"+lv;
-		lvLabel.color = "#FFFFFF";
-		lvLabel.size = 9;
-		lvLabel.x = nameLabel.x + nameLabel.getWidth();
-		lvLabel.y = 3;
-		layer.addChild(lvLabel);
-	}
-	return layer;
-};
-MainView.prototype.addEvent=function(){
-	var self = this;
-	self.addEventListener(LMouseEvent.MOUSE_DOWN,self.onDown);
-	self.addEventListener(LMouseEvent.MOUSE_MOVE,self.onMove);
-	self.addEventListener(LMouseEvent.MOUSE_UP,self.onUp);
-};
-MainView.prototype.onDown=function(event){
-	var self = event.clickTarget;
-	self.downPoint = {x:event.offsetX,y:event.offsetY,bx:self.backLayer.x,by:self.backLayer.y};
-};
-MainView.prototype.onMove=function(event){
-	var self = event.clickTarget;
-	if(typeof self.downPoint == UNDEFINED)return;
-	self.backLayer.x = event.offsetX - self.downPoint.x + self.downPoint.bx;
-	self.backLayer.y = event.offsetY - self.downPoint.y + self.downPoint.by;
-	if(self.backLayer.x > 0){
-		self.backLayer.x = 0;
-	}else if(self.backLayer.x <  LGlobal.width - self.backgroundLayer.getWidth()){
-		self.backLayer.x = LGlobal.width - self.backgroundLayer.getWidth();
-	}
-	if(self.backLayer.y > 140){
-		self.backLayer.y = 140;
-	}else if(self.backLayer.y <  LGlobal.height - self.backgroundLayer.getHeight()){
-		self.backLayer.y = LGlobal.height - self.backgroundLayer.getHeight();
-	}
-};
-MainView.prototype.onUp=function(event){
-	var self = event.clickTarget;
-	var downPoint = self.downPoint;
-	delete self.downPoint;
-	if(Math.abs(event.offsetX - downPoint.x) > 2 || Math.abs(event.offsetY - downPoint.y) > 2){
-		return;
-	}
-	
-	var cx = event.selfX - self.backLayer.x,cy = event.selfY - self.backLayer.y;
-	for(var i=0;i<self.buildList.length;i++){
-		var obj = self.buildList[i];
-		var rect = obj.rect;
-		if(!obj.clickMode)continue;
-		if(cx >= rect.x && cx <= rect.x + rect.width && cy >= rect.y && cy <= rect.y + rect.height){
-			self.controller.selectBuild(obj.type);
-		}
-	}
-};
-MainView.prototype.cloudsInit=function(){
-	var self = this;
-	var cloud = new BitmapSprite(self.model.getCloudsPath());
-	cloud.y = 300;
-	self.addChild(cloud);
-	self.cloud = cloud;
-	self.controller.cloudsRun();
-};
-MainView.prototype.showBuild = function(buildType){
-	var self = this;
-	self.die();
-	self.handLayer.removeAllChild();
-	
-	var bLayer = new LSprite();
-	bLayer.alpha = 0.8;
-	bLayer.graphics.drawRect(0,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#000000");
-	self.buildLayer.addChild(bLayer);
-	var bBar = new Bar(LGlobal.width,LGlobal.height);
-	self.buildLayer.addChild(bBar);
-	
-};
-
-/* 
- * 上の顔画像や、ステータス部分
- */
-MainView.prototype.statusInit=function(){
-	var self = this;
-	var statusLayer = new LSprite();
-	self.addChild(statusLayer);
-	self.statusLayer = statusLayer;
-	
-	var statusBack = new LBitmap(new LBitmapData(LMvc.datalist["statusBack"]));
-	statusLayer.addChild(statusBack);
-	var face = new Face(self.model.userStatus.face);
-	face.x = face.y = 20;
-	statusLayer.addChild(face);
-	
-	var nameLabel = new LTextField();
-	nameLabel.text = "ニックネーム：" + self.model.userStatus.name;
-	nameLabel.color = "#FFFFFF";
-	nameLabel.x = 140;
-	nameLabel.y = 20;
-	statusLayer.addChild(nameLabel);
-	
-	var icon_gold = new LBitmap(new LBitmapData(LMvc.datalist["icon_gold"]));
-	icon_gold.x = 130;
-	icon_gold.y = 50;
-	statusLayer.addChild(icon_gold);
-	var goldLabel = new LTextField();
-	goldLabel.text = self.model.userStatus.gold;
-	goldLabel.color = "#FFFFFF";
-	goldLabel.x = 180;
-	goldLabel.y = 55;
-	statusLayer.addChild(goldLabel);
-	
-	var icon_silver = new LBitmap(new LBitmapData(LMvc.datalist["icon_silver"]));
-	icon_silver.x = 240;
-	icon_silver.y = 50;
-	statusLayer.addChild(icon_silver);
-	var silverLabel = new LTextField();
-	silverLabel.text = self.model.userStatus.silver;
-	silverLabel.color = "#FFFFFF";
-	silverLabel.x = 290;
-	silverLabel.y = 55;
-	statusLayer.addChild(silverLabel);
-
-	var icon_food = new LBitmap(new LBitmapData(LMvc.datalist["icon_food"]));
-	icon_food.x = 130;
-	icon_food.y = 85;
-	statusLayer.addChild(icon_food);
-	var foodLabel = new LTextField();
-	foodLabel.text = self.model.userStatus.food;
-	foodLabel.color = "#FFFFFF";
-	foodLabel.x = 180;
-	foodLabel.y = 95;
-	statusLayer.addChild(foodLabel);
-
-	var icon_wood = new LBitmap(new LBitmapData(LMvc.datalist["icon_wood"]));
-	icon_wood.x = 240;
-	icon_wood.y = 85;
-	statusLayer.addChild(icon_wood);
-	var woodLabel = new LTextField();
-	woodLabel.text = self.model.userStatus.wood;
-	woodLabel.color = "#FFFFFF";
-	woodLabel.x = 290;
-	woodLabel.y = 95;
-	statusLayer.addChild(woodLabel);
-
-	var icon_iron = new LBitmap(new LBitmapData(LMvc.datalist["icon_iron"]));
-	icon_iron.x = 350;
-	icon_iron.y = 90;
-	statusLayer.addChild(icon_iron);
-	var ironLabel = new LTextField();
-	ironLabel.text = self.model.userStatus.iron;
-	ironLabel.color = "#FFFFFF";
-	ironLabel.x = 390;
-	ironLabel.y = 95;
-	statusLayer.addChild(ironLabel);
+	self.menuLayerInit();
 };

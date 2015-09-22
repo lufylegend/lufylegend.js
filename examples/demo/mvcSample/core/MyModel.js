@@ -1,6 +1,6 @@
-function MyModel(){
+function MyModel(controller){
 	var self = this;
-	base(self,LModel,[]);
+	base(self,LModel,[controller]);
 	self.API_URL = "";
 	self.local = true;
 }

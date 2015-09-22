@@ -10,13 +10,23 @@ IndexController.prototype.logoLoad=function(){
 	var logo = new LogoController();
 	self.view.addChild(logo.view);
 };
-IndexController.prototype.gameLoad=function(){
-	var self = this;
-	self.loadMvc("Game",self.gameStart);
-};
-IndexController.prototype.gameStart=function(){
+IndexController.prototype.mainLoad=function(){
 	var self = this;
 	self.view.removeAllChild();
-	var gameBody = new GameController();
-	self.view.addChild(gameBody.view);
+	self.loadMvc("Main",self.mainLoadComplete);
+};
+IndexController.prototype.mainLoadComplete=function(){
+	var self = this;
+	var main = new MainController();
+	self.view.addChild(main.view);
+};
+IndexController.prototype.battleLoad=function(){
+	var self = this;
+	self.view.removeAllChild();
+	self.loadMvc("Battle",self.battleLoadComplete);
+};
+IndexController.prototype.battleLoadComplete=function(){
+	var self = this;
+	var battle = new BattleController();
+	self.view.addChild(battle.view);
 };

@@ -1,0 +1,69 @@
+function GetConfirmView(controller,ingot,liqueur){
+	var self = this;
+	base(self,LView,[controller]);
+	self.set(ingot,liqueur);
+}
+GetConfirmView.prototype.layerInit=function(){
+	var self = this;
+	self.backLayer = new LSprite();
+	self.addChild(self.backLayer);
+	self.confirmLayer = new LSprite();
+	self.addChild(self.confirmLayer);
+};
+GetConfirmView.prototype.backLayerInit=function(){
+	var self = this;
+	var backgroundData = new LBitmapData(LMvc.datalist["translucent"]);
+	var background = new LBitmap(backgroundData);
+	background.scaleX = LGlobal.width / backgroundData.width;
+	background.scaleY = LGlobal.height / backgroundData.height;
+	self.backLayer.addChild(background);
+	self.backLayer.addEventListener(LMouseEvent.MOUSE_UP, self.close);
+};
+GetConfirmView.prototype.set=function(ingot,liqueur){
+	var self = this;
+	var obj = {title:"购买",message:"要花费"+ingot+"元宝邀请英雄喝"+liqueur+"吗？",okText:"确定",okEvent:self.onClick,cancelText:"取消",cancelEvent:self.onClick};
+	var windowLayer = ConfirmWindow(obj);
+	self.addChild(windowLayer);
+	return;
+	self.layerInit();
+	self.backLayerInit();
+	var backgroundData = new LBitmapData(LMvc.datalist["win07"]);
+	var panel = new LPanel(backgroundData,320,300);
+	panel.x = (LGlobal.width - panel.getWidth()) * 0.5;
+	panel.y = (LGlobal.height - panel.getHeight()) * 0.5;
+	self.confirmLayer.addChild(panel);
+	panel.addEventListener(LMouseEvent.MOUSE_UP, function(){});
+	
+	var title = getStrokeLabel("购买",20,"#FFFFFF","#000000",4);
+	title.x = (LGlobal.width - title.getWidth())*0.5;
+	title.y = panel.y + 8;
+	self.addChild(title);
+	
+	var msg = getStrokeLabel("要花费"+ingot+"元宝邀请英雄喝"+liqueur+"吗？",16,"#FFFFFF","#000000",4);
+	msg.width = 260;
+	msg.setWordWrap(true,27);
+	msg.x = panel.x + 30;
+	msg.y = panel.y + 80;
+	self.addChild(msg);
+	
+	var okData = new LBitmapData(LMvc.datalist["win01"]);
+	var okPanel = new LPanel(okData,120,50);
+	okPanel.x = (LGlobal.width - okPanel.getWidth())*0.5;
+	okPanel.y = panel.y + panel.getHeight() - okPanel.getHeight() - 20;
+	var buttonTitle = getStrokeLabel("确定",15,"#FFFFFF","#000000",2);
+	buttonTitle.x = (okPanel.getWidth() - buttonTitle.getWidth()) * 0.5;
+	buttonTitle.y = (okPanel.getHeight() - buttonTitle.getHeight()) * 0.5;
+	okPanel.addChild(buttonTitle);
+	self.addChild(okPanel);
+	okPanel.addEventListener(LMouseEvent.MOUSE_UP, self.onClick);
+};
+GetConfirmView.prototype.onClick=function(event){
+	var self = event.currentTarget.parent;
+	var controller = self.controller;
+	controller.getCharacter();
+	self.remove();
+};
+GetConfirmView.prototype.close=function(event){
+	var self = event.currentTarget.parent;
+	self.remove();
+};
