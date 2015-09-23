@@ -540,7 +540,7 @@ var LDisplayObject = (function () {
 		 * <p>此方法允许您将任何给定的 x 和 y 坐标从相对于特定显示对象原点 (0,0) 的值（本地坐标）转换为相对于舞台原点的值（全局坐标）。</p>
 		 * <p>要使用此方法，请先创建 Point 类的一个实例。您分配的 x 和 y 的值表示本地坐标，因为它们是相对于显示对象原点的值。</p>
 		 * <p>然后，您可以将创建的 Point 实例作为参数传递给 localToGlobal() 方法。该方法会返回一个新的 Point 对象，该对象具有相对于舞台原点（而不是显示对象原点）的 x 和 y 值。</p>
-		 * @method getBounds
+		 * @method localToGlobal
 		 * @param {LPoint} point 使用 Point 类创建的点的名称或标识符，指定 x 和 y 坐标作为属性。
 		 * @return {LPoint} 具有相对于舞台的坐标的 Point 对象。
 		 * @since 1.9.11
@@ -573,7 +573,7 @@ var LDisplayObject = (function () {
 		/** @language chinese
 		 * <p>将 point 对象从舞台（全局）坐标转换为显示对象的（本地）坐标。</p>
 		 * <p>要使用此方法，请先创建 LPoint 类的一个实例。您分配的 x 和 y 值表示全局坐标，因为它们是相对于主显示区域的原点 (0,0) 的。然后将 LPoint 实例作为参数传递给 globalToLocal() 方法。该方法会返回一个新的 LPoint 对象，该对象具有相对于显示对象原点（而不是舞台原点）的 x 和 y 值。</p>
-		 * @method getBounds
+		 * @method globalToLocal
 		 * @param {LPoint} point 用 LPoint 类创建的对象。 该 LPoint 对象指定 x 和 y 坐标作为属性。
 		 * @return {LPoint} 具有相对于显示对象的坐标的 LPoint 对象。
 		 * @since 1.9.11
