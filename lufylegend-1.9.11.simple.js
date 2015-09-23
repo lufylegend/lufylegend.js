@@ -83,6 +83,9 @@ LMultitouchInputMode.TOUCH_POINT = "touchPoint";
 var LMultitouch = function () {throw "LMultitouch cannot be instantiated";};
 LMultitouch.inputMode = "none";
 LMultitouch.touchs = [];
+var LTimerEvent = function (){throw "LTimerEvent cannot be instantiated";};
+LTimerEvent.TIMER = "timer";
+LTimerEvent.TIMER_COMPLETE = "timerComplete";
 var LTextEvent = function () {throw "LTextEvent cannot be instantiated";};
 LTextEvent.TEXT_INPUT = "textInput";
 LTextEvent.WIND_COMPLETE = "windComplete";
@@ -1628,6 +1631,86 @@ var LObject = (function () {
 		}
 	};
 	return LObject;
+})();
+var LTimer = (function () {
+	function LTimer(delay, repeat) {
+		var s = this;
+		LExtends (s, LEventDispatcher, []);
+		s.type = "LTimer";
+		s.delay = delay;
+		s.repeatCount = repeat ? repeat : int.MAX_VALUE;
+		s.running = false;
+		s.currentCount = 0;
+		s.reset();
+		LTimer.TimerManager.add(s);
+	}
+	LTimer.TimerManager = (function(){
+		function TimerManager(){
+			this.childList = [];
+		}
+		TimerManager.prototype = {
+			ll_show : function(){
+				var s = this, d;
+				for(var i = 0;i<s.childList.length;i++){
+					d = s.childList[i];
+					if(d){
+						d.ll_show();
+					}
+				}
+			},
+			add : function(child){
+				this.childList.push(child);
+			},
+			remove : function(d){
+				var s  = this, c = s.childList, i, l;
+				for (i = 0, l = c.length; i < l; i++) {
+					if (d.objectIndex == c[i].objectIndex) {
+						s.childList.splice(i, 1);
+						break;
+					}
+				}
+			}
+		};
+		return new TimerManager();
+	})();
+	p = {
+		start : function(){
+			this.running = true;
+		},
+		stop : function(){
+			this.running = false;
+		},
+		reset : function(){
+			var s = this;
+			s.currentTime = 0;
+			s.currentCount = 0;
+			s.stop();
+		},
+		destroy : function(){
+			LTimer.TimerManager.remove(this);
+		},
+		ll_show : function(){
+			var s = this;
+			if(!s.running || s.currentCount >= s.repeatCount){
+				return;
+			}
+			s.currentTime += LGlobal.speed;
+			if (s.currentTime < s.delay) {
+				return;
+			}
+			s.currentTime = 0;
+			s.currentCount++;
+			s.dispatchEvent(LTimerEvent.TIMER);
+			if(s.currentCount >= s.repeatCount){
+				s.dispatchEvent(LTimerEvent.TIMER_COMPLETE);
+			}
+		}
+	};
+	for (var k in p) {
+		LTimer.prototype[k] = p[k];
+	}
+	LGlobal.childList.push(LTimer.TimerManager);
+	return LTimer;
 })();
 var LColorTransform = (function () {
 	function LColorTransform (redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
