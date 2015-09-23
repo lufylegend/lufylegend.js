@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>applyFilter</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 480, 960, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapData = new LBitmapData(event.target, null, null, null, null,LBitmapData.DATA_CANVAS);
+				var bitmapData2 = bitmapData.clone();
+				var bitmapData3 = bitmapData.clone();
+				var bitmapData4 = bitmapData.clone();
+				var bitmapData5 = bitmapData.clone();
+				var bitmapData6 = bitmapData.clone();
+				var bitmapData7 = bitmapData.clone();
+				var bitmapData8 = bitmapData.clone();
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				
+				bitmapData2.applyFilter(bitmapData2, new LRectangle(0,0,bitmapData2.width,bitmapData2.height), new LPoint(0,0), new LConvolutionFilter(3,3,[1, 1, 1, 1, 1, 1, 1, 1, 1],9));
+				bitmap = new LBitmap(bitmapData2);
+				bitmap.x = 240;
+				addChild(bitmap);
+				
+				bitmapData3.applyFilter(bitmapData3, new LRectangle(0,0,bitmapData3.width*0.5,bitmapData3.height), new LPoint(0,0), new LConvolutionFilter(3,3,[-5, 0, 0, 0, 0, 0, 0, 0, 5]));
+				bitmap = new LBitmap(bitmapData3);
+				bitmap.y = 240;
+				addChild(bitmap);
+				
+				bitmapData4.applyFilter(bitmapData4, new LRectangle(bitmapData4.width*0.5,0,bitmapData4.width*0.5,bitmapData4.height), new LPoint(bitmapData4.width*0.5,0), new LConvolutionFilter(3,3,[2, 0, 0, 0, -1, 0, 0, 0, -1],1,127));
+				bitmap = new LBitmap(bitmapData4);
+				bitmap.x = 240;
+				bitmap.y = 240;
+				addChild(bitmap);
+				
+				bitmapData5.applyFilter(bitmapData5, new LRectangle(0,0,bitmapData5.width,bitmapData5.height*0.5), new LPoint(0,0), new LConvolutionFilter(3,3,[-1, -1, -1, -1, 9, -1, -1, -1, -1]));
+				bitmap = new LBitmap(bitmapData5);
+				bitmap.y = 480;
+				addChild(bitmap);
+				
+				bitmapData6.applyFilter(bitmapData6, new LRectangle(0,bitmapData6.height*0.5,bitmapData6.width,bitmapData6.height*0.5), new LPoint(0,bitmapData6.height*0.5), new LConvolutionFilter(3,3,[1, 1, 1, 1, -7, 1, 1, 1, 1]));
+				bitmap = new LBitmap(bitmapData6);
+				bitmap.x = 240;
+				bitmap.y = 480;
+				addChild(bitmap);
+				
+				bitmapData7.applyFilter(bitmapData7, new LRectangle(0,0,bitmapData7.width,bitmapData7.height), new LPoint(0,0), new LColorMatrixFilter([0.3086,0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0, 0, 0, 1, 0]));
+				bitmap = new LBitmap(bitmapData7);
+				bitmap.y = 720;
+				addChild(bitmap);
+				
+				bitmapData8.applyFilter(bitmapData8, new LRectangle(0,0,bitmapData7.width,bitmapData7.height), new LPoint(0,0), new LColorMatrixFilter([-1,0, 0, 0, 255, 0, -1, 0, 0, 255, 0, 0, -1, 0, 255, 0, 0, 0, 1, 0]));
+				bitmap = new LBitmap(bitmapData8);
+				bitmap.x = 240;
+				bitmap.y = 720;
+				addChild(bitmap);
+			}
+			</script>
+	</body>
+</html>

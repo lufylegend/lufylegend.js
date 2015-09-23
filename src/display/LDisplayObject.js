@@ -401,7 +401,7 @@ var LDisplayObject = (function () {
 				c.globalCompositeOperation = s.blendMode;
 			}
 			if (s.filters) {
-				s._ll_setShadow();
+				s._ll_setFilters();
 			}
 			s._rotateReady();
 			if (s.mask != null && s.mask.ll_show) {
@@ -424,7 +424,11 @@ var LDisplayObject = (function () {
 					LGlobal.fpsStatus.transform++;
 				}
 			}
-			s._ll_show(c);
+			if(s._ll_cacheAsBitmap){
+				s._ll_cacheAsBitmap._ll_show();
+			}else{
+				s._ll_show(c);
+			}
 			c.restore();
 			if (LGlobal.box2d != null && typeof s._ll_loopframe == "function") {
 				s._ll_loopframe();
@@ -443,15 +447,19 @@ var LDisplayObject = (function () {
 		_rotateReady : function () {},
 		_showReady : function (c) {},
 		_ll_show : function (c) {},
-		_ll_setShadow : function () {
+		_ll_setFilters : function () {
 			var s = this, f = s.filters, i, l;
 			if (!f) {
 				return;
 			}
 			for (i = 0, l = f.length; i < l; i++) {
-				f[i].ll_show();
+				f[i].ll_show(s);
 			}
 		},
+		startX : function(){return 0;},
+		startY : function(){return 0;},
+		getWidth : function(){return 1;},
+		getHeight : function(){return 1;},
 		_transformRotate : function () {
 			var s = this, c;
 			if (s.rotate == 0) {
@@ -525,18 +533,72 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		getRootCoordinate : function () {
-			var s = this, sx, sy, p;
-			sx=s.x;
-			sy=s.y;
-			p = s.parent;
-			while (p && p != "root") {
-				sx *= p.scaleX;
-				sy *= p.scaleY;
-				sx += p.x;
-				sy += p.y;
-				p = p.parent;
-			}
-			return new LPoint(sx,sy);
+			return this.localToGlobal(new LPoint(0,0));
+		},
+		/** @language chinese
+		 * <p>将 point 对象从显示对象的（本地）坐标转换为舞台（全局）坐标。</p>
+		 * <p>此方法允许您将任何给定的 x 和 y 坐标从相对于特定显示对象原点 (0,0) 的值（本地坐标）转换为相对于舞台原点的值（全局坐标）。</p>
+		 * <p>要使用此方法，请先创建 Point 类的一个实例。您分配的 x 和 y 的值表示本地坐标，因为它们是相对于显示对象原点的值。</p>
+		 * <p>然后，您可以将创建的 Point 实例作为参数传递给 localToGlobal() 方法。该方法会返回一个新的 Point 对象，该对象具有相对于舞台原点（而不是显示对象原点）的 x 和 y 值。</p>
+		 * @method localToGlobal
+		 * @param {LPoint} point 使用 Point 类创建的点的名称或标识符，指定 x 和 y 坐标作为属性。
+		 * @return {LPoint} 具有相对于舞台的坐标的 Point 对象。
+		 * @since 1.9.11
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	var square;
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		square = new LSprite();
+		 * 		square.graphics.drawRect(1,"#000000",[0, 0, 100, 100]);
+		 * 		square.x = 100;
+		 * 		square.y = 200;
+		 * 		addChild(square);
+		 * 		square.addEventListener(LMouseEvent.MOUSE_DOWN, traceCoordinates);
+		 * 	}
+		 * 	function traceCoordinates(event) {
+		 * 		var clickPoint = new LPoint(mouseX, mouseY);
+		 * 		trace("display object coordinates:", clickPoint);
+		 * 		trace("stage coordinates:", square.localToGlobal(clickPoint));
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LDisplayObject/localToGlobal.html" target="_blank">测试链接</a></p>
+		 */
+		localToGlobal : function (point) {
+			var s = this, x, y, p;
+			m = s.getRootMatrix();
+			p = m.toArray([point.x, point.y, 1]);
+			return new LPoint(p[0], p[1]);
+		},
+		/** @language chinese
+		 * <p>将 point 对象从舞台（全局）坐标转换为显示对象的（本地）坐标。</p>
+		 * <p>要使用此方法，请先创建 LPoint 类的一个实例。您分配的 x 和 y 值表示全局坐标，因为它们是相对于主显示区域的原点 (0,0) 的。然后将 LPoint 实例作为参数传递给 globalToLocal() 方法。该方法会返回一个新的 LPoint 对象，该对象具有相对于显示对象原点（而不是舞台原点）的 x 和 y 值。</p>
+		 * @method globalToLocal
+		 * @param {LPoint} point 用 LPoint 类创建的对象。 该 LPoint 对象指定 x 和 y 坐标作为属性。
+		 * @return {LPoint} 具有相对于显示对象的坐标的 LPoint 对象。
+		 * @since 1.9.11
+		 * @public
+		 * @example
+		 * 	LInit(50, "legend", 800, 480, main);
+		 * 	function main () {
+		 * 		LGlobal.setDebug(true);
+		 * 		var circle = new LSprite();
+		 * 		circle.x = 10;
+		 * 		addChild(circle);
+		 * 		var point1 = new LPoint(0, 0);
+		 * 		trace(circle.globalToLocal(point1)); // [x=-10, y=0]
+		 * 		var point2 = new LPoint(10, 1);
+		 * 		trace(circle.globalToLocal(point2)); // [x=0, y=1]
+		 * 		var point3 = new LPoint(30, 20);
+		 * 		trace(circle.globalToLocal(point3)); // [x=20, y=20]
+		 * 	}
+		 * @examplelink <p><a href="../../../api/LDisplayObject/globalToLocal.html" target="_blank">测试链接</a></p>
+		 */
+		globalToLocal : function (point) {
+			var s = this, x, y, p;
+			m = s.getLocalMatrix();
+			p = m.toArray([point.x, point.y, 1]);
+			return new LPoint(p[0], p[1]);
 		},
 		/** @language chinese
 		 * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
@@ -581,15 +643,53 @@ var LDisplayObject = (function () {
 			}
 			return new LRectangle(x, y, w, h);
 		},
-		getDataCanvas : function () {
+		/** @language chinese
+		 * <p>如果设置为 true，则运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。速度可能会大大加快，具体取决于矢量内容的复杂性。</p>
+		 * <p>*动态改变的对象无法使用cacheAsBitmap</p>
+		 * @method cacheAsBitmap
+		 * @param {bool} value 分配给触摸点的整数(触摸设备)。
+		 * @example
+		 * 	var layer = new LSprite();
+		 * 	layer.x = layer.y = 100;
+		 * 	addChild(layer);
+		 * 	var bitmapdata = new LBitmapData(event.target);
+		 * 	var bitmap = new LBitmap(bitmapdata);
+		 * 	layer.addChild(bitmap);
+		 * 	bitmap = new LBitmap(bitmapdata);
+		 * 	bitmap.x = bitmap.y = 50;
+		 * 	layer.addChild(bitmap);
+		 * 	var sprite = new LSprite();
+		 * 	sprite.graphics.drawRect(3, "#000000", [0, 0, 190, 100],true,"#00FF00");
+		 * 	sprite.x = -100;
+		 * 	layer.addChild(sprite);
+		 * 	layer.cacheAsBitmap(true);
+		 * @examplelink <p><a href="../../../api/LDisplayObject/cacheAsBitmap.html" target="_blank">测试链接</a></p>
+		 * @public
+		 * @since 1.9.11
+		 */
+		cacheAsBitmap : function (value) {
+			var s = this;
+			if(!value){
+				s._ll_cacheAsBitmap = null;
+				return;
+			}
+			var sx = s.x - s.startX(), sy = s.y - s.startY();
+			var data = s.getDataCanvas(sx, sy, s.getWidth(), s.getHeight());
+			var b = new LBitmapData(data, 0, 0, null, null, LBitmapData.DATA_CANVAS);
+			var cache = new LBitmap(b);
+			cache.x = -sx;
+			cache.y = -sy;
+			s._ll_cacheAsBitmap = cache;
+		},
+		getDataCanvas : function (x,y,w,h) {
 			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
 			_o = s._canvas;
 			_c = s._context;
-			s.width = s.getWidth();
-			s.height = s.getHeight();
+			s.width = w || s.getWidth();
+			s.height = h || s.getHeight();
 			_o.width = s.width;
 			_o.height = s.height;
 			_c.clearRect(0, 0, s.width, s.height);
@@ -597,7 +697,8 @@ var LDisplayObject = (function () {
 			LGlobal.canvas = s._context;
 			_x = s.x;
 			_y = s.y;
-			s.x = s.y = 0;
+			s.x = x || 0;
+			s.y = y || 0;
 			s.ll_show();
 			s.x = _x;
 			s.y = _y;
@@ -693,6 +794,26 @@ var LDisplayObject = (function () {
 					m.translate(parent.x, parent.y);
 				}
 				parent = parent.parent;
+			}
+			return m;
+		},
+		getLocalMatrix : function () {
+			var parent = this, m = new LMatrix(), list = [];
+			while (parent && parent != "root") {
+				list.push(parent);
+				parent = parent.parent;
+			}
+			for (var i = list.length - 1; i >= 0; i--) {
+				parent = list[i];
+				if (parent.x != 0 || parent.y != 0) {
+					m.translate(-parent.x, -parent.y);
+				}
+				if (parent.rotate != 0) {
+					m.rotate(-parent.rotate);
+				}
+				if (parent.scaleX != 1 || parent.scaleY != 1) {
+					m.scale(1/parent.scaleX, 1/parent.scaleY);
+				}
 			}
 			return m;
 		},

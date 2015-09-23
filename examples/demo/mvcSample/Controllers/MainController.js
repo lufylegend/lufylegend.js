@@ -3,58 +3,135 @@ function MainController(){
 }
 MainController.prototype.construct=function(){
 	var self = this;
-	LMvc.keepLoading(true);
+	//LMvc.keepLoading(true);
 	var list = self.model.getImages();
-	self.load.image(list,self.getSatus);
+	self.load.image(list,self.configLoad);
+	//self.load.image(list,self.getSatus);
 };
-MainController.prototype.getSatus=function(){
+MainController.prototype.configLoad=function(){
 	var self = this;
-	self.model.getStatus(self.libraryLoad);
+	self.load.config(["BattleMap","Arms","characterList","lineups","Item","Position"],self.helperLoad);
+};
+MainController.prototype.helperLoad=function(){
+	var self = this;
+	self.load.helper(["Label","Star","Cost"],self.libraryLoad);
 };
 MainController.prototype.libraryLoad=function(){
 	var self = this;
-	self.loadMvc("Build/Official",self.officialLoad);
+	var libraris = ["Face","Card"];
+	libraris.push("language/chinese/Language");
+	self.load.library(libraris,self.viewLoad);
 };
-MainController.prototype.officialLoad=function(){
+MainController.prototype.viewLoad=function(){
 	var self = this;
-	self.load.library(["Hand"],self.init);
+	self.load.view(["Main/MenuList","Main/Mainmenu","Main/BuildOfficial","Main/BuildShop","Main/BuildTavern","Common/HeaderStatus"],self.init);
 };
-MainController.prototype.init=function(status){
+MainController.prototype.init=function(){
 	var self = this;
 	LMvc.keepLoading(false);
-	self.view.init();
+	var user = UserModel.own(self);
+	self.setValue("yuanbao",user.gold());
+	self.setValue("yinzi",user.silver());
+	self.setValue("tili",user.junling()+"/"+user.junlingMax());
+	
+	self.dispatchEvent(LEvent.COMPLETE);
+	self.dispatchEvent(LController.NOTIFY);
 };
-MainController.prototype.cloudsRun = function(){
+MainController.prototype.itemsShow=function(){
 	var self = this;
-	LTweenLite.to(self.view.cloud,10,{x:300}).  
-	to(self.view.cloud,10,{delay:1,x:0,onComplete:function(){  
-        self.cloudsRun();  
-    }});  
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("Items",self.itemsLoadComplete);
 };
-MainController.prototype.selectBuild = function(buildType){
+MainController.prototype.itemsLoadComplete=function(){
 	var self = this;
-	self.view.die();
-	self.view.handLayer.removeAllChild();
-	var build;
-	switch(buildType){
-		case "main":
-			build = new OfficialController();
-		break;
-	}
-	self.view.buildLayer.addChild(build.view);
+	var items = new ItemsController();
+	self.view.parent.addChild(items.view);
 };
-
-MainController.prototype.talkChange=function(){
+MainController.prototype.equipmentsShow=function(){
 	var self = this;
-	var msg = self.model.getTalkMessage();
-	if(msg){
-		self.view.setTalk(msg);
-	}else{
-		LGlobal.talkLayer.removeAllChild();
-		self.view.handShow();
-	}
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("Equipments",self.equipmentsLoadComplete);
 };
-MainController.prototype.tutorialOver = function(){
+MainController.prototype.equipmentsLoadComplete=function(){
 	var self = this;
-
+	var equipments = new EquipmentsController(self);
+	self.view.parent.addChild(equipments.view);
+};
+MainController.prototype.characterListShow=function(){
+	var self = this;
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("CharacterList",self.characterListLoadComplete);
+};
+MainController.prototype.characterListLoadComplete=function(){
+	var self = this;
+	var characterList = new CharacterListController();
+	self.view.parent.addChild(characterList.view);
+};
+MainController.prototype.characterTestShow=function(){
+	var self = this;
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("CharacterTest",self.characterTestLoadComplete);
+};
+MainController.prototype.characterTestLoadComplete=function(){
+	var self = this;
+	var characterTest = new CharacterTestController();
+	self.view.parent.addChild(characterTest.view);
+};
+MainController.prototype.officialShow=function(){
+	var self = this;
+	LMvc.keepLoading(true);
+	self.view.visible = false;
+	self.loadMvc("Official",self.officialLoadComplete);
+};
+MainController.prototype.officialLoadComplete=function(){
+	var self = this;
+	var official = new OfficialController();
+	self.view.addChild(official.view);
+};
+MainController.prototype.chapterShow=function(){
+	var self = this;
+	self.webview.die();
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("Chapter",self.chapterLoadComplete);
+};
+MainController.prototype.chapterLoadComplete=function(){
+	var self = this;
+	var chapter = new ChapterController();
+	self.view.parent.addChild(chapter.view);
+};
+MainController.prototype.shopShow=function(){
+	var self = this;
+	self.webview.die();
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("Shop",self.shopLoadComplete);
+};
+MainController.prototype.shopLoadComplete=function(){
+	var self = this;
+	var shop = new ShopController();
+	self.view.parent.addChild(shop.view);
+};
+MainController.prototype.tavernShow=function(){
+	var self = this;
+	self.webview.die();
+	LMvc.keepLoading(true);
+	LMvc.mainController = self;
+	self.view.visible = false;
+	self.loadMvc("Tavern",self.tavernLoadComplete);
+};
+MainController.prototype.tavernLoadComplete=function(){
+	var self = this;
+	var tavern = new TavernController();
+	self.view.parent.addChild(tavern.view);
 };

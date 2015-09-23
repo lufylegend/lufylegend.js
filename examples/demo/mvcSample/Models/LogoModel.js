@@ -3,22 +3,20 @@ function LogoModel(){
 }
 LogoModel.prototype.construct=function(){
 };
-LogoModel.prototype.getBackMusic=function(){
-	return LMvc.SOUND_PATH+"M03.mp3";
-};
-LogoModel.prototype.getCommonImages=function(){
+LogoModel.prototype.getImages=function(){
 	var list = [
-		{name:"bar-up",path:LMvc.IMG_PATH+"common/bar-up.png"},
-		{name:"bar-right-up",path:LMvc.IMG_PATH+"common/bar-right-up.png"},
-		{name:"bar-right-down",path:LMvc.IMG_PATH+"common/bar-right-down.png"},
-		{name:"bar-right",path:LMvc.IMG_PATH+"common/bar-left.png"},
-		{name:"bar-left-up",path:LMvc.IMG_PATH+"common/bar-left-up.png"},
-		{name:"bar-left-down",path:LMvc.IMG_PATH+"common/bar-left-down.png"},
-		{name:"bar-left",path:LMvc.IMG_PATH+"common/bar-left.png"},
-		{name:"bar-down",path:LMvc.IMG_PATH+"common/bar-down.png"},
-		{name:"inputbox-1",path:LMvc.IMG_PATH+"common/inputbox-1.png"}
+		{name:"icon-star",path:LMvc.IMG_PATH+"icon/star.png"},
+		{name:"common-black",path:LMvc.IMG_PATH+"common/black.png"},
+		{name:"translucent",path:LMvc.IMG_PATH+"common/translucent.png"},
+		{name:"inputbox",path:LMvc.IMG_PATH+"logo/inputbox.png"},
+		{name:"win01",path:LMvc.IMG_PATH+"win/win01.png"},
+		{name:"win02",path:LMvc.IMG_PATH+"win/win02.png"},
+		{name:"face-background",path:LMvc.IMG_PATH+"face/background.png"}
 	];
 	return list;
+};
+LogoModel.prototype.getBackMusic=function(){
+	return LMvc.SOUND_PATH+"M03.mp3";
 };
 LogoModel.prototype.login=function(name,pass,callback){
 	var self = this;

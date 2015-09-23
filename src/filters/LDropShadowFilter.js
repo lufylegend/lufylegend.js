@@ -58,7 +58,7 @@
 var LDropShadowFilter = (function () {
 	function LDropShadowFilter (distance, angle, color, blur) {
 		var s = this;
-		LExtends(s, LObject, []);
+		LExtends(s, LBitmapFilter, []);
 		s.type = "LDropShadowFilter";
 		s.distance = distance ? distance : 0;
 		s.angle = angle ? angle : 0;

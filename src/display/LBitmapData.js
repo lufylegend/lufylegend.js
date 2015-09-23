@@ -539,6 +539,23 @@ var LBitmapData = (function() {
 			s._data = null;
 		},
 		/** @language chinese
+		 * <p>取得一个源图像和一个滤镜对象，并生成过滤的图像。</p>
+		 * <p>此方法依赖于内置滤镜对象的行为，这些对象确定受输入源矩形影响的目标矩形。</p>
+		 * @method applyFilter
+		 * @param {LBitmapData} sourceBitmapData 要使用的输入位图图像。源图像可以是另一个 LBitmapData 对象，也可以引用当前 LBitmapData 实例。
+		 * @param {LRectangle} sourceRect 定义要用作输入的源图像区域的矩形。
+		 * @param {LPoint} destPoint 目标图像（当前 LBitmapData 实例）中与源矩形的左上角对应的点。
+		 * @param {LBitmapFilter} filter 用于执行过滤操作的滤镜对象。
+		 * @since 1.9.11
+		 * @public
+		 */
+		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
+			var s = this;
+			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
+			var data = filter.filter(r,sourceRect.width);
+			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
+		},
+		/** @language chinese
 		 * 返回一个数组，它表示 LBitmapData 对象中在特定点 (x, y) 处的 RGB 像素数据。
 		 * @method getPixel
 		 * @param {int} x 指定坐标点x坐标。

@@ -226,7 +226,7 @@ var LMatrix = (function () {
 		},
 		/** @language chinese
 		 * 沿 x 和 y 轴倾斜。
-		 * @method translate
+		 * @method skew
 		 * @param {float} kx 沿 x 轴倾斜的量。
 		 * @param {float} ky 沿 y 轴倾斜的量。
 		 * @return {LMatrix} 矩阵本身。
@@ -235,13 +235,13 @@ var LMatrix = (function () {
 		 */
 		/** @language english
 		 * ......
-		 * @method translate
+		 * @method skew
 		 * @since 1.9.8
 		 * @public
 		 */
 		/** @language japanese
 		 * ......
-		 * @method translate
+		 * @method skew
 		 * @since 1.9.8
 		 * @public
 		 */

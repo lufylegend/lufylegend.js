@@ -3,6 +3,7 @@ function LogoView(){
 }
 LogoView.prototype.construct=function(){
 	var self = this;
+	//console.log(self.constructor.name);
 	var bitmapBgBack = new LBitmap(new LBitmapData(LMvc.datalist["logo_bg_1"]));
 	self.graphics.drawRect(0,"#000000",[0,0,LGlobal.width,LGlobal.height*0.5],true,"#000000");
 	bitmapBgBack.y = LGlobal.height - bitmapBgBack.getHeight()+50;
@@ -31,17 +32,25 @@ LogoView.prototype.construct=function(){
 	layerChara.addChild(bitmapChara);
 	self.layerChara = layerChara;
 	
-	var bitmapTitle = new LBitmap(new LBitmapData(LMvc.datalist["logo_title"]));
-	bitmapTitle.x = -bitmapTitle.getWidth()*0.5;
-	bitmapTitle.y = -bitmapTitle.getHeight()*0.5;
-	var layerTitle = new LSprite();
-	layerTitle.x = LGlobal.width*0.5;
-	layerTitle.y = 150;
-	self.addChild(layerTitle);
-	layerTitle.scaleX = layerTitle.scaleY = 5;
-	layerTitle.alpha = 0;
-	layerTitle.addChild(bitmapTitle);
-	self.layerTitle = layerTitle;
+	return;
+	var title = new LTextField();
+	title.color="#FFFFFF";
+	title.size = 50;
+	title.lineColor = "#FF0000";
+	title.stroke = true;
+	title.lineWidth = 4;
+	title.text = "三国攻防记";
+	title.x = (LGlobal.width - title.getWidth())*0.5;
+	title.y = 150;
+	
+	var shadow = new LDropShadowFilter(5,45,"#00FF00");
+	title.filters = [shadow];
+	self.addChild(title);
+	
+};
+LogoView.prototype.updateView = function(){
+	var self = this;
+	self.insertWindow();
 };
 LogoView.prototype.insertWindow=function(){
 	var self = this;
@@ -55,89 +64,77 @@ LogoView.prototype.insertWindow=function(){
 	self.childWindow.addChild(self.childWindowLayer);
 	self.childWindowLayer.x = -200;
 	self.childWindowLayer.y = -200;
-	
-	var childBack = new LSprite();
-	childBack.graphics.drawRect(0,"#000000",[0,0,400,400],true,"#000000");
-	self.childWindowLayer.addChild(childBack);
-	childBack.alpha = 0.7;
-	
-	var childBar = new Bar(400,400);
-	self.childWindowLayer.addChild(childBar);
+	var bitmapWin = new LPanel(new LBitmapData(LMvc.datalist["win02"]),400,400);
+	self.childWindowLayer.addChild(bitmapWin);
 	
 	
-	var titleLabel = new LTextField();
-	titleLabel.text = "ログイン / 新規登録";
-	titleLabel.color = "#FFFFFF";
-	titleLabel.size = 25;
-	titleLabel.weight = "bolder";
+	var titleLabel = getStrokeLabel("ログイン / 新規登録",25,"#FFFFFF","#000000",3,"bitmap");
 	self.childWindowLayer.addChild(titleLabel);
 	titleLabel.x = (400 - titleLabel.getWidth())*0.5;
 	titleLabel.y = 40;
 	
 	var textLayer;
-	textLayer = new LBitmap(new LBitmapData(LMvc.datalist["inputbox-1"]));
+	textLayer = new LBitmap(new LBitmapData(LMvc.datalist["inputbox"]));
 	self.childWindowLayer.addChild(textLayer);
 	textLayer.x = (400-textLayer.getWidth())*0.5;
 	textLayer.y = 120;
 	
 	var labelLayer;
 	labelLayer = new LSprite();
-	labelLayer.graphics.drawRect(1,"#000000",[0,0,270,40],true,"#FFFFFF");
-	labelLayer.alpha = 0;
+	labelLayer.graphics.drawRect(0,"#FF0000",[0,0,270,40]);
 	var nameText = new LTextField();
+	nameText.size = 25;
 	nameText.x = textLayer.x + 35;
 	nameText.y = textLayer.y + 20;
+	nameText.text = "aaa";
 	nameText.setType(LTextFieldType.INPUT,labelLayer);
+	self.nameText = nameText;
 	self.childWindowLayer.addChild(nameText);
-	var nameLabel = new LTextField();
-	nameLabel.text = "名前";
-	nameLabel.color = "#FFFFFF";
-	nameLabel.size = 20;
-	nameLabel.weight = "bolder";
+	var nameLabel = getStrokeLabel("名前",20,"#FFFFFF","#000000",3,"bitmap");
 	self.childWindowLayer.addChild(nameLabel);
 	nameLabel.x = 60;
 	nameLabel.y = 100;
 	
-	textLayer = new LBitmap(new LBitmapData(LMvc.datalist["inputbox-1"]));
+	textLayer = new LBitmap(new LBitmapData(LMvc.datalist["inputbox"]));
 	self.childWindowLayer.addChild(textLayer);
 	textLayer.x = (400-textLayer.getWidth())*0.5;
 	textLayer.y = 220;
 	
 	labelLayer = new LSprite();
-	labelLayer.graphics.drawRect(1,"#000000",[0,0,220,40],true,"#FFFFFF");
-	labelLayer.alpha = 0;
+	labelLayer.graphics.drawRect(0,"#FF0000",[0,0,270,40]);
 	var passText = new LTextField();
+	passText.size = 25;
 	passText.displayAsPassword = true;
 	passText.x = textLayer.x + 35;
 	passText.y = textLayer.y + 20;
+	passText.text = "bbb";
 	passText.setType(LTextFieldType.INPUT,labelLayer);
+	self.passText = passText;
 	self.childWindowLayer.addChild(passText);
-	var passLabel = new LTextField();
-	passLabel.text = "パスワード";
-	passLabel.color = "#FFFFFF";
-	passLabel.size = 20;
-	passLabel.weight = "bolder";
+	var passLabel = getStrokeLabel("パスワード",20,"#FFFFFF","#000000",3,"bitmap");
 	self.childWindowLayer.addChild(passLabel);
 	passLabel.x = 60;
 	passLabel.y = 205;
 	
-	var buttonLogin = new LButtonSample2("ログイン");
-	buttonLogin.backgroundCorl = "blue";
-	buttonLogin.x = 70;
-	buttonLogin.y = 300;
+	var buttonLogin = getButton("ログイン",150);
+	buttonLogin.x = 50;
+	buttonLogin.y = 310;
 	self.childWindowLayer.addChild(buttonLogin);
 	
-	var buttonInsert = new LButtonSample2("新規登録");
-	buttonInsert.backgroundCorl = "blue";
-	buttonInsert.x = 220;
-	buttonInsert.y = 300;
+	var buttonInsert = getButton("新規登録",150);
+	buttonInsert.x = 200;
+	buttonInsert.y = buttonLogin.y;
 	self.childWindowLayer.addChild(buttonInsert);
 	
 	
-	buttonLogin.addEventListener(LMouseEvent.MOUSE_UP, function(event){
-		self.controller.toLogin(nameText.text,passText.text);
-	});
-	buttonInsert.addEventListener(LMouseEvent.MOUSE_UP,function(event){
-		self.controller.toInsert(nameText.text,passText.text);
-	});
+	buttonLogin.addEventListener(LMouseEvent.MOUSE_UP, self.login);
+	buttonInsert.addEventListener(LMouseEvent.MOUSE_UP,self.register);
+};
+LogoView.prototype.login = function(event){
+	var self = event.currentTarget.parent.parent.parent;
+	self.controller.toLogin(self.nameText.text, self.passText.text);
+};
+LogoView.prototype.register = function(event){
+	var self = event.currentTarget.parent.parent.parent;
+	self.controller.toRegister(self.nameText.text, self.passText.text);
 };

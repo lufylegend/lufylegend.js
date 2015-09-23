@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LColorMatrixFilter</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(requestAnimationFrame ? requestAnimationFrame : (1000/60), "legend", 800, 480, main);
+			function main () {
+				loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var layer = new LSprite();
+				layer.x = layer.y = 100;
+				addChild(layer);
+				var bitmap;
+				var bitmapdata = new LBitmapData(event.target);
+				bitmap = new LBitmap(bitmapdata);
+				layer.addChild(bitmap);
+				var sprite = new LSprite();
+		  		sprite.graphics.drawRect(3, "#000000", [0, 0, 190, 100],true,"#00FF00");
+		  		sprite.x = -100;
+				layer.addChild(sprite);
+				
+				layer.filters = [new LColorMatrixFilter([0.3086,0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0.3086, 0.6094, 0.0820, 0, 0, 0, 0, 0, 1, 0])];
+			}
+			</script>
+	</body>
+</html>

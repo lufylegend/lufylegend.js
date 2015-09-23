@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>ORIENTATIONCHANGE</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;overflow-x:hidden;overflow-y:hidden;">
+			<div id="legend">
+			</div>
+			<script>
+		LInit(1000/60, "legend", 400,400, main);
+		var label;
+		function main () {
+			label = new LTextField();
+			label.x = label.y = 20;
+			label.text = "orientationchange test";
+			addChild(label);
+			LGlobal.stage.addEventListener(LEvent.WINDOW_ORIENTATIONCHANGE,orientationIsChange);
+		}
+		function orientationIsChange(e){
+			label.text = e.orientation;
+		}
+			</script>
+	</body>
+</html>

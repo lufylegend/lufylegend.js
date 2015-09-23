@@ -90,7 +90,7 @@ var FPS = (function () {
 		s.fpsCount++;
 		t = (new Date()).getTime();
 		if(t - s.fpsTime < 1000)return;
-		s.fps[0].text = "FPS : " + Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10; 
+		s.fps[0].text = "FPS : " + Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10;
 		f = LGlobal.fpsStatus;
 		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b; 
 		s.fps[2].text = "Draw image : " + f.a; 
