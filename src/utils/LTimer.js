@@ -16,7 +16,7 @@
  * 		myTimer.start();
  * 	}
  * 	function timerHandler(e){
- * 		trace("timerHandler: " + event);
+ * 		trace("timerHandler: " + e);
  * 	}
  * @examplelink <p><a href="../../../api/LTimerEvent/index.html" target="_blank">测试链接</a></p>
  * @public
