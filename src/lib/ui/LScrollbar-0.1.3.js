@@ -45,6 +45,7 @@ var LScrollbar = (function () {
 		s.addChild(s._showLayer);
 		s._width = 0;
 		s._height = 0;
+		s._speed = 0;
 		s._showObject = showObject;
 		s._showLayer.addChild(showObject);
 		s.mode = "touch";
