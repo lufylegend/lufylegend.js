@@ -10,6 +10,7 @@
 var LModel = (function() {
 	function LModel(controller){
 		var self = this;
+		base(self,LObject,[]);
 		base(self,LMvcObject,[]);
 		self.mvcType = "model";
 		if (controller) {
