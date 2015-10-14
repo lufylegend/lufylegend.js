@@ -1353,7 +1353,7 @@ var LSprite = (function () {
 		},
 		_ll_debugShape : function () {
 			var s = this, i, l, child, c, arg, j, ll;
-			if (!LGlobal.traceDebug || s.shapes.length == 0) {
+			if (!LGlobal.traceDebug || !s.shapes || s.shapes.length == 0) {
 				return;
 			}
 			for (i = 0, l = s.shapes.length; i < l; i++) {
