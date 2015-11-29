@@ -48,7 +48,7 @@ var LScrollbar = (function () {
 		s._speed = 0;
 		s._showObject = showObject;
 		s._showLayer.addChild(showObject);
-		s.mode = "touch";
+		s.mode = LGlobal.mobile?LScrollbar.NEED_MODE:LScrollbar.ALWAY_MODE;
 		s._showObject.mask = s._mask;
 		if (!param) {
 			s._scrollWidth = 20;
@@ -97,6 +97,9 @@ var LScrollbar = (function () {
 		s.dispatchEvent(LEvent.ENTER_FRAME);
 		s.dragRangeUpdate();
 	}
+	LScrollbar.ALWAY_MODE = "alway";
+	LScrollbar.HIDE_MODE = "hide";
+	LScrollbar.NEED_MODE = "need";
 	LScrollbar.prototype.clone = function () {
 		var s = this, a = new LScrollbar(s._showObject.clone(), s._maskW, s._maskH, s._scrollWidth, s._wVisible, s._hVisible);
 		a.copyProperty(s);
@@ -110,10 +113,11 @@ var LScrollbar = (function () {
 		if(typeof h == UNDEFINED) {
 			h = s._showObject.getHeight();
 		}
-		s._showObject.dragRange = new LRectangle(w < s._maskW ? 0 : s._maskW - w,
-		h < s._maskH ? 0 : s._maskH - h,
-		w > s._maskW ? w - s._maskW : 0, 
-			h > s._maskH ? h - s._maskH : 0);
+		s._showObject.dragRange = new LRectangle(
+		!s._wVisible || w < s._maskW ? 0 : s._maskW - w,
+		!s._hVisible || h < s._maskH ? 0 : s._maskH - h,
+		s._wVisible && w > s._maskW ? w - s._maskW : 0, 
+		s._hVisible && h > s._maskH ? h - s._maskH : 0);
 	};
 	LScrollbar.prototype.onFrame = function (event) {
 		var s = event.currentTarget, w, h, i, l, child, m;
@@ -164,8 +168,13 @@ var LScrollbar = (function () {
 		if (s._key["right"]) {
 			s.moveRight();
 		}
-		if (LGlobal.mobile && s.mode == "touch") {
+		if (LGlobal.mobile) {
 			m = LGlobal.IS_MOUSE_DOWN;
+			if(s.mode == LScrollbar.ALWAY_MODE){
+				m = true;
+			}else if(s.mode == LScrollbar.HIDE_MODE){
+				m = false;
+			}
 			if (s._scroll_h) {
 				s._scroll_h.visible = s._scroll_h_bar.visible = m;
 			}
@@ -204,7 +213,7 @@ var LScrollbar = (function () {
 			s._scroll_w.y = s._maskH;
 			s._scroll_w_bar.x = s._scrollWidth;
 			s._scroll_w_bar.y = s._maskH;
-			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth * ((LGlobal.mobile && s.mode == "touch") ? 1 : 2), 0);
+			grd = LGlobal.canvas.createLinearGradient(0, 0, s._scrollWidth, 0);
 			grd.addColorStop(0, "#FFFFFF");
 			grd.addColorStop(1, "#008000");
 			grdb = LGlobal.canvas.createLinearGradient(0, 0, 0, s._scrollWidth);
@@ -254,7 +263,7 @@ var LScrollbar = (function () {
 				s._scroll_w.graphics.drawRect(0, "#000000", [s._mask.getWidth() - s._scrollWidth, 0, s._scrollWidth, s._scrollWidth]);
 				s._scroll_w.graphics.drawVertices(1, "#CCCCCC", [[s._mask.getWidth() - s._scrollWidth * 0.75, s._scrollWidth * 0.25], [s._mask.getWidth() - s._scrollWidth * 0.75, s._scrollWidth * 0.75], [s._mask.getWidth() - s._scrollWidth * 0.25, s._scrollWidth * 0.5]], true, grd);
 			}
-			if (LGlobal.mobile && s.mode == "touch") {
+			if (LGlobal.mobile && s.mode != LScrollbar.ALWAY_MODE) {
 				return;
 			}
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {
@@ -325,7 +334,7 @@ var LScrollbar = (function () {
 				s._scroll_h.graphics.drawRect(0, "#000000", [0, s._mask.getHeight() - s._scrollWidth, s._scrollWidth, s._scrollWidth]);
 				s._scroll_h.graphics.drawVertices(1, "#CCCCCC", [[s._scrollWidth / 4, s._mask.getHeight() - s._scrollWidth * 0.75], [s._scrollWidth / 2, s._mask.getHeight() - s._scrollWidth * 0.25], [s._scrollWidth * 0.75, s._mask.getHeight() - s._scrollWidth * 0.75]], true, grd);
 			}
-			if (LGlobal.mobile && s.mode == "touch") {
+			if (LGlobal.mobile && s.mode != LScrollbar.ALWAY_MODE) {
 				return;
 			}
 			if (!s.hasEventListener(LMouseEvent.MOUSE_DOWN)) {

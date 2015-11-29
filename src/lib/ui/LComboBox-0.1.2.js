@@ -81,25 +81,28 @@ var LComboBox = (function () {
 		 */
 		s.value = null;
 		s.selectWidth = 100;
-		if (!size) {
-			size = 16;
+		var params;
+		if(typeof size != "object"){
+			params = {size:size,color:color,font:font,layerBack:layerBack,layerUp:layerUp,layerOver:layerOver};
 		}
-		if (!color) {
-			color = "#000000";
+		s.size = params.size ? params.size : 16;
+		s.font = params.font ? params.font : "Arial";
+		s.color = params.color ? params.color : "#000000"; 
+		layerBack = params.layerBack;
+		layerUp = params.layerUp;
+		layerOver = params.layerOver;
+		if(!params.listBackground){
+			params.listBackground = new LPanel(new LBitmapData("#f5f5f9",0,0,10,10),10,10);
 		}
-		if (!font) {
-			font = "Arial";
+		if(!params.listSelected){
+			params.listSelected = new LPanel(new LBitmapData("#CCCCCC",0,0,10,10),10,10);
 		}
-		s.size = size;
-		s.color = color;
-		s.font = font;
+		s.params = params;
 		s.maxIndex = 5;
 		if (!layerBack) {
-			var back = new LSprite();
-			back.graphics.drawRoundRect(1, "#999999", [0, 0, 12, 12, 4], true, "#f5f5f9");
-			var bitBack = new LBitmapData(null, 0, 0, 12, 12, LBitmapData.DATA_CANVAS);
-			bitBack.draw(back);
-			layerBack = new LPanel(bitBack, 200, 30, 4, 8, 4, 8);
+			layerBack = new LSprite();
+			layerBack.graphics.drawRoundRect(1, "#999999", [0, 0, 200, 30, 4], true, "#f5f5f9");
+			layerBack.cacheAsBitmap(true);
 		}
 		var layer;
 		if (!layerUp || !layerOver) {
@@ -196,6 +199,20 @@ var LComboBox = (function () {
 		s.layer.upState.resize(w + h + 8, h + 8);
 		s.layer.downState.resize(w + h + 8, h + 8);
 	},
+	LComboBox.prototype.setScrollbar = function (params) {
+		this._ll_scrollbar_params = params;
+	};
+	LComboBox.prototype._ll_getScrollbar = function () {
+		var self = this;
+		var params = {overflowX:false,scrollbarWidth:(LGlobal.mobile?8:20),mode:LScrollbar.ALWAY_MODE};
+		if(!self._ll_scrollbar_params){
+			return params;
+		}
+		for (var k in self._ll_scrollbar_params) {
+			params[k] = self._ll_scrollbar_params[k];
+		}
+		return params;
+	};
 	/** @language chinese
 	 * 删除元素。
 	 * @method deleteChild
@@ -207,7 +224,7 @@ var LComboBox = (function () {
 		var s = this, i, l, delIndex = -1;
 		for (i = 0, l = s.list.length; i < l; i++) {
 			if (s.list[i].value === value) {
-				delIndex = i
+				delIndex = i;
 				break;
 			}
 		}
@@ -257,7 +274,9 @@ var LComboBox = (function () {
 	LComboBox.prototype.showChildList = function () {
 		var s = this, i, l, child, w;
 		var textLayer = new LSprite();
-		selectLayer = new LSprite();
+		var listBack = s.params.listBackground.clone();
+		textLayer.addChild(listBack);
+		selectLayer = s.params.listSelected.clone();
 		textLayer.addChild(selectLayer);
 		textLayer.selectLayer = selectLayer;
 		textLayer.childHeight = s.size * 1.5 >>> 0;
@@ -273,11 +292,14 @@ var LComboBox = (function () {
 			textLayer.addChild(text);
 		}
 		w = textLayer.getWidth();
-		if (w < 196) {
-			w = 196;
+		if (w < s.minWidth) {
+			w = s.minWidth;
 		}
-		textLayer.graphics.drawRect(1, "#999999", [0, 0, w + 4, textLayer.childHeight * s.list.length + 4], true, "#f5f5f9");
-		selectLayer.graphics.drawRect(0, "#CCCCCC", [2, 2, w, textLayer.childHeight], true, "#CCCCCC");
+		listBack.resize(w + 4,textLayer.childHeight * s.list.length + 4);
+		selectLayer.resize(w, textLayer.childHeight);
+		listBack.cacheAsBitmap(true);
+		selectLayer.cacheAsBitmap(true);
+		
 		selectLayer.y = textLayer.childHeight * s.selectIndex;
 		var coordinate = s.getRootCoordinate();
 		textLayer.comboBox = s;
@@ -287,6 +309,9 @@ var LComboBox = (function () {
 		LGlobal.stage.addChild(translucent);
 		translucent.addEventListener(LMouseEvent.MOUSE_UP, function (e) {
 			var cnt = LGlobal.stage.numChildren;
+			if(e.target.constructor.name == "LScrollbar"){
+				return;
+			}
 			LGlobal.stage.removeChildAt(cnt - 1);
 			LGlobal.stage.removeChildAt(cnt - 2);
 		});
@@ -295,8 +320,8 @@ var LComboBox = (function () {
 		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
 		if (s.list.length > s.maxIndex) {
-			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, {overflowX:false,mode:"pc"});
-			sc.mode = "pc";
+			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, s._ll_getScrollbar());
+			sc.excluding = true;
 			sc.x = coordinate.x;
 			sc.y = coordinate.y + s.layer.getHeight();
 			if (sc.y + textLayer.childHeight * s.maxIndex > LGlobal.height) {
@@ -309,6 +334,7 @@ var LComboBox = (function () {
 			sc._speed = Math.abs(sc._tager.y - sc._showObject.y);
 			sc.setSpeed();
 			sc.setScrollY(textLayer.childHeight * s.selectIndex);
+			sc._ll_scroll_y = sc.getScrollY();
 			LGlobal.stage.addChild(sc);
 		} else {
 			textLayer.x = coordinate.x;
@@ -318,6 +344,7 @@ var LComboBox = (function () {
 			}
 			LGlobal.stage.addChild(textLayer);
 		}
+		textLayer._isChanged = false;
 		textLayer.addEventListener(LMouseEvent.MOUSE_MOVE, s._childSelecting);
 		textLayer.addEventListener(LMouseEvent.MOUSE_UP, s._childSelected);
 	};
@@ -327,13 +354,21 @@ var LComboBox = (function () {
 		if (i >= textLayer.comboBox.list.length) {
 			return;
 		}
+		textLayer._isChanged = true;
 		textLayer.selectLayer.y = textLayer.childHeight * i;
 	};
 	LComboBox.prototype._childSelected = function (event) {
 		var textLayer = event.currentTarget, i, v;
+		var cnt = LGlobal.stage.numChildren;
+		var obj = LGlobal.stage.getChildAt(cnt-1);
+		if(obj.constructor.name == "LScrollbar"){
+			if(Math.abs(obj._ll_scroll_y - obj.getScrollY()) > 5){
+				obj._ll_scroll_y = obj.getScrollY();
+				return;
+			}
+		}
 		i = event.selfY / textLayer.childHeight >>> 0;
 		textLayer.comboBox.setValue(textLayer.comboBox.list[i].value);
-		var cnt = LGlobal.stage.numChildren;
 		LGlobal.stage.removeChildAt(cnt - 1);
 		LGlobal.stage.removeChildAt(cnt - 2);
 	};
