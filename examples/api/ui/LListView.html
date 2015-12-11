@@ -3,58 +3,49 @@
 	<head>
 	<meta charset="utf-8" />
 	<title>UI:LButtonSample</title>
-	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../../../lufylegend-1.9.11.js"></script>
 	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
 	<script type="text/javascript" src="../../../src/lib/ui/LListView.js"></script>
 	</head>
 	<body style="margin:0;padding:0;">
 			<div id="legend"></div>
 <script>
-init(20,"legend",800,450,main);
-var layer,button;
-
+init(1000/60,"legend",800,450,main);
+function MyListChildView(i){
+	var self = this;
+	base(self,LListChildView,[]);
+	self.graphics.drawRect(1, "#ff0000", [0, 0, 50, 30]);
+	var t = new LTextField();
+	t.text = i;
+	t.x = t.y = 5;
+	self.addChild(t);
+	self.i = i;
+}
 function main(){
 	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
 	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	LGlobal.setDebug(true);
-	layer = new LSprite();
-	layer.y = 50;
+	var layer = new LListView();
+	layer.x = 10;
+	layer.y = 100;
 	addChild(layer);
-	addButton();
+	layer.maxPerLine = 6;
+	layer.cellWidth = 50;
+	layer.cellHeight = 30;
+	layer.resize(210,100);
+	layer.graphics.drawRect(1, "#00ff00", [0, 0, layer.clipping.width,layer.clipping.height]);
+	layer.clipping.x = 60;
+	var list = [];
+	for(var i=0;i<200;i++){
+		var c = new MyListChildView(i);
+		list.push(c);
+	}
+	layer.updateList(list);
+	//layer.onframe();
+	addChild(new FPS());
 }
-function addButton(){
-	var button01 = new LButtonSample1("一般测试按钮");
-	button01.x = 30;
-	button01.y = 10;
-	layer.addChild(button01);
-	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button01 click");});
-	
-	var button02 = new LButtonSample1("设置了大小的按钮",12);
-	button02.backgroundColor = "#008800";
-	button02.width = 300;
-	button02.height = 70;
-	button02.x = 250;
-	button02.y = 10;
-	layer.addChild(button02);
-	button02.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button02 click");});
-	
-	var button03 = new LButtonSample2("测试按钮");
-	button03.backgroundColor = "blue";
-	button03.x = 30;
-	button03.y = 100;
-	button03.setLabel("改变了按钮文字");
-	layer.addChild(button03);
-	button03.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button03 click");});
-	
-	var button04 = new LButtonSample2("状态无效按钮",20);
-	button04.backgroundColor = "purple";
-	button04.x = 250;
-	button04.y = 100;
-	button04.buttonMode = false;
-	layer.addChild(button04);
-	button04.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button04 click");});
-}
+
 </script>
 	</body>
 </html>
