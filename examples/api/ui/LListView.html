@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 	<meta charset="utf-8" />
-	<title>UI:LButtonSample</title>
+	<title>UI:LListView</title>
 	<script type="text/javascript" src="../../../lufylegend-1.9.11.js"></script>
 	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
 	<script type="text/javascript" src="../../../src/lib/ui/LListView.js"></script>
@@ -34,8 +34,9 @@ function main(){
 	layer.cellWidth = 50;
 	layer.cellHeight = 30;
 	layer.resize(210,100);
+	layer.arrangement = LListView.Direction.Vertical;
 	layer.graphics.drawRect(1, "#00ff00", [0, 0, layer.clipping.width,layer.clipping.height]);
-	layer.clipping.x = 60;
+	//layer.clipping.x = 60;
 	var list = [];
 	for(var i=0;i<200;i++){
 		var c = new MyListChildView(i);
