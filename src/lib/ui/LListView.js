@@ -16,6 +16,7 @@ function LListView(){
 	/// Effect to apply when dragging.
 	self.dragEffect = LListView.DragEffects.MomentumAndSpring;
 
+	self.scrollBar = new LListScrollBar();
 	/// Maximum children per line.
 	/// If the arrangement is horizontal, this denotes the number of columns.
 	/// If the arrangement is vertical, this stands for the number of rows.
@@ -36,6 +37,11 @@ LListView.Direction = {
 	Vertical:"vertical",//垂直
 	Unrestricted:"unrestricted"//无限制
 };
+LListView.ScrollBarCondition = {
+	Always:"always",
+	OnlyIfNeeded:"onlyIfNeeded",
+	WhenDragging:"whenDragging"
+};
 LListView.prototype._ll_ondown = function(event){
 	var self = event.currentTarget;
 	var dragObject = new LListViewDragObject(self);
@@ -51,7 +57,6 @@ LListView.prototype._ll_onframe = function(event){
 	var length = self._ll_items.length;
 	var startX = self.clipping.x / self.cellWidth >> 0;
 	var startY = self.clipping.y / self.cellHeight >> 0;
-	//console.log("startX,startY",startX,startY, self.clipping.x, self.clipping.y,self.clipping.x / self.cellWidth);
 	if(self.arrangement == LListView.Direction.Horizontal){
 		for(var i = 0, l = Math.ceil(self.clipping.height / self.cellHeight); i < l; i++){
 			var xIndex = (startY + i) * self.maxPerLine + startX;
@@ -65,7 +70,6 @@ LListView.prototype._ll_onframe = function(event){
 				var x = (index % self.maxPerLine) * self.cellWidth;
 				var y = (index / self.maxPerLine >>> 0) * self.cellHeight;
 				item.updateView(self.bitmapData, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
-				//console.log(j+1,jl,self.maxPerLine);
 			}
 		}
 	}else{
@@ -81,7 +85,6 @@ LListView.prototype._ll_onframe = function(event){
 				var y = (index % self.maxPerLine) * self.cellHeight;
 				var x = (index / self.maxPerLine >>> 0) * self.cellWidth;
 				item.updateView(self.bitmapData, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
-				//console.log(j+1,jl,self.maxPerLine);
 			}
 		}
 	}
@@ -109,6 +112,13 @@ LListView.prototype.updateList = function(list){
 LListView.prototype.updateView = function(list){
 	var self = this;
 };
+function LListScrollBar(background, foreground, showCondition){
+	var self = this;
+	base(self,LSprite,[]);
+	self.background = background ? background : new LPanel("#CCCCCC");
+	self.foreground = foreground ? foreground : new LPanel("#333333");
+	self.showCondition = showCondition ? showCondition : LListView.ScrollBarCondition.OnlyIfNeeded;
+}
 function LListChildView(){
 	var self = this;
 	base(self,LSprite,[]);
