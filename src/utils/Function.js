@@ -463,7 +463,7 @@ function init (s, c, w, h, f, t) {
 		loop = function(){
 			s(loop);
 			LGlobal.onShow();
-		}
+		};
 	}else{
 		loop = function(){
 			LGlobal.frameRate = setInterval(function () {
