@@ -56,7 +56,11 @@ function listViewInit(){
 	addChild(new FPS());
 }
 function ctrlInit(){
-	var arrangement = new LComboBox(15);
+	var layerBack = new LSprite();
+	layerBack.graphics.drawRoundRect(1, "#999999", [0, 0, 140, 30, 4], true, "#f5f5f9");
+	layerBack.cacheAsBitmap(true);
+	//var com = new LComboBox(null, null, null, layerBack);
+	var arrangement = new LComboBox(15, null, null, layerBack);
 	arrangement.x = 10;
 	arrangement.y= 10;
 	arrangement.setChild({label:"Horizontal",value:LListView.Direction.Horizontal});
