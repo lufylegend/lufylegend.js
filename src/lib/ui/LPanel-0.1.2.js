@@ -112,11 +112,8 @@ var LPanel = (function () {
 		s.lmBitmap.scaleY = s.mmBitmap.scaleY = s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2) + self.overlapping * 2) / (s.y2 - s.y1);
 		s.mtBitmap.scaleX = s.mmBitmap.scaleX = s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2) + self.overlapping * 2) / (s.x2 - s.x1);
 	};
-	LPanel.prototype.getWidth = function () {
-		return this._ll_w;
-	};
-	LPanel.prototype.getHeight = function () {
-		return this._ll_h;
+	LPanel.prototype.getSize = function () {
+		return {width:this._ll_w, height:this._ll_h};
 	};
 	LPanel.prototype.clone = function () {
 		var s = this;
