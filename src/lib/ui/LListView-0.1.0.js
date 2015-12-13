@@ -16,7 +16,10 @@ function LListView(){
 	/// Effect to apply when dragging.
 	self.dragEffect = LListView.DragEffects.MomentumAndSpring;
 
-	self.scrollBar = new LListScrollBar();
+	self.scrollBarVertical = new LListScrollBar();
+	self.addChild(self.scrollBarVertical);
+	self.scrollBarHorizontal = new LListScrollBar();
+	self.addChild(self.scrollBarHorizontal);
 	/// Maximum children per line.
 	/// If the arrangement is horizontal, this denotes the number of columns.
 	/// If the arrangement is vertical, this stands for the number of rows.
@@ -41,6 +44,30 @@ LListView.ScrollBarCondition = {
 	Always:"always",
 	OnlyIfNeeded:"onlyIfNeeded",
 	WhenDragging:"whenDragging"
+};
+LListView.prototype.setVerticalScrollBar = function(value){
+	var self = this;
+	self.scrollBarVertical = value;
+	self.scrollBarVertical.resizeHeight(self.clipping.height);
+};
+LListView.prototype.setHorizontalScrollBar = function(value){
+	var self = this;
+	self.scrollBarHorizontal = value;
+	self.scrollBarHorizontal.resizeWidth(self.clipping.width);
+};
+LListView.prototype.resize = function(w, h){
+	var self = this;
+	self.bitmapData.image.height = self.bitmapData.height = h;
+	self.bitmapData.image.width = self.bitmapData.width = w;
+	self.clipping.width = w;
+	self.clipping.height = h;
+	self.scrollBarVertical.x = self.clipping.width;
+	self.scrollBarHorizontal.y = self.clipping.height;
+	//self.scrollBarVertical.visible = false;
+	//self.scrollBarHorizontal.visible = false;
+	self.scrollBarVertical.resizeHeight(self.clipping.height);
+	self.scrollBarHorizontal.resizeWidth(self.clipping.width);
+	self.resizeScrollBar();
 };
 LListView.prototype._ll_ondown = function(event){
 	var self = event.currentTarget;
@@ -88,6 +115,7 @@ LListView.prototype._ll_onframe = function(event){
 			}
 		}
 	}
+	self.setScrollBarsPositon();
 	self._ll_x = self.clipping.x;
 	self._ll_y = self.clipping.y;
 };
@@ -98,27 +126,116 @@ LListView.prototype.insert = function(child, index){
 	}else{
 		self._ll_items.splice(index, 0, child);
 	}
-};
-LListView.prototype.resize = function(w, h){
-	var self = this;
-	self.bitmapData.image.height = self.bitmapData.height = h;
-	self.bitmapData.image.width = self.bitmapData.width = w;
-	self.clipping.width = w;
-	self.clipping.height = h;
+	self.resizeScrollBar();
 };
 LListView.prototype.updateList = function(list){
-	this._ll_items = list;
-};
-LListView.prototype.updateView = function(list){
 	var self = this;
+	self._ll_items = list;
+	self.resizeScrollBar();
+};
+LListView.prototype.setScrollBarsPositon = function(){
+	var self = this;
+	if(self.allWidth > 0){
+		self.scrollBarHorizontal.setX(self.clipping.x / self.allWidth);
+	}
+	if(self.allHeight > 0){
+		self.scrollBarVertical.setY(self.clipping.y / self.allHeight);
+	}
+};
+LListView.prototype.dragStart = function(){
+	var self = this;
+	if(self.scrollBarHorizontal.showCondition == LListView.ScrollBarCondition.WhenDragging){
+		self.scrollBarHorizontal.visible = true;
+	}
+	if(self.scrollBarVertical.showCondition == LListView.ScrollBarCondition.WhenDragging){
+		self.scrollBarVertical.visible = true;
+	}
+};
+LListView.prototype.dragEnd = function(){
+	var self = this;
+	if(self.scrollBarHorizontal.showCondition == LListView.ScrollBarCondition.WhenDragging){
+		self.scrollBarHorizontal.visible = false;
+	}
+	if(self.scrollBarVertical.showCondition == LListView.ScrollBarCondition.WhenDragging){
+		self.scrollBarVertical.visible = false;
+	}
+};
+LListView.prototype.resizeScrollBar = function(){
+	var self = this, scaleX, scaleY, w, h;
+	var length = self._ll_items.length;
+	if(self.arrangement == LListView.Direction.Horizontal){
+		w = self.cellWidth * (length > self.maxPerLine ? self.maxPerLine : length);
+		h = self.cellHeight * (length / self.maxPerLine >>> 0);
+	}else{
+		h = self.cellHeight * (length > self.maxPerLine ? self.maxPerLine : length);
+		w = self.cellWidth * (length / self.maxPerLine >>> 0);
+	}
+	scaleX = self.clipping.width < w ? self.clipping.width / w : 1;
+	scaleY = self.clipping.height < h ? self.clipping.height / h : 1;
+	self.allWidth = w - self.clipping.width;
+	self.allHeight = h - self.clipping.height;
+	console.log(w,h,scaleX,scaleY);
+	self.scrollBarHorizontal.setWidthScale(scaleX);
+	self.setScrollBarVisible(self.scrollBarHorizontal, scaleX);
+	self.scrollBarVertical.setHeightScale(scaleY);
+	self.setScrollBarVisible(self.scrollBarVertical, scaleY);
+};
+LListView.prototype.setScrollBarVisible = function(bar, scale){
+	if(bar.showCondition == LListView.ScrollBarCondition.Always){
+		bar.visible = true;
+	}else if(bar.showCondition == LListView.ScrollBarCondition.OnlyIfNeeded){
+		if(scale > 1){
+			bar.visible = false;
+		}else{
+			bar.visible = true;
+		}
+	}else{
+		bar.visible = false;
+	}
 };
 function LListScrollBar(background, foreground, showCondition){
 	var self = this;
 	base(self,LSprite,[]);
-	self.background = background ? background : new LPanel("#CCCCCC");
-	self.foreground = foreground ? foreground : new LPanel("#333333");
+	self.background = background ? background : new LPanel("#CCCCCC", 8, 8);
+	self.addChild(self.background);
+	self.foreground = foreground ? foreground : new LPanel("#333333", 8, 8);
+	self.addChild(self.foreground);
 	self.showCondition = showCondition ? showCondition : LListView.ScrollBarCondition.OnlyIfNeeded;
 }
+LListScrollBar.prototype.resizeWidth = function(value){
+	var self = this;
+	self.background.resize(value, self.background.getHeight());
+};
+LListScrollBar.prototype.resizeHeight = function(value){
+	var self = this;
+	self.background.resize(self.background.getWidth(), value);
+};
+LListScrollBar.prototype.setWidthScale = function(value){
+	var self = this;
+	self.foreground.resize(self.background.getWidth() * value, self.foreground.getHeight());
+};
+LListScrollBar.prototype.setHeightScale = function(value){
+	var self = this;
+	self.foreground.resize(self.foreground.getWidth(), self.background.getHeight() * value);
+};
+LListScrollBar.prototype.setX = function(scaleX){
+	var self = this;
+	if(scaleX < 0){
+		scaleX = 0;
+	}else if(scaleX > 1){
+		scaleX = 1;
+	}
+	self.foreground.x = (self.background.getWidth() - self.foreground.getWidth()) * scaleX;
+};
+LListScrollBar.prototype.setY = function(scaleY){
+	var self = this;
+	if(scaleY < 0){
+		scaleY = 0;
+	}else if(scaleY > 1){
+		scaleY = 1;
+	}
+	self.foreground.y = (self.background.getHeight() - self.foreground.getHeight()) * scaleY;
+};
 function LListChildView(){
 	var self = this;
 	base(self,LSprite,[]);
@@ -143,6 +260,7 @@ function LListViewDragObject(listView){
 	if(LGlobal.listViewDragObject){
 		LGlobal.listViewDragObject.remove();
 	}
+	listView.dragStart();
 	LGlobal.listViewDragObject = self;
 	self.addEventListener(LMouseEvent.MOUSE_UP, self._ll_onup);
 	self.addEventListener(LEvent.ENTER_FRAME,self._ll_onframe);
@@ -160,6 +278,7 @@ LListViewDragObject.prototype._ll_focusout = function(event){
 };
 LListViewDragObject.prototype._ll_stop = function(){
 	var self = this;
+	self.listView.dragEnd();
 	self.stopDrag();
 	self.isDeleted = true;
 	var move = self.inertia();
