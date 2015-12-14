@@ -65,17 +65,19 @@ var LListView = (function () {
 		self.clipping.height = h;
 		self.scrollBarVertical.x = self.clipping.width;
 		self.scrollBarHorizontal.y = self.clipping.height;
-		//self.scrollBarVertical.visible = false;
-		//self.scrollBarHorizontal.visible = false;
 		self.scrollBarVertical.resizeHeight(self.clipping.height);
 		self.scrollBarHorizontal.resizeWidth(self.clipping.width);
 		self.resizeScrollBar();
 	};
 	LListView.prototype._ll_ondown = function(event){
 		var self = event.currentTarget;
-		var dragObject = new LListViewDragObject(self);
+		var dragObject = new LListViewDragObject(self, event.selfX, event.selfY);
 		LGlobal.stage.addChild(dragObject);
 		dragObject.startDrag(event.touchPointID);
+	};
+	LListView.prototype.updateView = function(){
+		var self = this;
+		self._ll_x = Number.MAX_VALUE;
 	};
 	LListView.prototype._ll_onframe = function(event){
 		var self = event.currentTarget;
@@ -86,10 +88,13 @@ var LListView = (function () {
 		var length = self._ll_items.length;
 		var startX = self.clipping.x / self.cellWidth >> 0;
 		var startY = self.clipping.y / self.cellHeight >> 0;
+		var addX = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
+		var addY = self.clipping.height % self.cellHeight == 0 ? 0 : 1;
+		addX = addY = 1;
 		if(self.arrangement == LListView.Direction.Horizontal){
-			for(var i = 0, l = Math.ceil(self.clipping.height / self.cellHeight); i < l; i++){
+			for(var i = 0, l = Math.ceil(self.clipping.height / self.cellHeight) + addY; i < l; i++){
 				var xIndex = (startY + i) * self.maxPerLine + startX;
-				for(var j = 0, jl = Math.ceil(self.clipping.width / self.cellWidth);j < self.maxPerLine && j < jl; j++){
+				for(var j = 0, jl = Math.ceil(self.clipping.width / self.cellWidth) + addX;j < self.maxPerLine && j < jl; j++){
 					var index = xIndex + j;
 					if(index < 0)continue;
 					if(index >= length){
@@ -102,9 +107,10 @@ var LListView = (function () {
 				}
 			}
 		}else{
-			for(var i = 0, l = Math.ceil(self.clipping.width / self.cellWidth); i < l; i++){
+			var add = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
+			for(var i = 0, l = Math.ceil(self.clipping.width / self.cellWidth) + addX; i < l; i++){
 				var yIndex = (startX + i) * self.maxPerLine + startY;
-				for(var j = 0, jl = Math.ceil(self.clipping.height / self.cellHeight);j < self.maxPerLine && j < jl; j++){
+				for(var j = 0, jl = Math.ceil(self.clipping.height / self.cellHeight) + addY;j < self.maxPerLine && j < jl; j++){
 					var index = yIndex + j;
 					if(index < 0)continue;
 					if(index >= length){
@@ -120,6 +126,21 @@ var LListView = (function () {
 		self.setScrollBarsPositon();
 		self._ll_x = self.clipping.x;
 		self._ll_y = self.clipping.y;
+	};
+	LListView.prototype.clickOnChild = function(selfX, selfY){
+		var self = this;
+		var x = self.clipping.x + selfX;
+		var y = self.clipping.y + selfY;
+		var index;
+		if(self.arrangement == LListView.Direction.Horizontal){
+			index = (y / self.cellHeight >>> 0) * self.maxPerLine + (x / self.cellWidth >>> 0);
+		}else{
+			index = (y / self.cellHeight >>> 0) + (x / self.cellWidth >>> 0) * self.maxPerLine;
+		}
+		if(index < self._ll_items.length){
+			var event = {offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
+			self._ll_items[index].onClick(event);
+		}
 	};
 	LListView.prototype.insert = function(child, index){
 		var self = this;
@@ -263,10 +284,11 @@ var LListChildView = (function () {
 		}
 		bitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, rectangle, point);
 	};
+	LListChildView.prototype.onClick = function(event){};
 	return LListChildView;
 })();
 var LListViewDragObject = (function () {
-	function LListViewDragObject(listView){
+	function LListViewDragObject(listView, selfX, selfY){
 		var self = this;
 		base(self,LSprite,[]);
 		self.graphics.drawRect(0, "#000000", [-10, -10, 20, 20]);
@@ -275,9 +297,24 @@ var LListViewDragObject = (function () {
 		self.sy = self.y = mouseY;
 		self.vx = self.listView.clipping.x;
 		self.vy = self.listView.clipping.y;
+		self.selfX = selfX;
+		self.selfY = selfY;
 		if(LGlobal.listViewDragObject){
 			LGlobal.listViewDragObject.remove();
 		}
+		
+		var horizontalMove = false, verticalMove = false;
+		if(listView.movement == LListView.Direction.Unrestricted){
+			horizontalMove = verticalMove = true;
+		}else if(listView.movement == LListView.Direction.Horizontal){
+			horizontalMove = true;
+			verticalMove = false;
+		}else if(listView.movement == LListView.Direction.Vertical){
+			horizontalMove = false;
+			verticalMove = true;
+		}
+		//TODO::拖动范围
+		
 		listView.dragStart();
 		LGlobal.listViewDragObject = self;
 		self.addEventListener(LMouseEvent.MOUSE_UP, self._ll_onup);
@@ -299,8 +336,12 @@ var LListViewDragObject = (function () {
 		self.listView.dragEnd();
 		self.stopDrag();
 		self.isDeleted = true;
+		if(Math.abs(mouseX - self.sx) < 5 && Math.abs(mouseY - self.sy) < 5){
+			self.listView.clickOnChild(mouseX - self.sx + self.selfX, mouseY - self.sy + self.selfY);
+		}
+		
 		var move = self.inertia();
-		if(move || (self.fX == self.toX && self.fY == self.toY)){
+		if(move){
 			return;
 		}
 		self._ll_tween();
@@ -362,6 +403,7 @@ var LListViewDragObject = (function () {
 		}
 		var tx = listView.clipping.x;
 		var ty = listView.clipping.y;
+		
 		if(listView.clipping.x < 0){
 			if(!dragObject){
 				tx = 0;
@@ -373,12 +415,12 @@ var LListViewDragObject = (function () {
 			}
 		}else{
 			var length = listView._ll_items.length, width;
-			if(self.arrangement == LListView.Direction.Horizontal){
+			if(listView.arrangement == LListView.Direction.Horizontal){
 				width = (length > listView.maxPerLine ? listView.maxPerLine : length) * listView.cellWidth;
 			}else{
 				width = Math.ceil(length / listView.maxPerLine) * listView.cellWidth;
 			}
-			if(listView.clipping.x > width - listView.clipping.width){
+			if(width > listView.clipping.width && listView.clipping.x > width - listView.clipping.width){
 				if(!dragObject){
 					tx = width - listView.clipping.width;
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
@@ -400,12 +442,12 @@ var LListViewDragObject = (function () {
 			}
 		}else{
 			var length = listView._ll_items.length, height;
-			if(self.arrangement == LListView.Direction.Horizontal){
+			if(listView.arrangement == LListView.Direction.Horizontal){
 				height = Math.ceil(length / listView.maxPerLine) * listView.cellHeight;
 			}else{
 				height = (length > listView.maxPerLine ? listView.maxPerLine : length) * listView.cellHeight;
 			}
-			if(listView.clipping.y > height - listView.clipping.height){
+			if(height > listView.clipping.height && listView.clipping.y > height - listView.clipping.height){
 				if(!dragObject){
 					ty = height - listView.clipping.height;
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){

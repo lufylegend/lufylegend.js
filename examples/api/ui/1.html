@@ -14,11 +14,12 @@
 			<div id="legend"></div>
 <script>
 init(1000/60,"legend",800,450,main);
-var backLayer, ctrlLayer;
+var backLayer, ctrlLayer, listView;
 function MyListChildView(i){
 	var self = this;
 	base(self,LListChildView,[]);
-	self.graphics.drawRect(1, "#ff0000", [0, 0, 50, 30]);
+	var rand = Math.random();
+	self.graphics.drawRect(1, "#000000", [0, 0, 50, 30],true,rand < 0.33?"#90EE90":(rand < 0.66 ? "#F4A460":"#E6E6FA"));
 	var t = new LTextField();
 	t.text = i;
 	t.x = t.y = 5;
@@ -34,24 +35,22 @@ function main(){
 	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
 	LGlobal.setDebug(true);
 	ctrlLayer = new LSprite();
-	ctrlLayer.x = 10;
-	ctrlLayer.y= 50;
 	addChild(ctrlLayer);
 	backLayer = new LSprite();
 	backLayer.x = 200;
 	backLayer.y = 50;
 	addChild(backLayer);
 	ctrlInit();
-	listViewInit();
+	listViewInit(LListView.Direction.Horizontal);
 }
-function listViewInit(){
-	var listView = new LListView();
+function listViewInit(arrangement){
+	listView = new LListView();
 	backLayer.addChild(listView);
 	listView.maxPerLine = 6;
 	listView.cellWidth = 50;
 	listView.cellHeight = 30;
-	listView.resize(210,100);
-	listView.arrangement = LListView.Direction.Horizontal;
+	listView.resize(210,300);
+	listView.arrangement = arrangement;
 	listView.graphics.drawRect(1, "#00ff00", [0, 0, listView.clipping.width,listView.clipping.height]);
 	var list = [];
 	for(var i=0;i<100;i++){
@@ -64,10 +63,17 @@ function ctrlInit(){
 	var layerBack = new LSprite();
 	layerBack.graphics.drawRoundRect(1, "#999999", [0, 0, 140, 30, 4], true, "#f5f5f9");
 	layerBack.cacheAsBitmap(true);
-	var arrangement = new LComboBox(15, null, null, layerBack);
-	arrangement.setChild({label:"Horizontal",value:LListView.Direction.Horizontal});
-	arrangement.setChild({label:"Vertical",value:LListView.Direction.Vertical});
-	ctrlLayer.addChild(arrangement);
+	var comboBox = new LComboBox(15, null, null, layerBack);
+	comboBox.x = 10;
+	comboBox.y= 50;
+	comboBox.setChild({label:"Horizontal",value:LListView.Direction.Horizontal});
+	comboBox.setChild({label:"Vertical",value:LListView.Direction.Vertical});
+	ctrlLayer.addChild(comboBox);
+	comboBox.addEventListener(LComboBox.ON_CHANGE,function(event){
+		var arrangement = event.target.value;
+		listView.remove();
+		listViewInit(arrangement);
+	});
 }
 
 </script>
