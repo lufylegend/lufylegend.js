@@ -142,12 +142,22 @@ var LListView = (function () {
 			self._ll_items[index].onClick(event);
 		}
 	};
-	LListView.prototype.insert = function(child, index){
+	LListView.prototype.insertChild = function(child, index){
 		var self = this;
 		if(typeof index == UNDEFINED){
 			self._ll_items.push(child);
 		}else{
 			self._ll_items.splice(index, 0, child);
+		}
+		self.resizeScrollBar();
+	};
+	LListView.prototype.removeChild = function(child){
+		var self = this, c = self._ll_items, i, l;
+		for (i = 0, l = c.length; i < l; i++) {
+			if (child.objectIndex == c[i].objectIndex) {
+				self._ll_items.splice(i, 1);
+				break;
+			}
 		}
 		self.resizeScrollBar();
 	};
@@ -282,7 +292,12 @@ var LListChildView = (function () {
 		if(!self._ll_cacheAsBitmap){
 			self.cacheAsBitmap(true);
 		}
-		bitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, rectangle, point);
+		if(bitmapData){
+			self.ll_baseBitmapData = bitmapData;
+			self.ll_baseRectangle = rectangle;
+			self.ll_basePoint = point;
+		}
+		self.ll_baseBitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
 	};
 	LListChildView.prototype.onClick = function(event){};
 	return LListChildView;
