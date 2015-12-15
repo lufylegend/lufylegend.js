@@ -1,4 +1,13 @@
-
+/** @language chinese
+ * <p>lufylegend.js专用UI，list列表。</p>
+ * <p>使用时需要引进lufylegend.ui-x.x.x.js文件。</p>
+ * @class UI:LListView
+ * @constructor
+ * @extends LSprite
+ * @since 1.9.12
+ * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
+ * @public
+ */
 var LListView = (function () {
 	function LListView(){
 		var self = this;
@@ -138,7 +147,7 @@ var LListView = (function () {
 			index = (y / self.cellHeight >>> 0) + (x / self.cellWidth >>> 0) * self.maxPerLine;
 		}
 		if(index < self._ll_items.length){
-			var event = {offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
+			var event = {listView:self,offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
 			self._ll_items[index].onClick(event);
 		}
 	};
@@ -198,10 +207,10 @@ var LListView = (function () {
 		var length = self._ll_items.length;
 		if(self.arrangement == LListView.Direction.Horizontal){
 			w = self.cellWidth * (length > self.maxPerLine ? self.maxPerLine : length);
-			h = self.cellHeight * (length / self.maxPerLine >>> 0);
+			h = self.cellHeight * Math.ceil(length / self.maxPerLine);
 		}else{
 			h = self.cellHeight * (length > self.maxPerLine ? self.maxPerLine : length);
-			w = self.cellWidth * (length / self.maxPerLine >>> 0);
+			w = self.cellWidth * Math.ceil(length / self.maxPerLine);
 		}
 		scaleX = self.clipping.width < w ? self.clipping.width / w : 1;
 		scaleY = self.clipping.height < h ? self.clipping.height / h : 1;
@@ -211,6 +220,7 @@ var LListView = (function () {
 		self.setScrollBarVisible(self.scrollBarHorizontal, scaleX);
 		self.scrollBarVertical.setHeightScale(scaleY);
 		self.setScrollBarVisible(self.scrollBarVertical, scaleY);
+		self.updateView();
 	};
 	LListView.prototype.setScrollBarVisible = function(bar, scale){
 		if(bar.showCondition == LListView.ScrollBarCondition.Always){
@@ -227,6 +237,19 @@ var LListView = (function () {
 	};
 	return LListView;
 })();
+/** @language chinese
+ * <p>lufylegend.js专用UI，list列表。</p>
+ * <p>使用时需要引进lufylegend.ui-x.x.x.js文件。</p>
+ * @class UI:LListScrollBar
+ * @constructor
+ * @extends LSprite
+ * @since 1.9.12
+ * @param {LPanel} background 滚动条背景。
+ * @param {LPanel} foreground 滚动条样式。
+ * @param {LListView.ScrollBarCondition} showCondition 滚动条样式。
+ * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
+ * @public
+ */
 var LListScrollBar = (function () {
 	function LListScrollBar(background, foreground, showCondition){
 		var self = this;
