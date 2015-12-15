@@ -303,17 +303,17 @@ var LListViewDragObject = (function () {
 			LGlobal.listViewDragObject.remove();
 		}
 		
-		var horizontalMove = false, verticalMove = false;
+		
+		self.horizontalStop = true, self.verticalStop = true;
 		if(listView.movement == LListView.Direction.Unrestricted){
-			horizontalMove = verticalMove = true;
+			self.horizontalStop = self.verticalStop = false;
 		}else if(listView.movement == LListView.Direction.Horizontal){
-			horizontalMove = true;
-			verticalMove = false;
+			self.horizontalStop = false;
+			self.verticalStop = true;
 		}else if(listView.movement == LListView.Direction.Vertical){
-			horizontalMove = false;
-			verticalMove = true;
+			self.horizontalStop = true;
+			self.verticalStop = false;
 		}
-		//TODO::拖动范围
 		
 		listView.dragStart();
 		LGlobal.listViewDragObject = self;
@@ -340,6 +340,9 @@ var LListViewDragObject = (function () {
 			self.listView.clickOnChild(mouseX - self.sx + self.selfX, mouseY - self.sy + self.selfY);
 		}
 		
+		if(self.listView.dragEffect == LListView.DragEffects.None){
+			return;
+		}
 		var move = self.inertia();
 		if(move){
 			return;
@@ -368,6 +371,18 @@ var LListViewDragObject = (function () {
 		if(my != 0){
 			ty += my * 5;
 		}
+		if(listView.dragEffect == LListView.DragEffects.Momentum){
+			if(tx < 0){
+				tx = 0;
+			}else if(tx > listView.allWidth){
+				tx = listView.allWidth;
+			}
+			if(ty < 0){
+				ty = 0;
+			}else if(ty > listView.allHeight){
+				ty = listView.allHeight;
+			}
+		}
 		LTweenLite.to(self.listView.clipping,0.3,{x:tx,y:ty,ease:LEasing.Sine.easeOut,onComplete:self.tweenComplete});
 		return true;
 	};
@@ -389,8 +404,12 @@ var LListViewDragObject = (function () {
 		var listView = self.listView;
 		self.fX = self.toX = listView.clipping.x;
 		self.fY = self.toY = listView.clipping.y;
-		listView.clipping.x = self.sx - self.x + self.vx;
-		listView.clipping.y = self.sy - self.y + self.vy;
+		if(!self.horizontalStop){
+			listView.clipping.x = self.sx - self.x + self.vx;
+		}
+		if(!self.verticalStop){
+			listView.clipping.y = self.sy - self.y + self.vy;
+		}
 		LListViewDragObject.prototype.dragAmend.apply(self, []);
 	};
 	LListViewDragObject.prototype.dragAmend = function(){
