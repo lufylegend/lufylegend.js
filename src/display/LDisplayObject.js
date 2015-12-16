@@ -142,24 +142,27 @@ var LDisplayObject = (function () {
 		 * 表示指定对象的 Alpha 透明度值。有效值为 0（完全透明）到 1（完全不透明）。默认值为 1。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
 		/** @language english
 		 * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque). The default value is 1. Display objects with alpha set to 0 are active, even though they are invisible.
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
 		/** @language japanese
 		 * 指定されたオブジェクトのアルファ透明度値を示します。有効な値は 0（完全な透明）～ 1（完全な不透明）です。デフォルト値は 1 です。alpha が 0 に設定されている表示オブジェクトは、表示されない場合でも、アクティブです。
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
 		s.alpha = 1;
@@ -416,7 +419,7 @@ var LDisplayObject = (function () {
 			}
 			if (s.alpha < 1) {
 				s._ll_trans = true;
-				c.globalAlpha = s.alpha;
+				c.globalAlpha *= s.alpha;
 			}
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.display++;
