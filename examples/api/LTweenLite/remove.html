@@ -17,7 +17,7 @@
 				var rect = new LSprite();
 				rect.x = 50;
 				rect.y = 50;
-				rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+				rect.graphics.drawRect(1,"#FF00FF",[0,0,20,20],true,"#FF00FF");
 				addChild(rect);
 				tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
 				.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});

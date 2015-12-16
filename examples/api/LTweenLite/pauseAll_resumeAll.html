@@ -17,12 +17,12 @@
 				var circle = new LSprite();
 				circle.x = 50;
 				circle.y = 50;
-				circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+				circle.graphics.drawArc(1,"#FF0000",[0,0,20,0,Math.PI*2],true,"#FF0000");
 				addChild(circle);
 				var rect = new LSprite();
 				rect.x = 50;
 				rect.y = 50;
-				rect.graphics.drawRect("#FF00FF",1,[0,0,20,20],true,"#FF00FF");
+				rect.graphics.drawRect(1,"#FF00FF",[0,0,20,20],true,"#FF00FF");
 				addChild(rect);
 				LTweenLite.to(circle,1,{x:500,y:400,scaleX:3,scaleY:3,loop:true,ease:LEasing.Strong.easeInOut})
 				.to(circle,1,{x:700,y:50,scaleX:1,scaleY:1,ease:LEasing.Quint.easeIn})

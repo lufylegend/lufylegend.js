@@ -193,27 +193,36 @@ var LTweenLite = (function () {
 			delete s.target.currentTarget;
 			delete s.target.target;
 		},
-		to : function ($target, $duration, $vars) {
+		to : function ($target, $duration, $vars, $data) {
 			var s = this;
-			s.toNew.push({target : $target, duration : $duration, vars : $vars});
+			s.toNew.push({target : $target, duration : $duration, vars : $vars, data : $data});
 			return s;
 		},
 		keep : function () {
-			var s = this, t, vs, k;
+			var s = this, t, vs, k, d;
 			if (s.toNew.length > 0) {
 				t = s.toNew.shift();
 				if (t.vars.loop) {
 					s.loop = true;
-					if(typeof t.vars.playStyle == UNDEFINED){
-						t.vars.playStyle = LTweenLite.PlayStyle.Keep;
-					}
 				}
 				if (s.loop) {
+					d = {};
 					vs = {};
 					for (k in t.vars) {
 						vs[k] = t.vars[k];
+						if(typeof t.target[k] == UNDEFINED || t.vars.playStyle != LTweenLite.PlayStyle.Init){
+							continue;
+						}
+						if(t.data){
+							t.target[k] = t.data[k];
+							continue;
+						}
+						d[k] = t.target[k];
 					}
-					s.to(t.target, t.duration, vs);
+					if(!t.data){
+						t.data = d;
+					}
+					s.to(t.target, t.duration, vs, t.data);
 				}
 				s.init(t.target, t.duration, t.vars);
 				return true;
@@ -251,8 +260,21 @@ var LTweenLite = (function () {
 		s.type = "LTweenLite";
 		s.tweens = [];
 	}
+	/** @language chinese
+	 * <p>缓动动画循环的类型</p>
+	 * <table>
+	 * <tr><th>属性</th><th>说明</th></tr>
+	 * <tr><td>LTweenLite.PlayStyle.None</td><td>无效果</td></tr>
+	 * <tr><td>LTweenLite.PlayStyle.Init</td><td>每次缓动都从第一次缓动开始时的值开始进行。</td></tr>
+	 * </table>
+	 * @property LTweenLite.PlayStyle
+	 * @type Object
+	 * @static
+	 * @since 1.9.12
+	 * @public
+	 */
 	LTweenLite.PlayStyle = {
-		Keep : "keep",
+		None : "none",
 		Init : "init"
 	};
 	LTweenLite.TYPE_FRAME = "type_frame";
@@ -293,6 +315,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
+		 * <tr><td>playStyle</td><td>LTweenLite.PlayStyle</td><td>只有设定loop为true, playStyle才会有效。</td></tr>
 		 * <tr><td>coordinate</td><td>Array</td><td>你可以自定义缓动路径，路径的每个点必须是LPoint对象,或者类似于{x:1,y:2}的形式，<a href="../../../api/LTweenLite/toList.html" target="_blank">测试链接</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例
@@ -670,6 +693,7 @@ var LTweenLite = (function () {
 	var tween = new LTweenLite();
 	tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
 	tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;
+	tween.PlayStyle = LTweenLite.PlayStyle;
 	LGlobal.childList.push(tween);
 	return tween;
 })();
