@@ -610,6 +610,7 @@ var LDisplayObject = (function () {
 		 * @return {LRectangle} 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
 		 * @since 1.7.7
 		 * @public
+		 * @examplelink <p><a href="../../../api/LDisplayObject/getBounds.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
 		 * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
@@ -638,12 +639,8 @@ var LDisplayObject = (function () {
 				x = sp.x - dp.x;
 				y = sp.y - dp.y;
 			}
-			if (d.getWidth) {
-				w = d.getWidth();
-			}
-			if (d.getHeight) {
-				h = d.getHeight();
-			}
+			w = s.getWidth();
+			h = s.getHeight();
 			return new LRectangle(x, y, w, h);
 		},
 		/** @language chinese

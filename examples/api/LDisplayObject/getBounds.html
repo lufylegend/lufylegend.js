@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getBounds</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script>
+			LInit(50, "legend", 800, 480, main);
+			function main() {
+				LGlobal.setDebug(true);
+				var gysprite = new LSprite;
+				gysprite.x = 10;
+				gysprite.y = 10;
+				addChild(gysprite);
+				gysprite.graphics.drawRect(0, "#ff0000", [0, 0, 150, 100], true, "#00ff00");
+				trace(gysprite.getBounds(gysprite.parent));
+			}
+		</script>
+	</body>
+</html>
