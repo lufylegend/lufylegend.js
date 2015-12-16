@@ -927,7 +927,11 @@ var LGlobal = ( function () {
 	LGlobal.ll_touchStartEvent = function (event,eveIndex,canvasX,canvasY) {
 		var eve = {offsetX : (event.touches[eveIndex].pageX - canvasX),
 		offsetY : (event.touches[eveIndex].pageY - canvasY),
-		touchPointID : event.touches[eveIndex].identifier};
+		touchPointID : event.touches[eveIndex].identifier,
+		force : event.touches[eveIndex].force,
+		rotationAngle : event.touches[eveIndex].rotationAngle,
+		radiusX : event.touches[eveIndex].radiusX,
+		radiusY : event.touches[eveIndex].radiusY};
 		eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
 		eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 		mouseX = LGlobal.offsetX = eve.offsetX;
