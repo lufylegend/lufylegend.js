@@ -864,6 +864,8 @@ var LTextField = (function () {
 				}
 				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
 					return;
+				}else{
+					c.clip();
 				}
 			}
 			if (LGlobal.fpsStatus) {
@@ -886,7 +888,7 @@ var LTextField = (function () {
 					s.ll_getHtmlText(tf, s.htmlText);
 				}
 				j = 0, k = 0, m = 0, b = 0;
-				s._wordHeight = s.wordHeight || 30;
+				s._ll_height = s.wordHeight || 30;
 				if(!LTextField.underlineY){
 					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
 				}
@@ -903,12 +905,12 @@ var LTextField = (function () {
 						} else {
 							h = c.measureText("O").width * 1.2;
 							if (s.stroke) {
-								c.strokeText(text.substr(i, 1), j, m * s._wordHeight);
+								c.strokeText(text.substr(i, 1), j, m * s._ll_height);
 							}
-							c.fillText(text.substr(i, 1), j, m * s._wordHeight);
+							c.fillText(text.substr(i, 1), j, m * s._ll_height);
 							if(textFormat.underline){
 								c.beginPath();
-								underlineY = m * s._wordHeight + h * LTextField.underlineY[s.textBaseline];
+								underlineY = m * s._ll_height + h * LTextField.underlineY[s.textBaseline];
 								c.moveTo(j, underlineY);
 								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
 								c.stroke();
@@ -921,7 +923,7 @@ var LTextField = (function () {
 							m++;
 						}
 					}
-					s.height = (m + 1) * s._wordHeight;
+					s.height = (m + 1) * s._ll_height;
 				});
 				return;
 			}
@@ -1574,15 +1576,17 @@ var LTextField = (function () {
 				if (s.height == 0) {
 					j = 0, k = 0, m = 0;
 					for (i = 0, l = s.text.length; i < l; i++) {
-						j = c.measureText(s.text.substr(k, i - k)).width;
 						enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i, 1));
-						if ((s.wordWrap && j > s.width) || enter) {
+						if (enter) {
 							j = 0;
-							k = i;
+							k = i + 1;
 							m++;
-							if (enter) {
-								k++;
-							}
+						}
+						j = c.measureText(s.text.substr(k, i + 1 - k)).width;
+						if (s.wordWrap && j + c.measureText(s.text.substr(i + 1, 1)).width > s.width) {
+							j = 0;
+							k = i + 1;
+							m++;
 						}
 					}
 					s.height = (m + 1) * s.wordHeight;
