@@ -1155,7 +1155,7 @@ var LGraphics = (function () {
 		 * @method drawArc
 		 * @param {int} thickness 一个整数，以点为单位表示线条的粗细；
 		 * @param {String} color 线的颜色，这个属性可能是一个字符串，或者一个 CanvasGradient 对象 或 CanvasPattern 对象。如果是一个字符串，它被解析为一个 CSS 颜色值，并且画笔用所得的实色来绘制。如果这个属性的值是一个 CanvasGradient 对象或 CanvasPattern 对象，画笔使用这个渐变或模式来实现。
-		 * @param {Array} param [x,y,r,sAngle,eAngle,counterclockwise,isSector]:[描述弧的圆形的圆心的坐标x,描述弧的圆形的圆心的坐标y,描述弧的圆形的半径,沿着圆指定弧的开始点点的一个角度,沿着圆指定弧的结束点的一个角度,弧沿着圆周的逆时针方向（TRUE）还是顺时针方向（FALSE）遍历,是否绘制成扇形]。
+		 * @param {Array} param <p>[x,y,r,sAngle,eAngle,counterclockwise,isSector]:[描述弧的圆形的圆心的坐标x,描述弧的圆形的圆心的坐标y,描述弧的圆形的半径,沿着圆指定弧的开始点点的一个角度,沿着圆指定弧的结束点的一个角度,弧沿着圆周的逆时针方向（TRUE）还是顺时针方向（FALSE）遍历,是否绘制成扇形]。</p>
 		 * @param {Boolean} isFill 是否填充图形
 		 * @param {String} fillColor 填充图形的颜色，这个属性可能是一个字符串，或者一个 CanvasGradient 对象 或 CanvasPattern 对象。如果是一个字符串，它被解析为一个 CSS 颜色值，并且画笔用所得的实色来绘制。如果这个属性的值是一个 CanvasGradient 对象或 CanvasPattern 对象，画笔使用这个渐变或模式来实现。
 		 * @example
@@ -1174,7 +1174,7 @@ var LGraphics = (function () {
 		 * @method drawArc
 		 * @param {int} thickness An integer that indicates the thickness of the line in points; 
 		 * @param {String} color color|gradient|pattern
-		 * @param {Array} param [x,y,r,sAngle,eAngle,counterclockwise,isSector]:[The x-coordinate of the center of the circle,The y-coordinate of the center of the circle,radius The radius of the circle,startAngle The starting angle,endAngle The ending angle,Specifies whether the drawing should be counterclockwise or clockwise,whether the drawing should be a sector]。
+		 * @param {Array} param <p>[x,y,r,sAngle,eAngle,counterclockwise,isSector]:[The x-coordinate of the center of the circle,The y-coordinate of the center of the circle,radius The radius of the circle,startAngle The starting angle,endAngle The ending angle,Specifies whether the drawing should be counterclockwise or clockwise,whether the drawing should be a sector]。</p>
 		 * @param {Boolean} isFill Whether to Fills the current drawing
 		 * @param {String} fillColor Fills color
 		 * @example
@@ -1193,7 +1193,7 @@ var LGraphics = (function () {
 		 * @method drawArc
 		 * @param {int} thickness 線の太さをポイント単位で示す整数。
 		 * @param {String} color 線の色
-		 * @param {Array} param [x,y,r,sAngle,eAngle,counterclockwise,isSector]:[中心の座標x,中心の座標y,半径,開始地点,終了地点,反時計回りにするか,扇形にするか]。
+		 * @param {Array} param <p>[x,y,r,sAngle,eAngle,counterclockwise,isSector]:[中心の座標x,中心の座標y,半径,開始地点,終了地点,反時計回りにするか,扇形にするか]。</p>
 		 * @param {Boolean} isFill サブパスを塗りつぶするかどうか
 		 * @param {String} fillColor サブパスを塗りつぶする色
 		 * @example
