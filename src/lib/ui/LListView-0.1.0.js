@@ -1,5 +1,6 @@
 /** @language chinese
  * <p>lufylegend.js专用UI，list列表。</p>
+ * <p>※此组件不可以添加LMouseEvent事件，如果需要使用点击事件，需要重写子项的onClick函数，具体做法参照 LListChildView。</p>
  * <p>使用时需要引进lufylegend.ui-x.x.x.js文件。</p>
  * @class UI:LListView
  * @constructor
@@ -12,28 +13,85 @@ var LListView = (function () {
 	function LListView(){
 		var self = this;
 		base(self,LSprite,[]);
+		/** @language chinese
+		 * [只读]LListView列表的画布，为了提升LListView的效率，LListView的所有子项都会被draw到这个LBitmapData对象上，由LListView内部控制刷新，所以是只读属性，外部不可操作。
+		 * @property bitmapData
+		 * @type LBitmapData
+		 * @since 1.9.12
+		 * @public
+		 */
 		self.bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
 		self.addChild(new LBitmap(self.bitmapData));
-		self.clipping = new LRectangle (0, 0, 100, 100);//范围
+		/** @language chinese
+		 * LListView列表的可视范围，即大小。
+		 * @property clipping
+		 * @type LRectangle
+		 * @default new LRectangle (0, 0, 100, 100)
+		 * @since 1.9.12
+		 * @public
+		 */
+		self.clipping = new LRectangle (0, 0, 100, 100);
 		self.clipping.parent = self;
-		/// The width of each of the cells.
-		self.cellWidth = 100;//单位宽度
-		/// The height of each of the cells.
-		self.cellHeight = 100;//单位高度
-		/// Type of arrangement -- vertical or horizontal.
-		self.arrangement = LListView.Direction.Horizontal;//排列方向
-		/// Type of movement allowed
-		self.movement = LListView.Direction.Vertical;//运动方向
-		/// Effect to apply when dragging.
+		/** @language chinese
+		 * 单位宽度
+		 * @property cellWidth
+		 * @type float
+		 * @default 100
+		 * @since 1.9.12
+		 * @public
+		 */
+		self.cellWidth = 100;
+		/** @language chinese
+		 * 单位高度
+		 * @property cellHeight
+		 * @type float
+		 * @default 100
+		 * @since 1.9.12
+		 * @public
+		 */
+		self.cellHeight = 100;
+		/** @language chinese
+		 * 子单位平铺方向（只能是LListView.Direction.Horizontal或者LListView.Direction.Vertical中的一个）
+		 * @property arrangement
+		 * @type LListView.Direction
+		 * @default LListView.Direction.Horizontal
+		 * @since 1.9.12
+		 * @public
+		 */
+		self.arrangement = LListView.Direction.Horizontal;
+		/** @language chinese
+		 * 可拖动的方向
+		 * @property movement
+		 * @type LListView.Direction
+		 * @default LListView.Direction.Vertical
+		 * @since 1.9.12
+		 * @public
+		 */
+		self.movement = LListView.Direction.Vertical;
+		/** @language chinese
+		 * 拖动时的效果
+		 * @property dragEffect
+		 * @type LListView.DragEffects
+		 * @default LListView.DragEffects.MomentumAndSpring
+		 * @since 1.9.12
+		 * @public
+		 */
 		self.dragEffect = LListView.DragEffects.MomentumAndSpring;
 	
 		self.scrollBarVertical = new LListScrollBar();
 		self.addChild(self.scrollBarVertical);
 		self.scrollBarHorizontal = new LListScrollBar();
 		self.addChild(self.scrollBarHorizontal);
-		/// Maximum children per line.
-		/// If the arrangement is horizontal, this denotes the number of columns.
-		/// If the arrangement is vertical, this stands for the number of rows.
+		/** @language chinese
+		 * <p>每行(列)的单位个数</p>
+		 * <p>如果arrangement为LListView.Direction.Horizontal，则表示每行的单位个数</p>
+		 * <p>如果arrangement为LListView.Direction.Vertical，则表示每列的单位个数</p>
+		 * @property maxPerLine
+		 * @type int
+		 * @default 1
+		 * @since 1.9.12
+		 * @public
+		 */
 		self.maxPerLine = 1;//每组长度
 		self._ll_items = [];
 		self._ll_x = Number.MAX_VALUE;
@@ -56,14 +114,34 @@ var LListView = (function () {
 		OnlyIfNeeded:"onlyIfNeeded",
 		WhenDragging:"whenDragging"
 	};
+	/** @language chinese
+	 * 定义LListView 列表的垂直方向的滚动条。
+	 * @method setVerticalScrollBar
+	 * @param {LListScrollBar} scrollBar 滚动条
+	 * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListView.prototype.setVerticalScrollBar = function(value){
 		var self = this;
+		self.scrollBarVertical.remove();
 		self.scrollBarVertical = value;
+		self.addChild(self.scrollBarVertical);
 		self.scrollBarVertical.resizeHeight(self.clipping.height);
 	};
+	/** @language chinese
+	 * 定义LListView 列表的水平方向的滚动条。
+	 * @method setHorizontalScrollBar
+	 * @param {LListScrollBar} scrollBar 滚动条
+	 * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListView.prototype.setHorizontalScrollBar = function(value){
 		var self = this;
+		self.scrollBarHorizontal.remove();
 		self.scrollBarHorizontal = value;
+		self.addChild(self.scrollBarHorizontal);
 		self.scrollBarHorizontal.resizeWidth(self.clipping.width);
 	};
 	LListView.prototype.resize = function(w, h){
@@ -84,6 +162,12 @@ var LListView = (function () {
 		LGlobal.stage.addChild(dragObject);
 		dragObject.startDrag(event.touchPointID);
 	};
+	/** @language chinese
+	 * 刷新LListView 列表
+	 * @method updateView
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListView.prototype.updateView = function(){
 		var self = this;
 		self._ll_x = Number.MAX_VALUE;
@@ -147,11 +231,20 @@ var LListView = (function () {
 			index = (y / self.cellHeight >>> 0) + (x / self.cellWidth >>> 0) * self.maxPerLine;
 		}
 		if(index < self._ll_items.length){
-			var event = {listView:self,offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
-			self._ll_items[index].onClick(event);
+			var child = self._ll_items[index];
+			var event = {currentTarget:self,target:child,offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
+			child.onClick(event);
 		}
 	};
-	LListView.prototype.insertChild = function(child, index){
+	/** @language chinese
+	 * 为LListView 列表增加一个子项。
+	 * @method insertChildView
+	 * @param {LListChildView} child 单元子项
+	 * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
+	LListView.prototype.insertChildView = function(child, index){
 		var self = this;
 		if(typeof index == UNDEFINED){
 			self._ll_items.push(child);
@@ -160,7 +253,15 @@ var LListView = (function () {
 		}
 		self.resizeScrollBar();
 	};
-	LListView.prototype.removeChild = function(child){
+	/** @language chinese
+	 * 从LListView 列表中删除一个子项。
+	 * @method deleteChildView
+	 * @param {LListChildView} child 单元子项
+	 * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
+	LListView.prototype.deleteChildView = function(child){
 		var self = this, c = self._ll_items, i, l;
 		for (i = 0, l = c.length; i < l; i++) {
 			if (child.objectIndex == c[i].objectIndex) {
@@ -170,6 +271,17 @@ var LListView = (function () {
 		}
 		self.resizeScrollBar();
 	};
+	/** @language chinese
+	 * LListView 列表不可以添加LMouseEvent事件，如果需要使用点击事件，需要重写子项的onClick函数。
+	 * @method updateList
+	 * @param {Array} list 单元子项的数组
+	 * @example
+	 * 	var list = [new ListChildView()];
+	 * 	var listView = new LListView();
+	 * 	listView.updateList(list);
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListView.prototype.updateList = function(list){
 		var self = this;
 		self._ll_items = list;
@@ -238,7 +350,7 @@ var LListView = (function () {
 	return LListView;
 })();
 /** @language chinese
- * <p>lufylegend.js专用UI，list列表。</p>
+ * <p>lufylegend.js专用UI，LListView 列表的专用滚动条。</p>
  * <p>使用时需要引进lufylegend.ui-x.x.x.js文件。</p>
  * @class UI:LListScrollBar
  * @constructor
@@ -246,7 +358,7 @@ var LListView = (function () {
  * @since 1.9.12
  * @param {LPanel} background 滚动条背景。
  * @param {LPanel} foreground 滚动条样式。
- * @param {LListView.ScrollBarCondition} showCondition 滚动条样式。
+ * @param {LListView.ScrollBarCondition} showCondition 滚动条的种类。
  * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
  * @public
  */
@@ -304,12 +416,29 @@ var LListScrollBar = (function () {
 	};
 	return LListScrollBar;
 })();
+/** @language chinese
+ * <p>lufylegend.js专用UI，LListView 列表的一个单元子项。</p>
+ * <p>在使用LListView的子项的时候，需要先从LListChildView继承。</p>
+ * <p>使用时需要引进lufylegend.ui-x.x.x.js文件。</p>
+ * @class UI:LListChildView
+ * @constructor
+ * @extends LSprite
+ * @since 1.9.12
+ * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
+ * @public
+ */
 var LListChildView = (function () {
 	function LListChildView(){
 		var self = this;
 		base(self,LSprite,[]);
-		
 	}
+	/** @language chinese
+	 * 当LListView 列表的子项LListChildView内容有改变的时候，需要使用调用updateView来刷新，如果被改变的对象在LListView的可视范围以外的话，则无需刷新。
+	 * @method updateView
+	 * @examplelink <p><a href="../../../api/ui/LListView_onClick.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListChildView.prototype.updateView = function(bitmapData, rectangle, point){
 		var self = this;
 		if(!self._ll_cacheAsBitmap){
@@ -320,8 +449,32 @@ var LListChildView = (function () {
 			self.ll_baseRectangle = rectangle;
 			self.ll_basePoint = point;
 		}
+		if(!self.ll_baseBitmapData){
+			return;
+		}
+		if(self.ll_basePoint.x > self.ll_baseBitmapData.width || self.ll_basePoint.y > self.ll_baseBitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0){
+			return;
+		}
 		self.ll_baseBitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
 	};
+	/** @language chinese
+	 * LListView 列表不可以添加LMouseEvent事件，如果需要使用点击事件，需要重写子项的onClick函数。
+	 * @method onClick
+	 * @param {Object} event {currentTarget:LListView对象,target:LListChildView自身,offsetX:同LMouseEvent,offsetY:同LMouseEvent,selfX:同LMouseEvent,selfY:同LMouseEvent}
+	 * @example
+	 * 	function MyListChildView(){
+	 * 		var self = this;
+	 * 		base(self,LListChildView,[]);
+	 * 		//处理
+	 * 	}
+	 * 	MyListChildView.prototype.onClick = function(event){
+	 * 		var self = event.target;
+	 * 		//处理
+	 * 	}
+	 * @examplelink <p><a href="../../../api/ui/LListView_onClick.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.9.12
+	 */
 	LListChildView.prototype.onClick = function(event){};
 	return LListChildView;
 })();
@@ -340,8 +493,6 @@ var LListViewDragObject = (function () {
 		if(LGlobal.listViewDragObject){
 			LGlobal.listViewDragObject.remove();
 		}
-		
-		
 		self.horizontalStop = true, self.verticalStop = true;
 		if(listView.movement == LListView.Direction.Unrestricted){
 			self.horizontalStop = self.verticalStop = false;
@@ -352,7 +503,6 @@ var LListViewDragObject = (function () {
 			self.horizontalStop = true;
 			self.verticalStop = false;
 		}
-		
 		listView.dragStart();
 		LGlobal.listViewDragObject = self;
 		self.addEventListener(LMouseEvent.MOUSE_UP, self._ll_onup);
