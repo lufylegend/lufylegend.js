@@ -204,6 +204,9 @@ var LTweenLite = (function () {
 				t = s.toNew.shift();
 				if (t.vars.loop) {
 					s.loop = true;
+					if(typeof t.vars.playStyle == UNDEFINED){
+						t.vars.playStyle = LTweenLite.PlayStyle.Keep;
+					}
 				}
 				if (s.loop) {
 					vs = {};
@@ -248,6 +251,10 @@ var LTweenLite = (function () {
 		s.type = "LTweenLite";
 		s.tweens = [];
 	}
+	LTweenLite.PlayStyle = {
+		Keep : "keep",
+		Init : "init"
+	};
 	LTweenLite.TYPE_FRAME = "type_frame";
 	LTweenLite.TYPE_TIMER = "type_timer";
 	p = {
