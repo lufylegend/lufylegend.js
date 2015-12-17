@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="../../../src/lib/ui/LComboBox-0.1.2.js"></script>
 	<script type="text/javascript" src="../../../src/lib/ui/LScrollbar-0.1.4.js"></script>
 	<script type="text/javascript" src="../../../src/lib/ui/LListView-0.1.0.js"></script>
+	<script type="text/javascript" src="../../../src/display/LBitmapData.js"></script>
 	</head>
 	<body style="margin:0;padding:0;">
 			<div id="legend">
@@ -19,6 +20,7 @@ var imgData = [
 	{name:"combobox_back",path:"combobox_back.png"}
 	,{name:"combobox_up",path:"combobox_up.png"}
 	,{name:"combobox_over",path:"combobox_over.png"}
+	,{name:"range_select",path:"range_select.png"}
 		];
 var datalist;
 function main(){
@@ -44,10 +46,15 @@ function gameInit(result){
 	com.setChild({label:"测试十三",value:"data13"});
 	addChild(com);
 	
-	var panel = new LPanel(new LBitmapData(datalist["combobox_back"]),150,20,40,50,8,12);
+	var panel = new LPanel(new LBitmapData(datalist["combobox_back"]),150,24,40,50,8,12);
 	var up = new LBitmap(new LBitmapData(datalist["combobox_up"]));
 	var over = new LBitmap(new LBitmapData(datalist["combobox_over"]));
 	com = new LComboBox(15,"#000000","Arial",panel,up,over);
+	com.listView.cellWidth = 150;
+	com.listView.cellHeight = 31;
+	var scrollBarVertical = new LListScrollBar(new LPanel("#9370DB", 8, 8), new LPanel("#9400D3", 8, 8), LListView.ScrollBarCondition.OnlyIfNeeded);
+	com.listView.setVerticalScrollBar(scrollBarVertical);
+	com.setListChildView(MyComboBoxChild);
 	com.x = 50;
 	com.y = 100;
 	com.setChild({label:"测试一",value:"data1"});
@@ -66,6 +73,33 @@ function gameInit(result){
 	addChild(com);
 	com.setValue("data5");
 }
+	function MyComboBoxChild(content, comboBox){
+		var self = this;
+		base(self,LComboBoxChild,[content, comboBox]);
+	}
+	MyComboBoxChild.prototype.init = function(){
+		var self = this;
+		var comboBox = self.comboBox;
+		var content = self.content;
+		var listView = comboBox.listView;
+		var panel = new LPanel(new LBitmapData(datalist["range_select"]),150,31);
+		panel.cacheAsBitmap(true);
+		self.addChild(panel);
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+	};
+	MyComboBoxChild.prototype.onTouch = function(event){console.log("onTouch");
+		var self = event.target;
+		var listView = event.currentTarget;
+		self.cacheAsBitmap(false);
+		self.alpha = 0.7;
+		self.updateView();
+	};
 </script>
 	</body>
 </html>

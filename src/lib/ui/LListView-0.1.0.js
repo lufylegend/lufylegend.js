@@ -460,6 +460,9 @@ var LListChildView = (function () {
 		if(self.ll_basePoint.x > self.ll_baseBitmapData.width || self.ll_basePoint.y > self.ll_baseBitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0){
 			return;
 		}
+		if(!bitmapData){
+			self.ll_baseBitmapData.clear(new LRectangle(self.ll_basePoint.x, self.ll_basePoint.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height));
+		}
 		self.ll_baseBitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
 	};
 	/** @language chinese
