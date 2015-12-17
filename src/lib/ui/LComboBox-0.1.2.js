@@ -91,12 +91,7 @@ var LComboBox = (function () {
 		layerBack = params.layerBack;
 		layerUp = params.layerUp;
 		layerOver = params.layerOver;
-		if(!params.listBackground){
-			params.listBackground = new LPanel(new LBitmapData("#f5f5f9",0,0,10,10),10,10);
-		}
-		if(!params.listSelected){
-			params.listSelected = new LPanel(new LBitmapData("#CCCCCC",0,0,10,10),10,10);
-		}
+
 		s.params = params;
 		s.maxIndex = 5;
 		if (!layerBack) {
@@ -123,8 +118,6 @@ var LComboBox = (function () {
 			data.draw(down);
 			layerOver = new LBitmap(data);
 		}
-		s.minWidth = layerBack.getWidth();
-		s.minHeight = layerBack.getHeight();
 		var layer1 = layerBack.clone();
 		layerUp.x = layer1.getWidth() - layerUp.getWidth() -4;
 		layerUp.y = 4;
@@ -150,6 +143,10 @@ var LComboBox = (function () {
 		layer.addChild(label);
 		s.label = label;
 		s.layer = layer;
+		s.listView = new LListView();
+		s.listView.cellWidth = s.minWidth = layerBack.getWidth();
+		s.listView.cellHeight = s.minHeight = layerBack.getHeight();
+		s.listChildView = LComboBoxChild;
 		s.addEventListener(LMouseEvent.MOUSE_UP, s._showChildList);
 	}
 	/** @language chinese
@@ -169,7 +166,7 @@ var LComboBox = (function () {
 	 */
 	LComboBox.ON_CHANGE = "onchange";
 	LComboBox.prototype._ll_resize = function () {
-		var s = this;
+		var s = this;return;
 		if (s.list.length == 0) {
 			return;
 		}
@@ -184,8 +181,8 @@ var LComboBox = (function () {
 		} else {
 			s.label.y = 4;
 		}
-		if (w + h + 8 < s.minWidth) {
-			w = s.minWidth - h - 8;
+		if (w + h + 8 < s.listView.cellWidth) {
+			w = s.listView.cellWidth - h - 8;
 		}
 		
 		var arraw = s.layer.upState.arraw;
@@ -199,20 +196,6 @@ var LComboBox = (function () {
 		s.layer.upState.resize(w + h + 8, h + 8);
 		s.layer.downState.resize(w + h + 8, h + 8);
 	},
-	LComboBox.prototype.setScrollbar = function (params) {
-		this._ll_scrollbar_params = params;
-	};
-	LComboBox.prototype._ll_getScrollbar = function () {
-		var self = this;
-		var params = {overflowX:false,scrollbarWidth:(LGlobal.mobile?8:20),mode:LScrollbar.ALWAY_MODE};
-		if(!self._ll_scrollbar_params){
-			return params;
-		}
-		for (var k in self._ll_scrollbar_params) {
-			params[k] = self._ll_scrollbar_params[k];
-		}
-		return params;
-	};
 	/** @language chinese
 	 * 删除元素。
 	 * @method deleteChild
@@ -271,8 +254,47 @@ var LComboBox = (function () {
 		var s = event.currentTarget;
 		s.showChildList();
 	};
+	LComboBox.prototype.setListChildView = function (childClass) {
+		this.listChildView = childClass;
+	};
+	LComboBox.prototype.getListView = function () {
+		return this.listView;
+	};
 	LComboBox.prototype.showChildList = function () {
 		var s = this, i, l, child, w;
+		
+		var translucent = new LSprite();
+		translucent.graphics.drawRect(0, "#000000", [0, 0, LGlobal.width, LGlobal.height], true, "#000000");
+		translucent.alpha = 0;
+		LGlobal.stage.addChild(translucent);
+		translucent.addEventListener(LMouseEvent.MOUSE_UP, function (e) {
+			var cnt = LGlobal.stage.numChildren;
+			if(e.target.constructor.name == "LListView"){
+				return;
+			}
+			var destroy = LGlobal.destroy;
+			LGlobal.destroy = false;
+			LGlobal.stage.removeChildAt(cnt - 1);
+			LGlobal.destroy = destroy;
+			LGlobal.stage.removeChildAt(cnt - 2);
+		});
+		translucent.addEventListener(LMouseEvent.MOUSE_DOWN, function (e) {});
+		translucent.addEventListener(LMouseEvent.MOUSE_MOVE, function (e) {});
+		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
+		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
+		
+		var coordinate = s.getRootCoordinate();
+		s.listView.x = coordinate.x;
+		s.listView.y = coordinate.y + s.layer.getHeight();
+		LGlobal.stage.addChild(s.listView);
+		var list = [];
+		for (i = 0, l = s.list.length; i < l; i++) {
+			child = new s.listChildView(s.list[i], s);
+			list.push(child);
+		}
+		s.listView.resize(s.listView.cellWidth, s.listView.cellHeight * (s.list.length > s.maxIndex ? s.maxIndex : s.list.length));
+		s.listView.updateList(list);
+		return;
 		var textLayer = new LSprite();
 		var listBack = s.params.listBackground.clone();
 		textLayer.addChild(listBack);
@@ -292,8 +314,8 @@ var LComboBox = (function () {
 			textLayer.addChild(text);
 		}
 		w = textLayer.getWidth();
-		if (w < s.minWidth) {
-			w = s.minWidth;
+		if (w < s.listView.cellWidth) {
+			w = s.listView.cellWidth;
 		}
 		listBack.resize(w + 4,textLayer.childHeight * s.list.length + 4);
 		selectLayer.resize(w, textLayer.childHeight);
@@ -319,6 +341,11 @@ var LComboBox = (function () {
 		translucent.addEventListener(LMouseEvent.MOUSE_MOVE, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
+		if (s.list.length > s.maxIndex) {
+			
+		}else{
+			
+		}
 		if (s.list.length > s.maxIndex) {
 			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, s._ll_getScrollbar());
 			sc.excluding = true;
@@ -407,4 +434,53 @@ var LComboBox = (function () {
 		return a;
 	};
 	return LComboBox;
+})();
+var LComboBoxChild = (function () {
+	function LComboBoxChild(content, comboBox){
+		var self = this;
+		base(self,LListChildView,[]);
+		self.content = content;
+		self.comboBox = comboBox;
+		self.init(content, comboBox);
+	}
+	LComboBoxChild.prototype.init = function(){
+		var self = this;
+		var comboBox = self.comboBox;
+		var content = self.content;
+		var listView = comboBox.listView;
+		self.graphics.drawRect(0,"#f5f5f9", [0, 0, listView.cellWidth, listView.cellHeight], true, "#f5f5f9");
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+	};
+	LComboBoxChild.prototype.onTouch = function(event){console.log("onTouch");
+		var self = event.target;
+		var listView = event.currentTarget;
+		self.graphics.clear();
+		self.graphics.drawRect(0,"#CCCCCC", [0, 0, listView.cellWidth, listView.cellHeight], true, "#CCCCCC");
+		self.cacheAsBitmap(false);
+		self.updateView();
+	};
+	LComboBoxChild.prototype.onClick = function(event){console.log("onClick");
+		var self = event.target;
+		var listView = event.currentTarget, i, v;
+		//event.currentTarget.deleteChildView(event.target);
+		var cnt = LGlobal.stage.numChildren;
+		var obj = LGlobal.stage.getChildAt(cnt-1);
+		self.comboBox.setValue(self.content.value);
+		setTimeout(function(){
+			var destroy = LGlobal.destroy;
+			LGlobal.destroy = false;
+			console.log("LGlobal.destroy -1 =" , LGlobal.stage.getChildAt(cnt - 1));
+			LGlobal.stage.removeChildAt(cnt - 1);
+			LGlobal.destroy = destroy;
+			console.log("LGlobal.destroy -2 =" , LGlobal.stage.getChildAt(cnt - 2));
+			LGlobal.stage.removeChildAt(cnt - 2);
+		},10);
+	};
+	return LComboBoxChild;
 })();

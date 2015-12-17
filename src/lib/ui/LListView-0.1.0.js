@@ -161,6 +161,7 @@ var LListView = (function () {
 		var dragObject = new LListViewDragObject(self, event.selfX, event.selfY);
 		LGlobal.stage.addChild(dragObject);
 		dragObject.startDrag(event.touchPointID);
+		self.clickOnChild(event.selfX, event.selfY, "touch");
 	};
 	/** @language chinese
 	 * 刷新LListView 列表
@@ -220,7 +221,7 @@ var LListView = (function () {
 		self._ll_x = self.clipping.x;
 		self._ll_y = self.clipping.y;
 	};
-	LListView.prototype.clickOnChild = function(selfX, selfY){
+	LListView.prototype.clickOnChild = function(selfX, selfY, type){
 		var self = this;
 		var x = self.clipping.x + selfX;
 		var y = self.clipping.y + selfY;
@@ -233,7 +234,11 @@ var LListView = (function () {
 		if(index < self._ll_items.length){
 			var child = self._ll_items[index];
 			var event = {currentTarget:self,target:child,offsetX:mouseX,offsetY:mouseY,selfX:(x % self.cellWidth),selfY:(y % self.cellHeight)};
-			child.onClick(event);
+			if(type == "touch"){
+				child.onTouch(event);
+			}else{
+				child.onClick(event);
+			}
 		}
 	};
 	/** @language chinese
@@ -476,6 +481,7 @@ var LListChildView = (function () {
 	 * @since 1.9.12
 	 */
 	LListChildView.prototype.onClick = function(event){};
+	LListChildView.prototype.onTouch = function(event){};
 	return LListChildView;
 })();
 var LListViewDragObject = (function () {
