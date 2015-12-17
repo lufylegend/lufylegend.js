@@ -329,10 +329,22 @@ var LBitmapData = (function() {
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		clear : function() {
+		/** @language chinese
+		 * <p>擦除LBitmapData</p>
+		 * <p>使用条件：数据保存形式为LBitmapData.DATA_CANVAS。</p>
+		 * @method clear
+		 * @param {LRectangle} rectangle 擦除范围，默认为全部擦除。
+		 * @public
+		 * @since 1.9.12
+		 */
+		clear : function(rectangle) {
 			var s = this;
 			s._createCanvas();
-			s._canvas.width = s.image.width;
+			if(rectangle){
+				s._context.clearRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+			}else{
+				s._canvas.width = s.image.width;
+			}
 			if (s.dataType == LBitmapData.DATA_IMAGE) {
 				s.image.src = s._canvas.toDataURL();
 			}
