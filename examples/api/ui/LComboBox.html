@@ -73,15 +73,12 @@ function gameInit(result){
 	addChild(com);
 	com.setValue("data5");
 }
-	function MyComboBoxChild(content, comboBox){
+	function MyComboBoxChild(content, comboBox, selected){
 		var self = this;
-		base(self,LComboBoxChild,[content, comboBox]);
+		base(self,LComboBoxChild,[content, comboBox, selected]);
 	}
-	MyComboBoxChild.prototype.init = function(){
+	MyComboBoxChild.prototype.setStatus = function(content, comboBox){
 		var self = this;
-		var comboBox = self.comboBox;
-		var content = self.content;
-		var listView = comboBox.listView;
 		var panel = new LPanel(new LBitmapData(datalist["range_select"]),150,31);
 		panel.cacheAsBitmap(true);
 		self.addChild(panel);
@@ -92,12 +89,21 @@ function gameInit(result){
 		text.text = content.label;
 		text.x = text.y = 5;
 		self.addChild(text);
+		self.updateView();
 	};
-	MyComboBoxChild.prototype.onTouch = function(event){console.log("onTouch");
-		var self = event.target;
-		var listView = event.currentTarget;
-		self.cacheAsBitmap(false);
-		self.alpha = 0.7;
+	MyComboBoxChild.prototype.setSelectStatus = function(content, comboBox){
+		var self = this;
+		var panel = new LPanel(new LBitmapData(datalist["range_select"]),150,31);
+		panel.alpha = 0.7;
+		panel.cacheAsBitmap(true);
+		self.addChild(panel);
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
 		self.updateView();
 	};
 </script>

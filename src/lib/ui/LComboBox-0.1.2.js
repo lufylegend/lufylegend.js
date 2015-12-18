@@ -254,9 +254,16 @@ var LComboBox = (function () {
 		s.listView.x = coordinate.x;
 		s.listView.y = coordinate.y + s.layer.getHeight();
 		LGlobal.stage.addChild(s.listView);
+		if(typeof s.listView._ll_saveY != UNDEFINED){
+			s.listView.clipping.y = s.listView._ll_saveY;
+		}
 		var list = [];
 		for (i = 0, l = s.list.length; i < l; i++) {
-			child = new s.listChildView(s.list[i], s);
+			var selected = s.value === s.list[i].value;
+			child = new s.listChildView(s.list[i], s, selected);
+			if(selected){
+				s.listView._ll_selectedChild = child;
+			}
 			list.push(child);
 		}
 		s.listView.resize(s.listView.cellWidth, s.listView.cellHeight * (s.list.length > s.maxIndex ? s.maxIndex : s.list.length));
@@ -299,17 +306,19 @@ var LComboBox = (function () {
 	return LComboBox;
 })();
 var LComboBoxChild = (function () {
-	function LComboBoxChild(content, comboBox){
+	function LComboBoxChild(content, comboBox, selected){
 		var self = this;
 		base(self,LListChildView,[]);
 		self.content = content;
 		self.comboBox = comboBox;
-		self.init(content, comboBox);
+		if(selected){
+			self.setSelectStatus(content, comboBox);
+		}else{
+			self.setStatus(content, comboBox);
+		}
 	}
-	LComboBoxChild.prototype.init = function(){
+	LComboBoxChild.prototype.setStatus = function(content, comboBox){
 		var self = this;
-		var comboBox = self.comboBox;
-		var content = self.content;
 		var listView = comboBox.listView;
 		self.graphics.drawRect(0,"#f5f5f9", [0, 0, listView.cellWidth, listView.cellHeight], true, "#f5f5f9");
 		var text = new LTextField();
@@ -319,16 +328,36 @@ var LComboBoxChild = (function () {
 		text.text = content.label;
 		text.x = text.y = 5;
 		self.addChild(text);
-	};
-	LComboBoxChild.prototype.onTouch = function(event){console.log("onTouch");
-		var self = event.target;
-		var listView = event.currentTarget;
-		self.graphics.clear();
-		self.graphics.drawRect(0,"#CCCCCC", [0, 0, listView.cellWidth, listView.cellHeight], true, "#CCCCCC");
-		self.cacheAsBitmap(false);
 		self.updateView();
 	};
-	LComboBoxChild.prototype.onClick = function(event){console.log("onClick");
+	LComboBoxChild.prototype.setSelectStatus = function(content, comboBox){
+		var self = this;
+		var listView = comboBox.listView;
+		self.graphics.clear();
+		self.graphics.drawRect(0,"#CCCCCC", [0, 0, listView.cellWidth, listView.cellHeight], true, "#CCCCCC");
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+		self.updateView();
+	};
+	LComboBoxChild.prototype.onTouch = function(event){
+		var self = event.target;
+		var listView = event.currentTarget;
+		if(listView._ll_selectedChild){
+			listView._ll_selectedChild.removeAllChild();
+			listView._ll_selectedChild.cacheAsBitmap(false);
+			listView._ll_selectedChild.setStatus(listView._ll_selectedChild.content, listView._ll_selectedChild.comboBox);
+		}
+		self.removeAllChild();
+		self.cacheAsBitmap(false);
+		self.setSelectStatus(self.content, self.comboBox);
+		listView._ll_selectedChild = self;
+	};
+	LComboBoxChild.prototype.onClick = function(event){
 		var self = event.target;
 		var listView = event.currentTarget, i, v;
 		var comboBox = self.comboBox;
@@ -345,6 +374,7 @@ var LComboBoxChild = (function () {
 		LGlobal.stage.removeChildAt(listViewIndex);
 		LGlobal.destroy = destroy;
 		LGlobal.stage.removeChildAt(listViewIndex - 1);
+		listView._ll_saveY = listView.clipping.y;
 	};
 	return LComboBoxChild;
 })();
