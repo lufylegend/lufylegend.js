@@ -92,7 +92,7 @@ var LListView = (function () {
 		 * @since 1.9.12
 		 * @public
 		 */
-		self.maxPerLine = 1;//每组长度
+		self.maxPerLine = 1;/*每组长度*/
 		self._ll_items = [];
 		self._ll_x = Number.MAX_VALUE;
 		self._ll_y = 0;
@@ -100,14 +100,14 @@ var LListView = (function () {
 		self.addEventListener(LMouseEvent.MOUSE_DOWN,self._ll_ondown);
 	}
 	LListView.DragEffects = {
-		None:"none",//无效果
-		Momentum:"momentum",//拖动惯性
-		MomentumAndSpring:"momentumAndSpring"//拖动惯性+边界惯性
+		None:"none",/*无效果*/
+		Momentum:"momentum",/*拖动惯性*/
+		MomentumAndSpring:"momentumAndSpring"/*拖动惯性+边界惯性*/
 	};
 	LListView.Direction = {
-		Horizontal:"horizontal",//水平
-		Vertical:"vertical",//垂直
-		Unrestricted:"unrestricted"//无限制
+		Horizontal:"horizontal",/*水平*/
+		Vertical:"vertical",/*垂直*/
+		Unrestricted:"unrestricted"/*无限制*/
 	};
 	LListView.ScrollBarCondition = {
 		Always:"always",
