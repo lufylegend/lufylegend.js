@@ -364,17 +364,17 @@ var LComboBoxChild = (function () {
 		var listViewIndex;
 		comboBox.setValue(self.content.value);
 		for(var i=LGlobal.stage.numChildren-1;i>=0;i--){
-			if(LGlobal.stage.childList[i].constructor.name == "LListView"){
-				listViewIndex = i;
-				break;
+			if(LGlobal.stage.childList[i].objectIndex != listView.objectIndex){
+				continue;
 			}
+			var destroy = LGlobal.destroy;
+			LGlobal.destroy = false;
+			LGlobal.stage.removeChildAt(i);
+			LGlobal.destroy = destroy;
+			LGlobal.stage.removeChildAt(i - 1);
+			listView._ll_saveY = listView.clipping.y;
+			break;
 		}
-		var destroy = LGlobal.destroy;
-		LGlobal.destroy = false;
-		LGlobal.stage.removeChildAt(listViewIndex);
-		LGlobal.destroy = destroy;
-		LGlobal.stage.removeChildAt(listViewIndex - 1);
-		listView._ll_saveY = listView.clipping.y;
 	};
 	return LComboBoxChild;
 })();
