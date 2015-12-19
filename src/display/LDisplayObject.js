@@ -389,8 +389,9 @@ var LDisplayObject = (function () {
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		ll_show : function () {
-			var s = this, c = LGlobal.canvas;
+		ll_show : function (c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			if (!s._canShow()) {
 				return;
 			}
@@ -408,11 +409,11 @@ var LDisplayObject = (function () {
 			}
 			s._rotateReady();
 			if (s.mask != null && s.mask.ll_show) {
-				s.mask.ll_show();
+				s.mask.ll_show(c);
 				c.clip();
 			}
-			s._transformRotate();
-			s._transformScale();
+			s._transformRotate(c);
+			s._transformScale(c);
 			s._coordinate(c);
 			if (s.transform.matrix) {
 				s.transform.matrix.transform(c);
@@ -428,7 +429,7 @@ var LDisplayObject = (function () {
 				}
 			}
 			if(s._ll_cacheAsBitmap){
-				s._ll_cacheAsBitmap._ll_show();
+				s._ll_cacheAsBitmap._ll_show(c);
 			}else{
 				s._ll_show(c);
 			}
@@ -463,13 +464,14 @@ var LDisplayObject = (function () {
 		startY : function(){return 0;},
 		getWidth : function(){return 1;},
 		getHeight : function(){return 1;},
-		_transformRotate : function () {
-			var s = this, c;
+		_transformRotate : function (c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			if (s.rotate == 0) {
 				return;
 			}
 			s._ll_trans = true;
-			c = LGlobal.canvas, rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
+			rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
 			if ((typeof s.rotatex) == UNDEFINED) {
 				s.rotatex = 0;
 				s.rotatey = 0;
@@ -485,8 +487,9 @@ var LDisplayObject = (function () {
 			rotateObj.ty = s.y + s.rotatey;
 			rotateObj.transform(c).setTo(1, 0, 0, 1, -rotateObj.tx, -rotateObj.ty).transform(c);
 		},
-		_transformScale : function () {
-			var s = this,c = LGlobal.canvas, scaleObj;
+		_transformScale : function (c) {
+			var s = this, scaleObj;
+			c = c || LGlobal.canvas;
 			if (s.scaleX == 1 && s.scaleY == 1) {
 				return;
 			}
@@ -684,6 +687,21 @@ var LDisplayObject = (function () {
 		getDataCanvas : function (x,y,w,h) {
 			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
+			_x = s.x;
+			_y = s.y;
+			s.x = x || 0;
+			s.y = y || 0;
+			s.width = w || s.getWidth();
+			s.height = h || s.getHeight();
+			s._canvas.width = s.width;
+			s._canvas.height = s.height;
+			s.ll_show(s._context);
+			s.x = _x;
+			s.y = _y;
+			return s._canvas;
+			
+			var s = this, _o, o, _c, c, _x, _y;
+			s._createCanvas();
 			o = LGlobal.canvasObj;
 			c = LGlobal.canvas;
 			_o = s._canvas;
@@ -699,7 +717,7 @@ var LDisplayObject = (function () {
 			_y = s.y;
 			s.x = x || 0;
 			s.y = y || 0;
-			s.ll_show();
+			s.ll_show(s._context);
 			s.x = _x;
 			s.y = _y;
 			s._canvas = _o;

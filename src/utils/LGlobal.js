@@ -1242,13 +1242,14 @@ var LGlobal = ( function () {
 				LGlobal.canvas.fillRect(0, 0, LGlobal.width, LGlobal.height);
 			}
 		}
-		LGlobal.show(LGlobal.childList);
+		LGlobal.show(LGlobal.childList, LGlobal.canvas);
 	};
-	LGlobal.show = function (s) {
+	LGlobal.show = function (s, ctx) {
+		ctx = ctx || LGlobal.canvas;
 		for (var i = 0, l = s.length, c; i < l; i++) {
 			c = s[i];
 			if (c && c.ll_show) {
-				c.ll_show();
+				c.ll_show(ctx);
 				if(c._ll_removeFromSelf){
 					i--;
 					l--;

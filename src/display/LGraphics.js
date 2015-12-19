@@ -61,13 +61,13 @@ var LGraphics = (function () {
 		s.showList = new Array();
 	}
 	var p = {
-		ll_show : function () {
+		ll_show : function (ctx) {
 			var s = this, k, l = s.setList.length;
 			if (l == 0) {
 				return;
 			}
 			for (k = 0; k < l; k++) {
-				s.setList[k]();
+				s.setList[k](ctx);
 				if (LGlobal.fpsStatus) {
 					LGlobal.fpsStatus.graphics++;
 				}
@@ -171,8 +171,8 @@ var LGraphics = (function () {
 		 */
 		lineCap : function (t) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.lineCap = t;
+			s.setList.push(function (ctx) {
+				ctx.lineCap = t;
 			});
 		},
 		/** @language chinese
@@ -231,8 +231,8 @@ var LGraphics = (function () {
 		 */
 		lineJoin : function (t) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.lineJoin = t;
+			s.setList.push(function (ctx) {
+				ctx.lineJoin = t;
 			});
 		},
 		/** @language chinese
@@ -300,8 +300,8 @@ var LGraphics = (function () {
 		 */
 		lineWidth : function (t) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.lineWidth = t;
+			s.setList.push(function (ctx) {
+				ctx.lineWidth = t;
 			});
 		},
 		/** @language chinese
@@ -354,8 +354,8 @@ var LGraphics = (function () {
 		 */
 		strokeStyle : function (co) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.strokeStyle = co;
+			s.setList.push(function (ctx) {
+				ctx.strokeStyle = co;
 			});
 		},
 		/** @language chinese
@@ -405,8 +405,8 @@ var LGraphics = (function () {
 		 */
 		stroke : function () {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.stroke();
+			s.setList.push(function (ctx) {
+				ctx.stroke();
 			});
 		},
 		/** @language chinese
@@ -474,8 +474,8 @@ var LGraphics = (function () {
 		 */
 		beginPath : function () {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.beginPath();
+			s.setList.push(function (ctx) {
+				ctx.beginPath();
 			});
 		},
 		/** @language chinese
@@ -528,8 +528,8 @@ var LGraphics = (function () {
 		 */
 		closePath : function () {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.closePath();
+			s.setList.push(function (ctx) {
+				ctx.closePath();
 			});
 		},
 		/** @language chinese
@@ -582,8 +582,8 @@ var LGraphics = (function () {
 		 */
 		moveTo : function (x, y) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.moveTo(x, y);
+			s.setList.push(function (ctx) {
+				ctx.moveTo(x, y);
 			});
 			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
@@ -637,8 +637,8 @@ var LGraphics = (function () {
 		 */
 		lineTo : function (x, y) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.lineTo(x, y);
+			s.setList.push(function (ctx) {
+				ctx.lineTo(x, y);
 			});
 			s.showList.push({type : LShape.POINT, arg : [x, y]});
 		},
@@ -692,8 +692,8 @@ var LGraphics = (function () {
 		 */
 		rect : function (x, y, w, h) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.rect(x, y, w, h);
+			s.setList.push(function (ctx) {
+				ctx.rect(x, y, w, h);
 			});
 			s.showList.push({type : LShape.RECT, arg : [x, y, w, h]});
 		},
@@ -741,8 +741,8 @@ var LGraphics = (function () {
 		 */
 		fillStyle : function (co) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.fillStyle = co;
+			s.setList.push(function (ctx) {
+				ctx.fillStyle = co;
 			});
 		},
 		/** @language chinese
@@ -786,8 +786,8 @@ var LGraphics = (function () {
 		 */
 		fill : function () {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.fill();
+			s.setList.push(function (ctx) {
+				ctx.fill();
 			});
 		},
 		/** @language chinese
@@ -846,8 +846,8 @@ var LGraphics = (function () {
 		 */
 		arc : function (x, y, r, sa, ea, aw) {
 			var s = this;
-			s.setList.push(function () {
-				LGlobal.canvas.arc(x, y, r, sa, ea, aw);
+			s.setList.push(function (ctx) {
+				ctx.arc(x, y, r, sa, ea, aw);
 			});
 			s.showList.push({type : LShape.ARC, arg : sa});
 		},
@@ -902,8 +902,7 @@ var LGraphics = (function () {
 				co = s.color;
 			}
 			s.color = co;
-			s.setList.push(function () {
-				c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.lineWidth = tn;
 				c.strokeStyle = co;
 			});
@@ -1108,9 +1107,8 @@ var LGraphics = (function () {
 		 */
 		drawEllipse : function (tn, lco, pa, isf, co) {
 			var s = this;
-			s.setList.push(function () {
-				var c, x, y, w, h, k, ox, oy, xe, ye, xm, ym;
-				c = LGlobal.canvas;
+			s.setList.push(function (c) {
+				var x, y, w, h, k, ox, oy, xe, ye, xm, ym;
 				c.beginPath();
 				k = 0.5522848;
 				x = pa[0];
@@ -1209,8 +1207,7 @@ var LGraphics = (function () {
 		 */
 		drawArc : function (tn, lco, pa, isf, co) {
 			var s = this;
-			s.setList.push(function () {
-				var c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.beginPath();
 				if (pa.length > 6 && pa[6]) {
 					c.moveTo(pa[0], pa[1]);
@@ -1294,8 +1291,7 @@ var LGraphics = (function () {
 		 */
 		drawRect : function (tn, lco, pa, isf, co) {
 			var s = this;
-			s.setList.push(function () {
-				var c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.beginPath();
 				c.rect(pa[0], pa[1], pa[2], pa[3]);
 				c.closePath();
@@ -1376,8 +1372,7 @@ var LGraphics = (function () {
 		 */
 		drawRoundRect : function (tn, lco, pa, isf, co) {
 			var s = this;
-			s.setList.push(function () {
-				var c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.beginPath();
 				c.moveTo(pa[0] + pa[4], pa[1]);
 				c.lineTo(pa[0] + pa[2] - pa[4], pa[1]);
@@ -1469,8 +1464,7 @@ var LGraphics = (function () {
 			if (v.length < 3) {
 				return;
 			}
-			s.setList.push(function () {
-				var c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.beginPath();
 				c.moveTo(v[0][0], v[0][1]);
 				var i, l = v.length, pa;
@@ -1647,8 +1641,7 @@ var LGraphics = (function () {
 		drawTriangles : function (ve, ind, u, tn, lco) {
 			var s = this;
 			var i, j, l = ind.length, c;
-			s.setList.push(function () {
-				c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				var v = ve, a, k, sw;
 				for (i = 0, j = 0; i < l; i += 3) {
 					a = 0;
@@ -1798,8 +1791,7 @@ var LGraphics = (function () {
 		 */
 		drawLine : function (tn, lco, pa) {
 			var s = this;
-			s.setList.push(function () {
-				var c = LGlobal.canvas;
+			s.setList.push(function (c) {
 				c.beginPath();
 				c.moveTo(pa[0], pa[1]);
 				c.lineTo(pa[2], pa[3]);

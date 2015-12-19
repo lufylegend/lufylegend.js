@@ -227,12 +227,12 @@ var LBitmapData = (function() {
 		} else {
 			s._createCanvas();
 			s.dataType = LBitmapData.DATA_CANVAS;
-			s._canvas.width = s.width = (width == null ? 1 : width);
-			s._canvas.height = s.height = (height == null ? 1 : height);
+			s._canvas.width = s.width = (width ? width : 1);
+			s._canvas.height = s.height = (height ? height : 1);
 			if ( typeof image == "string") {
-				image = parseInt(image.replace("#", "0x"));
-			}
-			if ( typeof image == "number") {
+				s._context.fillStyle = image;
+				s._context.fillRect(0, 0, w, h);
+			}else if ( typeof image == "number") {
 				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;

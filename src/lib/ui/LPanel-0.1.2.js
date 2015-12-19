@@ -49,7 +49,7 @@ var LPanel = (function () {
 				h = 20;
 			}
 			d.graphics.drawRoundRect(1, "#000000", [0, 0, w, h, w*0.5], true, bitmapData);
-			bitmapData = new LBitmapData(null, 0, 0, w, h);
+			bitmapData = new LBitmapData(null, 0, 0, w, h, LBitmapData.DATA_CANVAS);
 			bitmapData.draw(d);
 		}
 		s.x1 = x1 ? x1 : bitmapData.width * 0.4;

@@ -125,7 +125,7 @@ var LShape = (function () {
 	var p = {
 		_ll_show : function (c) {
 			var s = this;
-			s.graphics.ll_show();
+			s.graphics.ll_show(c);
 		},
 		/** @language chinese
 		 * 获取显示对象的宽度，以像素为单位。
