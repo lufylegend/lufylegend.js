@@ -2070,7 +2070,7 @@ var LDisplayObject = (function () {
 				c.globalCompositeOperation = s.blendMode;
 			}
 			if (s.filters) {
-				s._ll_setFilters();
+				s._ll_setFilters(c);
 			}
 			s._rotateReady();
 			if (s.mask != null && s.mask.ll_show) {
@@ -2116,13 +2116,13 @@ var LDisplayObject = (function () {
 		_rotateReady : function () {},
 		_showReady : function (c) {},
 		_ll_show : function (c) {},
-		_ll_setFilters : function () {
+		_ll_setFilters : function (c) {
 			var s = this, f = s.filters, i, l;
 			if (!f) {
 				return;
 			}
 			for (i = 0, l = f.length; i < l; i++) {
-				f[i].ll_show(s);
+				f[i].ll_show(s, c);
 			}
 		},
 		startX : function(){return 0;},
@@ -5524,10 +5524,10 @@ var LBitmapData = (function() {
 			s._setDataType(s._dataType);
 			s._data = null;
 		},
-		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
+		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter, c) {
 			var s = this;
 			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
-			var data = filter.filter(r,sourceRect.width);
+			var data = filter.filter(r,sourceRect.width, c);
 			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
 		},
 		getPixel : function(x, y, colorType) {
@@ -5744,12 +5744,13 @@ var LBitmapFilter = (function () {
 		LExtends(s, LObject, []);
 		s.type = "LBitmapFilter";
 	}
-	LBitmapFilter.prototype.ll_show = function (displayObject) {
+	LBitmapFilter.prototype.ll_show = function (displayObject, c) {
 		var s = this;
 		if(s.cacheMaking){
 			return;
 		}
-		var c = LGlobal.canvas, d = displayObject, bitmapData;
+		c = c || LGlobal.canvas;
+		var d = displayObject, bitmapData;
 		if(d.constructor.name == "LBitmap"){
 			bitmapData = d.bitmapData;
 		}else{
@@ -5764,7 +5765,7 @@ var LBitmapFilter = (function () {
 			return;
 		}
 		s.bitmapDataIndex = bitmapData.objectIndex;
-		bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
+		bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s, c);
 	};
 	return LBitmapFilter;
 })();
@@ -5786,8 +5787,9 @@ var LDropShadowFilter = (function () {
 			s.shadowOffsetX = s.distance * Math.cos(a);
 			s.shadowOffsetY = s.distance * Math.sin(a);
 		},
-		ll_show : function () {
-			var s = this, c = LGlobal.canvas;
+		ll_show : function (o, c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			c.shadowColor = s.shadowColor;
 			c.shadowBlur = s.shadowBlur;
 			c.shadowOffsetX = s.shadowOffsetX;
@@ -5821,8 +5823,9 @@ var LColorMatrixFilter = (function () {
 		s.matrix = matrix;
 	}
 	var p = {
-		filter : function(olddata, w){
-			var s = this, c = LGlobal.canvas;
+		filter : function(olddata, w, c){
+			var s = this;
+			c = c || LGlobal.canvas;
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;
@@ -5857,8 +5860,9 @@ var LConvolutionFilter = (function () {
 		s.bias = bias ? bias : 0;
 	}
 	var p = {
-		filter : function(olddata, w){
-			var s = this, c = LGlobal.canvas;
+		filter : function(olddata, w, c){
+			var s = this;
+			c = c || LGlobal.canvas;
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;

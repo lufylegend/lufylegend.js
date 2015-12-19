@@ -405,7 +405,7 @@ var LDisplayObject = (function () {
 				c.globalCompositeOperation = s.blendMode;
 			}
 			if (s.filters) {
-				s._ll_setFilters();
+				s._ll_setFilters(c);
 			}
 			s._rotateReady();
 			if (s.mask != null && s.mask.ll_show) {
@@ -451,13 +451,13 @@ var LDisplayObject = (function () {
 		_rotateReady : function () {},
 		_showReady : function (c) {},
 		_ll_show : function (c) {},
-		_ll_setFilters : function () {
+		_ll_setFilters : function (c) {
 			var s = this, f = s.filters, i, l;
 			if (!f) {
 				return;
 			}
 			for (i = 0, l = f.length; i < l; i++) {
-				f[i].ll_show(s);
+				f[i].ll_show(s, c);
 			}
 		},
 		startX : function(){return 0;},

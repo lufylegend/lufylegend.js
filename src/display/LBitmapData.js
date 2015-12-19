@@ -561,10 +561,10 @@ var LBitmapData = (function() {
 		 * @since 1.9.11
 		 * @public
 		 */
-		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
+		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter, c) {
 			var s = this;
 			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
-			var data = filter.filter(r,sourceRect.width);
+			var data = filter.filter(r,sourceRect.width, c);
 			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
 		},
 		/** @language chinese

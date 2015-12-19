@@ -14,12 +14,13 @@ var LBitmapFilter = (function () {
 		LExtends(s, LObject, []);
 		s.type = "LBitmapFilter";
 	}
-	LBitmapFilter.prototype.ll_show = function (displayObject) {
+	LBitmapFilter.prototype.ll_show = function (displayObject, c) {
 		var s = this;
 		if(s.cacheMaking){
 			return;
 		}
-		var c = LGlobal.canvas, d = displayObject, bitmapData;
+		c = c || LGlobal.canvas;
+		var d = displayObject, bitmapData;
 		if(d.constructor.name == "LBitmap"){
 			bitmapData = d.bitmapData;
 		}else{
@@ -34,7 +35,7 @@ var LBitmapFilter = (function () {
 			return;
 		}
 		s.bitmapDataIndex = bitmapData.objectIndex;
-		bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s);
+		bitmapData.applyFilter(bitmapData, new LRectangle(0,0,bitmapData.width,bitmapData.height), new LPoint(0,0), s, c);
 	};
 	return LBitmapFilter;
 })();
