@@ -1643,7 +1643,7 @@ var LTimer = (function () {
 		LExtends (s, LEventDispatcher, []);
 		s.type = "LTimer";
 		s.delay = delay;
-		s.repeatCount = repeat ? repeat : int.MAX_VALUE;
+		s.repeatCount = repeat ? repeat : Number.MAX_VALUE;
 		s.running = false;
 		s.currentCount = 0;
 		s.reset();
