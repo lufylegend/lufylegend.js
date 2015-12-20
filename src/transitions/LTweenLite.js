@@ -270,8 +270,9 @@ var LTweenLite = (function () {
 	 * @property LTweenLite.PlayStyle
 	 * @type Object
 	 * @static
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 * @public
+	 * @examplelink <p><a href="../../../api/LTweenLite/playStyle.html" target="_blank">测试链接</a></p>
 	 */
 	LTweenLite.PlayStyle = {
 		None : "none",

@@ -5,7 +5,7 @@
  * @class UI:LListView
  * @constructor
  * @extends LSprite
- * @since 1.9.12
+ * @since 1.10.0
  * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
  * @public
  */
@@ -17,7 +17,7 @@ var LListView = (function () {
 		 * [只读]LListView列表的画布，为了提升LListView的效率，LListView的所有子项都会被draw到这个LBitmapData对象上，由LListView内部控制刷新，所以是只读属性，外部不可操作。
 		 * @property bitmapData
 		 * @type LBitmapData
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
@@ -27,7 +27,7 @@ var LListView = (function () {
 		 * @property clipping
 		 * @type LRectangle
 		 * @default new LRectangle (0, 0, 100, 100)
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.clipping = new LRectangle (0, 0, 100, 100);
@@ -37,7 +37,7 @@ var LListView = (function () {
 		 * @property cellWidth
 		 * @type float
 		 * @default 100
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.cellWidth = 100;
@@ -46,7 +46,7 @@ var LListView = (function () {
 		 * @property cellHeight
 		 * @type float
 		 * @default 100
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.cellHeight = 100;
@@ -55,7 +55,7 @@ var LListView = (function () {
 		 * @property arrangement
 		 * @type LListView.Direction
 		 * @default LListView.Direction.Horizontal
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.arrangement = LListView.Direction.Horizontal;
@@ -64,7 +64,7 @@ var LListView = (function () {
 		 * @property movement
 		 * @type LListView.Direction
 		 * @default LListView.Direction.Vertical
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.movement = LListView.Direction.Vertical;
@@ -73,7 +73,7 @@ var LListView = (function () {
 		 * @property dragEffect
 		 * @type LListView.DragEffects
 		 * @default LListView.DragEffects.MomentumAndSpring
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.dragEffect = LListView.DragEffects.MomentumAndSpring;
@@ -89,7 +89,7 @@ var LListView = (function () {
 		 * @property maxPerLine
 		 * @type int
 		 * @default 1
-		 * @since 1.9.12
+		 * @since 1.10.0
 		 * @public
 		 */
 		self.maxPerLine = 1;/*每组长度*/
@@ -120,7 +120,7 @@ var LListView = (function () {
 	 * @param {LListScrollBar} scrollBar 滚动条
 	 * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.setVerticalScrollBar = function(value){
 		var self = this;
@@ -135,7 +135,7 @@ var LListView = (function () {
 	 * @param {LListScrollBar} scrollBar 滚动条
 	 * @examplelink <p><a href="../../../api/ui/LListScrollBar.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.setHorizontalScrollBar = function(value){
 		var self = this;
@@ -167,7 +167,7 @@ var LListView = (function () {
 	 * 刷新LListView 列表
 	 * @method updateView
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.updateView = function(){
 		var self = this;
@@ -247,7 +247,7 @@ var LListView = (function () {
 	 * @param {LListChildView} child 单元子项
 	 * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.insertChildView = function(child, index){
 		var self = this;
@@ -264,7 +264,7 @@ var LListView = (function () {
 	 * @param {LListChildView} child 单元子项
 	 * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.deleteChildView = function(child){
 		var self = this, c = self._ll_items, i, l;
@@ -285,7 +285,7 @@ var LListView = (function () {
 	 * 	var listView = new LListView();
 	 * 	listView.updateList(list);
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListView.prototype.updateList = function(list){
 		var self = this;
@@ -360,7 +360,7 @@ var LListView = (function () {
  * @class UI:LListScrollBar
  * @constructor
  * @extends LSprite
- * @since 1.9.12
+ * @since 1.10.0
  * @param {LPanel} background 滚动条背景。
  * @param {LPanel} foreground 滚动条样式。
  * @param {LListView.ScrollBarCondition} showCondition 滚动条的种类。
@@ -428,7 +428,7 @@ var LListScrollBar = (function () {
  * @class UI:LListChildView
  * @constructor
  * @extends LSprite
- * @since 1.9.12
+ * @since 1.10.0
  * @examplelink <p><a href="../../../api/ui/LListView.html" target="_blank">测试链接</a></p>
  * @public
  */
@@ -442,7 +442,7 @@ var LListChildView = (function () {
 	 * @method updateView
 	 * @examplelink <p><a href="../../../api/ui/LListView_onClick.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListChildView.prototype.updateView = function(bitmapData, rectangle, point){
 		var self = this;
@@ -481,7 +481,7 @@ var LListChildView = (function () {
 	 * 	}
 	 * @examplelink <p><a href="../../../api/ui/LListView_onClick.html" target="_blank">测试链接</a></p>
 	 * @public
-	 * @since 1.9.12
+	 * @since 1.10.0
 	 */
 	LListChildView.prototype.onClick = function(event){};
 	LListChildView.prototype.onTouch = function(event){};
