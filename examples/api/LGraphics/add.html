@@ -13,8 +13,7 @@
 			function main () {
 				var shape = new LShape();
 				addChild(shape);
-				shape.graphics.add(function(){
-					var ctx = LGlobal.canvas;
+				shape.graphics.add(function(ctx){
 					ctx.beginPath();
 					ctx.strokeStyle = "#FF0000";
 					ctx.lineWidth = 2;

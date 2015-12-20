@@ -1244,6 +1244,32 @@ var LGlobal = ( function () {
 		}
 		LGlobal.show(LGlobal.childList, LGlobal.canvas);
 	};
+	/** @language chinese
+	 * <p>将传入的一组对象绘制到指定的CanvasRenderingContext2D对象上。</p>
+	 * <p>※该方法每调用一次，只绘制一次。</p>
+	 * @method show
+	 * @static
+	 * @param {Array} list 要绘制的对象数组，数组中的对象必须是LDisplayObject对象
+	 * @param {CanvasRenderingContext2D} context2D 通过canvas.getContext("2d")得到的对象
+	 * @example
+	 * 	LInit(1000/60, "legend", 240, 240, main);
+	 * 	var myCanvas=document.getElementById("myCanvas");
+	 * 	var ctx=myCanvas.getContext("2d");
+	 * 	function main () {
+	 * 		var loader = new LLoader();
+	 * 		loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	 * 		loader.load("face.jpg", "bitmapData");
+	 * 	}
+	 * 	function loadBitmapdata(event){
+	 * 		var bitmapdata = new LBitmapData(event.target); 
+	 * 		var bitmap = new LBitmap(bitmapdata);
+	 * 		addChild(bitmap);
+	 * 		LGlobal.show([bitmap], ctx);
+	 * 	}
+	 * @examplelink <p><a href="../../../api/LGlobal/show.html" target="_blank">测试链接</a></p>
+	 * @public
+	 * @since 1.10.0
+	 */
 	LGlobal.show = function (s, ctx) {
 		ctx = ctx || LGlobal.canvas;
 		for (var i = 0, l = s.length, c; i < l; i++) {

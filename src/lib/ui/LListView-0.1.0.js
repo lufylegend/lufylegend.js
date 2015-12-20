@@ -636,7 +636,13 @@ var LListViewDragObject = (function () {
 			}else{
 				width = Math.ceil(length / listView.maxPerLine) * listView.cellWidth;
 			}
-			if(width > listView.clipping.width && listView.clipping.x > width - listView.clipping.width){
+			if(width <= listView.clipping.width){
+				if(dragObject){
+					listView.clipping.x = 0;
+				}else{
+					tx = 0;
+				}
+			}else if(listView.clipping.x > width - listView.clipping.width){
 				if(!dragObject){
 					tx = width - listView.clipping.width;
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
@@ -663,7 +669,13 @@ var LListViewDragObject = (function () {
 			}else{
 				height = (length > listView.maxPerLine ? listView.maxPerLine : length) * listView.cellHeight;
 			}
-			if(height > listView.clipping.height && listView.clipping.y > height - listView.clipping.height){
+			if(height <= listView.clipping.height){
+				if(dragObject){
+					listView.clipping.y = 0;
+				}else{
+					ty = 0;
+				}
+			}else if(listView.clipping.y > height - listView.clipping.height){
 				if(!dragObject){
 					ty = height - listView.clipping.height;
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){

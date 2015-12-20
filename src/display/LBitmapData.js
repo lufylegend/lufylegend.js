@@ -231,7 +231,7 @@ var LBitmapData = (function() {
 			s._canvas.height = s.height = (height ? height : 1);
 			if ( typeof image == "string") {
 				s._context.fillStyle = image;
-				s._context.fillRect(0, 0, w, h);
+				s._context.fillRect(0, 0, s.width, s.height);
 			}else if ( typeof image == "number") {
 				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {

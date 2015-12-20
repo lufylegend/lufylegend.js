@@ -1809,8 +1809,7 @@ var LGraphics = (function () {
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
-		 * 	shape.graphics.add(function(){
-		 * 		var ctx = LGlobal.canvas;
+		 * 	shape.graphics.add(function(ctx){
 		 * 		ctx.beginPath();
 		 * 		ctx.strokeStyle = "#FF0000";
 		 * 		ctx.lineWidth = 2;
@@ -1829,8 +1828,7 @@ var LGraphics = (function () {
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
-		 * 	shape.graphics.add(function(){
-		 * 		var ctx = LGlobal.canvas;
+		 * 	shape.graphics.add(function(ctx){
 		 * 		ctx.beginPath();
 		 * 		ctx.strokeStyle = "#FF0000";
 		 * 		ctx.lineWidth = 2;
@@ -1849,8 +1847,7 @@ var LGraphics = (function () {
 		 * @example
 		 * 	var shape = new LShape();
 		 * 	addChild(shape);
-		 * 	shape.graphics.add(function(){
-		 * 		var ctx = LGlobal.canvas;
+		 * 	shape.graphics.add(function(ctx){
 		 * 		ctx.beginPath();
 		 * 		ctx.strokeStyle = "#FF0000";
 		 * 		ctx.lineWidth = 2;

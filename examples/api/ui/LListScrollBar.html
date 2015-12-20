@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 	<meta charset="utf-8" />
-	<title>UI:LListView</title>
+	<title>UI:LListScrollBar</title>
 	<script type="text/javascript" src="../load_lufylegend.js"></script>
 	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
 	</head>
@@ -30,14 +30,14 @@ function main(){
 	backLayer.x = 50;
 	backLayer.y = 50;
 	addChild(backLayer);
-	listViewInit(1);
+	setTimeout(function(){listViewInit(1);},100);
 }
 function listViewInit(){
 	listView = new LListView();
 	backLayer.addChild(listView);
-	var scrollBarVertical = new LListScrollBar(new LPanel("#9370DB", 8, 8), new LPanel("#9400D3", 8, 8), LListView.ScrollBarCondition.OnlyIfNeeded);
+	var scrollBarVertical = new LListScrollBar(new LPanel("#9370DB", 18, 18), new LPanel("#9400D3", 18, 18), LListView.ScrollBarCondition.OnlyIfNeeded);
 	listView.setVerticalScrollBar(scrollBarVertical);
-	var scrollBarHorizontal = new LListScrollBar(new LPanel("#AFEEEE", 8, 8), new LPanel("#4169E1", 8, 8), LListView.ScrollBarCondition.OnlyIfNeeded);
+	var scrollBarHorizontal = new LListScrollBar(new LPanel("#AFEEEE", 18, 18), new LPanel("#4169E1", 18, 18), LListView.ScrollBarCondition.OnlyIfNeeded);
 	listView.setHorizontalScrollBar(scrollBarHorizontal);
 	listView.maxPerLine = 6;
 	listView.cellWidth = 100;

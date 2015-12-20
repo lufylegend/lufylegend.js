@@ -48,7 +48,7 @@ var LPanel = (function () {
 			if(typeof h == UNDEFINED){
 				h = 20;
 			}
-			d.graphics.drawRoundRect(1, "#000000", [0, 0, w, h, w*0.5], true, bitmapData);
+			d.graphics.drawRoundRect(1, "#000000", [0, 0, w, h, w < 10 ? w * 0.5 : 5], true, bitmapData);
 			bitmapData = new LBitmapData(null, 0, 0, w, h, LBitmapData.DATA_CANVAS);
 			bitmapData.draw(d);
 		}
