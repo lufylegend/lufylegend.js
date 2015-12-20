@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>alpha</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var sprite = new LSprite();
+				sprite.alpha = 0.5;
+				addChild(sprite);
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				sprite.addChild(bitmap);
+				
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				bitmap.x = 240;
+				bitmap.alpha = 0.5;
+				sprite.addChild(bitmap);
+				
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				bitmap.x = 480;
+				addChild(bitmap);
+			}
+			</script>
+	</body>
+</html>

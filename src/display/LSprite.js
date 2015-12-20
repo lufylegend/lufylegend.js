@@ -288,9 +288,9 @@ var LSprite = (function () {
 		},
 		_ll_show : function (c) {
 			var s = this;
-			s.graphics.ll_show();
-			LGlobal.show(s.childList);
-			s._ll_debugShape();
+			s.graphics.ll_show(c);
+			LGlobal.show(s.childList, c);
+			s._ll_debugShape(c);
 		},
 		/** @language chinese
 		 * 允许用户拖动指定的 LSprite。LSprite 将一直保持可拖动，直到通过调用 LSprite.stopDrag() 方法来明确停止。
@@ -1351,14 +1351,14 @@ var LSprite = (function () {
 		clearShape : function () {
 			this.shapes = [];
 		},
-		_ll_debugShape : function () {
-			var s = this, i, l, child, c, arg, j, ll;
-			if (!LGlobal.traceDebug || s.shapes.length == 0) {
+		_ll_debugShape : function (c) {
+			var s = this, i, l, child, arg, j, ll;
+			if (!LGlobal.traceDebug || !s.shapes || s.shapes.length == 0) {
 				return;
 			}
 			for (i = 0, l = s.shapes.length; i < l; i++) {
 				child = s.shapes[i];
-				c = LGlobal.canvas;
+				c = c || LGlobal.canvas;
 				arg = child.arg;
 				c.beginPath();
 				if (child.type == LShape.RECT) {

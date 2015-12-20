@@ -49,7 +49,7 @@ var LStageWebView = (function () {
 		s.display.style.position = "absolute";
 		s.display.style.marginTop = "0px";
 		s.display.style.marginLeft = "0px";
-		s.display.style.zIndex = 11;
+		s.display.style.zIndex = LStageWebView.START_INDEX++;
 		if(LGlobal.ios){
 			s.display.style.overflow = "auto";
 			s.display.style.webkitOverflowScrolling = "touch";
@@ -57,6 +57,7 @@ var LStageWebView = (function () {
 		s.display.appendChild(s.iframe);
 		s.idAdded = false;
 	}
+	LStageWebView.START_INDEX = 11;
 	var p = {
 		/** @language chinese
 		 * <p>在指定的 URL 加载页面。</p>

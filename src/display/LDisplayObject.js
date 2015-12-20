@@ -142,24 +142,27 @@ var LDisplayObject = (function () {
 		 * 表示指定对象的 Alpha 透明度值。有效值为 0（完全透明）到 1（完全不透明）。默认值为 1。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">测试链接</a></p>
 		 * @public
 		 */
 		/** @language english
 		 * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque). The default value is 1. Display objects with alpha set to 0 are active, even though they are invisible.
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">Try it »</a></p>
 		 * @public
 		 */
 		/** @language japanese
 		 * 指定されたオブジェクトのアルファ透明度値を示します。有効な値は 0（完全な透明）～ 1（完全な不透明）です。デフォルト値は 1 です。alpha が 0 に設定されている表示オブジェクトは、表示されない場合でも、アクティブです。
 		 * @property alpha
 		 * @type float
-		 * @default 0
+		 * @default 1
 		 * @since 1.6.0
+		 * @examplelink <p><a href="../../../api/LDisplayObject/alpha.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
 		s.alpha = 1;
@@ -386,8 +389,9 @@ var LDisplayObject = (function () {
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		ll_show : function () {
-			var s = this, c = LGlobal.canvas;
+		ll_show : function (c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			if (!s._canShow()) {
 				return;
 			}
@@ -401,22 +405,22 @@ var LDisplayObject = (function () {
 				c.globalCompositeOperation = s.blendMode;
 			}
 			if (s.filters) {
-				s._ll_setFilters();
+				s._ll_setFilters(c);
 			}
 			s._rotateReady();
 			if (s.mask != null && s.mask.ll_show) {
-				s.mask.ll_show();
+				s.mask.ll_show(c);
 				c.clip();
 			}
-			s._transformRotate();
-			s._transformScale();
+			s._transformRotate(c);
+			s._transformScale(c);
 			s._coordinate(c);
 			if (s.transform.matrix) {
 				s.transform.matrix.transform(c);
 			}
 			if (s.alpha < 1) {
 				s._ll_trans = true;
-				c.globalAlpha = s.alpha;
+				c.globalAlpha *= s.alpha;
 			}
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.display++;
@@ -425,7 +429,7 @@ var LDisplayObject = (function () {
 				}
 			}
 			if(s._ll_cacheAsBitmap){
-				s._ll_cacheAsBitmap._ll_show();
+				s._ll_cacheAsBitmap._ll_show(c);
 			}else{
 				s._ll_show(c);
 			}
@@ -447,26 +451,27 @@ var LDisplayObject = (function () {
 		_rotateReady : function () {},
 		_showReady : function (c) {},
 		_ll_show : function (c) {},
-		_ll_setFilters : function () {
+		_ll_setFilters : function (c) {
 			var s = this, f = s.filters, i, l;
 			if (!f) {
 				return;
 			}
 			for (i = 0, l = f.length; i < l; i++) {
-				f[i].ll_show(s);
+				f[i].ll_show(s, c);
 			}
 		},
 		startX : function(){return 0;},
 		startY : function(){return 0;},
 		getWidth : function(){return 1;},
 		getHeight : function(){return 1;},
-		_transformRotate : function () {
-			var s = this, c;
+		_transformRotate : function (c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			if (s.rotate == 0) {
 				return;
 			}
 			s._ll_trans = true;
-			c = LGlobal.canvas, rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
+			rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
 			if ((typeof s.rotatex) == UNDEFINED) {
 				s.rotatex = 0;
 				s.rotatey = 0;
@@ -482,8 +487,9 @@ var LDisplayObject = (function () {
 			rotateObj.ty = s.y + s.rotatey;
 			rotateObj.transform(c).setTo(1, 0, 0, 1, -rotateObj.tx, -rotateObj.ty).transform(c);
 		},
-		_transformScale : function () {
-			var s = this,c = LGlobal.canvas, scaleObj;
+		_transformScale : function (c) {
+			var s = this, scaleObj;
+			c = c || LGlobal.canvas;
 			if (s.scaleX == 1 && s.scaleY == 1) {
 				return;
 			}
@@ -607,6 +613,7 @@ var LDisplayObject = (function () {
 		 * @return {LRectangle} 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
 		 * @since 1.7.7
 		 * @public
+		 * @examplelink <p><a href="../../../api/LDisplayObject/getBounds.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
 		 * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
@@ -635,12 +642,8 @@ var LDisplayObject = (function () {
 				x = sp.x - dp.x;
 				y = sp.y - dp.y;
 			}
-			if (d.getWidth) {
-				w = d.getWidth();
-			}
-			if (d.getHeight) {
-				h = d.getHeight();
-			}
+			w = s.getWidth();
+			h = s.getHeight();
 			return new LRectangle(x, y, w, h);
 		},
 		/** @language chinese
@@ -684,28 +687,17 @@ var LDisplayObject = (function () {
 		getDataCanvas : function (x,y,w,h) {
 			var s = this, _o, o, _c, c, _x, _y;
 			s._createCanvas();
-			o = LGlobal.canvasObj;
-			c = LGlobal.canvas;
-			_o = s._canvas;
-			_c = s._context;
-			s.width = w || s.getWidth();
-			s.height = h || s.getHeight();
-			_o.width = s.width;
-			_o.height = s.height;
-			_c.clearRect(0, 0, s.width, s.height);
-			LGlobal.canvasObj = s._canvas;
-			LGlobal.canvas = s._context;
 			_x = s.x;
 			_y = s.y;
 			s.x = x || 0;
 			s.y = y || 0;
-			s.ll_show();
+			s.width = w || s.getWidth();
+			s.height = h || s.getHeight();
+			s._canvas.width = s.width;
+			s._canvas.height = s.height;
+			s.ll_show(s._context);
 			s.x = _x;
 			s.y = _y;
-			s._canvas = _o;
-			s._context = _c;
-			LGlobal.canvasObj = o;
-			LGlobal.canvas = c;
 			return s._canvas;
 		},
 		/** @language chinese

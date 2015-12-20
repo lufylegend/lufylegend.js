@@ -76,6 +76,7 @@ var LMessageBox = (function () {
 		msgLabel.width = properties.width - 100;
 		msgLabel.setWordWrap(true, properties.textHeight);
 		msgLabel.text = properties.message;
+		msgLabel.size = properties.size;
 		msgLabel.x = (properties.width - msgLabel.width) * 0.5;
 		msgLabel.y = (properties.height - myWindow.bar.getHeight() - msgLabel.getHeight()) * 0.5;
 		myWindow.layer.addChild(msgLabel);

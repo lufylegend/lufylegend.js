@@ -50,8 +50,9 @@ var LConvolutionFilter = (function () {
 		s.bias = bias ? bias : 0;
 	}
 	var p = {
-		filter : function(olddata, w){
-			var s = this, c = LGlobal.canvas;
+		filter : function(olddata, w, c){
+			var s = this;
+			c = c || LGlobal.canvas;
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;

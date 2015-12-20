@@ -85,7 +85,7 @@ UNDEFINED = "undefined",
 LANDSCAPE = "landscape",
 /** @language chinese
  * 用来设定LGlobal.aspectRatio值，表示限制横向显示，即只能纵向显示。
- * @property LANDSCAPE
+ * @property PORTRAIT
  * @since 1.0.0
  * @public
  */

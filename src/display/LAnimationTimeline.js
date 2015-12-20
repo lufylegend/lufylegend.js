@@ -643,8 +643,8 @@ var LAnimationTimeline = (function() {
 		gotoAndPlay : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			s.onframe();
 			s.play();
+			s.onframe();
 		},
 		/** @language chinese
 		 * 将播放头移到影片剪辑的指定标签并停在那里。
@@ -709,8 +709,8 @@ var LAnimationTimeline = (function() {
 		gotoAndStop : function(name) {
 			var s = this, l = s.ll_labelList[name];
 			s.setAction(l.rowIndex, l.colIndex, l.mode, l.isMirror);
-			s.onframe();
 			s.stop();
+			s.onframe();
 		},
 		/** @language chinese
 		 * 向指定标签位置添加执行脚本。

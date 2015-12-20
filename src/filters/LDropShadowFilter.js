@@ -73,8 +73,9 @@ var LDropShadowFilter = (function () {
 			s.shadowOffsetX = s.distance * Math.cos(a);
 			s.shadowOffsetY = s.distance * Math.sin(a);
 		},
-		ll_show : function () {
-			var s = this, c = LGlobal.canvas;
+		ll_show : function (o, c) {
+			var s = this;
+			c = c || LGlobal.canvas;
 			c.shadowColor = s.shadowColor;
 			c.shadowBlur = s.shadowBlur;
 			c.shadowOffsetX = s.shadowOffsetX;

@@ -177,15 +177,15 @@ var LBitmap = (function () {
 			}
 		},
 		_coordinate : function (c) {},
-		_ll_show : function () {
-			this.ll_draw();
+		_ll_show : function (c) {
+			this.ll_draw(c);
 		},
-		ll_draw : function () {
+		ll_draw : function (c) {
 			var s = this;
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.bitmapData++;
 			}
-			LGlobal.canvas.drawImage(s.bitmapData.image,
+			c.drawImage(s.bitmapData.image,
 				s.bitmapData.x,
 				s.bitmapData.y,
 				s.bitmapData.width,

@@ -45,6 +45,7 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
+		 * 		{name:"myFont",path:"NotoSans.eot,NotoSans.ttf",type:"font"},
 		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
 		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
 		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
@@ -76,6 +77,7 @@ var LLoadManage = (function () {
 		 * 	}
 		 * @public
 		 * @since 1.4.0
+		 * @examplelink <p><a href="../../../api/LLoadManage/index.html" target="_blank">测试链接</a></p>
 		 */
 		/** @language english
 		 * loads data from the specified list.
@@ -97,6 +99,7 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
+		 * 		{name:"myFont",path:"NotoSans.eot,NotoSans.ttf",type:"font"},
 		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
 		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
 		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
@@ -149,6 +152,7 @@ var LLoadManage = (function () {
 		 * 		{path:"./js/jsfile02.js",type:"js"},
 		 * 		{name:"img0",path:"./images/img0.png"},
 		 * 		{name:"img1",path:"./images/img1.png"},
+		 * 		{name:"myFont",path:"NotoSans.eot,NotoSans.ttf",type:"font"},
 		 * 		{name:"text01",path:"./files/text01.txt",type:"text"},
 		 * 		{name:"text02",path:"./files/text02.txt",type:"text"},
 		 * 		{name:"sound01",path:"./sounds/sound01.wav",type:"sound"},
@@ -230,6 +234,11 @@ var LLoadManage = (function () {
 					s.loader.name = d.name;
 					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
 					s.loader.load(d.path);
+				} else if (d["type"] == LFontLoader.TYPE_FONT) {
+					s.loader = new LFontLoader();
+					s.loader.name = d.name;
+					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.load(d.path, d.name);
 				} else {
 					s.loader = new LLoader();
 					s.loader.name = d.name;

@@ -58,7 +58,7 @@ var LTimer = (function () {
 		 * @since 1.9.11
 		 * @public
 		 */
-		s.repeatCount = repeat ? repeat : int.MAX_VALUE;
+		s.repeatCount = repeat ? repeat : Number.MAX_VALUE;
 		/** @language chinese
 		 * <p>计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。</p>
 		 * @property running

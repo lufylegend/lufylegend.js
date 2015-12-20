@@ -227,12 +227,12 @@ var LBitmapData = (function() {
 		} else {
 			s._createCanvas();
 			s.dataType = LBitmapData.DATA_CANVAS;
-			s._canvas.width = s.width = (width == null ? 1 : width);
-			s._canvas.height = s.height = (height == null ? 1 : height);
+			s._canvas.width = s.width = (width ? width : 1);
+			s._canvas.height = s.height = (height ? height : 1);
 			if ( typeof image == "string") {
-				image = parseInt(image.replace("#", "0x"));
-			}
-			if ( typeof image == "number") {
+				s._context.fillStyle = image;
+				s._context.fillRect(0, 0, s.width, s.height);
+			}else if ( typeof image == "number") {
 				var d = s._context.createImageData(s.width, s.height);
 				for (var i = 0; i < d.data.length; i += 4) {
 					d.data[i + 0] = image >> 16 & 0xFF;
@@ -329,10 +329,22 @@ var LBitmapData = (function() {
 				s._context = s._canvas.getContext("2d");
 			}
 		},
-		clear : function() {
+		/** @language chinese
+		 * <p>擦除LBitmapData</p>
+		 * <p>使用条件：数据保存形式为LBitmapData.DATA_CANVAS。</p>
+		 * @method clear
+		 * @param {LRectangle} rectangle 擦除范围，默认为全部擦除。
+		 * @public
+		 * @since 1.9.12
+		 */
+		clear : function(rectangle) {
 			var s = this;
 			s._createCanvas();
-			s._canvas.width = s.image.width;
+			if(rectangle){
+				s._context.clearRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+			}else{
+				s._canvas.width = s.image.width;
+			}
 			if (s.dataType == LBitmapData.DATA_IMAGE) {
 				s.image.src = s._canvas.toDataURL();
 			}
@@ -549,10 +561,10 @@ var LBitmapData = (function() {
 		 * @since 1.9.11
 		 * @public
 		 */
-		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter) {
+		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter, c) {
 			var s = this;
 			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
-			var data = filter.filter(r,sourceRect.width);
+			var data = filter.filter(r,sourceRect.width, c);
 			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
 		},
 		/** @language chinese

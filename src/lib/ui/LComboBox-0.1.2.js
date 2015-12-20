@@ -81,26 +81,27 @@ var LComboBox = (function () {
 		 */
 		s.value = null;
 		s.selectWidth = 100;
-		if (!size) {
-			size = 16;
+		var params;
+		if(typeof size != "object"){
+			params = {size:size,color:color,font:font,layerBack:layerBack,layerUp:layerUp,layerOver:layerOver};
 		}
-		if (!color) {
-			color = "#000000";
-		}
-		if (!font) {
-			font = "Arial";
-		}
-		s.size = size;
-		s.color = color;
-		s.font = font;
+		s.size = params.size ? params.size : 16;
+		s.font = params.font ? params.font : "Arial";
+		s.color = params.color ? params.color : "#000000"; 
+		layerBack = params.layerBack;
+		layerUp = params.layerUp;
+		layerOver = params.layerOver;
+
+		s.params = params;
 		s.maxIndex = 5;
 		if (!layerBack) {
-			var back = new LSprite();
-			back.graphics.drawRoundRect(1, "#999999", [0, 0, 12, 12, 4], true, "#f5f5f9");
-			var bitBack = new LBitmapData(null, 0, 0, 12, 12, LBitmapData.DATA_CANVAS);
-			bitBack.draw(back);
-			layerBack = new LPanel(bitBack, 200, 30, 4, 8, 4, 8);
+			layerBack = new LSprite();
+			layerBack.graphics.drawRoundRect(1, "#999999", [0, 0, 200, 30, 4], true, "#f5f5f9");
 		}
+		s.listView = new LListView();
+		s.listView.dragEffect = LListView.DragEffects.Momentum;
+		s.listView.cellWidth = s.minWidth = layerBack.getWidth();
+		s.listView.cellHeight = s.minHeight = layerBack.getHeight();
 		var layer;
 		if (!layerUp || !layerOver) {
 			var up, down, data;
@@ -120,18 +121,19 @@ var LComboBox = (function () {
 			data.draw(down);
 			layerOver = new LBitmap(data);
 		}
-		s.minWidth = layerBack.getWidth();
-		s.minHeight = layerBack.getHeight();
+		
 		var layer1 = layerBack.clone();
 		layerUp.x = layer1.getWidth() - layerUp.getWidth() -4;
 		layerUp.y = 4;
 		layer1.arraw = layerUp;
 		layer1.addChild(layerUp);
+		layer1.cacheAsBitmap(true);
 		var layer2 = layerBack.clone();
 		layerOver.x = layer2.getWidth() - layerOver.getWidth() -4;
 		layerOver.y = 4;
 		layer2.arraw = layerOver;
 		layer2.addChild(layerOver);
+		layer2.cacheAsBitmap(true);
 		layer = new LButton(layer1, layer2);
 		layer.setCursorEnabled(false);
 		layer.staticMode = true;
@@ -147,6 +149,7 @@ var LComboBox = (function () {
 		layer.addChild(label);
 		s.label = label;
 		s.layer = layer;
+		s.listChildView = LComboBoxChild;
 		s.addEventListener(LMouseEvent.MOUSE_UP, s._showChildList);
 	}
 	/** @language chinese
@@ -165,37 +168,6 @@ var LComboBox = (function () {
 	 * @since 0.1.0
 	 */
 	LComboBox.ON_CHANGE = "onchange";
-	LComboBox.prototype._ll_resize = function () {
-		var s = this;
-		if (s.list.length == 0) {
-			return;
-		}
-		var txt = new LTextField();
-		txt.text = s.list[0].label;
-		txt.size = s.size;
-		var w = txt.getWidth();
-		var h = txt.getHeight();
-		if (h + 8 < s.minHeight) {
-			h = s.minHeight - 8;
-			s.label.y = (h + 8 - txt.getHeight()) * 0.5;
-		} else {
-			s.label.y = 4;
-		}
-		if (w + h + 8 < s.minWidth) {
-			w = s.minWidth - h - 8;
-		}
-		
-		var arraw = s.layer.upState.arraw;
-		arraw.scaleX = 1;
-		arraw.scaleX = arraw.scaleY = h / arraw.getWidth();
-		arraw.x = w + 4;
-		arraw = s.layer.downState.arraw;
-		arraw.scaleX = 1;
-		arraw.scaleX = arraw.scaleY = h / arraw.getWidth();
-		arraw.x = w + 4;
-		s.layer.upState.resize(w + h + 8, h + 8);
-		s.layer.downState.resize(w + h + 8, h + 8);
-	},
 	/** @language chinese
 	 * 删除元素。
 	 * @method deleteChild
@@ -207,7 +179,7 @@ var LComboBox = (function () {
 		var s = this, i, l, delIndex = -1;
 		for (i = 0, l = s.list.length; i < l; i++) {
 			if (s.list[i].value === value) {
-				delIndex = i
+				delIndex = i;
 				break;
 			}
 		}
@@ -224,7 +196,6 @@ var LComboBox = (function () {
 			s.selectIndex = -1;
 			s.value = null;
 		}
-		s._ll_resize();
 	};
 	/** @language chinese
 	 * 增加元素。
@@ -248,94 +219,55 @@ var LComboBox = (function () {
 		if (s.list.length == 1) {
 			s.setValue(child.value);
 		}
-		s._ll_resize();
 	};
 	LComboBox.prototype._showChildList = function (event) {
 		var s = event.currentTarget;
 		s.showChildList();
 	};
+	LComboBox.prototype.setListChildView = function (childClass) {
+		this.listChildView = childClass;
+	};
 	LComboBox.prototype.showChildList = function () {
 		var s = this, i, l, child, w;
-		var textLayer = new LSprite();
-		selectLayer = new LSprite();
-		textLayer.addChild(selectLayer);
-		textLayer.selectLayer = selectLayer;
-		textLayer.childHeight = s.size * 1.5 >>> 0;
-		for (i = 0, l = s.list.length; i < l; i++) {
-			child = s.list[i];
-			var text = new LTextField();
-			text.size = s.size;
-			text.color = s.color;
-			text.font = s.font;
-			text.text = child.label;
-			text.x = 5;
-			text.y = 5 + textLayer.childHeight * i;
-			textLayer.addChild(text);
-		}
-		w = textLayer.getWidth();
-		if (w < 196) {
-			w = 196;
-		}
-		textLayer.graphics.drawRect(1, "#999999", [0, 0, w + 4, textLayer.childHeight * s.list.length + 4], true, "#f5f5f9");
-		selectLayer.graphics.drawRect(0, "#CCCCCC", [2, 2, w, textLayer.childHeight], true, "#CCCCCC");
-		selectLayer.y = textLayer.childHeight * s.selectIndex;
-		var coordinate = s.getRootCoordinate();
-		textLayer.comboBox = s;
+		
 		var translucent = new LSprite();
 		translucent.graphics.drawRect(0, "#000000", [0, 0, LGlobal.width, LGlobal.height], true, "#000000");
 		translucent.alpha = 0;
 		LGlobal.stage.addChild(translucent);
 		translucent.addEventListener(LMouseEvent.MOUSE_UP, function (e) {
 			var cnt = LGlobal.stage.numChildren;
+			if(e.target.constructor.name == "LListView"){
+				return;
+			}
+			var destroy = LGlobal.destroy;
+			LGlobal.destroy = false;
 			LGlobal.stage.removeChildAt(cnt - 1);
+			LGlobal.destroy = destroy;
 			LGlobal.stage.removeChildAt(cnt - 2);
 		});
 		translucent.addEventListener(LMouseEvent.MOUSE_DOWN, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_MOVE, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
 		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
-		if (s.list.length > s.maxIndex) {
-			var sc = new LScrollbar(textLayer, w, textLayer.childHeight * s.maxIndex, {overflowX:false,mode:"pc"});
-			sc.mode = "pc";
-			sc.x = coordinate.x;
-			sc.y = coordinate.y + s.layer.getHeight();
-			if (sc.y + textLayer.childHeight * s.maxIndex > LGlobal.height) {
-				sc.y = LGlobal.height - textLayer.childHeight * s.maxIndex;
-			}
-			sc.resizeHeight(sc._maskH);
-			sc._key["down"] = true;
-			sc._key["up"] = false;
-			sc._tager = {x : 0, y : 40};
-			sc._speed = Math.abs(sc._tager.y - sc._showObject.y);
-			sc.setSpeed();
-			sc.setScrollY(textLayer.childHeight * s.selectIndex);
-			LGlobal.stage.addChild(sc);
-		} else {
-			textLayer.x = coordinate.x;
-			textLayer.y = coordinate.y + s.layer.getHeight();
-			if (textLayer.y + textLayer.getHeight() > LGlobal.height) {
-				textLayer.y = LGlobal.height - textLayer.getHeight();
-			}
-			LGlobal.stage.addChild(textLayer);
+		
+		var coordinate = s.getRootCoordinate();
+		s.listView.x = coordinate.x;
+		s.listView.y = coordinate.y + s.layer.getHeight();
+		LGlobal.stage.addChild(s.listView);
+		if(typeof s.listView._ll_saveY != UNDEFINED){
+			s.listView.clipping.y = s.listView._ll_saveY;
 		}
-		textLayer.addEventListener(LMouseEvent.MOUSE_MOVE, s._childSelecting);
-		textLayer.addEventListener(LMouseEvent.MOUSE_UP, s._childSelected);
-	};
-	LComboBox.prototype._childSelecting = function (event) {
-		var textLayer = event.currentTarget, i;
-		i = event.selfY / textLayer.childHeight >>> 0;
-		if (i >= textLayer.comboBox.list.length) {
-			return;
+		var list = [];
+		for (i = 0, l = s.list.length; i < l; i++) {
+			var selected = s.value === s.list[i].value;
+			child = new s.listChildView(s.list[i], s, selected);
+			if(selected){
+				s.listView._ll_selectedChild = child;
+			}
+			list.push(child);
 		}
-		textLayer.selectLayer.y = textLayer.childHeight * i;
-	};
-	LComboBox.prototype._childSelected = function (event) {
-		var textLayer = event.currentTarget, i, v;
-		i = event.selfY / textLayer.childHeight >>> 0;
-		textLayer.comboBox.setValue(textLayer.comboBox.list[i].value);
-		var cnt = LGlobal.stage.numChildren;
-		LGlobal.stage.removeChildAt(cnt - 1);
-		LGlobal.stage.removeChildAt(cnt - 2);
+		s.listView.resize(s.listView.cellWidth, s.listView.cellHeight * (s.list.length > s.maxIndex ? s.maxIndex : s.list.length));
+		s.listView.updateList(list);
 	};
 	/** @language chinese
 	 * 设置组合框的值。
@@ -372,4 +304,77 @@ var LComboBox = (function () {
 		return a;
 	};
 	return LComboBox;
+})();
+var LComboBoxChild = (function () {
+	function LComboBoxChild(content, comboBox, selected){
+		var self = this;
+		base(self,LListChildView,[]);
+		self.content = content;
+		self.comboBox = comboBox;
+		if(selected){
+			self.setSelectStatus(content, comboBox);
+		}else{
+			self.setStatus(content, comboBox);
+		}
+	}
+	LComboBoxChild.prototype.setStatus = function(content, comboBox){
+		var self = this;
+		var listView = comboBox.listView;
+		self.graphics.drawRect(0,"#f5f5f9", [0, 0, listView.cellWidth, listView.cellHeight], true, "#f5f5f9");
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+		self.updateView();
+	};
+	LComboBoxChild.prototype.setSelectStatus = function(content, comboBox){
+		var self = this;
+		var listView = comboBox.listView;
+		self.graphics.clear();
+		self.graphics.drawRect(0,"#CCCCCC", [0, 0, listView.cellWidth, listView.cellHeight], true, "#CCCCCC");
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+		self.updateView();
+	};
+	LComboBoxChild.prototype.onTouch = function(event){
+		var self = event.target;
+		var listView = event.currentTarget;
+		if(listView._ll_selectedChild){
+			listView._ll_selectedChild.removeAllChild();
+			listView._ll_selectedChild.cacheAsBitmap(false);
+			listView._ll_selectedChild.setStatus(listView._ll_selectedChild.content, listView._ll_selectedChild.comboBox);
+		}
+		self.removeAllChild();
+		self.cacheAsBitmap(false);
+		self.setSelectStatus(self.content, self.comboBox);
+		listView._ll_selectedChild = self;
+	};
+	LComboBoxChild.prototype.onClick = function(event){
+		var self = event.target;
+		var listView = event.currentTarget, i, v;
+		var comboBox = self.comboBox;
+		var listViewIndex;
+		comboBox.setValue(self.content.value);
+		for(var i=LGlobal.stage.numChildren-1;i>=0;i--){
+			if(LGlobal.stage.childList[i].objectIndex != listView.objectIndex){
+				continue;
+			}
+			var destroy = LGlobal.destroy;
+			LGlobal.destroy = false;
+			LGlobal.stage.removeChildAt(i);
+			LGlobal.destroy = destroy;
+			LGlobal.stage.removeChildAt(i - 1);
+			listView._ll_saveY = listView.clipping.y;
+			break;
+		}
+	};
+	return LComboBoxChild;
 })();

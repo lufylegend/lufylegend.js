@@ -107,26 +107,26 @@ var LWindow = (function () {
 				var bitmapClose = new LBitmap(style.closeButton);
 				var closeButton = new LSprite();
 				closeButton.addChild(bitmapClose);
-				s.close = closeButton;
+				s.closeObj = closeButton;
 			}else{
-				s.close = style.closeButton;
+				s.closeObj = style.closeButton;
 			}
-			s.close.x = s.w - s.close.getWidth();
+			s.closeObj.x = s.w - s.closeObj.getWidth();
 		}else{
-			s.close = new LSprite();
-			style.closeButton = s.close;
-			s.close.w = 50;
-			s.close.h = 25;
-			s.close.x = s.w - s.close.w;
-			var closeGrd = LGlobal.canvas.createLinearGradient(0, -s.close.h * 0.5, 0, s.close.h * 2);
+			s.closeObj = new LSprite();
+			style.closeButton = s.closeObj;
+			s.closeObj.w = 50;
+			s.closeObj.h = 25;
+			s.closeObj.x = s.w - s.closeObj.w;
+			var closeGrd = LGlobal.canvas.createLinearGradient(0, -s.closeObj.h * 0.5, 0, s.closeObj.h * 2);
 			closeGrd.addColorStop(0, "#FFFFFF");
 			closeGrd.addColorStop(1, "#800000");
-			s.close.graphics.drawRoundRect(1, "#800000", [0, 0, s.close.w, s.close.h, s.close.h * 0.1], true, closeGrd);
-			s.close.graphics.drawLine(4, "#FFFFFF", [15, 5, s.close.w - 15, s.close.h - 5]);
-			s.close.graphics.drawLine(4, "#FFFFFF", [15, s.close.h - 5, s.close.w - 15, 5]);
+			s.closeObj.graphics.drawRoundRect(1, "#800000", [0, 0, s.closeObj.w, s.closeObj.h, s.closeObj.h * 0.1], true, closeGrd);
+			s.closeObj.graphics.drawLine(4, "#FFFFFF", [15, 5, s.closeObj.w - 15, s.closeObj.h - 5]);
+			s.closeObj.graphics.drawLine(4, "#FFFFFF", [15, s.closeObj.h - 5, s.closeObj.w - 15, 5]);
 		}
-		s.addChild(s.close);
-		s.close.addEventListener(LMouseEvent.MOUSE_UP, s._onClose);
+		s.addChild(s.closeObj);
+		s.closeObj.addEventListener(LMouseEvent.MOUSE_UP, s._onClose);
 	
 		/** @language chinese
 		 * [只读]窗口的根容器，在窗口中添加显示对象，都需要加在此容器或者它的子容器中。
@@ -185,7 +185,10 @@ var LWindow = (function () {
 		return a;
 	};
 	LWindow.prototype._onClose = function (event) {
-		var s = event.clickTarget.parent;
+		event.clickTarget.parent.close();
+	};
+	LWindow.prototype.close = function () {
+		var s = this;
 		s.dispatchEvent(LWindow.CLOSE);
 		s.parent.removeChild(s);
 	};

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>InteractivePNG</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.InteractivePNG.js"></script>
+    </head>
+    <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;font-size: 0;">
+        <div id="mvclegend">loading</div>
+        <script>
+        init(1000/30,"mvclegend",400,400,main);
+        var pngLayer;
+		function main(){
+			LGlobal.setDebug(true);
+			var loadData = [
+				{name:"card01",path:"card01.png"}
+			];
+		
+			loadingLayer = new LoadingSample1();
+			addChild(loadingLayer);	
+			LLoadManage.load(
+				loadData,
+				function(progress){
+					loadingLayer.setProgress(progress);
+				},
+				loadComplete
+			);
+		}
+		function loadComplete(result){
+			removeChild(loadingLayer);
+			loadingLayer = null;
+			
+			pngLayer = new InteractivePNG();
+			addChild(pngLayer);
+			var pngBitmap = new LBitmap(new LBitmapData(result["card01"]));
+			pngLayer.addChild(pngBitmap);
+			
+			pngLayer.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+		}
+		function onmouse(event){
+			trace("chick on!");
+		}
+        </script>
+    </body>
+</html>

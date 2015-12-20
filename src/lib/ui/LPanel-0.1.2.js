@@ -42,8 +42,14 @@ var LPanel = (function () {
 		self.overlapping = overlapping;
 		if (typeof bitmapData == "string") {
 			var d = new LShape();
-			d.graphics.drawRoundRect(1, "#000000", [0, 0, 20, 20, 5], true, bitmapData);
-			bitmapData = new LBitmapData(null, 0, 0, 20, 20);
+			if(typeof w == UNDEFINED){
+				w = 20;
+			}
+			if(typeof h == UNDEFINED){
+				h = 20;
+			}
+			d.graphics.drawRoundRect(1, "#000000", [0, 0, w, h, w < 10 ? w * 0.5 : 5], true, bitmapData);
+			bitmapData = new LBitmapData(null, 0, 0, w, h, LBitmapData.DATA_CANVAS);
 			bitmapData.draw(d);
 		}
 		s.x1 = x1 ? x1 : bitmapData.width * 0.4;
@@ -105,6 +111,9 @@ var LPanel = (function () {
 		s.lbBitmap.y = s.mbBitmap.y = s.rbBitmap.y = h - (s.bitmapData.height - s.y2);
 		s.lmBitmap.scaleY = s.mmBitmap.scaleY = s.rmBitmap.scaleY = (h - s.y1 - (s.bitmapData.height - s.y2) + self.overlapping * 2) / (s.y2 - s.y1);
 		s.mtBitmap.scaleX = s.mmBitmap.scaleX = s.mbBitmap.scaleX = (w - s.x1 - (s.bitmapData.width - s.x2) + self.overlapping * 2) / (s.x2 - s.x1);
+	};
+	LPanel.prototype.getSize = function () {
+		return {width:this._ll_w, height:this._ll_h};
 	};
 	LPanel.prototype.clone = function () {
 		var s = this;
