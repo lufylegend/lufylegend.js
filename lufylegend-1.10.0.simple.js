@@ -2241,31 +2241,6 @@ var LDisplayObject = (function () {
 			s.x = _x;
 			s.y = _y;
 			return s._canvas;
-			var s = this, _o, o, _c, c, _x, _y;
-			s._createCanvas();
-			o = LGlobal.canvasObj;
-			c = LGlobal.canvas;
-			_o = s._canvas;
-			_c = s._context;
-			s.width = w || s.getWidth();
-			s.height = h || s.getHeight();
-			_o.width = s.width;
-			_o.height = s.height;
-			_c.clearRect(0, 0, s.width, s.height);
-			LGlobal.canvasObj = s._canvas;
-			LGlobal.canvas = s._context;
-			_x = s.x;
-			_y = s.y;
-			s.x = x || 0;
-			s.y = y || 0;
-			s.ll_show(s._context);
-			s.x = _x;
-			s.y = _y;
-			s._canvas = _o;
-			s._context = _c;
-			LGlobal.canvasObj = o;
-			LGlobal.canvas = c;
-			return s._canvas;
 		},
 		getDataURL : function () {
 			var s = this, r = s.getDataCanvas();
