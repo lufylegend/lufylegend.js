@@ -530,6 +530,9 @@ var LListViewDragObject = (function () {
 	};
 	LListViewDragObject.prototype._ll_stop = function(){
 		var self = this;
+		if(self.isDeleted){
+			return;
+		}
 		self.listView.dragEnd();
 		self.stopDrag();
 		self.isDeleted = true;
