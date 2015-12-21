@@ -173,6 +173,20 @@ var LListView = (function () {
 		var self = this;
 		self._ll_x = Number.MAX_VALUE;
 	};
+	LListView.prototype.getItems = function(){
+		return this._ll_items;
+	};
+	LListChildView.prototype.isInClipping = function(index){
+		var self = this, x, y;
+		if(self.arrangement == LListView.Direction.Horizontal){
+			x = (index % self.maxPerLine) * self.cellWidth;
+			y = (index / self.maxPerLine >>> 0) * self.cellHeight;
+		}else{
+			x = (index / self.maxPerLine >>> 0) * self.cellWidth;
+			y = (index % self.maxPerLine) * self.cellHeight;
+		}
+		return self.clipping.x <= x && self.clipping.x + self.clipping.width > x && self.clipping.y <= y && self.clipping.y + self.clipping.height > y;
+	};
 	LListView.prototype._ll_onframe = function(event){
 		var self = event.currentTarget;
 		if(self.clipping.x == self._ll_x && self.clipping.y == self._ll_y){
