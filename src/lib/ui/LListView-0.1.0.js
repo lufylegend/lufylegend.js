@@ -57,6 +57,7 @@ var LListView = (function () {
 		 * @default LListView.Direction.Horizontal
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_arrangement.html" target="_blank">测试链接</a></p>
 		 */
 		self.arrangement = LListView.Direction.Horizontal;
 		/** @language chinese
@@ -66,6 +67,7 @@ var LListView = (function () {
 		 * @default LListView.Direction.Vertical
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_movement.html" target="_blank">测试链接</a></p>
 		 */
 		self.movement = LListView.Direction.Vertical;
 		/** @language chinese
@@ -75,6 +77,7 @@ var LListView = (function () {
 		 * @default LListView.DragEffects.MomentumAndSpring
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_DragEffects.html" target="_blank">测试链接</a></p>
 		 */
 		self.dragEffect = LListView.DragEffects.MomentumAndSpring;
 	
@@ -91,6 +94,7 @@ var LListView = (function () {
 		 * @default 1
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_maxPerLine.html" target="_blank">测试链接</a></p>
 		 */
 		self.maxPerLine = 1;/*每组长度*/
 		self._ll_items = [];
@@ -144,8 +148,18 @@ var LListView = (function () {
 		self.addChild(self.scrollBarHorizontal);
 		self.scrollBarHorizontal.resizeWidth(self.clipping.width);
 	};
+	/** @language chinese
+	 * 设置LListView 列表的显示范围。
+	 * @method resize
+	 * @param {int} width 宽
+	 * @param {int} height 高
+	 * @public
+	 * @since 1.10.0
+	 */
 	LListView.prototype.resize = function(w, h){
 		var self = this;
+		w = w >>> 0;
+		h = h >>> 0;
 		self.bitmapData.image.height = self.bitmapData.height = h;
 		self.bitmapData.image.width = self.bitmapData.width = w;
 		self.clipping.width = w;
@@ -176,7 +190,7 @@ var LListView = (function () {
 	LListView.prototype.getItems = function(){
 		return this._ll_items;
 	};
-	LListChildView.prototype.isInClipping = function(index){
+	LListView.prototype.isInClipping = function(index){
 		var self = this, x, y;
 		if(self.arrangement == LListView.Direction.Horizontal){
 			x = (index % self.maxPerLine) * self.cellWidth;
@@ -196,8 +210,8 @@ var LListView = (function () {
 		var length = self._ll_items.length;
 		var startX = self.clipping.x / self.cellWidth >> 0;
 		var startY = self.clipping.y / self.cellHeight >> 0;
-		var addX = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
-		var addY = self.clipping.height % self.cellHeight == 0 ? 0 : 1;
+		var addX;
+		var addY;
 		addX = addY = 1;
 		if(self.arrangement == LListView.Direction.Horizontal){
 			for(var i = 0, l = Math.ceil(self.clipping.height / self.cellHeight) + addY; i < l; i++){
@@ -215,7 +229,6 @@ var LListView = (function () {
 				}
 			}
 		}else{
-			var add = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
 			for(var i = 0, l = Math.ceil(self.clipping.width / self.cellWidth) + addX; i < l; i++){
 				var yIndex = (startX + i) * self.maxPerLine + startY;
 				for(var j = 0, jl = Math.ceil(self.clipping.height / self.cellHeight) + addY;j < self.maxPerLine && j < jl; j++){
