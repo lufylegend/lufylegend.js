@@ -304,6 +304,7 @@ var LDisplayObject = (function () {
 		 * @default null
 		 * @since 1.6.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/LDisplayObject/filters.html" target="_blank">测试链接</a></p>
 		 */
 		s.filters = null;
 		/** @language chinese

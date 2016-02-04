@@ -579,6 +579,10 @@ var LListViewDragObject = (function () {
 	LListViewDragObject.prototype.inertia = function(){
 		var self = this;
 		var listView = self.listView;
+		if(typeof self.fX == UNDEFINED){
+			self.fX = listView.clipping.x;
+			self.fY = listView.clipping.y;
+		}
 		var mx = listView.clipping.x - self.fX;
 		var my = listView.clipping.y - self.fY;
 		if(Math.abs(mx) < 5){

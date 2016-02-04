@@ -560,6 +560,7 @@ var LBitmapData = (function() {
 		 * @param {LBitmapFilter} filter 用于执行过滤操作的滤镜对象。
 		 * @since 1.9.11
 		 * @public
+		 * @examplelink <p><a href="../../../api/LBitmapData/applyFilter.html" target="_blank">测试链接</a></p>
 		 */
 		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter, c) {
 			var s = this;
