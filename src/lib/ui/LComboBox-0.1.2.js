@@ -191,9 +191,10 @@ var LComboBox = (function () {
 			return;
 		}
 		if (s.list.length > 0) {
-			s.setValue(s.list[delIndex > 0 ? delIndex - 1 : 0]);
+			s.setValue(s.list[delIndex > 0 ? delIndex - 1 : 0].value);
 		} else {
 			s.selectIndex = -1;
+			s.label.text = "";
 			s.value = null;
 		}
 	};
