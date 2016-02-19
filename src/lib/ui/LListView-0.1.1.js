@@ -189,9 +189,22 @@ var LListView = (function () {
 		var self = this;
 		self._ll_x = Number.MAX_VALUE;
 	};
+	/** @language chinese
+	 * 获取LListView 列表的所有子项。
+	 * @method getItems
+	 * @public
+	 * @since 1.10.1
+	 */
 	LListView.prototype.getItems = function(){
 		return this._ll_items;
 	};
+	/** @language chinese
+	 * 判断LListView 列表的子项是否处于有效的显示范围之内。
+	 * @method isInClipping
+	 * @param {int} index 子项的索引号
+	 * @public
+	 * @since 1.10.1
+	 */
 	LListView.prototype.isInClipping = function(index){
 		var self = this, x, y;
 		if(self.arrangement == LListView.Direction.Horizontal){
