@@ -728,6 +728,39 @@ var LDisplayObject = (function () {
 			var s = this, r = s.getDataCanvas();
 			return r.toDataURL.apply(r, arguments);
 		},
+		/** @language chinese
+		 * 通过构造函数向上查找对象。
+		 * @method getParentByConstructor
+		 * @param {constructor} constructor 某个构造函数
+		 * @return {object} 查找到的对象。
+		 * @since 1.10.1
+		 * @example
+		 *	function MyClass1(){
+		 *	    base(self,LSprite,[]);
+		 *	}
+		 *	function MyClass2(){
+		 *	    base(self,LSprite,[]);
+		 *	}
+		 *	var obj1 = new MyClass1();
+		 *	var obj2 = new MyClass2();
+		 *	var obj3 = new LSprite();
+		 *	addChild(obj1);
+		 *	obj1.addChild(obj2);
+		 *	obj2.addChild(obj3);
+		 *	trace(obj1.objectIndex == obj3.getParentByConstructor(MyClass1).objectIndex);//out: true
+		 *	trace(obj2.objectIndex == obj3.getParentByConstructor(MyClass2).objectIndex);//out: true
+		 * @public
+		 */
+		getParentByConstructor : function (value) {
+			var parent = this.parent;
+			while(typeof parent == "object"){
+				if(parent instanceof value){
+					return parent;
+				}
+				parent = parent.parent;
+			}
+			return null;
+		},
 		ismouseonShapes : function (shapes, mx, my) {
 			var s = this, parent = s, m, child, j, v, arg;
 			if (typeof shapes == UNDEFINED) {
