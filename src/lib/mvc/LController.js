@@ -69,32 +69,19 @@ var LController = (function() {
 	LController.NOTIFY_ALL = "notify_all";
 	LController.prototype.notify = function(event){
 		var self = event.currentTarget;
-		for(var i=0,l=self.ll_viewList.length;i<l;i++){
-			LController._notify(self.ll_viewList[i], false);
+		if(self.view){
+			LController._notify(self.view);
 		}
 	};
 	LController.prototype.notifyAll = function(event){
 		var self = event.currentTarget;
 		for(var i=0,l=self.ll_viewList.length;i<l;i++){
-			LController._notify(self.ll_viewList[i], true);
+			LController._notify(self.ll_viewList[i]);
 		}
 	};
 	LController._notify = function(view, depth){
-		if(view && view.visible){
-			if(view.mvcType == "view"){
-				view.updateView();
-			}
-			if(!depth){
-				return;
-			}
-			var childList = view.childList;
-			if(!childList || !childList.length){
-				return;
-			}
-			for(var i=0;i<childList.length;i++){
-				var child = childList[i];
-				LController._notify(child, depth);
-			}
+		if(view && view.visible && view.mvcType == "view"){
+			view.updateView();
 		}
 	};
 	/** @language chinese

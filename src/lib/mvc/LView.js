@@ -65,6 +65,31 @@ var LView = (function() {
 			self.controller.addView(self);
 		}
 	}
+	/** @language chinese
+	 * 向视图中添加控制器。即：可以在视图创建的时候，直接传入控制器，也可以创建完视图之后再添加控制器，如果已经有控制器，则再次添加无效。
+	 * @method addController
+	 * @since 1.10.1
+	 * @example
+	 *	//自定义视图
+	 *	function MyTestView(controller){
+	 *	    base(self,LView,[controller]);
+	 *	}
+	 *	
+	 *	//假设testController为控制器
+	 *	var myView1 = new MyTestView(testController);
+	 *	
+	 *	var myView2 = new MyTestView(null);
+	 *	myView2.addController(testController);
+	 * @public
+	 */
+	LView.prototype.addController = function(controller){
+		if(self.controller){
+			return;
+		}
+		self.controller = controller;
+		self.model = controller.model;
+		self.controller.addView(self);
+	};
 	LView.prototype.die = function(){
 		var self = this;
 		if (self.controller) {
