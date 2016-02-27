@@ -747,5 +747,9 @@ var LMouseEventContainer = (function () {
 			return list;
 		}
 	};
-	return new MouseEventContainer();
+	var container = new MouseEventContainer();
+	container.set(LMouseEvent.MOUSE_DOWN,true);
+	container.set(LMouseEvent.MOUSE_UP,true);
+	container.set(LMouseEvent.MOUSE_MOVE,true);
+	return container;
 })();

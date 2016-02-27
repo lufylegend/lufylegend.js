@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getDataURL</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<img id="copyImg1" style="position:absolute;top:480px;left:0px;">
+		<img id="copyImg2" style="position:absolute;top:480px;left:100px;">
+		<script>
+			LInit(50, "legend", 800, 480, main);
+			function main() {
+				
+				var copySprite1 = new LSprite();
+				addChild(copySprite1);
+				copySprite1.graphics.drawRect(0, "#ff0000", [0, 0, 300, 300], true, "#00ff00");
+				copySprite1.graphics.drawRect(0, "#ff0000", [40, 20, 60, 60], true, "#ff0000");
+				
+				var shape = new LSprite();
+				shape.graphics.drawArc(0, "#ff0000", [40, 70, 40, 0, 2*Math.PI]);
+				copySprite1.mask = shape;
+				
+				var data = copySprite1.getDataURL();
+				document.getElementById("copyImg1").src = data;
+				
+				var copySprite2 = new LSprite();
+				copySprite2.x=100;
+				addChild(copySprite2);
+				copySprite2.graphics.drawRect(0, "#ff0000", [0, 0, 300, 300], true, "#00ff00");
+				copySprite2.graphics.drawRect(0, "#ff0000", [40, 20, 60, 60], true, "#ff0000");
+				
+				data = copySprite2.getDataURL();
+				document.getElementById("copyImg2").src = data;
+			}
+		</script>
+	</body>
+</html>
