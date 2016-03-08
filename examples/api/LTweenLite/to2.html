@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LTweenLite.to</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var circle = new LSprite();
+				circle.x = 50;
+				circle.y = 50;
+				circle.graphics.drawArc(1,"#FF0000",[0,0,20,0,Math.PI*2],true,"#FF0000");
+				addChild(circle);
+				var rect = new LSprite();
+				rect.x = 50;
+				rect.y = 100;
+				rect.graphics.drawRect(1,"#FF00FF",[0,0,20,20],true,"#FF00FF");
+				addChild(rect);
+				LTweenLite.to(circle,2,{x:700,scaleX:3,scaleY:3,ease:LEasing.Strong.easeInOut,tweenTimeline:LTweenLite.TYPE_TIMER});
+				LTweenLite.to(rect,2,{x:600,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME});
+				setTimeout(function(){
+					LGlobal.sleep(2000);
+				},100);
+			}
+			</script>
+	</body>
+</html>

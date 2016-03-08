@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LComboBox</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,600,main);
+var imgData = [
+	{name:"combobox_back",path:"combobox_back.png"}
+	,{name:"combobox_up",path:"combobox_up.png"}
+	,{name:"combobox_over",path:"combobox_over.png"}
+	,{name:"range_select",path:"range_select.png"}
+		];
+var datalist;
+function main(){
+	LLoadManage.load(imgData,null,gameInit);
+}
+function gameInit(result){
+	datalist = result;
+	var com = new LComboBox();
+	com.x = 50;
+	com.y = 50;
+	com.setChild({label:"测试一",value:"data1"});
+	com.setChild({label:"测试二",value:"data2"});
+	com.setChild({label:"测试三",value:"data3"});
+	com.setChild({label:"测试四",value:"data4"});
+	com.setChild({label:"测试五",value:"data5"});
+	com.setChild({label:"测试六",value:"data6"});
+	com.setChild({label:"测试七",value:"data7"});
+	com.setChild({label:"测试八",value:"data8"});
+	com.setChild({label:"测试九",value:"data9"});
+	com.setChild({label:"测试十",value:"data10"});
+	com.setChild({label:"测试十一",value:"data11"});
+	com.setChild({label:"测试十二",value:"data12"});
+	com.setChild({label:"测试十三",value:"data13"});
+	addChild(com);
+	
+	var panel = new LPanel(new LBitmapData(datalist["combobox_back"]),150,24,40,50,8,12);
+	var up = new LBitmap(new LBitmapData(datalist["combobox_up"]));
+	var over = new LBitmap(new LBitmapData(datalist["combobox_over"]));
+	com = new LComboBox(15,"#000000","Arial",panel,up,over);
+	com.listView.cellWidth = 150;
+	com.listView.cellHeight = 31;
+	var scrollBarVertical = new LListScrollBar(new LPanel("#9370DB", 8, 8), new LPanel("#9400D3", 8, 8), LListView.ScrollBarCondition.OnlyIfNeeded);
+	com.listView.setVerticalScrollBar(scrollBarVertical);
+	com.setListChildView(MyComboBoxChild);
+	com.x = 50;
+	com.y = 100;
+	com.setChild({label:"测试一",value:"data1"});
+	com.setChild({label:"测试二",value:"data2"});
+	com.setChild({label:"测试三",value:"data3"});
+	com.setChild({label:"测试四",value:"data4"});
+	com.setChild({label:"测试五",value:"data5"});
+	com.setChild({label:"测试六",value:"data6"});
+	com.setChild({label:"测试七",value:"data7"});
+	com.setChild({label:"测试八",value:"data8"});
+	com.setChild({label:"测试九",value:"data9"});
+	com.setChild({label:"测试十",value:"data10"});
+	com.setChild({label:"测试十一",value:"data11"});
+	com.setChild({label:"测试十二",value:"data12"});
+	com.setChild({label:"测试十三",value:"data13"});
+	addChild(com);
+	com.setValue("data5");
+}
+	function MyComboBoxChild(content, comboBox, selected){
+		var self = this;
+		base(self,LComboBoxChild,[content, comboBox, selected]);
+	}
+	MyComboBoxChild.prototype.setStatus = function(content, comboBox){
+		var self = this;
+		var panel = new LPanel(new LBitmapData(datalist["range_select"]),150,31);
+		panel.cacheAsBitmap(true);
+		self.addChild(panel);
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+		self.updateView();
+	};
+	MyComboBoxChild.prototype.setSelectStatus = function(content, comboBox){
+		var self = this;
+		var panel = new LPanel(new LBitmapData(datalist["range_select"]),150,31);
+		panel.alpha = 0.7;
+		panel.cacheAsBitmap(true);
+		self.addChild(panel);
+		var text = new LTextField();
+		text.size = comboBox.size;
+		text.color = comboBox.color;
+		text.font = comboBox.font;
+		text.text = content.label;
+		text.x = text.y = 5;
+		self.addChild(text);
+		self.updateView();
+	};
+</script>
+	</body>
+</html>

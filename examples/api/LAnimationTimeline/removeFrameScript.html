@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>removeFrameScript</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend"></div>
+			<script type="text/javascript">
+				LInit(200,"legend",800,450,main);
+				var player;
+				function main(){
+					LGlobal.setDebug(true);
+					var loader = new LLoader();
+					loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+					loader.load("player.png", "bitmapData");
+				}
+				function loadBitmapdata(event){
+					var backLayer = new LSprite();
+					addChild(backLayer);
+					var list = LGlobal.divideCoordinate(480,630,3,4);
+					var data = new LBitmapData(event.target,0,0,120,210);
+					player = new LAnimationTimeline(data,list);
+					player.setLabel("right",2,0,1,true);
+					player.addFrameScript("right",scriptTest,["testParams1","testParams2"]);
+					backLayer.addChild(player);
+					player.gotoAndPlay("right");
+				}
+				function scriptTest(param1,param2){
+					trace("scriptTest Run : " + param1 + "," + param2);
+					player.removeFrameScript("right");
+				}
+			</script>
+			
+			
+			
+	</body>
+</html>

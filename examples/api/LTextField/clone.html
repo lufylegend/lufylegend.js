@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>clone</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.text = "font test";
+				addChild(theTextField);
+				var theTextField2 = theTextField.clone();
+				theTextField2.y = 50;
+				addChild(theTextField2);
+			}
+			</script>
+	</body>
+</html>

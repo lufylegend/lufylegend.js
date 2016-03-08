@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>setType</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 100, main);
+			function main () {
+				var inputLayer = new LSprite();
+				inputLayer.graphics.drawRect(1,"#000000",[0, 0, 400, 30]);
+				var theTextField = new LTextField();
+				theTextField.size = 25;
+				theTextField.color = "#FF0000";
+				theTextField.font = "明朝";
+				theTextField.setType(LTextFieldType.INPUT,inputLayer);
+				addChild(theTextField);
+			}
+			</script>
+	</body>
+</html>

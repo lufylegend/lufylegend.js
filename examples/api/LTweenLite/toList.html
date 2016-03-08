@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LTweenLite.to自定义路径</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+    <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;font-size: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800, 480, main);
+			var backgroundLayer, circle, pointList;
+			function main () {
+				pointList = [];
+				backgroundLayer = new LSprite();
+				backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
+				addChild(backgroundLayer);
+				backgroundLayer.addEventListener(LMouseEvent.MOUSE_UP, addTweenPoint);
+				var label = new LTextField();
+				label.x = 120;
+				label.y = 10;
+				label.text = "点击画面开始绘制缓动路径点";
+				backgroundLayer.addChild(label);
+				
+				circle = new LShape();
+				circle.x = 50;
+				circle.y = 150;
+				circle.graphics.drawArc("#FF0000",1,[0,0,20,0,Math.PI*2],true,"#FF0000");
+				backgroundLayer.addChild(circle);
+				
+				var buttonStart = new LButtonSample1("缓动开始");
+				buttonStart.x = 10;
+				buttonStart.y = 10;
+				addChild(buttonStart);
+				buttonStart.addEventListener(LMouseEvent.MOUSE_UP,startTween);
+				var buttonClear = new LButtonSample1("清空缓动点");
+				buttonClear.x = 10;
+				buttonClear.y = 60;
+				addChild(buttonClear);
+				buttonClear.addEventListener(LMouseEvent.MOUSE_UP,clearTweenPoint);
+			}
+			function startTween(event){
+				if(pointList.length == 0){
+					return;
+				}
+				
+				for(var i=0;i<pointList.length;i++){
+					var point = pointList[i];
+				}
+				LTweenLite.to(circle,2,{coordinate:pointList,ease:LEasing.Cubic.easeIn,onComplete:function(){
+					backgroundLayer.graphics.clear();
+					backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
+				}});
+				pointList = [];
+			}
+			function clearTweenPoint(event){
+				pointList.length = 0;
+				backgroundLayer.graphics.clear();
+				backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
+			}
+			function addTweenPoint(event){
+				pointList.push(new LPoint(event.offsetX,event.offsetY));
+				backgroundLayer.graphics.clear();
+				backgroundLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#E0FFFF");
+				for(var i=0;i<pointList.length;i++){
+					var point = pointList[i];
+					backgroundLayer.graphics.drawArc("#000000",1,[point.x,point.y,5,0,Math.PI*2],true,"#000000");
+					if(i == 0){
+						backgroundLayer.graphics.drawLine("#000000",1,[circle.x,circle.y,point.x,point.y]);
+						if(pointList.length < 2){
+							continue;
+						}
+					}else if(i == pointList.length - 1){
+						continue;
+					}
+					var nextPoint = pointList[i + 1];
+					backgroundLayer.graphics.drawLine("#000000",1,[point.x,point.y,nextPoint.x,nextPoint.y]);
+				}
+			}
+			</script>
+	</body>
+</html>

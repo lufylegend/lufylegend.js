@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus SVG 1.1//EN"
+"http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FSYY</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <script src="../load_lufylegend.js" type="text/javascript"></script>
+        <script src="../load_lufylegend.ui.js" type="text/javascript"></script>
+        <script src="../../../lib/lufylegend.mvc-0.3.0.min.js" type="text/javascript"></script>
+        <script src="./js/Api.js" type="text/javascript"></script>
+        <script src="./js/LocalApi.js" type="text/javascript"></script>
+    </head>
+    <body style="margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;font-size: 0;">
+        <div id="mvclegend">loading</div>
+        <script>
+        if(LGlobal.mobile){
+        	var protocol = location.protocol;
+			if (protocol == "http:" || protocol == "https:") {
+			}else{
+				//console.log = trace;
+				console.log=function(){};
+			}
+		}
+        LMvcLoader.prototype.loadJs=function(type,classType,names,callback){
+		var self = this,list=[],i,l;
+			if(typeof names == "string")names = [names];
+			for(i=0,l=names.length;i<l;i++){
+				var name = names[i]+(classType?classType:"");
+				var patts = name.split("/");
+				if(window[patts[patts.length - 1]]){
+					continue;
+				}
+				list.push({path:LMvc.MVC_PATH+(type?(type+"/"):"")+name+".js",type:"js"});
+			}
+			LMvc.loading.visible = true;
+			LLoadManage.load(
+				list,function(progress){
+					LMvc.loading.visible = true;
+					LMvc.loading.setProgress(progress);
+				},
+				function(result){
+					callback.apply(self.controllerClass,[]);
+					if(!LMvc.loadingLock)LMvc.loading.visible = false;
+				}
+			);
+		};
+		LGlobal.aspectRatio = PORTRAIT;
+        init(1000/30,"mvclegend",480,800,main);
+		function main(){
+			LGlobal.setDebug(true);
+			if(LGlobal.mobile){
+				LGlobal.width = 480;
+				LGlobal.height = 480*window.innerHeight/window.innerWidth;
+				LGlobal.canvasObj.width  = LGlobal.width;
+				LGlobal.canvasObj.height  = LGlobal.height;
+			}
+			LGlobal.align = LStageAlign.TOP_LEFT;
+			LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+			LSystem.screen(LStage.FULL_SCREEN);
+			LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+			LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+			LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+			
+			var loadData = [
+					{name:"logo_bg_1",path:LMvc.IMG_PATH+"logo/logo_bg_1.jpg"},
+					{name:"logo_bg_2",path:LMvc.IMG_PATH+"logo/logo_bg_2.png"},
+					{name:"logo_ryofu",path:LMvc.IMG_PATH+"logo/logo_ryofu.png"},
+					{path:"./core/MyController.js",type:"js"},
+					{path:"./core/MyModel.js",type:"js"},
+			];
+		
+			loadingLayer = new LoadingSample3();
+			addChild(loadingLayer);	
+			LLoadManage.load(
+				loadData,
+				function(progress){
+					loadingLayer.setProgress(progress);
+				},
+				function(result){
+					LMvc.datalist = result;
+					removeChild(loadingLayer);
+					loadingLayer = null;
+					
+					LMvc.init();
+					var fps = new FPS();
+					LTweenLiteTimeline.to(fps,5,{alpha:0,loop:true}).to(fps,5,{alpha:1});
+					addChild(fps);
+				}
+			);
+		}
+        </script>
+    </body>
+</html>

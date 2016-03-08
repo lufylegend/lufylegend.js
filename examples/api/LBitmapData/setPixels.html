@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getPixels</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapData = new LBitmapData(event.target);
+				bitmapData2 = new LBitmapData(null, 0, 0, 500, 400);
+				var img = bitmapData.getPixels(new LRectangle(75, 50, 100, 100));
+			    bitmapData2.lock();
+			    bitmapData2.setPixels(new LRectangle(50, 30, 50, 50), img);
+			    bitmapData2.setPixels(new LRectangle(100, 30, 50, 50), img);
+			    bitmapData2.setPixels(new LRectangle(150, 30, 50, 50), img);
+			    bitmapData2.setPixels(new LRectangle(200, 30, 50, 50), img);
+			    bitmapData2.unlock(); 
+				
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				
+				var bitmap2 = new LBitmap(bitmapData2);
+				bitmap2.y = 250;
+				addChild(bitmap2);
+			}
+			</script>
+	</body>
+</html>

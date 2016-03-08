@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LRadio</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+	init(1000/60,"legend",800,200,main);
+	var imgData = [
+		{name:"radio",path:"radio.png"}
+	];
+	var imglist;var backLayer;
+	function main(){
+		LGlobal.setDebug(true);
+		LLoadManage.load(imgData,null,gameInit);
+	}
+	function gameInit(result){
+		imglist = result;
+		var bitmap = new LBitmap(new LBitmapData(imglist["radio"],0,41,41,41));
+		var bitmapSelect = new LBitmap(new LBitmapData(imglist["radio"],0,0,41,41));
+		var radio = new LRadio();
+		radio.x = 50;
+		radio.y = 50;
+		radio.setChildRadio(1,0,0);
+		radio.setChildRadio(2,50,0);
+		radio.setChildRadio(3,100,0);
+		addChild(radio);
+		radio.addEventListener(LMouseEvent.MOUSE_UP,onChange);
+		
+		radio = new LRadio();
+		radio.x = 50;
+		radio.y = 100;
+		radio.setChildRadio(1,0,0,bitmap,bitmapSelect);
+		radio.setChildRadio(2,50,0,bitmap,bitmapSelect);
+		radio.setChildRadio(3,100,0,bitmap,bitmapSelect);
+		radio.setValue(2);
+		addChild(radio);
+		radio.addEventListener(LMouseEvent.MOUSE_UP,onChange);
+	}
+	function onChange(event){
+		var radio = event.currentTarget;
+		trace(radio.name + "=" + radio.value);
+	}
+</script>
+	</body>
+</html>

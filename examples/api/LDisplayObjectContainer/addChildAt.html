@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>addChildAt</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container = new LSprite();
+				var circle1 = new LSprite();
+				var circle2 = new LSprite();
+				container.addChild(circle1);
+				container.addChildAt(circle2, 0);
+				trace(container.getChildAt(0) == circle2); // true
+				trace(container.getChildAt(1) == circle1); // true
+			}
+			</script>
+	</body>
+</html>

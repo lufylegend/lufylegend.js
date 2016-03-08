@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>pause_resume</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var rect = new LSprite();
+				rect.x = 50;
+				rect.y = 100;
+				rect.graphics.drawRect(1,"#FF00FF",[0,0,20,20],true,"#FF00FF");
+				addChild(rect);
+				var tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut,tweenTimeline:LTweenLite.TYPE_FRAME})
+				.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+				
+				var button01 = new LButtonSample1("pause/resume");
+				button01.x = 30;
+				button01.y = 10;
+				addChild(button01);
+				button01.addEventListener(LMouseEvent.MOUSE_UP,function(){
+					if(tween.stop){
+						tween.resume();
+					}else{
+						tween.pause();
+					}
+				});
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>transform.matrix</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../../../src/geom/LMatrix.js"></script>
+		<script type="text/javascript" src="../../../src/geom/LTransform.js"></script>
+		<script type="text/javascript" src="../../../src/display/LDisplayObject.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var square = new LSprite();
+		  		square.graphics.drawRect(1, "#ff0000", [0, 0, 150, 100],true);
+		  		addChild(square);
+		  		square.addEventListener(LMouseEvent.MOUSE_UP, transformer);
+		  		
+		  		var label = new LTextField();
+		  		label.text = "click the object!";
+		  		label.x = 10;
+		  		label.y = 200;
+		  		addChild(label);
+			}
+			function transformer(event) {
+				var square = event.currentTarget;
+				var tempMatrix = new LMatrix();
+				tempMatrix.skew(0.3, 0).translate(30,50);
+				square.transform.matrix = tempMatrix;
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>book</title>
+		<meta content="lufylegend.js,html5,game" name="description" />
+		<meta content="lufylegend.js,html5,game" name="keywords" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script type="text/javascript">
+			LInit(50, "legend", 800, 480, main);
+			var pageIndex = 0;
+			var bookWidth = 380;
+			var bookHeight = 440;
+			var book;
+			var moveType = "";
+			var minPage = 0, maxPage = 5;
+			var testLayer;
+			//数组：当前翻动书页与书本的两个交点会储存在里面
+			var maskPoints;
+			//当前翻动书页对象
+			var currentPage;
+			//当前书页翻动后要显示的下一书页对象
+			var nextPage;
+			//nextPage会先放到desk容器中，翻页完成后移交给book容器
+			var desk;
+			function main() {
+				var back = new LSprite();
+				back.graphics.drawRect(1, "#000000", [0, 0, LGlobal.width, LGlobal.height],true,"#FFFFFF");
+				back.graphics.drawLine(1, "#000000", [LGlobal.width * 0.5, 0, LGlobal.width * 0.5, LGlobal.height]);
+				addChild(back);
+				desk = new LSprite();
+				addChild(desk);
+				book = new LSprite();
+				desk.x = book.x = LGlobal.width * 0.5;
+				desk.y = book.y = 20;
+				addChild(book);
+				
+				var page = getPage(pageIndex);
+				book.addChild(page);
+				
+				book.addEventListener(LMouseEvent.MOUSE_DOWN, onmousedown);
+				book.addEventListener(LMouseEvent.MOUSE_UP, onmouseup);
+				book.addEventListener(LMouseEvent.MOUSE_MOVE, onmousemove);
+				book.addEventListener(LEvent.ENTER_FRAME, onframe);
+			}
+			/*
+			 * 核心算法 2
+			 * 设置书页遮罩，以及书页旋转位置
+			 */
+			function onframe(event){
+				if(maskPoints == null){
+					return;
+				}
+				if(moveType == "minus")return;
+				if(!book.mask){
+					var mask = new LSprite();
+					mask.x = book.x;
+					mask.y = book.y;
+					book.mask = mask;
+				}
+				book.mask.graphics.clear();
+				//设置书页遮罩，为了显示书本范围外的部分，遮罩范围要大于书本范围
+				book.mask.graphics.drawVertices(0, "#ff0000", [
+				[-bookWidth, -bookHeight], 
+				[maskPoints[0].x > 0 ? maskPoints[0].x : 0, 0], 
+				[bookWidth, maskPoints[1].y], 
+				[bookWidth, bookHeight*2], 
+				[-bookWidth, bookHeight*2]
+				]);
+				//设置翻转书页的旋转中心点
+				var currentPageData = currentPage.getChildAt(0);
+				currentPageData.x = maskPoints[0].x - bookWidth;
+				currentPage.x = maskPoints[0].x;
+				//根据鼠标与书本右上角连线的法线与书本交点，计算翻动书页时的旋转角度
+				var angle = Math.atan2(maskPoints[1].y - maskPoints[0].y, maskPoints[1].x - maskPoints[0].x);
+				currentPage.rotate = -(180-angle*360/Math.PI);
+			}
+			function onmousemove(event){
+				if(!LGlobal.IS_MOUSE_DOWN)return;
+				if(moveType == "minus")return;
+				var point = new LPoint(event.selfX,event.selfY);
+				setMaskPoints(point);
+			}
+			function setMaskPoints(point){
+				var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
+				maskPoints = getPoints(middlePoint);
+			}
+			function onmousedown(event){
+				if(event.selfX > 0){
+					var page = getPage(pageIndex + 1);
+					page.x = -bookWidth;
+					book.addChild(page);
+					currentPage = page;
+					if(pageIndex + 2 <= maxPage){
+						nextPage = getPage(pageIndex + 2);
+						desk.addChild(nextPage);
+					}
+					moveType = "plus";
+					var point = new LPoint(bookWidth,1);
+					var middlePoint = new LPoint((bookWidth + point.x)*0.5,point.y*0.5);
+					maskPoints = getPoints(middlePoint);
+					onframe();
+					var func = function(e){
+						setMaskPoints(e.target);
+					};
+					LTweenLite.to(point,0.2,{x:event.selfX,y:event.selfY,onUpdate:func,onComplete:func});
+				}else{
+					moveType = "minus";
+				}
+			}
+			/*
+			 * 核心算法 3
+			 * 鼠标松开后，用LTweenLite模拟鼠标移动，继续完成翻页动作
+			 */
+			function onmouseup(event){
+				if(moveType == "minus")return;
+				var point = new LPoint(event.selfX,event.selfY);
+				var func = function(e){
+					setMaskPoints(e.target);
+				};
+				if(event.selfX > bookWidth * 0.5){
+					LTweenLite.to(point,0.3,{x:bookWidth,y:0,onUpdate:func,onComplete:function(event){
+						currentPage.remove();
+						maskPoints = null;
+						book.mask=null;
+					}})
+				}else{
+					LTweenLite.to(point,0.4,{x:-bookWidth,y:0,onUpdate:func,onComplete:function(event){
+						currentPage.rotate = 0;
+						currentPage.x = -bookWidth;
+						currentPage.getChildAt(0).x = 0;
+						maskPoints = null;
+						book.mask=null;
+						book.removeChildAt(0);
+						if(pageIndex <= maxPage){
+							LGlobal.destroy = false;
+							desk.removeChildAt(0);
+							book.addChild(nextPage);
+							LGlobal.destroy = true;
+						}else{
+							nextPage.remove();
+						}
+						
+					}})
+					pageIndex += 2;
+				}
+			}
+			/*
+			 * 核心算法 1
+			 * 求鼠标与书本右上角连线的法线与书本轮廓的两个交点，即求折叠位置
+			 * @param middlePoint 鼠标位置与书本右上角坐标连线的中心点
+			 */
+			function getPoints(middlePoint){
+				var point1 = new LPoint(bookWidth - ((Math.pow(bookWidth - middlePoint.x,2) + Math.pow(middlePoint.y,2))/(bookWidth - middlePoint.x)), 0);
+				var point2 = new LPoint(bookWidth, ((Math.pow(bookWidth - middlePoint.x,2) + Math.pow(middlePoint.y,2))/middlePoint.y));
+				if(point1.x < 0){
+					point2 = new LPoint(bookWidth, bookWidth * point2.y / (bookWidth - point1.x));
+					point1 = new LPoint(0, 0);
+				}
+				return [point1, point2]
+			}
+			/*
+			 * 将文字对象添加到LSprite中，转换为书页显示
+			 * 可以用任意图片或者LSprite对象代替
+			 */
+			function getPage(index) {
+				var layer = new LSprite();
+				layer.graphics.drawRect(1, "#000000", [0, 0, 380, 440], true, index % 2 == 0 ? "#F0F8FF" : "#F5F5F5");
+				var theTextField = new LTextField();
+				theTextField.width = 380;
+				theTextField.size = 20;
+				theTextField.x = 20;
+				theTextField.y = 50;
+				theTextField.setWordWrap(true, 40);
+				if (index == 0) {
+					theTextField.setWordWrap(true, 50);
+					theTextField.text = "相\n信\n未\n来";
+					theTextField.size = 50;
+					theTextField.x = 150;
+					theTextField.y = 50;
+					var author = new LTextField();
+					author.setWordWrap(true, 25);
+					author.size = 20;
+					author.text = "作\n者\n\n食\n指";
+					author.x = 220;
+					author.y = 200;
+					layer.addChild(author);
+				}else if (index == 1) {
+					theTextField.text = "当蜘蛛网无情地查封了我的炉台，\n" + "当灰烬的余烟叹息着贫困的悲哀，\n" + "我依然固执地铺平失望的灰烬，\n" + "用美丽的雪花写下：相信未来。\n\n"+  "当我的紫葡萄化为深秋的露水，\n" + "当我的鲜花依偎在别人的情怀，\n" + "我依然固执地用凝霜的枯藤，\n" + "在凄凉的大地上写下：相信未来。\n";
+				}else if (index == 2) {
+					theTextField.text = "我要用手指那涌向天边的排浪，\n" + "我要用手掌那托起太阳的大海，\n" + "摇曳着曙光那支温暖漂亮的笔杆，\n" + "用孩子的笔体写下：相信未来。\n\n" + "我之所以坚定地相信未来，\n" + "是我相信未来人们的眼睛——\n" + "她有拨开历史风尘的睫毛，\n" + "她有看透岁月篇章的瞳孔。\n";
+				}else if (index == 3) {
+					theTextField.text = "不管人们对于我们腐烂的皮肉，\n" + "那些迷途的惆怅，失败的苦痛，\n" + "是寄予感动的热泪，深切的同情，\n" + "还是给以轻蔑的微笑，辛辣的嘲讽。\n\n" + "我坚信人们对于我们的脊骨，\n" + "那无数次地探索、迷途、失败和成功，\n" + "一定会给予热情、客观、公正的评定，\n" + "是的，我焦急地等待着他们的评定。\n";
+				}else if (index == 4) {
+					theTextField.text = "朋友，坚定地相信未来吧，\n" + "相信不屈不挠的努力，\n" + "相信战胜死亡的年轻，\n" + "相信未来，热爱生命。";
+				}else if (index == 5) {
+					theTextField.text = "完！\n" + "此demo为半成品，只完成了一半。\n" + "待完善。\n" + "    －－by lufy";
+				}
+				layer.addChild(theTextField);
+				var pageLayer = new LSprite();
+				pageLayer.addChild(getBitmap(layer));
+				pageLayer.pageIndex = index;
+				return pageLayer;
+			}
+			/*
+			 * 将LDisplayObject对象转换为LBitmap，以提高显示效率
+			 * 原理：将多次绘图转换成一次绘图，可根据FPS验证
+			 */
+			function getBitmap(displayObject){
+				var bitmapData = new LBitmapData(null,0,0,displayObject.getWidth(),displayObject.getHeight(),LBitmapData.DATA_CANVAS);
+				bitmapData.draw(displayObject);
+				return new LBitmap(bitmapData);
+			}
+		</script>
+	</body>
+</html>

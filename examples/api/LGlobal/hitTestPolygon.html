@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LGlobal.hitTestPolygon</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body style="margin: 0;padding: 0;">
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800,480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var layer = new LSprite();
+				addChild(layer);
+				var vertices = [[50,100],[150,50],[100,150]];
+				layer.graphics.drawVertices(1,"#000000",vertices);
+				var vertices1 = [[120,60],[250,150],[100,100]];
+				layer.graphics.drawVertices(1,"#000000",vertices1);
+				var vertices2 = [[70,200],[100,160],[200,300]];
+				layer.graphics.drawVertices(1,"#000000",vertices2);
+				trace(LGlobal.hitTestPolygon(vertices,vertices1));//out:true
+				trace(LGlobal.hitTestPolygon(vertices,vertices2));//out:false
+			}
+			</script>
+	</body>
+</html>

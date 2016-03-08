@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>useCursor</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var layer01 = new LSprite();
+				layer01.useCursor = "pointer";
+				addChild(layer01);
+				var bm01 = new LBitmap(new LBitmapData("#FF0000", 0, 0, 100, 100));
+				layer01.addChild(bm01);
+				
+				
+				var layer02 = new LSprite();
+				layer02.useCursor = "wait";
+				layer02.x = 120;
+				addChild(layer02);
+				var bm02 = new LBitmap(new LBitmapData("#0000FF", 0, 0, 100, 100));
+				layer02.addChild(bm02);
+			}
+			</script>
+	</body>
+</html>

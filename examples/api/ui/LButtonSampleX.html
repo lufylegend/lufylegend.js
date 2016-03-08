@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LButtonSample</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend"></div>
+<script>
+init(20,"legend",800,450,main);
+var layer,button;
+
+function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	LGlobal.setDebug(true);
+	layer = new LSprite();
+	layer.y = 50;
+	addChild(layer);
+	addButton();
+}
+function addButton(){
+	var button01 = new LButtonSample1("一般测试按钮");
+	button01.x = 30;
+	button01.y = 10;
+	layer.addChild(button01);
+	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button01 click");});
+	
+	var button02 = new LButtonSample1("设置了大小的按钮",12);
+	button02.backgroundColor = "#008800";
+	button02.width = 300;
+	button02.height = 70;
+	button02.x = 250;
+	button02.y = 10;
+	layer.addChild(button02);
+	button02.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button02 click");});
+	
+	var button03 = new LButtonSample2("测试按钮");
+	button03.backgroundColor = "blue";
+	button03.x = 30;
+	button03.y = 100;
+	button03.setLabel("改变了按钮文字");
+	layer.addChild(button03);
+	button03.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button03 click");});
+	
+	var button04 = new LButtonSample2("状态无效按钮",20);
+	button04.backgroundColor = "purple";
+	button04.x = 250;
+	button04.y = 100;
+	button04.buttonMode = false;
+	layer.addChild(button04);
+	button04.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("button04 click");});
+}
+</script>
+	</body>
+</html>

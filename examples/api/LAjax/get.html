@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LAjax.get</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/50, "legend", 800, 480, main);
+			var label;
+			function main(){
+				label = new LTextField();
+				addChild(label);
+				label.x = label.y = 50;
+				label.text = "LAjax.get ......";
+				LAjax.get("test.txt",{},success);
+			}
+			function success (data) {
+				label.text = data;
+			}
+			</script>
+	</body>
+</html>

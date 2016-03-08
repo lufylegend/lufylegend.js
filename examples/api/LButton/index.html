@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>LButton</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+	<script type="text/javascript">
+		init(1000/60,"legend",800,600,main);
+		var imgData = [
+			{name:"ok_button",path:"ok_button.png"}
+		];
+		function main(){
+			LLoadManage.load(imgData,null,gameInit);
+		}
+		function gameInit(result){
+			var backLayer = new LSprite();
+			addChild(backLayer);
+			var title;
+			var upState = new LPanel("#666666",200,50);
+			title = new LTextField();
+			title.text = "buttonTitle";
+			title.color = "#FF0000";
+			title.size = 20;
+			title.x = (upState.getWidth() - title.getWidth())*0.5;
+			title.y = (upState.getHeight() - title.getHeight())*0.5;
+			upState.addChild(title);
+			var overState = new LPanel("#999999",200,50);
+			title = new LTextField();
+			title.text = "buttonTitle";
+			title.color = "#FF0000";
+			title.size = 20;
+			title.x = (upState.getWidth() - title.getWidth())*0.5;
+			title.y = (upState.getHeight() - title.getHeight())*0.5;
+			overState.addChild(title);
+			var downState = new LPanel("#CCCCCC",200,50);
+			title = new LTextField();
+			title.text = "buttonTitle";
+			title.color = "#FF0000";
+			title.size = 20;
+			title.x = (upState.getWidth() - title.getWidth())*0.5;
+			title.y = (upState.getHeight() - title.getHeight())*0.5;
+			downState.addChild(title);
+			var button01 = new LButton(upState,overState,downState);
+			button01.x = 50;
+			button01.y = 50;
+			backLayer.addChild(button01);
+			
+			var bitmapDataUp = new LBitmapData(result["ok_button"],0,0,98,48);
+			var bitmapUp = new LBitmap(bitmapDataUp);
+			var bitmapDataOver = new LBitmapData(result["ok_button"],0,48,98,48);
+			var bitmapOver = new LBitmap(bitmapDataOver);
+			bitmapUp.scaleX = 0.5;
+			bitmapOver.scaleX = 0.5;
+			var button02 = new LButton(bitmapUp,bitmapOver);
+			button02.x = 50;
+			button02.y = 150;
+			backLayer.addChild(button02);
+		}
+</script>
+	</body>
+</html>

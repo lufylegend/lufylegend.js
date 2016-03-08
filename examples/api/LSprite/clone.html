@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>clone</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			var container;
+			function main () {
+				var circle1 = new LSprite();
+				circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+				var circle2 = circle1.clone();
+				circle2.y = 120;
+				addChild(circle1);
+				addChild(circle2);
+			}
+			</script>
+	</body>
+</html>

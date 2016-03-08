@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LCheckBox</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,200,main);
+	var imgData = [
+		{name:"checkbox",path:"checkbox.png"}
+	];
+	var imglist;var backLayer;
+	function main(){
+		LGlobal.setDebug(true);
+		LLoadManage.load(imgData,null,gameInit);
+	}
+	function gameInit(result){
+		imglist = result;
+		var bitmap = new LBitmap(new LBitmapData(imglist["checkbox"],0,48,48,48));
+		var bitmapSelect = new LBitmap(new LBitmapData(imglist["checkbox"],0,0,48,48));
+		var check1 = new LCheckBox();
+		check1.x = 50;
+		check1.y= 50;
+		addChild(check1);
+		check1.addEventListener(LMouseEvent.MOUSE_UP,onChecked);
+		var check2 = new LCheckBox();
+		check2.x = 100;
+		check2.y= 50;
+		addChild(check2);
+		check2.addEventListener(LMouseEvent.MOUSE_UP,onChecked);
+		
+		
+		var check3 = new LCheckBox(bitmap,bitmapSelect);
+		check3.x = 50;
+		check3.y= 100;
+		addChild(check3);
+		check3.addEventListener(LMouseEvent.MOUSE_UP,onChecked);
+		var check4 = new LCheckBox(bitmap,bitmapSelect);
+		check4.x = 100;
+		check4.y= 100;
+		addChild(check4);
+		check4.addEventListener(LMouseEvent.MOUSE_UP,onChecked);
+		var check5 = new LCheckBox(bitmap,bitmapSelect);
+		check5.x = 150;
+		check5.y= 100;
+		addChild(check5);
+		check5.addEventListener(LMouseEvent.MOUSE_UP,onChecked);
+	}
+	function onChecked(event){
+		var checkbutton = event.currentTarget;
+		trace(checkbutton.name + "=" + checkbutton.checked);
+	}
+</script>
+	</body>
+</html>

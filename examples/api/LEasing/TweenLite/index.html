@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TweenLite</title>
+	<script type="text/javascript" src="../../lufylegend-1.8.12.min.js"></script>
+<script type="text/javascript" src="./js/Main.js"></script> 
+</head>
+<body>
+<div id="mylegend">loading……</div>
+<div id="mylegend1" style="position:absolute;top:480px;width:800px;z-index:1;color: #ffffff;background-color:#000000;">
+<table border="1">
+<tr>
+<td>
+<select id="stage" onchange="onchangestage();">
+	<option value="LBitmap">LBitmap</option>
+	<option value="LSprite">LSprite</option>
+</select>
+</td>
+<td>
+<select id="LEasing" style="width:90px;">
+	<option value="None">None</option>	
+	<option value="Bounce">Bounce</option>	
+	<option value="Quad">Quad</option>
+	<option value="Cubic">Cubic</option>
+	<option value="Quart">Quart</option>
+	<option value="Quint">Quint</option>
+	<option value="Sine">Sine</option>
+	<option value="Strong">Strong</option>
+	<option value="Expo">Expo</option>
+	<option value="Circ">Circ</option>
+	<option value="Elastic">Elastic</option>
+	<option value="Back">Back</option>	
+</select>
+<br />
+<select id="LEasingchild" style="width:90px;">
+	<option selected="selected" value="easeIn">easeIn</option>
+	<option value="easeOut">easeOut</option>
+	<option value="easeInOut">easeInOut</option>
+</select>
+</td>
+<td>
+alpha:<br /><input id="alpha" type="number" max="100" min="0" value="100" />%
+</td>
+<td>
+timer:<br /><input id="timer" type="number" max="10" min="0" value="1" />
+</td>
+<td>
+rotate:<br />0<input id="rotate" type="range" value="0" />360
+</td>
+<td>scaleX:<br />
+<select id="scaleX">
+	<option value="3">3</option>
+	<option value="2.5">2.5</option>
+	<option value="2">2</option>
+	<option value="1.5">1.5</option>
+	<option value="1" selected="selected">1</option>
+	<option value="0.9">0.9</option>
+	<option value="0.8">0.8</option>
+	<option value="0.7">0.7</option>
+	<option value="0.6">0.6</option>
+	<option value="0.5">0.5</option>
+	<option value="0.4">0.4</option>
+	<option value="0.3">0.3</option>
+	<option value="0.2">0.2</option>
+	<option value="0.1">0.1</option>
+</select>
+</td>
+<td>scaleY:<br />
+<select id="scaleY" selected="selected">
+	<option value="3">3</option>
+	<option value="2.5">2.5</option>
+	<option value="2">2</option>
+	<option value="1.5">1.5</option>
+	<option value="1" selected="selected">1</option>
+	<option value="0.9">0.9</option>
+	<option value="0.8">0.8</option>
+	<option value="0.7">0.7</option>
+	<option value="0.6">0.6</option>
+	<option value="0.5">0.5</option>
+	<option value="0.4">0.4</option>
+	<option value="0.3">0.3</option>
+	<option value="0.2">0.2</option>
+	<option value="0.1">0.1</option>
+</select>
+</td>
+<td>
+delay:<br />
+<input id="delay" type="number" max="10" min="0" value="0" />
+</td>
+<td>
+<input type="button" value=" Run " onclick="tweenLiteRun();" />
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

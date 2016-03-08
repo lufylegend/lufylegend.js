@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>hitTestObject</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container = new LSprite();
+				addChild(container);
+				var circle1 = new LSprite();
+				circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+				var circle2 = new LSprite();
+				circle2.x = 120;
+				circle2.graphics.drawRect(1,"#FF0000",[0,0,100,100],true,"#FF0000");
+				var circle3 = new LSprite();
+				circle3.x = 60;
+				circle3.y = 60;
+				circle3.graphics.drawRect(1,"#008800",[0,0,100,100],true,"#008800");
+				container.addChild(circle1);
+				container.addChild(circle2);
+				container.addChild(circle3);
+				trace(circle1.hitTestObject(circle2));//false
+				trace(circle1.hitTestObject(circle3));//true
+				trace(circle2.hitTestObject(circle3));//true
+			}
+			</script>
+	</body>
+</html>

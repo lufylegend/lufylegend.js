@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>mouseChildren</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(20, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container1 = new LSprite();
+				container1.x = container1.y = 20;
+				var container2 = new LSprite();
+				container2.x = 20;
+				container2.y = 100;
+				container2.mouseChildren = false;
+				addChild(container1);
+				addChild(container2);
+				var button01 = new LButtonSample1("mouseChildren=true");
+				container1.addChild(button01);
+				button01.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+					trace("button01 click");
+				});
+				var button02 = new LButtonSample1("mouseChildren=false");
+				container2.addChild(button02);
+				button02.addEventListener(LMouseEvent.MOUSE_DOWN,function(e){
+					trace("button02 click");
+				});
+			}
+			</script>
+	</body>
+</html>

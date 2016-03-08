@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>drawEM</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 480, 800, main);
+			var drawBitmapData;
+			var runShape,runShapeLayer;
+			var backLayer;
+			var speed = 1;
+			var paintbrushs = [], paintbrushSize;
+			function main () {
+				if(LGlobal.canTouch){
+					LGlobal.stageScale = LStageScaleMode.SHOW_ALL;
+					LSystem.screen(LStage.FULL_SCREEN);
+				}
+				var bitmapData, shape;
+				backLayer = new LSprite();
+				addChild(backLayer);
+				bitmapData = new LBitmapData("#000000", 0, 0, LGlobal.width, LGlobal.height);
+				backLayer.addChild(new LBitmap(bitmapData));
+				
+				drawBitmapData = new LBitmapData(null, 0, 0, LGlobal.width, LGlobal.height, LBitmapData.DATA_CANVAS);
+				backLayer.addChild(new LBitmap(drawBitmapData));
+				
+				runShapeLayer = new LSprite();
+				backLayer.addChild(runShapeLayer);
+				paintbrushSize = 5;
+				var colors = ["#FF0000","#008800","#00FF00","#0000FF","#FFFFFF"];
+				for(var i = 0;i < 5;i++){
+					shape = new LShape();
+					shape.graphics.drawRect(0, "#ff0000", [0, 0, paintbrushSize, paintbrushSize],true,colors[i]);
+					bitmapData = new LBitmapData(null, 0, 0, paintbrushSize, paintbrushSize, LBitmapData.DATA_CANVAS);
+					bitmapData.draw(shape);
+					paintbrush = bitmapData.getPixels(new LRectangle(0, 0, paintbrushSize, paintbrushSize));
+					
+					runShape = new LShape();
+					runShape.graphics.drawArc(2, colors[i], [0, 0, 20, 0, 2*Math.PI],true,"#000000");
+					runShape.x = LGlobal.width*Math.random();
+					runShape.y = LGlobal.height*Math.random();
+					runShape.tx = LGlobal.width*Math.random();
+					runShape.ty = LGlobal.height*Math.random();
+					runShape.paintbrush = paintbrush;
+					runShapeLayer.addChild(runShape);
+				}
+				backLayer.addEventListener(LEvent.ENTER_FRAME, onframe);console.log(runShapeLayer);
+				addChild(new FPS());
+			}
+			function onframe (event) {
+				for(var i = 0;i<runShapeLayer.numChildren;i++){
+					runShape = runShapeLayer.getChildAt(i);
+					if(runShape.x > runShape.tx){
+						runShape.x -= speed;
+						if(runShape.x <= runShape.tx){
+							runShape.x = runShape.tx;
+						}
+					}else if(runShape.x < runShape.tx){
+						runShape.x += speed;
+						if(runShape.x >= runShape.tx){
+							runShape.x = runShape.tx;
+						}
+					}
+					if(runShape.y > runShape.ty){
+						runShape.y -= speed;
+						if(runShape.y <= runShape.ty){
+							runShape.y = runShape.ty;
+						}
+					}else if(runShape.y < runShape.ty){
+						runShape.y += speed;
+						if(runShape.y >= runShape.ty){
+							runShape.y = runShape.ty;
+						}
+					}
+					if(runShape.x == runShape.tx && runShape.y == runShape.ty){
+						runShape.tx = LGlobal.width*Math.random();
+						runShape.ty = LGlobal.height*Math.random();
+					}
+					drawBitmapData.putPixels(new LRectangle(runShape.x - paintbrushSize*0.5, runShape.y - paintbrushSize*0.5, paintbrushSize, paintbrushSize), runShape.paintbrush);
+				}
+			}
+			</script>
+	</body>
+</html>

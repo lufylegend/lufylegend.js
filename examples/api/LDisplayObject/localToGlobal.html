@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>localToGlobal</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			var square;
+			function main () {
+				LGlobal.setDebug(true);
+				square = new LSprite();
+				square.graphics.drawRect(1,"#000000",[0, 0, 100, 100]);
+				square.x = 100;
+				square.y = 200;
+				addChild(square);
+				square.addEventListener(LMouseEvent.MOUSE_DOWN, traceCoordinates);
+			}
+			function traceCoordinates(event) {
+				var clickPoint = new LPoint(mouseX, mouseY);
+				trace("display object coordinates:", clickPoint);
+				trace("stage coordinates:", square.localToGlobal(clickPoint));
+			}
+			</script>
+	</body>
+</html>

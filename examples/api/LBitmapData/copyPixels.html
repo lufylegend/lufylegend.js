@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>copyPixels</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapData = new LBitmapData(event.target);
+				bitmapData2 = new LBitmapData(null, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+				bitmapData2.copyPixels(bitmapData, new LRectangle(0, 0, 240, 240), new LPoint(0,0));
+				bitmapData2.copyPixels(bitmapData, new LRectangle(50, 50, 100, 100), new LPoint(0,50));
+				bitmapData2.copyPixels(bitmapData, new LRectangle(100, 50, 100, 100), new LPoint(50,150));
+				
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				
+				var bitmap2 = new LBitmap(bitmapData2);
+				bitmap2.y = 250;
+				addChild(bitmap2);
+			}
+			</script>
+	</body>
+</html>

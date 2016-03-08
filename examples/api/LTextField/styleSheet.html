@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>htmlText</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var ss = new LStyleSheet();
+				ss.setStyle(".test","{color:#FF0000;font-size:40}");
+				ss.setStyle("myText","{color:#008800;font-size:30}");
+				var theTextField = new LTextField();
+				//theTextField.htmlText = "ABC<font face='Book Antiqua' color=\"#FF0000\" size='20'>ABC<font color='#008800' size='24'><i>ABC</i><font size='15'>ABC</font></font>ABC</font>ABC<b>ABC</b><u>ABC</u>";
+				theTextField.htmlText = "ABC<span class='test'>ABC<myText><i>ABC</i>ABC</myText>ABC</span>ABC<b>ABC</b><u>ABC</u>";
+				theTextField.x = 10;
+				theTextField.y = 30;
+				theTextField.textBaseline = "alphabetic";
+				theTextField.font = "Georgia";
+				theTextField.styleSheet = ss;
+				addChild(theTextField);
+			}
+			</script>
+	</body>
+</html>

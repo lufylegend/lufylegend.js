@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>addChildAt</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var container = new LSprite();
+				addChild(container);
+				var circle1 = new LSprite();
+				circle1.graphics.drawRect(1,"#000000",[0,0,50,50]);
+				var circle2 = new LSprite();
+				circle2.graphics.drawRect(1,"#000000",[100,100,50,50]);
+				container.addChild(circle1);
+				container.addChild(circle2);
+				container.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+			}
+			function clicked (event) {
+				event.currentTarget.removeChild(event.target);
+			}
+			</script>
+	</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>setChildIndex</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			var container;
+			function main () {
+				container = new LSprite();
+				addChild(container);
+				var circle1 = new LSprite();
+				circle1.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+				circle1.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+				var circle2 = new LSprite();
+				circle2.graphics.drawRect(1,"#FF0000",[40,80,100,100],true,"#FF0000");
+				circle2.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+				var circle3 = new LSprite();
+				circle3.graphics.drawRect(1,"#008800",[80,0,100,100],true,"#008800");
+				circle3.addEventListener(LMouseEvent.MOUSE_DOWN, clicked);
+				container.addChild(circle1);
+				container.addChild(circle2);
+				container.addChild(circle3);
+			}
+			function clicked (event) {
+				var circle = event.target;
+				var topPosition = container.numChildren - 1;
+				container.setChildIndex(circle, topPosition);
+			}
+			</script>
+	</body>
+</html>

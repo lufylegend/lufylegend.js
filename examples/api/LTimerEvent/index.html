@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LTimerEvent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);	
+				var myTimer = new LTimer(1000, 2);
+				myTimer.addEventListener(LTimerEvent.TIMER, timerHandler);
+				myTimer.start();
+			}
+			function timerHandler(e){
+				trace("timerHandler: " + e);
+			}
+			</script>
+	</body>
+</html>

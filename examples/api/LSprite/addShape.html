@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title>addShape</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+				
+			</div>
+<script>
+LInit(20,"legend",800,450,main);
+function main () {
+	LGlobal.setDebug(true);
+	var loader = new LLoader();
+	loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+	loader.load("face.jpg", "bitmapData");
+}
+function loadBitmapdata (event) {
+	var bitmapData = new LBitmapData(event.target);//width:240,height:240
+	var bitmap01 = new LBitmap(bitmapData);
+	var layer01 = new LSprite();
+	addChild(layer01);
+	layer01.addChild(bitmap01);
+	var rect1 = new LSprite();
+	rect1.x = 180;
+	rect1.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+	addChild(rect1);
+	
+	var bitmap02 = new LBitmap(bitmapData);
+	var layer02 = new LSprite();
+	layer02.x = 300;
+	addChild(layer02);
+	layer02.addChild(bitmap02);
+	layer02.addShape(LShape.ARC,[110,80,60]);
+	layer02.addShape(LShape.RECT,[20,140,200,100]);
+	var rect2 = new LSprite();
+	rect2.x = 480;
+	rect2.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+	addChild(rect2);
+	
+	var rect3 = new LSprite();
+	rect3.x = 480;
+	rect3.y = 120;
+	rect3.graphics.drawRect(2,"#FF0000",[0,0,100,100]);
+	addChild(rect3);
+	
+	trace(layer01.hitTestObject(rect1));//true
+	trace(layer02.hitTestObject(rect2));//false
+	trace(layer02.hitTestObject(rect3));//true
+}
+</script>
+	</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LPanel</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+	<script type="text/javascript">
+		init(1000/60,"legend",800,600,main);
+		var backLayer;
+		var imgData = [
+			{name:"btn_square_red",path:"btn_square_red.png"}
+			,{name:"window_icon",path:"window_icon.png"}
+			,{name:"window_lock_icon",path:"window_lock_icon.png"}
+		];
+		var imglist;
+		
+		function main(){
+			LLoadManage.load(imgData,null,gameInit);
+		}
+		function gameInit(result){
+			imglist = result;
+			backLayer = new LSprite();
+			addChild(backLayer);
+			//使用图片来显示LPanel
+			var data = new LBitmapData(imglist["btn_square_red"]);
+			var panel = new LPanel(data,300,200);
+			panel.x = panel.y = 10;
+			backLayer.addChild(panel);
+			
+			//使用图片来显示LPanel,然后使用resize改变大小
+			data = new LBitmapData(imglist["window_icon"]);
+			panel = new LPanel(data,450,350);
+			panel.x = 10;
+			panel.y = 250;
+			backLayer.addChild(panel);
+			trace(panel.getWidth(),panel.getHeight());
+			panel.resize(250,250);
+			
+			//使用图片来显示LPanel,并且制定图片的缩放范伟
+			data = new LBitmapData(imglist["window_lock_icon"]);
+			panel = new LPanel(data,250,230,40,50,30,40);
+			panel.x = 350;
+			panel.y = 10;
+			backLayer.addChild(panel);
+			
+			//使用自定义颜色的LBitmapData来显示LPanel
+			data = new LBitmapData("#FF0000",0,0,10,10);
+			panel = new LPanel(data,300,130);
+			panel.x = 350;
+			panel.y = 250;
+			backLayer.addChild(panel);
+			
+			//直接使用白色来显示LPanel
+			panel = new LPanel("#FFFFFF",200,110);
+			panel.x = 350;
+			panel.y = 390;
+			backLayer.addChild(panel);
+		}
+</script>
+	</body>
+</html>

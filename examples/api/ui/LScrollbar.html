@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LScrollbar</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+	init(1000/60,"legend",800,400,main);
+	var imgData = [
+		{name:"scrollbar_back",path:"scrollbar_back.png"},
+		{name:"scrollbar_select",path:"scrollbar_select.png"},
+		{name:"scrollbar_arraw",path:"scrollbar_arraw.png"}
+	];
+	var imglist;var backLayer;
+	function main(){
+		LGlobal.setDebug(true);
+		LLoadManage.load(imgData,null,gameInit);
+	}
+	function gameInit(result){
+		imglist = result;
+		var bitmap = new LBitmap(new LBitmapData(imglist["scrollbar_back"]));
+		var bitmapSelect = new LBitmap(new LBitmapData(imglist["scrollbar_select"]));
+		var bitmapArraw = new LBitmap(new LBitmapData(imglist["scrollbar_arraw"]));
+
+		var backLayer = new LSprite();
+		addChild(backLayer);
+		backLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height]);
+		var showObject = new LSprite();
+		var t = new LTextField();
+		t.color = "#000000";
+		t.text = "ABCABC\nABCABC\nABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC";
+		t.width = 300;
+		t.size = 30;
+		t.setWordWrap(true,35);
+		showObject.addChild(t);
+		showObject.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("showObject click");});
+		var sc = new LScrollbar(showObject,200,200,18);
+		sc.x = 50;
+		sc.y = 100;
+		addChild(sc);
+		
+		showObject = new LSprite();
+		t = new LTextField();
+		t.color = "#000000";
+		t.text = "ABCABC\nABCABC\nABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABCABC";
+		t.width = 300;
+		t.size = 30;
+		t.setWordWrap(true,35);
+		showObject.addChild(t);
+		showObject.addEventListener(LMouseEvent.MOUSE_UP,function(){trace("showObject click");});
+		sc = new LScrollbar(showObject,200,200,{back:bitmap,select:bitmapSelect,arraw:bitmapArraw});
+		sc.x = 350;
+		sc.y = 100;
+		addChild(sc);
+	}
+</script>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LMouseEvent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);	
+				var layer01 = new LSprite();
+				layer01.x = 50;
+				layer01.y = 20;
+				addChild(layer01);
+				var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+				var bm = new LBitmap(bmd);
+				layer01.addChild(bm);
+				layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+				layer01.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
+				
+				var layer02 = new LSprite();
+				layer02.graphics.drawRect(1,"#008800",[0,0,100,100],true);
+				layer02.x = 200;
+				layer02.y = 20;
+				addChild(layer02);
+				layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouse);
+				layer02.addEventListener(LMouseEvent.MOUSE_DOWN, onmouseOther);
+			}
+			function onmouse(event){
+				trace("event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
+				trace("event.target : " + event.target + "(" + event.target.objectIndex + ")");
+				trace("event.clickTarget == event.currentTarget : " + (event.clickTarget == event.currentTarget));
+				trace("event.offsetX : " + event.offsetX, "event.offsetY : " + event.offsetY);
+				trace("event.selfX : " + event.selfX, "event.selfY : " + event.selfY, "");
+			}
+			function onmouseOther(event,object){
+				trace("onmouseOther event.currentTarget : " + event.currentTarget + "(" + event.currentTarget.objectIndex + ")");
+				trace("onmouseOther object : " + object + "(" + object.objectIndex + ")");
+				trace("onmouseOther object == event.currentTarget : " + (object == event.currentTarget), "");
+			}
+			</script>
+	</body>
+</html>
