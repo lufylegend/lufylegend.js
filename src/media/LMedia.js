@@ -94,6 +94,13 @@ var LMedia = (function () {
 				s.dispatchEvent(e);
 				return;
 			}
+			s.data.addEventListener("error", function (e) {
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = e.target.src;
+				s.dispatchEvent(event);
+			}, false);
 			s.data.addEventListener("canplaythrough", function () {
 				s.onload();
 			}, false);
@@ -450,20 +457,29 @@ var LMedia = (function () {
  * 多媒体文件加载完成事件。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.7.0
  */
 /** @language english
  * when the media is loaded
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.7.0
  */
 /** @language japanese
  * audioまたはvideoファイルロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.7.0
  */
 /** @language chinese
  * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
  * @event LEvent.SOUND_COMPLETE
  * @since 1.7.0
  * @public
+ */
+/** @language chinese
+ * 多媒体文件加载异常事件。
+ * <p><a href="LEvent.html#property_ERROR">LEvent.ERROR</a></p>
+ * @event LEvent.ERROR
+ * @since 1.10.1
  */

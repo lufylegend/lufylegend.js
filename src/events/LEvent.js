@@ -28,6 +28,7 @@ LEvent.prototype.preventDefault = function () {
 };
 /** @language chinese
  * <p>[静态] 定义 lufylegend.js引擎初始化 事件对象的 type 属性值，当引擎初始化是在window.onload事件之后，需要使用此属性。</p>
+ * <p>LEvent.INIT在1.10.1之后已经废弃。</p>
  * @property INIT
  * @type String
  * @static
@@ -56,6 +57,7 @@ LEvent.prototype.preventDefault = function () {
  */
 /** @language english
  * <p>[static] If Engine initialization is after window.onload, you need to use this property.</p>
+ * <p>The LEvent.INIT has been deprecated after 1.10.1.</p>
  * @property INIT
  * @type String
  * @static
@@ -84,6 +86,7 @@ LEvent.prototype.preventDefault = function () {
  */
 /** @language japanese
  * <p>[静的] もしライブラリの初期化はwindow.onloadが終わった後実施したら、このパラメータが必要になります。</p>
+ * <p>LEvent.INITはバージョン1.10.1以降に削除されました。</p>
  * @property INIT
  * @type String
  * @static
@@ -112,7 +115,7 @@ LEvent.prototype.preventDefault = function () {
  */
 LEvent.INIT = "init";
 /** @language chinese
- * <p>[静态] 定义 mouseDown 事件对象的 type 属性值。</p>
+ * <p>[静态] 定义加载完成事件对象的 type 属性值。</p>
  * <p>此事件可以在下列对象中使用：</p>
  * <table>
  * <tr><th>对象</th><th>说明</th></tr>
@@ -129,7 +132,7 @@ LEvent.INIT = "init";
  * @public
  */
 /** @language english
- * <p>[static] Defines the value of the type property of a mouseDown event object.</p>
+ * <p>[static] Defines the value of the type property of a load complete event object.</p>
  * <p>This event can be used in the classes:</p>
  * <table>
  * <tr><th>Object</th><th>Explanation</th></tr>
@@ -146,7 +149,7 @@ LEvent.INIT = "init";
  * @public
  */
 /** @language japanese
- * <p>[静的] type プロパティ（mouseDown イベントオブジェクト）の値を定義します。</p>
+ * <p>[静的] type プロパティ（ロード完了イベントオブジェクト）の値を定義します。</p>
  * <p>このイベントには、次のオブジェクトに使えます。</p>
  * <table>
  * <tr><th>オブジェクト</th><th>説明</th></tr>
@@ -163,6 +166,38 @@ LEvent.INIT = "init";
  * @public
  */
 LEvent.COMPLETE = "complete";
+/** @language chinese
+ * <p>[静态] 定义 加载异常事件对象的 type 属性值。</p>
+ * <p>此事件可以在下列对象中使用：</p>
+ * <table>
+ * <tr><th>对象</th><th>说明</th></tr>
+ * <tr><td>LLoader</td><td>图片加载异常事件。</td></tr>
+ * <tr><td>LURLLoader</td><td>js文件或者文本文件加载异常事件。</td></tr>
+ * <tr><td>LMedia</td><td>多媒体文件加载异常事件。</td></tr>
+ * </table>
+ * @property ERROR
+ * @type String
+ * @static
+ * @since 1.10.1
+ * @public
+ */
+LEvent.ERROR = "error";
+/** @language chinese
+ * <p>[静态] 定义 加载进度事件对象的 type 属性值。</p>
+ * <p>此事件可以在下列对象中使用：</p>
+ * <table>
+ * <tr><th>对象</th><th>说明</th></tr>
+ * <tr><td>LLoader</td><td>图片加载进度事件。</td></tr>
+ * <tr><td>LURLLoader</td><td>js文件或者文本文件加载进度事件。</td></tr>
+ * <tr><td>LMedia</td><td>多媒体文件加载进度事件。</td></tr>
+ * </table>
+ * @property ERROR
+ * @type String
+ * @static
+ * @since 1.10.1
+ * @public
+ */
+LEvent.PROGRESS = "progress";
 /** @language chinese
  * <p>[播放事件] 播放头进入新帧时调度。如果播放头不移动，或者只有一帧，则会继续以帧速率调度此事件。此事件为广播事件，这意味着具有注册了此事件的侦听器的所有显示对象都会调度此事件。</p>
  * <p>LEvent.ENTER_FRAME 常量定义 enterFrame 事件对象的 type 属性值。</p>

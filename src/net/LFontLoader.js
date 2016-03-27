@@ -1,3 +1,11 @@
+/** @language chinese
+ * LFontLoader 类可用于加载外部Font文件。使用 load() 方法来启动加载。
+ * @class LFontLoader
+ * @extends LEventDispatcher
+ * @constructor
+ * @since 1.10.0
+ * @public
+ */
 var LFontLoader = (function () {
 	function LFontLoader () {
 		var s = this;
@@ -8,6 +16,13 @@ var LFontLoader = (function () {
 	LFontLoader.prototype.load = function (u, name) {
 		var s = this, font, tff, eot, a, b, d, t = "";
 		font = document.createElement("style");
+		font.onerror = function(e){
+			var event = new LEvent(LEvent.ERROR);
+			event.currentTarget = s;
+			event.target = e.target;
+			event.responseURL = u;
+			s.dispatchEvent(event);
+		};
 		a = u.split(',');
 		for (var i = 0; i < a.length; i++) {
 			b = a[i].split('.');
@@ -36,3 +51,15 @@ var LFontLoader = (function () {
 	};
 	return LFontLoader;
 })();
+/** @language chinese
+ * Font文件加载完成事件。
+ * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
+ * @event LEvent.COMPLETE
+ * @since 1.10.0
+ */
+/** @language chinese
+ * Font文件加载异常事件。
+ * <p><a href="LEvent.html#property_ERROR">LEvent.ERROR</a></p>
+ * @event LEvent.ERROR
+ * @since 1.10.1
+ */

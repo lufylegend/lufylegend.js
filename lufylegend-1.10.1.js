@@ -30,6 +30,8 @@ LEvent.prototype.preventDefault = function () {
 };
 LEvent.INIT = "init";
 LEvent.COMPLETE = "complete";
+LEvent.ERROR = "error";
+LEvent.PROGRESS = "progress";
 LEvent.ENTER_FRAME = "enter_frame";
 LEvent.WINDOW_RESIZE = "resize";
 LEvent.WINDOW_ORIENTATIONCHANGE = "orientationchange";
@@ -1535,6 +1537,7 @@ function init (s, c, w, h, f, t) {
 			s(loop);
 			LGlobal.onShow();
 		};
+		LGlobal.speed = 1000 / 60;
 	}else{
 		loop = function(){
 			LGlobal.frameRate = setInterval(function () {
@@ -2602,24 +2605,87 @@ var LLoader = (function () {
 		s.type = "LLoader";
 	}
 	LLoader.TYPE_BITMAPDATE = "bitmapData";
-	LLoader.prototype.load = function (u, t) {
+	LLoader.prototype.load = function (u, t, xhr) {
 		var s = this;
 		if (!t) {
 			t = LLoader.TYPE_BITMAPDATE;
 		}
 		s.loadtype = t;
+		s.useXHR = xhr && !LAjax.local && LAjax.canUseBlob;
 		if (t == LLoader.TYPE_BITMAPDATE) {
-			s.content = new Image();
-			s.content.onload = function () {
-				s.content.onload = null;
-				var event = new LEvent(LEvent.COMPLETE);
-				event.currentTarget = s;
-				event.target = s.content;
-				s.dispatchEvent(event);
-				delete s.content;
-			};
-			s.content.src = u; 
+			if(s.useXHR){
+				LAjax.responseType = LAjax.ARRAY_BUFFER;
+				LAjax.progress = function(e){
+					var event = new LEvent(LEvent.PROGRESS);
+					event.currentTarget = s;
+					event.target = e.currentTarget;
+					event.loaded = e.loaded;
+					event.total = e.total;
+					event.responseURL = e.responseURL;
+					s.dispatchEvent(event);
+				};
+				LAjax.post(u, {}, function(response){
+					var blob;
+					try {
+						blob = new Blob([response], {type : 'image/png'});
+					} catch (e) {
+						if(e.name === 'TypeError' && window.BlobBuilder){
+							var builder = new BlobBuilder();
+							builder.append(response);
+							blob = builder.getBlob();
+						}else{
+							blob = null;
+							s.useXHR = false;
+						}
+					}
+					if(s.useXHR){
+						u = s.createObjectURL(blob);
+					}
+					s.loadStart(u);
+				}, function(request){
+					var event = new LEvent(LEvent.ERROR);
+					event.currentTarget = s;
+					event.target = request;
+					event.responseURL = request.responseURL;
+					s.dispatchEvent(event);
+				});
+			}else{
+				s.loadStart(u);
+			}
 		}
+	};
+	LLoader.prototype.loadStart = function(u){
+		var s = this;
+		s.content = new Image();
+		s.content.onload = function () {
+			s.content.onload = null;
+			var event = new LEvent(LEvent.COMPLETE);
+			event.currentTarget = s;
+			event.target = s.content;
+			if(s.useXHR){
+				s.revokeObjectURL(s.content.src);
+			}
+			s.dispatchEvent(event);
+			delete s.content;
+		};
+		if(!s.useXHR){
+			s.content.onerror = function(e){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = e.target.src;
+				s.dispatchEvent(event);
+			};
+		}
+		s.content.src = u;
+	};
+	LLoader.prototype.createObjectURL = function(obj){
+		var URL = window.URL || window.webkitURL;
+		return URL.createObjectURL(obj);
+	};
+	LLoader.prototype.revokeObjectURL = function(src){
+		var URL = window.URL || window.webkitURL;
+		URL.revokeObjectURL(src);
 	};
 	return LLoader;
 })();
@@ -2646,6 +2712,15 @@ var LURLLoader = (function () {
 		}
 		s.loadtype = t;
 		if (t == LURLLoader.TYPE_TEXT) {
+			LAjax.progress = function(e){
+				var event = new LEvent(LEvent.PROGRESS);
+				event.currentTarget = s;
+				event.target = e.currentTarget;
+				event.loaded = e.loaded;
+				event.total = e.total;
+				event.responseURL = e.responseURL;
+				s.dispatchEvent(event);
+			};
 			LAjax.get(u, {}, function (data) {
 				event = new LEvent(LEvent.COMPLETE);
 				s.data = data;
@@ -2654,9 +2729,22 @@ var LURLLoader = (function () {
 				s.dispatchEvent(event);
 				delete s.content;
 				delete s.data;
+			}, function(request){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = request;
+				event.responseURL = request.responseURL;
+				s.dispatchEvent(event);
 			});
 		} else if (t == LURLLoader.TYPE_JS) {
 			var script = document.createElement("script");
+			script.onerror = function(e){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = u;
+				s.dispatchEvent(event);
+			};
 			script.onload = function () {
 				event = new LEvent(LEvent.COMPLETE);
 				event.currentTarget = s;
@@ -2681,6 +2769,13 @@ var LFontLoader = (function () {
 	LFontLoader.prototype.load = function (u, name) {
 		var s = this, font, tff, eot, a, b, d, t = "";
 		font = document.createElement("style");
+		font.onerror = function(e){
+			var event = new LEvent(LEvent.ERROR);
+			event.currentTarget = s;
+			event.target = e.target;
+			event.responseURL = u;
+			s.dispatchEvent(event);
+		};
 		a = u.split(',');
 		for (var i = 0; i < a.length; i++) {
 			b = a[i].split('.');
@@ -2818,7 +2913,22 @@ var LWebAudio = (function () {
 				});
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
-					LAjax.get(a[k], {}, s.onload.bind(s));
+					LAjax.progress = function(e){
+						var event = new LEvent(LEvent.PROGRESS);
+						event.currentTarget = s;
+						event.target = e.currentTarget;
+						event.loaded = e.loaded;
+						event.total = e.total;
+						event.responseURL = e.responseURL;
+						s.dispatchEvent(event);
+					};
+					LAjax.get(a[k], {}, s.onload.bind(s), function(request){
+						var event = new LEvent(LEvent.ERROR);
+						event.currentTarget = s;
+						event.target = request;
+						event.responseURL = request.responseURL;
+						s.dispatchEvent(event);
+					});
 					return;
 				} else {
 					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
@@ -2968,6 +3078,13 @@ var LMedia = (function () {
 				s.dispatchEvent(e);
 				return;
 			}
+			s.data.addEventListener("error", function (e) {
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = e.target.src;
+				s.dispatchEvent(event);
+			}, false);
 			s.data.addEventListener("canplaythrough", function () {
 				s.onload();
 			}, false);
@@ -6158,14 +6275,19 @@ var LAnimationTimeline = (function() {
 })(); 
 var LLoadManage = (function () {
 	function LLoadManage(){
-		this.llname="ll.file.";
-		this.llload="ll.load.";
+		var s = this;
+		LExtends(s, LEventDispatcher, []);
+		s.llname="ll.file.";
+		s.llload="ll.load.";
 	}
-	LLoadManage.prototype = {
+	p = {
 		load : function (l, u, c) {
 			var s = this;
 			if (!l || l.length == 0) {
-				c([]);
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = s;
+				event.target = {};
+				s.dispatchEvent(event);
 				return;
 			}
 			s.list = l, s.onupdate = u, s.oncomplete = c;
@@ -6179,7 +6301,6 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex = 0;
 			s.loadStart();
-			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
 			var s = this, d, ph, phs, ext;
@@ -6187,6 +6308,7 @@ var LLoadManage = (function () {
 				return;
 			}
 			d = s.list[s.loadIndex];
+			d.progress = 0;
 			if (!d.name) {
 				d.name = s.llname + s.loadIndex;
 			}
@@ -6203,33 +6325,76 @@ var LLoadManage = (function () {
 				}
 				if (d["type"] == LURLLoader.TYPE_TEXT || d["type"] == LURLLoader.TYPE_JS) {
 					s.loader = new LURLLoader();
+					s.loader.parent = s;
 					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
+					s.loader.addEventListener(LEvent.ERROR, s._loadError);
+					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
 					s.loader.load(s.url(d.path), d["type"]);
 				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
+					s.loader.parent = s;
 					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
+					s.loader.addEventListener(LEvent.ERROR, s._loadError);
+					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
 					s.loader.load(d.path);
 				} else if (d["type"] == LFontLoader.TYPE_FONT) {
 					s.loader = new LFontLoader();
+					s.loader.parent = s;
 					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
+					s.loader.addEventListener(LEvent.ERROR, s._loadError);
+					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
 					s.loader.load(d.path, d.name);
 				} else {
 					s.loader = new LLoader();
+					s.loader.parent = s;
 					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.COMPLETE, s.loadComplete.bind(s));
-					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE);
+					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
+					s.loader.addEventListener(LEvent.ERROR, s._loadError);
+					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE, d.useXHR);
 				}
+				s.loader._loadIndex = s.loadIndex;
 			}
 			s.loadIndex++;
 			s.loadStart();
 		},
-		loadComplete : function (e) {
-			var s = this;
-			if (e  && e.currentTarget && e.currentTarget.name) {
-				e.currentTarget.removeEventListener(LEvent.COMPLETE, s.loadComplete);
+		_loadProgress : function (e) {
+			var loader = e.currentTarget;
+			var s = loader.parent;
+			d = s.list[loader._loadIndex];
+			d.progress = e.loaded / e.total;
+			var progress = 0;
+			for(var i = 0, l=s.list.length;i<l;i++){
+				progress += s.list[i].progress;
+			}
+			var event = new LEvent(LEvent.PROGRESS);
+			event.currentTarget = s;
+			event.target = e.currentTarget;
+			event.loaded = progress;
+			event.total = s.list.length;
+			event.responseURL = e.responseURL;
+			s.dispatchEvent(event);
+		},
+		_loadError : function (e) {
+			var loader = e.currentTarget;
+			var s = loader.parent;
+			delete loader.parent;
+			loader.removeEventListener(LEvent.ERROR, s._loadError);
+			var event = new LEvent(LEvent.ERROR);
+			event.currentTarget = s;
+			event.target = e.target;
+			event.responseURL = e.responseURL;
+			s.dispatchEvent(event);
+		},
+		_loadComplete : function (e) {
+			var s = e.currentTarget.parent;
+			if(!s){
+				return;
+			}
+			if (e  && e.currentTarget.name) {
+				e.currentTarget.removeEventListener(LEvent.COMPLETE, s._loadComplete);
 				if (e.currentTarget.name.indexOf(s.llname) >= 0) {
 					e.target = 1;
 				}
@@ -6240,17 +6405,15 @@ var LLoadManage = (function () {
 				s.lresult[s.llload + e.currentTarget.name] = 1;
 			}
 			s.index++;
-			if (s.onupdate) {
-				s.onupdate(Math.floor(s.index * 100 / s.list.length));
-			}
+			e.loaded = e.total = 1;
+			s._loadProgress(e);
+			delete e.currentTarget.parent;
 			if (s.index >= s.list.length) {
-				if (s.reloadtime) {
-					clearTimeout(s.reloadtime);
-				}
-				s.loader = null;
-				var r = s.result;
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = s;
+				event.target = s.result;
+				s.dispatchEvent(event);
 				LGlobal.forceRefresh = true;
-				s.oncomplete(r);
 			}
 		},
 		url : function (u) {
@@ -6260,9 +6423,25 @@ var LLoadManage = (function () {
 			return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + (new Date()).getTime();
 		}
 	};
-	LLoadManage.load = function(l, u, c){
+	for (var k in p) {
+		LLoadManage.prototype[k] = p[k];
+	}
+	LLoadManage.load = function(l, u, c, e){
 		var loadObj = new LLoadManage();
-		loadObj.load(l, u, c);
+		if(u){
+			loadObj.addEventListener(LEvent.PROGRESS, function(event){
+				u((event.loaded * 100 / event.total).toFixed(2));
+			});
+		}
+		if(c){
+			loadObj.addEventListener(LEvent.COMPLETE, function(event){
+				c(event.target);
+			});
+		}
+		if(e){
+			loadObj.addEventListener(LEvent.ERROR, e);
+		}
+		loadObj.load(l);
 	};
 	return LLoadManage;
 })();
@@ -6802,6 +6981,10 @@ var LTweenLite = (function () {
 var LAjax = (function () {
 	function LAjax () {
 		this.responseType = null;
+		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+		this.canUseBlob = window.Blob || window.BlobBuilder;
+		var protocol = location.protocol;
+		this.local = !(protocol == "http:" || protocol == "https:");
 	}
 	LAjax.prototype = {
 		TEXT : "text",
@@ -6831,6 +7014,26 @@ var LAjax = (function () {
 				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
 				data = null;
 			}
+			ajax.onerror = function(e){
+				if(err){
+					err(e);
+					err = null;
+				}
+			};
+			var progress = s.progress;
+			s.progress = null;
+			ajax.addEventListener("progress", function(e){
+				if(e.currentTarget.status == 404){
+					if (err) {
+						err(e.currentTarget);
+						err = null;
+					}
+				}else if(e.currentTarget.status == 200){
+					if(progress){
+						progress(e);
+					}
+				}
+			}, false);
 			ajax.open(t, url, true);
 			if (s.responseType) {
 				if(s.responseType == s.JSON){
@@ -6846,24 +7049,26 @@ var LAjax = (function () {
 				s.responseType = s.TEXT;
 			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			ajax.onreadystatechange = function () {
-				if (ajax.readyState == 4) {
-					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
+			ajax.onreadystatechange = function (e) {
+				var request = e.currentTarget;
+				if (request.readyState == 4) {
+					if (request.status >= 200 && request.status < 300 || request.status === 304) {
 						if (oncomplete) {
-							if(ajax._responseType == s.JSON){
-								ajax._responseType = s.TEXT;
-								oncomplete(JSON.parse(ajax.responseText));
-							}else if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB || ajax.responseType == s.JSON) {
-								oncomplete(ajax.response);
-							} else if (ajax.responseText.length > 0) {
-								oncomplete(ajax.responseText);
+							if(request._responseType == s.JSON){
+								request._responseType = s.TEXT;
+								oncomplete(JSON.parse(request.responseText));
+							}else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
+								oncomplete(request.response);
+							} else if (request.responseText.length > 0) {
+								oncomplete(request.responseText);
 							} else {
 								oncomplete(null);
 							}
 						}
 					} else {
 						if (err) {
-							err(ajax);
+							err(request);
+							err = null;
 						}
 					}
 		 		}
@@ -7138,6 +7343,7 @@ var LoadingSample1 = (function() {
 	}
 	LoadingSample1.prototype.setProgress = function(value) {
 		var s = this, c = LGlobal.canvas;
+		value = Math.floor(value);
 		var num_0 = "", num_1, num_2, i;
 		var s_x = s.step;
 		if (value >= 100) {

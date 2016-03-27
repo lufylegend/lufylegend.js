@@ -49,6 +49,10 @@ var LAjax = (function () {
 		 * @public
 		 */
 		this.responseType = null;
+		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+		this.canUseBlob = window.Blob || window.BlobBuilder;
+		var protocol = location.protocol;
+		this.local = !(protocol == "http:" || protocol == "https:");
 	}
 	LAjax.prototype = {
 		/** @language chinese
@@ -318,6 +322,26 @@ var LAjax = (function () {
 				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
 				data = null;
 			}
+			ajax.onerror = function(e){
+				if(err){
+					err(e);
+					err = null;
+				}
+			};
+			var progress = s.progress;
+			s.progress = null;
+			ajax.addEventListener("progress", function(e){
+				if(e.currentTarget.status == 404){
+					if (err) {
+						err(e.currentTarget);
+						err = null;
+					}
+				}else if(e.currentTarget.status == 200){
+					if(progress){
+						progress(e);
+					}
+				}
+			}, false);
 			ajax.open(t, url, true);
 			if (s.responseType) {
 				if(s.responseType == s.JSON){
@@ -333,24 +357,26 @@ var LAjax = (function () {
 				s.responseType = s.TEXT;
 			}
 			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			ajax.onreadystatechange = function () {
-				if (ajax.readyState == 4) {
-					if (ajax.status >= 200 && ajax.status < 300 || ajax.status === 304) {
+			ajax.onreadystatechange = function (e) {
+				var request = e.currentTarget;
+				if (request.readyState == 4) {
+					if (request.status >= 200 && request.status < 300 || request.status === 304) {
 						if (oncomplete) {
-							if(ajax._responseType == s.JSON){
-								ajax._responseType = s.TEXT;
-								oncomplete(JSON.parse(ajax.responseText));
-							}else if (ajax.responseType == s.ARRAY_BUFFER || ajax.responseType == s.BLOB || ajax.responseType == s.JSON) {
-								oncomplete(ajax.response);
-							} else if (ajax.responseText.length > 0) {
-								oncomplete(ajax.responseText);
+							if(request._responseType == s.JSON){
+								request._responseType = s.TEXT;
+								oncomplete(JSON.parse(request.responseText));
+							}else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
+								oncomplete(request.response);
+							} else if (request.responseText.length > 0) {
+								oncomplete(request.responseText);
 							} else {
 								oncomplete(null);
 							}
 						}
 					} else {
 						if (err) {
-							err(ajax);
+							err(request);
+							err = null;
 						}
 					}
 		 		}

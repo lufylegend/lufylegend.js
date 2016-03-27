@@ -464,6 +464,7 @@ function init (s, c, w, h, f, t) {
 			s(loop);
 			LGlobal.onShow();
 		};
+		LGlobal.speed = 1000 / 60;
 	}else{
 		loop = function(){
 			LGlobal.frameRate = setInterval(function () {

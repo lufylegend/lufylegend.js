@@ -104,24 +104,87 @@ var LLoader = (function () {
 	 * @public
 	 * @since 1.0.0
 	 */
-	LLoader.prototype.load = function (u, t) {
+	LLoader.prototype.load = function (u, t, xhr) {
 		var s = this;
 		if (!t) {
 			t = LLoader.TYPE_BITMAPDATE;
 		}
 		s.loadtype = t;
+		s.useXHR = xhr && !LAjax.local && LAjax.canUseBlob;
 		if (t == LLoader.TYPE_BITMAPDATE) {
-			s.content = new Image();
-			s.content.onload = function () {
-				s.content.onload = null;
-				var event = new LEvent(LEvent.COMPLETE);
-				event.currentTarget = s;
-				event.target = s.content;
-				s.dispatchEvent(event);
-				delete s.content;
-			};
-			s.content.src = u; 
+			if(s.useXHR){
+				LAjax.responseType = LAjax.ARRAY_BUFFER;
+				LAjax.progress = function(e){
+					var event = new LEvent(LEvent.PROGRESS);
+					event.currentTarget = s;
+					event.target = e.currentTarget;
+					event.loaded = e.loaded;
+					event.total = e.total;
+					event.responseURL = e.responseURL;
+					s.dispatchEvent(event);
+				};
+				LAjax.post(u, {}, function(response){
+					var blob;
+					try {
+						blob = new Blob([response], {type : 'image/png'});
+					} catch (e) {
+						if(e.name === 'TypeError' && window.BlobBuilder){
+							var builder = new BlobBuilder();
+							builder.append(response);
+							blob = builder.getBlob();
+						}else{
+							blob = null;
+							s.useXHR = false;
+						}
+					}
+					if(s.useXHR){
+						u = s.createObjectURL(blob);
+					}
+					s.loadStart(u);
+				}, function(request){
+					var event = new LEvent(LEvent.ERROR);
+					event.currentTarget = s;
+					event.target = request;
+					event.responseURL = request.responseURL;
+					s.dispatchEvent(event);
+				});
+			}else{
+				s.loadStart(u);
+			}
 		}
+	};
+	LLoader.prototype.loadStart = function(u){
+		var s = this;
+		s.content = new Image();
+		s.content.onload = function () {
+			s.content.onload = null;
+			var event = new LEvent(LEvent.COMPLETE);
+			event.currentTarget = s;
+			event.target = s.content;
+			if(s.useXHR){
+				s.revokeObjectURL(s.content.src);
+			}
+			s.dispatchEvent(event);
+			delete s.content;
+		};
+		if(!s.useXHR){
+			s.content.onerror = function(e){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = e.target.src;
+				s.dispatchEvent(event);
+			};
+		}
+		s.content.src = u;
+	};
+	LLoader.prototype.createObjectURL = function(obj){
+		var URL = window.URL || window.webkitURL;
+		return URL.createObjectURL(obj);
+	};
+	LLoader.prototype.revokeObjectURL = function(src){
+		var URL = window.URL || window.webkitURL;
+		URL.revokeObjectURL(src);
 	};
 	return LLoader;
 })();
@@ -129,14 +192,29 @@ var LLoader = (function () {
  * 图片加载完成事件。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
  */
 /** @language english
  * when the image is loaded.
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
  */
 /** @language japanese
  * 画像ロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
+ */
+/** @language chinese
+ * 图片加载进度事件。
+ * <p><a href="LEvent.html#property_PROGRESS">LEvent.PROGRESS</a></p>
+ * @event LEvent.PROGRESS
+ * @since 1.10.1
+ */
+/** @language chinese
+ * 图片加载异常事件。
+ * <p><a href="LEvent.html#property_ERROR">LEvent.ERROR</a></p>
+ * @event LEvent.ERROR
+ * @since 1.10.1
  */
