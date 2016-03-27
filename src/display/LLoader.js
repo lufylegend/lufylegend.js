@@ -34,6 +34,7 @@ var LLoader = (function () {
 	 * @method load
 	 * @param {String} url 所请求的 URL。
 	 * @param {String} type 读取文件种类，目前只支持"bitmapData"。
+	 * @param {Boolean} xhr 是否利用xhr来读取图片。默认为false。
 	 * @example
 	 * 	LInit(1000/50,"legend",800,450,main);
 	 * 	var loader;
