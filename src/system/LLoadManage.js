@@ -40,8 +40,6 @@ var LLoadManage = (function () {
 		 * <tr><td>文本文件</td><td>{name:"testfile",path:"./files/testfile.txt",type:"text"}。1.9.1以上版本，扩展名为"txt"的时候,type可以省略。</td></tr>
 		 * <tr><td>音频文件（需要服务器支持）</td><td>{name:"testSound",path:"./sounds/testsound.wav",type:"sound"}。1.9.1以上版本，音频文件扩展名为"mp3", "ogg", "wav", "m4a"的时候，type可以省略。</td></tr>
 		 * </table>
-		 * @param {function} onUpdate 加载过程中调用的函数，一般用来显示游戏进度。
-		 * @param {function} onComplete list中全部文件加载完成时调用此函数
 		 * @example
 		 * 	var loadData = [
 		 * 		{path:"./js/jsfile01.js",type:"js"},
