@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LURLLoader</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script>
+			LInit(1000 / 50, "legend", 800, 480, main);
+			var loadData = [
+			{name:"face",path:"../LBitmapData/face.jpg"},
+			{name:"myFont", path:"NotoSans-BoldItalic.eot,NotoSans-BoldItalic.ttf", type:"font"}];
+			var loadingLayer;
+			var datalist=[]; 
+			function main() {
+				LGlobal.setDebug(true);
+				loadingLayer = new LoadingSample4();
+				addChild(loadingLayer);
+				var loadManage = new LLoadManage();
+				loadManage.addEventListener(LEvent.PROGRESS, progressFunc);
+				loadManage.addEventListener(LEvent.ERROR, errorFunc);
+				loadManage.addEventListener(LEvent.COMPLETE, completeFunc);
+				loadManage.load(loadData);
+			}
+			function completeFunc(event) {
+				datalist = event.target; 
+				removeChild(loadingLayer);
+				loadingLayer = null;
+				var bitmapData = new LBitmapData(datalist["face"]);
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				var t = new LTextField();
+				t.text = "AAAAAAA";
+				t.font = "myFont";
+				t.size = 30;
+				t.y = 240;
+				addChild(t);
+			}
+			function progressFunc(event) {
+				var progress = (event.loaded * 100 / event.total).toFixed(2);
+				loadingLayer.setProgress(progress); 
+			}
+			function errorFunc(event) {
+				trace("error url:" + event.responseURL);
+			}
+		</script>
+	</body>
+</html>

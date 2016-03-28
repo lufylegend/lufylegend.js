@@ -114,6 +114,15 @@ var LURLLoader = (function () {
 		}
 		s.loadtype = t;
 		if (t == LURLLoader.TYPE_TEXT) {
+			LAjax.progress = function(e){
+				var event = new LEvent(LEvent.PROGRESS);
+				event.currentTarget = s;
+				event.target = e.currentTarget;
+				event.loaded = e.loaded;
+				event.total = e.total;
+				event.responseURL = e.responseURL;
+				s.dispatchEvent(event);
+			};
 			LAjax.get(u, {}, function (data) {
 				event = new LEvent(LEvent.COMPLETE);
 				s.data = data;
@@ -122,9 +131,22 @@ var LURLLoader = (function () {
 				s.dispatchEvent(event);
 				delete s.content;
 				delete s.data;
+			}, function(request){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = request;
+				event.responseURL = request.responseURL;
+				s.dispatchEvent(event);
 			});
 		} else if (t == LURLLoader.TYPE_JS) {
 			var script = document.createElement("script");
+			script.onerror = function(e){
+				var event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = u;
+				s.dispatchEvent(event);
+			};
 			script.onload = function () {
 				event = new LEvent(LEvent.COMPLETE);
 				event.currentTarget = s;
@@ -143,14 +165,29 @@ var LURLLoader = (function () {
  * js文件或者文本文件加载完成事件。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
  */
 /** @language english
  * when the text file or js file is loaded.
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
  */
 /** @language japanese
  * jsファイルまたはテキストファイルロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.0.0
+ */
+/** @language chinese
+ * js文件或者文本文件加载进度事件。
+ * <p><a href="LEvent.html#property_PROGRESS">LEvent.PROGRESS</a></p>
+ * @event LEvent.PROGRESS
+ * @since 1.10.1
+ */
+/** @language chinese
+ * js文件或者文本文件加载异常事件。
+ * <p><a href="LEvent.html#property_ERROR">LEvent.ERROR</a></p>
+ * @event LEvent.ERROR
+ * @since 1.10.1
  */

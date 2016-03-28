@@ -304,6 +304,7 @@ var LDisplayObject = (function () {
 		 * @default null
 		 * @since 1.6.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/LDisplayObject/filters.html" target="_blank">测试链接</a></p>
 		 */
 		s.filters = null;
 		/** @language chinese
@@ -408,7 +409,7 @@ var LDisplayObject = (function () {
 				s._ll_setFilters(c);
 			}
 			s._rotateReady();
-			if (s.mask != null && s.mask.ll_show) {
+			if (s.mask != null && s.mask.ll_show && !s._ll_cacheAsBitmap) {
 				s.mask.ll_show(c);
 				c.clip();
 			}
@@ -462,8 +463,8 @@ var LDisplayObject = (function () {
 		},
 		startX : function(){return 0;},
 		startY : function(){return 0;},
-		getWidth : function(){return 1;},
-		getHeight : function(){return 1;},
+		getWidth : function(maskSize){return 1;},
+		getHeight : function(maskSize){return 1;},
 		_transformRotate : function (c) {
 			var s = this;
 			c = c || LGlobal.canvas;
@@ -642,8 +643,8 @@ var LDisplayObject = (function () {
 				x = sp.x - dp.x;
 				y = sp.y - dp.y;
 			}
-			w = s.getWidth();
-			h = s.getHeight();
+			w = s.getWidth(true);
+			h = s.getHeight(true);
 			return new LRectangle(x, y, w, h);
 		},
 		/** @language chinese
@@ -676,8 +677,8 @@ var LDisplayObject = (function () {
 				s._ll_cacheAsBitmap = null;
 				return;
 			}
-			var sx = s.x - s.startX(), sy = s.y - s.startY();
-			var data = s.getDataCanvas(sx, sy, s.getWidth(), s.getHeight());
+			var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
+			var data = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
 			var b = new LBitmapData(data, 0, 0, null, null, LBitmapData.DATA_CANVAS);
 			var cache = new LBitmap(b);
 			cache.x = -sx;
@@ -695,9 +696,20 @@ var LDisplayObject = (function () {
 			s.height = h || s.getHeight();
 			s._canvas.width = s.width;
 			s._canvas.height = s.height;
+			var mx, my;
+			if(s.mask){
+				mx = s.mask.x;
+				my = s.mask.y;
+				s.mask.x += (s.x - _x);
+				s.mask.y += (s.y - _y);
+			}
 			s.ll_show(s._context);
 			s.x = _x;
 			s.y = _y;
+			if(s.mask){
+				s.mask.x = mx;
+				s.mask.y = my;
+			}
 			return s._canvas;
 		},
 		/** @language chinese
@@ -724,8 +736,43 @@ var LDisplayObject = (function () {
 		 * @public
 		 */
 		getDataURL : function () {
-			var s = this, r = s.getDataCanvas();
+			var s = this;
+			var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
+			var r = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
 			return r.toDataURL.apply(r, arguments);
+		},
+		/** @language chinese
+		 * 通过构造函数向上查找对象。
+		 * @method getParentByConstructor
+		 * @param {constructor} constructor 某个构造函数
+		 * @return {object} 查找到的对象。
+		 * @since 1.10.1
+		 * @example
+		 *	function MyClass1(){
+		 *	    base(self,LSprite,[]);
+		 *	}
+		 *	function MyClass2(){
+		 *	    base(self,LSprite,[]);
+		 *	}
+		 *	var obj1 = new MyClass1();
+		 *	var obj2 = new MyClass2();
+		 *	var obj3 = new LSprite();
+		 *	addChild(obj1);
+		 *	obj1.addChild(obj2);
+		 *	obj2.addChild(obj3);
+		 *	trace(obj1.objectIndex == obj3.getParentByConstructor(MyClass1).objectIndex);//out: true
+		 *	trace(obj2.objectIndex == obj3.getParentByConstructor(MyClass2).objectIndex);//out: true
+		 * @public
+		 */
+		getParentByConstructor : function (value) {
+			var parent = this.parent;
+			while(typeof parent == "object"){
+				if(parent instanceof value){
+					return parent;
+				}
+				parent = parent.parent;
+			}
+			return null;
 		},
 		ismouseonShapes : function (shapes, mx, my) {
 			var s = this, parent = s, m, child, j, v, arg;

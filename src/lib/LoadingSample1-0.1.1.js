@@ -99,6 +99,7 @@ var LoadingSample1 = (function() {
 	 */
 	LoadingSample1.prototype.setProgress = function(value) {
 		var s = this, c = LGlobal.canvas;
+		value = Math.floor(value);
 		var num_0 = "", num_1, num_2, i;
 		var s_x = s.step;
 		if (value >= 100) {

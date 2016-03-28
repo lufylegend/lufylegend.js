@@ -20,8 +20,9 @@ var LListView = (function () {
 		 * @since 1.10.0
 		 * @public
 		 */
-		self.bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
-		self.addChild(new LBitmap(self.bitmapData));
+		var bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
+		self.bitmap = new LBitmap(bitmapData);
+		self.addChild(self.bitmap);
 		/** @language chinese
 		 * LListView列表的可视范围，即大小。
 		 * @property clipping
@@ -57,6 +58,7 @@ var LListView = (function () {
 		 * @default LListView.Direction.Horizontal
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_arrangement.html" target="_blank">测试链接</a></p>
 		 */
 		self.arrangement = LListView.Direction.Horizontal;
 		/** @language chinese
@@ -66,6 +68,7 @@ var LListView = (function () {
 		 * @default LListView.Direction.Vertical
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_movement.html" target="_blank">测试链接</a></p>
 		 */
 		self.movement = LListView.Direction.Vertical;
 		/** @language chinese
@@ -75,6 +78,7 @@ var LListView = (function () {
 		 * @default LListView.DragEffects.MomentumAndSpring
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_DragEffects.html" target="_blank">测试链接</a></p>
 		 */
 		self.dragEffect = LListView.DragEffects.MomentumAndSpring;
 	
@@ -91,6 +95,7 @@ var LListView = (function () {
 		 * @default 1
 		 * @since 1.10.0
 		 * @public
+		 * @examplelink <p><a href="../../../api/ui/LListView_maxPerLine.html" target="_blank">测试链接</a></p>
 		 */
 		self.maxPerLine = 1;/*每组长度*/
 		self._ll_items = [];
@@ -144,10 +149,21 @@ var LListView = (function () {
 		self.addChild(self.scrollBarHorizontal);
 		self.scrollBarHorizontal.resizeWidth(self.clipping.width);
 	};
+	/** @language chinese
+	 * 设置LListView 列表的显示范围。
+	 * @method resize
+	 * @param {int} width 宽
+	 * @param {int} height 高
+	 * @public
+	 * @since 1.10.0
+	 */
 	LListView.prototype.resize = function(w, h){
 		var self = this;
-		self.bitmapData.image.height = self.bitmapData.height = h;
-		self.bitmapData.image.width = self.bitmapData.width = w;
+		w = w >>> 0;
+		h = h >>> 0;
+		var bitmapData = self.bitmap.bitmapData;
+		bitmapData.image.height = bitmapData.height = h;
+		bitmapData.image.width = bitmapData.width = w;
 		self.clipping.width = w;
 		self.clipping.height = h;
 		self.scrollBarVertical.x = self.clipping.width;
@@ -173,17 +189,44 @@ var LListView = (function () {
 		var self = this;
 		self._ll_x = Number.MAX_VALUE;
 	};
+	/** @language chinese
+	 * 获取LListView 列表的所有子项。
+	 * @method getItems
+	 * @public
+	 * @since 1.10.1
+	 */
+	LListView.prototype.getItems = function(){
+		return this._ll_items;
+	};
+	/** @language chinese
+	 * 判断LListView 列表的子项是否处于有效的显示范围之内。
+	 * @method isInClipping
+	 * @param {int} index 子项的索引号
+	 * @public
+	 * @since 1.10.1
+	 */
+	LListView.prototype.isInClipping = function(index){
+		var self = this, x, y;
+		if(self.arrangement == LListView.Direction.Horizontal){
+			x = (index % self.maxPerLine) * self.cellWidth;
+			y = (index / self.maxPerLine >>> 0) * self.cellHeight;
+		}else{
+			x = (index / self.maxPerLine >>> 0) * self.cellWidth;
+			y = (index % self.maxPerLine) * self.cellHeight;
+		}
+		return self.clipping.x <= x && self.clipping.x + self.clipping.width > x && self.clipping.y <= y && self.clipping.y + self.clipping.height > y;
+	};
 	LListView.prototype._ll_onframe = function(event){
 		var self = event.currentTarget;
 		if(self.clipping.x == self._ll_x && self.clipping.y == self._ll_y){
 			return;
 		}
-		self.bitmapData.clear();
+		self.bitmap.bitmapData.clear();
 		var length = self._ll_items.length;
 		var startX = self.clipping.x / self.cellWidth >> 0;
 		var startY = self.clipping.y / self.cellHeight >> 0;
-		var addX = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
-		var addY = self.clipping.height % self.cellHeight == 0 ? 0 : 1;
+		var addX;
+		var addY;
 		addX = addY = 1;
 		if(self.arrangement == LListView.Direction.Horizontal){
 			for(var i = 0, l = Math.ceil(self.clipping.height / self.cellHeight) + addY; i < l; i++){
@@ -197,11 +240,10 @@ var LListView = (function () {
 					var item = self._ll_items[index];
 					var x = (index % self.maxPerLine) * self.cellWidth;
 					var y = (index / self.maxPerLine >>> 0) * self.cellHeight;
-					item.updateView(self.bitmapData, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
+					item.updateView(self.bitmap, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
 				}
 			}
 		}else{
-			var add = self.clipping.width % self.cellWidth == 0 ? 0 : 1;
 			for(var i = 0, l = Math.ceil(self.clipping.width / self.cellWidth) + addX; i < l; i++){
 				var yIndex = (startX + i) * self.maxPerLine + startY;
 				for(var j = 0, jl = Math.ceil(self.clipping.height / self.cellHeight) + addY;j < self.maxPerLine && j < jl; j++){
@@ -213,7 +255,7 @@ var LListView = (function () {
 					var item = self._ll_items[index];
 					var y = (index % self.maxPerLine) * self.cellHeight;
 					var x = (index / self.maxPerLine >>> 0) * self.cellWidth;
-					item.updateView(self.bitmapData, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
+					item.updateView(self.bitmap, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
 				}
 			}
 		}
@@ -352,6 +394,14 @@ var LListView = (function () {
 			bar.visible = false;
 		}
 	};
+	LListView.prototype.die = function(){
+		var self = this;
+		for(var i=0,l=self._ll_items.length;i<l;i++){
+			self._ll_items[i].die();
+		}
+		self._ll_items = null;
+		self.callParent("die",arguments);
+	};
 	return LListView;
 })();
 /** @language chinese
@@ -444,26 +494,58 @@ var LListChildView = (function () {
 	 * @public
 	 * @since 1.10.0
 	 */
-	LListChildView.prototype.updateView = function(bitmapData, rectangle, point){
+	LListChildView.prototype.die = function(){
+		this.ll_baseBitmap = null;
+		this.ll_baseRectangle = null;
+		this.ll_basePoint = null;
+		this._ll_cacheAsBitmap = null;
+		this._canvas = null;
+		this._context = null;
+	};
+	LListChildView.prototype.updateView = function(bitmap, rectangle, point){
 		var self = this;
 		if(!self._ll_cacheAsBitmap){
 			self.cacheAsBitmap(true);
 		}
-		if(bitmapData){
-			self.ll_baseBitmapData = bitmapData;
+		if(bitmap){
+			self.ll_baseBitmap = bitmap;
 			self.ll_baseRectangle = rectangle;
 			self.ll_basePoint = point;
 		}
-		if(!self.ll_baseBitmapData){
+		if(!self.ll_baseBitmap){
 			return;
 		}
-		if(self.ll_basePoint.x > self.ll_baseBitmapData.width || self.ll_basePoint.y > self.ll_baseBitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0){
+		if(self.ll_basePoint.x > self.ll_baseBitmap.bitmapData.width || self.ll_basePoint.y > self.ll_baseBitmap.bitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0){
 			return;
 		}
-		if(!bitmapData){
-			self.ll_baseBitmapData.clear(new LRectangle(self.ll_basePoint.x, self.ll_basePoint.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height));
+		if(!bitmap){
+			var listView = self.ll_baseBitmap.parent;
+			var index = -1, items = listView.getItems(), x, y;
+			for(var i=0,l=items.length;i<l;i++){
+				if(items[i] && items[i].objectIndex == self.objectIndex){
+					index = i;
+					break;
+				}
+			}
+			if(index < 0){
+				return;
+			}
+			if(listView.arrangement == LListView.Direction.Horizontal){
+				x = (index % listView.maxPerLine) * listView.cellWidth;
+				y = (index / listView.maxPerLine >>> 0) * listView.cellHeight;
+			}else{
+				x = (index / listView.maxPerLine >>> 0) * listView.cellWidth;
+				y = (index % listView.maxPerLine) * listView.cellHeight;
+			}
+			var isIn = (listView.clipping.x <= x && listView.clipping.x + listView.clipping.width > x && listView.clipping.y <= y && listView.clipping.y + listView.clipping.height > y);
+			if(!isIn){
+				return;
+			}
+			self.ll_basePoint.x = x - listView.clipping.x;
+			self.ll_basePoint.y = y - listView.clipping.y;
+			self.ll_baseBitmap.bitmapData.clear(new LRectangle(self.ll_basePoint.x, self.ll_basePoint.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height));
 		}
-		self.ll_baseBitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
+		self.ll_baseBitmap.bitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
 	};
 	/** @language chinese
 	 * LListView 列表不可以添加LMouseEvent事件，如果需要使用点击事件，需要重写子项的onClick函数。
@@ -552,6 +634,10 @@ var LListViewDragObject = (function () {
 	LListViewDragObject.prototype.inertia = function(){
 		var self = this;
 		var listView = self.listView;
+		if(typeof self.fX == UNDEFINED){
+			self.fX = listView.clipping.x;
+			self.fY = listView.clipping.y;
+		}
 		var mx = listView.clipping.x - self.fX;
 		var my = listView.clipping.y - self.fY;
 		if(Math.abs(mx) < 5){

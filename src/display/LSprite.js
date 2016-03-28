@@ -537,7 +537,7 @@ var LSprite = (function () {
 				}
 				a = o.x;
 				if (typeof o._startX == "function") {
-					a=o._startX();
+					a=o._startX(maskSize);
 				}
 				b = a + o.getWidth(maskSize);
 				if (a < left) {
@@ -556,9 +556,12 @@ var LSprite = (function () {
 				if (right > mx + mw) {
 					right = mx + mw;
 				}
+				s.ll_left = left;
+				s.ll_right = right;
+			}else{
+				s.ll_left = s.x + left;
+				s.ll_right = s.x + right;
 			}
-			s.ll_left = s.x + left;
-			s.ll_right = s.x + right;
 			return (right - left) * s.scaleX;
 		},
 		/** @language chinese
@@ -616,7 +619,7 @@ var LSprite = (function () {
 				}
 				a = o.y;
 				if (typeof o._startY == "function") {
-					a=o._startY();
+					a=o._startY(maskSize);
 				}
 				b = a + o.getHeight(maskSize);
 				if (a < top) {
@@ -635,28 +638,31 @@ var LSprite = (function () {
 				if (bottom > my + mh) {
 					bottom = my + mh;
 				}
+				s.ll_top = top;
+				s.ll_bottom = bottom;
+			}else{
+				s.ll_top = s.y + top;
+				s.ll_bottom = s.y + bottom;
 			}
-			s.ll_top = s.y + top;
-			s.ll_bottom = s.y + bottom;
 			return (bottom - top) * s.scaleY;
 		},
-		_startX : function () {
+		_startX : function (maskSize) {
 			var s = this;
-			s.getWidth();
+			s.getWidth(maskSize);
 			return s.ll_left;
 		},
-		startX : function () {
+		startX : function (maskSize) {
 			var s = this;
-			return s._startX() * s.scaleX;
+			return s._startX(maskSize) * s.scaleX;
 		},
-		_startY : function () {
+		_startY : function (maskSize) {
 			var s = this;
-			s.getHeight();
+			s.getHeight(maskSize);
 			return s.ll_top;
 		},
-		startY : function () {
+		startY : function (maskSize) {
 			var s = this;
-			return s._startY() * s.scaleY;
+			return s._startY(maskSize) * s.scaleY;
 		},
 		_ll_loopframe : function () {
 			this.dispatchEvent(LEvent.ENTER_FRAME);

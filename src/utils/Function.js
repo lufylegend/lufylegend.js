@@ -356,7 +356,7 @@ function removeChild (o) {
  * @param {int} width 游戏界面宽。
  * @param {int} height 游戏界面高。
  * @param {Function} callback 游戏初始化后，调用此函数。
- * @param {String} type 当为null时，会先进行页面的onload操作，如果你的init函数调用是在onload之后，那么需要将此参数设为LEvent.INIT。
+ * @param {String} type <p style="color:#FF0000;">*该参数在1.10.1之后已被删除，改为引擎内部自动判定。</p>当为null时，会先进行页面的onload操作，如果你的init函数调用是在onload之后，那么需要将此参数设为LEvent.INIT。
  * @example
  * 	<!DOCTYPE html>
  * 	<html>
@@ -388,7 +388,7 @@ function removeChild (o) {
  * @param {int} width Game Interface's width.
  * @param {int} height Game Interface's height.
  * @param {Function} callback Engine initialization's callback method.
- * @param {String} type If your init function call is after the onload, then you need to set this parameter to LEvent.INIT.
+ * @param {String} type <p style="color:#FF0000;">*it is deleted after ver 1.10.1。</p>If your init function call is after the onload, then you need to set this parameter to LEvent.INIT.
  * @example
  * 	<!DOCTYPE html>
  * 	<html>
@@ -420,7 +420,7 @@ function removeChild (o) {
  * @param {int} width ゲーム画面の幅。
  * @param {int} height ゲーム画面の高さ。
  * @param {Function} callback ライブラリの初期化が終わったら，この関数を呼び出す。
- * @param {String} type ライブラリの初期化がwindow.onloadの後にしたら，このパラメータをLEvent.INITに設定しなければなりません。
+ * @param {String} type <p style="color:#FF0000;">*バージョン1.10.1以降には自動判断になりますから、設定する必要がありません。</p>ライブラリの初期化がwindow.onloadの後にしたら，このパラメータをLEvent.INITに設定しなければなりません。
  * @example
  * 	<!DOCTYPE html>
  * 	<html>
@@ -464,6 +464,7 @@ function init (s, c, w, h, f, t) {
 			s(loop);
 			LGlobal.onShow();
 		};
+		LGlobal.speed = 1000 / 60;
 	}else{
 		loop = function(){
 			LGlobal.frameRate = setInterval(function () {
@@ -473,7 +474,7 @@ function init (s, c, w, h, f, t) {
 			_f();
 		};
 	}
-	if (t != null && t == LEvent.INIT) {
+	if (document.readyState === "complete") {
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {

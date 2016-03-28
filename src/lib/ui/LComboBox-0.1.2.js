@@ -191,9 +191,10 @@ var LComboBox = (function () {
 			return;
 		}
 		if (s.list.length > 0) {
-			s.setValue(s.list[delIndex > 0 ? delIndex - 1 : 0]);
+			s.setValue(s.list[delIndex > 0 ? delIndex - 1 : 0].value);
 		} else {
 			s.selectIndex = -1;
+			s.label.text = "";
 			s.value = null;
 		}
 	};
@@ -219,6 +220,12 @@ var LComboBox = (function () {
 		if (s.list.length == 1) {
 			s.setValue(child.value);
 		}
+	};
+	LComboBox.prototype.die = function () {
+		var self = this;
+		self.listView.die();
+		self.listView.removeAllChild();
+		self.callParent("die",arguments);
 	};
 	LComboBox.prototype._showChildList = function (event) {
 		var s = event.currentTarget;
@@ -364,6 +371,11 @@ var LComboBoxChild = (function () {
 		var listViewIndex;
 		comboBox.setValue(self.content.value);
 		for(var i=LGlobal.stage.numChildren-1;i>=0;i--){
+			if(LGlobal.stage.childList[i].constructor.name == "LListViewDragObject"){
+				LGlobal.stage.removeChildAt(i);
+				LGlobal.listViewDragObject = null;
+				continue;
+			}
 			if(LGlobal.stage.childList[i].objectIndex != listView.objectIndex){
 				continue;
 			}

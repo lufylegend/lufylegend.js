@@ -653,6 +653,8 @@ var LDisplayObjectContainer = (function () {
 				c[i].die();
 			}
 			var d = s.childList.splice(i, 1);
+			d = d[0];
+			delete d.parent;
 			s.numChildren = s.childList.length;
 			return d;
 		},

@@ -316,7 +316,7 @@ var LTweenLite = (function () {
 		 * <tr><td>onStart</td><td>Function</td><td>在缓动开始时触发此方法.回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>onUpdate</td><td>Function</td><td>当属性值发生改变时(缓动进行中的每一帧，每一秒)触发此方法。回调函数是有参数的，使用方法同下面的例子。</td></tr>
 		 * <tr><td>loop</td><td>Boolean</td><td>如果设定为 true, 缓动就会持续循环.</td></tr>
-		 * <tr><td>playStyle</td><td>LTweenLite.PlayStyle</td><td>只有设定loop为true, playStyle才会有效。</td></tr>
+		 * <tr><td>playStyle</td><td>LTweenLite.PlayStyle</td><td>只有设定loop为true, playStyle才会有效。<a href="../../../api/LTweenLite/playStyle.html" target="_blank">测试链接</a></td></tr>
 		 * <tr><td>coordinate</td><td>Array</td><td>你可以自定义缓动路径，路径的每个点必须是LPoint对象,或者类似于{x:1,y:2}的形式，<a href="../../../api/LTweenLite/toList.html" target="_blank">测试链接</a></td></tr>
 		 * </table>
 		 * @return {LTweenLiteChild} 一个LTweenLiteChild的实例

@@ -207,7 +207,22 @@ var LWebAudio = (function () {
 				});
 				if (c) {
 					LAjax.responseType = LAjax.ARRAY_BUFFER;
-					LAjax.get(a[k], {}, s.onload.bind(s));
+					LAjax.progress = function(e){
+						var event = new LEvent(LEvent.PROGRESS);
+						event.currentTarget = s;
+						event.target = e.currentTarget;
+						event.loaded = e.loaded;
+						event.total = e.total;
+						event.responseURL = e.responseURL;
+						s.dispatchEvent(event);
+					};
+					LAjax.get(a[k], {}, s.onload.bind(s), function(request){
+						var event = new LEvent(LEvent.ERROR);
+						event.currentTarget = s;
+						event.target = request;
+						event.responseURL = request.responseURL;
+						s.dispatchEvent(event);
+					});
 					return;
 				} else {
 					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
@@ -514,20 +529,35 @@ var LWebAudio = (function () {
  * 多媒体文件加载完成事件。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.9.0
  */
 /** @language english
  * when the media is loaded
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.9.0
  */
 /** @language japanese
  * audioまたはvideoファイルロード完了。
  * <p><a href="LEvent.html#property_COMPLETE">LEvent.COMPLETE</a></p>
  * @event LEvent.COMPLETE
+ * @since 1.9.0
  */
 /** @language chinese
  * 播放结束事件，一个音频文件播放完之后调度，如果是使用playSegment函数播放音频的一段，则播放完一段音频之后调度。
  * @event LEvent.SOUND_COMPLETE
- * @since 1.7.0
+ * @since 1.9.0
  * @public
+ */
+/** @language chinese
+ * 多媒体文件加载进度事件。
+ * <p><a href="LEvent.html#property_PROGRESS">LEvent.PROGRESS</a></p>
+ * @event LEvent.PROGRESS
+ * @since 1.10.1
+ */
+/** @language chinese
+ * 多媒体文件加载异常事件。
+ * <p><a href="LEvent.html#property_ERROR">LEvent.ERROR</a></p>
+ * @event LEvent.ERROR
+ * @since 1.10.1
  */
