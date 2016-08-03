@@ -211,7 +211,7 @@ var LWebAudio = (function () {
 						var event = new LEvent(LEvent.PROGRESS);
 						event.currentTarget = s;
 						event.target = e.currentTarget;
-						event.loaded = e.loaded;
+						event.loaded = e.loaded * 0.5;
 						event.total = e.total;
 						event.responseURL = e.responseURL;
 						s.dispatchEvent(event);
