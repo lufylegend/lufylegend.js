@@ -236,7 +236,9 @@ var LComboBox = (function () {
 	};
 	LComboBox.prototype.showChildList = function () {
 		var s = this, i, l, child, w;
-		
+		if(s.list.length == 0){
+			return;
+		}
 		var translucent = new LSprite();
 		translucent.graphics.drawRect(0, "#000000", [0, 0, LGlobal.width, LGlobal.height], true, "#000000");
 		translucent.alpha = 0;
