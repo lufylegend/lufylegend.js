@@ -105,6 +105,7 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex = 0;
 			s.loadStart();
+			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
 			var s = this, d, ph, phs, ext;
@@ -213,6 +214,9 @@ var LLoadManage = (function () {
 			s._loadProgress(e);
 			delete e.currentTarget.parent;
 			if (s.index >= s.list.length) {
+				if (s.reloadtime) {
+					clearTimeout(s.reloadtime);
+				}
 				var event = new LEvent(LEvent.COMPLETE);
 				event.currentTarget = s;
 				event.target = s.result;
