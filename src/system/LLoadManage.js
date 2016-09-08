@@ -113,7 +113,9 @@ var LLoadManage = (function () {
 				return;
 			}
 			d = s.list[s.loadIndex];
-			d.progress = 0;
+			if(typeof d.progress == UNDEFINED){
+				d.progress = 0;
+			}
 			if (!d.name) {
 				d.name = s.llname + s.loadIndex;
 			}
