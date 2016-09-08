@@ -963,8 +963,8 @@ var LGlobal = ( function () {
 		}
 		if (!eve) {
 			eve = {offsetX : LGlobal.offsetX, offsetY : LGlobal.offsetY};
+			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		}
-		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		LGlobal.touchHandler(event);
 		LGlobal.buttonStatusEvent = null;
 		if (LGlobal.mouseJoint_end) {
