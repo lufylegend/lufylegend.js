@@ -1243,6 +1243,9 @@ var LTextField = (function () {
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 				LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 				LGlobal.inputBox.style.display = NONE;
+				if(typeof LGlobal.inputTextField.preventDefault != UNDEFINED){
+					LGlobal.preventDefault=LGlobal.inputTextField.preventDefault;
+				}
 				LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
 				LGlobal.inputTextField = null;
 			}
@@ -1502,6 +1505,10 @@ var LTextField = (function () {
 				}
 			}
 			setTimeout(function () {
+				if(LGlobal.ios){
+					s.preventDefault = LGlobal.preventDefault;
+					LGlobal.preventDefault=false;
+				}
 				LGlobal.inputTextBox.focus();
 			}, 0);
 		},
