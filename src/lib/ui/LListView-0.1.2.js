@@ -579,7 +579,12 @@ var LListViewDragObject = (function () {
 		self.sy = self.y = mouseY;
 		self.vx = self.listView.clipping.x;
 		self.vy = self.listView.clipping.y;
-		self.vPoint = self.listView.globalToLocal(new LPoint(self.x, self.y));
+		var m = self.listView.getRootMatrix();
+		self.needChangeToLocal = (m.b != 0 || m.c != 0);
+		self.vPoint = new LPoint(self.x, self.y);
+		if(self.needChangeToLocal){
+			self.vPoint = self.listView.globalToLocal(self.vPoint);
+		}
 		self.selfX = selfX;
 		self.selfY = selfY;
 		if(LGlobal.listViewDragObject){
@@ -692,7 +697,10 @@ var LListViewDragObject = (function () {
 		self.fX = self.toX = listView.clipping.x;
 		self.fY = self.toY = listView.clipping.y;
 		
-		self.nPoint = self.listView.globalToLocal(new LPoint(self.x, self.y));
+		self.nPoint = new LPoint(self.x, self.y);
+		if(self.needChangeToLocal){
+			self.nPoint = self.listView.globalToLocal(self.nPoint);
+		}
 		if(!self.horizontalStop){
 			listView.clipping.x = self.vPoint.x - self.nPoint.x + self.vx;
 		}
