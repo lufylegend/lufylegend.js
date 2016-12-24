@@ -579,6 +579,7 @@ var LListViewDragObject = (function () {
 		self.sy = self.y = mouseY;
 		self.vx = self.listView.clipping.x;
 		self.vy = self.listView.clipping.y;
+		self.vPoint = self.listView.globalToLocal(new LPoint(self.x, self.y));
 		self.selfX = selfX;
 		self.selfY = selfY;
 		if(LGlobal.listViewDragObject){
@@ -690,11 +691,13 @@ var LListViewDragObject = (function () {
 		var listView = self.listView;
 		self.fX = self.toX = listView.clipping.x;
 		self.fY = self.toY = listView.clipping.y;
+		
+		self.nPoint = self.listView.globalToLocal(new LPoint(self.x, self.y));
 		if(!self.horizontalStop){
-			listView.clipping.x = self.sx - self.x + self.vx;
+			listView.clipping.x = self.vPoint.x - self.nPoint.x + self.vx;
 		}
 		if(!self.verticalStop){
-			listView.clipping.y = self.sy - self.y + self.vy;
+			listView.clipping.y = self.vPoint.y - self.nPoint.y + self.vy;
 		}
 		LListViewDragObject.prototype.dragAmend.apply(self, []);
 	};
