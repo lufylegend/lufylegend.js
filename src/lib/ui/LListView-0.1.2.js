@@ -635,14 +635,14 @@ var LListViewDragObject = (function () {
 			return;
 		}
 		var move = self.inertia();
-		if(move){
-			return;
-		}
 		if(self.pullToRefreshX != 0 || self.pullToRefreshY != 0){
 			var event = new LEvent(LListView.PULL_TO_REFRESH);
 			event.pullToRefreshX = self.pullToRefreshX;
 			event.pullToRefreshY = self.pullToRefreshY;
 			listView.dispatchEvent(event);
+		}
+		if(move){
+			return;
 		}
 		self._ll_tween();
 	};
