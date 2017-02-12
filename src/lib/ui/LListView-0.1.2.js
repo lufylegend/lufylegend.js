@@ -104,6 +104,7 @@ var LListView = (function () {
 		self.addEventListener(LEvent.ENTER_FRAME,self._ll_onframe);
 		self.addEventListener(LMouseEvent.MOUSE_DOWN,self._ll_ondown);
 	}
+	LListView.PULL_TO_REFRESH = "pull_to_refresh";
 	LListView.DragEffects = {
 		None:"none",/*无效果*/
 		Momentum:"momentum",/*拖动惯性*/
@@ -579,6 +580,7 @@ var LListViewDragObject = (function () {
 		self.sy = self.y = mouseY;
 		self.vx = self.listView.clipping.x;
 		self.vy = self.listView.clipping.y;
+		self.pullToRefreshX = self.pullToRefreshY = 0;
 		var m = self.listView.getRootMatrix();
 		self.needChangeToLocal = (m.b != 0 || m.c != 0);
 		self.vPoint = new LPoint(self.x, self.y);
@@ -621,19 +623,26 @@ var LListViewDragObject = (function () {
 		if(self.isDeleted){
 			return;
 		}
-		self.listView.dragEnd();
+		var listView = self.listView;
+		listView.dragEnd();
 		self.stopDrag();
 		self.isDeleted = true;
 		if(Math.abs(mouseX - self.sx) < 5 && Math.abs(mouseY - self.sy) < 5){
-			self.listView.clickOnChild(mouseX - self.sx + self.selfX, mouseY - self.sy + self.selfY);
+			listView.clickOnChild(mouseX - self.sx + self.selfX, mouseY - self.sy + self.selfY);
 		}
 		
-		if(self.listView.dragEffect == LListView.DragEffects.None){
+		if(listView.dragEffect == LListView.DragEffects.None){
 			return;
 		}
 		var move = self.inertia();
 		if(move){
 			return;
+		}
+		if(self.pullToRefreshX != 0 || self.pullToRefreshY != 0){
+			var event = new LEvent(LListView.PULL_TO_REFRESH);
+			event.pullToRefreshX = self.pullToRefreshX;
+			event.pullToRefreshY = self.pullToRefreshY;
+			listView.dispatchEvent(event);
 		}
 		self._ll_tween();
 	};
@@ -719,13 +728,14 @@ var LListViewDragObject = (function () {
 		}
 		var tx = listView.clipping.x;
 		var ty = listView.clipping.y;
-		
+		self.pullToRefreshX = self.pullToRefreshY = 0;
 		if(listView.clipping.x < 0){
 			if(!dragObject){
 				tx = 0;
 			}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
 				listView.clipping.x *= 0.5;
 				self.toX = 0;
+				self.pullToRefreshX = listView.clipping.x - tx;
 			}else{
 				listView.clipping.x = 0;
 			}
@@ -748,6 +758,7 @@ var LListViewDragObject = (function () {
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
 					self.toX = width - listView.clipping.width;
 					listView.clipping.x = self.toX + (listView.clipping.x - width + listView.clipping.width) * 0.5;
+					self.pullToRefreshX = listView.clipping.x - tx;
 				}else{
 					listView.clipping.x = width - listView.clipping.width;
 				}
@@ -759,6 +770,7 @@ var LListViewDragObject = (function () {
 			}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
 				listView.clipping.y *= 0.5;
 				self.toY = 0;
+				self.pullToRefreshY = listView.clipping.y - ty;
 			}else{
 				listView.clipping.y = 0;
 			}
@@ -781,6 +793,7 @@ var LListViewDragObject = (function () {
 				}else if(listView.dragEffect == LListView.DragEffects.MomentumAndSpring){
 					self.toY = height - listView.clipping.height;
 					listView.clipping.y = self.toY + (listView.clipping.y - height + listView.clipping.height) * 0.5;
+					self.pullToRefreshY = listView.clipping.y - ty;
 				}else{
 					listView.clipping.y = height - listView.clipping.height;
 				}
