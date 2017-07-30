@@ -81,7 +81,15 @@ var LListView = (function () {
 		 * @examplelink <p><a href="../../../api/ui/LListView_DragEffects.html" target="_blank">测试链接</a></p>
 		 */
 		self.dragEffect = LListView.DragEffects.MomentumAndSpring;
-	
+		/** @language chinese
+		 * 拖动子物体后保持一个子物体位于中心位置
+		 * @property centerOn
+		 * @type bool
+		 * @default false
+		 * @since 1.10.2
+		 * @public
+		 */
+		self.centerOn = false;
 		self.scrollBarVertical = new LListScrollBar();
 		self.addChild(self.scrollBarVertical);
 		self.scrollBarHorizontal = new LListScrollBar();
@@ -684,7 +692,7 @@ var LListViewDragObject = (function () {
 				ty = listView.allHeight;
 			}
 		}
-		LTweenLite.to(self.listView.clipping,0.3,{x:tx,y:ty,ease:LEasing.Sine.easeOut,onComplete:self.tweenComplete});
+		LListViewDragObject.listToPosition(listView, tx, ty, self.tweenComplete);
 		return true;
 	};
 	LListViewDragObject.prototype.tweenComplete = function(event){
@@ -693,7 +701,27 @@ var LListViewDragObject = (function () {
 	};
 	LListViewDragObject.prototype._ll_tween = function(){
 		var self = this;
-		LTweenLite.to(self.listView.clipping,0.3,{x:self.toX,y:self.toY,ease:LEasing.Sine.easeOut});
+		LListViewDragObject.listToPosition(self.listView, self.toX, self.toY);
+	};
+	LListViewDragObject.listToPosition = function(listView, tx, ty, tweenComplete){
+		if(listView.centerOn){
+			var centerX = -(listView.clipping.width % listView.cellWidth) / 2;
+			var centerY = -(listView.clipping.height % listView.cellHeight) / 2;
+			var px, py;
+			if(tx % listView.cellWidth > listView.cellWidth * 0.5){
+				px = Math.ceil(tx / listView.cellWidth);
+			}else{
+				px = Math.floor(tx / listView.cellWidth);
+			}
+			if(ty % listView.cellHeight > listView.cellHeight * 0.5){
+				py = Math.ceil(ty / listView.cellHeight);
+			}else{
+				py = Math.floor(ty / listView.cellHeight);
+			}
+			tx = centerX + px * listView.cellWidth;
+			ty = centerY + py * listView.cellHeight;
+		}
+		LTweenLite.to(listView.clipping,0.3,{x:tx,y:ty,ease:LEasing.Sine.easeOut, onComplete:tweenComplete});
 	};
 	LListViewDragObject.prototype._ll_onframe = function(event){
 		var self = event.currentTarget;
@@ -800,7 +828,7 @@ var LListViewDragObject = (function () {
 			}
 		}
 		if(!dragObject && (tx != listView.clipping.x || ty != listView.clipping.y)){
-			LTweenLite.to(listView.clipping,0.3,{x:tx,y:ty,ease:LEasing.Sine.easeOut});
+			LListViewDragObject.listToPosition(listView, tx, ty);
 		}
 	};
 	return LListViewDragObject;
