@@ -12,11 +12,15 @@ var InteractivePNG = (function() {
 	function InteractivePNG() {
 		LExtends(this, LSprite, []);
 	}
-	InteractivePNG.prototype.hitTestPoint = function(x, y) {
+	InteractivePNG.prototype.hitTestPoint = function(x, y, cd) {
 		var self = this;
 		var point = self.getRootCoordinate();
 		point.x = x - point.x;
 		point.y = y - point.y;
+		if(typeof cd != UNDEFINED){
+			point.x /= (cd.scaleX*self.scaleX);
+			point.y /= (cd.scaleY*self.scaleY);
+		}
 		for (var i = 0, l = self.childList.length; i < l; i++) {
 			var child = self.childList[0];
 			if (!child.bitmapData._locked) {
@@ -35,7 +39,7 @@ var InteractivePNG = (function() {
 		return false;
 	};
 	InteractivePNG.prototype.ismouseon = function(e, cd) {
-		return this.hitTestPoint(e.offsetX, e.offsetY);
+		return this.hitTestPoint(e.offsetX, e.offsetY, cd);
 	};
 	InteractivePNG.prototype.addChild = function(d) {
 		if (d.type != "LBitmap") {
