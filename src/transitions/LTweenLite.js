@@ -48,17 +48,23 @@ var LTweenLite = (function () {
 			}
 			s.ease = s.vars.ease;
 			delete s.vars.ease;
-			if (s.vars.onComplete) {
+			if (typeof s.vars.onComplete == "function") {
 				s.onComplete = s.vars.onComplete;
 				delete s.vars.onComplete;
+			}else{
+				s.onComplete = null;
 			}
-			if (s.vars.onUpdate) {
+			if (typeof s.vars.onUpdate == "function") {
 				s.onUpdate = s.vars.onUpdate;
 				delete s.vars.onUpdate;
+			}else{
+				s.onUpdate = null;
 			}
-			if (s.vars.onStart) {
+			if (typeof s.vars.onStart == "function") {
 				s.onStart = s.vars.onStart;
 				delete s.vars.onStart;
+			}else{
+				s.onStart = null;
 			}
 			for (k in s.vars) {
 				if (k == "coordinate" && Array.isArray(s.vars[k])) {
