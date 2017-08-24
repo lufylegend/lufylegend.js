@@ -444,6 +444,7 @@ var LDisplayObjectContainer = (function () {
 			}
 			s.numChildren = s.childList.length;
 			delete d.parent;
+			LTweenLite.removeTarget(d);
 		},
 		/** @language chinese
 		 * 返回位于指定索引处的子显示对象实例。
@@ -662,6 +663,7 @@ var LDisplayObjectContainer = (function () {
 			LDisplayObjectContainer.destroy(d);
 			s.childList.splice(i, 1);
 			delete d.parent;
+			LTweenLite.removeTarget(d);
 			s.numChildren = s.childList.length;
 			return d;
 		},
@@ -888,6 +890,7 @@ var LDisplayObjectContainer = (function () {
 				var d = c[i];
 				LDisplayObjectContainer.destroy(d);
 				delete d.parent;
+				LTweenLite.removeTarget(d);
 			}
 			s.childList.length = 0;
 			s.width = 0;

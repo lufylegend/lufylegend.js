@@ -21,6 +21,9 @@ var LTweenLite = (function () {
 				$vars["tweenTimeline"] = LTweenLite.TYPE_FRAME;
 			}
 			s.target = $target;
+			if(!s.target.objectIndex){
+				s.target.objectIndex = ++LGlobal.objectIndex;
+			}
 			s.duration = $duration || 0.001;
 			s.vars = $vars;
 			s.delay = s.vars.delay || 0;
@@ -183,7 +186,7 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					s._dispatchEvent(s.onComplete);
+					setTimeout(function(){s._dispatchEvent(s.onComplete);}, 1);
 				}
 				return true;
 			} else if (s.onUpdate) {
@@ -555,6 +558,15 @@ var LTweenLite = (function () {
 			}
 			for (var i = 0, l = s.tweens.length; i < l; i++) {
 				if (tween.objectIndex == s.tweens[i].objectIndex) {
+					s.tweens.splice(i, 1);
+					break;
+				}
+			}
+		},
+		removeTarget : function (target) {
+			var s = this;
+			for (var i = 0, l = s.tweens.length; i < l; i++) {
+				if (target.objectIndex == s.tweens[i].target.objectIndex) {
 					s.tweens.splice(i, 1);
 					break;
 				}

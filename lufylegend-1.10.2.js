@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 1.10.1
+* @version 1.10.2
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -726,8 +726,8 @@ var LGlobal = ( function () {
 		}
 		if (!eve) {
 			eve = {offsetX : LGlobal.offsetX, offsetY : LGlobal.offsetY};
+			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		}
-		LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		LGlobal.touchHandler(event);
 		LGlobal.buttonStatusEvent = null;
 		if (LGlobal.mouseJoint_end) {
@@ -1539,18 +1539,34 @@ function init (s, c, w, h, f, t) {
 		};
 		LGlobal.speed = 1000 / 60;
 	}else{
+		var _requestAF = (function() {
+			return window.requestAnimationFrame ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.oRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function( callback,  element) {
+				window.setTimeout(callback, 1000/60);
+			};
+		})();
+		LGlobal.setCanvas(c, w, h);
+		LGlobal._requestAFBaseTime = (new Date()).getTime();
+		_f();
 		loop = function(){
-			LGlobal.frameRate = setInterval(function () {
+			var now = (new Date()).getTime();
+			var check = now - LGlobal._requestAFBaseTime;
+			if( check / s >= 1 ) {
+				LGlobal._requestAFBaseTime += s;
 				LGlobal.onShow();
-			}, s);
-			LGlobal.setCanvas(c, w, h);
-			_f();
+			}
+			_requestAF(loop, s);
 		};
 	}
 	if (document.readyState === "complete") {
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
+			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			loop();
 		});
 	}
@@ -2470,6 +2486,17 @@ var LDisplayObjectContainer = (function () {
 		s.numChildren = 0;
 		s.mouseChildren = true;
 	}
+	LDisplayObjectContainer.destroy = function (d) {
+		if (!LGlobal.destroy) {
+			return;
+		}
+		if (d.die) {
+			d.die();
+		}
+		if (d.removeAllChild) {
+			d.removeAllChild();
+		}
+	};
 	var p = {
 		addChild : function (d) {
 			var s  = this,t;
@@ -2506,9 +2533,7 @@ var LDisplayObjectContainer = (function () {
 			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {
 				if (d.objectIndex == c[i].objectIndex) {
-					if (LGlobal.destroy && d.die) {
-						d.die();
-					}
+					LDisplayObjectContainer.destroy(d);
 					s.childList.splice(i, 1);
 					break;
 				}
@@ -2536,15 +2561,13 @@ var LDisplayObjectContainer = (function () {
 			return null;
 		},
 		removeChildAt : function (i) {
-			var s  = this, c = s.childList;
-			if (c.length <= i) {
+			var s  = this, c = s.childList, d;
+			if (c.length <= i || i < 0) {
 				return;
 			}
-			if (LGlobal.destroy && c[i].die) {
-				c[i].die();
-			}
-			var d = s.childList.splice(i, 1);
-			d = d[0];
+			d = c[i];
+			LDisplayObjectContainer.destroy(d);
+			s.childList.splice(i, 1);
 			delete d.parent;
 			s.numChildren = s.childList.length;
 			return d;
@@ -2583,9 +2606,9 @@ var LDisplayObjectContainer = (function () {
 		removeAllChild : function () {
 			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {
-				if (LGlobal.destroy && c[i].die) {
-					c[i].die();
-				}
+				var d = c[i];
+				LDisplayObjectContainer.destroy(d);
+				delete d.parent;
 			}
 			s.childList.length = 0;
 			s.width = 0;
@@ -2917,7 +2940,7 @@ var LWebAudio = (function () {
 						var event = new LEvent(LEvent.PROGRESS);
 						event.currentTarget = s;
 						event.target = e.currentTarget;
-						event.loaded = e.loaded;
+						event.loaded = e.loaded * 0.5;
 						event.total = e.total;
 						event.responseURL = e.responseURL;
 						s.dispatchEvent(event);
@@ -4195,6 +4218,7 @@ var LShape = (function () {
 		die : function () {
 			var s = this;
 			s.graphics.clear();
+			s.callParent("die",arguments);
 		}
 	};
 	for (var k in p) {
@@ -4698,7 +4722,7 @@ var LButton = (function () {
 				return false;
 			}
 			var s = this;
-			if (type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
+			if (LGlobal.os == OS_PC && type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
 				s.ll_button_mode(e);
 			}
 			return this.callParent("mouseEvent",arguments);
@@ -5242,6 +5266,9 @@ var LTextField = (function () {
 				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 				LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 				LGlobal.inputBox.style.display = NONE;
+				if(typeof LGlobal.inputTextField.preventDefault != UNDEFINED){
+					LGlobal.preventDefault=LGlobal.inputTextField.preventDefault;
+				}
 				LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
 				LGlobal.inputTextField = null;
 			}
@@ -5306,6 +5333,10 @@ var LTextField = (function () {
 				}
 			}
 			setTimeout(function () {
+				if(LGlobal.ios){
+					s.preventDefault = LGlobal.preventDefault;
+					LGlobal.preventDefault=false;
+				}
 				LGlobal.inputTextBox.focus();
 			}, 0);
 		},
@@ -5333,6 +5364,14 @@ var LTextField = (function () {
 				}
 			}
 			return w;
+		},
+		_startX : function (maskSize) {
+			var s = this;
+			if(s.textAlign == "left"){
+				return s.x;
+			}
+			var w = s.getWidth(maskSize);
+			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
 		},
 		_getHeight : function () {
 			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
@@ -5406,6 +5445,13 @@ var LTextField = (function () {
 			}
 			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
 			s._ll_wind_length++;
+		},
+		windComplete : function() {
+			var s = this;
+			s._speedIndex = s.speed;
+			s.text = s._ll_wind_text;
+			s._ll_wind_length = s._ll_wind_text.length + 1;
+			s._ll_windRun();
 		},
 		die : function () {
 			LMouseEventContainer.removeInputBox(this);
@@ -6301,6 +6347,7 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex = 0;
 			s.loadStart();
+			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
 		loadStart : function () {
 			var s = this, d, ph, phs, ext;
@@ -6308,7 +6355,9 @@ var LLoadManage = (function () {
 				return;
 			}
 			d = s.list[s.loadIndex];
-			d.progress = 0;
+			if(typeof d.progress == UNDEFINED){
+				d.progress = 0;
+			}
 			if (!d.name) {
 				d.name = s.llname + s.loadIndex;
 			}
@@ -6409,6 +6458,9 @@ var LLoadManage = (function () {
 			s._loadProgress(e);
 			delete e.currentTarget.parent;
 			if (s.index >= s.list.length) {
+				if (s.reloadtime) {
+					clearTimeout(s.reloadtime);
+				}
 				var event = new LEvent(LEvent.COMPLETE);
 				event.currentTarget = s;
 				event.target = s.result;
@@ -6734,17 +6786,23 @@ var LTweenLite = (function () {
 			}
 			s.ease = s.vars.ease;
 			delete s.vars.ease;
-			if (s.vars.onComplete) {
+			if (typeof s.vars.onComplete == "function") {
 				s.onComplete = s.vars.onComplete;
 				delete s.vars.onComplete;
+			}else{
+				s.onComplete = null;
 			}
-			if (s.vars.onUpdate) {
+			if (typeof s.vars.onUpdate == "function") {
 				s.onUpdate = s.vars.onUpdate;
 				delete s.vars.onUpdate;
+			}else{
+				s.onUpdate = null;
 			}
-			if (s.vars.onStart) {
+			if (typeof s.vars.onStart == "function") {
 				s.onStart = s.vars.onStart;
 				delete s.vars.onStart;
+			}else{
+				s.onStart = null;
 			}
 			for (k in s.vars) {
 				if (k == "coordinate" && Array.isArray(s.vars[k])) {
