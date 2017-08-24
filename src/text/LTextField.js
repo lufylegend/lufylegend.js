@@ -1576,6 +1576,14 @@ var LTextField = (function () {
 			}
 			return w;
 		},
+		_startX : function (maskSize) {
+			var s = this;
+			if(s.textAlign == "left"){
+				return s.x;
+			}
+			var w = s.getWidth(maskSize);
+			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
+		},
 		_getHeight : function () {
 			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
