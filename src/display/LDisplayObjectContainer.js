@@ -207,6 +207,17 @@ var LDisplayObjectContainer = (function () {
 		 */
 		s.mouseChildren = true;
 	}
+	LDisplayObjectContainer.destroy = function (d) {
+		if (!LGlobal.destroy) {
+			return;
+		}
+		if (d.die) {
+			d.die();
+		}
+		if (d.removeAllChild) {
+			d.removeAllChild();
+		}
+	};
 	var p = {
 		/** @language chinese
 		 * <p>将一个 DisplayObject 子实例添加到该 LDisplayObjectContainer 实例中。子项将被添加到该 LDisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）</p>
@@ -426,9 +437,7 @@ var LDisplayObjectContainer = (function () {
 			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {
 				if (d.objectIndex == c[i].objectIndex) {
-					if (LGlobal.destroy && d.die) {
-						d.die();
-					}
+					LDisplayObjectContainer.destroy(d);
 					s.childList.splice(i, 1);
 					break;
 				}
@@ -645,15 +654,13 @@ var LDisplayObjectContainer = (function () {
 		 * @examplelink <p><a href="../../../api/LDisplayObjectContainer/removeChildAt.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
 		removeChildAt : function (i) {
-			var s  = this, c = s.childList;
-			if (c.length <= i) {
+			var s  = this, c = s.childList, d;
+			if (c.length <= i || i < 0) {
 				return;
 			}
-			if (LGlobal.destroy && c[i].die) {
-				c[i].die();
-			}
-			var d = s.childList.splice(i, 1);
-			d = d[0];
+			d = c[i];
+			LDisplayObjectContainer.destroy(d);
+			s.childList.splice(i, 1);
 			delete d.parent;
 			s.numChildren = s.childList.length;
 			return d;
@@ -878,9 +885,9 @@ var LDisplayObjectContainer = (function () {
 		removeAllChild : function () {
 			var s  = this, c = s.childList, i, l;
 			for (i = 0, l = c.length; i < l; i++) {
-				if (LGlobal.destroy && c[i].die) {
-					c[i].die();
-				}
+				var d = c[i];
+				LDisplayObjectContainer.destroy(d);
+				delete d.parent;
 			}
 			s.childList.length = 0;
 			s.width = 0;
