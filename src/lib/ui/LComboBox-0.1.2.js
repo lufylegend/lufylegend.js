@@ -169,6 +169,18 @@ var LComboBox = (function () {
 	 */
 	LComboBox.ON_CHANGE = "onchange";
 	/** @language chinese
+	 * 组合框即将打开列表时调用此事件。
+	 * @event LComboBox.PRE_OPEN
+	 * @since 0.1.3
+	*/
+	LComboBox.PRE_OPEN = "pre_open";
+	/** @language chinese
+	 * 组合框打开列表之后调用此事件。
+	 * @event LComboBox.END_OPEN
+	 * @since 0.1.3
+	*/
+	LComboBox.END_OPEN = "end_open";
+	/** @language chinese
 	 * 删除元素。
 	 * @method deleteChild
 	 * @param {String} value 删除元素的值。
@@ -229,54 +241,66 @@ var LComboBox = (function () {
 	};
 	LComboBox.prototype._showChildList = function (event) {
 		var s = event.currentTarget;
-		s.showChildList();
+		if(!s.list || s.list.length == 0){
+			return;
+		}
+		s.dispatchEvent(LComboBox.PRE_OPEN);
+		setTimeout(function(){
+			s.showChildList();
+		}, 0);
 	};
 	LComboBox.prototype.setListChildView = function (childClass) {
 		this.listChildView = childClass;
 	};
 	LComboBox.prototype.showChildList = function () {
 		var s = this, i, l, child, w;
-		if(s.list.length == 0){
+		if (!list) {
+			var translucent = new LSprite();
+			translucent.graphics.drawRect(0, "#000000", [0, 0, LGlobal.width, LGlobal.height], true, "#000000");
+			translucent.alpha = 0;
+			LGlobal.stage.addChild(translucent);
+			translucent.addEventListener(LMouseEvent.MOUSE_UP, function(e) {
+				var cnt = LGlobal.stage.numChildren;
+				if (e.target.constructor.name == "LListView") {
+					return;
+				}
+				var destroy = LGlobal.destroy;
+				LGlobal.destroy = false;
+				LGlobal.stage.removeChildAt(cnt - 1);
+				LGlobal.destroy = destroy;
+				LGlobal.stage.removeChildAt(cnt - 2);
+			});
+			translucent.addEventListener(LMouseEvent.MOUSE_DOWN, function(e) {});
+			translucent.addEventListener(LMouseEvent.MOUSE_MOVE, function(e) {});
+			translucent.addEventListener(LMouseEvent.MOUSE_OVER, function(e) {});
+			translucent.addEventListener(LMouseEvent.MOUSE_OUT, function(e) {});
+
+			var coordinate = s.getRootCoordinate();
+			s.listView.x = coordinate.x;
+			s.listView.y = coordinate.y + s.layer.getHeight();
+			LGlobal.stage.addChild(s.listView);
+			if ( typeof s.listView._ll_saveY != UNDEFINED) {
+				s.listView.clipping.y = s.listView._ll_saveY;
+			}
+			list = [];
+			index = 0;
+		}
+		i = index;
+		var selected = s.value === s.list[i].value;
+		child = new s.listChildView(s.list[i], s, selected);
+		if (selected) {
+			s.listView._ll_selectedChild = child;
+		}
+		list.push(child);
+		if (index < s.list.length - 1) {
+			setTimeout(function() {
+				s.showChildList(list, index + 1);
+			}, 0);
 			return;
-		}
-		var translucent = new LSprite();
-		translucent.graphics.drawRect(0, "#000000", [0, 0, LGlobal.width, LGlobal.height], true, "#000000");
-		translucent.alpha = 0;
-		LGlobal.stage.addChild(translucent);
-		translucent.addEventListener(LMouseEvent.MOUSE_UP, function (e) {
-			var cnt = LGlobal.stage.numChildren;
-			if(e.target.constructor.name == "LListView"){
-				return;
-			}
-			var destroy = LGlobal.destroy;
-			LGlobal.destroy = false;
-			LGlobal.stage.removeChildAt(cnt - 1);
-			LGlobal.destroy = destroy;
-			LGlobal.stage.removeChildAt(cnt - 2);
-		});
-		translucent.addEventListener(LMouseEvent.MOUSE_DOWN, function (e) {});
-		translucent.addEventListener(LMouseEvent.MOUSE_MOVE, function (e) {});
-		translucent.addEventListener(LMouseEvent.MOUSE_OVER, function (e) {});
-		translucent.addEventListener(LMouseEvent.MOUSE_OUT, function (e) {});
-		
-		var coordinate = s.getRootCoordinate();
-		s.listView.x = coordinate.x;
-		s.listView.y = coordinate.y + s.layer.getHeight();
-		LGlobal.stage.addChild(s.listView);
-		if(typeof s.listView._ll_saveY != UNDEFINED){
-			s.listView.clipping.y = s.listView._ll_saveY;
-		}
-		var list = [];
-		for (i = 0, l = s.list.length; i < l; i++) {
-			var selected = s.value === s.list[i].value;
-			child = new s.listChildView(s.list[i], s, selected);
-			if(selected){
-				s.listView._ll_selectedChild = child;
-			}
-			list.push(child);
 		}
 		s.listView.resize(s.listView.cellWidth, s.listView.cellHeight * (s.list.length > s.maxIndex ? s.maxIndex : s.list.length));
 		s.listView.updateList(list);
+		s.dispatchEvent(LComboBox.END_OPEN);
 	};
 	/** @language chinese
 	 * 设置组合框的值。
