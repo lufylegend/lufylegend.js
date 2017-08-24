@@ -427,7 +427,7 @@ var LButton = (function () {
 				return false;
 			}
 			var s = this;
-			if (type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
+			if (LGlobal.os == OS_PC && type == LMouseEvent.MOUSE_MOVE && s.ll_button_mode) {
 				s.ll_button_mode(e);
 			}
 			return this.callParent("mouseEvent",arguments);
