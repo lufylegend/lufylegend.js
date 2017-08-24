@@ -358,6 +358,7 @@ var LShape = (function () {
 		die : function () {
 			var s = this;
 			s.graphics.clear();
+			s.callParent("die",arguments);
 		}
 	};
 	for (var k in p) {
