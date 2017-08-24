@@ -458,7 +458,6 @@ function init (s, c, w, h, f, t) {
 	};
 	var loop;
 	if(typeof s == "function"){
-		LGlobal.setCanvas(c, w, h);
 		_f();
 		loop = function(){
 			s(loop);
@@ -472,11 +471,10 @@ function init (s, c, w, h, f, t) {
 			window.mozRequestAnimationFrame ||
 			window.oRequestAnimationFrame ||
 			window.msRequestAnimationFrame ||
-			function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+			function( callback,  element) {
 				window.setTimeout(callback, 1000/60);
 			};
 		})();
-		LGlobal.setCanvas(c, w, h);
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
 		_f();
 		loop = function(){
@@ -490,10 +488,12 @@ function init (s, c, w, h, f, t) {
 		};
 	}
 	if (document.readyState === "complete") {
+		LGlobal.setCanvas(c, w, h);
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
+			LGlobal.setCanvas(c, w, h);
 			loop();
 		});
 	}
