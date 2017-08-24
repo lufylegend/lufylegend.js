@@ -462,6 +462,9 @@ var LButton = (function () {
 			s._tweenOver = s.ll_modeOver;
 			onComplete = function(obj){
 				var s = obj.parent;
+				if(!s || !s.tween){
+					return;
+				}
 				delete s.tween;
 				s._tweenOver({clickTarget : s});
 				delete s._tweenOver;
