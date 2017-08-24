@@ -466,22 +466,39 @@ function init (s, c, w, h, f, t) {
 		};
 		LGlobal.speed = 1000 / 60;
 	}else{
+		var _requestAF = (function() {
+			return window.requestAnimationFrame ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.oRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+				window.setTimeout(callback, 1000/60);
+			};
+		})();
+		LGlobal.setCanvas(c, w, h);
+		LGlobal._requestAFBaseTime = (new Date()).getTime();
+		_f();
 		loop = function(){
-			LGlobal.frameRate = setInterval(function () {
+			var now = (new Date()).getTime();
+			var check = now - LGlobal._requestAFBaseTime;
+			if( check / s >= 1 ) {
+				LGlobal._requestAFBaseTime += s;
 				LGlobal.onShow();
-			}, s);
-			LGlobal.setCanvas(c, w, h);
-			_f();
+			}
+			_requestAF(loop, s);
 		};
 	}
 	if (document.readyState === "complete") {
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
+			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			loop();
 		});
 	}
 }
+
 var LInit = init;
 
 /** @language chinese
