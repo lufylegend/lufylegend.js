@@ -310,6 +310,21 @@ var LListView = (function () {
 		self.resizeScrollBar();
 	};
 	/** @language chinese
+	 * 删除LListView列表中的所有子项。
+	 * @method clear
+	 * @public
+	 * @since 1.10.2
+	 */
+	LListView.prototype.clear = function() {
+		var self = this;
+		for (var i = 0, l = self._ll_items.length; i < l; i++) {
+			self._ll_items[i].die();
+			self._ll_items[i].removeAllChild();
+		}
+		self._ll_items.length = 0;
+		self.resizeScrollBar();
+	};
+	/** @language chinese
 	 * 从LListView 列表中删除一个子项。
 	 * @method deleteChildView
 	 * @param {LListChildView} child 单元子项
@@ -321,6 +336,8 @@ var LListView = (function () {
 		var self = this, c = self._ll_items, i, l;
 		for (i = 0, l = c.length; i < l; i++) {
 			if (child.objectIndex == c[i].objectIndex) {
+				c[i].die();
+				c[i].removeAllChild();
 				self._ll_items.splice(i, 1);
 				break;
 			}
@@ -407,6 +424,7 @@ var LListView = (function () {
 		var self = this;
 		for(var i=0,l=self._ll_items.length;i<l;i++){
 			self._ll_items[i].die();
+			self._ll_items[i].removeAllChild();
 		}
 		self._ll_items = null;
 		self.callParent("die",arguments);
@@ -504,12 +522,16 @@ var LListChildView = (function () {
 	 * @since 1.10.0
 	 */
 	LListChildView.prototype.die = function(){
-		this.ll_baseBitmap = null;
-		this.ll_baseRectangle = null;
-		this.ll_basePoint = null;
-		this._ll_cacheAsBitmap = null;
-		this._canvas = null;
-		this._context = null;
+		var self = this;
+		self.cacheAsBitmap(false);
+		self.removeAllChild();
+		self.ll_baseBitmap = null;
+		self.ll_baseRectangle = null;
+		self.ll_basePoint = null;
+		self._ll_cacheAsBitmap = null;
+		self._canvas = null;
+		self._context = null;
+		self.callParent("die",arguments);
 	};
 	LListChildView.prototype.updateView = function(bitmap, rectangle, point){
 		var self = this;
