@@ -1803,6 +1803,31 @@ var LTextField = (function () {
 			s._ll_wind_length++;
 		},
 		/** @language chinese
+		 * <p>结束文本逐字显示。</p>
+		 * @method windComplete
+		 * @since 1.10.2
+		 * @public
+		 */
+		/** @language english
+		 * <p>Stop Text animation.</p>
+		 * @method windComplete
+		 * @since 1.10.2
+		 * @public
+		 */
+		/** @language japanese
+		 * <p>テキストを1文字ずつ画面に表示させることを停止する。</p>
+		 * @method windComplete
+		 * @since 1.10.2
+		 * @public
+		 */
+		windComplete : function() {
+			var s = this;
+			s._speedIndex = s.speed;
+			s.text = s._ll_wind_text;
+			s._ll_wind_length = s._ll_wind_text.length + 1;
+			s._ll_windRun();
+		},
+		/** @language chinese
 		 * <p>清空所使用的内存。</p>
 		 * @method die
 		 * @since 1.0.0
@@ -1810,7 +1835,7 @@ var LTextField = (function () {
 		 */
 		/** @language english
 		 * <p>Frees memory that is used.</p>
-		 * @method clearShape
+		 * @method die
 		 * @since 1.0.0
 		 * @public
 		 */
