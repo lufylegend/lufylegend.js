@@ -1113,9 +1113,9 @@ var LSprite = (function () {
 		},
 		/** @language chinese
 		 * <p>添加碰撞形状，指定碰撞的范围。如果没有添加碰撞形状，则会默认使用最大矩形范围来碰撞检测。</p>
-		 * <p>添加矩形 : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>添加圆形 : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>添加多边形 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * <p>添加矩形 : addShape(LShape.RECT,[x,y,width,height])</p>
+		 * <p>添加圆形 : addShape(LShape.ARC,[x,y,r])</p>
+		 * <p>添加多边形 : addShape(LShape.VERTICES,[[x1,y1],[x2,y2],[x3,y3]])</p>
 		 * @method addShape
 		 * @param {string} type 形状的类型.
 		 * @param {Array} arg 形状参数.
@@ -1164,9 +1164,9 @@ var LSprite = (function () {
 		 */
 		/** @language english
 		 * <p>Add a collider’s shape</p>
-		 * <p>a rectangle : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>a circle : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>a polygon : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * <p>a rectangle : addShape(LShape.RECT,[x,y,width,height])</p>
+		 * <p>a circle : addShape(LShape.ARC,[x,y,r])</p>
+		 * <p>a polygon : addShape(LShape.VERTICES,[[x1,y1],[x2,y2],[x3,y3]])</p>
 		 * @method addShape
 		 * @param {string} type The shape's type.
 		 * @param {Array} arg The shape's parameters.
@@ -1215,9 +1215,9 @@ var LSprite = (function () {
 		 */
 		/** @language japanese
 		 * <p>衝突の形状を追加します。追加していなければ、最大の矩形を使って、衝突を判定します。</p>
-		 * <p>矩形を追加 : addShape(LShape.RECT,[20,140,200,100])</p>
-		 * <p>円を追加 : addShape(LShape.ARC,[110,80,60])</p>
-		 * <p>多边形を追加 : addShape(LShape.VERTICES,[[10,10],[50,100],[100,70]])</p>
+		 * <p>矩形を追加 : addShape(LShape.RECT,[x,y,width,height])</p>
+		 * <p>円を追加 : addShape(LShape.ARC,[x,y,r])</p>
+		 * <p>多边形を追加 : addShape(LShape.VERTICES,[[x1,y1],[x2,y2],[x3,y3]])</p>
 		 * @method addShape
 		 * @param {string} type 衝突の形状。
 		 * @param {Array} arg 具体的なパラメータ。
