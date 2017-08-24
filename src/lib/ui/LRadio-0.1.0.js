@@ -122,6 +122,22 @@ var LRadio = (function () {
 		s.value = null;
 	}
 	/** @language chinese
+	 * 单选按钮的值改变时调用此事件。
+	 * @event LRadio.ON_CHANGE
+	 * @since 0.1.1
+	*/
+	/** @language english
+	 * onchange event。
+	 * @event LRadio.ON_CHANGE
+	 * @since 0.1.1
+	 */
+	/** @language japanese
+	 * onchangeイベント。
+	 * @event LRadio.ON_CHANGE
+	 * @since 0.1.1
+	 */
+	LRadio.ON_CHANGE = "onchange";
+	/** @language chinese
 	 * 添加单选按钮子元素。
 	 * @method setChildRadio
 	 * @param {float|String} value 单选按钮的子元素的值。
@@ -159,17 +175,21 @@ var LRadio = (function () {
 	 * @public
 	 */
 	LRadio.prototype.setValue = function (value) {
-	    var s = this, child, k;
-	    for (k in s.childList) {
-	    	child = s.childList[k];
-	        if (child.setChecked) {
-	        	child.setChecked(false);
-	        }
-	        if (child.value == value) {
-	        	s.value = value;
-	        	child.setChecked(true);
-	        }
-	    }
+		var s = this, child, k;
+		var saveValue = s.value;
+		for (k in s.childList) {
+			child = s.childList[k];
+		    if (child.setChecked) {
+		     	child.setChecked(false);
+			}
+			if (child.value == value) {
+				s.value = value;
+				child.setChecked(true);
+			}
+		}
+		if(saveValue != s.value){
+			s.dispatchEvent(LRadio.ON_CHANGE);
+		}
 	};
 	LRadio.prototype.clone = function () {
 		var s = this, a = new LRadio(), child, k;
