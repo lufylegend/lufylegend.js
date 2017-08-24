@@ -186,7 +186,7 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					setTimeout(function(){s._dispatchEvent(s.onComplete);}, 1);
+					s._dispatchEvent(s.onComplete);
 				}
 				return true;
 			} else if (s.onUpdate) {
