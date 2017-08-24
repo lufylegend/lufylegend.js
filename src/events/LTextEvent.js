@@ -118,7 +118,7 @@ var LTextEvent = function () {throw "LTextEvent cannot be instantiated";};
  */
 LTextEvent.TEXT_INPUT = "textInput";
 /** @language chinese
- * <p>[静态] 定义 textInput 事件对象的 type 属性值。</p>
+ * <p>[静态] 文本逐字显示结束时触发的事件。</p>
  * <p>此事件具有以下属性：</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
@@ -149,7 +149,7 @@ LTextEvent.TEXT_INPUT = "textInput";
  * @public
  */
 /** @language english
- * <p>[static] Defines the value of the type property of a textInput event object.</p>
+ * <p>[static] When the Text animation is end.</p>
  * <p>This event has the following properties:</p>
  * <table>
  * <tr><th>Property</th><th>Value</th></tr>
@@ -180,7 +180,7 @@ LTextEvent.TEXT_INPUT = "textInput";
  * @public
  */
 /** @language japanese
- * <p>[静的] textInput イベントオブジェクトの type プロパティ値を定義します。</p>
+ * <p>[静的] テキストを1文字ずつ画面に表示させることを停止した時発生するイベント。</p>
  * <p>このイベントには、次のプロパティがあります。</p>
  * <table>
  * <tr><th>属性</th><th>值</th></tr>
