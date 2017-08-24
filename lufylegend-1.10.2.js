@@ -1531,7 +1531,6 @@ function init (s, c, w, h, f, t) {
 	};
 	var loop;
 	if(typeof s == "function"){
-		LGlobal.setCanvas(c, w, h);
 		_f();
 		loop = function(){
 			s(loop);
@@ -1549,7 +1548,6 @@ function init (s, c, w, h, f, t) {
 				window.setTimeout(callback, 1000/60);
 			};
 		})();
-		LGlobal.setCanvas(c, w, h);
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
 		_f();
 		loop = function(){
@@ -1563,10 +1561,12 @@ function init (s, c, w, h, f, t) {
 		};
 	}
 	if (document.readyState === "complete") {
+		LGlobal.setCanvas(c, w, h);
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
+			LGlobal.setCanvas(c, w, h);
 			loop();
 		});
 	}
@@ -2540,6 +2540,7 @@ var LDisplayObjectContainer = (function () {
 			}
 			s.numChildren = s.childList.length;
 			delete d.parent;
+			LTweenLite.removeTarget(d);
 		},
 		getChildAt : function (i) {
 			var s  = this, c = s.childList;
@@ -2569,6 +2570,7 @@ var LDisplayObjectContainer = (function () {
 			LDisplayObjectContainer.destroy(d);
 			s.childList.splice(i, 1);
 			delete d.parent;
+			LTweenLite.removeTarget(d);
 			s.numChildren = s.childList.length;
 			return d;
 		},
@@ -2609,6 +2611,7 @@ var LDisplayObjectContainer = (function () {
 				var d = c[i];
 				LDisplayObjectContainer.destroy(d);
 				delete d.parent;
+				LTweenLite.removeTarget(d);
 			}
 			s.childList.length = 0;
 			s.width = 0;
@@ -4757,6 +4760,9 @@ var LButton = (function () {
 			s._tweenOver = s.ll_modeOver;
 			onComplete = function(obj){
 				var s = obj.parent;
+				if(!s || !s.tween){
+					return;
+				}
 				delete s.tween;
 				s._tweenOver({clickTarget : s});
 				delete s._tweenOver;
@@ -6759,6 +6765,9 @@ var LTweenLite = (function () {
 				$vars["tweenTimeline"] = LTweenLite.TYPE_FRAME;
 			}
 			s.target = $target;
+			if(!s.target.objectIndex){
+				s.target.objectIndex = ++LGlobal.objectIndex;
+			}
 			s.duration = $duration || 0.001;
 			s.vars = $vars;
 			s.delay = s.vars.delay || 0;
@@ -6898,7 +6907,7 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					s._dispatchEvent(s.onComplete);
+					setTimeout(function(){s._dispatchEvent(s.onComplete);}, 1);
 				}
 				return true;
 			} else if (s.onUpdate) {
@@ -7005,6 +7014,15 @@ var LTweenLite = (function () {
 			}
 			for (var i = 0, l = s.tweens.length; i < l; i++) {
 				if (tween.objectIndex == s.tweens[i].objectIndex) {
+					s.tweens.splice(i, 1);
+					break;
+				}
+			}
+		},
+		removeTarget : function (target) {
+			var s = this;
+			for (var i = 0, l = s.tweens.length; i < l; i++) {
+				if (target.objectIndex == s.tweens[i].target.objectIndex) {
 					s.tweens.splice(i, 1);
 					break;
 				}
