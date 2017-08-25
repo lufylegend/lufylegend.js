@@ -28,7 +28,7 @@ ItemMasterModel.prototype.id = function(){
 ItemMasterModel.prototype.name = function(){
 	return Language.get(this.data.name);
 };
-ItemMasterModel.prototype.type = function(){
+ItemMasterModel.prototype.itemtype = function(){
 	return this.data.type;
 };
 ItemMasterModel.prototype.child_id = function(){
@@ -42,20 +42,21 @@ ItemMasterModel.prototype.explanation = function(){
 };
 ItemMasterModel.prototype.icon=function(size){
 	var self = this;
+	console.error("ItemMasterModel", self);
 	if(!size){
 		size = new LPoint(100,100);
 	}
 	var icon;
-	if(self.type() == ItemType.CHARACTER_STONE || self.type() == ItemType.CHARACTER_FRAGMENT){
+	if(self.itemtype() == ItemType.CHARACTER_STONE || self.itemtype() == ItemType.CHARACTER_FRAGMENT){
 		icon = new LSprite();
-		var bitmap = new LBitmap(new LBitmapData(LMvc.datalist[self.type() == ItemType.CHARACTER_STONE ? "item-character-stone" : "item-character-fragment"]));
+		var bitmap = new LBitmap(new LBitmapData(LMvc.datalist[self.itemtype() == ItemType.CHARACTER_STONE ? "item-character-stone" : "item-character-fragment"]));
 		bitmap.scaleX = size.x/bitmap.getWidth();
 		bitmap.scaleY = size.y/bitmap.getHeight();
 		icon.addChild(bitmap);
 		var chara = CharacterMasterModel.getMaster(self.child_id());
-		var face = chara.minFace(self.type() == ItemType.CHARACTER_STONE ? size.x*0.7 : size.y*0.5);
+		var face = chara.minFace(self.itemtype() == ItemType.CHARACTER_STONE ? size.x*0.7 : size.y*0.5);
 		
-		face.x = face.y = self.type() == ItemType.CHARACTER_STONE ? size.x*0.15 : size.y*0.25;
+		face.x = face.y = self.itemtype() == ItemType.CHARACTER_STONE ? size.x*0.15 : size.y*0.25;
 		
 		face.alpha = 0.7;
 		icon.addChild(face);
