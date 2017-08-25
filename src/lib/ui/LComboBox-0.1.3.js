@@ -252,7 +252,7 @@ var LComboBox = (function () {
 	LComboBox.prototype.setListChildView = function (childClass) {
 		this.listChildView = childClass;
 	};
-	LComboBox.prototype.showChildList = function () {
+	LComboBox.prototype.showChildList = function (list, index) {
 		var s = this, i, l, child, w;
 		if (!list) {
 			var translucent = new LSprite();
