@@ -538,6 +538,10 @@ var LGlobal = ( function () {
 			LGlobal.os = OS_BLACK_BERRY;
 			LGlobal.canTouch = true;
 		}
+		if(LGlobal.ios){
+			var v = n.match(/OS (\d+)_(\d+)_?(\d+)?/);
+			LGlobal.iOSversion = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
 	LGlobal.setDebug = function (v) {
@@ -3352,10 +3356,16 @@ var LVideo = (function () {
 		s._type = "video";
 		s.rotatex = 0;
 		s.rotatey = 0;
-		s.data = document.createElement("video");
-		s.data.style.display = "none";
-		document.body.appendChild(s.data);
-		s.data.id = "video_" + s.objectIndex;
+		var strTag = "";
+		if(LGlobal.os == OS_IPHONE && LGlobal.iOSversion[0] >= 10){
+			s.sound = new LSound();
+			strTag = " muted playsinline ";
+		}
+		var div = document.createElement("div");
+		div.id = "div_video_" + s.objectIndex;
+		div.innerHTML = '<video id="video_'+s.objectIndex+'" '+strTag+' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
+		document.body.appendChild(div);
+		s.data = document.getElementById("video_" + s.objectIndex);
 		s.data.loop = false;
 		s.data.autoplay = false;
 		if (u) {
@@ -3367,10 +3377,55 @@ var LVideo = (function () {
 			var s = this;
 			c.drawImage(s.data, s.x, s.y);
 		},
+		load : function(u){
+			var s = this;
+			s.callParent("load", arguments);
+			if(s.sound){
+				s.sound.load(u);
+			}
+		},
+		play : function (c, l, to) {
+			var s = this;
+			s.callParent("play", arguments);
+			if(s.sound){
+				s.sound.play(c, l, to);
+			}
+		},
+		stop : function () {
+			var s = this;
+			s.callParent("stop", arguments);
+			if(s.sound){
+				s.sound.stop();
+			}
+		},
+		setVolume : function (v) {
+			var s = this;
+			if(s.sound){
+				s.sound.setVolume(v);
+			}else{
+				s.callParent("setVolume", arguments);
+			}
+		},
+		getVolume : function () {
+			var s = this;
+			if(s.sound){
+				return s.sound.getVolume();
+			}else{
+				return s.callParent("getVolume", arguments);
+			}
+		},
+		close : function () {
+			var s = this;
+			s.callParent("close", arguments);
+			if(s.sound){
+				s.sound.close();
+			}
+		},
 		die : function () {
 			var s = this;
-			document.body.removeChild(s.data);
+			document.body.removeChild(document.getElementById("div_video_" + s.objectIndex));
 			delete s.data;
+			delete s.sound;
 		},
 		getWidth : function () {
 			return this.data.width;
@@ -6907,7 +6962,7 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					setTimeout(function(){s._dispatchEvent(s.onComplete);}, 1);
+					s._dispatchEvent(s.onComplete, true);
 				}
 				return true;
 			} else if (s.onUpdate) {
@@ -6915,13 +6970,23 @@ var LTweenLite = (function () {
 			}
 			return false;
 		},
-		_dispatchEvent : function (f) {
+		_dispatchEvent : function (f, wait) {
 			var s = this;
-			s.target.target = s.target;
-			s.target.currentTarget = s;
-			f(s.target);
-			delete s.target.currentTarget;
-			delete s.target.target;
+			var target = s.target;
+			var fun = function(){
+				target.target = target;
+				target.currentTarget = s;
+				f(target);
+				delete target.currentTarget;
+				delete target.target;
+			};
+			if(wait){
+				setTimeout(function(){
+					fun();
+				}, 1);
+			}else{
+				fun();
+			}
 		},
 		to : function ($target, $duration, $vars, $data) {
 			var s = this;
