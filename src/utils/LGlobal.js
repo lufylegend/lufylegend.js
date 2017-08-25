@@ -727,6 +727,10 @@ var LGlobal = ( function () {
 			LGlobal.os = OS_BLACK_BERRY;
 			LGlobal.canTouch = true;
 		}
+		if(LGlobal.ios){
+			var v = n.match(/OS (\d+)_(\d+)_?(\d+)?/);
+			LGlobal.iOSversion = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
 	/** @language chinese
