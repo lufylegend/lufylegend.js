@@ -186,7 +186,7 @@ var LTweenLite = (function () {
 					s.target[tweentype] = s.varsto[tweentype];
 				}
 				if (s.onComplete) {
-					s._dispatchEvent(s.onComplete);
+					s._dispatchEvent(s.onComplete, true);
 				}
 				return true;
 			} else if (s.onUpdate) {
@@ -194,13 +194,23 @@ var LTweenLite = (function () {
 			}
 			return false;
 		},
-		_dispatchEvent : function (f) {
+		_dispatchEvent : function (f, wait) {
 			var s = this;
-			s.target.target = s.target;
-			s.target.currentTarget = s;
-			f(s.target);
-			delete s.target.currentTarget;
-			delete s.target.target;
+			var target = s.target;
+			var fun = function(){
+				target.target = target;
+				target.currentTarget = s;
+				f(target);
+				delete target.currentTarget;
+				delete target.target;
+			};
+			if(wait){
+				setTimeout(function(){
+					fun();
+				}, 1);
+			}else{
+				fun();
+			}
 		},
 		to : function ($target, $duration, $vars, $data) {
 			var s = this;
