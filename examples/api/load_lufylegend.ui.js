@@ -1,1 +1,0 @@
-document.write('<script type="text/javascript" src="../../../lib/lufylegend.ui-0.14.2.min.js"></script> ');
