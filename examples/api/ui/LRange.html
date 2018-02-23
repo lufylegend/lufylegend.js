@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LRange</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+	init(1000/60,"legend",800,400,main);
+	var imgData = [
+		{name:"range_back",path:"range_back.png"},
+		{name:"range_select",path:"range_select.png"}
+	];
+	var imglist;var backLayer;
+	function main(){
+		LGlobal.setDebug(true);
+		LLoadManage.load(imgData,null,gameInit);
+	}
+	function gameInit(result){
+		imglist = result;
+		var bitmap = new LBitmap(new LBitmapData(imglist["range_back"]));
+		var bitmapSelect = new LBitmap(new LBitmapData(imglist["range_select"]));
+		var backLayer = new LSprite();
+		backLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#008000");
+		addChild(backLayer);
+		var r = new LRange(300);
+		r.x = 100;
+		r.y = 100;
+		addChild(r);
+		
+		r = new LRange(bitmap,bitmapSelect);
+		r.x = 100;
+		r.y = 200;
+		addChild(r);
+	}
+</script>
+	</body>
+</html>

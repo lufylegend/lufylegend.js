@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LExtends</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function FatherClass(){
+				this.name = "Father";
+			}
+			FatherClass.prototype.getName = function(){
+				return this.name;
+			};
+			function ChildClass(){
+				LExtends(this,FatherClass,[]);
+				this.name = "Child";
+			}
+			
+			function main () {
+				LGlobal.setDebug(true);
+				var father = new FatherClass();
+				var child = new ChildClass();
+				trace("father.getName() = " + father.getName()); //father.getName() = Father
+				trace("child.getName() = " + child.getName());//child.getName() = Child
+			}
+			</script>
+	</body>
+</html>

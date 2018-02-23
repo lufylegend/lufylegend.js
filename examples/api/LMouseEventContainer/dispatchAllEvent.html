@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>dispatchAllEvent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 400, main);
+			var label;
+			function main(){
+				LGlobal.setDebug(true);
+				LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+				LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+				var backLayer = new LSprite();
+				backLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#cccccc");
+				addChild(backLayer);
+				label = new LTextField();
+				label.text = "LMouseEventContainer.dispatchAllEvent = false;";
+				label.size = 18;
+				label.x = 10;
+				label.y = 10;
+				backLayer.addChild(label);
+				var buttonChange = new LButtonSample1("Change dispatchAllEvent's value");
+				buttonChange.x = 10;
+				buttonChange.y = 40;
+				backLayer.addChild(buttonChange);
+				buttonChange.addEventListener(LMouseEvent.MOUSE_UP,dispatchAllEventChange);
+				var layer = new LSprite();
+				layer.name = "layer";
+				layer.y = 100;
+				layer.graphics.drawRect(2,"#ff0000",[0,0,500,200],true,"#880088");
+				backLayer.addChild(layer);
+				layer.addEventListener(LMouseEvent.MOUSE_DOWN,mousedown);
+				layer.addEventListener(LMouseEvent.MOUSE_UP,mouseup);
+				var button01 = new LButtonSample1("button01",50);
+				button01.name = "button01";
+				button01.x = 10;
+				button01.y = 10;
+				layer.addChild(button01);
+				button01.addEventListener(LMouseEvent.MOUSE_DOWN,mousedown);
+				button01.addEventListener(LMouseEvent.MOUSE_UP,mouseup);
+				var button02 = new LButtonSample1("button02");
+				button02.name = "button02";
+				button02.x = 15;
+				button02.y = 15;
+				layer.addChild(button02);
+				button02.addEventListener(LMouseEvent.MOUSE_DOWN,mousedown);
+				button02.addEventListener(LMouseEvent.MOUSE_UP,mouseup);
+			}
+			function dispatchAllEventChange(){
+				LMouseEventContainer.dispatchAllEvent = !LMouseEventContainer.dispatchAllEvent;
+				label.text = "LMouseEventContainer.dispatchAllEvent = "+LMouseEventContainer.dispatchAllEvent+";";
+			}
+			function mousedown(e){
+				trace("mousedown e.currentTarget.name = " + e.currentTarget.name);
+			}
+			function mouseup(e){
+				trace("mouseup e.currentTarget.name = " + e.currentTarget.name);
+			}
+			</script>
+	</body>
+</html>

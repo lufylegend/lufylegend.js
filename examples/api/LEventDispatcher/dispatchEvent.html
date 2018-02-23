@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>dispatchEvent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			function MyEventObject(){
+				var self = this;
+				LExtends(self,LSprite,[]);
+				self.graphics.drawRect(1,"#000000",[0,0,100,100],true,"#000000");
+				self.graphics.drawRect(1,"#FF0000",[100,0,100,100],true,"#FF0000");
+				self.addEventListener(LMouseEvent.MOUSE_UP,self.onclick);
+				 
+				self.addEventListener(MyEventObject.CLICK_LEFT,function(event){
+					trace("dispatchEvent");
+				});
+				self.addEventListener(MyEventObject.CLICK_RIGHT,function(event){
+					trace("dispatchEvent event.name = " + event.name);
+				});
+			}
+			MyEventObject.CLICK_LEFT = "click_left";
+			MyEventObject.CLICK_RIGHT = "click_right";
+			MyEventObject.prototype.onclick = function(event){
+				var self = event.clickTarget;
+				if(event.selfX < 100){
+					self.dispatchEvent(MyEventObject.CLICK_LEFT);
+				}else{
+					var event = new LEvent(MyEventObject.CLICK_RIGHT);
+					event.name = "LEvent Test";
+					self.dispatchEvent(event);
+				}
+			}
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var obj = new MyEventObject();
+				addChild(obj);
+			}
+			</script>
+	</body>
+</html>

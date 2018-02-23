@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>一般方法：200个对象的碰撞检测</title>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+<script type="text/javascript" src="../load_lufylegend.js"></script>
+<script type="text/javascript">
+init(30,"mylegend",800,450,main,LEvent.INIT);
+var back,query,list;
+function main(){
+	LGlobal.setDebug(true);
+	back = new LSprite();
+	back.graphics.drawRect(1,"#000000",[0,0,800,450],true,"#cccccc");
+	addChild(back);
+	list = [];
+	var child;
+	for(var i=0;i< 200;i++){
+		child = new LSprite();
+		child.graphics.drawRect(1,"#000000",[0,0,20,20]);
+		child.x = Math.random()*750;
+		child.y = Math.random()*400;
+		child.sx = 10 - Math.random()*20;
+		child.sy = 10 - Math.random()*20;
+		back.addChild(child);
+		list.push(child);
+	}
+	back.addEventListener(LEvent.ENTER_FRAME, onframe);
+}
+function onframe(){
+	var child,child2;
+	
+	var arr = [];
+	for(var key=0; key < back.childList.length;key++){
+		child = back.childList[key];
+		child.x += child.sx;
+		child.y += child.sy;
+		if(child.x < 0 || child.x > LGlobal.width)child.sx *= -1;
+		if(child.y < 0 || child.y > LGlobal.height)child.sy *= -1;
+		
+		child.graphics.clear();
+		child.graphics.drawRect(1,"#000000",[0,0,20,20]);
+		for (var i = key + 1; i < back.childList.length; i++) {
+			child2 = back.childList[i];
+			if(LGlobal.hitTest(child,child2)){
+				arr[key] = 1;
+				arr[i] = 1;
+			}
+		}
+	}
+	for (key in arr){
+		child = back.childList[key];
+		child.graphics.clear();
+		child.graphics.drawRect(1,"#ff0000",[0,0,20,20]);
+	}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>wind speed</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(20, "legend", 800, 480, main);
+			function main () {
+				var theTextField = new LTextField();
+				theTextField.text = "wait click";
+				theTextField.x = 10;
+				theTextField.y = 10;
+				theTextField.size = 20;
+				addChild(theTextField);
+				var button = new LButtonSample1("wind test start");
+				button.textField = theTextField;
+				button.x = 10;
+				button.y = 100;
+				addChild(button);
+				button.addEventListener(LMouseEvent.MOUSE_DOWN, onclick);
+			}
+			function windOver(event){
+				var theTextField = event.target;
+				theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+				theTextField.text = "wind over";
+			}
+			function onclick(event){
+				var theTextField = event.currentTarget.textField;
+				if (theTextField.hasEventListener(LTextEvent.WIND_COMPLETE)) {
+					theTextField.removeEventListener(LTextEvent.WIND_COMPLETE, windOver);
+				}
+				theTextField.text = "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT";
+				theTextField.speed = 3;
+				theTextField.wind();
+				theTextField.addEventListener(LTextEvent.WIND_COMPLETE, windOver);
+			}
+			</script>
+	</body>
+</html>

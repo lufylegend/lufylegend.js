@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LBlendMode</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(20,"legend",800,400,main);
+			var loadingLayer,stageLayer,imgLayer;
+			var imgData = [
+				{name:"back",path:"back.jpg"},
+				{name:"img",path:"img.jpg"}
+			];
+			var dataList;
+			var back,img;
+			var boxBlendMode;
+			function main(){
+				loadingLayer = new LoadingSample1();
+				addChild(loadingLayer);
+				LLoadManage.load(imgData,
+					function(progress){
+						loadingLayer.setProgress(progress);
+					},gameInit);
+			}
+			function gameInit(result){
+				if(LGlobal.canTouch){
+					LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+					LSystem.screen(LStage.FULL_SCREEN);
+				}
+				dataList = result;
+				removeChild(loadingLayer);
+				loadingLayer = null;
+				
+				stageLayer = new LSprite();
+				addChild(stageLayer);
+				
+				imgLayer = new LSprite();
+				stageLayer.addChild(imgLayer);
+				back = new LBitmap(new LBitmapData(dataList["back"]));
+				back.x = -480;
+				imgLayer.addChild(back);
+				img = new LBitmap(new LBitmapData(dataList["img"]));
+				img.x = 150;
+				img.y = -100;
+				imgLayer.addChild(img);
+			
+				ctrlLayer = new LSprite();
+				ctrlLayer.x = 450;
+				stageLayer.addChild(ctrlLayer);
+				addCtrl();
+			}
+			function addCtrl(){
+				boxBlendMode = new LComboBox(15);
+				boxBlendMode.x = 10;
+				boxBlendMode.y= 10;
+				boxBlendMode.setChild({label:"NONE",value:LBlendMode.NONE});
+				boxBlendMode.setChild({label:"LIGHTER",value:LBlendMode.LIGHTER});
+				boxBlendMode.setChild({label:"SOURCE_OVER",value:LBlendMode.SOURCE_OVER});
+				boxBlendMode.setChild({label:"SOURCE_ATOP",value:LBlendMode.SOURCE_ATOP});
+				boxBlendMode.setChild({label:"SOURCE_IN",value:LBlendMode.SOURCE_IN});
+				boxBlendMode.setChild({label:"SOURCE_OUT",value:LBlendMode.SOURCE_OUT});
+				boxBlendMode.setChild({label:"DESTINATION_OVER",value:LBlendMode.DESTINATION_OVER});
+				boxBlendMode.setChild({label:"DESTINATION_ATOP",value:LBlendMode.DESTINATION_ATOP});
+				boxBlendMode.setChild({label:"DESTINATION_IN",value:LBlendMode.DESTINATION_IN});
+				boxBlendMode.setChild({label:"DESTINATION_OUT",value:LBlendMode.DESTINATION_OUT});
+				boxBlendMode.setChild({label:"COPY",value:LBlendMode.COPY});
+				boxBlendMode.setChild({label:"XOR",value:LBlendMode.XOR});
+				ctrlLayer.addChild(boxBlendMode);
+			
+				var buttonRun = new LButtonSample1("效果开始");
+				buttonRun.x = 10;
+				buttonRun.y = 50;
+				ctrlLayer.addChild(buttonRun);
+				buttonRun.addEventListener(LMouseEvent.MOUSE_UP,run);
+			}
+			function run(){
+				img.blendMode = boxBlendMode.value;
+			}
+			</script>
+	</body>
+</html>

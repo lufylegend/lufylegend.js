@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LTreeWidget</title>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+<script>
+init(30,"mylegend",850,630,main);
+LStage.setDebug(true);
+function main(){
+	var treelist = [
+		{
+			label:"Note",
+			branch:[
+				{
+					label:"Class Note",
+					branch:[
+						{label:"Mathematics", branch:[
+							{label:"Geometry", branch:[
+								{label:"Triangle"},
+								{label:"Circle"},
+								{label:"Rectangle"}
+							]},
+							{label:"Algebra", branch:[
+								{label:"Equation"},
+								{label:"Function"}
+							]}
+						]},
+						{label:"Physics", branch:[
+							{label:"Mechanics", branch:[
+								{label:"Triangle"},
+								{label:"Circle"},
+								{label:"Rectangle"}
+							]},
+							{label:"Electricity"}
+						]}
+					],
+					click:function(){trace("Class Note");}
+				},
+				{
+					label:"Programming Note",
+					branch:[
+						{label:"lufylegend.js APIs", branch:[
+							{label:"LGlobal"},
+							{label:"LSprite", branch:[
+								{label:"addChild"},
+								{label:"removeChild"},
+								{label:"addEventListener"},
+								{label:"removeEventListener"}
+							]},
+							{label:"LBitmapData"},
+							{label:"LBitmap"}
+						]},
+						{label:"Object-Oriented Programming"},
+					],
+					click:function(){trace("Programming Note");}
+				}
+			]
+		}
+	];
+	var treeWidget = new LTreeWidget(treelist, {textColor:"red", textSize:30, branchButtonColor:"blue"});
+	addChild(treeWidget);
+}
+</script>
+</body>
+</html>

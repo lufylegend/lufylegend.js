@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>clone</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend"></div>
+			<script type="text/javascript">
+				LInit(20,"legend",800,450,main);
+				function main(){
+					var loader = new LLoader();
+					loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+					loader.load("player.png", "bitmapData");
+				}
+				function loadBitmapdata(event){
+					var backLayer = new LSprite();
+					addChild(backLayer);
+					var list = LGlobal.divideCoordinate(480,630,3,4);
+					var data = new LBitmapData(event.target,0,0,120,210);
+					var player = new LAnimationTimeline(data,list);
+					player.speed = 10;
+					backLayer.addChild(player);
+					var player2 = player.clone();
+					player2.setAction(2);
+					player2.x = 150;
+					backLayer.addChild(player2);
+				}
+			</script>
+			
+			
+			
+	</body>
+</html>

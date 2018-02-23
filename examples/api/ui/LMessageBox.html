@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LMessageBox</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,600,main);
+function main(){
+	var button01 = new LButtonSample1("LMessageBox test");
+	button01.x = 100;
+	button01.y = 150;
+	addChild(button01);
+	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){
+		LMessageBox.show({
+			title:"title",
+			message:"LMessageBox test"
+		});
+	});
+}
+</script>
+	</body>
+</html>

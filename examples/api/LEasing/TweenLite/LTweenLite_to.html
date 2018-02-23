@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>LTweenLite</title>
+	<script type="text/javascript" src="../../lufylegend-1.8.12.min.js"></script>
+</head>
+<body>
+<div id="legend"></div>
+<script type="text/javascript">
+init(50,"legend",480,400,main);
+var box,box2;
+function main(){
+	box = new LSprite();
+	box.x = box.y = 100;
+	addChild(box);
+	box.graphics.drawArc(5,"#333333",[0,0,10,0,2*Math.PI],true,"#333333");
+
+	box2 = new LSprite();
+	box2.x = box2.y = 150;
+	addChild(box2);
+	box2.graphics.drawArc(5,"#333333",[0,0,10,0,2*Math.PI],true,"#333333");
+
+	var tween = LTweenLite.to(box,1,{x:200,ease:Strong.easeOut})
+	.to(box,1,{x:100,ease:Strong.easeOut})
+	.to(box,1,{x:200,ease:Strong.easeOut})
+	.to(box,1,{x:100,ease:Strong.easeOut})
+	.to(box2,1,{x:250,ease:Strong.easeOut,loop:true})
+	.to(box2,1,{x:150,ease:Strong.easeOut});
+}
+</script> 
+</body>
+</html>

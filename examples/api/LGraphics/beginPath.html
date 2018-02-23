@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>beginPath</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var shape = new LShape();
+				addChild(shape);
+				shape.graphics.beginPath();
+				shape.graphics.lineWidth(5);
+				shape.graphics.strokeStyle("#FF0000");
+				shape.graphics.moveTo(0,75);
+				shape.graphics.lineTo(250,75);
+				shape.graphics.stroke();
+				
+				shape.graphics.beginPath();
+				shape.graphics.strokeStyle("#00FF00");
+				shape.graphics.moveTo(50,0);
+				shape.graphics.lineTo(150,130);
+				shape.graphics.stroke();
+			}
+			</script>
+	</body>
+</html>

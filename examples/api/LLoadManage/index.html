@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LURLLoader</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script>
+			LInit(1000 / 50, "legend", 800, 480, main);
+			var loadData = [
+			{name:"face",path:"../LBitmapData/face.jpg"},
+			{name:"myFont", path:"NotoSans-BoldItalic.eot,NotoSans-BoldItalic.ttf", type:"font"}];
+			var loadingLayer;
+			var datalist=[]; 
+			function main() {
+				loadingLayer = new LoadingSample1();
+				addChild(loadingLayer);
+				LLoadManage.load(loadData, function(progress) {
+					loadingLayer.setProgress(progress);
+				}, gameInit);
+			}
+
+			function gameInit(result) {
+				datalist = result; 
+				removeChild(loadingLayer);
+				loadingLayer = null;
+				var bitmapData = new LBitmapData(datalist["face"]);
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				var t = new LTextField();
+				t.text = "AAAAAAA";
+				t.font = "myFont";
+				t.size = 30;
+				t.y = 240;
+				addChild(t);
+			}
+		</script>
+	</body>
+</html>

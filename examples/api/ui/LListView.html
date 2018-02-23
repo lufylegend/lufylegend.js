@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LListView</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend"></div>
+<script>
+init(1000/60,"legend",800,450,main);
+var backLayer, ctrlLayer, listView, index = 1;
+function MyListChildView(i){
+	var self = this;
+	base(self,LListChildView,[]);
+	var rand = Math.random();
+	self.graphics.drawRect(1, "#000000", [0, 0, 100, 30],true,rand < 0.33?"#90EE90":(rand < 0.66 ? "#F4A460":"#E6E6FA"));
+	var t = new LTextField();
+	t.text = "点击删除"+i;
+	t.x = t.y = 5;
+	self.addChild(t);
+}
+MyListChildView.prototype.onClick = function(event){
+	event.currentTarget.deleteChildView(event.target);
+};
+function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	LGlobal.setDebug(true);
+	ctrlLayer = new LSprite();
+	addChild(ctrlLayer);
+	backLayer = new LSprite();
+	backLayer.x = 20;
+	backLayer.y = 50;
+	addChild(backLayer);
+	var button01 = new LButtonSample1("点击按钮添加单元");
+	button01.x = 30;
+	button01.y = 10;
+	ctrlLayer.addChild(button01);
+	button01.addEventListener(LMouseEvent.MOUSE_UP,addListChildView);
+	
+	listViewInit();
+}
+function listViewInit(){
+	listView = new LListView();
+	backLayer.addChild(listView);
+	listView.maxPerLine = 3;
+	listView.cellWidth = 100;
+	listView.cellHeight = 30;
+	listView.resize(300,300);
+	listView.arrangement = LListView.Direction.Horizontal;
+	listView.movement = LListView.Direction.Vertical;
+	listView.graphics.drawRect(1, "#00ff00", [0, 0, listView.clipping.width,listView.clipping.height]);
+}
+function addListChildView(){
+	var child = new MyListChildView(index++);
+	listView.insertChildView(child);
+}
+</script>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LWindow</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+init(1000/60,"legend",800,600,main);
+function main(){
+	var myWindow = new LWindow({width:350,height:250,title:"TEST"});
+	myWindow.x = 200;
+	myWindow.y = 100;
+	addChild(myWindow);
+	
+	var title = new LTextField();
+	title.text = "窗口UI测试";
+	title.size = 20;
+	title.x = 100;
+	title.y = 10;
+	myWindow.layer.addChild(title);
+	
+	var nameLabel = new LTextField();
+	nameLabel.text = "用户名：";
+	nameLabel.x = 80;
+	nameLabel.y = 70;
+	myWindow.layer.addChild(nameLabel);
+	var name = new LTextField();
+	name.x = 150;
+	name.y = 70;
+	name.setWordWrap(true);
+	name.setType(LTextFieldType.INPUT);
+	myWindow.layer.addChild(name);
+	name.focus();
+	var passLabel = new LTextField();
+	passLabel.text = "密码：";
+	passLabel.x = 80;
+	passLabel.y = 110;
+	myWindow.layer.addChild(passLabel);
+	var pass = new LTextField();
+	pass.x = 150;
+	pass.y = 110;
+	pass.displayAsPassword = true;
+	pass.setType(LTextFieldType.INPUT);
+	myWindow.layer.addChild(pass);
+
+	var button01 = new LButtonSample1("登陆");
+	button01.x = 100;
+	button01.y = 150;
+	myWindow.layer.addChild(button01);
+	button01.addEventListener(LMouseEvent.MOUSE_UP,function(){
+		LMessageBox.show({
+			title:"message",
+			message:"点击了登陆按钮"
+		});
+	});
+	var button02 = new LButtonSample1("注册");
+	button02.x = 200;
+	button02.y = 150;
+	myWindow.layer.addChild(button02);
+	
+}
+</script>
+	</body>
+</html>

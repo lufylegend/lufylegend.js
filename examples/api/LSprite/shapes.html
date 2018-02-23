@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LSprite</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend">
+			
+		</div>
+		<script>
+			var layer;
+			init(1000/50,"legend",800,450,main);
+			function main () {
+				LGlobal.setDebug(true);
+				loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("lufylegend.js.png", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				
+				layer = new LSprite();
+				layer.addChild(bitmap);
+				layer.x = 20;
+				layer.y = 50;
+				layer.addShape(LShape.VERTICES, [[180, 20], [210, 40], [210, 60], [120, 110], [35, 100]]);
+				layer.addShape(LShape.VERTICES, [[120, 110], [140, 120], [140, 150], [110, 160], [35, 120], [35, 100]]);
+				addChild(layer);
+				
+				layer.addEventListener(LEvent.ENTER_FRAME, onframe);
+			}
+			function onframe (e) {
+				if (layer.hitTestPoint(mouseX, mouseY)) {
+					layer.alpha = 0.5;
+				} else {
+					layer.alpha = 1;
+				}
+			}
+		</script>
+	</body>
+</html>

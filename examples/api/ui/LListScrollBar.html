@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LListScrollBar</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend"></div>
+<script>
+init(1000/60,"legend",800,850,main);
+var backLayer, listView;
+function MyListChildView(i){
+	var self = this;
+	base(self,LListChildView,[]);
+	var rand = Math.random();
+	self.graphics.drawRect(1, "#000000", [0, 0, 100, 30],true,rand < 0.33?"#90EE90":(rand < 0.66 ? "#F4A460":"#E6E6FA"));
+	var t = new LTextField();
+	t.text = i;
+	t.x = t.y = 5;
+	self.addChild(t);
+}
+function main(){
+	LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+	LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+	LGlobal.setDebug(true);
+	backLayer = new LSprite();
+	backLayer.x = 50;
+	backLayer.y = 50;
+	addChild(backLayer);
+	setTimeout(function(){listViewInit(1);},100);
+}
+function listViewInit(){
+	listView = new LListView();
+	backLayer.addChild(listView);
+	var scrollBarVertical = new LListScrollBar(new LPanel("#9370DB", 18, 18), new LPanel("#9400D3", 18, 18), LListView.ScrollBarCondition.OnlyIfNeeded);
+	listView.setVerticalScrollBar(scrollBarVertical);
+	var scrollBarHorizontal = new LListScrollBar(new LPanel("#AFEEEE", 18, 18), new LPanel("#4169E1", 18, 18), LListView.ScrollBarCondition.OnlyIfNeeded);
+	listView.setHorizontalScrollBar(scrollBarHorizontal);
+	listView.maxPerLine = 6;
+	listView.cellWidth = 100;
+	listView.cellHeight = 30;
+	listView.resize(300,300);
+	listView.movement = LListView.Direction.Unrestricted;
+	listView.graphics.drawRect(1, "#00ff00", [0, 0, listView.clipping.width,listView.clipping.height]);
+	var list = [];
+	for(var i=0;i<100;i++){
+		var c = new MyListChildView(i);
+		list.push(c);
+	}
+	listView.updateList(list);
+}
+
+</script>
+	</body>
+</html>

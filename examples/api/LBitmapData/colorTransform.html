@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>colorTransform</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+		<div id="legend"></div>
+		<script>
+			LInit(50, "legend", 800, 480, main);
+			function main() {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata(event) {
+				var bitmapData = new LBitmapData(event.target, 0, 0, 240, 240, LBitmapData.DATA_CANVAS);
+				var rect = new LRectangle(50, 50, 90, 90);
+				var colorTransform = new LColorTransform(0.5, 0.7, 0.4, 1, 0, 0, 0, 0);
+				bitmapData.colorTransform(rect, colorTransform);
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+			}
+		</script>
+	</body>
+</html>

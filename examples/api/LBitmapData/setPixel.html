@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>setPixel</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("face.jpg", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapData = new LBitmapData(event.target);
+				var bitmapData2 = new LBitmapData(null, 0, 0, 50, 50);
+				var bitmapData3 = new LBitmapData(null, 0, 0, 50, 50);
+				var img, imgs = [], arr;
+				bitmapData.lock();
+				for (var i = 0; i < 50; i++) {
+					 arr = [];
+					 for (var j = 0; j < 50; j++) {
+						img = bitmapData.getPixel(100 + i, 100 + j);
+						arr.push(img);
+					}
+					imgs.push(arr);
+				}
+				bitmapData.unlock();
+				bitmapData2.lock();
+				for (var i = 0; i < 50; i++) {
+					arr = imgs[i];
+					for (var j = 0; j < 50; j++) {
+						img = arr[j];
+						bitmapData2.setPixel(i, j, img);
+					}
+				}
+				bitmapData2.unlock();
+				
+				bitmapData3.lock();
+				for (var i = 0; i < 50; i++) {
+					arr = imgs[i];
+					for (var j = 0; j < 50; j++) {
+						img = arr[j];
+						img[3] = 128;
+						bitmapData3.setPixel(i, j, img);
+					}
+				}
+				bitmapData3.unlock();
+				
+				var bitmap = new LBitmap(bitmapData);
+				addChild(bitmap);
+				
+				var bitmap2 = new LBitmap(bitmapData2);
+				bitmap2.x = 250;
+				addChild(bitmap2);
+				var bitmap3 = new LBitmap(bitmapData3);
+				bitmap3.x = 250;
+				bitmap3.y = 100;
+				addChild(bitmap3);
+			}
+			</script>
+	</body>
+</html>

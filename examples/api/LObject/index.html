@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>callParent</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			function funA(){
+			    LExtends(this,LObject,[]);
+			}
+			funA.prototype.myName = function(){
+			    return "AAA";
+			}
+			function funB(){
+			    LExtends(this,funA,[]);
+			}
+			funB.prototype.myName = function(){
+			    return "BBB";
+			}
+			function funC(){
+			    LExtends(this,funA,[]);
+			}
+			funC.prototype.myName = function(){
+			    return this.callParent("myName",arguments);
+			}
+			LInit(50, "legend", 800, 150, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var objB = new funB();
+				trace(objB.myName());//BBB
+				var objC = new funC();
+				trace(objC.myName());//AAA
+			}
+			
+			</script>
+	</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>LTransitionManager</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+</head>
+<body>
+	<div id="legend"></div>
+<script>
+init(20,"legend",640,400,main);
+var loadingLayer;
+var imgData = [
+	{name:"img01",path:"img01.jpg"},
+	{name:"img02",path:"img02.jpg"}
+];
+var dataList;
+var stageLayer,ctrlLayer,paramsLayer,imgLayer;
+var transType;
+var numStrips;
+var easing,easeValue;
+var direction;
+var duration;
+var startPoint;
+var xSections,ySections;
+function main(){
+	loadingLayer = new LoadingSample1();
+	addChild(loadingLayer);
+	LLoadManage.load(imgData,
+		function(progress){
+			loadingLayer.setProgress(progress);
+		},gameInit);
+}
+function gameInit(result){
+	LGlobal.setDebug(true);
+	dataList = result;
+	removeChild(loadingLayer);
+	loadingLayer = null;
+	
+	stageLayer = new LSprite();
+	addChild(stageLayer);
+	ctrlLayer = new LSprite();
+	ctrlLayer.x = 400;
+	stageLayer.addChild(ctrlLayer);
+	addCtrl();
+	
+	imgLayer = new LSprite();
+	addChild(imgLayer);
+	var layer,bitmap;
+	layer = new LSprite();
+	imgLayer.addChild(layer);
+	bitmap = new LBitmap(new LBitmapData(dataList["img01"]));
+	layer.addChild(bitmap);
+	layer = new LSprite();
+	imgLayer.addChild(layer);
+	bitmap = new LBitmap(new LBitmapData(dataList["img02"]));
+	layer.addChild(bitmap);
+}
+function addCtrl(){
+	direction = new LComboBox(15);
+	direction.x = 10;
+	direction.y= 10;
+	direction.setChild({label:"进入",value:LTransition.IN});
+	direction.setChild({label:"移除",value:LTransition.OUT});
+	ctrlLayer.addChild(direction);
+
+	transType = new LComboBox(15);
+	transType.x = 10;
+	transType.y= 50;
+	transType.setChild({label:"Blinds",value:LTransition.Blinds});
+	transType.setChild({label:"Fade",value:LTransition.Fade});
+	transType.setChild({label:"Fly",value:LTransition.Fly});
+	transType.setChild({label:"Iris",value:LTransition.Iris});
+	transType.setChild({label:"Curtain",value:LTransition.Curtain});
+	transType.setChild({label:"PixelDissolve",value:LTransition.PixelDissolve});
+	transType.setChild({label:"Squeeze",value:LTransition.Squeeze});
+	transType.setChild({label:"Wipe",value:LTransition.Wipe});
+	transType.setChild({label:"Zoom",value:LTransition.Zoom});
+	ctrlLayer.addChild(transType);
+	transType.addEventListener(LComboBox.ON_CHANGE,function(event){
+		setParams(event.target.value);
+	});
+	paramsLayer = new LSprite();
+	paramsLayer.y = 90;
+	ctrlLayer.addChild(paramsLayer);
+	setParams(transType.value);
+
+	var lable;
+	lable = new LTextField();
+	lable.text = "时间：";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 220;
+	ctrlLayer.addChild(lable);
+	duration = new LTextField();
+	duration.width = 50;
+	duration.text = 1;
+	duration.x = 70;
+	duration.y = 225;
+	duration.setType(LTextFieldType.INPUT);
+	ctrlLayer.addChild(duration);
+	lable = new LTextField();
+	lable.text = "秒";
+	lable.size = 14;
+	lable.x = 130;
+	lable.y = 220;
+	ctrlLayer.addChild(lable);
+
+	easing = new LComboBox(15);
+	easing.x = 10;
+	easing.y= 250;
+	easing.setChild({label:"Quad",value:"Quad"});
+	easing.setChild({label:"Cubic",value:"Cubic"});
+	easing.setChild({label:"Quart",value:"Quart"});
+	easing.setChild({label:"Quint",value:"Quint"});
+	easing.setChild({label:"Sine",value:"Sine"});
+	easing.setChild({label:"Strong",value:"Strong"});
+	easing.setChild({label:"Expo",value:"Expo"});
+	easing.setChild({label:"Circ",value:"Circ"});
+	easing.setChild({label:"Elastic",value:"Elastic"});
+	easing.setChild({label:"Back",value:"Back"});
+	easing.setChild({label:"Bounce",value:"Bounce"});
+	ctrlLayer.addChild(easing);
+
+	easeValue = new LComboBox(15);
+	easeValue.x = 10;
+	easeValue.y= 300;
+	easeValue.setChild({label:"easeIn",value:"easeIn"});
+	easeValue.setChild({label:"easeOut",value:"easeOut"});
+	easeValue.setChild({label:"easeInOut",value:"easeInOut"});
+	ctrlLayer.addChild(easeValue);
+
+	var buttonRun = new LButtonSample1("效果开始");
+	buttonRun.x = 10;
+	buttonRun.y = 350;
+	ctrlLayer.addChild(buttonRun);
+	buttonRun.addEventListener(LMouseEvent.MOUSE_UP,run);
+}
+function run(){
+	var transObj = {};
+	transObj.type=transType.value;
+	transObj.direction=direction.value;
+	var index = 0;
+	var child;
+	if(direction.value == LTransition.IN){
+		child = imgLayer.getChildAt(0);
+		imgLayer.setChildIndex(child,1);
+		transObj.onComplete = function(child){
+			child.x = child.y = 0;
+			child.alpha = child.alpha = 1;
+			child.scaleX = child.scaleY = 1;
+		}
+	}else{
+		child = imgLayer.getChildAt(1);
+		transObj.onComplete = function(child){
+			child.x = child.y = 0;
+			child.alpha = child.alpha = 1;
+			child.scaleX = child.scaleY = 1;
+			imgLayer.setChildIndex(child,0);
+		}
+	}
+
+	transObj.duration = parseInt(duration.text);
+	transObj.easing=LEasing[easing.value][easeValue.value];
+	switch(transType.value){
+		case LTransition.Blinds:
+			transObj.numStrips=numStrips.text;
+			transObj.dimension=dimension.value;
+			break;
+		case LTransition.Fly:
+		case LTransition.Wipe:
+			transObj.startPoint=startPoint.value;
+			break;
+		case LTransition.Iris:
+			transObj.startPoint=startPoint.value;
+			transObj.shape=shape.value;
+			break;
+		case LTransition.Curtain:
+		case LTransition.Squeeze:
+			transObj.dimension=dimension.value;
+			break;
+		case LTransition.PixelDissolve:
+			transObj.xSections=xSections.text;
+			transObj.ySections=ySections.text;
+			break;
+	}
+	LTransitionManager.start(child,transObj);
+}
+function setParams(value){
+	paramsLayer.removeAllChild();
+	switch(value){
+		case LTransition.Blinds:
+			setParamsBlinds();
+			break;
+		case LTransition.Fly:
+		case LTransition.Wipe:
+			setParamsFly();
+			break;
+		case LTransition.Iris:
+			setParamsIris();
+			break;
+		case LTransition.PixelDissolve:
+			setParamsPixelDissolve();
+			break;
+		case LTransition.Curtain:
+		case LTransition.Squeeze:
+			setParamsCurtain();
+			break;
+	}
+}
+function setParamsPixelDissolve(){
+	var lable;
+	lable = new LTextField();
+	lable.text = "水平数目";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 10;
+	paramsLayer.addChild(lable);
+	
+	xSections = new LTextField();
+	xSections.text = 10;
+	xSections.x = 10;
+	xSections.y = 40;
+	xSections.setType(LTextFieldType.INPUT);
+	paramsLayer.addChild(xSections);
+
+	lable = new LTextField();
+	lable.text = "垂直数目";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 60;
+	paramsLayer.addChild(lable);
+	
+	ySections = new LTextField();
+	ySections.text = 10;
+	ySections.x = 10;
+	ySections.y = 90;
+	ySections.setType(LTextFieldType.INPUT);
+	paramsLayer.addChild(ySections);
+}
+function setParamsCurtain(){
+	var lable;
+	lable = new LTextField();
+	lable.text = "垂直";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 10;
+	paramsLayer.addChild(lable);
+	lable = new LTextField();
+	lable.text = "水平";
+	lable.size = 14;
+	lable.x = 80;
+	lable.y = 10;
+	paramsLayer.addChild(lable);
+	dimension = new LRadio();
+	dimension.x = 60;
+	dimension.y = 20;
+	dimension.setChildRadio(0,0,0);
+	dimension.setChildRadio(1,70,0);
+	dimension.setValue(0);
+	paramsLayer.addChild(dimension);
+}
+function setParamsIris(){
+	var lable;
+	startPoint = new LComboBox(15);
+	startPoint.x = 10;
+	startPoint.y = 10;
+	startPoint.setChild({label:"左上",value:1});
+	startPoint.setChild({label:"上中",value:2});
+	startPoint.setChild({label:"右上",value:3});
+	startPoint.setChild({label:"左中",value:4});
+	startPoint.setChild({label:"中心",value:5});
+	startPoint.setChild({label:"右中",value:6});
+	startPoint.setChild({label:"左下",value:7});
+	startPoint.setChild({label:"下中",value:8});
+	startPoint.setChild({label:"右下",value:9});
+	paramsLayer.addChild(startPoint);
+
+	lable = new LTextField();
+	lable.text = "方形";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 70;
+	paramsLayer.addChild(lable);
+	lable = new LTextField();
+	lable.text = "圆形";
+	lable.size = 14;
+	lable.x = 80;
+	lable.y = 70;
+	paramsLayer.addChild(lable);
+	shape = new LRadio();
+	shape.x = 60;
+	shape.y = 80;
+	shape.setChildRadio(LIris.SQUARE,0,0);
+	shape.setChildRadio(LIris.CIRCLE,70,0);
+	shape.setValue(0);
+	paramsLayer.addChild(shape);
+}
+function setParamsFly(){
+	startPoint = new LComboBox(15);
+	startPoint.x = 10;
+	startPoint.y = 10;
+	startPoint.setChild({label:"左上",value:1});
+	startPoint.setChild({label:"上中",value:2});
+	startPoint.setChild({label:"右上",value:3});
+	startPoint.setChild({label:"左中",value:4});
+	startPoint.setChild({label:"中心",value:5});
+	startPoint.setChild({label:"右中",value:6});
+	startPoint.setChild({label:"左下",value:7});
+	startPoint.setChild({label:"下中",value:8});
+	startPoint.setChild({label:"右下",value:9});
+	paramsLayer.addChild(startPoint);
+}
+function setParamsBlinds(){
+	var lable;
+	lable = new LTextField();
+	lable.text = "条纹数";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 10;
+	paramsLayer.addChild(lable);
+	
+	numStrips = new LTextField();
+	numStrips.text = 10;
+	numStrips.x = 10;
+	numStrips.y = 40;
+	numStrips.setType(LTextFieldType.INPUT);
+	paramsLayer.addChild(numStrips);
+
+	lable = new LTextField();
+	lable.text = "垂直";
+	lable.size = 14;
+	lable.x = 10;
+	lable.y = 70;
+	paramsLayer.addChild(lable);
+	lable = new LTextField();
+	lable.text = "水平";
+	lable.size = 14;
+	lable.x = 80;
+	lable.y = 70;
+	paramsLayer.addChild(lable);
+	dimension = new LRadio();
+	dimension.x = 60;
+	dimension.y = 80;
+	dimension.setChildRadio(0,0,0);
+	dimension.setChildRadio(1,70,0);
+	dimension.setValue(0);
+	paramsLayer.addChild(dimension);
+}
+function a(){
+	sp = new LSprite();
+	addChild(sp);
+	imglist = result;
+	bitmapData = new LBitmapData(imglist["img1"]);
+	bitmap = new LBitmap(bitmapData);
+	sp.addChild(bitmap);
+sp.addEventListener(LMouseEvent.MOUSE_UP,function(){
+	LGlobal.mg.clear();
+	LGlobal.mg.drawRect(0,"#000000",[0,0,100,100]);
+});  
+var trans = new LTransitionManager(sp);
+trans.startTransition( {type:LTransition.Curtain,
+	dimension:1,
+	direction:LTransition.OUT,
+	duration:2,
+	easing:Strong.easeOut});
+/**
+trans.startTransition( {type:LTransition.PixelDissolve,
+			xSections:5,
+			ySections:10,
+                        direction:LTransition.IN,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Blinds,
+			dimension:0,
+			numStrips:10,
+                        direction:LTransition.IN,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Wipe,
+			startPoint:1,
+                        direction:LTransition.OUT,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Iris,
+			startPoint:4,shape:LIris.CIRCLE,
+                        direction:LTransition.IN,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Squeeze,
+			dimension:1,
+                        direction:LTransition.IN,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Zoom,
+                        direction:LTransition.IN,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Fly,
+			startPoint:3,
+                        direction:LTransition.OUT,
+                        duration:2,
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Fade,
+                        direction:LTransition.IN,
+                        duration:2,
+			onUpdate:function(){trace("0");},
+                        easing:Strong.easeOut});
+trans.startTransition( {type:LTransition.Blinds,
+			dimension:0,
+			numStrips:10,
+                        direction:LTransition.OUT,
+                        duration:2,
+			onUpdate:function(){trace("0");},
+                        easing:Strong.easeOut});*/
+return;
+	sp.x = 200;
+	sp.y = 200;
+	sp.scaleX = 2
+	sp.scaleY = 2;
+	bitmap.x = -bitmap.getWidth() / 2;
+	bitmap.y = -bitmap.getHeight() / 2
+
+	sp.x = 200/sp.scaleX;
+	sp.y = 200/sp.scaleX;
+
+
+	var obj = new Object()
+	obj.scaleX = 1
+	obj.scaleY = 1
+	obj.onUpdate = function (sp){
+	sp.x = 200/sp.scaleX;
+	sp.y = 200/sp.scaleX;
+	}
+	LTweenLite.to(sp, 1, obj)
+
+}	
+</script>
+	</body>
+</html>

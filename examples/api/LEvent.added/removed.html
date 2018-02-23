@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>added</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../../../lib/lufylegend.LEvent.added-0.1.2.min.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(1000/60, "legend", 800, 80, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var layer = new LSprite();
+				var childLayer = new LSprite();
+				var childLayer2 = new LSprite();
+				childLayer.addEventListener(LEvent.REMOVED,removed);
+				childLayer.addEventListener(LEvent.REMOVED_FROM_STAGE,removedFromStage);
+				childLayer2.addEventListener(LEvent.REMOVED,removed);
+				childLayer2.addEventListener(LEvent.REMOVED_FROM_STAGE,removedFromStage);
+				layer.addChild(childLayer);
+				layer.addChild(childLayer2);
+				
+				layer.removeChild(childLayer);
+				addChild(layer);
+				
+				layer.removeChild(childLayer2);
+			}
+			function removed(event) {
+				trace("removed : " + event.currentTarget + "("+event.currentTarget.objectIndex+")");
+			}
+			function removedFromStage(event) {
+				trace("removedFromStage : " + event.currentTarget + "("+event.currentTarget.objectIndex+")");
+			}
+			</script>
+	</body>
+</html>

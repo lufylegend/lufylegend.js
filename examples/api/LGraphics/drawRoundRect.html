@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>drawRoundRect</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				var shape = new LShape();
+				addChild(shape);
+				shape.graphics.drawRoundRect(2, "#ff0000", [10, 10, 100, 50, 10]);
+				shape.graphics.drawRoundRect(1, "#000000", [10, 100, 50, 100, 10], true, "#880088");
+			}
+			</script>
+	</body>
+</html>

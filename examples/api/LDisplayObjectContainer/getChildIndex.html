@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getChildIndex</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				var container = new LSprite();
+				var sprite1 = new LSprite();
+				sprite1.name = "sprite1";
+				var sprite2 = new LSprite();
+				sprite2.name = "sprite2";
+				container.addChild(sprite1);
+				container.addChild(sprite2);
+				trace(container.getChildIndex(sprite1)); // 0
+			}
+			</script>
+	</body>
+</html>

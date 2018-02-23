@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>四叉树方法：400个对象的碰撞检测</title>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+<script type="text/javascript" src="../load_lufylegend.js"></script>
+<script type="text/javascript">
+init(30,"mylegend",800,450,main,LEvent.INIT);
+var back,query,list;
+function main(){
+	LGlobal.setDebug(true);
+	back = new LSprite();
+	back.graphics.drawRect(1,"#000000",[0,0,800,450],true,"#cccccc");
+	query = new LQuadTree(new LRectangle(0,0,800,450));
+	query.createChildren(3);
+	addChild(back);
+	list = [];
+	var child;
+	for(var i=0;i< 400;i++){
+		child = new LSprite();
+		child.graphics.drawRect(1,"#000000",[0,0,20,20]);
+		child.x = Math.random()*750;
+		child.y = Math.random()*400;
+		child.sx = 10 - Math.random()*20;
+		child.sy = 10 - Math.random()*20;
+		back.addChild(child);
+		list.push(child);
+		query.add(child,child.x,child.y);
+	}
+	back.addEventListener(LEvent.ENTER_FRAME, onframe);
+}
+
+function onframe(){
+	var child,child2;
+	for (var i = 0; i < list.length; i++) {
+		child = list[i];
+		child.x += child.sx;
+		child.y += child.sy;
+		if(child.x < 0 || child.x > LGlobal.width)child.sx *= -1;
+		if(child.y < 0 || child.y > LGlobal.height)child.sy *= -1;
+		query.remove(child);
+		query.add(child,child.x,child.y);
+	}
+	var arr = [];
+	for(var key=0; key < back.childList.length;key++){
+		child = back.childList[key];
+		
+		child.graphics.clear();
+		child.graphics.drawRect(1,"#000000",[0,0,20,20]);
+		var queryArr = query.getDataInRect(new LRectangle(child.x - 20,child.y - 20,60,60));
+		for (var i = 0; i < queryArr.length; i++) {
+			child2 = queryArr[i];
+			if(child.objectindex != child2.objectindex && LGlobal.hitTest(child,child2)){
+				arr.push(key);
+				break;
+			}
+		}
+	}
+	for (key in arr){
+		child = back.childList[arr[key]];
+		child.graphics.clear();
+		child.graphics.drawRect(1,"#ff0000",[0,0,20,20]);
+	}
+}
+</script>
+</body>
+</html>

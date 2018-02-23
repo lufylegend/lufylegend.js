@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8" />
+	<title>UI:LMenubar</title>
+	<script type="text/javascript" src="../load_lufylegend.js"></script>
+	<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body style="margin:0;padding:0;">
+			<div id="legend">
+			</div>
+<script type="text/javascript">
+	init(1000/60,"legend",800,600,main);
+	function main(){
+		LMouseEventContainer.set(LMouseEvent.MOUSE_DOWN,true);
+		LMouseEventContainer.set(LMouseEvent.MOUSE_UP,true);
+		LMouseEventContainer.set(LMouseEvent.MOUSE_MOVE,true);
+		LGlobal.setDebug(true);
+		var list = [
+			{label:"File",list:[
+				{label:"New",list:[
+					{label:"File",click:function(){trace("File");}},
+					{label:"Folder",click:function(){trace("Folder");}}
+				]},
+				{label:"New Open File",list:[
+					{label:"File",click:function(){trace("File");}},
+					{label:"Folder",click:function(){trace("Folder");}},
+					{label:"Test",list:[
+						{label:"File",click:function(){trace("File");}},
+						{label:"Folder",click:function(){trace("Folder");}},
+						{label:"Test",click:function(){trace("Test");}}
+					]}
+				]},
+				{label:"Open File",click:function(){trace("Open File");}}
+			]},
+			{label:"Edit",list:[
+				{label:"Test1",click:function(){trace("Test1");}},
+				{label:"Test2",click:function(){trace("Test2");}}
+			]},
+			{label:"Project",list:[
+				{label:"Test1",click:function(){trace("Test1");}},
+				{label:"Test2",click:function(){trace("Test2");}}
+			]},
+			{label:"Window",list:[
+				{label:"Test1",click:function(){trace("Test1");}},
+				{label:"Test2",click:function(){trace("Test2");}}
+			]},
+			{label:"Help",list:[
+				{label:"About",click:function(){trace("About");}},
+				{label:"Test3",click:function(){trace("Test3");}}
+			]}
+		];
+		
+		var menu = new LMenubar(list,{textSize:20,textColor:"#FFFFFF",lineColor:"#000000",backgroundColor:"#333333",horizontalIndent:15,verticalIndent:10});
+		addChild(menu);
+	}
+</script>
+	</body>
+</html>

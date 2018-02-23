@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>是男人就坚持20秒</title>
+</head>
+<body>
+<div id="mylegend">loading……</div>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<script type="text/javascript" src="../load_lufylegend.js"></script>
+<script type="text/javascript">
+init(30,"mylegend",320,480,main);
+/**数组变量*/
+//图片path数组
+var imgData = new Array();
+//读取完的图片数组
+var imglist = {};
+var back,sky,player,ctrl,x=0,y=0,step=2,
+mode="",count=100,overmenu,time,timeText;
+function main(){
+	if(LGlobal.canTouch){
+		LGlobal.stageScale = LStageScaleMode.EXACT_FIT;
+		LSystem.screen(LStage.FULL_SCREEN);
+	}
+	imgData.push({name:"player",path:"./player.png"});
+	imgData.push({name:"s",path:"./s.png"});
+	LLoadManage.load(
+		imgData,
+		function(progress){
+		},
+		function(result){
+			imglist = result;
+			gameInit();
+		}
+	);
+}
+function gameInit(){
+	back = new LSprite();
+	back.graphics.drawRect(1,"#000000",[0,0,320,480],true,"#ffffff");
+	addChild(back);
+	sky = new LSprite();
+	sky.graphics.drawRect(1,"#000000",[0,0,320,320],true,"#000000");
+	back.addChild(sky);
+	player = new LBitmap(new LBitmapData(imglist["player"]));
+	player.x = (LGlobal.width - player.getWidth())*0.5;
+	player.y = (LGlobal.width - player.getHeight())*0.5;
+	back.addChild(player);
+	ctrl = new LSprite();
+	ctrl.graphics.drawArc(1,"#000000",[0,0,70,0,Math.PI*2],true,"#cccccc");
+	ctrl.graphics.drawArc(1,"#ff0000",[0,0,10,0,Math.PI*2],true,"#ff0000");
+	back.addChild(ctrl);
+	ctrl.x = 160;
+	ctrl.y = 390;
+	timeText = new LTextField();
+	timeText.x = 10;
+	timeText.y = 340;
+	back.addChild(timeText);
+	start();
+}
+function over(){
+	if(overmenu){
+		return;
+	}
+	ctrl.removeEventListener(LMouseEvent.MOUSE_DOWN, ondown);
+	ctrl.removeEventListener(LMouseEvent.MOUSE_MOVE, onmove);
+	back.removeEventListener(LMouseEvent.MOUSE_UP, onup);
+	back.removeEventListener(LEvent.ENTER_FRAME, onframe);
+	overmenu = new LSprite();
+	overmenu.x = 60;
+	overmenu.y = 60;
+	back.addChild(overmenu);
+	overmenu.graphics.drawRect(1,"#000000",[0,0,200,200],true,"#ffffff");
+	var txt = new LTextField();
+	txt.x = 10;
+	txt.y = 10;
+	txt.size = 20;
+	txt.text = timeText.text;
+	overmenu.addChild(txt);
+	txt = new LTextField();
+	txt.x = 10;
+	txt.y = 60;
+	txt.size = 20;
+	txt.text = "称号：";
+	overmenu.addChild(txt);
+	txt = new LTextField();
+	txt.x = 50;
+	txt.y = 100;
+	txt.size = 20;
+	var r = parseInt(timeText.text.replace("time : ",""));
+	if(r >= 100)txt.text =  "元帥"; 
+				else if(r >= 90 )txt.text = "大将";
+				else if(r >= 85 )txt.text = "中将";
+				else if(r >= 80 )txt.text = "少将";
+				else if(r >= 75 )txt.text = "准将";
+				else if(r >= 70 )txt.text = "大佐";
+				else if(r >= 65 )txt.text = "中佐";
+				else if(r >= 60 )txt.text = "少佐";
+				else if(r >= 55 )txt.text = "准佐";
+				else if(r >= 50 )txt.text = "大尉";
+				else if(r >= 45 )txt.text = "中尉";
+				else if(r >= 40 )txt.text = "少尉";
+				else if(r >= 35 )txt.text = "准尉";
+				else if(r >= 30 )txt.text = "曹長";
+				else if(r >= 25 )txt.text = "軍曹";
+				else if(r >= 20 )txt.text = "伍長";
+				else if(r >= 15 )txt.text = "兵長";
+				else if(r >= 10 )txt.text = "上等兵";
+				else if(r >= 5 )txt.text = "中等兵";
+				else txt.text = "下等兵";
+	overmenu.addChild(txt);
+	txt = new LTextField();
+	txt.x = 10;
+	txt.y = 150;
+	txt.size = 16;
+	txt.text = "画面クリックして、";
+	overmenu.addChild(txt);
+	txt = new LTextField();
+	txt.x = 10;
+	txt.y = 170;
+	txt.size = 16;
+	txt.text = "もう一度チャレンジ";
+	overmenu.addChild(txt);
+	back.addEventListener(LMouseEvent.MOUSE_DOWN,start);
+}
+function start(event){
+	if(event){
+		back.removeChild(overmenu);
+		overmenu = null;
+		back.removeEventListener(LMouseEvent.MOUSE_DOWN, start);
+		player.x = (LGlobal.width - player.getWidth())*0.5;
+		player.y = (LGlobal.width - player.getHeight())*0.5;
+	}
+	sky.removeAllChild();
+	time = (new Date()).getTime();
+	ctrl.addEventListener(LMouseEvent.MOUSE_DOWN, ondown);
+	ctrl.addEventListener(LMouseEvent.MOUSE_MOVE, onmove);
+	back.addEventListener(LMouseEvent.MOUSE_UP, onup);
+	back.addEventListener(LEvent.ENTER_FRAME, onframe);
+}
+function onframe(){
+	timeText.text = "time : " + ((new Date()).getTime() - time)/1000;
+	var child,rand;
+	for(var i=0;i<sky.childList.length;i++){
+		child = sky.childList[i];
+		child.x += child.sx;
+		child.y += child.sy;
+		if(LGlobal.hitTestArc(player,child,10,1)){
+			over();
+			break;
+		}else if(child.x > LGlobal.width || child.y > LGlobal.width || child.x < 0 || child.y < 0){
+			sky.removeChild(child);
+		}
+	}
+	move();
+	if(sky.childList.length < count){
+		child = new LBitmap(new LBitmapData(imglist["s"]));
+		rand = Math.random();
+		if(rand < 0.5){
+			child.x = rand < 0.25 ? 0 : LGlobal.width;
+			child.y = Math.random()*LGlobal.width;
+		}else{
+			child.y = rand < 0.75 ? 0 : LGlobal.width;
+			child.x = Math.random()*LGlobal.width;
+		}
+		sky.addChild(child);
+		var angle = Math.atan2((child.y - player.y - player.getHeight()*0.5),(child.x - player.x - player.getWidth()*0.5) );
+		child.sy = -Math.sin(angle);
+		child.sx = -Math.cos(angle);
+	}
+}
+
+function move(){
+	player.x += x , player.y += y;
+	if(player.x < 0){
+		player.x = 0;
+	}else if(player.x > LGlobal.width - player.getWidth()){
+		player.x = LGlobal.width - player.getWidth();
+	}
+	if(player.y < 0){
+		player.y = 0;
+	}else if(player.y > LGlobal.width - player.getHeight()){
+		player.y = LGlobal.width - player.getHeight();
+	}
+}
+function ondown(event){
+	mode = "down";
+	onmove(event);
+}
+function onmove(event){
+	if(mode == "")return;
+	var angle = Math.atan2((event.offsetY - 390),(event.offsetX - 160) );
+	y = Math.sin(angle)*step;
+	x = Math.cos(angle)*step;
+}
+function onup(event){
+	mode = "";
+	x=0,y=0;
+}
+</script>
+</body>
+</html>

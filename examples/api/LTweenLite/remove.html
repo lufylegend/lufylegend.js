@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>LTweenLite.remove</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="../load_lufylegend.ui.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			LInit(50, "legend", 800, 280, main);
+			var tween;
+			function main () {
+				LGlobal.setDebug(true);
+				var rect = new LSprite();
+				rect.x = 50;
+				rect.y = 50;
+				rect.graphics.drawRect(1,"#FF00FF",[0,0,20,20],true,"#FF00FF");
+				addChild(rect);
+				tween = LTweenLite.to(rect,1,{x:500,loop:true,ease:LEasing.Sine.easeInOut})
+				.to(rect,1,{x:50,ease:LEasing.Quad.easeInOut});
+				var stopButton = new LButtonSample1("stop");
+				stopButton.x = 50;
+				stopButton.y = 100;
+				addChild(stopButton);
+				stopButton.addEventListener(LMouseEvent.MOUSE_UP,stopTween);
+			}
+			function stopTween(e){
+				LTweenLite.remove(tween);
+			}
+			</script>
+	</body>
+</html>

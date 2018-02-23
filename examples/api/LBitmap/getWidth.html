@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>getWidth</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+			var loader;
+			LInit(50, "legend", 800, 480, main);
+			function main () {
+				LGlobal.setDebug(true);
+				loader = new LLoader();
+				loader.addEventListener(LEvent.COMPLETE, loadBitmapdata); 
+				loader.load("lufylegend.js.png", "bitmapData");
+			}
+			function loadBitmapdata (event) {
+				var bitmapdata = new LBitmapData(event.target);  
+				var bitmap = new LBitmap(bitmapdata);
+				addChild(bitmap);
+				trace("width : " + bitmap.getWidth());
+			}
+			</script>
+	</body>
+</html>
