@@ -501,6 +501,9 @@ var LGlobal = ( function () {
 	LGlobal.keepClear = true;
 	LGlobal.top = 0;
 	LGlobal.left = 0;
+	LGlobal.enableWebGL = (function(){
+		return typeof enableWebGLCanvas !== UNDEFINED;
+	})();
 	LGlobal.window = window;
 	(function (n) {
 		LGlobal.isOldFirefox = (function(un){
@@ -603,7 +606,11 @@ var LGlobal = ( function () {
 		LGlobal.height = LGlobal.canvasObj.height;
 		LGlobal.canvasStyleWidth = LGlobal.width;
 		LGlobal.canvasStyleHeight = LGlobal.height;
-		LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
+		if(typeof enableWebGLCanvas !== UNDEFINED){
+			LGlobal.canvas = enableWebGLCanvas(LGlobal.canvasObj);
+		}else{
+			LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
+		}
 		LGlobal.offsetX = mouseX = 0;
 		LGlobal.offsetY = mouseY = 0;
 	};
@@ -969,6 +976,10 @@ var LGlobal = ( function () {
 		if (LGlobal.canvas == null) {
 			return;
 		}
+		if(LGlobal.canvas.start2D){
+			LGlobal.canvas.start2D();
+			LGlobal.canvas.globalAlpha = 1;
+		}
 		if(LGlobal._outStageCheckCount <= 0){
 			LGlobal._outStageCheckCount--;
 			if(LGlobal._outStageCheckCount < -2){
@@ -1008,6 +1019,9 @@ var LGlobal = ( function () {
 			}
 		}
 		LGlobal.show(LGlobal.childList, LGlobal.canvas);
+		if(LGlobal.canvas.finish2D){
+			LGlobal.canvas.finish2D();
+		}
 	};
 	LGlobal.show = function (s, ctx) {
 		ctx = ctx || LGlobal.canvas;
@@ -3014,7 +3028,9 @@ var LWebAudio = (function () {
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
-			s.volumeNode.gain.value = s.volume;
+			s.volumeNode.gain.setTargetAtTime = s.volumeNode.gain.setTargetAtTime || s.volumeNode.gain.setTargetValueAtTime || s._setTargetAtTime;
+			s.volumeNode.gain.setValueAtTime(s.volume, s.currentTime, 0.5);
+			//s.volumeNode.gain.value = s.volume;
 			s.volumeNode.connect(s.data.destination);
 			s.bufferSource.connect(s.volumeNode);
 			s.currentSave = s.data.currentTime;
@@ -3023,6 +3039,9 @@ var LWebAudio = (function () {
 			} else {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
+		},
+		_setTargetAtTime : function(target, startTime, timeConstant) {
+			this.volumeNode.gain.value = target;
 		},
 		playSegment : function (c, seg, l) {
 			this.playTo(c, c + seg, l);
@@ -3842,6 +3861,10 @@ var LGraphics = (function () {
 		},
 		drawRoundRect : function (tn, lco, pa, isf, co) {
 			var s = this;
+			if(LGlobal.enableWebGL){
+				s.drawRect(tn, lco, pa, isf, co);
+				return;
+			}
 			s.setList.push(function (c) {
 				c.beginPath();
 				c.moveTo(pa[0] + pa[4], pa[1]);
@@ -5229,7 +5252,18 @@ var LTextField = (function () {
 				if (s.stroke) {
 					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
 				}
-				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+				if(typeof enableWebGLCanvas !== UNDEFINED){
+					this._createCanvas();
+					s._canvas.width = LGlobal.width;
+					s._canvas.height = LGlobal.height;
+					h = s._context.measureText("O").width * 1.2;
+					s._showReady(s._context);
+					s._context.fillStyle = c.fillStyle;
+					s._context.fillText(lbl, 0, 0);
+					c.drawImage(s._canvas, 0, 0);
+				}else{
+					c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+				}
 			}
 			if (s.windRunning) {
 				s._ll_windRun();
@@ -5406,8 +5440,12 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				return s.width;
 			}
-			LGlobal.canvas.font = s.size + "px " + s.font;
-			return LGlobal.canvas.measureText(s.text).width;
+			if(typeof enableWebGLCanvas !== UNDEFINED){
+				this._createCanvas();
+			}
+			var c = (typeof enableWebGLCanvas !== UNDEFINED) ? s._context : LGlobal.canvas;
+			c.font = s.size + "px " + s.font;
+			return c.measureText(s.text).width;
 		},
 		getWidth : function (maskSize) {
 			var s = this, w, mx, mw;
@@ -5435,7 +5473,11 @@ var LTextField = (function () {
 			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
 		},
 		_getHeight : function () {
-			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
+			var s = this;
+			if(typeof enableWebGLCanvas !== UNDEFINED){
+				this._createCanvas();
+			}
+			var c = (typeof enableWebGLCanvas !== UNDEFINED) ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {

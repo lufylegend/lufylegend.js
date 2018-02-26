@@ -690,6 +690,9 @@ var LGlobal = ( function () {
 	LGlobal.keepClear = true;
 	LGlobal.top = 0;
 	LGlobal.left = 0;
+	LGlobal.enableWebGL = (function(){
+		return typeof enableWebGLCanvas !== UNDEFINED;
+	})();
 	LGlobal.window = window;
 	(function (n) {
 		LGlobal.isOldFirefox = (function(un){
@@ -840,7 +843,7 @@ var LGlobal = ( function () {
 		LGlobal.height = LGlobal.canvasObj.height;
 		LGlobal.canvasStyleWidth = LGlobal.width;
 		LGlobal.canvasStyleHeight = LGlobal.height;
-		LGlobal.canvas = LGlobal.canvasObj.getContext("2d");
+		LGlobal.canvas = LGlobal.enableWebGL ? enableWebGLCanvas(LGlobal.canvasObj) : LGlobal.canvasObj.getContext("2d");
 		LGlobal.offsetX = mouseX = 0;
 		LGlobal.offsetY = mouseY = 0;
 	};
@@ -1208,6 +1211,10 @@ var LGlobal = ( function () {
 		if (LGlobal.canvas == null) {
 			return;
 		}
+		if(LGlobal.enableWebGL){
+			LGlobal.canvas.start2D();
+			LGlobal.canvas.globalAlpha = 1;
+		}
 		if(LGlobal._outStageCheckCount <= 0){
 			LGlobal._outStageCheckCount--;
 			if(LGlobal._outStageCheckCount < -2){
@@ -1247,6 +1254,9 @@ var LGlobal = ( function () {
 			}
 		}
 		LGlobal.show(LGlobal.childList, LGlobal.canvas);
+		if(LGlobal.enableWebGL){
+			LGlobal.canvas.finish2D();
+		}
 	};
 	/** @language chinese
 	 * <p>将传入的一组对象绘制到指定的CanvasRenderingContext2D对象上。</p>

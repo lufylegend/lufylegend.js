@@ -5,3 +5,7 @@
  ehthumbs.db
  Thumbs.db
 
+
+node_modules/
+tool/package-lock.json
+tool/package.json
