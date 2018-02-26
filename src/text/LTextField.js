@@ -768,6 +768,11 @@ var LTextField = (function () {
 			c.font = s.weight + " " + s.size + "px " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
+			}
 		},
 		ll_getStyleSheet : function (textFormat, tabName, attribute, text) {
 			var s = this, pattern, tf = textFormat.clone();
@@ -853,8 +858,8 @@ var LTextField = (function () {
 			s.ll_getStyleSheet(tf, tabName, arr[3], content);
 			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
 		},
-		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
+		_ll_show : function (ctx) {
+			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -871,10 +876,14 @@ var LTextField = (function () {
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.text++;
 			}
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
+			if(LGlobal.enableWebGL){
+				s._createCanvas();
+				s._canvas.width = LGlobal.width;
+				s._canvas.height = LGlobal.height;
+				s._showReady(s._context);
+				c = s._context;
+			}else{
+				c = ctx;
 			}
 			if (s.htmlText) {
 				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
@@ -925,6 +934,9 @@ var LTextField = (function () {
 					}
 					s.height = (m + 1) * s._ll_height;
 				});
+				if(LGlobal.enableWebGL){
+					ctx.drawImage(s._canvas, 0, 0);
+				}
 				return;
 			}
 			lbl = s.text;
@@ -963,6 +975,9 @@ var LTextField = (function () {
 					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
 				}
 				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+			}
+			if(LGlobal.enableWebGL){
+				ctx.drawImage(s._canvas, 0, 0);
 			}
 			if (s.windRunning) {
 				s._ll_windRun();
@@ -1517,8 +1532,12 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				return s.width;
 			}
-			LGlobal.canvas.font = s.size + "px " + s.font;
-			return LGlobal.canvas.measureText(s.text).width;
+			if(LGlobal.enableWebGL){
+				this._createCanvas();
+			}
+			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
+			c.font = s.size + "px " + s.font;
+			return c.measureText(s.text).width;
 		},
 		/** @language chinese
 		 * 获取显示对象的宽度，以像素为单位。
@@ -1585,7 +1604,11 @@ var LTextField = (function () {
 			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
 		},
 		_getHeight : function () {
-			var s = this, c = LGlobal.canvas, i, l, j, k, m, enter;
+			var s = this;
+			if(LGlobal.enableWebGL){
+				this._createCanvas();
+			}
+			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
 			if (s.wordWrap) {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {

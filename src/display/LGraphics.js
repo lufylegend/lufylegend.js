@@ -1372,6 +1372,10 @@ var LGraphics = (function () {
 		 */
 		drawRoundRect : function (tn, lco, pa, isf, co) {
 			var s = this;
+			if(LGlobal.enableWebGL){
+				s.drawRect(tn, lco, pa, isf, co);
+				return;
+			}
 			s.setList.push(function (c) {
 				c.beginPath();
 				c.moveTo(pa[0] + pa[4], pa[1]);

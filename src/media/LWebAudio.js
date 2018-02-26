@@ -365,7 +365,8 @@ var LWebAudio = (function () {
 			s.bufferSource = s.data.createBufferSource();
 			s.bufferSource.buffer = s.buffer;
 			s.volumeNode = s.data.createGainNode();
-			s.volumeNode.gain.value = s.volume;
+			s.volumeNode.gain.setTargetAtTime = s.volumeNode.gain.setTargetAtTime || s.volumeNode.gain.setTargetValueAtTime || s._setTargetAtTime;
+			s.volumeNode.gain.setValueAtTime(s.volume, s.currentTime, 0.5);
 			s.volumeNode.connect(s.data.destination);
 			s.bufferSource.connect(s.volumeNode);
 			s.currentSave = s.data.currentTime;
@@ -374,6 +375,9 @@ var LWebAudio = (function () {
 			} else {
 				s.bufferSource.noteGrainOn(0, s.currentTime, s.length - s.currentTime);
 			}
+		},
+		_setTargetAtTime : function(target, startTime, timeConstant) {
+			this.volumeNode.gain.value = target;
 		},
 		/** @language chinese
 		 * <p>播放指定长度的其中的一段音频。</p>
