@@ -52,7 +52,7 @@ var LConvolutionFilter = (function () {
 	var p = {
 		filter : function(olddata, w, c){
 			var s = this;
-			c = c || LGlobal.canvas;
+			c = LGlobal.enableWebGL ? LGlobal._context : (c || LGlobal.canvas);
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;
