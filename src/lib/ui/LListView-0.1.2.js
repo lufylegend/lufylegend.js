@@ -422,11 +422,11 @@ var LListView = (function () {
 	};
 	LListView.prototype.die = function(){
 		var self = this;
-		for(var i=0,l=self._ll_items.length;i<l;i++){
+		for (var i = 0, l = self._ll_items.length; i < l; i++) {
 			self._ll_items[i].die();
 			self._ll_items[i].removeAllChild();
 		}
-		self._ll_items = null;
+		self._ll_items.length = 0;
 		self.callParent("die",arguments);
 	};
 	return LListView;

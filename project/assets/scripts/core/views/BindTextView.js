@@ -4,12 +4,14 @@ export default ll.LClass(ll.LNode, 'BindTextView', {
 		this.addChild(this.t);
 	},
 	lateInit:function(){
+		console.error('BindTextView lateInit start');
 		let key = this.bind.key;
 		let target = this.bind.target;
 		let parent = this.parent;
 		while(parent){
 			if(parent._ll_className === target){
-				this.t.text = parent.dis[key];
+				console.error(parent._ll_className, key, parent.dispatcher);
+				this.t.text = parent.dispatcher[key];
 				break;
 			}else{
 				parent = parent.parent;
