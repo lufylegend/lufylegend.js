@@ -5059,6 +5059,11 @@ var LTextField = (function () {
 			c.font = s.weight + " " + s.size + "px " + s.font;  
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
+			c.fillStyle = s.color;
+			if (s.stroke) {
+				c.strokeStyle = s.lineColor;
+				c.lineWidth = s.lineWidth + 1;  
+			}
 		},
 		ll_getStyleSheet : function (textFormat, tabName, attribute, text) {
 			var s = this, pattern, tf = textFormat.clone();
@@ -5139,12 +5144,13 @@ var LTextField = (function () {
 				end = text.indexOf("</" + tabName, end + 1);
 				start = text.indexOf("<" + tabName, start + 1);
 			} while(start > 0 && start < end);
+
 			content = text.substring(text.indexOf(">", arr.index) + 1, end);
 			s.ll_getStyleSheet(tf, tabName, arr[3], content);
 			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
 		},
-		_ll_show : function (c) {
-			var s = this, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
+		_ll_show : function (ctx) {
+			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -5161,10 +5167,14 @@ var LTextField = (function () {
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.text++;
 			}
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
+			if(LGlobal.enableWebGL){
+				s._createCanvas();
+				s._canvas.width = LGlobal.width;
+				s._canvas.height = LGlobal.height;
+				s._showReady(s._context);
+				c = s._context;
+			}else{
+				c = ctx;
 			}
 			if (s.htmlText) {
 				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
@@ -5215,6 +5225,9 @@ var LTextField = (function () {
 					}
 					s.height = (m + 1) * s._ll_height;
 				});
+				if(LGlobal.enableWebGL){
+					ctx.drawImage(s._canvas, 0, 0);
+				}
 				return;
 			}
 			lbl = s.text;
@@ -5252,18 +5265,10 @@ var LTextField = (function () {
 				if (s.stroke) {
 					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
 				}
-				if(typeof enableWebGLCanvas !== UNDEFINED){
-					this._createCanvas();
-					s._canvas.width = LGlobal.width;
-					s._canvas.height = LGlobal.height;
-					h = s._context.measureText("O").width * 1.2;
-					s._showReady(s._context);
-					s._context.fillStyle = c.fillStyle;
-					s._context.fillText(lbl, 0, 0);
-					c.drawImage(s._canvas, 0, 0);
-				}else{
-					c.fillText(lbl, 0, 0, c.measureText(lbl).width);
-				}
+				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+			}
+			if(LGlobal.enableWebGL){
+				ctx.drawImage(s._canvas, 0, 0);
 			}
 			if (s.windRunning) {
 				s._ll_windRun();
@@ -6101,7 +6106,7 @@ var LColorMatrixFilter = (function () {
 	var p = {
 		filter : function(olddata, w, c){
 			var s = this;
-			c = c || LGlobal.canvas;
+			c = LGlobal.enableWebGL ? LGlobal._context : (c || LGlobal.canvas);
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;
@@ -6138,7 +6143,7 @@ var LConvolutionFilter = (function () {
 	var p = {
 		filter : function(olddata, w, c){
 			var s = this;
-			c = c || LGlobal.canvas;
+			c = LGlobal.enableWebGL ? LGlobal._context : (c || LGlobal.canvas);
 			var oldpx = olddata.data;
 			var newdata = c.createImageData(olddata);
 			var newpx = newdata.data;
@@ -9069,3 +9074,227 @@ var LString = {
 	}
 };
 LMath = LString;
+
+var ll = {};
+ //utils
+ll.OS_PC = OS_PC;
+ll.OS_IPHONE = OS_IPHONE;
+ll.OS_IPOD = OS_IPOD;
+ll.OS_IPAD = OS_IPAD;
+ll.OS_ANDROID = OS_ANDROID;
+ll.OS_WINDOWS_PHONE = OS_WINDOWS_PHONE;
+ll.OS_BLACK_BERRY = OS_BLACK_BERRY;
+ll.NONE = NONE;
+ll.UNDEFINED = UNDEFINED;
+ll.LANDSCAPE = LANDSCAPE;
+ll.PORTRAIT = PORTRAIT;
+ll.mouseX = mouseX;
+ll.mouseY = mouseY;
+
+ll.trace = trace;
+ll.addChild = addChild;
+ll.removeChild = removeChild;
+ll.init = init;
+ll.LInit = LInit;
+ll.base = base;
+ll.LExtends = LExtends;
+ll.getTimer = getTimer;
+ll.getExtension = getExtension;
+ll.getTimer = getTimer;
+
+ll.LStage = ll.LSystem = ll.LGlobal = LGlobal;
+ll.LObject = LObject;
+ll.LTimer = LTimer;
+
+//events
+ll.LAccelerometerEvent = LAccelerometerEvent;
+ll.LEvent = LEvent;
+ll.LEventDispatcher = LEventDispatcher;
+ll.LFocusEvent = LFocusEvent;
+ll.LKeyboardEvent = LKeyboardEvent;
+ll.LMouseEvent = LMouseEvent;
+ll.LMouseEventContainer = LMouseEventContainer;
+ll.LTextEvent = LTextEvent;
+ll.LTimerEvent = LTimerEvent;
+
+//display
+ll.FPS = FPS;
+ll.LAnimation = LAnimation;
+ll.LAnimationTimeline = LAnimationTimeline;
+ll.LBitmap = LBitmap;
+ll.LBitmapData = LBitmapData;
+ll.LBlendMode = LBlendMode;
+ll.LButton = LButton;
+ll.LDisplayObject = LDisplayObject;
+ll.LDisplayObjectContainer = LDisplayObjectContainer;
+ll.LGraphics = LGraphics;
+ll.LInteractiveObject = LInteractiveObject;
+ll.LLoader = LLoader;
+ll.LShape = LShape;
+ll.LSprite = LSprite;
+ll.LStageAlign = LStageAlign;
+ll.LStageScaleMode = LStageScaleMode;
+
+//filters
+ll.LBitmapFilter = LBitmapFilter;
+ll.LColorMatrixFilter = LColorMatrixFilter;
+ll.LConvolutionFilter = LConvolutionFilter;
+ll.LDropShadowFilter = LDropShadowFilter;
+
+//geom
+ll.LColorTransform = LColorTransform;
+ll.LMatrix = LMatrix;
+ll.LPoint = LPoint;
+ll.LRectangle = LRectangle;
+ll.LTransform = LTransform;
+ll.LVec2 = LVec2;
+
+//lib
+if(typeof InteractivePNG !== UNDEFINED){
+	ll.InteractivePNG = InteractivePNG;
+}
+ll.LBox2d = LBox2d;
+ll.LFlash = LFlash;
+if(typeof LoadingSample1 !== UNDEFINED){
+	ll.LoadingSample1 = LoadingSample1;
+	ll.LoadingSample2 = LoadingSample2;
+	ll.LoadingSample3 = LoadingSample3;
+	ll.LoadingSample4 = LoadingSample4;
+	ll.LoadingSample5 = LoadingSample5;
+	ll.LoadingSample6 = LoadingSample6;
+	ll.LoadingSample7 = LoadingSample7;
+}
+ll.LQuadTree = LQuadTree;
+ll.LString = LString;
+ll.LTransition = LTransition;
+ll.LIris = LIris;
+ll.LTransitionManager = LTransitionManager;
+
+if(typeof LButtonSample1 !== UNDEFINED){
+ll.LButtonSample1 = LButtonSample1;
+ll.LButtonSample2 = LButtonSample2;
+ll.LCheckBox = LCheckBox;
+ll.LComboBox = LComboBox;
+ll.LListView = LListView;
+ll.LMenubar = LMenubar;
+ll.LMessageBox = LMessageBox;
+ll.LPanel = LPanel;
+ll.LRadioChild = LRadioChild;
+ll.LRadio = LRadio;
+ll.LRange = LRange;
+ll.LScrollbar = LScrollbar;
+ll.LTable = LTable;
+ll.LTreeWidget = LTreeWidget;
+ll.LWindow = LWindow;
+}
+//media
+ll.LMedia = LMedia;
+ll.LSound = LSound;
+ll.LWebAudio = LWebAudio;
+ll.LStageWebView = LStageWebView;
+ll.LVideo = LVideo;
+
+//net
+ll.LAjax = LAjax;
+ll.LFontLoader = LFontLoader;
+ll.LURLLoader = LURLLoader;
+
+//system
+ll.LLoadManage = LLoadManage;
+
+//text
+ll.LStyleSheet = LStyleSheet;
+ll.LTextField = LTextField;
+ll.LTextFieldType = LTextFieldType;
+ll.LTextFormat = LTextFormat;
+
+//transitions
+ll.LEasing = LEasing;
+ll.LTweenLite = LTweenLite;
+
+//ui
+ll.LMultitouch = LMultitouch;
+ll.LMultitouchInputMode = LMultitouchInputMode;
+
+var lufylegend = ll;
+let LClass = (function(){
+	function LClass(_super, name, params){
+		params = params || {};
+		var Class = (function () {
+			function Class () {
+				LExtends(this, _super, arguments);
+				for(let key in params){
+					let value = params[key];
+					if(typeof value === 'function'){
+						continue;
+					}
+					this[key] = value;
+				}
+			}
+			for(let key in params){
+				let value = params[key];
+				if(typeof value !== 'function'){
+					continue;
+				}
+				if(_super.prototype[key]){
+					Class.prototype[key] = function(){
+						value.apply(this, arguments)
+						return this.callParent(key,arguments);
+					};
+				}else{
+					Class.prototype[key] = value;
+				}
+			}
+			Class.prototype['_ll_className'] = name;
+			return Class;
+		})();
+		ll[name] = Class;
+		return Class;
+	}
+	return LClass;
+})();
+ll.LClass = LClass;
+let LNode = (function () {
+	function LNode (data) {
+		LExtends(this, LSprite, []);
+		this.type = "LNode";
+		if(typeof this.init === 'function'){
+			this.init();
+		}
+		this._initData(data);
+	}
+	LNode.prototype._initData = function (data) {
+		if(!data){
+			return;
+		}
+		this._initDataProperty(data);
+		this._initDataChildNodes(data);
+	};
+	LNode.prototype._initDataProperty = function (data) {
+		let property = data.property;
+		if(!property){
+			return;
+		}
+		for(let key in property){
+			this[key] = property[key];
+		}
+	};
+	LNode.prototype._initDataChildNodes = function (data) {
+		if(!data.childNodes){
+			return;
+		}
+		for(let childNode of data.childNodes){
+			let className = childNode.class;
+			if(typeof ll[className] !== 'function'){
+				continue;
+			}
+			let child = new ll[className](childNode);
+			this.addChild(child);
+			if(typeof child.lateInit === 'function'){
+				child.lateInit();
+			}
+		}
+	};
+	return LNode;
+})();
+ll.LNode = LNode;
