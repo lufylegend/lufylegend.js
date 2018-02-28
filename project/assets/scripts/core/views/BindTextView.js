@@ -1,24 +1,13 @@
-export default ll.LClass(ll.LNode, 'BindTextView', {
-	init:function(){
-		this.t = new ll.LTextField();
-		this.addChild(this.t);
+import BaseBindView from './BaseBindView';
+export default ll.LClass(BaseBindView, 'BindTextView', {
+	init(){
+		this.label = new ll.LTextField();
+		this.addChild(this.label);
 	},
-	lateInit:function(){
-		console.error('BindTextView lateInit start');
-		let key = this.bind.key;
-		let target = this.bind.target;
-		let parent = this.parent;
-		while(parent){
-			if(parent._ll_className === target){
-				console.error(parent._ll_className, key, parent.dispatcher);
-				this.t.text = parent.dispatcher[key];
-				break;
-			}else{
-				parent = parent.parent;
-				if(typeof parent !== 'object'){
-					break;
-				}
-			}
+	updateView(){
+		let value = this.getByPath(this.bind.key);
+		if(value !== null){
+			this.label.text = value;
 		}
 	}
 });

@@ -1,7 +1,12 @@
 import BindTextView from '../views/BindTextView';
 export default ll.LClass(ll.LNode, 'BaseController', {
-        init:function(){
+	init(){
                 this.callParent("init",arguments);
-                this.dispatcher = this.dispatche || {};
-	}
+                this._ll_isController = true;
+                this.dispatcher = this.dispatcher || {};
+                this.onLoad();
+        },
+        onLoad(){
+
+        }
 });
