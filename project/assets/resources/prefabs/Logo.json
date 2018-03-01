@@ -1,25 +1,15 @@
 {
-	"class":"",
+	"class":"LNode",
 	"property":{
 		"x":0,
 		"y":0
 	},
 	"childNodes":[
 		{
-			"class":"Test",
+			"class":"LogoController",
 			"property":{
-				"x":0,
-				"y":0
-			},
-			"childNodes":[
-
-			]
-		},
-		{
-			"class":"Test",
-			"property":{
-				"x":100,
-				"y":0
+				"x":10,
+				"y":10
 			},
 			"childNodes":[
 				{
@@ -27,7 +17,7 @@
 					"property":{
 						"bind":{
 							"key":"username",
-							"target":"Test"//Controller,ListChildView
+							"target":"LogoController"
 						},
 						"x":0,
 						"y":70
