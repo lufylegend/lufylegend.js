@@ -7240,7 +7240,7 @@ var LAjax = (function () {
 				var request = e.currentTarget;
 				if (request.readyState == 4) {
 					if (request.status >= 200 && request.status < 300 || request.status === 304) {
-						if (oncomplete) {console.error(request);
+						if (oncomplete) {
 							if(request._responseType == s.JSON){
 								request._responseType = s.TEXT;
 								oncomplete(JSON.parse(request.responseText));
@@ -9305,3 +9305,80 @@ let LNode = (function () {
 	return LNode;
 })();
 ll.LNode = LNode;
+
+let LAtlas = (function () {
+	function LAtlas () {
+		LExtends(this, LEventDispatcher, []);
+		this.type = "LAtlas";
+	};
+	LAtlas.prototype.load = function (path, name) {
+		let loadData = [
+			{name:`${path}/${name}.png`,path:`${path}/${name}.png`},
+			{name:`${path}/${name}.plist`,path:`${path}/${name}.plist`,type:"text"}
+		];
+		LLoadManage.load( 
+			loadData,null,(datalist)=>{
+				this._loadComplete(datalist, path, name);
+			}
+		);
+	}
+	LAtlas.prototype._loadComplete = function (datalist, path, name) {
+		let texture = datalist[`${path}/${name}.png`];
+		let xml = datalist[`${path}/${name}.plist`];
+		this.set(xml, texture);
+		let event = new LEvent(LEvent.COMPLETE);
+		event.currentTarget = this;
+		event.target = this;
+		this.dispatchEvent(event);
+	};
+	LAtlas.prototype.set = function (xml, texture) {
+		this._texture = texture;
+		this._initData(xml);
+	};
+	LAtlas.prototype._initData = function (xml) {
+		let parser = new DOMParser();
+		this.xmlDom = parser.parseFromString(xml, 'text/xml');
+		let plistDom = this.xmlDom.querySelector("plist").querySelector("dict");
+		let children = plistDom.children;
+		let frames;
+		for(let i = 0;i < children.length; i++){
+			let child = children[i];
+			if(child.tagName === "key" && child.textContent === "frames"){
+				frames = children[i + 1].children;
+				break;
+			}
+		}
+		this._textureData = {};
+		for(let i = 0;i < frames.length; i+=2){
+			let key = frames[i].textContent.replace(".png", "");
+			let value = frames[i + 1];
+			let data = this._getTextureData(value.children);
+			this._textureData[key] = this._textureToSprite(data);
+		}
+	};
+	LAtlas.prototype.getSprite = function (name) {
+		return this._textureData[name];
+	};
+	LAtlas.prototype._textureToSprite = function (data) {
+		let bitmapData = new LBitmapData(this._texture, data.frame[0][0], data.frame[0][1], data.frame[1][0], data.frame[1][1]);
+		let bitmap = new LBitmap(bitmapData);
+		if(data.rotated){
+			bitmap.rotate = -90;
+		}
+		let sprite = new LSprite();
+		sprite.addChild(bitmap);
+		return sprite;
+	};
+	LAtlas.prototype._getTextureData = function (children) {
+		let data = {};
+		for(let i = 0;i < children.length; i+=2){
+			let key = children[i].textContent;
+			let tict = children[i + 1];
+			let value = JSON.parse(tict.tagName === "string" ? tict.textContent.replace(/\{/g, "[").replace(/\}/g, "]") : tict.tagName);
+			data[key] = value;
+		}
+		return data;
+	};
+	return LAtlas;
+})();
+ll.LAtlas = LAtlas;
