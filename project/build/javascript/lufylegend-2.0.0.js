@@ -1549,7 +1549,6 @@ function init (s, c, w, h, f, t) {
 	};
 	var loop;
 	if(typeof s == "function"){
-		_f();
 		loop = function(){
 			s(loop);
 			LGlobal.onShow();
@@ -1567,7 +1566,6 @@ function init (s, c, w, h, f, t) {
 			};
 		})();
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
-		_f();
 		loop = function(){
 			var now = (new Date()).getTime();
 			var check = now - LGlobal._requestAFBaseTime;
@@ -1585,6 +1583,7 @@ function init (s, c, w, h, f, t) {
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			LGlobal.setCanvas(c, w, h);
+			_f();
 			loop();
 		});
 	}
@@ -7241,7 +7240,7 @@ var LAjax = (function () {
 				var request = e.currentTarget;
 				if (request.readyState == 4) {
 					if (request.status >= 200 && request.status < 300 || request.status === 304) {
-						if (oncomplete) {
+						if (oncomplete) {console.error(request);
 							if(request._responseType == s.JSON){
 								request._responseType = s.TEXT;
 								oncomplete(JSON.parse(request.responseText));
@@ -9263,6 +9262,14 @@ let LNode = (function () {
 		}
 		this._initData(data);
 	}
+	LNode.create = function(data){
+		let className = data.class;
+		if(typeof ll[className] !== 'function'){
+			return new LNode(data);
+		}
+		let child = new ll[className](data);
+		return child;
+	};
 	LNode.prototype._initData = function (data) {
 		if(!data){
 			return;

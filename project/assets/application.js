@@ -1,8 +1,10 @@
 import LogoController from './scripts/controllers/LogoController';
-import BaseManager from './scripts/managers/BaseManager';
+import BaseManager from './scripts/core/managers/BaseManager';
 
 LInit(50, "legend", 800, 480, main);
 function main () {
+	BaseManager.showDialog('Logo');
+	/*
 	let node = new LNode({
 		"class":"",
 		"property":{
@@ -36,7 +38,7 @@ function main () {
 		]
 	});
 	addChild(node);
-	console.error(node);
+	console.error(node);*/
 }
 
 /*let test = new Test();

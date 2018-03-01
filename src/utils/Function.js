@@ -458,7 +458,6 @@ function init (s, c, w, h, f, t) {
 	};
 	var loop;
 	if(typeof s == "function"){
-		_f();
 		loop = function(){
 			s(loop);
 			LGlobal.onShow();
@@ -476,7 +475,6 @@ function init (s, c, w, h, f, t) {
 			};
 		})();
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
-		_f();
 		loop = function(){
 			var now = (new Date()).getTime();
 			var check = now - LGlobal._requestAFBaseTime;
@@ -489,11 +487,13 @@ function init (s, c, w, h, f, t) {
 	}
 	if (document.readyState === "complete") {
 		LGlobal.setCanvas(c, w, h);
+		_f();
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			LGlobal.setCanvas(c, w, h);
+			_f();
 			loop();
 		});
 	}
