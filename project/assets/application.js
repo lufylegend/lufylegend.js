@@ -3,7 +3,11 @@ import BaseManager from './scripts/core/managers/BaseManager';
 
 LInit(50, "legend", 800, 480, main);
 function main () {
-	BaseManager.showDialog('Logo');
+	let atlas = new ll.LAtlas();
+	atlas.addEventListener(ll.LEvent.COMPLETE, ()=>{
+		BaseManager.showDialog('Logo');
+	});
+	atlas.load("resources/atlas", "cards");
 	/*
 	let node = new LNode({
 		"class":"",
