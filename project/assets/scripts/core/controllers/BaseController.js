@@ -1,4 +1,5 @@
 import BindTextView from '../views/BindTextView';
+import BindSpriteView from '../views/BindSpriteView';
 export default ll.LClass(ll.LNode, 'BaseController', {
 	init(){
                 this.callParent("init",arguments);

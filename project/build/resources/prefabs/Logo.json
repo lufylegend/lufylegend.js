@@ -1,31 +1,38 @@
+
 {
-	"class":"LNode",
+	"class":"LogoController",
 	"property":{
 		"x":0,
 		"y":0
 	},
 	"childNodes":[
 		{
-			"class":"LogoController",
+			"class":"BindSpriteView",
 			"property":{
-				"x":10,
-				"y":10
+				"bind":{
+					"key":"avatar",
+					"atlas":"atlas/cards",
+					"target":"LogoController"
+				},
+				"x":0,
+				"y":0
 			},
 			"childNodes":[
-				{
-					"class":"BindTextView",
-					"property":{
-						"bind":{
-							"key":"username",
-							"target":"LogoController"
-						},
-						"x":0,
-						"y":70
-					},
-					"childNodes":[
-						
-					]
-				}
+					
+			]
+		},
+		{
+			"class":"BindTextView",
+			"property":{
+				"bind":{
+					"key":"username",
+					"target":"LogoController"
+				},
+				"x":0,
+				"y":70
+			},
+			"childNodes":[
+					
 			]
 		}
 	]

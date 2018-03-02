@@ -9311,6 +9311,13 @@ let LAtlas = (function () {
 		LExtends(this, LEventDispatcher, []);
 		this.type = "LAtlas";
 	};
+	LAtlas._container = {};
+	LAtlas.get = function (name){
+		return LAtlas._container[name] || new LAtlas();
+	};
+	LAtlas.prototype.destroy = function () {
+		delete LAtlas._container[name]
+	};
 	LAtlas.prototype.load = function (path, name) {
 		let loadData = [
 			{name:`${path}/${name}.png`,path:`${path}/${name}.png`},
@@ -9323,6 +9330,10 @@ let LAtlas = (function () {
 		);
 	}
 	LAtlas.prototype._loadComplete = function (datalist, path, name) {
+		let resourcesPath = "resources/";
+		let resourcesIndex = path.indexOf(resourcesPath);
+		this._atlasKey = path.substring(resourcesIndex + resourcesPath.length) + "/" + name;
+		LAtlas._container[this._atlasKey] = this;
 		let texture = datalist[`${path}/${name}.png`];
 		let xml = datalist[`${path}/${name}.plist`];
 		this.set(xml, texture);
