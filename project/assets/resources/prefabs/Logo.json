@@ -11,7 +11,7 @@
 			"property":{
 				"bind":{
 					"key":"avatar",
-					"atlas":"atlas/cards",
+					"atlas":"atlas/Card",
 					"target":"LogoController"
 				},
 				"x":10,
@@ -40,7 +40,7 @@
 			"property":{
 				"bind":{
 					"key":"cards",
-					"childPrefab":"prefabs/card",
+					"childPrefab":"prefabs/Card",
 					"target":"LogoController"
 				},
 				"x":0,

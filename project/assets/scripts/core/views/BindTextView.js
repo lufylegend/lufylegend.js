@@ -8,6 +8,7 @@ export default ll.LClass(BaseBindView, 'BindTextView', {
 		let value = this.getByPath(this.bind.key);
 		if(value !== null){
 			this.label.text = value;
+			console.log('BindTextView',this.label.text);
 		}
 	}
 });
