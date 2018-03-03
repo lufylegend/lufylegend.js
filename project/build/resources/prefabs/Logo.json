@@ -2,8 +2,8 @@
 {
 	"class":"LogoController",
 	"property":{
-		"x":0,
-		"y":0
+		"x":10,
+		"y":10
 	},
 	"childNodes":[
 		{
@@ -11,11 +11,11 @@
 			"property":{
 				"bind":{
 					"key":"avatar",
-					"atlas":"atlas/cards",
+					"atlas":"atlas/Card",
 					"target":"LogoController"
 				},
-				"x":0,
-				"y":0
+				"x":10,
+				"y":20
 			},
 			"childNodes":[
 					
@@ -29,7 +29,22 @@
 					"target":"LogoController"
 				},
 				"x":0,
-				"y":70
+				"y":0
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindListView",
+			"property":{
+				"bind":{
+					"key":"cards",
+					"childPrefab":"prefabs/Card",
+					"target":"LogoController"
+				},
+				"x":0,
+				"y":50
 			},
 			"childNodes":[
 					

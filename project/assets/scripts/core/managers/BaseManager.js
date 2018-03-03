@@ -2,14 +2,14 @@ class BaseManager {
     constructor() {
     }
     showDialog(prefabName, request) {
-        return this.loadPrefab(prefabName, 'dialogs')
+        let path = `resources/prefabs/${prefabName}.json`;
+        return this.loadPrefab(path)
         .then(data => {
             let node = LNode.create(data);
             addChild(node);
         });
     }
-    loadPrefab(prefabName, folder) {
-        let path = `resources/prefabs/${prefabName}.json`;
+    loadPrefab(path) {
         return new Promise(function(resolve, reject) {
             let loader = new ll.LURLLoader();
             loader.addEventListener(ll.LEvent.COMPLETE, (event)=>{
