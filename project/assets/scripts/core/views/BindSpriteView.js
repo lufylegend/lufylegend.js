@@ -10,7 +10,7 @@ export default ll.LClass(BaseBindView, 'BindSpriteView', {
 			let sprite = atlas.getSprite(value);
 			if(sprite){
 				console.log("BindSpriteView updateView", this.bind.key);
-				this.addChild(sprite);
+				this.addChild(sprite.clone());
 			}
 		}
 	}
