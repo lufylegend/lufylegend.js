@@ -1,7 +1,7 @@
 import LogoController from './scripts/controllers/LogoController';
 import BaseManager from './scripts/core/managers/BaseManager';
 
-LInit(50, "legend", 800, 480, main);
+LInit(50, "legend", 800, 800, main);
 function main () {
 	ll.LGlobal.debug = true;
 	let atlas = new ll.LAtlas();

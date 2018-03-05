@@ -13,8 +13,8 @@ export default ll.LClass(BaseBindView, 'BindListView', {
 		let listView = this.listView;
 		listView.maxPerLine = 1;
 		listView.cellWidth = 100;
-		listView.cellHeight = 30;
-		listView.resize(300,300);
+		listView.cellHeight = 100;
+		listView.resize(300,200);
 		listView.arrangement = ll.LListView.Direction.Horizontal;
 		listView.movement = ll.LListView.Direction.Vertical;
 
@@ -25,8 +25,6 @@ export default ll.LClass(BaseBindView, 'BindListView', {
 			for(let child of value){
 				this.createListObject(data, child);
 			}
-		    //let node = LNode.create(data);
-		    //this.listView.insertChildView(node);
 		});
 	},
 	createListObject(data, model){
