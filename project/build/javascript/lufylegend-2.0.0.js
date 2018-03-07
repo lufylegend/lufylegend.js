@@ -9106,6 +9106,7 @@ var LListView = (function () {
 		if(LGlobal.enableWebGL){
 			self.childLayer = new LSprite();
 			self.addChild(self.childLayer);
+			self.childLayer.mask = new LSprite();
 		}
 		/** @language chinese
 		 * LListView列表的可视范围，即大小。
@@ -9193,6 +9194,7 @@ var LListView = (function () {
 		self._ll_y = 0;
 		self.addEventListener(LEvent.ENTER_FRAME,self._ll_onframe);
 		self.addEventListener(LMouseEvent.MOUSE_DOWN,self._ll_ondown);
+		self.resize(100, 100);
 	}
 	LListView.PULL_TO_REFRESH = "pull_to_refresh";
 	LListView.DragEffects = {
@@ -9262,6 +9264,9 @@ var LListView = (function () {
 		self.scrollBarVertical.resizeHeight(self.clipping.height);
 		self.scrollBarHorizontal.resizeWidth(self.clipping.width);
 		self.resizeScrollBar();
+		self.childLayer.mask.graphics.clear();
+		self.childLayer.mask.graphics.drawRect(0, "#ff0000", 
+		[0, 0, self.clipping.width, self.clipping.height]);
 	};
 	LListView.prototype._ll_ondown = function(event){
 		var self = event.currentTarget;
@@ -9635,9 +9640,10 @@ var LListChildView = (function () {
 		if(!self._ll_cacheAsBitmap && !LGlobal.enableWebGL){
 			self.cacheAsBitmap(true);
 		}
+		/*
 		if(LGlobal.enableWebGL){
 			self.mask = self.mask || new LSprite();
-		}
+		}*/
 		if(bitmap){
 			self.ll_baseBitmap = bitmap;
 			self.ll_baseRectangle = rectangle;
@@ -9682,11 +9688,12 @@ var LListChildView = (function () {
 			var listView = self.ll_baseBitmap.parent;
 			self.x = self.ll_basePoint.x;
 			self.y = self.ll_basePoint.y;
+			/*
 			self.mask.graphics.clear();
 			self.mask.graphics.drawRect(0, "#ff0000", 
 			[Math.max(self.ll_basePoint.x, 0), Math.max(self.ll_basePoint.y, 0), 
 				listView.clipping.x + listView.clipping.width - self.ll_basePoint.x, 
-				listView.clipping.y + listView.clipping.height - self.ll_basePoint.y]);
+				listView.clipping.y + listView.clipping.height - self.ll_basePoint.y]);*/
 			//[self.x + self.ll_baseRectangle.x, self.y + self.ll_baseRectangle.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height]);
 			self.visible = true;
 			return;
