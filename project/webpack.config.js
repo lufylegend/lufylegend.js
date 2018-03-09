@@ -6,5 +6,17 @@ module.exports = {
   output: {
     path: __dirname + '/build/javascript',
     filename: '[name].js'
+  },
+  module: {
+    rules: [
+      { 
+        test: /\.js$/, 
+        exclude: /node_modules/, 
+        loader: "babel-loader", 
+        options:{
+          presets: ['react', 'es2015']
+        }
+      }
+    ]
   }
 };
