@@ -1,5 +1,7 @@
 import LogoController from './scripts/controllers/LogoController';
 import BaseManager from './scripts/core/managers/BaseManager';
+import TestManager from './scripts/core/managers/TestManager';
+import Test2Manager from './scripts/core/managers/Test2Manager';
 
 LInit(50, "legend", 800, 800, main);
 function main () {
@@ -9,6 +11,7 @@ function main () {
 		BaseManager.showDialog('Logo');
 	});
 	atlas.load("resources/atlas", "Card");
+	TestManager.out();
 	/*
 	let node = new LNode({
 		"class":"",

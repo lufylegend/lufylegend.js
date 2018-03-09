@@ -9640,10 +9640,6 @@ var LListChildView = (function () {
 		if(!self._ll_cacheAsBitmap && !LGlobal.enableWebGL){
 			self.cacheAsBitmap(true);
 		}
-		/*
-		if(LGlobal.enableWebGL){
-			self.mask = self.mask || new LSprite();
-		}*/
 		if(bitmap){
 			self.ll_baseBitmap = bitmap;
 			self.ll_baseRectangle = rectangle;
@@ -9655,8 +9651,8 @@ var LListChildView = (function () {
 		if(self.ll_basePoint.x > self.ll_baseBitmap.bitmapData.width || self.ll_basePoint.y > self.ll_baseBitmap.bitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0){
 			return;
 		}
+		var listView = self.ll_baseBitmap.parent;
 		if(!bitmap){
-			var listView = self.ll_baseBitmap.parent;
 			var index = -1, items = listView.getItems(), x, y;
 			for(var i=0,l=items.length;i<l;i++){
 				if(items[i] && items[i].objectIndex == self.objectIndex){
@@ -9685,16 +9681,8 @@ var LListChildView = (function () {
 			}
 		}
 		if(LGlobal.enableWebGL){
-			var listView = self.ll_baseBitmap.parent;
-			self.x = self.ll_basePoint.x;
-			self.y = self.ll_basePoint.y;
-			/*
-			self.mask.graphics.clear();
-			self.mask.graphics.drawRect(0, "#ff0000", 
-			[Math.max(self.ll_basePoint.x, 0), Math.max(self.ll_basePoint.y, 0), 
-				listView.clipping.x + listView.clipping.width - self.ll_basePoint.x, 
-				listView.clipping.y + listView.clipping.height - self.ll_basePoint.y]);*/
-			//[self.x + self.ll_baseRectangle.x, self.y + self.ll_baseRectangle.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height]);
+			self.x = self.ll_basePoint.x + listView.clipping.x;
+			self.y = self.ll_basePoint.y + listView.clipping.y;
 			self.visible = true;
 			return;
 		}

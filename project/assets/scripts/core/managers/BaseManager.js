@@ -27,5 +27,8 @@ class BaseManager {
         }
       }*/
     }
+    out(){
+        console.log('BaseManager');
+    }
 }
 export default new BaseManager();

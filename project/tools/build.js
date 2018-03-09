@@ -11,7 +11,7 @@ ExecCommand('rm -rf build/resources')
     console.log(res);
     console.log('build success!!');
 }).catch((err)=>{
-    console.error(log);
+    console.error(err);
 });
 
 function ExecCommand(command) {
