@@ -1,9 +1,13 @@
 import BaseView from './BaseView';
-export default ll.LClass(BaseView, 'BaseBindView', {
-	lateInit(){
+import PrefabContainer from '../prefabs/PrefabContainer';
+class BaseBindView extends BaseView {
+    lateInit() {
+        super.lateInit();
         this.updateView();
-	},
-	updateView(model){
+    }
+    updateView(model) {
         this.model = model;
     }
-});
+}
+PrefabContainer.set('BaseBindView', BaseBindView);
+export default BaseBindView;

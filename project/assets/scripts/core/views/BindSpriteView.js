@@ -1,17 +1,26 @@
 import BaseBindView from './BaseBindView';
-export default ll.LClass(BaseBindView, 'BindSpriteView', {
-	init(){
-	},
-	updateView(){
-		let value = this.getByPath(this.bind.key);
-		if(value !== null){
-			let atlas = ll.LAtlas.get(this.bind.atlas);
-			this.removeAllChild();
-			let sprite = atlas.getSprite(value);
-			if(sprite){
-				console.log("BindSpriteView updateView", this.bind.key);
-				this.addChild(sprite.clone());
-			}
-		}
-	}
-});
+import LAtlas from '../prefabs/LAtlas';
+import PrefabContainer from '../prefabs/PrefabContainer';
+class BindSpriteView extends BaseBindView {
+    constructor(data) {
+        super(data);
+    }
+    updateView() {
+        super.updateView();
+        if (!this.bind) {
+            return;
+        }
+        let value = this.getByPath(this.bind.key);
+        if (value === null) {
+            return;
+        }
+        let atlas = LAtlas.get(this.bind.atlas);
+        this.removeAllChild();
+        let sprite = atlas.getSprite(value);
+        if (sprite) {
+            this.addChild(sprite.clone());
+        }
+    }
+}
+PrefabContainer.set('BindSpriteView', BindSpriteView);
+export default BindSpriteView;

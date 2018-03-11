@@ -1,25 +1,29 @@
+import { addChild } from '../../lufylegend/utils/Function';
+import LNode from '../prefabs/LNode';
+import LURLLoader from '../../lufylegend/net/LURLLoader';
+import LEvent from '../../lufylegend/events/LEvent';
 class BaseManager {
     constructor() {
     }
     showDialog(prefabName, request) {
         let path = `resources/prefabs/${prefabName}.json`;
         return this.loadPrefab(path)
-        .then(data => {
-            let node = LNode.create(data);
-            addChild(node);
-        });
+            .then((data) => {
+                let node = LNode.create(data);
+                addChild(node);
+            });
     }
     loadPrefab(path) {
         return new Promise(function(resolve, reject) {
-            let loader = new ll.LURLLoader();
-            loader.addEventListener(ll.LEvent.COMPLETE, (event)=>{
+            let loader = new LURLLoader();
+            loader.addEventListener(LEvent.COMPLETE, (event) => {
                 let data = JSON.parse(event.target);
                 resolve(data);
             }); 
-            loader.load(path, ll.LURLLoader.TYPE_TEXT);
+            loader.load(path, LURLLoader.TYPE_TEXT);
         });
 
-      /*if (folder === 'dialogs'){
+        /*if (folder === 'dialogs'){
         let dialog = this.findDialog(prefabName);
         if (dialog){
           console.log("----dialog---");
@@ -27,7 +31,7 @@ class BaseManager {
         }
       }*/
     }
-    out(){
+    out() {
         console.log('BaseManager');
     }
 }
