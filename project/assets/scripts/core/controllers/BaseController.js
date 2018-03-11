@@ -1,15 +1,19 @@
-import BindListView from '../views/BindListView';
-import BindTextView from '../views/BindTextView';
-import BindSpriteView from '../views/BindSpriteView';
-import BindListChildView from '../views/BindListChildView';
-export default ll.LClass(ll.LNode, 'BaseController', {
-	init(){
-                this.callParent("init",arguments);
-                this._ll_isController = true;
-                this.dispatcher = this.dispatcher || {};
-                this.onLoad();
-        },
-        onLoad(){
+import LNode from '../prefabs/LNode';
+class BaseController extends LNode {
+    constructor(data) {
+        super(data);
+    }
+    get isController() {
+        return true;
+    }
+    init() {
+        super.init();
+        this.dispatcher = this.dispatcher || {};
+        this.onLoad();
+    }
+    onLoad() {
+        console.error('BaseController onLoad');
+    }
 
-        }
-});
+}
+export default BaseController;
