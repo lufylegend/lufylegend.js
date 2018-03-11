@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "globals": {
+        "BlobBuilder":true,
+        "console":true,
+        "Box2D":true,
+        "webkitAudioContext":true,
+        "ActiveXObject":true,
+        "enableWebGLCanvas":true
+    },
+    "rules": {
+        "no-console":["error", {"allow":["log", "warn", "error"]}],
+        "arrow-parens": "error",
+        "arrow-spacing": "error",
+        "block-spacing": ["error", "never"],
+        "brace-style": "error",
+        "comma-spacing": "error",
+        "eqeqeq": "error",
+        "func-call-spacing": "error",
+        "key-spacing": "error",
+        "keyword-spacing": "error",
+        "no-multi-spaces": "error",
+        "no-unused-vars": ["error", {
+          "args": "none"
+        }],
+        "no-whitespace-before-property": "error",
+        "object-curly-spacing": ["error", "always"],
+        "space-before-blocks": "error",
+        "space-before-function-paren": ["error", "never"],
+        "space-in-parens": "error",
+        "space-infix-ops": "error",
+        "no-var": 1,
+        "indent": [
+            "error",
+            4
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
