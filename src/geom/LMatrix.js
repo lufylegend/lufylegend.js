@@ -113,7 +113,7 @@ var LMatrix = (function () {
 		 */
 		isIdentity : function () {
 			var s = this;
-			return (s.a == 1 && s.b == 0 && s.c == 0 && s.d == 1 && s.tx == 0 && s.ty == 0 && u == 0 && v == 0 && w == 1);
+			return (s.a === 1 && s.b === 0 && s.c === 0 && s.d === 1 && s.tx === 0 && s.ty === 0 && s.u === 0 && s.v === 0 && s.w === 1);
 		},
 		transform : function (c) {
 			var s = this;
