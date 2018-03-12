@@ -1,7 +1,7 @@
 import LSprite from '../../display/LSprite';
 import LGraphics from '../../display/LGraphics';
 import LGlobal from '../../utils/LGlobal';
-import UNDEFINED from '../../utils/LConstant';
+import { UNDEFINED } from '../../utils/LConstant';
 import LEvent from '../../events/LEvent';
 import LMouseEvent from '../../events/LMouseEvent';
 import LRectangle from '../../geom/LRectangle';
@@ -124,7 +124,7 @@ class LScrollbar extends LSprite {
                 }
             }
         }
-        if (s._key === null) {
+        if (!s._key) {
             return;
         }
         if (s._key['up']) {
@@ -162,7 +162,7 @@ class LScrollbar extends LSprite {
     resizeWidth(value) {
         let s = this, grd, grdb;
         if (!value) {
-            if (s._scroll_w !== null) {
+            if (s._scroll_w) {
                 s._scroll_w.parent.removeChild(s._scroll_w);
                 s._scroll_w_bar.parent.removeChild(s._scroll_w_bar);
                 s._scroll_w = null;
@@ -170,8 +170,8 @@ class LScrollbar extends LSprite {
             }
             return;
         }
-        if (s._scroll_w_bar === null) {
-            if (s._key === null) {
+        if (!s._scroll_w_bar) {
+            if (!s._key) {
                 s._key = [];
             }
             s._scroll_w = new LSprite();
@@ -243,7 +243,7 @@ class LScrollbar extends LSprite {
     resizeHeight(value) {
         let s = this, grd, grdb;
         if (!value) {
-            if (s._scroll_h !== null) {
+            if (s._scroll_h) {
                 s._scroll_h.parent.removeChild(s._scroll_h);
                 s._scroll_h_bar.parent.removeChild(s._scroll_h_bar);
                 s._scroll_h = null;
@@ -251,8 +251,8 @@ class LScrollbar extends LSprite {
             }
             return;
         }
-        if (s._scroll_h_bar === null) {
-            if (s._key === null) {
+        if (!s._scroll_h_bar) {
+            if (!s._key) {
                 s._key = [];
             }
             s._scroll_h = new LSprite();
@@ -443,10 +443,10 @@ class LScrollbar extends LSprite {
     }
     mouseDown(event) {
         let s = event.clickTarget;
-        if (s._scroll_h !== null && event.selfX >= s._scroll_h.x && event.selfX <= s._scroll_h.x + s._scrollWidth) {
+        if (s._scroll_h && event.selfX >= s._scroll_h.x && event.selfX <= s._scroll_h.x + s._scrollWidth) {
             s.mouseDownH(event, s);
         }
-        if (s._scroll_w !== null && event.selfY >= s._scroll_w.y && event.selfY <= s._scroll_w.y + s._scrollWidth) {
+        if (s._scroll_w && event.selfY >= s._scroll_w.y && event.selfY <= s._scroll_w.y + s._scrollWidth) {
             s.mouseDownW(event, s);
         }
     }

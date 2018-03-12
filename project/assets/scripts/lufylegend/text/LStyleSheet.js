@@ -12,7 +12,7 @@ class LStyleSheet extends LObject {
     }
     setStyle(styleName, styleObject) {
         this.styleIndex++;
-        if (styleObject === null) {
+        if (!styleObject) {
             if (this.styleNames[styleName]) {
                 delete this.styleNames[styleName];
             }

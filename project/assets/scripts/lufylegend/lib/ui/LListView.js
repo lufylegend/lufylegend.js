@@ -6,7 +6,7 @@ import lufylegend from '../../ll';
 import LEvent from '../../events/LEvent';
 import LMouseEvent from '../../events/LMouseEvent';
 import LPoint from '../../geom/LPoint';
-import UNDEFINED from '../../utils/LConstant';
+import { UNDEFINED } from '../../utils/LConstant';
 import LPanel from './LPanel';
 import LFocusEvent from '../../events/LFocusEvent';
 import LTweenLite from '../../transitions/LTweenLite';
@@ -15,12 +15,15 @@ export class LListView extends LSprite {
     constructor() {
         super();
         let self = this;
-        let bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
+        let bitmapData = new LBitmapData('#fff000', 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
         self.bitmap = new LBitmap(bitmapData);
         self.addChild(self.bitmap);
+
+
         self.clipping = new LRectangle(0, 0, 100, 100);
         self.clipping.parent = self;
         if (lufylegend.LGlobal.enableWebGL) {
+            self.bitmap.visible = false;
             self.childLayer = new LSprite();
             self.addChild(self.childLayer);
             self.childLayer.mask = new LSprite();
@@ -71,12 +74,13 @@ export class LListView extends LSprite {
         self.scrollBarVertical.resizeHeight(self.clipping.height);
         self.scrollBarHorizontal.resizeWidth(self.clipping.width);
         self.resizeScrollBar();
-        self.childLayer.mask.graphics.clear();
-        self.childLayer.mask.graphics.drawRect(0, '#ff0000', 
-            [0, 0, self.clipping.width, self.clipping.height]);
+        if (lufylegend.LGlobal.enableWebGL) {
+            self.childLayer.mask.graphics.clear();
+            self.childLayer.mask.graphics.drawRect(0, '#ff0000', 
+                [0, 0, self.clipping.width, self.clipping.height]);
+        }
     }
     _ll_ondown(event) {
-        console.log('LListView _ll_ondown');
         let self = event.currentTarget;
         let dragObject = new LListViewDragObject(self, event.selfX, event.selfY);
         lufylegend.LGlobal.stage.addChild(dragObject);
@@ -545,11 +549,13 @@ class LListViewDragObject extends LSprite {
                 ty = listView.allHeight;
             }
         }
-        LListViewDragObject.listToPosition(listView, tx, ty, self.tweenComplete);
+        LListViewDragObject.listToPosition(listView, tx, ty, () => {
+            self.tweenComplete();
+        });
         return true;
     }
-    tweenComplete(event) {
-        event.target.dragAmend();
+    tweenComplete() {
+        this.dragAmend();
     }
     _ll_tween() {
         let self = this;

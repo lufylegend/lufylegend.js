@@ -70,7 +70,7 @@ class LBitmap extends LDisplayObject {
     }
     getWidth(maskSize) {
         let s = this, w, mx, mw;
-        w = s.bitmapData !== null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+        w = s.bitmapData ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
         if (maskSize && s.mask) {
             mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
             if (mx > w) {
@@ -87,7 +87,7 @@ class LBitmap extends LDisplayObject {
     }
     getHeight(maskSize) {
         let s = this, h, my, mh;
-        h = s.bitmapData !== null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+        h = s.bitmapData ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
         if (maskSize && s.mask) {
             my = s.mask._startY ? s.mask._startY() : s.mask.startY();
             if (my > h) {

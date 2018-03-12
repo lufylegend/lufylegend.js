@@ -1,4 +1,4 @@
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 import LGlobal from '../utils/LGlobal';
 import LEvent from '../events/LEvent';
 class LBox2d {
@@ -88,14 +88,14 @@ class LBox2d {
         let wa = new s.b2Vec2(vec[0], vec[1]);
         let j = new s.b2LineJointDef();
         j.Initialize(A, B, B.GetWorldCenter(), wa);
-        if (t === null) {
+        if (!t) {
             j.enableLimit = false;
         } else {
             j.lowerTranslation = t[0];
             j.upperTranslation = t[1];
             j.enableLimit = true;
         }
-        if (m === null) {
+        if (!m) {
             j.enableMotor = false;
         } else {
             j.maxMotorForce = m[0];
@@ -119,14 +119,14 @@ class LBox2d {
         let wa = new s.b2Vec2(vec[0], vec[1]);
         let j = new s.b2PrismaticJointDef();
         j.Initialize(B, A, B.GetWorldCenter(), wa);
-        if (t === null) {
+        if (!t) {
             j.enableLimit = false;
         } else {
             j.lowerTranslation = t[0];
             j.upperTranslation = t[1];
             j.enableLimit = true;
         }
-        if (m === null) {
+        if (!m) {
             j.enableMotor = false;
         } else {
             j.maxMotorForce = m[0];
@@ -139,14 +139,14 @@ class LBox2d {
         let s = this;
         let j = new s.b2RevoluteJointDef();
         j.Initialize(A, B, B.GetWorldCenter());
-        if (a === null) {
+        if (!a) {
             j.enableLimit = false;
         } else {
             j.lowerAngle = a[0] * s.b2Settings.b2_pi / 180;
             j.upperAngle = a[1] * s.b2Settings.b2_pi / 180;
             j.enableLimit = true;
         }
-        if (m === null) {
+        if (!m) {
             j.enableMotor = false;
         } else {
             j.maxMotorTorque = m[0];
@@ -295,13 +295,13 @@ class LBox2d {
         for (currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
             child = currentBody.GetUserData();
             if (child) {
-                if (position === null) {
+                if (!position) {
                     parent = child.parent;
                     cx = currentBody.GetPosition().x;
                     cy = currentBody.GetPosition().y;
                 }
                 currentBody.SetPosition(new s.b2Vec2((child.x + child.rotatex + parent.x) / s.drawScale, (child.y + child.rotatey + parent.y) / s.drawScale));
-                if (position === null) {
+                if (!position) {
                     position = {
                         x: (currentBody.GetPosition().x - cx),
                         y: (currentBody.GetPosition().y - cy)

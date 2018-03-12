@@ -1,7 +1,7 @@
 import LWebAudio from './LWebAudio';
 import LMedia from './LMedia';
 import lufylegend from '../ll';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LSound {
     constructor(u) {
         this.type = 'LSound';

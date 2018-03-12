@@ -7,9 +7,9 @@ class LoadingSample5 extends LSprite {
     constructor(height, background, color) {
         super();
         let s = this;
-        s.backgroundColor = background === null ? '#000000' : background;
+        s.backgroundColor = background || '#000000';
         s.graphics.drawRect(1, s.backgroundColor, [0, 0, LGlobal.width, LGlobal.height], true, s.backgroundColor);
-        if (color === null)color = '#FFFFFF';
+        color = color || '#FFFFFF';
         s.arc = new LSprite();
         s.arc.x = LGlobal.width * 0.5;
         s.arc.y = LGlobal.height * 0.5;

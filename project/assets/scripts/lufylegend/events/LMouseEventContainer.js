@@ -1,5 +1,5 @@
 import LMouseEvent from './LMouseEvent';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LMouseEventContainer {
     constructor() {
         this.dispatchAllEvent = false;

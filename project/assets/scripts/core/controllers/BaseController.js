@@ -12,7 +12,6 @@ class BaseController extends LNode {
         this.onLoad();
     }
     onLoad() {
-        console.error('BaseController onLoad');
     }
 
 }

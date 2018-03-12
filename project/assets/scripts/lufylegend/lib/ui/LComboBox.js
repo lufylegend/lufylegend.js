@@ -5,7 +5,7 @@ import LGlobal from '../../utils/LGlobal';
 import LButton from '../../utils/LButton';
 import LTextField from '../../text/LTextField';
 import LMouseEvent from '../../events/LMouseEvent';
-import UNDEFINED from '../../utils/LConstant';
+import { UNDEFINED } from '../../utils/LConstant';
 import { LListView, LListChildView } from './LListView';
 export class LComboBox extends LSprite {
     constructor(size, color, font, layerBack, layerUp, layerOver) {

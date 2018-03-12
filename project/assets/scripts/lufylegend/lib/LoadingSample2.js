@@ -6,13 +6,12 @@ class LoadingSample2 extends LSprite {
     constructor(size, background, color) {
         super();
         let s = this, c = LGlobal.canvas, t = 'Loading...', l;
-        s.backgroundColor = background === null ? '#000000' : background;
+        s.backgroundColor = background || '#000000';
         s.graphics.drawRect(1, s.backgroundColor, [0, 0, LGlobal.width, LGlobal.height], true, s.backgroundColor);
-	
-        if (color === null)color = LGlobal._create_loading_color();
-        s.color = color;
+        
+        s.color = color || LGlobal._create_loading_color();
         s.progress = 0;
-        s.size = size === null ? LGlobal.height * 0.2 : size;
+        s.size = size || LGlobal.height * 0.2;
         l = new LTextField();
         l.text = t;
         l.size = s.size;

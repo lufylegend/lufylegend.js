@@ -1,6 +1,6 @@
 import LObject from '../utils/LObject';
 import LRectangle from '../geom/LRectangle';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LQuadTree extends LObject {
     constructor(rect) {
         super();

@@ -2,7 +2,7 @@ import LSprite from '../../display/LSprite';
 import LShape from '../../display/LShape';
 import LBitmapData from '../../display/LBitmapData';
 import LBitmap from '../../display/LBitmap';
-import UNDEFINED from '../../utils/LConstant';
+import { UNDEFINED } from '../../utils/LConstant';
 class LPanel extends LSprite {
     constructor(bitmapData, w, h, x1, x2, y1, y2, overlapping) {
         super();

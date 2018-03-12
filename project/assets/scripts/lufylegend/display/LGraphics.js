@@ -1,6 +1,6 @@
 import LObject from '../utils/LObject';
 import ll from '../ll';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LGraphics extends LObject {
     constructor() {
         super();
@@ -124,7 +124,7 @@ class LGraphics extends LObject {
     }
     lineStyle(tn, co) {
         let s = this;
-        if (co === null) {
+        if (!co) {
             co = s.color;
         }
         s.color = co;
@@ -454,7 +454,7 @@ class LGraphics extends LObject {
     }
     ismouseon(e, co) {
         let s = this;
-        if (e === null || e === UNDEFINED || s.showList.length === 0 || !s.parent) {
+        if (!e || s.showList.length === 0 || !s.parent) {
             return false;
         }
         return s.parent.ismouseonShapes(s.showList, e.offsetX, e.offsetY);

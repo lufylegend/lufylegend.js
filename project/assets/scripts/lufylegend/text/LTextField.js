@@ -287,7 +287,7 @@ class LTextField extends LInteractiveObject {
     setType(type, inputBackLayer) {
         let s = this;
         if (s.texttype !== type && type === LTextFieldType.INPUT) {
-            if (inputBackLayer === null || inputBackLayer instanceof LSprite) {
+            if (!inputBackLayer || !(inputBackLayer instanceof LSprite)) {
                 s.inputBackLayer = new LSprite();
                 s.inputBackLayer.graphics.drawRect(1, '#000000', [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
             } else {
@@ -338,7 +338,7 @@ class LTextField extends LInteractiveObject {
     }
     mouseEvent(event, type, cood) {
         let s = this, on;
-        if (s.inputBackLayer === null || type !== LMouseEvent.MOUSE_DOWN) {
+        if (!s.inputBackLayer || type !== LMouseEvent.MOUSE_DOWN) {
             return;
         }
         on = s.ismouseon(event, cood);

@@ -74,7 +74,7 @@ class LShape extends LInteractiveObject {
     }
     ismouseon(e, cd) {
         let s = this, i = false, sc;
-        if (!s.visible || e === null) {
+        if (!s.visible || !e) {
             return false;
         }
         if (s.mask) {

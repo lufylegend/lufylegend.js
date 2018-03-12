@@ -102,7 +102,6 @@ let LGlobal = (function() {
         LGlobal.traceDebug = v; 
     };
     LGlobal.setCanvas = function(id, w, h) {
-        console.log('LGlobal.setCanvas');
         LGlobal.ll_createCanvas(id, w, h);
         LGlobal.ll_createStage();
         if (LGlobal.displayState === LGlobal.FULL_SCREEN) {
@@ -123,7 +122,6 @@ let LGlobal = (function() {
             LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_UP, LGlobal.ll_mouseUp);
             LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_OUT, LGlobal.ll_mouseOut);
         }
-        console.log('LGlobal.setCanvas end');
     };
     LGlobal.ll_createCanvas = function(id, w, h) {
         LGlobal.id = id;
@@ -333,7 +331,7 @@ let LGlobal = (function() {
         }
     };
     LGlobal.ll_mouseDbclick = function(e) {
-        if (e.offsetX === null && e.layerX !== null) {
+        if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
@@ -343,7 +341,7 @@ let LGlobal = (function() {
         LGlobal.mouseEvent(event, LMouseEvent.DOUBLE_CLICK);
     };
     LGlobal.ll_mouseDown = function(e) {
-        if (e.offsetX === null && e.layerX !== null) {
+        if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
@@ -360,7 +358,7 @@ let LGlobal = (function() {
         }
     };
     LGlobal.ll_mouseMove = function(e) {
-        if (e.offsetX === null && e.layerX !== null) {
+        if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
@@ -389,7 +387,7 @@ let LGlobal = (function() {
         }
     };
     LGlobal.ll_mouseUp = function(e) {
-        if (e.offsetX === null && e.layerX !== null) {
+        if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
@@ -403,7 +401,7 @@ let LGlobal = (function() {
         }
     };
     LGlobal.ll_mouseOut = function(e) {
-        if (e.offsetX === null && e.layerX !== null) {
+        if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
@@ -428,8 +426,6 @@ let LGlobal = (function() {
     LGlobal.mouseEvent = function(e, t) {
         if (t === LMouseEvent.MOUSE_MOVE) {
             LGlobal.dragHandler(e);
-        } else {
-            console.log('LGlobal.mouseEvent', t, e);
         }
         if (LMouseEventContainer.container[t]) {
             LMouseEventContainer.dispatchMouseEvent(e, t);
@@ -531,7 +527,7 @@ let LGlobal = (function() {
         b.arrow.x = s * 1.5 + w1;
     };
     LGlobal.onShow = function() {
-        if (LGlobal.canvas === null) {
+        if (!LGlobal.canvas) {
             return;
         }
         if (LGlobal.enableWebGL) {
@@ -562,7 +558,7 @@ let LGlobal = (function() {
             LGlobal.forceRefresh = false;
         }
         LGlobal.canvas.beginPath();
-        if (LGlobal.box2d !== null) {
+        if (LGlobal.box2d) {
             LGlobal.box2d.ll_show();
             if (!LGlobal.traceDebug && LGlobal.keepClear) {
                 LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
@@ -571,7 +567,7 @@ let LGlobal = (function() {
             if (LGlobal.keepClear) {
                 LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
             }
-            if (LGlobal.backgroundColor !== null) {
+            if (LGlobal.backgroundColor) {
                 LGlobal.canvas.fillStyle = LGlobal.backgroundColor;
                 LGlobal.canvas.fillRect(0, 0, LGlobal.width, LGlobal.height);
             }
@@ -583,7 +579,7 @@ let LGlobal = (function() {
     };
     LGlobal.show = function(s, ctx) {
         ctx = ctx || LGlobal.canvas;
-        for (var i = 0, l = s.length, c; i < l; i++) {
+        for (let i = 0, l = s.length, c; i < l; i++) {
             c = s[i];
             if (c && c.ll_show) {
                 c.ll_show(ctx);
@@ -878,7 +874,7 @@ let LGlobal = (function() {
         LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
     };
     LGlobal.mouseJoint_end = function() {
-        if (LGlobal.box2d !== null && LGlobal.box2d.mouseJoint) {
+        if (LGlobal.box2d && LGlobal.box2d.mouseJoint) {
             LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
             LGlobal.box2d.mouseJoint = null;
         }

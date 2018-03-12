@@ -21,9 +21,7 @@ LEvent.PRE_SOLVE = 'preSolve';
 LEvent.POST_SOLVE = 'postSolve';
 LEvent.BEGIN_CONTACT = 'beginContact';
 LEvent.addEventListener = function(n, t, f, b) {
-    if (b === null) {
-        b = false;
-    }
+    b = b || false;
     if (n.addEventListener) {
         n.addEventListener(t, f, b);
     } else if (n.attachEvent) {
@@ -35,9 +33,7 @@ LEvent.addEventListener = function(n, t, f, b) {
     }
 };
 LEvent.removeEventListener = function(n, t, f, b) {
-    if (b === null) {
-        b = false;
-    }
+    b = b || false;
     if (n.removeEventListener) {
         n.removeEventListener(t, f, b);
     } else if (n.detachEvent) {

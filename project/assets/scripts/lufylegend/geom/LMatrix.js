@@ -1,5 +1,5 @@
 import LObject from '../utils/LObject';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LMatrix extends LObject {
     constructor(a, b, c, d, tx, ty, u, v, w) {
         super();

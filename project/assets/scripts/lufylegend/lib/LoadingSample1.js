@@ -5,10 +5,10 @@ class LoadingSample1 extends LSprite {
         super();
         let s = this;
         s.numberList = new Array([1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0], [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1]);
-        s.backgroundColor = b === null ? '#000000' : b;
-        s.color = c === null ? '#ffffff' : c;
+        s.backgroundColor = b || '#000000';
+        s.color = c || '#ffffff';
         s.progress = 0;
-        s.step = step === null ? LGlobal.width * 0.5 / 15 : step;
+        s.step = step ? step : LGlobal.width * 0.5 / 15;
         s.back = new LSprite();
         s.addChild(s.back);
         s.num = new LSprite();
