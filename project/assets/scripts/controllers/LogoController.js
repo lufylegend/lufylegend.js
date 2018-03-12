@@ -1,5 +1,5 @@
-import PrefabContainer from '../core/prefabs/PrefabContainer';
-import BaseController from '../core/controllers/BaseController';
+import PrefabContainer from '../../plugin/mvc/prefabs/PrefabContainer';
+import BaseController from '../../plugin/mvc/controllers/BaseController';
 class LogoController extends BaseController {
     onLoad() {
         super.onLoad();
