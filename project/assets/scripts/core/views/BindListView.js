@@ -6,7 +6,6 @@ import PrefabContainer from '../prefabs/PrefabContainer';
 class BindListView extends BaseBindView {
     init() {
         super.init();
-        this.graphics.drawRect(2, '#ff0000', [0, 0, 200, 200], false, '#ff0000');
         this.listView = new LListView();
         this.addChild(this.listView);
     }
@@ -17,6 +16,8 @@ class BindListView extends BaseBindView {
             return;
         }
         let listView = this.listView;
+        listView.scrollBarHorizontal.showCondition === LListView.ScrollBarCondition.Always;
+        listView.scrollBarVertical.showCondition === LListView.ScrollBarCondition.Always;
         listView.maxPerLine = 1;
         listView.cellWidth = 100;
         listView.cellHeight = 100;
@@ -35,11 +36,11 @@ class BindListView extends BaseBindView {
     }
     createListObject(data, model) {
         let listChild = new LListChildView();
+        this.model = model;
         let node = LNode.create(data);
-        console.log('BindListView createListObject,', data, model, node);
-        node.updateWidget(model);
         listChild.addChild(node);
         this.listView.insertChildView(listChild);
+        node.updateWidget(model);
     }
 }
 PrefabContainer.set('BindListView', BindListView);

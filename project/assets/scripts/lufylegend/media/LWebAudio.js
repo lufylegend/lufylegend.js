@@ -1,7 +1,7 @@
 import LEventDispatcher from '../events/LEventDispatcher';
 import LSound from './LSound';
 import LEvent from '../events/LEvent';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 import LAjax from '../net/LAjax';
 class LWebAudio extends LEventDispatcher {
     constructor() {

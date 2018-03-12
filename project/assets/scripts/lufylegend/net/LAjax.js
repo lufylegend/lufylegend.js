@@ -1,4 +1,4 @@
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LAjax {
     constructor() {
         this.responseType = null;

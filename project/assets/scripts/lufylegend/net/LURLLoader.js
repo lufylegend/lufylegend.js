@@ -1,6 +1,6 @@
 import LEventDispatcher from '../events/LEventDispatcher';
 import LEvent from '../events/LEvent';
-import getExtension from '../utils/Function';
+import { getExtension } from '../utils/Function';
 import LAjax from './LAjax';
 class LURLLoader extends LEventDispatcher {
     constructor() {

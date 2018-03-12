@@ -1,5 +1,5 @@
 import LDisplayObjectContainer from './LDisplayObjectContainer';
-import { UNDEFINED, OS_PC, mouseX, mouseY } from '../utils/LConstant';
+import { UNDEFINED, OS_PC } from '../utils/LConstant';
 import LGraphics from './LGraphics';
 import LPoint from '../geom/LPoint';
 import LEvent from '../events/LEvent';
@@ -51,8 +51,8 @@ class LSprite extends LDisplayObjectContainer {
         }
         s.ll_touchPointID = touchPointID;
         s.ll_dragGlobalPoint = s.parent.localToGlobal(new LPoint(s.x, s.y));
-        s.ll_dragMX = mouseX;
-        s.ll_dragMY = mouseY;
+        s.ll_dragMX = lufylegend.LGlobal.offsetX;
+        s.ll_dragMY = lufylegend.LGlobal.offsetY;
         s.ll_dragStart = true;
         lufylegend.LGlobal.dragList.push(s);
     }
@@ -238,7 +238,7 @@ class LSprite extends LDisplayObjectContainer {
         if (!s.visible) {
             return false;
         }
-        if (cd === null) {
+        if (!cd) {
             cd = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
         }
         on = s.ismouseon(e, cd);
@@ -376,10 +376,7 @@ class LSprite extends LDisplayObjectContainer {
     }
     ismouseon(e, cd) {
         let s = this;
-        if (e.mouseType !== LMouseEvent.MOUSE_MOVE) {
-            console.log('ismouseon', e, cd);
-        }
-        if (!s.visible || e === null) {
+        if (!s.visible || !e) {
             return false;
         }
         if (s.mask) {
@@ -441,14 +438,14 @@ class LSprite extends LDisplayObjectContainer {
         let s = this;
         s.rotatex = radius;
         s.rotatey = radius;
-        s.box2dBody = lufylegend.LGlobal.box2d.addCircle(radius / lufylegend.LGlobal.box2d.drawScale, (s.x + cx) / lufylegend.LGlobal.box2d.drawScale, (s.y + cy) / lufylegend.LGlobal.box2d.drawScale, (type === 1) ? lufylegend.LGlobal.box2d.b2Body.b2_dynamicBody : lufylegend.LGlobal.box2d.b2Body.b2_staticBody, density === null ? 0.5 : density, friction === null ? 0.4 : friction, restitution === null ? 0.8 : restitution);
+        s.box2dBody = lufylegend.LGlobal.box2d.addCircle(radius / lufylegend.LGlobal.box2d.drawScale, (s.x + cx) / lufylegend.LGlobal.box2d.drawScale, (s.y + cy) / lufylegend.LGlobal.box2d.drawScale, (type === 1) ? lufylegend.LGlobal.box2d.b2Body.b2_dynamicBody : lufylegend.LGlobal.box2d.b2Body.b2_staticBody, !density ? 0.5 : density, !friction ? 0.4 : friction, !restitution ? 0.8 : restitution);
         s.box2dBody.SetUserData(s);
     }
     addBodyPolygon(w, h, type, density, friction, restitution) {
         let s = this;
         s.rotatex = w / 2;
         s.rotatey = h / 2;
-        s.box2dBody = lufylegend.LGlobal.box2d.addPolygon(w * 0.5 / lufylegend.LGlobal.box2d.drawScale, h * 0.5 / lufylegend.LGlobal.box2d.drawScale, s.x / lufylegend.LGlobal.box2d.drawScale, s.y / lufylegend.LGlobal.box2d.drawScale, (type === 1) ? lufylegend.LGlobal.box2d.b2Body.b2_dynamicBody : lufylegend.LGlobal.box2d.b2Body.b2_staticBody, density === null ? 0.5 : density, friction === null ? 0.4 : friction, restitution === null ? 0.8 : restitution);
+        s.box2dBody = lufylegend.LGlobal.box2d.addPolygon(w * 0.5 / lufylegend.LGlobal.box2d.drawScale, h * 0.5 / lufylegend.LGlobal.box2d.drawScale, s.x / lufylegend.LGlobal.box2d.drawScale, s.y / lufylegend.LGlobal.box2d.drawScale, (type === 1) ? lufylegend.LGlobal.box2d.b2Body.b2_dynamicBody : lufylegend.LGlobal.box2d.b2Body.b2_staticBody, !density ? 0.5 : density, !friction ? 0.4 : friction, !restitution ? 0.8 : restitution);
         s.box2dBody.SetUserData(s);
     }
     addBodyVertices(vertices, cx, cy, type, density, friction, restitution) {

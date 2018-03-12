@@ -3,7 +3,7 @@ import LTransform from '../geom/LTransform';
 import LMatrix from '../geom/LMatrix';
 import LPoint from '../geom/LPoint';
 import LRectangle from '../geom/LRectangle';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 import ll from '../ll';
 class LDisplayObject extends LEventDispatcher {
     constructor() {

@@ -1,5 +1,5 @@
 import LObject from '../utils/LObject';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class LEventDispatcher extends LObject {
     constructor() {
         super();

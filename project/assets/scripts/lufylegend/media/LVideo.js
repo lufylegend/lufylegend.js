@@ -1,6 +1,6 @@
 import LMedia from './LMedia';
 import LGlobal from '../utils/LGlobal';
-import OS_IPHONE from '../utils/LConstant';
+import { OS_IPHONE } from '../utils/LConstant';
 import LSound from './LSound';
 class LVideo extends LMedia {
     constructor(u) {

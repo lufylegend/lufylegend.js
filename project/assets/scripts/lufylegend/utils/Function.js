@@ -19,7 +19,7 @@ if (!String.format) {
 export function trace() {
     if (!ll.LGlobal.traceDebug) return;
     let t = document.getElementById('traceObject'), i;
-    if (trace.arguments.length > 0 && t === null) {
+    if (trace.arguments.length > 0 && !t) {
         let d = document.createElement('DIV');
         d.position = 0;
         d.style.position = 'absolute';

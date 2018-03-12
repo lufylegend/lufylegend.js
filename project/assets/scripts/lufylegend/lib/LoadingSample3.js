@@ -6,14 +6,13 @@ class LoadingSample3 extends LSprite {
     constructor(height, background, color) {
         super();
         let s = this;
-        s.backgroundColor = background === null ? '#000000' : background;
+        s.backgroundColor = background || '#000000';
         s.graphics.drawRect(1, s.backgroundColor, [0, 0, LGlobal.width, LGlobal.height], true, s.backgroundColor);
 		
-        if (color === null)color = LGlobal._create_loading_color();
-        s.color = color;
+        s.color = color || LGlobal._create_loading_color();
         s.progress = 0;
         s.screenWidth = LGlobal.width * 0.75;
-        s.screenHeight = height === null ? LGlobal.height * 0.1 : height;
+        s.screenHeight = height || LGlobal.height * 0.1;
         if (s.screenHeight > 5)s.screenHeight = 5;
         s.screenX = (LGlobal.width - s.screenWidth) / 2;
         s.screenY = (LGlobal.height - s.screenHeight) / 2;

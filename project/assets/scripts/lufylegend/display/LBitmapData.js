@@ -20,8 +20,8 @@ class LBitmapData extends LObject {
         if (image && typeof image === 'object') {
             this.image = image;
             this.dataType = LBitmapData.DATA_IMAGE;
-            this.width = (width === null ? this.image.width : width);
-            this.height = (height === null ? this.image.height : height);
+            this.width = width || this.image.width;
+            this.height = height || this.image.height;
             this._setDataType(dataType);
         } else {
             this._createCanvas();

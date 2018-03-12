@@ -29,19 +29,19 @@ class LAnimation extends LSprite {
 
     setAction(rowIndex, colIndex, mode, isMirror) {
         let s = this, changed = false;
-        if (rowIndex !== null && rowIndex >= 0 && rowIndex < s.imageArray.length) {
+        if (typeof rowIndex !== UNDEFINED && rowIndex >= 0 && rowIndex < s.imageArray.length) {
             s.rowIndex = rowIndex;
             changed = true;
         }
-        if (colIndex !== null && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length) {
+        if (typeof colIndex !== UNDEFINED && colIndex >= 0 && colIndex < s.imageArray[rowIndex].length) {
             s.colIndex = colIndex;
             changed = true;
         }
-        if (mode !== null) {
+        if (typeof mode !== UNDEFINED) {
             s.mode = mode;
             changed = true;
         }
-        if (isMirror !== null) {
+        if (typeof isMirror !== UNDEFINED) {
             s.isMirror = isMirror;
             if (s.isMirror) {
                 s.bitmap.x = s.bitmap.getWidth();

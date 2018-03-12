@@ -169,16 +169,14 @@ class LTweenLiteChild extends LObject {
     }
     _dispatchEvent(f, wait) {
         let s = this;
-        let target = s.target;
-        let fun = function() {
-            target.target = target;
-            target.currentTarget = s;
-            f(target);
-            delete target.currentTarget;
-            delete target.target;
+        let event = {};
+        let fun = () => {
+            event.target = s.target;
+            event.currentTarget = s;
+            f(event);
         };
         if (wait) {
-            setTimeout(function() {
+            setTimeout(() => {
                 fun();
             }, 1);
         } else {
@@ -300,10 +298,12 @@ LTweenLite.PlayStyle = {
 };
 LTweenLite.TYPE_FRAME = 'type_frame';
 LTweenLite.TYPE_TIMER = 'type_timer';
-export let LTweenLiteTimeline = new LTweenLite();
-ll.LGlobal.childList.push(LTweenLiteTimeline);
-export let tween = new LTweenLite();
+ll.LTweenLiteTimeline = new LTweenLite();
+ll.LGlobal.childList.push(ll.LTweenLiteTimeline);
+let tween = new LTweenLite();
 tween.TYPE_FRAME = LTweenLite.TYPE_FRAME;
 tween.TYPE_TIMER = LTweenLite.TYPE_TIMER;
 tween.PlayStyle = LTweenLite.PlayStyle;
 ll.LGlobal.childList.push(tween);
+ll.LTweenLite = tween;
+export default tween;

@@ -1,5 +1,5 @@
 import LSprite from '../display/LSprite';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 class InteractivePNG extends LSprite {
     hitTestPoint(x, y, cd) {
         let self = this;

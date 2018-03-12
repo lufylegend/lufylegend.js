@@ -3,7 +3,7 @@ import LMouseEventContainer from '../events/LMouseEventContainer';
 import LMouseEvent from '../events/LMouseEvent';
 import LGlobal from '../utils/LGlobal';
 import { OS_PC } from '../utils/LConstant';
-import LTweenLiteTimeline from '../transitions/LTweenLite';
+import ll from '../ll';
 import LEasing from '../transitions/LEasing';
 class LButton extends LSprite {
     constructor(upState, overState, downState, disableState) {
@@ -121,7 +121,7 @@ class LButton extends LSprite {
             delete s._tweenOver;
         };
         if (s.staticMode) {
-            s.tween = LTweenLiteTimeline.to(s.downState, 0.3, {}).to(s.downState, 0.1, { onComplete: onComplete });
+            s.tween = ll.LTweenLiteTimeline.to(s.downState, 0.3, {}).to(s.downState, 0.1, { onComplete: onComplete });
         } else {
             w = s.downState.getWidth();
             h = s.downState.getHeight();
@@ -131,7 +131,7 @@ class LButton extends LSprite {
             y = s.downState.y;
             tx = x + (w - tw) * 0.5;
             ty = y + (h - th) * 0.5;
-            s.tween = LTweenLiteTimeline.to(s.downState, 0.3, { x: tx, y: ty, scaleX: s._ll_down_sx * 1.1, scaleY: s._ll_down_sy * 1.1, ease: LEasing.Quart.easeOut })
+            s.tween = ll.LTweenLiteTimeline.to(s.downState, 0.3, { x: tx, y: ty, scaleX: s._ll_down_sx * 1.1, scaleY: s._ll_down_sy * 1.1, ease: LEasing.Quart.easeOut })
                 .to(s.downState, 0.1, { x: x, y: y, scaleX: s._ll_down_sx, scaleY: s._ll_down_sy, ease: LEasing.Quart.easeOut, onComplete: onComplete });
         }
     }

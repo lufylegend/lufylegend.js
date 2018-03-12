@@ -1,4 +1,4 @@
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 const LEasing = {
     None: {
         easeIn: function(t, b, c, d) {

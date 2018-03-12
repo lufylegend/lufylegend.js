@@ -1,6 +1,6 @@
 import LEventDispatcher from '../events/LEventDispatcher';
 import LEvent from '../events/LEvent';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 import { getExtension } from '../utils/Function';
 import LURLLoader from '../net/LURLLoader';
 import LFontLoader from '../net/LFontLoader';

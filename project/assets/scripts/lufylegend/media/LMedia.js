@@ -1,6 +1,6 @@
 import LDisplayObject from '../display/LDisplayObject';
 import LGlobal from '../utils/LGlobal';
-import UNDEFINED from '../utils/LConstant';
+import { UNDEFINED } from '../utils/LConstant';
 import LEvent from '../events/LEvent';
 import LSound from './LSound';
 class LMedia extends LDisplayObject {
