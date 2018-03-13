@@ -1,5 +1,5 @@
 import BaseBindView from './BaseBindView';
-import LAtlas from '../prefabs/LAtlas';
+import LAtlas from '../../lufylegend/system/LAtlas';
 import PrefabContainer from '../prefabs/PrefabContainer';
 class BindSpriteView extends BaseBindView {
     constructor(data) {
