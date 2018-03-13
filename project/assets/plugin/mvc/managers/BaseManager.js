@@ -6,7 +6,7 @@ class BaseManager {
     constructor() {
     }
     showDialog(prefabName, request) {
-        let path = `resources/prefabs/${prefabName}.json`;
+        let path = `resources/prefabs/${prefabName}.prefab`;
         return this.loadPrefab(path)
             .then((data) => {
                 let node = LNode.create(data);
