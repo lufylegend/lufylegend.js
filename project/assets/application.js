@@ -2,7 +2,7 @@
 import BaseManager from './plugin/mvc/managers/BaseManager';
 import LGlobal from './plugin/lufylegend/utils/LGlobal';
 import { LInit } from './plugin/lufylegend/utils/Function';
-import LAtlas from './plugin/mvc/prefabs/LAtlas';
+import LAtlas from './plugin/lufylegend/system/LAtlas';
 import LEvent from './plugin/lufylegend/events/LEvent';
 
 

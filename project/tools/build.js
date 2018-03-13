@@ -53,8 +53,10 @@ readFile(applicationPath)
     })
     .then((res) => {
         console.log(res);
-        console.log('build success!!');
         return writeFile(applicationPath, applicationText);
+    })
+    .then(() => {
+        console.log('build success!!');
     }).catch((err) => {
         console.error(err);
     });
