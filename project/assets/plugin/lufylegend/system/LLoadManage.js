@@ -7,6 +7,7 @@ import LFontLoader from '../net/LFontLoader';
 import LLoader from '../display/LLoader';
 import LGlobal from '../utils/LGlobal';
 import LSound from '../media/LSound';
+import LAtlas from './LAtlas';
 class LLoadManage extends LEventDispatcher {
     constructor() {
         super();
@@ -74,6 +75,14 @@ class LLoadManage extends LEventDispatcher {
                 s.loader.addEventListener(LEvent.ERROR, s._loadError);
                 s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
                 s.loader.load(d.path);
+            } else if (d['type'] === LAtlas.TYPE_PLIST) {
+                s.loader = new LAtlas();
+                s.loader.parent = s;
+                s.loader.name = d.name;
+                s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
+                s.loader.addEventListener(LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+                s.loader.load(d.path, d.name);
             } else if (d['type'] === LFontLoader.TYPE_FONT) {
                 s.loader = new LFontLoader();
                 s.loader.parent = s;

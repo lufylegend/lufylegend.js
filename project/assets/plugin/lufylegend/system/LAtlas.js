@@ -81,6 +81,7 @@ class LAtlas extends LEventDispatcher {
         return data;
     }
 }
+LAtlas.TYPE_PLIST = 'type_plist';
 LAtlas._container = {};
 LAtlas.get = function(name) {
     return LAtlas._container[name] || new LAtlas();
