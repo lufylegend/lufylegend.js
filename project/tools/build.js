@@ -2,13 +2,9 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 const commonJson = require('./prefab-class.json');
-const classJson = require('../assets/prefab-class.json');
 let imports = [];
 for (let key of Object.keys(commonJson)) {
     imports.push(`import ${key} from "${commonJson[key]}";`);
-}
-for (let key of Object.keys(classJson)) {
-    imports.push(`import ${key} from "${classJson[key]}";`);
 }
 
 const applicationPath = './assets/application.js';
@@ -28,7 +24,32 @@ function getAtlas(atlas) {
     }
     return paths;
 }
-function readPrefabs(path) {
+const jsPaths = ['./assets/plugin', './assets/scripts'];
+let jsPathObject = {};
+function getImpports(json) {
+    let objs = [];
+    if (json.class && !jsPathObject[json.class]) {
+        let classes = [];
+        for (let jsPath of jsPaths) {
+            classes = classes.concat(readFiles(jsPath, new RegExp('.*\\' + json.class + '.js$')));
+            if (classes.length > 0) {
+                break;
+            }
+        }
+        if (classes.length > 0) {
+            let classPath = classes[0].replace('assets/', '');
+            objs.push(`import ${json.class} from "${classPath}";`);
+        }
+        jsPathObject[json.class] = true;
+    }
+    if (json.childNodes) {
+        for (let child of json.childNodes) {
+            objs = objs.concat(getImpports(child));
+        }
+    }
+    return objs;
+}
+function readFiles(path, regExp) {
     let result = [];
     let files = fs.readdirSync(path);
     for (let file of files) {
@@ -37,13 +58,13 @@ function readPrefabs(path) {
             continue;
         }
         if (stat.isFile()) {
-            if (/.*\.prefab$/.test(file)) {
+            if (regExp.test(file)) {
                 result.push(`${path}/${file}`);
             }
             continue;
         }
         if (stat.isDirectory()) {
-            result = result.concat(readPrefabs(`${path}/${file}`));
+            result = result.concat(readFiles(`${path}/${file}`, regExp));
         }
     }
     return result;
@@ -81,10 +102,11 @@ function writeFile(path, text) {
 }
 function createMeta() {
     return new Promise(function(resolve, reject) {
-        let prefabs = readPrefabs('./assets/resources');
+        let prefabs = readFiles('./assets/resources', /.*\.prefab$/);
         for (let prefab of prefabs) {
             let json = JSON.parse(fs.readFileSync(prefab));
             let atlasPaths = getAtlas(json);
+            imports = imports.concat(getImpports(json));
             let metaPath = `${prefab}.meta`;
             let metaContent = {};
             let atlasObj = {};
@@ -107,6 +129,7 @@ function filesRestore() {
     }
     writeFile(applicationPath, applicationText);
 }
+
 createMeta()
     .then(() => {
         return readFile(applicationPath);

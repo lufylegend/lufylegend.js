@@ -7,21 +7,14 @@ class BaseManager {
     constructor() {
     }
     showDialog(prefabName, request) {
-        let prefab;
         return this.loadPrefab(prefabName)
-            .then((res) => {
-                prefab = JSON.parse(res['prefab']);
-                console.error('loadPrefab res', res);
-                console.error('loadPrefab prefab', prefab);
-                let meta = JSON.parse(res['meta']);
-                return this.loadResources(meta);
-            })
-            .then(() => {
+            .then((prefab) => {
                 let node = LNode.create(prefab);
                 addChild(node);
             });
     }
     loadPrefab(prefabPath) {
+        let prefab;
         prefabPath = `resources/${prefabPath}.prefab`;
         let metaPath = `${prefabPath}.meta`;
         return new Promise(function(resolve, reject) {
@@ -31,7 +24,15 @@ class BaseManager {
             ], null, (res) => {
                 resolve(res);
             });
-        });
+        })
+            .then((res) => {
+                prefab = JSON.parse(res['prefab']);
+                let meta = JSON.parse(res['meta']);
+                return this.loadResources(meta);
+            })
+            .then(() => {
+                return Promise.resolve(prefab);
+            });
     }
     loadResources(meta) {
         let dataList = [];
