@@ -85,18 +85,27 @@ function createMeta() {
         for (let prefab of prefabs) {
             let json = JSON.parse(fs.readFileSync(prefab));
             let atlasPaths = getAtlas(json);
-            let atlasList;
+            let metaPath = `${prefab}.meta`;
+            let metaContent = {};
             let atlasObj = {};
             for (let atlasPath of atlasPaths) {
                 atlasObj[atlasPath] = true;
             }
-            atlasList = Object.keys(atlasObj);
-            let metaPath = `${prefab}.meta`;
+            metaContent.atlas = Object.keys(atlasObj).map((atlas) => {
+                let index = atlas.lastIndexOf('/');
+                return { name: atlas.substring(index + 1), path: atlas.substring(0, index) };
+            });
             metaList.push(metaPath);
-            fs.writeFileSync(metaPath, atlasList);
+            fs.writeFileSync(metaPath, JSON.stringify(metaContent));
         }
         resolve();
     });
+}
+function filesRestore() {
+    for (let methPath of metaList) {
+        fs.unlinkSync(methPath);
+    }
+    writeFile(applicationPath, applicationText);
 }
 createMeta()
     .then(() => {
@@ -117,12 +126,11 @@ createMeta()
     })
     .then((res) => {
         console.log(res);
-        return writeFile(applicationPath, applicationText);
-    })
-    .then(() => {
+        filesRestore();
         console.log('build success!!');
     }).catch((err) => {
         console.error(err);
+        filesRestore();
     });
 
 function ExecCommand(command) {
