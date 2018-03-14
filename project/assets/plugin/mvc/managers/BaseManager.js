@@ -1,38 +1,50 @@
 import { addChild } from '../../lufylegend/utils/Function';
 import LNode from '../prefabs/LNode';
+import LLoadManage from '../../lufylegend/system/LLoadManage';
 import LURLLoader from '../../lufylegend/net/LURLLoader';
-import LEvent from '../../lufylegend/events/LEvent';
+import LAtlas from '../../lufylegend/system/LAtlas';
 class BaseManager {
     constructor() {
     }
     showDialog(prefabName, request) {
-        let path = `resources/prefabs/${prefabName}.prefab`;
-        return this.loadPrefab(path)
-            .then((data) => {
-                let node = LNode.create(data);
+        let prefab;
+        return this.loadPrefab(prefabName)
+            .then((res) => {
+                prefab = JSON.parse(res['prefab']);
+                console.error('loadPrefab res', res);
+                console.error('loadPrefab prefab', prefab);
+                let meta = JSON.parse(res['meta']);
+                return this.loadResources(meta);
+            })
+            .then(() => {
+                let node = LNode.create(prefab);
                 addChild(node);
             });
     }
-    loadPrefab(path) {
+    loadPrefab(prefabPath) {
+        prefabPath = `resources/${prefabPath}.prefab`;
+        let metaPath = `${prefabPath}.meta`;
         return new Promise(function(resolve, reject) {
-            let loader = new LURLLoader();
-            loader.addEventListener(LEvent.COMPLETE, (event) => {
-                let data = JSON.parse(event.target);
-                resolve(data);
-            }); 
-            loader.load(path, LURLLoader.TYPE_TEXT);
+            LLoadManage.load([
+                { name: 'prefab', path: prefabPath, type: LURLLoader.TYPE_TEXT },
+                { name: 'meta', path: metaPath, type: LURLLoader.TYPE_TEXT }
+            ], null, (res) => {
+                resolve(res);
+            });
         });
-
-        /*if (folder === 'dialogs'){
-        let dialog = this.findDialog(prefabName);
-        if (dialog){
-          console.log("----dialog---");
-          return Promise.resolve(dialog.node);
-        }
-      }*/
     }
-    out() {
-        console.log('BaseManager');
+    loadResources(meta) {
+        let dataList = [];
+        if (meta.atlas) {
+            for (let atlas of meta.atlas) {
+                dataList.push({ name: atlas.name, path: `resources/${atlas.path}`, type: LAtlas.TYPE_PLIST });
+            }
+        }
+        return new Promise(function(resolve, reject) {
+            LLoadManage.load(dataList, null, (res) => {
+                resolve(res);
+            });
+        });
     }
 }
 export default new BaseManager();

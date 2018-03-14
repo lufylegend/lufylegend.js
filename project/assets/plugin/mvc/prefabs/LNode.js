@@ -46,6 +46,8 @@ LNode.create = function(data) {
     let node, cls = PrefabContainer.get(className);
     if (cls) {
         node = new cls(data);
+    } else {
+        console.error('not found : ', className, data);
     }
     return node;
 };

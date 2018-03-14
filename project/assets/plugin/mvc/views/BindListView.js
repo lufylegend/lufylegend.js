@@ -26,8 +26,7 @@ class BindListView extends BaseBindView {
         listView.movement = LListView.Direction.Vertical;
 
         let childPrefab = this.bind.childPrefab;
-        let path = `resources/${childPrefab}.json`;
-        return BaseManager.loadPrefab(path)
+        return BaseManager.loadPrefab(childPrefab)
             .then((data) => {
                 for (let child of value) {
                     this.createListObject(data, child);
