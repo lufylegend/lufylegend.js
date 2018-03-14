@@ -1,7 +1,0 @@
-{
-   "LogoController":"./scripts/controllers/LogoController",
-   "BindSpriteView":"./plugin/mvc/views/BindSpriteView",
-   "BindTextView":"./plugin/mvc/views/BindTextView",
-   "BindListView":"./plugin/mvc/views/BindListView",
-   "BindListChildView":"./plugin/mvc/views/BindListChildView"
-}

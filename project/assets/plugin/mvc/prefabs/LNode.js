@@ -47,7 +47,7 @@ LNode.create = function(data) {
     if (cls) {
         node = new cls(data);
     } else {
-        console.error('not found : ', className, data);
+        console.error('class not found : ', className);
     }
     return node;
 };
