@@ -4,6 +4,7 @@ import LEvent from '../../lufylegend/events/LEvent';
 import LSprite from '../../lufylegend/display/LSprite';
 import LBitmapData from '../../lufylegend/display/LBitmapData';
 import LBitmap from '../../lufylegend/display/LBitmap';
+import LSpriteAtlasType from './LSpriteAtlasType';
 class LAtlas extends LEventDispatcher {
     destroy() {
         delete LAtlas._container[name];
@@ -11,7 +12,8 @@ class LAtlas extends LEventDispatcher {
     load(path, name) {
         let loadData = [
             { name: `${path}/${name}.png`, path: `${path}/${name}.png` },
-            { name: `${path}/${name}.plist`, path: `${path}/${name}.plist`, type: 'text' }
+            { name: `${path}/${name}.plist`, path: `${path}/${name}.plist`, type: 'text' },
+            { name: `${path}/${name}.json`, path: `${path}/${name}.json`, type: 'text' }
         ];
         LLoadManage.load( 
             loadData, null, (datalist) => {
@@ -26,14 +28,16 @@ class LAtlas extends LEventDispatcher {
         LAtlas._container[this._atlasKey] = this;
         let texture = datalist[`${path}/${name}.png`];
         let xml = datalist[`${path}/${name}.plist`];
-        this.set(xml, texture);
+        let json = datalist[`${path}/${name}.json`];
+        this.set(xml, texture, json);
         let event = new LEvent(LEvent.COMPLETE);
         event.currentTarget = this;
         event.target = this;
         this.dispatchEvent(event);
     }
-    set(xml, texture) {
+    set(xml, texture, json) {
         this._texture = texture;
+        this._setting = json;
         this._initData(xml);
     }
     _initData(xml) {
@@ -54,13 +58,26 @@ class LAtlas extends LEventDispatcher {
             let key = frames[i].textContent.replace('.png', '');
             let value = frames[i + 1];
             let data = this._getTextureData(value.children);
-            this._textureData[key] = this._textureToSprite(data);
+            this._textureData[key] = data;
+            //this._textureData[key] = this._textureToSprite(data);
         }
     }
-    getSprite(name) {
-        return this._textureData[name];
+    getSprite(name, type, width, height) {
+        let data = this._textureData[name];
+        if (type === LSpriteAtlasType.SIMPLE) {
+            let bitmapSprite = this._getBitmapSprite(data);
+            bitmapSprite.scaleX = width / bitmapSprite.getWidth();
+            bitmapSprite.scaleY = height / bitmapSprite.getHeight();
+            return bitmapSprite;
+        } else if (type === LSpriteAtlasType.SLICED) {
+            let bitmapSprite = this._getBitmapSprite(data);
+            bitmapSprite.scaleX = width / bitmapSprite.getWidth();
+            bitmapSprite.scaleY = height / bitmapSprite.getHeight();
+            return bitmapSprite;
+        }
+        return new LSprite();
     }
-    _textureToSprite(data) {
+    _getBitmapSprite(data) {
         let x = data.frame[0][0];
         let y = data.frame[0][1];
         let width = data.frame[1][data.rotated ? 1 : 0];
