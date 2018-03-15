@@ -25,7 +25,7 @@ class BaseView extends LNode {
     }
     getByPath(path) {
         if (path.indexOf('.') < 0) {
-            return this.getValue(path);
+            return this.getValue(path) || null;
         }
         let paths = path.split('.');
         let currentVal = this.getValue(paths[0]);

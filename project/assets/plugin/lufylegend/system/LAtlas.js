@@ -61,9 +61,15 @@ class LAtlas extends LEventDispatcher {
         return this._textureData[name];
     }
     _textureToSprite(data) {
-        let bitmapData = new LBitmapData(this._texture, data.frame[0][0], data.frame[0][1], data.frame[1][0], data.frame[1][1]);
+        let x = data.frame[0][0];
+        let y = data.frame[0][1];
+        let width = data.frame[1][data.rotated ? 1 : 0];
+        let height = data.frame[1][data.rotated ? 0 : 1];
+        let bitmapData = new LBitmapData(this._texture, x, y, width, height);
         let bitmap = new LBitmap(bitmapData);
+        bitmap.rotateCenter = false;
         if (data.rotated) {
+            bitmap.y = width;
             bitmap.rotate = -90;
         }
         let sprite = new LSprite();

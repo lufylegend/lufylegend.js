@@ -2,30 +2,16 @@
 {
 	"class":"LogoController",
 	"property":{
-		"x":10,
-		"y":10
+		"x":0,
+		"y":0
 	},
 	"childNodes":[
 		{
 			"class":"BindSpriteView",
 			"property":{
 				"bind":{
-					"key":"avatar",
 					"atlas":"atlas/Card",
-					"target":"LogoController"
-				},
-				"x":10,
-				"y":20
-			},
-			"childNodes":[
-					
-			]
-		},
-		{
-			"class":"BindTextView",
-			"property":{
-				"bind":{
-					"key":"username",
+					"default":"bg_card_c",
 					"target":"LogoController"
 				},
 				"x":0,
@@ -36,15 +22,30 @@
 			]
 		},
 		{
-			"class":"BindListView",
+			"class":"BindSpriteView",
 			"property":{
 				"bind":{
-					"key":"cards",
-					"childPrefab":"prefabs/Card",
+					"atlas":"atlas/common",
+					"default":"frame_001",
 					"target":"LogoController"
 				},
 				"x":0,
-				"y":50
+				"y":0
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindSpriteView",
+			"property":{
+				"bind":{
+					"atlas":"atlas/common",
+					"default":"chest",
+					"target":"LogoController"
+				},
+				"x":300,
+				"y":0
 			},
 			"childNodes":[
 					

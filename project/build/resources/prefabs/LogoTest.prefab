@@ -1,0 +1,73 @@
+
+{
+	"class":"LogoController",
+	"property":{
+		"x":10,
+		"y":10
+	},
+	"childNodes":[
+		{
+			"class":"BindSpriteView",
+			"property":{
+				"bind":{
+					"key":"avatar",
+					"atlas":"atlas/Card",
+					"target":"LogoController"
+				},
+				"x":10,
+				"y":20
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindTextureView",
+			"property":{
+				"bind":{
+					"key":"testBird",
+					"default":"images/bird.png",
+					"target":"LogoController"
+				},
+				"x":10,
+				"y":20
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindTextView",
+			"property":{
+				"bind":{
+					"key":"username",
+					"target":"LogoController"
+				},
+				"x":0,
+				"y":0,
+				"textField":{
+					"color":"#FF0000",
+					"size":30
+				}
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindListView",
+			"property":{
+				"bind":{
+					"key":"cards",
+					"childPrefab":"prefabs/Card",
+					"target":"LogoController"
+				},
+				"x":0,
+				"y":50
+			},
+			"childNodes":[
+					
+			]
+		}
+	]
+}

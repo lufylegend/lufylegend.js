@@ -15,6 +15,13 @@ class LLoader extends LEventDispatcher {
         s.loadtype = t;
         s.useXHR = xhr && !LAjax.local && LAjax.canUseBlob;
         if (t === LLoader.TYPE_BITMAPDATE) {
+            let data = LLoader.get(u);
+            if (data) {
+                setTimeout(() => {
+                    s.dispatchCompleteEvent(data);
+                });
+                return;
+            }
             if (s.useXHR) {
                 LAjax.responseType = LAjax.ARRAY_BUFFER;
                 LAjax.progress = function(e) {
@@ -56,18 +63,22 @@ class LLoader extends LEventDispatcher {
             }
         }
     }
+    dispatchCompleteEvent(target) {
+        let event = new LEvent(LEvent.COMPLETE);
+        event.currentTarget = this;
+        event.target = target;
+        if (this.useXHR) {
+            this.revokeObjectURL(target.src);
+        }
+        this.dispatchEvent(event);
+    }
     loadStart(u) {
         let s = this;
         s.content = new Image();
         s.content.onload = function() {
             s.content.onload = null;
-            let event = new LEvent(LEvent.COMPLETE);
-            event.currentTarget = s;
-            event.target = s.content;
-            if (s.useXHR) {
-                s.revokeObjectURL(s.content.src);
-            }
-            s.dispatchEvent(event);
+            s.dispatchCompleteEvent(s.content);
+            LLoader._container[u] = s.content;
             delete s.content;
         };
         if (!s.useXHR) {
@@ -91,4 +102,8 @@ class LLoader extends LEventDispatcher {
     }
 }
 LLoader.TYPE_BITMAPDATE = 'bitmapData';
+LLoader._container = {};
+LLoader.get = function(name) {
+    return LLoader._container[name];
+};
 export default LLoader;
