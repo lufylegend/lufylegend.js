@@ -104,7 +104,8 @@ function createMeta() {
     return new Promise(function(resolve, reject) {
         let prefabs = readFiles('./assets/resources', /.*\.prefab$/);
         for (let prefab of prefabs) {
-            let json = JSON.parse(fs.readFileSync(prefab));
+            let prefabContext = fs.readFileSync(prefab);
+            let json = JSON.parse(prefabContext);
             let atlasPaths = getAtlas(json);
             imports = imports.concat(getImpports(json));
             let metaPath = `${prefab}.meta`;
@@ -161,6 +162,7 @@ function ExecCommand(command) {
     return new Promise(function(resolve, reject) {
         exec(command, (err, stdout, stderr) => {
             if (err) {
+                console.log(err, stdout, stderr);
                 reject(err);
             } else {
                 resolve(stdout.split('\n'));

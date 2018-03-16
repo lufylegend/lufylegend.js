@@ -7,6 +7,13 @@ class BindSpriteView extends BaseBindView {
     }
     init() {
         super.init();
+        if (!this.sprite) {
+            this.sprite = {
+                'type': 'simple',
+                'width': 0,
+                'height': 0
+            };
+        }
         if (this.bind.default) {
             this._updateSprite(this.bind.default);
         }
@@ -23,7 +30,7 @@ class BindSpriteView extends BaseBindView {
         this._updateSprite(value);
     }
     _updateSprite(value) {
-        let atlas = LAtlas.get(this.bind.atlas);
+        let atlas = LAtlas.get(this.bind.atlas, this.sprite.type, this.sprite.width, this.sprite.height);
         this.removeAllChild();
         let sprite = atlas.getSprite(value);
         if (sprite) {

@@ -46,11 +46,16 @@
 			"property":{
 				"bind":{
 					"atlas":"atlas/common",
-					"default":"chest",
+					"default":"frame_001",
 					"target":"LogoController"
 				},
 				"x":300,
-				"y":0
+				"y":0,
+				"sprite":{
+					"type":"simple",
+					"width":300,
+					"height":300
+				}
 			},
 			"childNodes":[
 					

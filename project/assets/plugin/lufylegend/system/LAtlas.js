@@ -1,10 +1,7 @@
 import LEventDispatcher from '../../lufylegend/events/LEventDispatcher';
 import LLoadManage from '../../lufylegend/system/LLoadManage';
 import LEvent from '../../lufylegend/events/LEvent';
-import LSprite from '../../lufylegend/display/LSprite';
-import LBitmapData from '../../lufylegend/display/LBitmapData';
-import LBitmap from '../../lufylegend/display/LBitmap';
-import LSpriteAtlasType from './LSpriteAtlasType';
+import LAtlasSprite from '../../lufylegend/display/LAtlasSprite';
 class LAtlas extends LEventDispatcher {
     destroy() {
         delete LAtlas._container[name];
@@ -59,39 +56,15 @@ class LAtlas extends LEventDispatcher {
             let value = frames[i + 1];
             let data = this._getTextureData(value.children);
             this._textureData[key] = data;
-            //this._textureData[key] = this._textureToSprite(data);
         }
     }
     getSprite(name, type, width, height) {
         let data = this._textureData[name];
-        if (type === LSpriteAtlasType.SIMPLE) {
-            let bitmapSprite = this._getBitmapSprite(data);
-            bitmapSprite.scaleX = width / bitmapSprite.getWidth();
-            bitmapSprite.scaleY = height / bitmapSprite.getHeight();
-            return bitmapSprite;
-        } else if (type === LSpriteAtlasType.SLICED) {
-            let bitmapSprite = this._getBitmapSprite(data);
-            bitmapSprite.scaleX = width / bitmapSprite.getWidth();
-            bitmapSprite.scaleY = height / bitmapSprite.getHeight();
-            return bitmapSprite;
+        let atlasSprite = new LAtlasSprite(this._texture, this._setting[name], data, type);
+        if (width && height) {
+            atlasSprite.reseze(width, height);
         }
-        return new LSprite();
-    }
-    _getBitmapSprite(data) {
-        let x = data.frame[0][0];
-        let y = data.frame[0][1];
-        let width = data.frame[1][data.rotated ? 1 : 0];
-        let height = data.frame[1][data.rotated ? 0 : 1];
-        let bitmapData = new LBitmapData(this._texture, x, y, width, height);
-        let bitmap = new LBitmap(bitmapData);
-        bitmap.rotateCenter = false;
-        if (data.rotated) {
-            bitmap.y = width;
-            bitmap.rotate = -90;
-        }
-        let sprite = new LSprite();
-        sprite.addChild(bitmap);
-        return sprite;
+        return atlasSprite;
     }
     _getTextureData(children) {
         let data = {};
