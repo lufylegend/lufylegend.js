@@ -1,24 +1,42 @@
 import LNode from '../prefabs/LNode';
+import BaseManager from '../managers/BaseManager';
 class BaseView extends LNode {
-    
-    getValue(key) {
+    init() {
+        super.init();
+        setTimeout(() => {
+            if (this.widget && BaseManager.currentScene) {
+                BaseManager.currentScene.nextFrameExecute(() => {
+                    this.widgetInit();
+                });
+            }
+        });
+    }
+    getTarget(target) {
         let parent = this.parent;
-        let target = this.bind.target;
         while (parent) {
             if (target) {
                 if (parent._ll_className === target) {
-                    if (parent.isController) {
-                        return parent.dispatcher[key];
-                    }
-                    return parent.model ? parent.model[key] : null;
+                    return parent;
                 }
             } else if (parent.isController) {
-                return parent.dispatcher[key];
+                return parent;
             }
             
             parent = parent.parent;
             if (typeof parent !== 'object') {
                 break;
+            }
+        }
+        return null;
+    }
+    getValue(key) {
+        let target = this.bind.target;
+        let parent = this.getTarget(target);
+        if (parent) {
+            if (parent.isController) {
+                return parent.dispatcher[key];
+            } else {
+                return parent.model ? parent.model[key] : null;
             }
         }
         return null;

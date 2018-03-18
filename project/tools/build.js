@@ -17,6 +17,15 @@ function getAtlas(atlas) {
     if (atlas.property.bind && atlas.property.bind.atlas) {
         paths.push(atlas.property.bind.atlas);
     }
+    if (atlas.property.button) {
+        let nodes = [];
+        if (atlas.property.button.upState) {
+            nodes.push(atlas.property.button.upState);
+        }
+        for (let child of nodes) {
+            paths = paths.concat(getAtlas(child));
+        }
+    }
     if (atlas.childNodes) {
         for (let child of atlas.childNodes) {
             paths = paths.concat(getAtlas(child));
@@ -128,7 +137,9 @@ function filesRestore() {
     for (let methPath of metaList) {
         fs.unlinkSync(methPath);
     }
-    writeFile(applicationPath, applicationText);
+    if (applicationText) {
+        writeFile(applicationPath, applicationText);
+    }
 }
 
 createMeta()

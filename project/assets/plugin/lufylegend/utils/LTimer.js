@@ -74,4 +74,5 @@ LTimer.TimerManager = (function() {
     };
     return new TimerManager();
 })();
+ll.LGlobal.childList.push(LTimer.TimerManager);
 export default LTimer;

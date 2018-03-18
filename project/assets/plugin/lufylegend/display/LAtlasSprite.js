@@ -9,6 +9,7 @@ class LAtlasSprite extends LSprite {
         this.atlasType = atlasType;
         this._rotated = data.rotated;
         if (atlasType === LSpriteAtlasType.SIMPLE || !setting) {
+            this.atlasType = LSpriteAtlasType.SIMPLE;
             let bitmap = this._getBitmap(texture, data);
             this.addChild(bitmap);
         } else if (atlasType === LSpriteAtlasType.SLICED) {
@@ -16,18 +17,20 @@ class LAtlasSprite extends LSprite {
             this.addChild(panel);
         }
     }
-    reseze(width, height) {
+    resize(width, height) {
         if (this.atlasType === LSpriteAtlasType.SIMPLE) {
-            this.scaleX = this.scaleY = 1;
-            this.scaleX = width / this.getWidth();
-            this.scaleY = height / this.getHeight();
+            let bitmap = this.getChildAt(0);
+            let bitmapWidth = this._rotated ? bitmap.bitmapData.getHeight() : bitmap.bitmapData.getWidth();
+            let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();
+            bitmap.scaleX = width / bitmapWidth;
+            bitmap.scaleY = height / bitmapHeight;
         } else if (this.atlasType === LSpriteAtlasType.SLICED) {
             let panel = this.getChildAt(0);
             if (this._rotated) {
-                panel.reseze(height, width);
+                panel.resize(height, width);
                 panel.y = height;
             } else {
-                panel.reseze(width, height);
+                panel.resize(width, height);
             }
         }
     }
@@ -53,10 +56,14 @@ class LAtlasSprite extends LSprite {
         let bitmapData = this._getBitmapData(texture, data);
         let width = bitmapData.getWidth();
         let height = bitmapData.getHeight();
-        let x1 = setting.left;
-        let x2 = width - setting.right;
-        let y1 = setting.top;
-        let y2 = height - setting.bottom;
+        let left = data.rotated ? setting.bottom : setting.left;
+        let right = data.rotated ? setting.top : setting.right;
+        let top = data.rotated ? setting.left : setting.top;
+        let bottom = data.rotated ? setting.right : setting.bottom;
+        let x1 = left;
+        let x2 = width - right;
+        let y1 = top;
+        let y2 = height - bottom;
         let panel = new LPanel(bitmapData, width, height, x1, x2, y1, y2);
         if (data.rotated) {
             panel.y = width;

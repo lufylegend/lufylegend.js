@@ -80,8 +80,9 @@ class LPanel extends LSprite {
         return { width: this._ll_w, height: this._ll_h };
     }
     clone() {
-        let s = this;
-        return new LPanel(s.bitmapData.clone(), s._ll_w, s._ll_h, s.x1, s.x2, s.y1, s.y2, self.overlapping);
+        let panel = new LPanel(this.bitmapData.clone(), this._ll_w, this._ll_h, this.x1, this.x2, this.y1, this.y2, this.overlapping);
+        panel.copyProperty(this);
+        return panel;
     }
 }
 export default LPanel;

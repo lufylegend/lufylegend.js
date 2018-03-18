@@ -111,8 +111,9 @@ class LButton extends LSprite {
         s.overState.visible = false;
         s.downState.visible = true;	
         s._tweenOver = s.ll_modeOver;
-        onComplete = function(obj) {
-            let s = obj.parent;
+        onComplete = function(event) {
+            let target = event.target;
+            let s = target.parent;
             if (!s || !s.tween) {
                 return;
             }

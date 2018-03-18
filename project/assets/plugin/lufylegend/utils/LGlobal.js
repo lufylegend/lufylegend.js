@@ -883,8 +883,4 @@ let LGlobal = (function() {
 })();
 ll.LGlobal = LGlobal;
 window.LGlobal = LGlobal;
-export default {
-    LStage: LGlobal,
-    LSystem: LGlobal,
-    LGlobal: LGlobal
-};
+export default LGlobal;
