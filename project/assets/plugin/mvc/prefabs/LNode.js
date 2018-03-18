@@ -1,6 +1,9 @@
 import LSprite from '../../lufylegend/display/LSprite';
 import LDisplayObject from '../../lufylegend/display/LDisplayObject';
 import PrefabContainer from './PrefabContainer';
+import LPoint from '../../lufylegend/geom/LPoint';
+import ll from '../../lufylegend/ll';
+import { UNDEFINED } from '../../lufylegend/utils/LConstant';
 class LNode extends LSprite {
     constructor(data) {
         super();
@@ -17,7 +20,13 @@ class LNode extends LSprite {
             return;
         }
         for (let key in property) {
-            this[key] = property[key];
+            let value = property[key];
+            if (key === 'width') {
+                key = '_widgetWidth';
+            } else if (key === 'height') {
+                key = '_widgetHeight';
+            }
+            this[key] = value;
         }
     }
     _initDataChildNodes(data) {
@@ -38,7 +47,80 @@ class LNode extends LSprite {
         
     }
     lateInit() {
-        
+    }
+    get widgetWidth() {
+        return this._widgetWidth || this.getWidth();
+    }
+    get widgetHeight() {
+        return this._widgetHeight || this.getHeight();
+    }
+    widgetInit() {
+        let target = this._getWidgetTarget(this.widget.target);
+        let targetWidth, targetHeight, width, height, widget;
+        if (target) {
+            targetWidth = target.widgetWidth || target.getWidth();
+            targetHeight = target.widgetHeight || target.getHeight();
+        } else {
+            targetWidth = ll.LGlobal.width;
+            targetHeight = ll.LGlobal.height;
+        }
+        widget = this.widget;
+        let resizeH = (typeof widget.top === 'number' && typeof widget.bottom === 'number');
+        let resizeW = (typeof widget.left === 'number' && typeof widget.right === 'number');
+        if (resizeH) {
+            height = targetHeight - widget.top - widget.bottom;
+            this._widgetHeight = height;
+        } else {
+            height = this.getHeight();
+        }
+        if (resizeW) {
+            width = targetWidth - widget.left - widget.right;
+            this._widgetWidth = width;
+        } else {
+            width = this.getWidth();
+        }
+        if (resizeH || resizeW) {
+            if (typeof this.resize === 'function') {
+                this.resize(this.widgetWidth, this.widgetHeight);
+            }
+        }
+        let x, y;
+        if (typeof widget.left === 'number') {
+            x = widget.left;
+        } else if (typeof widget.right === 'number') {
+            x = targetWidth - width - widget.right;
+        }
+        if (typeof widget.top === 'number') {
+            y = widget.top;
+        } else if (typeof widget.bottom === 'number') {
+            y = targetHeight - height - widget.bottom;
+        }
+        let localPoint = new LPoint(typeof x === UNDEFINED ? 0 : x, typeof y === UNDEFINED ? 0 : y);
+        let targetGlobal = target ? target.localToGlobal(localPoint) : localPoint;
+        let point = this.parent.globalToLocal(targetGlobal);
+        this.x = typeof x === UNDEFINED ? this.x : point.x;
+        this.y = typeof y === UNDEFINED ? this.y : point.y;
+    }
+    _getWidgetTarget(target) {
+        if (!target) {
+            return null;
+        }
+        let parent = this.parent;
+        while (parent) {
+            if (target) {
+                if (parent._ll_className === target) {
+                    return parent;
+                }
+            } else if (parent instanceof LNode) {
+                return parent;
+            }
+            
+            parent = parent.parent;
+            if (typeof parent !== 'object') {
+                break;
+            }
+        }
+        return null;
     }
 }
 LNode.create = function(data) {

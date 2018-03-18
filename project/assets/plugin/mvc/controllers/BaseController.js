@@ -1,4 +1,5 @@
 import LNode from '../prefabs/LNode';
+import BaseManager from '../managers/BaseManager';
 class BaseController extends LNode {
     constructor(data) {
         super(data);
@@ -9,9 +10,15 @@ class BaseController extends LNode {
     init() {
         super.init();
         this.dispatcher = this.dispatcher || {};
-        this.onLoad();
+        setTimeout(() => {
+            if (this.widget && BaseManager.currentScene) {
+                BaseManager.currentScene.nextFrameExecute(() => {
+                    this.widgetInit();
+                });
+            }
+        });
     }
-    onLoad() {
+    onLoad(request) {
     }
 
 }

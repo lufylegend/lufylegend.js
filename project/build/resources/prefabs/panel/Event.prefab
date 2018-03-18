@@ -1,0 +1,60 @@
+
+{
+	"class":"EventPanelController",
+	"property":{
+		"x":0,
+		"y":0,
+		"widget":{
+			"top":0,
+			"bottom":80,
+			"left":0,
+			"right":0
+		}
+	},
+	"childNodes":[
+		{
+			"class":"BindSpriteView",
+			"property":{
+				"bind":{
+					"atlas":"atlas/common",
+					"default":"circle_24"
+				},
+				"x":0,
+				"y":0,
+				"sprite":{
+					"type":"sliced",
+					"width":480,
+					"height":800
+				},
+				"widget":{
+					"target":"HomePanelController",
+					"top":0,
+					"bottom":0,
+					"left":0,
+					"right":0
+				}
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindTextView",
+			"property":{
+				"bind":{
+					"key":"title",
+					"target":"EventPanelController"
+				},
+				"x":0,
+				"y":0,
+				"textField":{
+					"color":"#FF0000",
+					"size":30
+				}
+			},
+			"childNodes":[
+					
+			]
+		}
+	]
+}

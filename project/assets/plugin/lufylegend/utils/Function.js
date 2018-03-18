@@ -79,7 +79,6 @@ export function removeChild(o) {
     ll.LGlobal.stage.removeChild(o);
 }
 export function init(s, c, w, h, f, t) {
-    console.error('init', ll.LGlobal);
     ll.LGlobal.speed = s;
     let _f = function() {
         if (ll.LGlobal.canTouch && ll.LGlobal.aspectRatio === LANDSCAPE && window.innerWidth < window.innerHeight) {

@@ -1,0 +1,1 @@
+document.write('<script type="text/javascript" src="javascript/application.js?i=' + Date.now() + '"></script> ');

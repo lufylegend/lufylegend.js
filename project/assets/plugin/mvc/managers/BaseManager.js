@@ -3,19 +3,75 @@ import LNode from '../prefabs/LNode';
 import LLoadManage from '../../lufylegend/system/LLoadManage';
 import LURLLoader from '../../lufylegend/net/LURLLoader';
 import LAtlas from '../../lufylegend/system/LAtlas';
+import LTweenLite from '../../lufylegend/transitions/LTweenLite';
+import LGlobal from '../../lufylegend/utils/LGlobal';
 class BaseManager {
     constructor() {
+        this._currentScene = null;
+        this._currentPanel = null;
+        this._panelList = [];
+        this._dialogList = [];
     }
     showDialog(prefabName, request) {
         return this.loadPrefab(prefabName)
             .then((prefab) => {
                 let node = LNode.create(prefab);
-                addChild(node);
+                this._currentPanel.addChild(node);
             });
     }
-    loadPrefab(prefabPath) {
+    loadPanel(prefabName, request) {
+        return this.loadPrefab(prefabName)
+            .then((prefab) => {
+                let node = LNode.create(prefab);
+                if (this._currentPanel) {
+                    this._currentPanel.remove();
+                }
+                this._currentPanel = node;
+                let layer = this._currentScene.childList.find((child) => {
+                    return child.name === 'panel';
+                });
+                if (layer) {
+                    layer.addChild(node);
+                } else {
+                    this._currentScene.addChildAt(node, 0);
+                }
+                
+            });
+    }
+    get currentScene() {
+        return this._currentScene;
+    }
+    loadScene(prefabName, request) {
+        return this.loadPrefab(prefabName)
+            .then((prefab) => {
+                let node = LNode.create(prefab);
+                let oldScene = null;
+                if (this._currentScene) {
+                    oldScene = this._currentScene;
+                }
+                this._currentScene = node;
+                addChild(node);
+                if (node instanceof LNode) {
+                    node.lateInit();
+                }
+                if (node.onLoad) {
+                    node.onLoad(request);
+                }
+                if (oldScene) {
+                    node.alpha = 0;
+                    LTweenLite.to(oldScene, 0.3, { alpha: 0, onComplete: (event) => {
+                        event.target.remove();
+                    } });
+                    LTweenLite.to(node, 0.3, { alpha: 1 });
+                }
+            });
+    }
+    loadPrefab(prefabPath, folder) {
         let prefab;
         prefabPath = `resources/${prefabPath}.prefab`;
+        if (LGlobal.traceDebug) {
+            prefabPath += '?t=' + Date.now();
+        }
         let metaPath = `${prefabPath}.meta`;
         return new Promise(function(resolve, reject) {
             LLoadManage.load([

@@ -2,21 +2,28 @@ import LEventDispatcher from '../../lufylegend/events/LEventDispatcher';
 import LLoadManage from '../../lufylegend/system/LLoadManage';
 import LEvent from '../../lufylegend/events/LEvent';
 import LAtlasSprite from '../../lufylegend/display/LAtlasSprite';
+import LGlobal from '../../lufylegend/utils/LGlobal';
 class LAtlas extends LEventDispatcher {
     destroy() {
         delete LAtlas._container[name];
     }
     load(path, name) {
         let loadData = [
-            { name: `${path}/${name}.png`, path: `${path}/${name}.png` },
-            { name: `${path}/${name}.plist`, path: `${path}/${name}.plist`, type: 'text' },
-            { name: `${path}/${name}.json`, path: `${path}/${name}.json`, type: 'text' }
+            { name: `${path}/${name}.png`, path: this.url(`${path}/${name}.png`) },
+            { name: `${path}/${name}.plist`, path: this.url(`${path}/${name}.plist`), type: 'text' },
+            { name: `${path}/${name}.json`, path: this.url(`${path}/${name}.json`), type: 'text' }
         ];
         LLoadManage.load( 
             loadData, null, (datalist) => {
                 this._loadComplete(datalist, path, name);
             }
         );
+    }
+    url(u) {
+        if (!LGlobal.traceDebug) {
+            return u;
+        }
+        return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
     }
     _loadComplete(datalist, path, name) {
         let resourcesPath = 'resources/';
@@ -25,7 +32,7 @@ class LAtlas extends LEventDispatcher {
         LAtlas._container[this._atlasKey] = this;
         let texture = datalist[`${path}/${name}.png`];
         let xml = datalist[`${path}/${name}.plist`];
-        let json = datalist[`${path}/${name}.json`];
+        let json = JSON.parse(datalist[`${path}/${name}.json`]);
         this.set(xml, texture, json);
         let event = new LEvent(LEvent.COMPLETE);
         event.currentTarget = this;
@@ -62,7 +69,7 @@ class LAtlas extends LEventDispatcher {
         let data = this._textureData[name];
         let atlasSprite = new LAtlasSprite(this._texture, this._setting[name], data, type);
         if (width && height) {
-            atlasSprite.reseze(width, height);
+            atlasSprite.resize(width, height);
         }
         return atlasSprite;
     }
