@@ -4,6 +4,7 @@ class TeamPanelController extends PanelController {
     onLoad() {
         super.onLoad();
         this.dispatcher.title = 'Team测试';
+        console.log('Team测试');
     }
 }
 PrefabContainer.set('TeamPanelController', TeamPanelController);

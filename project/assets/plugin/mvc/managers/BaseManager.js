@@ -5,6 +5,7 @@ import LURLLoader from '../../lufylegend/net/LURLLoader';
 import LAtlas from '../../lufylegend/system/LAtlas';
 import LTweenLite from '../../lufylegend/transitions/LTweenLite';
 import LGlobal from '../../lufylegend/utils/LGlobal';
+import PanelAnimation from '../views/Animation/PanelAnimation';
 class BaseManager {
     constructor() {
         this._currentScene = null;
@@ -19,12 +20,15 @@ class BaseManager {
                 this._currentPanel.addChild(node);
             });
     }
-    loadPanel(prefabName, request) {
+    loadPanel(prefabName, request, controllerAnimation) {
+        controllerAnimation = controllerAnimation || 'fade';
         return this.loadPrefab(prefabName)
             .then((prefab) => {
+                prefab.request = request;
                 let node = LNode.create(prefab);
-                if (this._currentPanel) {
-                    this._currentPanel.remove();
+                let oldPanel = this._currentPanel || null;
+                if (!oldPanel) {
+                    controllerAnimation = 'fade';
                 }
                 this._currentPanel = node;
                 let layer = this._currentScene.childList.find((child) => {
@@ -35,7 +39,13 @@ class BaseManager {
                 } else {
                     this._currentScene.addChildAt(node, 0);
                 }
-                
+                if (node instanceof LNode) {
+                    node.lateInit();
+                }
+                if (node.onLoadEnd) {
+                    node.onLoadEnd(request);
+                }
+                PanelAnimation.changePanel(oldPanel, this._currentPanel, controllerAnimation);
             });
     }
     get currentScene() {
@@ -44,18 +54,16 @@ class BaseManager {
     loadScene(prefabName, request) {
         return this.loadPrefab(prefabName)
             .then((prefab) => {
+                prefab.request = request;
                 let node = LNode.create(prefab);
-                let oldScene = null;
-                if (this._currentScene) {
-                    oldScene = this._currentScene;
-                }
+                let oldScene = this._currentScene || null;
                 this._currentScene = node;
                 addChild(node);
                 if (node instanceof LNode) {
                     node.lateInit();
                 }
-                if (node.onLoad) {
-                    node.onLoad(request);
+                if (node.onLoadEnd) {
+                    node.onLoadEnd(request);
                 }
                 if (oldScene) {
                     node.alpha = 0;

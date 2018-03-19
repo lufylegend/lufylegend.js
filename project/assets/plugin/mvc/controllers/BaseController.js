@@ -7,9 +7,10 @@ class BaseController extends LNode {
     get isController() {
         return true;
     }
-    init() {
-        super.init();
+    init(data) {
+        super.init(data);
         this.dispatcher = this.dispatcher || {};
+        this.onLoad(data.request);
         setTimeout(() => {
             if (this.widget && BaseManager.currentScene) {
                 BaseManager.currentScene.nextFrameExecute(() => {
@@ -19,6 +20,8 @@ class BaseController extends LNode {
         });
     }
     onLoad(request) {
+    }
+    onLoadEnd() {
     }
 
 }

@@ -5,8 +5,8 @@ class SceneController extends BaseController {
     constructor(data) {
         super(data);
     }
-    init() {
-        super.init();
+    init(data) {
+        super.init(data);
         this._waitExecuteFuncs = [];
     }
     nextFrameExecute(func) {
