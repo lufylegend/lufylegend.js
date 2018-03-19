@@ -4,6 +4,7 @@ class EventPanelController extends PanelController {
     onLoad() {
         super.onLoad();
         this.dispatcher.title = 'Event测试';
+        console.log('Event测试');
     }
 }
 PrefabContainer.set('EventPanelController', EventPanelController);

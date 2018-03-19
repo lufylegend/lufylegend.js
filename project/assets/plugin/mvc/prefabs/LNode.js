@@ -10,7 +10,7 @@ class LNode extends LSprite {
         this.type = 'LNode';
         if (data) {
             this._initDataProperty(data);
-            this.init();
+            this.init(data);
             this._initDataChildNodes(data);
         }
     }
@@ -43,7 +43,7 @@ class LNode extends LSprite {
             }
         }
     }
-    init() {
+    init(data) {
         
     }
     lateInit() {

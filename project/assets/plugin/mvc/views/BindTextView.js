@@ -11,9 +11,15 @@ class BindTextView extends BaseBindView {
                 this._label[key] = this.textField[key];
             }
         }
+        if (this.bind.default) {
+            this._label.text = this.bind.default;
+        }
     }
     updateView() {
         super.updateView();
+        if (!this.bind.key) {
+            return;
+        }
         let value = this.getByPath(this.bind.key);
         if (value !== null) {
             this._label.text = value;

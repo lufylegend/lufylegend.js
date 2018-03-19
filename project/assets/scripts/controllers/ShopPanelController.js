@@ -4,6 +4,7 @@ class ShopPanelController extends PanelController {
     onLoad() {
         super.onLoad();
         this.dispatcher.title = 'Shop测试';
+        console.log('Shop测试');
     }
 }
 PrefabContainer.set('ShopPanelController', ShopPanelController);

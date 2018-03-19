@@ -55,6 +55,57 @@
 			"childNodes":[
 					
 			]
+		},
+		{
+			"class":"BindButtonView",
+			"property":{
+				"x":20,
+				"y":100,
+				"button":{
+					"transition":"scale",
+					"upState":{
+						"class":"BindSpriteView",
+						"property":{
+							"bind":{
+								"atlas":"atlas/common",
+								"default":"btn_001"
+							},
+							"sprite":{
+								"type":"sliced",
+								"width":200,
+								"height":65
+							}
+						},
+						"childNodes":[
+							{
+								"class":"BindTextView",
+								"property":{
+									"bind":{
+										"default":"ListView测试"
+									},
+									"x":100,
+									"y":10,
+									"textField":{
+										"textAlign":"center",
+										"color":"#FFFFFF",
+										"size":30
+									}
+								},
+								"childNodes":[
+										
+								]
+							}
+						]
+					},
+					"onMouseUp":{
+						"target":"HomePanelController",
+						"method":"showRankingDialog"
+					}
+				}
+			},
+			"childNodes":[
+					
+			]
 		}
 	]
 }

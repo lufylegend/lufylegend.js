@@ -1,0 +1,62 @@
+
+{
+	"class":"RankingDialogController",
+	"property":{
+		"x":10,
+		"y":10
+	},
+	"childNodes":[
+		{
+			"class":"BindSpriteView",
+			"property":{
+				"bind":{
+					"atlas":"atlas/common",
+					"default":"frame_001"
+				},
+				"x":0,
+				"y":0,
+				"name":"panel",
+				"sprite":{
+					"type":"sliced",
+					"width":480,
+					"height":500
+				}
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindTextView",
+			"property":{
+				"bind":{
+					"default":"ListView测试"
+				},
+				"x":0,
+				"y":0,
+				"textField":{
+					"color":"#FF0000",
+					"size":30
+				}
+			},
+			"childNodes":[
+					
+			]
+		},
+		{
+			"class":"BindListView",
+			"property":{
+				"bind":{
+					"key":"users",
+					"childPrefab":"prefabs/dialog/RankingChild.prefab",
+					"target":"RankingDialogController"
+				},
+				"x":0,
+				"y":50
+			},
+			"childNodes":[
+					
+			]
+		}
+	]
+}
