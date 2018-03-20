@@ -10,7 +10,7 @@ class HomePanelController extends PanelController {
         //this.dispatcher.cards = [{ name: '老虎', icon: 'dog' }, { name: '狮子', icon: 'dragon' }, { name: '狮子', icon: 'dragon' }, { name: '狮子', icon: 'dragon' }];
     }
     showRankingDialog() {
-        BaseManager.showDialog('prefabs/dialog/RankingDialog.prefab');
+        BaseManager.showDialog('prefabs/dialog/RankingDialog');
     }
 }
 PrefabContainer.set('HomePanelController', HomePanelController);

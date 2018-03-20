@@ -14,6 +14,7 @@ class BaseManager {
         this._dialogList = [];
     }
     showDialog(prefabName, request) {
+        console.log('showDialog', prefabName, request);
         return this.loadPrefab(prefabName)
             .then((prefab) => {
                 let node = LNode.create(prefab);
