@@ -53,7 +53,16 @@
 					"target":"RankingDialogController"
 				},
 				"x":0,
-				"y":50
+				"y":50,
+				"listView":{
+					"maxPerLine":1,
+					"cellWidth":580,
+					"cellHeight":100,
+					"size":{
+						"width":580,
+						"height":600
+					}
+				}
 			},
 			"childNodes":[
 					
