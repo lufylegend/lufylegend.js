@@ -16,15 +16,15 @@ class FooterMenuButtonView extends BindButtonView {
             icon.resize(80, 80);
         }
         
-        icon.x = (this.getWidth() - icon.getWidth()) * 0.5;
-        icon.y = this.getHeight() - icon.getHeight();
+        icon.x = (this.widgetWidth - icon.widgetWidth) * 0.5;
+        icon.y = this.widgetHeight - icon.widgetHeight;
     }
     focusOn() {
         if (this._focus) {
             return;
         }
         this._focus = true;
-        this.currentButton.upState.resize(190, this.getHeight());
+        this.currentButton.upState.resize(190, this.widgetHeight);
         this._iconReset(true);
     }
     focusOff() {
@@ -32,7 +32,7 @@ class FooterMenuButtonView extends BindButtonView {
             return;
         }
         this._focus = false;
-        this.currentButton.upState.resize(150, this.getHeight());
+        this.currentButton.upState.resize(150, this.widgetHeight);
         this._iconReset(false);
     }
 }

@@ -45,9 +45,10 @@
 					"key":"title",
 					"target":"TeamPanelController"
 				},
-				"x":0,
-				"y":0,
+				"x":320,
+				"y":10,
 				"textField":{
+					"textAlign":"center",
 					"color":"#FF0000",
 					"size":30
 				}

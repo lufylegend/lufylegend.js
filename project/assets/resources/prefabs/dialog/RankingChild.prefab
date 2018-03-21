@@ -15,7 +15,7 @@
 				"y":0,
 				"sprite":{
 					"type":"sliced",
-					"width":580,
+					"width":560,
 					"height":100
 				}
 			},
@@ -50,8 +50,13 @@
 					"key":"name",
 					"target":"BindListChildView"
 				},
-				"x":100,
-				"y":5
+				"x":150,
+				"y":20,
+				"textField":{
+					"textAlign":"center",
+					"color":"#000000",
+					"size":24
+				}
 			},
 			"childNodes":[
 					

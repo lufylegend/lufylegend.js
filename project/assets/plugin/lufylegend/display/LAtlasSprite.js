@@ -19,11 +19,12 @@ class LAtlasSprite extends LSprite {
     }
     resize(width, height) {
         if (this.atlasType === LSpriteAtlasType.SIMPLE) {
-            let bitmap = this.getChildAt(0);
+            let sprite = this.getChildAt(0);
+            let bitmap = sprite.getChildAt(0);
             let bitmapWidth = this._rotated ? bitmap.bitmapData.getHeight() : bitmap.bitmapData.getWidth();
             let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();
-            bitmap.scaleX = width / bitmapWidth;
-            bitmap.scaleY = height / bitmapHeight;
+            sprite.scaleX = width / bitmapWidth;
+            sprite.scaleY = height / bitmapHeight;
         } else if (this.atlasType === LSpriteAtlasType.SLICED) {
             let panel = this.getChildAt(0);
             if (this._rotated) {
@@ -50,7 +51,9 @@ class LAtlasSprite extends LSprite {
             bitmap.y = bitmapData.getWidth();
             bitmap.rotate = -90;
         }
-        return bitmap;
+        let sprite = new LSprite();
+        sprite.addChild(bitmap);
+        return sprite;
     }
     _getPanel(texture, setting, data) {
         let bitmapData = this._getBitmapData(texture, data);

@@ -21,3 +21,5 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 English <a target='_blank' href="http://lufylegend.com/api/en_US/out/index.html">http://lufylegend.com/api/en_US/out/index.html</a>
 
 日本語版 <a target='_blank' href="http://lufylegend.com/api/ja_JP/out/index.html">http://lufylegend.com/api/ja_JP/out/index.html</a>
+
+# ECMAScript6开发
