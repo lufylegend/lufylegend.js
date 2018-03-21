@@ -7,7 +7,7 @@ class BindListView extends BaseBindView {
     init() {
         super.init();
         this._listView = new LListView();
-        this.addChild(this.listView);
+        this.addChild(this._listView);
     }
     updateView() {
         super.updateView();
@@ -17,21 +17,25 @@ class BindListView extends BaseBindView {
         }
         let listView = this._listView;
         for (let key in this.listView) {
-            if (key === 'size') {
-                listView.resize(300, 200);
-                return;
+            let value = this.listView[key];
+            switch (key) {
+            case 'size':
+                listView.resize(value.width, value.height);
+                break;
+            case 'maxPerLine':
+            case 'cellWidth':
+            case 'cellHeight':
+                listView[key] = value;
+                break;
+            default:
+                break;
             }
-            listView[key] + this.listView[key];
         }
         listView.scrollBarHorizontal.showCondition === LListView.ScrollBarCondition.Always;
         listView.scrollBarVertical.showCondition === LListView.ScrollBarCondition.Always;
-        //listView.maxPerLine = 1;
-        //listView.cellWidth = 100;
-        //listView.cellHeight = 100;
-        //listView.resize(300, 200);
+        
         listView.arrangement = LListView.Direction.Horizontal;
         listView.movement = LListView.Direction.Vertical;
-
         let childPrefab = this.bind.childPrefab;
         return BaseManager.loadPrefab(childPrefab)
             .then((data) => {
@@ -45,8 +49,8 @@ class BindListView extends BaseBindView {
         this.model = model;
         let node = LNode.create(data);
         listChild.addChild(node);
-        this._listView.insertChildView(listChild);
         node.updateWidget(model);
+        this._listView.insertChildView(listChild);
     }
 }
 PrefabContainer.set('BindListView', BindListView);

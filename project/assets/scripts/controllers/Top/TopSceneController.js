@@ -1,7 +1,7 @@
-import PrefabContainer from '../../plugin/mvc/prefabs/PrefabContainer';
-import SceneController from '../../plugin/mvc/controllers/SceneController';
-import BaseManager from '../../plugin/mvc/managers/BaseManager';
-import FooterMenuButtonView from '../views/FooterMenuButtonView';
+import PrefabContainer from '../../../plugin/mvc/prefabs/PrefabContainer';
+import SceneController from '../../../plugin/mvc/controllers/SceneController';
+import BaseManager from '../../../plugin/mvc/managers/BaseManager';
+import FooterMenuButtonView from '../../views/FooterMenuButtonView';
 class TopSceneController extends SceneController {
     onLoad(request) {
         super.onLoad(request);

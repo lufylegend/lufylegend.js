@@ -49,10 +49,22 @@ class LNode extends LSprite {
     lateInit() {
     }
     get widgetWidth() {
-        return this._widgetWidth || this.getWidth();
+        if (this._widgetWidth) {
+            return this._widgetWidth;
+        }
+        if (this.sprite && this.sprite.width) {
+            return this.sprite.width;
+        }
+        return this.getWidth();
     }
     get widgetHeight() {
-        return this._widgetHeight || this.getHeight();
+        if (this._widgetHeight) {
+            return this._widgetHeight;
+        }
+        if (this.sprite && this.sprite.height) {
+            return this.sprite.height;
+        }
+        return this.getHeight();
     }
     widgetInit() {
         let target = this._getWidgetTarget(this.widget.target);
@@ -71,13 +83,13 @@ class LNode extends LSprite {
             height = targetHeight - widget.top - widget.bottom;
             this._widgetHeight = height;
         } else {
-            height = this.getHeight();
+            height = this.widgetHeight;
         }
         if (resizeW) {
             width = targetWidth - widget.left - widget.right;
             this._widgetWidth = width;
         } else {
-            width = this.getWidth();
+            width = this.widgetWidth;
         }
         if (resizeH || resizeW) {
             if (typeof this.resize === 'function') {

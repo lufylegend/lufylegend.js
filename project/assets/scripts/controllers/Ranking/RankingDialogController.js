@@ -4,9 +4,8 @@ import BaseManager from '../../../plugin/mvc/managers/BaseManager';
 class RankingDialogController extends DialogController {
     onLoad() {
         super.onLoad();
-        this.dispatcher.title = 'Home测试';
-        console.log('Home测试');
-        this.dispatcher.users = [{ name: '老虎', icon: 'dog' }, { name: '狮子', icon: 'dragon' }, { name: '狮子', icon: 'dragon' }, { name: '狮子', icon: 'dragon' }];
+        this.dispatcher.title = 'ListView测试';
+        this.dispatcher.users = [{ name: '龙', icon: 'dragon' }, { name: '老虎', icon: 'tiger' }, { name: '马', icon: 'horse' }, { name: '猴子', icon: 'monkey' }];
     }
     showRankingDialog() {
         BaseManager.showDialog('prefabs/dialog/RankingDialog');

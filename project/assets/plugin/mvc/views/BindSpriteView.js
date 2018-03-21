@@ -23,12 +23,6 @@ class BindSpriteView extends BaseBindView {
         this.sprite.height = height;
         this.getChildAt(0).resize(width, height);
     }
-    getWidth() {
-        return this.sprite.width;
-    }
-    getHeight() {
-        return this.sprite.height;
-    }
     updateView() {
         super.updateView();
         if (!this.bind || !this.bind.key) {

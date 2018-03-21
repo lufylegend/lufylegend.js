@@ -2,8 +2,8 @@
 {
 	"class":"RankingDialogController",
 	"property":{
-		"x":10,
-		"y":10
+		"x":20,
+		"y":20
 	},
 	"childNodes":[
 		{
@@ -32,8 +32,8 @@
 					"key":"title",
 					"target":"RankingDialogController"
 				},
-				"x":0,
-				"y":0,
+				"x":300,
+				"y":10,
 				"textField":{
 					"textAlign":"center",
 					"color":"#FF0000",
@@ -52,11 +52,11 @@
 					"childPrefab":"prefabs/dialog/RankingChild",
 					"target":"RankingDialogController"
 				},
-				"x":0,
+				"x":20,
 				"y":50,
 				"listView":{
 					"maxPerLine":1,
-					"cellWidth":580,
+					"cellWidth":560,
 					"cellHeight":100,
 					"size":{
 						"width":580,

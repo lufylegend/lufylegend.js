@@ -37,10 +37,22 @@ class BindButtonView extends BaseBindView {
             });
         }
     }
-    getWidth() {
+    get widgetWidth() {
+        if (this._widgetWidth) {
+            return this._widgetWidth;
+        }
+        if (this.currentButton.upState.widgetWidth) {
+            return this.currentButton.upState.widgetWidth;
+        }
         return this.currentButton.upState.getWidth();
     }
-    getHeight() {
+    get widgetHeight() {
+        if (this._widgetHeight) {
+            return this._widgetHeight;
+        }
+        if (this.currentButton.upState.widgetHeight) {
+            return this.currentButton.upState.widgetHeight;
+        }
         return this.currentButton.upState.getHeight();
     }
     get currentButton() {
