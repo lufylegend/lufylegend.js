@@ -20,11 +20,11 @@ class LAtlasSprite extends LSprite {
     resize(width, height) {
         if (this.atlasType === LSpriteAtlasType.SIMPLE) {
             let sprite = this.getChildAt(0);
-            let bitmap = sprite.getChildAt(0);
+            /*let bitmap = sprite.getChildAt(0);
             let bitmapWidth = this._rotated ? bitmap.bitmapData.getHeight() : bitmap.bitmapData.getWidth();
-            let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();
-            sprite.scaleX = width / bitmapWidth;
-            sprite.scaleY = height / bitmapHeight;
+            let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();*/
+            sprite.scaleX = width / this._sourceSize[0];
+            sprite.scaleY = height / this._sourceSize[1];
         } else if (this.atlasType === LSpriteAtlasType.SLICED) {
             let panel = this.getChildAt(0);
             if (this._rotated) {
@@ -41,16 +41,25 @@ class LAtlasSprite extends LSprite {
         let width = data.frame[1][data.rotated ? 1 : 0];
         let height = data.frame[1][data.rotated ? 0 : 1];
         let bitmapData = new LBitmapData(texture, x, y, width, height);
+        this._sourceSize = data.sourceSize;
         return bitmapData;
-    }
+    } 
     _getBitmap(texture, data) {
         let bitmapData = this._getBitmapData(texture, data);
         let bitmap = new LBitmap(bitmapData);
+        let w, h;
         bitmap.rotateCenter = false;
         if (data.rotated) {
-            bitmap.y = bitmapData.getWidth();
+            w = bitmapData.getHeight();
+            h = bitmapData.getWidth();
+            bitmap.y = h;
             bitmap.rotate = -90;
+        } else {
+            w = bitmapData.getWidth();
+            h = bitmapData.getHeight();
         }
+        bitmap.x += (this._sourceSize[0] - w) * 0.5 + data.offset[0];
+        bitmap.y += (this._sourceSize[1] - h) * 0.5 - data.offset[1];
         let sprite = new LSprite();
         sprite.addChild(bitmap);
         return sprite;
