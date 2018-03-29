@@ -20,13 +20,13 @@ class LAtlasSprite extends LSprite {
     resize(width, height) {
         if (this.atlasType === LSpriteAtlasType.SIMPLE) {
             let sprite = this.getChildAt(0);
-            /*let bitmap = sprite.getChildAt(0);
-            let bitmapWidth = this._rotated ? bitmap.bitmapData.getHeight() : bitmap.bitmapData.getWidth();
-            let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();*/
             sprite.scaleX = width / this._sourceSize[0];
             sprite.scaleY = height / this._sourceSize[1];
         } else if (this.atlasType === LSpriteAtlasType.SLICED) {
-            let panel = this.getChildAt(0);
+            let sprite = this.getChildAt(0);
+            let panel = sprite.getChildAt(0);
+            width -= this._minusWidth;
+            height -= this._minusHeight;
             if (this._rotated) {
                 panel.resize(height, width);
                 panel.y = height;
@@ -66,6 +66,7 @@ class LAtlasSprite extends LSprite {
     }
     _getPanel(texture, setting, data) {
         let bitmapData = this._getBitmapData(texture, data);
+        let w, h;
         let width = bitmapData.getWidth();
         let height = bitmapData.getHeight();
         let left = data.rotated ? setting.bottom : setting.left;
@@ -78,10 +79,21 @@ class LAtlasSprite extends LSprite {
         let y2 = height - bottom;
         let panel = new LPanel(bitmapData, width, height, x1, x2, y1, y2);
         if (data.rotated) {
-            panel.y = width;
+            w = height;
+            h = width;
+            panel.y = h;
             panel.rotate = -90;
+        } else {
+            w = width;
+            h = height;
         }
-        return panel;
+        this._minusWidth = this._sourceSize[0] - w;
+        this._minusHeight = this._sourceSize[1] - h;
+        panel.x += this._minusWidth * 0.5 + data.offset[0];
+        panel.y += this._minusHeight * 0.5 - data.offset[1];
+        let sprite = new LSprite();
+        sprite.addChild(panel);
+        return sprite;
     }
 }
 export default LAtlasSprite;
