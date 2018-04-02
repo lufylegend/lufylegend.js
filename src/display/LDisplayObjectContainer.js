@@ -278,7 +278,7 @@ var LDisplayObjectContainer = (function () {
 			d.parent = s;
 			s.childList.push(d);
 			s.numChildren = s.childList.length;
-			s._ll_removeFromSelf = false;
+			d._ll_removeFromSelf = false;
 			return d;
 		},
 		/** @language chinese
@@ -358,7 +358,7 @@ var LDisplayObjectContainer = (function () {
 			d.parent = s;
 			s.childList.splice(i, 0, d);
 			s.numChildren = s.childList.length;
-			s._ll_removeFromSelf = false;
+			d._ll_removeFromSelf = false;
 			return d;
 		},
 		/** @language chinese
