@@ -472,7 +472,7 @@ var LDisplayObject = (function () {
 				return;
 			}
 			s._ll_trans = true;
-			rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
+			var rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
 			if ((typeof s.rotatex) == UNDEFINED) {
 				s.rotatex = 0;
 				s.rotatey = 0;

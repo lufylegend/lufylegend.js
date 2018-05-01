@@ -32,4 +32,4 @@ var LString = {
 		return p.exec(s); 
 	}
 };
-LMath = LString;
+var LMath = LString;

@@ -26,7 +26,7 @@ var LLoadManage = (function () {
 		s.llname="ll.file.";
 		s.llload="ll.load.";
 	}
-	p = {
+	var p = {
 		/** @language chinese
 		 * 从指定的 list 加载数据。
 		 * @method load
@@ -170,7 +170,7 @@ var LLoadManage = (function () {
 		_loadProgress : function (e) {
 			var loader = e.currentTarget;
 			var s = loader.parent;
-			d = s.list[loader._loadIndex];
+			var d = s.list[loader._loadIndex];
 			d.progress = e.loaded / e.total;
 			var progress = 0;
 			for(var i = 0, l=s.list.length;i<l;i++){

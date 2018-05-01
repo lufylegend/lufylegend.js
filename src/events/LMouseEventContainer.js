@@ -537,7 +537,7 @@ var LMouseEventContainer = (function () {
 			return true;
 		},
 		_dispatchEvent : function(event, type, st, index, fromIndex, endIndex) {
-			var self = this, i, j, l = st.length;
+			var self = this, i, j, o, l = st.length;
 			for (i = fromIndex; i <= endIndex && i < l; i++) {
 				o = st[i];
 				if (o.sp.objectIndex != index) {
