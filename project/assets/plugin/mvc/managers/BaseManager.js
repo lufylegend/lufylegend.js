@@ -78,10 +78,11 @@ class BaseManager {
     loadPrefab(prefabPath, folder) {
         let prefab;
         prefabPath = `resources/${prefabPath}.prefab`;
+        let metaPath = `${prefabPath}.meta`;
         if (LGlobal.traceDebug) {
             prefabPath += '?t=' + Date.now();
+            metaPath += '?t=' + Date.now();
         }
-        let metaPath = `${prefabPath}.meta`;
         return new Promise(function(resolve, reject) {
             LLoadManage.load([
                 { name: 'prefab', path: prefabPath, type: LURLLoader.TYPE_TEXT },
