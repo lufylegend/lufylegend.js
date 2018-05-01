@@ -107,7 +107,7 @@ var LTimer = (function () {
 		};
 		return new TimerManager();
 	})();
-	p = {
+	var p = {
 		/** @language chinese
 		 * 如果计时器尚未运行，则启动计时器。
 		 * @method start

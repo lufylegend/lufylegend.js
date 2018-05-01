@@ -1,4 +1,4 @@
-LTextFormat = (function() {
+var LTextFormat = (function() {
 	function LTextFormat(font, size, color, bold, italic, underline) {
 		var s = this;
 		LExtends(s, LObject, []);

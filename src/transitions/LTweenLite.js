@@ -299,7 +299,7 @@ var LTweenLite = (function () {
 	};
 	LTweenLite.TYPE_FRAME = "type_frame";
 	LTweenLite.TYPE_TIMER = "type_timer";
-	p = {
+	var p = {
 		count : function(){
 			return this.tweens.length;
 		},
