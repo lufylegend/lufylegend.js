@@ -45,7 +45,7 @@
  * @since 1.9.8
  * @public
  */
-LStyleSheet = (function() {
+var LStyleSheet = (function() {
 	function LStyleSheet() {
 		var s = this;
 		LExtends(s, LObject, []);

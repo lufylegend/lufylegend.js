@@ -67,7 +67,7 @@ var LButtonSample1 = (function () {
 		btn_up.back = new LSprite();
 		btn_up.addChild(btn_up.shadow);
 		btn_up.addChild(btn_up.back);
-		labelText = new LTextField();
+		var labelText = new LTextField();
 		labelText.color = color;
 		labelText.font = font;
 		labelText.size = size;
