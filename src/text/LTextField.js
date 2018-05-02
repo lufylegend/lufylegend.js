@@ -860,6 +860,16 @@ var LTextField = (function () {
 		},
 		_ll_show : function (ctx) {
 			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
+			
+			if(LGlobal.enableWebGL){
+				s._createCanvas();
+				s._canvas.width = LGlobal.width;
+				s._canvas.height = LGlobal.height;
+				s._showReady(s._context);
+				c = s._context;
+			}else{
+				c = ctx;
+			}
 			if (s.texttype == LTextFieldType.INPUT) {
 				s.inputBackLayer.ll_show();
 				rc = s.getRootCoordinate();
@@ -875,15 +885,6 @@ var LTextField = (function () {
 			}
 			if (LGlobal.fpsStatus) {
 				LGlobal.fpsStatus.text++;
-			}
-			if(LGlobal.enableWebGL){
-				s._createCanvas();
-				s._canvas.width = LGlobal.width;
-				s._canvas.height = LGlobal.height;
-				s._showReady(s._context);
-				c = s._context;
-			}else{
-				c = ctx;
 			}
 			if (s.htmlText) {
 				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
