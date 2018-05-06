@@ -1,5 +1,5 @@
 import LObject from '../utils/LObject';
-import { UNDEFINED } from '../utils/LConstant';
+import lufylegend from '../ll';
 class LEventDispatcher extends LObject {
     constructor() {
         super();
@@ -64,7 +64,7 @@ class LEventDispatcher extends LObject {
                 continue;
             }
             if (type === this._eventList[i].type) {
-                if (typeof listener === UNDEFINED || listener === this._eventList[i].listener) {
+                if (typeof listener === 'undefined' || listener === this._eventList[i].listener) {
                     return true;
                 }
             }
@@ -72,4 +72,5 @@ class LEventDispatcher extends LObject {
         return false;
     }
 }
+lufylegend.LEventDispatcher = LEventDispatcher;
 export default LEventDispatcher;

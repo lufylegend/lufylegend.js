@@ -107,6 +107,13 @@ var LLoadManage = (function () {
 			s.loadStart();
 			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
+		_addEvent(loader, name){
+			loader.parent = this;
+			loader.name = name;
+			loader.addEventListener(LEvent.PROGRESS, this._loadProgress);
+			loader.addEventListener(LEvent.ERROR, this._loadError);
+			loader.addEventListener(LEvent.COMPLETE, this._loadComplete);
+		},
 		loadStart : function () {
 			var s = this, d, ph, phs, ext;
 			if (s.loadIndex >= s.list.length) {
@@ -132,34 +139,33 @@ var LLoadManage = (function () {
 				}
 				if (d["type"] == LURLLoader.TYPE_TEXT || d["type"] == LURLLoader.TYPE_JS) {
 					s.loader = new LURLLoader();
-					s.loader.parent = s;
-					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-					s.loader.addEventListener(LEvent.ERROR, s._loadError);
-					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+					s._addEvent(s.loader, d.name);
 					s.loader.load(s.url(d.path), d["type"]);
 				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
-					s.loader.parent = s;
-					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-					s.loader.addEventListener(LEvent.ERROR, s._loadError);
-					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
-					s.loader.load(d.path);
+					if (LSound.webAudioEnabled || LGlobal.wx) {
+						s._addEvent(s.loader, d.name);
+						s.loader.load(d.path);
+					}else{
+						LSound.addWait(s.loader, d.path);
+						setTimeout(function(){
+							s._addEvent(s.loader, d.name);
+							var event = new LEvent(LEvent.COMPLETE);
+							event.currentTarget = s.loader;
+							event.target = d.path;
+							s.loader.dispatchEvent(event);
+						});
+					}
+				} else if (d['type'] === LAtlas.TYPE_PLIST) {
+					s.loader = new LAtlas();
+					s._addEvent(s.loader, d.name);
 				} else if (d["type"] == LFontLoader.TYPE_FONT) {
 					s.loader = new LFontLoader();
-					s.loader.parent = s;
-					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.ERROR, s._loadError);
-					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+					s._addEvent(s.loader, d.name);
 					s.loader.load(d.path, d.name);
 				} else {
 					s.loader = new LLoader();
-					s.loader.parent = s;
-					s.loader.name = d.name;
-					s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-					s.loader.addEventListener(LEvent.ERROR, s._loadError);
-					s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+					s._addEvent(s.loader, d.name);
 					s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE, d.useXHR);
 				}
 				s.loader._loadIndex = s.loadIndex;

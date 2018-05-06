@@ -1,14 +1,10 @@
-import LEventDispatcher from '../events/LEventDispatcher';
-import LEvent from '../events/LEvent';
-import { UNDEFINED } from '../utils/LConstant';
+
 import { getExtension } from '../utils/Function';
 import LURLLoader from '../net/LURLLoader';
 import LFontLoader from '../net/LFontLoader';
 import LLoader from '../display/LLoader';
-import LGlobal from '../utils/LGlobal';
-import LSound from '../media/LSound';
-import LAtlas from './LAtlas';
-class LLoadManage extends LEventDispatcher {
+import lufylegend from '../ll';
+class LLoadManage extends lufylegend.LEventDispatcher {
     constructor() {
         super();
         this.llname = 'll.file.';
@@ -17,7 +13,7 @@ class LLoadManage extends LEventDispatcher {
     load(l, u, c) {
         let s = this;
         if (!l || l.length === 0) {
-            let event = new LEvent(LEvent.COMPLETE);
+            let event = new lufylegend.LEvent(lufylegend.LEvent.COMPLETE);
             event.currentTarget = s;
             event.target = {};
             s.dispatchEvent(event);
@@ -42,7 +38,7 @@ class LLoadManage extends LEventDispatcher {
             return;
         }
         d = s.list[s.loadIndex];
-        if (typeof d.progress === UNDEFINED) {
+        if (typeof d.progress === 'undefined') {
             d.progress = 0;
         }
         if (!d.name) {
@@ -56,47 +52,52 @@ class LLoadManage extends LEventDispatcher {
                 } else if (ext === 'js') {
                     d['type'] = LURLLoader.TYPE_JS;
                 } else if ((new Array('mp3', 'ogg', 'wav', 'm4a')).indexOf(ext) >= 0) {
-                    d['type'] = LSound.TYPE_SOUND;
+                    d['type'] = lufylegend.LSound.TYPE_SOUND;
                 }
             }
             if (d['type'] === LURLLoader.TYPE_TEXT || d['type'] === LURLLoader.TYPE_JS) {
                 s.loader = new LURLLoader();
                 s.loader.parent = s;
                 s.loader.name = d.name;
-                s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-                s.loader.addEventListener(LEvent.ERROR, s._loadError);
-                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+                s.loader.addEventListener(lufylegend.LEvent.PROGRESS, s._loadProgress);
+                s.loader.addEventListener(lufylegend.LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
                 s.loader.load(s.url(d.path), d['type']);
-            } else if (d['type'] === LSound.TYPE_SOUND) {
-                s.loader = new LSound();
+            } else if (d['type'] === lufylegend.LSound.TYPE_SOUND) {
+                s.loader = new lufylegend.LSound();
                 s.loader.parent = s;
                 s.loader.name = d.name;
-                s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-                s.loader.addEventListener(LEvent.ERROR, s._loadError);
-                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
-                s.loader.load(d.path);
-            } else if (d['type'] === LAtlas.TYPE_PLIST) {
-                s.loader = new LAtlas();
+                s.loader.addEventListener(lufylegend.LEvent.PROGRESS, s._loadProgress);
+                s.loader.addEventListener(lufylegend.LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
+                if (lufylegend.LSound.webAudioEnabled || lufylegend.LGlobal.wx) {
+                    s.loader.load(d.path);
+                } else {
+                    lufylegend.LSound.addWait(s.loader, d.path);
+                    s.loader.dispatchEvent(lufylegend.LEvent.COMPLETE);
+                }
+            } else if (d['type'] === lufylegend.LAtlas.TYPE_PLIST) {
+                s.loader = new lufylegend.LAtlas();
                 s.loader.parent = s;
                 s.loader.name = d.name;
-                s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-                s.loader.addEventListener(LEvent.ERROR, s._loadError);
-                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+                s.loader.addEventListener(lufylegend.LEvent.PROGRESS, s._loadProgress);
+                s.loader.addEventListener(lufylegend.LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
                 s.loader.load(d.path, d.name);
             } else if (d['type'] === LFontLoader.TYPE_FONT) {
                 s.loader = new LFontLoader();
                 s.loader.parent = s;
                 s.loader.name = d.name;
-                s.loader.addEventListener(LEvent.ERROR, s._loadError);
-                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+                s.loader.addEventListener(lufylegend.LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
                 s.loader.load(d.path, d.name);
             } else {
                 s.loader = new LLoader();
                 s.loader.parent = s;
                 s.loader.name = d.name;
-                s.loader.addEventListener(LEvent.PROGRESS, s._loadProgress);
-                s.loader.addEventListener(LEvent.ERROR, s._loadError);
-                s.loader.addEventListener(LEvent.COMPLETE, s._loadComplete);
+                s.loader.addEventListener(lufylegend.LEvent.PROGRESS, s._loadProgress);
+                s.loader.addEventListener(lufylegend.LEvent.ERROR, s._loadError);
+                s.loader.addEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
                 s.loader.load(s.url(d.path), LLoader.TYPE_BITMAPDATE, d.useXHR);
             }
             s.loader._loadIndex = s.loadIndex;
@@ -113,7 +114,7 @@ class LLoadManage extends LEventDispatcher {
         for (let i = 0, l = s.list.length;i < l;i++) {
             progress += s.list[i].progress;
         }
-        let event = new LEvent(LEvent.PROGRESS);
+        let event = new lufylegend.LEvent(lufylegend.LEvent.PROGRESS);
         event.currentTarget = s;
         event.target = e.currentTarget;
         event.loaded = progress;
@@ -125,8 +126,8 @@ class LLoadManage extends LEventDispatcher {
         let loader = e.currentTarget;
         let s = loader.parent;
         delete loader.parent;
-        loader.removeEventListener(LEvent.ERROR, s._loadError);
-        let event = new LEvent(LEvent.ERROR);
+        loader.removeEventListener(lufylegend.LEvent.ERROR, s._loadError);
+        let event = new lufylegend.LEvent(lufylegend.LEvent.ERROR);
         event.currentTarget = s;
         event.target = e.target;
         event.responseURL = e.responseURL;
@@ -138,7 +139,7 @@ class LLoadManage extends LEventDispatcher {
             return;
         }
         if (e && e.currentTarget.name) {
-            e.currentTarget.removeEventListener(LEvent.COMPLETE, s._loadComplete);
+            e.currentTarget.removeEventListener(lufylegend.LEvent.COMPLETE, s._loadComplete);
             if (e.currentTarget.name.indexOf(s.llname) >= 0) {
                 e.target = 1;
             }
@@ -156,15 +157,15 @@ class LLoadManage extends LEventDispatcher {
             if (s.reloadtime) {
                 clearTimeout(s.reloadtime);
             }
-            let event = new LEvent(LEvent.COMPLETE);
+            let event = new lufylegend.LEvent(lufylegend.LEvent.COMPLETE);
             event.currentTarget = s;
             event.target = s.result;
             s.dispatchEvent(event);
-            LGlobal.forceRefresh = true;
+            lufylegend.LGlobal.forceRefresh = true;
         }
     }
     url(u) {
-        if (!LGlobal.traceDebug) {
+        if (!lufylegend.LGlobal.traceDebug) {
             return u;
         }
         return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + (new Date()).getTime();
@@ -173,17 +174,17 @@ class LLoadManage extends LEventDispatcher {
 LLoadManage.load = function(l, u, c, e) {
     let loadObj = new LLoadManage();
     if (u) {
-        loadObj.addEventListener(LEvent.PROGRESS, function(event) {
+        loadObj.addEventListener(lufylegend.LEvent.PROGRESS, function(event) {
             u((event.loaded * 100 / event.total).toFixed(2));
         });
     }
     if (c) {
-        loadObj.addEventListener(LEvent.COMPLETE, function(event) {
+        loadObj.addEventListener(lufylegend.LEvent.COMPLETE, function(event) {
             c(event.target);
         });
     }
     if (e) {
-        loadObj.addEventListener(LEvent.ERROR, e);
+        loadObj.addEventListener(lufylegend.LEvent.ERROR, e);
     }
     loadObj.load(l);
 };

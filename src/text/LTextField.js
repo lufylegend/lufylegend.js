@@ -871,15 +871,18 @@ var LTextField = (function () {
 				c = ctx;
 			}
 			if (s.texttype == LTextFieldType.INPUT) {
-				s.inputBackLayer.ll_show();
+				s.inputBackLayer.ll_show(c);
 				rc = s.getRootCoordinate();
-				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+				if (!LGlobal.wx && LGlobal.inputBox.name == "input" + s.objectIndex) {
 					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
 					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
 				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
 					return;
 				}else{
+					if (s.inputBackLayer.graphics.setList.length === 0) {
+						c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
+					}
 					c.clip();
 				}
 			}
@@ -1254,17 +1257,29 @@ var LTextField = (function () {
 			}
 			s.focus();
 		},
-		_ll_getValue : function () {
-			if (LGlobal.inputBox.style.display != NONE) {
-				LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-				LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
-				LGlobal.inputBox.style.display = NONE;
-				if(typeof LGlobal.inputTextField.preventDefault != UNDEFINED){
-					LGlobal.preventDefault=LGlobal.inputTextField.preventDefault;
-				}
-				LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-				LGlobal.inputTextField = null;
+		_wx_ll_getValue : function(value) {
+			LGlobal.inputTextField.text = value;
+			wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
+			wx.offKeyboardComplete(this._ll_getValue);
+			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+			LGlobal.inputTextField = null;
+		},
+		_ll_getValue : function (event) {
+			if (!LGlobal.inputTextField) {
+				return;
 			}
+			if (LGlobal.wx) {
+				LGlobal.inputTextField._wx_ll_getValue(event.value);
+				return;
+			}
+			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+			LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+			LGlobal.inputBox.style.display = NONE;
+			if(typeof LGlobal.inputTextField.preventDefault != UNDEFINED){
+				LGlobal.preventDefault=LGlobal.inputTextField.preventDefault;
+			}
+			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+			LGlobal.inputTextField = null;
 		},
 		/** @language chinese
 		 * 当LTextField对象设置为输入框的时候，将LTextField对象的text值反映到输入框中。
@@ -1355,11 +1370,32 @@ var LTextField = (function () {
 		 */
 		updateInput : function () {
 			var s = this;
+			if (LGlobal.wx) {
+				s._wxUpdateInput();
+				return;
+			}
 			if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
 				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
 			}
 		},
+		_wxUpdateInput : function() {
+			var s = this;
+			wx.hideKeyboard({ complete: function() {
+				s.focus();
+			} });
+		},
+		_wx_ll_input : function(value) {
+			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+				let event = new LEvent(LTextEvent.TEXT_INPUT);
+				event.keyCode = value;
+				LGlobal.inputTextField.dispatchEvent(event);
+			}
+		},
 		_ll_input : function (e) {
+			if (LGlobal.wx) {
+				LGlobal.inputTextField._wx_ll_input(e);
+				return;
+			}
 			var event = new LEvent(LTextEvent.TEXT_INPUT);
 			event.keyCode = e.keyCode;
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
@@ -1489,6 +1525,10 @@ var LTextField = (function () {
 				s._ll_getValue();
 			}
 			s.dispatchEvent(LFocusEvent.FOCUS_IN);
+			if (LGlobal.wx) {
+				s._wxFocus();
+				return;
+			}
 			sc = s.getAbsoluteScale();
 			LGlobal.inputBox.style.display = "";
 			LGlobal.inputBox.name = "input" + s.objectIndex;
@@ -1527,6 +1567,18 @@ var LTextField = (function () {
 				}
 				LGlobal.inputTextBox.focus();
 			}, 0);
+		},
+		_wxFocus : function() {
+			LGlobal.inputTextField = this;
+			wx.showKeyboard({
+				defaultValue: this.text,
+				maxLength: 20,
+				multiple: false,
+				confirmHold: false,
+				confirmType: 'done'
+			});
+			wx.onKeyboardInput(this._ll_input);
+			wx.onKeyboardComplete(this._ll_getValue);
 		},
 		_getWidth : function () {
 			var s = this;

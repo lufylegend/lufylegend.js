@@ -1,4 +1,4 @@
-
+import lufylegend from '../ll';
 class LEvent {
     constructor(type) {
         this.eventType = type;
@@ -44,4 +44,5 @@ LEvent.removeEventListener = function(n, t, f, b) {
         n.detachEvent('on' + t, n[t + f]);
     }
 };
+lufylegend.LEvent = LEvent;
 export default LEvent;

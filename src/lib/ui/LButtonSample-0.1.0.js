@@ -61,7 +61,6 @@ var LButtonSample1 = (function () {
 		 * @since 0.1.0
 		 * @public
 		 */
-		s.backgroundColor = "#000000";
 		var btn_up = new LSprite();
 		btn_up.shadow = new LSprite();
 		btn_up.back = new LSprite();
@@ -74,7 +73,6 @@ var LButtonSample1 = (function () {
 		labelText.x = size * 0.5;
 		labelText.y = size * 0.5;
 		labelText.text = name;
-		s.labelText = labelText;
 		btn_up.back.addChild(labelText);
 		var shadow = new LDropShadowFilter(4, 45, "#000000", 10);
 		btn_up.shadow.filters = [shadow];
@@ -85,6 +83,8 @@ var LButtonSample1 = (function () {
 		var btn_disable = btn_down.clone();
 		btn_disable.alpha = 0.5;
 		LExtends(s, LButton, [btn_up, btn_down, null, btn_disable]);
+		s.labelText = labelText;
+		s.backgroundColor = "#000000";
 		s.type = "LButtonSample1";
 		/** @language chinese
 		 * 按钮的宽度
@@ -172,7 +172,8 @@ var LButtonSample1 = (function () {
 		s.baseWidth = s.width = s.bitmap_up.back.getChildAt(0).getWidth() + s.bitmap_up.back.getChildAt(0).size;
 		s.backgroundSet = null;
 	};
-	LButtonSample1.prototype._onDraw = function (s) {
+	LButtonSample1.prototype._onDraw = function (event) {
+		let s = event.currentTarget;
 		var co = s.getRootCoordinate(), labelText;
 		if (s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y) {
 			return;
@@ -253,7 +254,8 @@ var LButtonSample2 = (function () {
 		a.y = s.y;
 		return a;
 	};
-	LButtonSample2.prototype._onDraw = function (s) {
+	LButtonSample2.prototype._onDraw = function (event) {
+		let s = event.currentTarget;
 		var co = s.getRootCoordinate(), labelText;
 		if (s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y) {
 			return;

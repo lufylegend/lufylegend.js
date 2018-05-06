@@ -139,24 +139,34 @@ var LURLLoader = (function () {
 				s.dispatchEvent(event);
 			});
 		} else if (t == LURLLoader.TYPE_JS) {
-			var script = document.createElement("script");
-			script.onerror = function(e){
-				var event = new LEvent(LEvent.ERROR);
-				event.currentTarget = s;
-				event.target = e.target;
-				event.responseURL = u;
-				s.dispatchEvent(event);
-			};
-			script.onload = function () {
-				event = new LEvent(LEvent.COMPLETE);
-				event.currentTarget = s;
-				event.target = s;
-				s.dispatchEvent(event);
-				delete s.content;
-			};
-			script.src = u;
-			script.type = "text/javascript";
-			document.querySelector('head').appendChild(script);
+			if(LGlobal.wx){
+				setTimeout(function(){
+					event = new LEvent(LEvent.COMPLETE);
+					event.currentTarget = s;
+					event.target = s;
+					s.dispatchEvent(event);
+					delete s.content;
+				});
+			}else{
+				var script = document.createElement("script");
+				script.onerror = function(e){
+					var event = new LEvent(LEvent.ERROR);
+					event.currentTarget = s;
+					event.target = e.target;
+					event.responseURL = u;
+					s.dispatchEvent(event);
+				};
+				script.onload = function () {
+					event = new LEvent(LEvent.COMPLETE);
+					event.currentTarget = s;
+					event.target = s;
+					s.dispatchEvent(event);
+					delete s.content;
+				};
+				script.src = u;
+				script.type = "text/javascript";
+				document.querySelector('head').appendChild(script);
+			}
 		}
 	};
 	return LURLLoader;

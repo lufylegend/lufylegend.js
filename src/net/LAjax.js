@@ -308,7 +308,8 @@ var LAjax = (function () {
 		getRequest : function (t, url, d, oncomplete, err) {
 			var s = this, k, data = "", a = "";
 			s.err = err;
-			var ajax = s.getHttp();
+			let isLocalUrl = url.indexOf('http') < 0;
+			let ajax = s.getHttp(isLocalUrl);
 			if (!ajax) {
 				return;
 			}
@@ -330,6 +331,11 @@ var LAjax = (function () {
 			};
 			var progress = s.progress;
 			s.progress = null;
+			if (!ajax.addEventListener) {
+				ajax.addEventListener = function(key, fun) {
+					ajax['on' + key] = fun;
+				};
+			}
 			ajax.addEventListener("progress", function(e){
 				if(e.currentTarget.status == 404){
 					if (err) {
@@ -383,7 +389,10 @@ var LAjax = (function () {
 			};
 			ajax.send(data);
 		},
-		getHttp : function () {
+		getHttp : function (isLocalUrl) {
+			if (LGlobal.wx && isLocalUrl) {
+				return new WxLocalRequest();
+			}
 			if (typeof XMLHttpRequest != UNDEFINED) {
 				return new XMLHttpRequest();
 			}  
