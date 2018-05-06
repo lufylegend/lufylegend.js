@@ -255,6 +255,19 @@ var LSound = (function () {
 	 * @public
 	 */
 	LSound.webAudioEnabled = false;
+	LSound._waitSounds = [];
+	LSound.addWait = function(sound, path) {
+		LSound._waitSounds.push({ sound: sound, path: path });
+	};
+	LSound.startLoad = function(sound) {
+		if (LSound._waitSounds.length === 0) {
+			return;
+		}
+		LSound._waitSounds.forEach(function(child) {
+			child.sound.load(child.path);
+		});
+		LSound._waitSounds.length = 0;
+	};
 	var protocol = location.protocol;
 	if (protocol == "http:" || protocol == "https:") {
 		if (typeof AudioContext !== UNDEFINED) {

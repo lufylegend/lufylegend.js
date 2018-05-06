@@ -40,6 +40,7 @@ let LGlobal = (function() {
     LGlobal.align = 'M';
     LGlobal.mobile = false;
     LGlobal.canTouch = false;
+    LGlobal.wx = false;
     LGlobal.os = OS_PC;
     LGlobal.ios = false;
     LGlobal.android = false;
@@ -52,11 +53,11 @@ let LGlobal = (function() {
     LGlobal.keepClear = true;
     LGlobal.top = 0;
     LGlobal.left = 0;
-    LGlobal.enableWebGL = (function() {
-        return typeof enableWebGLCanvas !== UNDEFINED;
-    })();
     LGlobal.window = window;
     (function(n) {
+        if (typeof wx !== 'undefined' && typeof GameGlobal !== 'undefined') {
+            LGlobal.wx = true;
+        }
         LGlobal.isOldFirefox = (function(un) {
             let i = un.toLowerCase().indexOf('firefox');
             if (i < 0) {
@@ -98,6 +99,9 @@ let LGlobal = (function() {
         }
         LGlobal.mobile = LGlobal.canTouch;
     })(navigator.userAgent);
+    LGlobal.enableWebGL = (function() {
+        return !LGlobal.wx && typeof enableWebGLCanvas !== UNDEFINED;
+    })();
     LGlobal.setDebug = function(v) {
         LGlobal.traceDebug = v; 
     };
@@ -125,8 +129,20 @@ let LGlobal = (function() {
     };
     LGlobal.ll_createCanvas = function(id, w, h) {
         LGlobal.id = id;
-        LGlobal.object = document.getElementById(id);
-        LGlobal.object.innerHTML = '<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">' +
+        
+        if (LGlobal.wx) {
+            LGlobal.canvasObj = document.getElementsByTagName('canvas')[0];
+            LGlobal.object = {
+                style: {
+                    left: 0, top: 0
+                }
+            };
+            LGlobal.canvasObj.style = {
+                marginLeft: 0, marginTop: 0
+            };
+        } else {
+            LGlobal.object = document.getElementById(id);
+            LGlobal.object.innerHTML = '<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">' +
   '<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:' + w + 'px;height:' + h + 'px;">' +
   '<div id="noCanvas">' +
   '<p>Hey there, it looks like you\'re using Microsoft\'s Internet Explorer. Microsoft hates the Web and doesn\'t support HTML5 :(</p>' + 
@@ -136,16 +152,17 @@ let LGlobal = (function() {
   '<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>' +
   '<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />' +
   '<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
-        LGlobal.canvasObj = document.getElementById(LGlobal.id + '_canvas');
+            LGlobal.canvasObj = document.getElementById(LGlobal.id + '_canvas');
+            LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
+            LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
+            LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
+            LGlobal.passwordBoxObj = document.getElementById(LGlobal.id + '_passwordBox');
+        }
         LGlobal._canvas = document.createElement('canvas');
         LGlobal._context = LGlobal._canvas.getContext('2d');
         if (LGlobal._context) {
             LGlobal.canvasObj.innerHTML = '';
         }
-        LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
-        LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
-        LGlobal.inputTextBoxObj = document.getElementById(LGlobal.id + '_InputTextBox');
-        LGlobal.passwordBoxObj = document.getElementById(LGlobal.id + '_passwordBox');
         LGlobal.inputTextField = null;
         if (w) {
             LGlobal.canvasObj.width = w;
@@ -222,7 +239,7 @@ let LGlobal = (function() {
         LGlobal._outStageCheckCount = 1;
         LGlobal.IS_MOUSE_DOWN = true;
         LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
-        if (LGlobal.inputBox.style.display !== NONE) {
+        if (LGlobal.inputTextField) {
             LGlobal.inputTextField._ll_getValue();
         }
         let canvasX, canvasY, eve;
@@ -249,6 +266,7 @@ let LGlobal = (function() {
             LGlobal.mouseJoint_start(eve);
         }
         LGlobal.touchHandler(event);
+        ll.LSound.startLoad();
     };
     LGlobal.ll_touchStartEvent = function(event, eveIndex, canvasX, canvasY) {
         let eve = { offsetX: (event.touches[eveIndex].pageX - canvasX),
@@ -345,7 +363,7 @@ let LGlobal = (function() {
             e.offsetX = e.layerX;
             e.offsetY = e.layerY;
         }
-        if (LGlobal.inputBox.style.display !== NONE) {
+        if (LGlobal.inputTextField) {
             LGlobal.inputTextField._ll_getValue();
         }
         let event = { button: e.button };
@@ -356,6 +374,7 @@ let LGlobal = (function() {
         if (LGlobal.mouseJoint_start) {
             LGlobal.mouseJoint_start(event);
         }
+        ll.LSound.startLoad();
     };
     LGlobal.ll_mouseMove = function(e) {
         if (typeof e.offsetX === UNDEFINED && typeof e.layerX !== UNDEFINED) {

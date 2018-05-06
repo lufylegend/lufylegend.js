@@ -85,25 +85,33 @@ var LMedia = (function () {
 	}
 	var p = {
 		onload : function () {
-			var s = this;
+			let s = this;
+			s.canplaythrough = s.canplaythrough || function() {
+				s.onload();
+			};
+			s.error = s.error || function(e) {
+				let event = new LEvent(LEvent.ERROR);
+				event.currentTarget = s;
+				event.target = e.target;
+				event.responseURL = e.target.src;
+				s.dispatchEvent(event);
+			};
+			if (!s._addEvent) {
+				s.data.addEventListener('error', s.error, false);
+				s.data.addEventListener('canplaythrough', s.canplaythrough, false);
+			}
+			s._addEvent = true;
 			if (s.data.readyState) {
+				s.data.removeEventListener('error', s.error);
+				s.data.removeEventListener('canplaythrough', s.canplaythrough);
+	
 				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
-				var e = new LEvent(LEvent.COMPLETE);
+				let e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
 				s.dispatchEvent(e);
 				return;
 			}
-			s.data.addEventListener("error", function (e) {
-				var event = new LEvent(LEvent.ERROR);
-				event.currentTarget = s;
-				event.target = e.target;
-				event.responseURL = e.target.src;
-				s.dispatchEvent(event);
-			}, false);
-			s.data.addEventListener("canplaythrough", function () {
-				s.onload();
-			}, false);
 		},
 		_onended : function () {
 			var s = this, i, l;
@@ -147,7 +155,7 @@ var LMedia = (function () {
 		 */
 		load : function (u) {
 			var s = this;
-			if (Object.prototype.toString.apply(u) == "[object HTMLAudioElement]") {
+			if (Object.prototype.toString.apply(u) == "[object HTMLAudioElement]" || (typeof u === 'object' && u.tagName === 'AUDIO')) {
 				s.data = u;
 				s.onload();
 				return;
@@ -166,9 +174,14 @@ var LMedia = (function () {
 					return s.data.canPlayType(s._type + "/" + element);
 				});
 				if (c) {
-					s.data.src = a[k];
-					s.onload();
-					s.data.load();
+					if (LGlobal.wx) {
+						s.onload();
+						s.data.src = a[k];
+					} else {
+						s.data.src = a[k];
+						s.onload();
+						s.data.load();
+					}
 					return;
 				} else {
 					console.warn( "Not support " + b[b.length - 1] + " : " + a[k]);
@@ -282,7 +295,7 @@ var LMedia = (function () {
 			if (s.length == 0) {
 				return;
 			}
-			if (LGlobal.android) {
+			if (LGlobal.android && !LGlobal.wx) {
 				LSound.Container.stopOther(this);
 			}
 			if (typeof c != UNDEFINED) {
@@ -433,7 +446,7 @@ var LMedia = (function () {
 		},
 		ll_check : function () {
 			var s = this;
-			if (!s.playing) {
+			if (!s.playing || LGlobal.wx) {
 				return;
 			}
 			if(s.data.duration != s._ll_duration){

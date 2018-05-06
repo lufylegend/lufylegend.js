@@ -1,4 +1,6 @@
 import { UNDEFINED } from '../utils/LConstant';
+import LGlobal from '../utils/LGlobal';
+import WxLocalRequest from './WxLocalRequest';
 class LAjax {
     constructor() {
         this.responseType = null;
@@ -21,7 +23,8 @@ class LAjax {
     getRequest(t, url, d, oncomplete, err) {
         let s = this, k, data = '', a = '';
         s.err = err;
-        let ajax = s.getHttp();
+        let isLocalUrl = url.indexOf('http') < 0; 
+        let ajax = s.getHttp(isLocalUrl);
         if (!ajax) {
             return;
         }
@@ -43,6 +46,11 @@ class LAjax {
         };
         let progress = s.progress;
         s.progress = null;
+        if (!ajax.addEventListener) {
+            ajax.addEventListener = function(key, fun) {
+                ajax['on' + key] = fun;
+            };
+        }
         ajax.addEventListener('progress', function(e) {
             if (e.currentTarget.status === 404) {
                 if (err) {
@@ -72,6 +80,7 @@ class LAjax {
         ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         ajax.onreadystatechange = function(e) {
             let request = e.currentTarget;
+            console.log(request);
             if (request.readyState === 4) {
                 if (request.status >= 200 && request.status < 300 || request.status === 304) {
                     if (oncomplete) {
@@ -96,7 +105,10 @@ class LAjax {
         };
         ajax.send(data);
     }
-    getHttp() {
+    getHttp(isLocalUrl) {
+        if (LGlobal.wx && isLocalUrl) {
+            return new WxLocalRequest();
+        }
         if (typeof XMLHttpRequest !== UNDEFINED) {
             return new XMLHttpRequest();
         }  

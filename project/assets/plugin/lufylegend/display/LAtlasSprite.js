@@ -20,13 +20,13 @@ class LAtlasSprite extends LSprite {
     resize(width, height) {
         if (this.atlasType === LSpriteAtlasType.SIMPLE) {
             let sprite = this.getChildAt(0);
-            sprite.scaleX = width / this._sourceSize[0];
-            sprite.scaleY = height / this._sourceSize[1];
+            let bitmap = sprite.getChildAt(0);
+            let bitmapWidth = this._rotated ? bitmap.bitmapData.getHeight() : bitmap.bitmapData.getWidth();
+            let bitmapHeight = this._rotated ? bitmap.bitmapData.getWidth() : bitmap.bitmapData.getHeight();
+            sprite.scaleX = width / bitmapWidth;
+            sprite.scaleY = height / bitmapHeight;
         } else if (this.atlasType === LSpriteAtlasType.SLICED) {
-            let sprite = this.getChildAt(0);
-            let panel = sprite.getChildAt(0);
-            width -= this._minusWidth;
-            height -= this._minusHeight;
+            let panel = this.getChildAt(0);
             if (this._rotated) {
                 panel.resize(height, width);
                 panel.y = height;
@@ -41,32 +41,22 @@ class LAtlasSprite extends LSprite {
         let width = data.frame[1][data.rotated ? 1 : 0];
         let height = data.frame[1][data.rotated ? 0 : 1];
         let bitmapData = new LBitmapData(texture, x, y, width, height);
-        this._sourceSize = data.sourceSize;
         return bitmapData;
-    } 
+    }
     _getBitmap(texture, data) {
         let bitmapData = this._getBitmapData(texture, data);
         let bitmap = new LBitmap(bitmapData);
-        let w, h;
         bitmap.rotateCenter = false;
         if (data.rotated) {
-            w = bitmapData.getHeight();
-            h = bitmapData.getWidth();
-            bitmap.y = h;
+            bitmap.y = bitmapData.getWidth();
             bitmap.rotate = -90;
-        } else {
-            w = bitmapData.getWidth();
-            h = bitmapData.getHeight();
         }
-        bitmap.x += (this._sourceSize[0] - w) * 0.5 + data.offset[0];
-        bitmap.y += (this._sourceSize[1] - h) * 0.5 - data.offset[1];
         let sprite = new LSprite();
         sprite.addChild(bitmap);
         return sprite;
     }
     _getPanel(texture, setting, data) {
         let bitmapData = this._getBitmapData(texture, data);
-        let w, h;
         let width = bitmapData.getWidth();
         let height = bitmapData.getHeight();
         let left = data.rotated ? setting.bottom : setting.left;
@@ -79,21 +69,10 @@ class LAtlasSprite extends LSprite {
         let y2 = height - bottom;
         let panel = new LPanel(bitmapData, width, height, x1, x2, y1, y2);
         if (data.rotated) {
-            w = height;
-            h = width;
-            panel.y = h;
+            panel.y = width;
             panel.rotate = -90;
-        } else {
-            w = width;
-            h = height;
         }
-        this._minusWidth = this._sourceSize[0] - w;
-        this._minusHeight = this._sourceSize[1] - h;
-        panel.x += this._minusWidth * 0.5 + data.offset[0];
-        panel.y += this._minusHeight * 0.5 - data.offset[1];
-        let sprite = new LSprite();
-        sprite.addChild(panel);
-        return sprite;
+        return panel;
     }
 }
 export default LAtlasSprite;

@@ -1,16 +1,16 @@
-import LEventDispatcher from '../../lufylegend/events/LEventDispatcher';
+
 import LLoadManage from '../../lufylegend/system/LLoadManage';
 import LEvent from '../../lufylegend/events/LEvent';
 import LAtlasSprite from '../../lufylegend/display/LAtlasSprite';
-import LGlobal from '../../lufylegend/utils/LGlobal';
-class LAtlas extends LEventDispatcher {
+import lufylegend from '../../lufylegend/ll';
+class LAtlas extends lufylegend.LEventDispatcher {
     destroy() {
         delete LAtlas._container[name];
     }
     load(path, name) {
         let loadData = [
             { name: `${path}/${name}.png`, path: this.url(`${path}/${name}.png`) },
-            { name: `${path}/${name}.plist`, path: this.url(`${path}/${name}.plist`), type: 'text' },
+            { name: `${path}/${name}.plist`, path: this.url(`${path}/${name}.plist` + (lufylegend.LGlobal.wx ? '.meta' : '')), type: 'text' },
             { name: `${path}/${name}.json`, path: this.url(`${path}/${name}.json`), type: 'text' }
         ];
         LLoadManage.load( 
@@ -20,7 +20,7 @@ class LAtlas extends LEventDispatcher {
         );
     }
     url(u) {
-        if (!LGlobal.traceDebug) {
+        if (!lufylegend.LGlobal.traceDebug) {
             return u;
         }
         return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
@@ -45,6 +45,10 @@ class LAtlas extends LEventDispatcher {
         this._initData(xml);
     }
     _initData(xml) {
+        if (lufylegend.LGlobal.wx) {
+            this._textureData = JSON.parse(xml);
+            return;
+        }
         let parser = new DOMParser();
         this.xmlDom = parser.parseFromString(xml, 'text/xml');
         let plistDom = this.xmlDom.querySelector('plist').querySelector('dict');
@@ -89,4 +93,5 @@ LAtlas._container = {};
 LAtlas.get = function(name) {
     return LAtlas._container[name] || new LAtlas();
 };
+lufylegend.LAtlas = LAtlas;
 export default LAtlas;

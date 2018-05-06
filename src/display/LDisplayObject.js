@@ -572,7 +572,7 @@ var LDisplayObject = (function () {
 		 * @examplelink <p><a href="../../../api/LDisplayObject/localToGlobal.html" target="_blank">测试链接</a></p>
 		 */
 		localToGlobal : function (point) {
-			var s = this, x, y, p;
+			var s = this, x, y, p, m;
 			m = s.getRootMatrix();
 			p = m.toArray([point.x, point.y, 1]);
 			return new LPoint(p[0], p[1]);

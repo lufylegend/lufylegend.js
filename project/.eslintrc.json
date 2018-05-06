@@ -11,6 +11,7 @@
         "BlobBuilder":true,
         "console":true,
         "Box2D":true,
+        "wx":true,
         "webkitAudioContext":true,
         "ActiveXObject":true,
         "enableWebGLCanvas":true

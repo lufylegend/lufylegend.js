@@ -2,31 +2,78 @@ import LWebAudio from './LWebAudio';
 import LMedia from './LMedia';
 import lufylegend from '../ll';
 import { UNDEFINED } from '../utils/LConstant';
-class LSound {
+class LSoundMedia extends LMedia {
     constructor(u) {
+        super(u);
         this.type = 'LSound';
         this._type = 'audio';
-        if (LSound.webAudioEnabled && lufylegend.LGlobal.webAudio) {
-            this._media = new LWebAudio();
-        } else {
-            this._media = new LMedia();
-            try {
-                this._media.data = new Audio();
-            } catch (e) {
-                console.warn('ReferenceError: Can\'t find variable: Audio');
-                this._media.data = {};
-            }
-            this._media.data.loop = false;
-            this._media.data.autoplay = false;
+        try {
+            this.data = new Audio();
+        } catch (e) {
+            console.warn('ReferenceError: Can\'t find variable: Audio');
+            this.data = {};
         }
+        this.data.loop = false;
+        this.data.autoplay = false;
         if (u) {
             this.load(u);
         }
     }
 }
+class LSoundWebAudio extends LWebAudio {
+    constructor(u) {
+        super(u);
+        this.type = 'LSound';
+        this._type = 'audio';
+        if (u) {
+            this.load(u);
+        }
+    }
+}
+function _webAudioEnabled() {
+    LWebAudio._context = null;
+    let protocol = location.protocol;
+    if (!lufylegend.LGlobal.wx && (protocol === 'http:' || protocol === 'https:')) {
+        if (typeof AudioContext !== UNDEFINED) {
+            try {
+                LWebAudio._context = new AudioContext();
+            } catch (e) {
+            //
+            }
+        } else if (typeof webkitAudioContext !== UNDEFINED) {
+            try {
+                LWebAudio._context = new webkitAudioContext();
+            } catch (e) {
+            //
+            }
+        }
+        if (LWebAudio._context) {
+            return true;
+        }
+    }
+    return false;
+}
+let LSound;
+if (!lufylegend.LGlobal.wx && _webAudioEnabled()) {
+    LSound = LSoundWebAudio;
+} else {
+    LSound = LSoundMedia;
+}
 LSound.TYPE_SOUND = 'sound';
 LSound.webAudioEnabled = false;
-
+LSound._waitSounds = [];
+LSound.addWait = function(sound, path) {
+    LSound._waitSounds.push({ sound: sound, path: path });
+};
+LSound.startLoad = function(sound) {
+    if (LSound._waitSounds.length === 0) {
+        return;
+    }
+    LSound._waitSounds.forEach(function(child) {
+        child.sound.load(child.path);
+    });
+    LSound._waitSounds.length = 0;
+};
 LSound.Container = {
     ll_save: 0,
     time: 0,
@@ -69,28 +116,10 @@ LSound.Container = {
 };
 setTimeout(() => {
     lufylegend.LGlobal.childList.push(LSound.Container);
-
-    LWebAudio._context = null;
-    let protocol = location.protocol;
-    if (protocol === 'http:' || protocol === 'https:') {
-        if (typeof AudioContext !== UNDEFINED) {
-            try {
-                LWebAudio._context = new AudioContext();
-            } catch (e) {
-            //
-            }
-        } else if (typeof webkitAudioContext !== UNDEFINED) {
-            try {
-                LWebAudio._context = new webkitAudioContext();
-            } catch (e) {
-            //
-            }
-        }
-        if (LWebAudio._context) {
-            LWebAudio.container.push(LWebAudio._context);
-            LSound.webAudioEnabled = true;
-        }
+    if (LWebAudio._context) {
+        LWebAudio.container.push(LWebAudio._context);
+        LSound.webAudioEnabled = true;
     }
 });
-
+lufylegend.LSound = LSound;
 export default LSound;

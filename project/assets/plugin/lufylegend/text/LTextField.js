@@ -137,22 +137,6 @@ class LTextField extends LInteractiveObject {
     }
     _ll_show(ctx) {
         let s = this, c, lbl, i, rc, j, l, k, m, h, enter, tf, underlineY;
-        if (s.texttype === LTextFieldType.INPUT) {
-            s.inputBackLayer.ll_show();
-            rc = s.getRootCoordinate();
-            if (lufylegend.LGlobal.inputBox.name === 'input' + s.objectIndex) {
-                lufylegend.LGlobal.inputBox.style.marginTop = (parseInt(lufylegend.LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(lufylegend.LGlobal.canvasObj.style.height) / lufylegend.LGlobal.canvasObj.height) >>> 0)) + 'px';
-                lufylegend.LGlobal.inputBox.style.marginLeft = (parseInt(lufylegend.LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(lufylegend.LGlobal.canvasObj.style.width) / lufylegend.LGlobal.canvasObj.width) >>> 0)) + 'px';
-            }
-            if (lufylegend.LGlobal.inputTextField && lufylegend.LGlobal.inputTextField.objectIndex === s.objectIndex) {
-                return;
-            } else {
-                c.clip();
-            }
-        }
-        if (lufylegend.LGlobal.fpsStatus) {
-            lufylegend.LGlobal.fpsStatus.text++;
-        }
         if (lufylegend.LGlobal.enableWebGL) {
             s._createCanvas();
             s._canvas.width = lufylegend.LGlobal.width;
@@ -161,6 +145,25 @@ class LTextField extends LInteractiveObject {
             c = s._context;
         } else {
             c = ctx;
+        }
+        if (s.texttype === LTextFieldType.INPUT) {
+            s.inputBackLayer.ll_show(c);
+            rc = s.getRootCoordinate();
+            if (!lufylegend.LGlobal.wx && lufylegend.LGlobal.inputBox.name === 'input' + s.objectIndex) {
+                lufylegend.LGlobal.inputBox.style.marginTop = (parseInt(lufylegend.LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(lufylegend.LGlobal.canvasObj.style.height) / lufylegend.LGlobal.canvasObj.height) >>> 0)) + 'px';
+                lufylegend.LGlobal.inputBox.style.marginLeft = (parseInt(lufylegend.LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(lufylegend.LGlobal.canvasObj.style.width) / lufylegend.LGlobal.canvasObj.width) >>> 0)) + 'px';
+            }
+            if (lufylegend.LGlobal.inputTextField && lufylegend.LGlobal.inputTextField.objectIndex === s.objectIndex) {
+                return;
+            } else {
+                if (s.inputBackLayer.graphics.setList.length === 0) {
+                    c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
+                }
+                c.clip();
+            }
+        }
+        if (lufylegend.LGlobal.fpsStatus) {
+            lufylegend.LGlobal.fpsStatus.text++;
         }
         if (s.htmlText) {
             if (s.ll_htmlText !== s.htmlText || (s.styleSheet && (s.ll_style_objectIndex !== s.styleSheet.objectIndex || s.ll_styleIndex === s.styleSheet.styleIndex))) {
@@ -347,33 +350,77 @@ class LTextField extends LInteractiveObject {
         }
         s.focus();
     }
-    _ll_getValue() {
-        if (lufylegend.LGlobal.inputBox.style.display !== NONE) {
-            lufylegend.LGlobal.inputTextField.text = lufylegend.LGlobal.inputTextBox.value;
-            LEvent.removeEventListener(lufylegend.LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, lufylegend.LGlobal.inputTextField._ll_input);
-            lufylegend.LGlobal.inputBox.style.display = NONE;
-            if (typeof lufylegend.LGlobal.inputTextField.preventDefault !== UNDEFINED) {
-                lufylegend.LGlobal.preventDefault = lufylegend.LGlobal.inputTextField.preventDefault;
-            }
-            lufylegend.LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-            lufylegend.LGlobal.inputTextField = null;
+    _wx_ll_getValue(value) {
+        lufylegend.LGlobal.inputTextField.text = value;
+        wx.offKeyboardInput(lufylegend.LGlobal.inputTextField._ll_input);
+        wx.offKeyboardComplete(this._ll_getValue);
+        lufylegend.LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+        lufylegend.LGlobal.inputTextField = null;
+    }
+    _ll_getValue(event) {
+        if (!lufylegend.LGlobal.inputTextField) {
+            return;
         }
+        if (lufylegend.LGlobal.wx) {
+            lufylegend.LGlobal.inputTextField._wx_ll_getValue(event.value);
+            return;
+        }
+        lufylegend.LGlobal.inputTextField.text = lufylegend.LGlobal.inputTextBox.value;
+        LEvent.removeEventListener(lufylegend.LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, lufylegend.LGlobal.inputTextField._ll_input);
+        lufylegend.LGlobal.inputBox.style.display = NONE;
+        if (typeof lufylegend.LGlobal.inputTextField.preventDefault !== UNDEFINED) {
+            lufylegend.LGlobal.preventDefault = lufylegend.LGlobal.inputTextField.preventDefault;
+        }
+        lufylegend.LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+        lufylegend.LGlobal.inputTextField = null;
+    }
+    _wxUpdateInput() {
+        wx.hideKeyboard({ complete: () => {
+            this.focus();
+        } });
     }
     updateInput() {
+        if (lufylegend.LGlobal.wx) {
+            this._wxUpdateInput();
+            return;
+        }
         let s = this;
         if (s.texttype === LTextFieldType.INPUT && lufylegend.LGlobal.inputTextField.objectIndex === s.objectIndex) {
             lufylegend.LGlobal.inputTextBox.value = lufylegend.LGlobal.inputTextField.text;
         }
     }
+    _wx_ll_input(value) {
+        if (lufylegend.LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+            let event = new LEvent(LTextEvent.TEXT_INPUT);
+            event.keyCode = value;
+            lufylegend.LGlobal.inputTextField.dispatchEvent(event);
+        }
+    }
     _ll_input(e) {
-        let event = new LEvent(LTextEvent.TEXT_INPUT);
-        event.keyCode = e.keyCode;
+        if (lufylegend.LGlobal.wx) {
+            lufylegend.LGlobal.inputTextField._wx_ll_input(e);
+            return;
+        }
         lufylegend.LGlobal.inputTextField.text = lufylegend.LGlobal.inputTextBox.value;
         if (lufylegend.LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+            let event = new LEvent(LTextEvent.TEXT_INPUT);
+            event.keyCode = e.keyCode;
             e.returnValue = lufylegend.LGlobal.inputTextField.dispatchEvent(event);
         } else {
             e.returnValue = true;
         }
+    }
+    _wxFocus() {
+        lufylegend.LGlobal.inputTextField = this;
+        wx.showKeyboard({
+            defaultValue: this.text,
+            maxLength: 20,
+            multiple: false,
+            confirmHold: false,
+            confirmType: 'done'
+        });
+        wx.onKeyboardInput(this._ll_input);
+        wx.onKeyboardComplete(this._ll_getValue);
     }
     focus() {
         let s = this, sc, sx, sy, rc;
@@ -387,6 +434,10 @@ class LTextField extends LInteractiveObject {
             s._ll_getValue();
         }
         s.dispatchEvent(LFocusEvent.FOCUS_IN);
+        if (lufylegend.LGlobal.wx) {
+            this._wxFocus();
+            return;
+        }
         sc = s.getAbsoluteScale();
         lufylegend.LGlobal.inputBox.style.display = '';
         lufylegend.LGlobal.inputBox.name = 'input' + s.objectIndex;

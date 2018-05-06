@@ -1,5 +1,5 @@
 import LEventDispatcher from '../events/LEventDispatcher';
-import LSound from './LSound';
+import lufylegend from '../ll';
 import LEvent from '../events/LEvent';
 import { UNDEFINED } from '../utils/LConstant';
 import LAjax from '../net/LAjax';
@@ -17,7 +17,7 @@ class LWebAudio extends LEventDispatcher {
         s.loopLength = 1;
         s.playing = false;
         s.volume = 1;
-        LSound.Container.add(s);
+        lufylegend.LSound.Container.add(s);
     }
 	
     getWebAudio() {
@@ -235,12 +235,12 @@ class LWebAudio extends LEventDispatcher {
         if (!s.playing) {
             return;
         }
-        if (s.currentTimeTo < s.data.currentTime - s.currentSave + LSound.Container.time * 0.001) {
+        if (s.currentTimeTo < s.data.currentTime - s.currentSave + lufylegend.LSound.Container.time * 0.001) {
             s._onended();
         }
     }
     die() {
-        LSound.Container.remove(this);
+        lufylegend.LSound.Container.remove(this);
     }
 }
 LWebAudio.container = [];
