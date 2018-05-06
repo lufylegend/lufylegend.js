@@ -474,8 +474,8 @@ var LGlobal = ( function () {
 	LGlobal.webAudio = true;
 	LGlobal.objectIndex = 1;
 	LGlobal.stage = null;
-	LGlobal.width = 0;
-	LGlobal.height = 0;
+	LGlobal.canvasObj.width = 0;
+	LGlobal.canvasObj.height = 0;
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
@@ -560,7 +560,7 @@ var LGlobal = ( function () {
 		if(LGlobal.displayState == LStage.FULL_SCREEN){
 			LGlobal.resize();
 		}else if(typeof LGlobal.displayState == "number"){
-			LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+			LGlobal.resize(LGlobal.canvasObj.width * LGlobal.displayState, LGlobal.canvasObj.height * LGlobal.displayState);
 		}
 		if (LGlobal.canTouch) {
 			LGlobal.ll_clicks = 0;
@@ -612,16 +612,21 @@ var LGlobal = ( function () {
 			LGlobal.canvasObj.innerHTML="";
 		}
 		LGlobal.inputTextField = null;
-		if (w) {
-			LGlobal.canvasObj.width = w;
-		}
-		if (h) {
-			LGlobal.canvasObj.height = h;
-		}
-		LGlobal.width = LGlobal.canvasObj.width;
-		LGlobal.height = LGlobal.canvasObj.height;
-		LGlobal.canvasStyleWidth = LGlobal.width;
-		LGlobal.canvasStyleHeight = LGlobal.height;
+        if(LGlobal.wx){
+            LGlobal._content_width = w;
+            LGlobal._content_height = h;
+            if(LGlobal.canvasObj.width / LGlobal.canvasObj.height > w / h){
+                w = LGlobal.canvasObj.width * h / LGlobal.canvasObj.height;
+            }else{
+                h = LGlobal.canvasObj.height * w / LGlobal.canvasObj.width;
+            }
+        }
+        LGlobal.canvasObj.width = w;
+        LGlobal.canvasObj.height = h;
+		LGlobal.width = LLGlobal._content_width;
+		LGlobal.height = LGlobal._content_height;
+		LGlobal.canvasStyleWidth = LGlobal.canvasObj.width;
+		LGlobal.canvasStyleHeight = LGlobal.canvasObj.height;
         LGlobal.canvas = (function() {
             if (LGlobal.enableWebGL && typeof enableWebGLCanvas === 'function') {
                 return enableWebGLCanvas(LGlobal.canvasObj);
@@ -635,6 +640,10 @@ var LGlobal = ( function () {
 		LGlobal.stage = new LSprite();
 		LGlobal.stage.parent = "root";
 		LGlobal.childList.push(LGlobal.stage);
+        if(LGlobal.wx){
+            LGlobal.stageMask = new LSprite();
+            LGlobal.childList.push(LGlobal.stageMask);
+        }
 		LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
 		LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
 		LGlobal.stage.addEventListener = function (type, listener) {
@@ -771,7 +780,7 @@ var LGlobal = ( function () {
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			ll = 1;
 		}
-		for (i = 0, l = e.touches.length; i < l && i < ll; i++) {
+		for (var i = 0, l = e.touches.length; i < l && i < ll; i++) {
 			eve = {offsetX : (e.touches[i].pageX - cX), offsetY : (e.touches[i].pageY - cY), touchPointID : e.touches[i].identifier};
 			eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
@@ -784,7 +793,7 @@ var LGlobal = ( function () {
 			}
 			LGlobal.buttonStatusEvent = eve;
 			LMultitouch.touchs["touch" + eve.touchPointID] = eve;
-			if(eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.height){
+			if(eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.canvasObj.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.canvasObj.height){
 				LGlobal._outStageCheckCount = 0;
 			}else{
 				LGlobal._outStageCheckCount = 1;
@@ -836,7 +845,7 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.cursor = "default";
-		if(mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.height){
+		if(mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.canvasObj.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.canvasObj.height){
 			if(LGlobal._outStageCheckCount){
 				LGlobal._outStageCheckCount = 0;
 				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
@@ -930,11 +939,11 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal._ll_mobile = function () {
-		var w1 = LGlobal.width * 0.3, h1 = w1 * 1.5, s = LGlobal.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15, 
+		var w1 = LGlobal.canvasObj.width * 0.3, h1 = w1 * 1.5, s = LGlobal.canvasObj.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15, 
 		sx = w1 * 0.3, sh = h1 * 0.20, c = '#cccccc', d = '#000000', f = '#ffffff', h = '#ff0000', b, w1, h1, m, m1, n, v;
 		b = new LSprite();
 		addChild(b);
-		w1 = LGlobal.width * 0.3, h1 = w1 * 1.5;
+		w1 = LGlobal.canvasObj.width * 0.3, h1 = w1 * 1.5;
 		b.graphics.drawRoundRect(1, d, [s, s, w1, h1, s],true,c);
 		b.graphics.drawRoundRect(1, d, [s + ss, s + ss, w1 - ss * 2, h1 - ss * 2, s], true, d);
 		b.graphics.drawRect(1, f, [s + sm, s + sh, w1 - sm * 2, h1 - sh * 2], true, f);
@@ -970,23 +979,23 @@ var LGlobal = ( function () {
 		return b;
 	};
 	LGlobal.verticalError = function () {
-		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var w1 = LGlobal.canvasObj.width * 0.3, s = LGlobal.canvasObj.width * 0.05;
 		var b = LGlobal._ll_mobile();
 		var d = b.clone();
 		d.getChildAt(0).visible = false;
-		d.x = LGlobal.width * 0.5 + s;
+		d.x = LGlobal.canvasObj.width * 0.5 + s;
 		addChild(d);
 		b.rotate = 90;
-		b.x = LGlobal.width * 0.5 + s;
+		b.x = LGlobal.canvasObj.width * 0.5 + s;
 		b.y = w1 * 0.5;
 	};
 	LGlobal.horizontalError = function () {
-		var w1 = LGlobal.width * 0.3, s = LGlobal.width * 0.05;
+		var w1 = LGlobal.canvasObj.width * 0.3, s = LGlobal.canvasObj.width * 0.05;
 		var b = LGlobal._ll_mobile();
 		var d = b.clone();
 		d.getChildAt(0).visible = false;
 		d.rotate = 90;
-		d.x = LGlobal.width - s;
+		d.x = LGlobal.canvasObj.width - s;
 		d.y = w1 * 0.5;
 		addChild(d);
 		b.arrow.x = s * 1.5 + w1;
@@ -1026,15 +1035,15 @@ var LGlobal = ( function () {
 		if (LGlobal.box2d != null) {
 			LGlobal.box2d.ll_show();
 			if (!LGlobal.traceDebug && LGlobal.keepClear) {
-				LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
+				LGlobal.canvas.clearRect(0, 0, LGlobal.canvasObj.width + 1, LGlobal.canvasObj.height + 1);
 			}
 		} else {
 			if (LGlobal.keepClear) {
-				LGlobal.canvas.clearRect(0, 0, LGlobal.width + 1, LGlobal.height + 1);
+				LGlobal.canvas.clearRect(0, 0, LGlobal.canvasObj.width + 1, LGlobal.canvasObj.height + 1);
 			}
 			if (LGlobal.backgroundColor !== null) {
 				LGlobal.canvas.fillStyle = LGlobal.backgroundColor;
-				LGlobal.canvas.fillRect(0, 0, LGlobal.width, LGlobal.height);
+				LGlobal.canvas.fillRect(0, 0, LGlobal.canvasObj.width, LGlobal.canvasObj.height);
 			}
 		}
 		LGlobal.show(LGlobal.childList, LGlobal.canvas);
@@ -1067,7 +1076,7 @@ var LGlobal = ( function () {
 		return r;
 	};
 	LGlobal._create_loading_color = function () {
-		var co = LGlobal.canvas.createRadialGradient(LGlobal.width / 2, LGlobal.height, 0, LGlobal.width / 2, 0, LGlobal.height);  
+		var co = LGlobal.canvas.createRadialGradient(LGlobal.canvasObj.width / 2, LGlobal.canvasObj.height, 0, LGlobal.canvasObj.width / 2, 0, LGlobal.canvasObj.height);  
 		co.addColorStop(0, "red");  
 		co.addColorStop(0.3, "orange");  
 		co.addColorStop(0.4, "yellow");  
@@ -1206,10 +1215,10 @@ var LGlobal = ( function () {
 		}, s);
 	};
 	LGlobal.ll_scaleX = function (v) {
-		return (v - LGlobal.left) * LGlobal.width/LGlobal.canvasStyleWidth;
+		return (v - LGlobal.left) * LGlobal.canvasObj.width/LGlobal.canvasStyleWidth;
 	};
 	LGlobal.ll_scaleY = function (v) {
-		return (v - LGlobal.top) * LGlobal.height / LGlobal.canvasStyleHeight;
+		return (v - LGlobal.top) * LGlobal.canvasObj.height / LGlobal.canvasStyleHeight;
 	};
 	LGlobal.ll_setStageSize = function (w, h) {
 		w =  Math.ceil(w);
@@ -1220,6 +1229,7 @@ var LGlobal = ( function () {
 		LGlobal.canvasStyleHeight = h;
 	};
 	LGlobal.resize = function (canvasW, canvasH) {
+        LGlobal.resizeWx(canvasW, canvasH);
 		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
 		LGlobal.innerWidth = ww;
 		LGlobal.innerHeight = wh;
@@ -1230,8 +1240,8 @@ var LGlobal = ( function () {
 			h = canvasH;
 		}
 		if (LGlobal.stageScale == "noScale") {
-			w = canvasW || LGlobal.width;
-			h = canvasH || LGlobal.height;
+			w = canvasW || LGlobal.canvasObj.width;
+			h = canvasH || LGlobal.canvasObj.height;
 		}
 		switch (LGlobal.stageScale) {
 		case "exactFit":
@@ -1240,7 +1250,7 @@ var LGlobal = ( function () {
 			break;
 		case "noBorder":
 			w = canvasW || ww;
-			h = canvasH || LGlobal.height*ww/LGlobal.width;
+			h = canvasH || LGlobal.canvasObj.height*ww/LGlobal.canvasObj.width;
 			switch (LGlobal.align) {
 			case LStageAlign.BOTTOM:
 			case LStageAlign.BOTTOM_LEFT:
@@ -1251,12 +1261,12 @@ var LGlobal = ( function () {
 			}
 		break;
 		case "showAll":
-			if (ww / wh > LGlobal.width / LGlobal.height) {
+			if (ww / wh > LGlobal.canvasObj.width / LGlobal.canvasObj.height) {
 				h = canvasH || wh;
-				w = canvasW || LGlobal.width * wh / LGlobal.height;
+				w = canvasW || LGlobal.canvasObj.width * wh / LGlobal.canvasObj.height;
 			} else {
 				w = canvasW || ww;
-				h = canvasH || LGlobal.height * ww / LGlobal.width;
+				h = canvasH || LGlobal.canvasObj.height * ww / LGlobal.canvasObj.width;
 			}
 		case "noScale":
 		default:
@@ -1298,6 +1308,39 @@ var LGlobal = ( function () {
 		}
 		LGlobal.ll_setStageSize(w, h);
 	};
+	LGlobal.resizeWx = function (canvasW, canvasH) {
+        if(!LGlobal.wx){
+            return;
+        }
+        LGlobal.stageMask.removeAllChild();
+        canvasW = canvasW || LGlobal._content_width;
+        canvasH = canvasH || LGlobal._content_height;
+        if(LGlobal.stageScale === "exactFit"){
+            LGlobal.canvasObj.width = LGlobal._content_width;
+            LGlobal.canvasObj.height = LGlobal._content_height;
+        }else if(LGlobal.stageScale === "showAll"){
+            LGlobal.stage.x = (LGlobal.canvasObj.width - LGlobal._content_width) * 0.5;
+            LGlobal.stage.y = (LGlobal.canvasObj.height - LGlobal._content_height) * 0.5;
+        }
+		var shape;
+        if(LGlobal.stage.x > 0){
+            shape = new LShape();
+            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
+            LGlobal.stageMask.addChild(shape);
+            shape = new LShape();
+            shape.x = LGlobal.canvasObj.width - LGlobal.stage.x;
+            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
+            LGlobal.stageMask.addChild(shape);
+        }else if(LGlobal.stage.y > 0){
+            shape = new LShape();
+            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
+            LGlobal.stageMask.addChild(shape);
+            shape = new LShape();
+            shape.x = LGlobal.canvasObj.height - LGlobal.stage.y;
+            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
+            LGlobal.stageMask.addChild(shape);
+        }
+	};
 	LGlobal.sleep = function (s) {
 		var d = new Date();   
 		while ((new Date().getTime() - d.getTime()) < s) {}
@@ -1306,7 +1349,7 @@ var LGlobal = ( function () {
 		LGlobal.displayState = a;
 		if (LGlobal.stage) {
 			if (typeof LGlobal.displayState == "number") {
-				LGlobal.resize(LGlobal.width * LGlobal.displayState, LGlobal.height * LGlobal.displayState);
+				LGlobal.resize(LGlobal.canvasObj.width * LGlobal.displayState, LGlobal.canvasObj.height * LGlobal.displayState);
 			} else {
 				LGlobal.resize();
 			}
@@ -6816,13 +6859,17 @@ var LLoadManage = (function () {
 					s.loader.load(s.url(d.path), d["type"]);
 				} else if (d["type"] == LSound.TYPE_SOUND) {
 					s.loader = new LSound();
-					s._addEvent(s.loader, d.name);
 					if (LSound.webAudioEnabled || LGlobal.wx) {
+						s._addEvent(s.loader, d.name);
 						s.loader.load(d.path);
 					}else{
 						LSound.addWait(s.loader, d.path);
 						setTimeout(function(){
-							s.loader.dispatchEvent(LEvent.COMPLETE);
+							s._addEvent(s.loader, d.name);
+							var event = new LEvent(LEvent.COMPLETE);
+							event.currentTarget = s.loader;
+							event.target = d.path;
+							s.loader.dispatchEvent(event);
 						});
 					}
 				} else if (d['type'] === LAtlas.TYPE_PLIST) {

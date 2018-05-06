@@ -2183,7 +2183,6 @@ var LGlobal = ( function () {
         LGlobal.stageMask.removeAllChild();
         canvasW = canvasW || LGlobal._content_width;
         canvasH = canvasH || LGlobal._content_height;
-        LGlobal.stageScale = "showAll";
         if(LGlobal.stageScale === "exactFit"){
             LGlobal.canvasObj.width = LGlobal._content_width;
             LGlobal.canvasObj.height = LGlobal._content_height;
