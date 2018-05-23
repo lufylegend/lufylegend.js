@@ -142,11 +142,21 @@ var LLoadManage = (function () {
 					s._addEvent(s.loader, d.name);
 					s.loader.load(s.url(d.path), d["type"]);
 				} else if (d["type"] == LSound.TYPE_SOUND) {
-					s.loader = new LSound();
-					if (LSound.webAudioEnabled || LGlobal.wx) {
+					if(LGlobal.wx){
+						s.loader = new LEventDispatcher();
+						setTimeout(function(){
+							s._addEvent(s.loader, d.name);
+							var event = new LEvent(LEvent.COMPLETE);
+							event.currentTarget = s.loader;
+							event.target = d.path;
+							s.loader.dispatchEvent(event);
+						});
+					} else if (LSound.webAudioEnabled) {
+						s.loader = new LSound();
 						s._addEvent(s.loader, d.name);
 						s.loader.load(d.path);
 					}else{
+						s.loader = new LSound();
 						LSound.addWait(s.loader, d.path);
 						setTimeout(function(){
 							s._addEvent(s.loader, d.name);

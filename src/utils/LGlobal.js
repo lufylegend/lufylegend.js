@@ -210,7 +210,7 @@ var LGlobal = ( function () {
 	 * @since 1.0.0
 	 * @public
 	 */
-	LGlobal.canvasObj.width = 0;
+	LGlobal.width = 0;
 	/** @language chinese
 	 * <p>游戏初始化时设定的画面的高，即canvas的高。</p>
 	 * @property LGlobal.canvasObj.height
@@ -235,7 +235,7 @@ var LGlobal = ( function () {
 	 * @since 1.0.0
 	 * @public
 	 */
-	LGlobal.canvasObj.height = 0;
+	LGlobal.height = 0;
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
@@ -860,8 +860,8 @@ var LGlobal = ( function () {
         }
         LGlobal.canvasObj.width = w;
         LGlobal.canvasObj.height = h;
-		LGlobal.width = LLGlobal._content_width;
-		LGlobal.height = LGlobal._content_height;
+		LGlobal.width = LLGlobal._content_width || w;
+		LGlobal.height = LGlobal._content_height || h;
 		LGlobal.canvasStyleWidth = LGlobal.canvasObj.width;
 		LGlobal.canvasStyleHeight = LGlobal.canvasObj.height;
         LGlobal.canvas = (function() {

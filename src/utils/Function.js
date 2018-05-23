@@ -558,9 +558,7 @@ function base (d, b, a) {
 		if (!h[p]) {
 			if(p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0){
 				if(LGlobal.wx){
-					o[p] = function(){
-						return this.callParent(p, arguments);
-					};
+					o[p] = b.prototype[p];
 				}else{
 					o[p] = new Function('return this.callParent("'+p+'", arguments);');
 				}
