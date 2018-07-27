@@ -246,14 +246,9 @@ var LEventDispatcher = (function () {
 						}
 						event._ll_preventDefault = false;
 						s._eventList[i].listener(event);
-						if (event._ll_preventDefault) {
-							return false;
-						}
 					}
-					return true;
 				}
 			}
-			return false;
 		},
 		/** @language chinese
 		 * <p>检查 LEventDispatcher 对象是否为特定事件类型注册了任何侦听器。这样，您就可以确定 LEventDispatcher 对象在事件流层次结构中的哪个位置改变了对事件类型的处理。</p>
