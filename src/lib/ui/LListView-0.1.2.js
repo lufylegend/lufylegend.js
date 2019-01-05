@@ -568,7 +568,7 @@ var LListChildView = (function () {
 				x = (index / listView.maxPerLine >>> 0) * listView.cellWidth;
 				y = (index % listView.maxPerLine) * listView.cellHeight;
 			}
-			var isIn = (listView.clipping.x <= x && listView.clipping.x + listView.clipping.width > x && listView.clipping.y <= y && listView.clipping.y + listView.clipping.height > y);
+			var isIn = (listView.clipping.x <= x && listView.clipping.x + listView.clipping.width > x && listView.clipping.y - listView.cellHeight <= y && listView.clipping.y + listView.clipping.height > y);
 			if(!isIn){
 				return;
 			}
