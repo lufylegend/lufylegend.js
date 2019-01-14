@@ -188,7 +188,7 @@ var LGlobal = ( function () {
 	LGlobal.stage = null;
 	/** @language chinese
 	 * <p>游戏初始化时设定的画面的宽，即canvas的宽。</p>
-	 * @property LGlobal.canvasObj.width
+	 * @property LGlobal.width
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -196,7 +196,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language english
 	 * <p>game screen's width(canvas's width)</p>
-	 * @property LGlobal.canvasObj.width
+	 * @property LGlobal.width
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -204,7 +204,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language japanese
 	 * <p>ゲーム初期化する時の画面の幅、canvasの幅と同じです。</p>
-	 * @property LGlobal.canvasObj.width
+	 * @property LGlobal.width
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -213,7 +213,7 @@ var LGlobal = ( function () {
 	LGlobal.width = 0;
 	/** @language chinese
 	 * <p>游戏初始化时设定的画面的高，即canvas的高。</p>
-	 * @property LGlobal.canvasObj.height
+	 * @property LGlobal.height
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -221,7 +221,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language english
 	 * <p>game screen's height(canvas's height)</p>
-	 * @property LGlobal.canvasObj.height
+	 * @property LGlobal.height
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -229,7 +229,7 @@ var LGlobal = ( function () {
 	 */
 	/** @language japanese
 	 * <p>ゲーム初期化する時の画面の高さ、canvasの高さと同じです。</p>
-	 * @property LGlobal.canvasObj.height
+	 * @property LGlobal.height
 	 * @type int
 	 * @static
 	 * @since 1.0.0
@@ -860,7 +860,7 @@ var LGlobal = ( function () {
         }
         LGlobal.canvasObj.width = w;
         LGlobal.canvasObj.height = h;
-		LGlobal.width = LLGlobal._content_width || w;
+		LGlobal.width = LGlobal._content_width || w;
 		LGlobal.height = LGlobal._content_height || h;
 		LGlobal.canvasStyleWidth = LGlobal.canvasObj.width;
 		LGlobal.canvasStyleHeight = LGlobal.canvasObj.height;
