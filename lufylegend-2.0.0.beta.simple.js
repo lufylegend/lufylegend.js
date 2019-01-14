@@ -474,8 +474,8 @@ var LGlobal = ( function () {
 	LGlobal.webAudio = true;
 	LGlobal.objectIndex = 1;
 	LGlobal.stage = null;
-	LGlobal.canvasObj.width = 0;
-	LGlobal.canvasObj.height = 0;
+	LGlobal.width = 0;
+	LGlobal.height = 0;
 	LGlobal.box2d = null;
 	LGlobal.speed = 50;
 	LGlobal.IS_MOUSE_DOWN = false;
@@ -623,8 +623,8 @@ var LGlobal = ( function () {
         }
         LGlobal.canvasObj.width = w;
         LGlobal.canvasObj.height = h;
-		LGlobal.width = LLGlobal._content_width;
-		LGlobal.height = LGlobal._content_height;
+		LGlobal.width = LGlobal._content_width || w;
+		LGlobal.height = LGlobal._content_height || h;
 		LGlobal.canvasStyleWidth = LGlobal.canvasObj.width;
 		LGlobal.canvasStyleHeight = LGlobal.canvasObj.height;
         LGlobal.canvas = (function() {
@@ -1691,9 +1691,7 @@ function base (d, b, a) {
 		if (!h[p]) {
 			if(p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0){
 				if(LGlobal.wx){
-					o[p] = function(){
-						return this.callParent(p, arguments);
-					};
+					o[p] = b.prototype[p];
 				}else{
 					o[p] = new Function('return this.callParent("'+p+'", arguments);');
 				}
@@ -2132,14 +2130,9 @@ var LEventDispatcher = (function () {
 						}
 						event._ll_preventDefault = false;
 						s._eventList[i].listener(event);
-						if (event._ll_preventDefault) {
-							return false;
-						}
 					}
-					return true;
 				}
 			}
-			return false;
 		},
 		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
@@ -3233,6 +3226,11 @@ var LMedia = (function () {
 				s.dispatchEvent(event);
 			};
 			if (!s._addEvent) {
+				if(LGlobal.wx){
+					s.data.addEventListener('ended', function(){
+						s._onended(false);
+					}, false);
+				}
 				s.data.addEventListener('error', s.error, false);
 				s.data.addEventListener('canplaythrough', s.canplaythrough, false);
 			}
@@ -3240,7 +3238,7 @@ var LMedia = (function () {
 			if (s.data.readyState) {
 				s.data.removeEventListener('error', s.error);
 				s.data.removeEventListener('canplaythrough', s.canplaythrough);
-				s.length = s.data.duration - (LGlobal.android ? 0.1 : 0);
+				s.length = s.data.duration - (LGlobal.android && !LGlobal.wx ? 0.1 : 0);
 				let e = new LEvent(LEvent.COMPLETE);
 				e.currentTarget = s;
 				e.target = s.data;
@@ -3257,7 +3255,7 @@ var LMedia = (function () {
 				s.close();
 				s.play(s.currentStart, s.loopLength, s.currentTimeTo);
 				s.loopIndex = i;
-			} else {
+			} else if(!LGlobal.wx) {
 				s.close();
 			}
 		},
@@ -3313,15 +3311,14 @@ var LMedia = (function () {
 		},
 		play : function (c, l, to) {
 			var s = this;
-			if (s.length == 0) {
+			if (s.length == 0 && !LGlobal.wx) {
 				return;
 			}
 			if (LGlobal.android && !LGlobal.wx) {
 				LSound.Container.stopOther(this);
 			}
-			if (typeof c != UNDEFINED) {
-				s.data.currentTime = c;
-				s.currentStart = c;
+			if (typeof c == UNDEFINED) {
+				c = 0;
 			}
 			if (typeof l != UNDEFINED) {
 				s.loopLength = l;
@@ -3335,12 +3332,31 @@ var LMedia = (function () {
 				clearTimeout(s.timeout);
 				delete s.timeout;
 			}
-			s.timeout = setTimeout(function(){
-				s._onended();
-			}, (s.currentTimeTo - s.data.currentTime) * 1000);
+			if(!LGlobal.wx){
+				s.timeout = setTimeout(function(){
+					s._onended();
+				}, (s.currentTimeTo - s.data.currentTime) * 1000);
+			}
+			if(LGlobal.wx){
+				s._wxDataList = s._wxDataList || [];
+				if(s._wxDataList.length > 0){
+					s.data = s._wxDataList.shift();
+				}
+				if(s._wxDataList.length == 0){
+					let audio = new Audio();
+					audio.addEventListener('ended', function(){
+						s._onended(false);
+					}, false);
+					audio.src = s.data.src;
+					s._wxDataList.push(audio);
+				}
+				s._wxDataList.push(s.data);
+			}
 			s.data.loop = false;
 			s.loopIndex = 0;
 			s.playing = true;
+			s.data.currentTime = c;
+			s.currentStart = c;
 			s.data.play();
 		},
 		playSegment : function (c, seg, l) {
@@ -5359,6 +5375,18 @@ var LTextField = (function () {
 			s.ll_getStyleSheet(tf, tabName, arr[3], content);
 			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
 		},
+		_createAlignCanvas:function(c){
+			var s = this;
+			if (!s._alignCanvas) {
+				s._alignCanvas = document.createElement("canvas");
+				s._alignContext = s._alignCanvas.getContext("2d");
+			}
+			s._alignCanvas.width = s.width;
+			s._alignContext.font = c.font;
+			s._alignContext.fillStyle = c.fillStyle;
+			s._alignContext.textBaseline = c.textBaseline;
+			s._alignContext.textAlign = "left";
+		},
 		_ll_show : function (ctx) {
 			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 			if(LGlobal.enableWebGL){
@@ -5400,11 +5428,14 @@ var LTextField = (function () {
 					}
 					s.ll_getHtmlText(tf, s.htmlText);
 				}
-				j = 0, k = 0, m = 0, b = 0;
+				j = 0, k = 0, m = 0, b = 0, cx = 0;
 				s._ll_height = s.wordHeight || 30;
 				if(!LTextField.underlineY){
 					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
 				}
+				s._createAlignCanvas(c);
+				var context = c;
+				c = s._alignContext;
 				s.ll_htmlTexts.forEach(function(element){
 					var textFormat = element.textFormat, text = element.text;
 					c.font = textFormat.getFontText();
@@ -5414,30 +5445,62 @@ var LTextField = (function () {
 						if (enter) {
 							j = 0;
 							k = i + 1;
+							cx = 0;
+							if(s.textAlign == "center"){
+								cx = -currentWidth * 0.5;
+							}else if(s.textAlign == "right"){
+								cx = -currentWidth;
+							}
+							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+							s._createAlignCanvas(context);
+							c.font = textFormat.getFontText();
+							c.fillStyle = textFormat.color;
+							currentWidth = 0;
 							m++;
 						} else {
 							h = c.measureText("O").width * 1.2;
 							if (s.stroke) {
-								c.strokeText(text.substr(i, 1), j, m * s._ll_height);
+								c.strokeText(text.substr(i, 1), j, s._ll_height);
 							}
-							c.fillText(text.substr(i, 1), j, m * s._ll_height);
+							c.fillText(text.substr(i, 1), j, s._ll_height);
 							if(textFormat.underline){
 								c.beginPath();
-								underlineY = m * s._ll_height + h * LTextField.underlineY[s.textBaseline];
+								underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
 								c.moveTo(j, underlineY);
 								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
 								c.stroke();
 							}
 						}
 						j += c.measureText(text.substr(i, 1)).width;
-						if (s.wordWrap && j + c.measureText(text.substr(i + 1, 1)).width > s.width) {
+						currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
+						if (s.wordWrap && currentWidth > s.width) {
 							j = 0;
 							k = i + 1;
+							cx = 0;
+							if(s.textAlign == "center"){
+								cx = -currentWidth * 0.5;
+							}else if(s.textAlign == "right"){
+								cx = -currentWidth;
+							}
+							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+							s._createAlignCanvas(context);
+							c.font = textFormat.getFontText();
+							c.fillStyle = textFormat.color;
+							currentWidth = 0;
 							m++;
 						}
 					}
 					s.height = (m + 1) * s._ll_height;
 				});
+				if(currentWidth > 0){
+					cx = 0;
+					if(s.textAlign == "center"){
+						cx = -currentWidth * 0.5;
+					}else if(s.textAlign == "right"){
+						cx = -currentWidth;
+					}
+					context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+				}
 				if(LGlobal.enableWebGL){
 					ctx.drawImage(s._canvas, 0, 0);
 				}
@@ -5451,26 +5514,65 @@ var LTextField = (function () {
 				}
 			}
 			if (s.wordWrap || s.multiline) {
-				j = 0, k = 0, m = 0, b = 0;
+				j = 0, k = 0, m = 0, b = 0, cx = 0;
+				var context = c;
+				var isAlignCanvas = s.textAlign != "left";
+				if(isAlignCanvas){
+					s._createAlignCanvas(c);
+					context = s._alignContext;
+				}
+				var currentWidth = 0;
 				for (i = 0, l = s.text.length; i < l; i++) {
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
 					if (enter) {
 						j = 0;
 						k = i + 1;
+						if(isAlignCanvas){
+							cx = 0;
+							if(s.textAlign == "center"){
+								cx = -currentWidth * 0.5;
+							}else if(s.textAlign == "right"){
+								cx = -currentWidth;
+							}
+							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+							s._createAlignCanvas(c);
+							currentWidth = 0;
+						}
 						m++;
 					} else {
 						if (s.stroke) {
-							c.strokeText(lbl.substr(i, 1), j, m * s.wordHeight);
+							context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
 						}
-						c.fillText(lbl.substr(i, 1), j, m * s.wordHeight);
+						context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
 					}
 					s.numLines = m;
-					j = c.measureText(s.text.substr(k, i + 1 - k)).width;
-					if (s.wordWrap && j + c.measureText(lbl.substr(i, 1)).width > s.width) {
+					j = context.measureText(s.text.substr(k, i + 1 - k)).width;
+					currentWidth = j + c.measureText(lbl.substr(i, 1)).width;
+					if (s.wordWrap && currentWidth > s.width) {
 						j = 0;
 						k = i + 1;
+						if(isAlignCanvas){
+							cx = 0;
+							if(s.textAlign == "center"){
+								cx = -currentWidth * 0.5;
+							}else if(s.textAlign == "right"){
+								cx = -currentWidth;
+							}
+							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+							s._createAlignCanvas(c);
+							currentWidth = 0;
+						}
 						m++;
 					}
+				}
+				if(isAlignCanvas && currentWidth > 0){
+					cx = 0;
+					if(s.textAlign == "center"){
+						cx = -currentWidth * 0.5;
+					}else if(s.textAlign == "right"){
+						cx = -currentWidth;
+					}
+					c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
 				}
 				s.height = (m + 1) * s.wordHeight;
 			} else {
@@ -6858,11 +6960,21 @@ var LLoadManage = (function () {
 					s._addEvent(s.loader, d.name);
 					s.loader.load(s.url(d.path), d["type"]);
 				} else if (d["type"] == LSound.TYPE_SOUND) {
-					s.loader = new LSound();
-					if (LSound.webAudioEnabled || LGlobal.wx) {
+					if(LGlobal.wx){
+						s.loader = new LEventDispatcher();
+						setTimeout(function(){
+							s._addEvent(s.loader, d.name);
+							var event = new LEvent(LEvent.COMPLETE);
+							event.currentTarget = s.loader;
+							event.target = d.path;
+							s.loader.dispatchEvent(event);
+						});
+					} else if (LSound.webAudioEnabled) {
+						s.loader = new LSound();
 						s._addEvent(s.loader, d.name);
 						s.loader.load(d.path);
 					}else{
+						s.loader = new LSound();
 						LSound.addWait(s.loader, d.path);
 						setTimeout(function(){
 							s._addEvent(s.loader, d.name);

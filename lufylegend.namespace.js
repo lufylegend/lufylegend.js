@@ -1,4 +1,4 @@
-var ll = {};
+var ll = (LGlobal && LGlobal.wx) ? window : {};
  //utils
 ll.OS_PC = OS_PC;
 ll.OS_IPHONE = OS_IPHONE;
@@ -73,37 +73,40 @@ ll.LTransform = LTransform;
 ll.LVec2 = LVec2;
 
 //lib
-ll.InteractivePNG = InteractivePNG;
-ll.LBox2d = LBox2d;
-ll.LFlash = LFlash;
-ll.LoadingSample1 = LoadingSample1;
-ll.LoadingSample2 = LoadingSample2;
-ll.LoadingSample3 = LoadingSample3;
-ll.LoadingSample4 = LoadingSample4;
-ll.LoadingSample5 = LoadingSample5;
-ll.LoadingSample6 = LoadingSample6;
-ll.LoadingSample7 = LoadingSample7;
-ll.LQuadTree = LQuadTree;
-ll.LString = LString;
-ll.LTransition = LTransition;
-ll.LIris = LIris;
-ll.LTransitionManager = LTransitionManager;
-
-ll.LButtonSample1 = LButtonSample1;
-ll.LButtonSample2 = LButtonSample2;
-ll.LCheckBox = LCheckBox;
-ll.LComboBox = LComboBox;
-ll.LListView = LListView;
-ll.LMenubar = LMenubar;
-ll.LMessageBox = LMessageBox;
-ll.LPanel = LPanel;
-ll.LRadioChild = LRadioChild;
-ll.LRadio = LRadio;
-ll.LRange = LRange;
-ll.LScrollbar = LScrollbar;
-ll.LTable = LTable;
-ll.LTreeWidget = LTreeWidget;
-ll.LWindow = LWindow;
+if(typeof InteractivePNG != "undefined"){
+    ll.InteractivePNG = InteractivePNG;
+}
+if(typeof LQuadTree != "undefined"){
+    ll.LQuadTree = LQuadTree;
+}
+if(typeof LoadingSample1 != "undefined"){
+    ll.LoadingSample1 = LoadingSample1;
+    ll.LoadingSample2 = LoadingSample2;
+    ll.LoadingSample3 = LoadingSample3;
+    ll.LoadingSample4 = LoadingSample4;
+    ll.LoadingSample5 = LoadingSample5;
+    ll.LoadingSample6 = LoadingSample6;
+    ll.LoadingSample7 = LoadingSample7;
+    ll.LCheckBox = LCheckBox;
+    ll.LComboBox = LComboBox;
+    ll.LListView = LListView;
+    ll.LMenubar = LMenubar;
+    ll.LMessageBox = LMessageBox;
+    ll.LPanel = LPanel;
+    ll.LRadioChild = LRadioChild;
+    ll.LRadio = LRadio;
+    ll.LRange = LRange;
+    ll.LScrollbar = LScrollbar;
+    ll.LTable = LTable;
+    ll.LTreeWidget = LTreeWidget;
+    ll.LWindow = LWindow;
+    ll.LString = LString;
+    ll.LTransition = LTransition;
+    ll.LIris = LIris;
+    ll.LTransitionManager = LTransitionManager;
+    ll.LFlash = LFlash;
+    ll.LBox2d = LBox2d;
+}
 
 //media
 ll.LMedia = LMedia;
