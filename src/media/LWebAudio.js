@@ -99,7 +99,7 @@ var LWebAudio = (function () {
 	var p = {
 		getWebAudio : function () {
 			var data;
-			if(LWebAudio.containerCount > 0){
+			if(LWebAudio.container.length > 0){
 				data = LWebAudio.container.shift();
 			} else {
 				if (typeof AudioContext !== UNDEFINED) {
@@ -354,6 +354,9 @@ var LWebAudio = (function () {
 				s.currentTimeTo = to > s.length ? s.length : to;
 			} else {
 				s.currentTimeTo = s.length;
+			}
+			if(s.data.resume){
+				s.data.resume();
 			}
 			s.data.loop = false;
 			s.playing = true;
