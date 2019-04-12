@@ -12,9 +12,12 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 # 官网 <a target='_blank' href="http://lufylegend.com/lufylegend">http://lufylegend.com/lufylegend</a>
 
 
-# ※1.10.2版
+# ※2.0.0.beta版
 
-新版API地址
+### 
+*2.0.0.beta版并未支持webgl，而是修复了一些非常重要的bug
+
+## 新版API地址
 
 中文版 <a target='_blank' href="http://lufylegend.com/api/zh_CN/out/index.html">http://lufylegend.com/api/zh_CN/out/index.html</a>
 
