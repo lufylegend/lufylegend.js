@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>缓动画板</title>
+		<script type="text/javascript" src="../load_lufylegend.js"></script>
+		<script type="text/javascript" src="./Sketchpad.js"></script>
+	</head>
+	<body>
+			<div id="legend">
+			</div>
+			<script>
+
+			LInit(1000/60, "legend", 480, 800, main);
+			function main () {
+				var sketchpad = new Sketchpad(450, 600);
+				addChild(sketchpad);
+
+				var shape = new LShape();
+				shape.graphics.drawRect(0, "#FF0000", [0, 0, 1, 1],true,"#FF0000");
+				shape.x = 100;
+				shape.y = 100;
+				sketchpad.addBrush(shape);
+
+				LTweenLite.to(shape,5,{coordinate:[new LPoint(300,100), new LPoint(150,250), new LPoint(200,50), new LPoint(250,250),new LPoint(100,100)]});
+
+
+				var shape2 = new LShape();
+				shape2.graphics.drawRect(0, "#008800", [0, 0, 1, 1],true,"#008800");
+				shape2.x = 100;
+				shape2.y = 300;
+				sketchpad.addBrush(shape2);
+
+				LTweenLite.to(shape2,1,{x:300,y:300})
+				.to(shape2,1,{x:300,y:350})
+				.to(shape2,1,{x:100,y:350})
+				.to(shape2,1,{x:100,y:400})
+				.to(shape2,1,{x:300,y:400});
+			}
+			</script>
+	</body>
+</html>
