@@ -25,4 +25,4 @@ English <a target='_blank' href="http://lufylegend.com/api/en_US/out/index.html"
 
 日本語版 <a target='_blank' href="http://lufylegend.com/api/ja_JP/out/index.html">http://lufylegend.com/api/ja_JP/out/index.html</a>
 
-# ECMAScript6开发
+
