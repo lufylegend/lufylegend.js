@@ -941,6 +941,7 @@ var LTextField = (function () {
 							c.fillStyle = textFormat.color;
 							currentWidth = 0;
 							m++;
+							continue;
 						} else {
 							h = c.measureText("O").width * 1.2;
 							if (s.stroke) {
