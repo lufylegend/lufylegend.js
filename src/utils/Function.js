@@ -498,6 +498,7 @@ function init (s, c, w, h, f, t) {
 		})();
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
 		loop = function(){
+			var now = (new Date()).getTime();
 			var check = now - LGlobal._requestAFBaseTime;
 			if( check / s >= 1 ) {
 				LGlobal._requestAFBaseTime += s;
