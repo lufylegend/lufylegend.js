@@ -958,7 +958,8 @@ var LTextField = (function () {
 						}
 						j += c.measureText(text.substr(i, 1)).width;
 						currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-						if (s.wordWrap && currentWidth > s.width) {
+						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
+						if (s.wordWrap && currentWidth > s.width && !enter) {
 							j = 0;
 							k = i + 1;
 							cx = 0;
@@ -1033,7 +1034,8 @@ var LTextField = (function () {
 					s.numLines = m;
 					j = context.measureText(s.text.substr(k, i + 1 - k)).width;
 					currentWidth = j + c.measureText(lbl.substr(i, 1)).width;
-					if (s.wordWrap && currentWidth > s.width) {
+					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
+					if (s.wordWrap && currentWidth > s.width && !enter) {
 						j = 0;
 						k = i + 1;
 						if(isAlignCanvas){
@@ -1473,7 +1475,7 @@ var LTextField = (function () {
 		},
 		_wx_ll_input : function(value) {
 			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
-				let event = new LEvent(LTextEvent.TEXT_INPUT);
+				var event = new LEvent(LTextEvent.TEXT_INPUT);
 				event.keyCode = value;
 				LGlobal.inputTextField.dispatchEvent(event);
 			}
