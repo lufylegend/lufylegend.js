@@ -308,8 +308,8 @@ var LAjax = (function () {
 		getRequest : function (t, url, d, oncomplete, err) {
 			var s = this, k, data = "", a = "";
 			s.err = err;
-			let isLocalUrl = url.indexOf('http') < 0;
-			let ajax = s.getHttp(isLocalUrl);
+			var isLocalUrl = url.indexOf('http') < 0;
+			var ajax = s.getHttp(isLocalUrl);
 			if (!ajax) {
 				return;
 			}

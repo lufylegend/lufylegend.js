@@ -173,7 +173,7 @@ var LButtonSample1 = (function () {
 		s.backgroundSet = null;
 	};
 	LButtonSample1.prototype._onDraw = function (event) {
-		let s = event.currentTarget;
+		var s = event.currentTarget;
 		var co = s.getRootCoordinate(), labelText;
 		if (s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y) {
 			return;
@@ -255,7 +255,7 @@ var LButtonSample2 = (function () {
 		return a;
 	};
 	LButtonSample2.prototype._onDraw = function (event) {
-		let s = event.currentTarget;
+		var s = event.currentTarget;
 		var co = s.getRootCoordinate(), labelText;
 		if (s.backgroundSet == s.backgroundColor && s.widthSet == s.width && s.heightSet == s.height && s.xSet == co.x && s.ySet == co.y) {
 			return;

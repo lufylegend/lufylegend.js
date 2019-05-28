@@ -10,7 +10,7 @@ var WxLocalRequest = (function () {
             if (!this.onreadystatechange) {
                 return;
             }
-            let event = {
+            var event = {
                 currentTarget: {
                     readyState: 4,
                     status: 200,
@@ -32,13 +32,14 @@ var WxLocalRequest = (function () {
             this.url = url;
         },
 		send:function(body){
-            let option = {
+            var s = this;
+            var option = {
                 filePath: this.url, 
-                success: (event) => {
-                    this._onreadystatechange(event);
+                success: function(event) {
+                    s._onreadystatechange(event);
                 }, 
-                fail: (event) => {
-                    this._onerror(event);
+                fail: function(event) {
+                    s._onerror(event);
                 }
             };
             if (this.responseType === 'text') {

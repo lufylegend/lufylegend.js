@@ -85,12 +85,12 @@ var LMedia = (function () {
 	}
 	var p = {
 		onload : function () {
-			let s = this;
+			var s = this;
 			s.canplaythrough = s.canplaythrough || function() {
 				s.onload();
 			};
 			s.error = s.error || function(e) {
-				let event = new LEvent(LEvent.ERROR);
+				var event = new LEvent(LEvent.ERROR);
 				event.currentTarget = s;
 				event.target = e.target;
 				event.responseURL = e.target.src;
@@ -111,7 +111,11 @@ var LMedia = (function () {
 				s.data.removeEventListener('canplaythrough', s.canplaythrough);
 	
 				s.length = s.data.duration - (LGlobal.android && !LGlobal.wx ? 0.1 : 0);
+<<<<<<< HEAD
+				var e = new LEvent(LEvent.COMPLETE);
+=======
 				let e = new LEvent(LEvent.COMPLETE);
+>>>>>>> d02d35136b78484a1f5b1a509d3e9c2d8aacc0f2
 				e.currentTarget = s;
 				e.target = s.data;
 				s.dispatchEvent(e);
@@ -329,7 +333,7 @@ var LMedia = (function () {
 					s.data = s._wxDataList.shift();
 				}
 				if(s._wxDataList.length == 0){
-					let audio = new Audio();
+					var audio = new Audio();
 					audio.addEventListener('ended', function(){
 						s._onended(false);
 					}, false);
