@@ -499,12 +499,17 @@ function init (s, c, w, h, f, t) {
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
 		loop = function(){
 			var now = (new Date()).getTime();
+<<<<<<< HEAD
 			if(now - LGlobal._now > s * 2){
 				LGlobal._requestAFBaseTime = now - s;
 			}
 			LGlobal._now = now;
 			var check = now - LGlobal._requestAFBaseTime;	
 			if( check / s >= 0.99 ) {
+=======
+			var check = now - LGlobal._requestAFBaseTime;
+			if( check / s >= 1 ) {
+>>>>>>> d02d35136b78484a1f5b1a509d3e9c2d8aacc0f2
 				LGlobal._requestAFBaseTime += s;
 				LGlobal.onShow();
 			}
