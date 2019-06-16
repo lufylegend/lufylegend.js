@@ -128,7 +128,7 @@ var LInteractiveObject = (function() {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.removeMouseEvent(s, type, listener);
+					LMouseEventContainer.removeMouseEvent(s, type, listener, _this);
 					return;
 				}
 				length = s.mouseList.length;
@@ -138,7 +138,7 @@ var LInteractiveObject = (function() {
 					}
 					if (type == s.mouseList[i].type 
 						&& (!listener || s.mouseList[i].listener == listener)
-						&& (!_this || s.mouseList[i].objectIndex == _this.objectIndex)) {
+						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
 						return;
 					}

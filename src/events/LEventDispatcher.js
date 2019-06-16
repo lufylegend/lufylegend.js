@@ -95,7 +95,7 @@ var LEventDispatcher = (function () {
 				}
 				if (type == s._eventList[i].type 
 					&& (!listener || s._eventList[i].listener == listener)
-					&& (!_this || s._eventList[i].objectIndex == _this.objectIndex)) {
+					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
 					return;
 				}

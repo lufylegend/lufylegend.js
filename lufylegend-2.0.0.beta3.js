@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 2.0.0.beta2
+* @version 2.0.0.beta3
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -153,57 +153,58 @@ var LMouseEventContainer = (function () {
 				}
 			}
 		},
-		addEvent : function (o, list, f) {
+		addEvent : function (o, list, f, _this) {
 			var s = this;
-			list.push({container : o, listener : f});
+			list.push({container : o, listener : f, _this});
 		},
-		removeEvent : function (o, list, f) {
+		removeEvent : function (o, list, f, _this) {
 			var s = this, i, l;
 			for (i = 0, l = list.length; i < l; i++) {
-				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)) {
+				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)
+				&& (!_this || !list[i]._this || list[i]._this.objectIndex == _this.objectIndex)) {
 					list.splice(i, 1);
 					break;
 				}
 			}
 		},
-		addMouseDownEvent : function (o, f) {
+		addMouseDownEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseDownContainer, f);
+			s.addEvent(o, s.mouseDownContainer, f, _this);
 		},
-		addMouseUpEvent : function (o, f) {
+		addMouseUpEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseUpContainer, f);
+			s.addEvent(o, s.mouseUpContainer, f, _this);
 		},
-		addMouseMoveEvent : function (o, f) {
+		addMouseMoveEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseMoveContainer, f);
+			s.addEvent(o, s.mouseMoveContainer, f, _this);
 		},
-		addMouseOverEvent : function (o, f) {
+		addMouseOverEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseOverContainer, f);
+			s.addEvent(o, s.mouseOverContainer, f, _this);
 		},
-		addMouseOutEvent : function (o, f) {
+		addMouseOutEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseOutContainer, f);
+			s.addEvent(o, s.mouseOutContainer, f, _this);
 		},
-		addMouseDblEvent : function (o, f) {
+		addMouseDblEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseDblContainer, f);
+			s.addEvent(o, s.mouseDblContainer, f, _this);
 		},
-		addMouseEvent : function (o, t, f) {
+		addMouseEvent : function (o, t, f, _this) {
 			var s = this;
-			if (t == LMouseEvent.MOUSE_DOWN) {
-				s.addMouseDownEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_UP) {
-				s.addMouseUpEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_OVER) {
-				s.addMouseOverEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_OUT) {
-				s.addMouseOutEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				s.addMouseMoveEvent(o, f);
+			if (t === LMouseEvent.MOUSE_DOWN) {
+				s.addMouseDownEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_UP) {
+				s.addMouseUpEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_OVER) {
+				s.addMouseOverEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_OUT) {
+				s.addMouseOutEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_MOVE) {
+				s.addMouseMoveEvent(o, f, _this);
 			} else {
-				s.addMouseDblEvent(o, f);
+				s.addMouseDblEvent(o, f, _this);
 			}
 		},
 		hasEventListener : function(o, t, f){
@@ -228,44 +229,44 @@ var LMouseEventContainer = (function () {
 			}
 			return false;
 		},
-		removeMouseDownEvent : function (o, f) {
+		removeMouseDownEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseDownContainer, f);
+			s.removeEvent(o, s.mouseDownContainer, f, _this);
 		},
-		removeMouseUpEvent : function (o, f) {
+		removeMouseUpEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseUpContainer, f);
+			s.removeEvent(o, s.mouseUpContainer, f, _this);
 		},
-		removeMouseMoveEvent : function (o, f) {
+		removeMouseMoveEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseMoveContainer, f);
+			s.removeEvent(o, s.mouseMoveContainer, f, _this);
 		},
-		removeMouseOverEvent : function (o, f) {
+		removeMouseOverEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseOverContainer, f);
+			s.removeEvent(o, s.mouseOverContainer, f, _this);
 		},
-		removeMouseOutEvent : function (o, f) {
+		removeMouseOutEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseOutContainer, f);
+			s.removeEvent(o, s.mouseOutContainer, f, _this);
 		},
-		removeMouseDblEvent : function (o, f) {
+		removeMouseDblEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseDblContainer, f);
+			s.removeEvent(o, s.mouseDblContainer, f, _this);
 		},
-		removeMouseEvent : function (o, t, f) {
+		removeMouseEvent : function (o, t, f, _this) {
 			var s = this;
 			if (t == LMouseEvent.MOUSE_DOWN) {
-				s.removeMouseDownEvent(o, f);
+				s.removeMouseDownEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_UP) {
-				s.removeMouseUpEvent(o, f);
+				s.removeMouseUpEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_OVER) {
-				s.removeMouseOverEvent(o, f);
+				s.removeMouseOverEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_OUT) {
-				s.removeMouseOutEvent(o, f);
+				s.removeMouseOutEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				s.removeMouseMoveEvent(o, f);
+				s.removeMouseMoveEvent(o, f, _this);
 			} else {
-				s.removeMouseDblEvent(o, f);
+				s.removeMouseDblEvent(o, f, _this);
 			}
 		},
 		dispatchMouseEvent : function (event, type) {
@@ -331,7 +332,7 @@ var LMouseEventContainer = (function () {
 				event.event_type = type;
 				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
 				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
-				o.listener(event, o.sp);
+				o.listener.call(o._this ? o._this : o, event, o.sp);
 			}
 		},
 		dispatchEvent : function (event, list, type) {
@@ -358,7 +359,7 @@ var LMouseEventContainer = (function () {
 					if (type != LMouseEvent.MOUSE_UP) {
 						sp.ll_mousein = true;
 					}
-					st.push({sp : sp, co : co, listener : list[i].listener});
+					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
 				} else {
 					if (type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER) {
 						continue;
@@ -367,7 +368,7 @@ var LMouseEventContainer = (function () {
 						continue;
 					}
 					sp.ll_mousein = false;
-					st.push({sp : sp, co : co, listener : list[i].listener});
+					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
 				}
 			}
 			if (st.length == 0) {
@@ -2092,17 +2093,19 @@ var LEventDispatcher = (function () {
 		s._eventList = new Array();
 	}
 	var p = {
-		addEventListener : function (type, listener) {
-			this._eventList.push({listener : listener, type : type});
+		addEventListener : function (type, listener, _this) {
+			this._eventList.push({listener : listener, type : type, _this: _this});
 		},
-		removeEventListener : function (type, listener) {
+		removeEventListener : function (type, listener, _this) {
 			var s = this, i, length;
 			length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
-				if (type == s._eventList[i].type && (!listener || s._eventList[i].listener == listener)) {
+				if (type == s._eventList[i].type 
+					&& (!listener || s._eventList[i].listener == listener)
+					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
 					return;
 				}
@@ -2112,31 +2115,34 @@ var LEventDispatcher = (function () {
 			this._eventList = [];
 		},
 		dispatchEvent : function (event) {
-			var s = this, i, length = s._eventList.length, ctype = (typeof event == "string") ? event : event.eventType;
-			for (i = 0; i < length; i++) {
-				if (!s._eventList[i]) {
+			var length = this._eventList.length;
+			var ctype = (typeof event === 'string') ? event : event.eventType;
+			for (var i = 0; i < length; i++) {
+				var child = this._eventList[i];
+				if (!child) {
 					continue;
 				}
-				if (ctype == s._eventList[i].type) {
-					if (typeof event == "string") {
-						s.currentTarget = s.target = s;
-						s.eventType = s.event_type = ctype;
-						s._eventList[i].listener(s);
-						delete s.currentTarget;
-						delete s.target;
-						delete s.eventType;
-					}else{
+				if (ctype === this._eventList[i].type) {
+					if (typeof event === 'string') {
+						child.listener.call(child._this ? child._this : this, {
+							currentTarget: this,
+							target: this,
+							eventType: ctype,
+							event_type: ctype
+						});
+					} else {
 						if (!event.target) {
-							event.target = s;
+							event.target = this;
 						}
 						if (!event.currentTarget) {
 							event.currentTarget = event.target;
 						}
 						event._ll_preventDefault = false;
-						s._eventList[i].listener(event);
+						child.listener.call(child._this ? child._this : this, event);
 					}
 				}
 			}
+			return false;
 		},
 		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
@@ -2506,29 +2512,31 @@ var LInteractiveObject = (function() {
 		s.mouseList = new Array();
 	}
 	var p = {
-		addEventListener : function(type, listener) {
+		addEventListener : function(type, listener, _this) {
 			var s = this;
-			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
-				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.addMouseEvent(s, type, listener);
+			if (type.indexOf('mouse') >= 0 || type.indexOf('touch') >= 0 || type === LMouseEvent.DOUBLE_CLICK) {
+				if (LMouseEventContainer.container[type] || ((type === LMouseEvent.MOUSE_OVER || type === LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
+					LMouseEventContainer.addMouseEvent(s, type, listener, _this);
 					return;
 				}
 				s.mouseList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			} else {
 				s._eventList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			}
 		},
-		removeEventListener : function(type, listener) {
+		removeEventListener : function(type, listener, _this) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.removeMouseEvent(s, type, listener);
+					LMouseEventContainer.removeMouseEvent(s, type, listener, _this);
 					return;
 				}
 				length = s.mouseList.length;
@@ -2536,7 +2544,9 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type && s.mouseList[i].listener == listener) {
+					if (type == s.mouseList[i].type 
+						&& (!listener || s.mouseList[i].listener == listener)
+						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
 						return;
 					}
@@ -5860,22 +5870,8 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
-					j = 0, k = 0, m = 0;
-					for (i = 0, l = s.text.length; i < l; i++) {
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i, 1));
-						if (enter) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-						j = c.measureText(s.text.substr(k, i + 1 - k)).width;
-						if (s.wordWrap && j + c.measureText(s.text.substr(i + 1, 1)).width > s.width) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-					}
-					s.height = (m + 1) * s.wordHeight;
+					s._createCanvas();
+					s._ll_show(s._context);
 				}
 				return s.height;
 			}
@@ -7964,3 +7960,1670 @@ var FPS = (function () {
 	};
 	return FPS;
 })();
+var LQuadTree = (function() {
+	function LQuadTree(rect) {
+		var s = this;
+		LExtends (s, LObject, []);
+		s.q1 = null;
+		s.q2 = null;
+		s.q3 = null;
+		s.q4 = null;
+		s.parent = null;
+		s.data = [];
+		s.rect = rect;
+		s.root = s;
+	}
+	var p = {
+		createChildren : function(deep) {
+			if (deep == 0) {
+				return;
+			}
+			var s = this;
+			var hw = s.rect.width / 2, hh = s.rect.height / 2;
+			s.q1 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y, hw, hh));
+			s.q2 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y + hh, hw, hh));
+			s.q3 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y + hh, hw, hh));
+			s.q4 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y, hw, hh));
+			s.q1.parent = s.q2.parent = s.q3.parent = s.q4.parent = s;
+			s.q1.root = s.q2.root = s.q3.root = s.q4.root = s.root;
+			s.q1.createChildren(deep - 1);
+			s.q2.createChildren(deep - 1);
+			s.q3.createChildren(deep - 1);
+			s.q4.createChildren(deep - 1);
+		},
+		hasChildren : function() {
+			var s = this;
+			return s.q1 && s.q2 && s.q3 && s.q4;
+		},
+		clear : function() {
+			var s = this;
+			if (s.hasChildren()) {
+				return s.q1.clear() || s.q2.clear() || s.q3.clear() || s.q4.clear();
+			} else {
+				s.q1 = null;
+				s.q2 = null;
+				s.q3 = null;
+				s.q4 = null;
+				s.parent = null;
+				s.data = [];
+				return s;
+			}
+		},
+		add : function(v, x, y) {
+			var s = this;
+			if (!s.isIn(x, y)) {
+				return null;
+			}
+			if (s.hasChildren()) {
+				return s.q1.add(v, x, y) || s.q2.add(v, x, y) || s.q3.add(v, x, y) || s.q4.add(v, x, y);
+			} else {
+				s.data.push(v);
+				return s;
+			}
+		},
+		remove : function(v, x, y) {
+			var s = this;
+			if (!s.isIn(x, y)) {
+				return null;
+			}
+			if (s.hasChildren()) {
+				return s.q1.remove(v, x, y) || s.q2.remove(v, x, y) || s.q3.remove(v, x, y) || s.q4.remove(v, x, y);
+			} else {
+				var index = s.data.indexOf(v);
+				if (index != -1) {
+					s.data.splice(index, 1);
+					return s;
+				} else {
+					return null;
+				}
+			}
+		},
+		isIn : function(x, y) {
+			var s = this;
+			return ( typeof x == UNDEFINED || (x >= s.rect.x && x < s.rect.right)) && ( typeof y == UNDEFINED || (y >= s.rect.y && y < s.rect.bottom));
+		},
+		getDataInRect : function(rect) {
+			var s = this;
+			if (!s.rect.intersects(rect)) {
+				return [];
+			}
+			var r = s.data.concat();
+			if (s.hasChildren()) {
+				r.push.apply(r, s.q1.getDataInRect(rect));
+				r.push.apply(r, s.q2.getDataInRect(rect));
+				r.push.apply(r, s.q3.getDataInRect(rect));
+				r.push.apply(r, s.q4.getDataInRect(rect));
+			}
+			return r;
+		}
+	};
+	for (var k in p) {
+		LQuadTree.prototype[k] = p[k];
+	}
+	return LQuadTree;
+})();
+var LoadingSample1 = (function() {
+	function LoadingSample1(step, b, c) {
+		base(this, LSprite, []);
+		var s = this;
+		s.numberList = new Array([1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0], [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1]);
+		s.backgroundColor = b == null ? "#000000" : b;
+		s.color = c == null ? "#ffffff" : c;
+		s.progress = 0;
+		s.step = step == null ? LGlobal.width * 0.5 / 15 : step;
+		s.back = new LSprite();
+		s.addChild(s.back);
+		s.num = new LSprite();
+		s.addChild(s.num);
+		s.num.mask = new LSprite();
+		s.screenX = (LGlobal.width - s.step * 15) / 2;
+		s.screenY = (LGlobal.height - s.step * 5) / 2;
+		s.num.x = s.screenX;
+		s.num.y = s.screenY;
+		s.setProgress(s.progress);
+	}
+	LoadingSample1.prototype.setProgress = function(value) {
+		var s = this, c = LGlobal.canvas;
+		value = Math.floor(value);
+		var num_0 = "", num_1, num_2, i;
+		var s_x = s.step;
+		if (value >= 100) {
+			num_0 = s.getNumber(1);
+			num_1 = s.getNumber(0);
+			num_2 = s.getNumber(0);
+			s_x = s.step * 3;
+		} else if (value >= 10) {
+			num_1 = s.getNumber(Math.floor(value / 10));
+			num_2 = s.getNumber(value % 10);
+		} else {
+			num_1 = s.getNumber(0);
+			num_2 = s.getNumber(value);
+		}
+		s.back.graphics.clear();
+		s.back.graphics.add(function() {
+			c.beginPath();
+			c.fillStyle = s.backgroundColor;
+			c.fillRect(0, 0, LGlobal.width, LGlobal.height);
+			c.closePath();
+			c.fillStyle = s.color;
+			if (value >= 100) {
+				for ( i = 0; i < num_0.length; i++) {
+					if (num_0[i] == 0) {
+						continue;
+					}
+					c.fillRect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+				}
+			}
+			for ( i = 0; i < num_1.length; i++) {
+				if (num_1[i] == 0) {
+					continue;
+				}
+				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+			for ( i = 0; i < num_2.length; i++) {
+				if (num_2[i] == 0) {
+					continue;
+				}
+				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+			c.moveTo(s.screenX + s_x + s.step * 9.7, s.screenY);
+			c.lineTo(s.screenX + s_x + s.step * 10.5, s.screenY);
+			c.lineTo(s.screenX + s_x + s.step * 9.3, s.screenY + s.step * 5);
+			c.lineTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step * 5);
+			c.lineTo(s.screenX + s_x + s.step * 9.7, s.screenY);
+			c.fill();
+			c.moveTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step);
+			c.arc(s.screenX + s_x + s.step * 8.5, s.screenY + s.step, s.step * 0.6, 0, 360 + Math.PI / 180);
+			c.moveTo(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4);
+			c.arc(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4, s.step * 0.6, 0, 360 + Math.PI / 180);
+			c.fill();
+		});
+		s.num.mask.graphics.clear();
+		s.num.mask.graphics.add(function() {
+			if (value >= 100) {
+				for ( i = 0; i < num_0.length; i++) {
+					if (num_0[i] == 0) {
+						continue;
+					}
+					c.rect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+				}
+			}
+			for (var i = 0; i < num_1.length; i++) {
+				if (num_1[i] == 0) {
+					continue;
+				}
+				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+			for (var i = 0; i < num_2.length; i++) {
+				if (num_2[i] == 0) {
+					continue;
+				}
+				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
+			}
+		});
+		c.fillStyle = LGlobal._create_loading_color();
+		s.num.graphics.clear();
+		s.num.graphics.drawRect(1, c.fillStyle, [0, s.step * 5 * (100 - value) * 0.01, LGlobal.width, LGlobal.height], true, c.fillStyle);
+	};
+	LoadingSample1.prototype.getNumber = function(value) {
+		return this.numberList[value];
+	};
+	return LoadingSample1;
+})();
+function LoadingSample2(size,background,color){
+	base(this,LSprite,[]);
+	var s = this,c = LGlobal.canvas,t = "Loading...",l;
+	s.backgroundColor = background==null?"#000000":background;
+	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
+	if(color==null)color = LGlobal._create_loading_color();
+	s.color = color;
+	s.progress = 0;
+	s.size = size==null?LGlobal.height*0.2:size;
+	l = new LTextField();
+	l.text = t;
+	l.size = s.size;
+	l.color = "#ffffff";
+	l.x = (LGlobal.width - l.getWidth())/2;
+	l.y = (LGlobal.height - s.size)/2;
+	s.addChild(l);
+	s.backLabel = l;
+	l = new LTextField();
+	l.text = "***%";
+	l.size = s.size*0.3;
+	l.color = color;
+	l.x = (LGlobal.width - l.getWidth())/2;
+	l.y = (LGlobal.height - s.size)/2 - s.size*0.4;
+	s.addChild(l);
+	s.progressLabel = l;
+	l = new LTextField();
+	l.text = t;
+	l.size = s.size;
+	l.color = s.color;
+	l.x = (LGlobal.width - l.getWidth())/2;
+	l.y = (LGlobal.height - s.size)/2;
+	l.mask = new LGraphics();
+	s.screenX = l.x;
+	s.screenY = l.y;
+	s.screenWidth = l.getWidth();
+	s.addChild(l);
+	s.showLabel=l;
+	c.shadowOffsetX = 2;  
+	c.shadowOffsetY = 2;
+	c.shadowColor = "blue"; 
+	s.setProgress(s.progress);
+}
+LoadingSample2.prototype.setProgress = function (value){
+	var s = this,c = LGlobal.canvas;
+	s.progressLabel.text = value + "%";
+	s.showLabel.mask.clear();
+	s.showLabel.mask.drawRect(0,"#000000",[s.screenX,0,s.screenWidth*value*0.01,LGlobal.height]);
+	if(value >= 100){
+		c.shadowOffsetX = 0;
+		c.shadowOffsetY = 0;
+	}
+};
+function LoadingSample3(height,background,color){
+	base(this,LSprite,[]);
+	var s = this,c = LGlobal.canvas;
+	s.backgroundColor = background==null?"#000000":background;
+	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
+	if(color==null)color = LGlobal._create_loading_color();
+	s.color = color;
+	s.progress = 0;
+	s.screenWidth = LGlobal.width*0.75;
+	s.screenHeight = height==null?LGlobal.height*0.1:height;
+	if(s.screenHeight > 5)s.screenHeight=5;
+	s.screenX = (LGlobal.width - s.screenWidth)/2;
+	s.screenY = (LGlobal.height - s.screenHeight)/2;
+	s.back = new LSprite();
+	s.addChild(s.back);
+	s.label = new LTextField();
+	s.label.color="#ffffff";
+	s.label.weight="bolder";
+	s.label.size = s.screenHeight * 2;
+	s.label.x = s.screenX + (s.screenWidth - s.label.getWidth())*0.5;
+	s.label.y = s.screenY - s.screenHeight * 4;
+	s.addChild(s.label);
+	s.star = new Array();
+	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
+	s.setProgress(s.progress);
+}
+LoadingSample3.prototype.onframe = function(s){
+	var i,star,l;
+	if(s.progress>=100){
+		if(s.star.length > 0){
+			for(i=0,l=s.star.length;i<l;i++){
+				s.removeChild(s.star[i]);
+			}
+			s.star.length = 0;
+		}
+		return;
+	}
+	for(i=0,l=s.star.length;i<l;i++){
+		star = s.star[i];
+		star.alpha -= 0.1;
+		star.x += star.speedx;
+		star.y += star.speedy;
+		if(star.alpha <= 0){
+			s.star.splice(i,1);
+			s.removeChild(star);
+			i--,l--;
+		}
+	}
+	if(s.star.length < 10)s.addStar();
+};
+LoadingSample3.prototype.addStar = function(){
+	var s = this,c = LGlobal.canvas;
+	var star = new LSprite();
+	var step = 1 + Math.floor(Math.random()*4);
+	star.graphics.add(function (){
+		c.beginPath();
+		c.fillStyle = "#ffffff";
+		c.lineTo(step*2,step);
+		c.lineTo(step*4,0);
+		c.lineTo(step*3,step*2);
+		c.lineTo(step*4,step*4);
+		c.lineTo(step*2,step*3);
+		c.lineTo(0,step*4);
+		c.lineTo(step,step*2);
+		c.lineTo(0,0);
+		c.fill();
+	});
+	star.x = s.screenX + s.screenWidth*s.progress*0.01;
+	star.y=s.screenY;
+	star.speedx = 4 - 8*Math.random();
+	star.speedy = 4 - 8*Math.random();
+	s.star.push(star);
+	s.addChild(star);
+};
+LoadingSample3.prototype.setProgress = function (value){
+	var s = this,c = LGlobal.canvas;
+	if(value > 100)value=100;
+	s.progress = value;
+	s.back.graphics.clear();
+	s.back.graphics.add(function (){
+		c.beginPath();
+		c.fillStyle = "#00FFFF";
+		c.rect(s.screenX - 3, s.screenY - 3, s.screenWidth + 6, s.screenHeight + 6);
+		c.fill();
+		c.beginPath();
+		c.fillStyle = "#990033";
+		c.rect(s.screenX, s.screenY, s.screenWidth, s.screenHeight);
+		c.fill();
+		c.beginPath();
+		c.fillStyle = s.color;
+		c.rect(s.screenX, s.screenY, s.screenWidth*value*0.01, s.screenHeight);
+		c.fill();
+	});
+	s.label.text = value + "%";
+};
+function LoadingSample4(height,background,color){
+	base(this,LSprite,[]);
+	var s = this,c = LGlobal.canvas;
+	s.backgroundColor = background==null?"#000000":background;
+	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
+	if(color==null)color = "#FFFFFF";
+	s.arc = new LSprite();
+	s.arc.x = LGlobal.width*0.5;
+	s.arc.y = LGlobal.height*0.5;
+	s.addChild(s.arc);
+	for(var i=0;i<360;i++){
+		s.arc.graphics.drawArc(1+i/36,color,[0,0,50,(2*Math.PI/360)*i,(2*Math.PI/360)*(i+2)]);
+	}
+	s.progress = 0;
+	s.label = new LTextField();
+	s.label.color=color;
+	s.label.weight="bolder";
+	s.label.size = 18;
+	s.label.x = LGlobal.width*0.5;
+	s.label.y = LGlobal.height*0.5-s.label.getHeight()*0.5;
+	s.addChild(s.label);
+	var shadow = new LDropShadowFilter(0,0,"#FFFFFF",30);
+	s.arc.filters = [shadow];
+	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
+	s.setProgress(s.progress);
+}
+LoadingSample4.prototype.onframe = function(event){
+	event.target.arc.rotate += 20;
+};
+LoadingSample4.prototype.setProgress = function (value){
+	var s = this;
+	if(value > 100)value=100;
+	s.progress = value;
+	s.label.text = value + "%";
+	s.label.x = LGlobal.width*0.5-s.label.getWidth()*0.5;
+};
+function LoadingSample5(height,background,color){
+	base(this,LSprite,[]);
+	var s = this,c = LGlobal.canvas;
+	s.backgroundColor = background==null?"#000000":background;
+	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
+	if(color==null)color = "#FFFFFF";
+	s.arc = new LSprite();
+	s.arc.x = LGlobal.width*0.5;
+	s.arc.y = LGlobal.height*0.5;
+	s.addChild(s.arc);
+	var r = 50;
+	for(var i=0;i<360;i+=30){
+		var child = new LSprite();
+		child.graphics.drawArc(0,color,[r,0,7,0,2*Math.PI],true,color);
+		child.rotate = i;
+		child.alpha = 0.1+i/360;
+		s.arc.addChild(child);
+	}
+	s.index = 0;
+	s.max = 3;
+	s.progress = 0;
+	s.label = new LTextField();
+	s.label.color="#FFFFFF";
+	s.label.weight="bolder";
+	s.label.size = 18;
+	s.label.x = LGlobal.width*0.5;
+	s.label.y = LGlobal.height*0.5-s.label.getHeight()*0.5;
+	s.addChild(s.label);
+	var shadow = new LDropShadowFilter(0,0,"#FFFFFF",30);
+	s.arc.filters = [shadow];
+	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
+	s.setProgress(s.progress);
+}
+LoadingSample5.prototype.onframe = function(event){
+	var s = event.target;
+	if(s.index++ < s.max)return;
+	s.index = 0;
+	s.arc.rotate += 30;
+};
+LoadingSample5.prototype.setProgress = function (value){
+	var s = this;
+	if(value > 100)value=100;
+	s.progress = value;
+	s.label.text = value + "%";
+	s.label.x = LGlobal.width*0.5-s.label.getWidth()*0.5;
+};
+function LoadingSample6(r,color,filterColor){
+	var self = this;
+	base(self,LSprite,[]);
+	self.progress = 0;
+	self.step = 0;
+	self.holeR = r || 10;
+	self.holeAmount = 5;
+	self.holesx = 20;
+	self.loadingBarWidth = self.holeR*2*self.holeAmount+self.holesx*(self.holeAmount-1);
+	self.loadingBarHeight = self.holeR*2;
+	self.progressColor = color || "#2187e7";
+	self.filterColor = filterColor || "#00c6ff";
+	self.backLayer = new LSprite();
+	self.backLayer.graphics.drawRect(0,"",[0,0,LGlobal.width,LGlobal.height],true,"#161616");
+	self.addChild(self.backLayer);
+	self.holeLayer = new LSprite();
+	self.holeLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
+	self.holeLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
+	self.addChild(self.holeLayer);
+	self.progressLayer = new LSprite();
+	self.progressLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
+	self.progressLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
+	self.addChild(self.progressLayer);
+	self._addHole();
+}
+LoadingSample6.prototype._addHole = function(){
+	var self = this;
+	var amount=self.holeAmount,sx=self.holeR*2+self.holesx,r=self.holeR;
+	for(var i=0; i<amount; i++){
+		var holeObj = new LSprite();
+		holeObj.x = i*sx;
+		holeObj.graphics.drawArc(1,"#111",[0,0,r,0,2*Math.PI],true,"#000");
+		holeObj.graphics.drawArc(1,"#333",[0,0,r,1.7*Math.PI,0.7*Math.PI],false);
+		self.holeLayer.addChild(holeObj);
+	}
+};
+LoadingSample6.prototype.setProgress = function(value){
+	var self = this;
+	var sx=self.holeR*2+self.holesx,r=self.holeR;
+	self.progress = value/100;
+	var tweenList = new Array();
+	while(Math.floor(self.progress/0.2) > self.step){
+		var cw = r*2;
+		var ch = cw;
+		var grd = LGlobal.canvas.createLinearGradient(0,-ch*2,0,ch);
+		grd.addColorStop(0,"white");
+		grd.addColorStop(1,self.progressColor);
+		var po = new LSprite();
+		po.x = self.step*sx;
+		po.scaleX = 0;
+		po.scaleY = 0;
+		po.graphics.drawArc(0,"",[0,0,r,0,2*Math.PI],true,grd);
+		self.progressLayer.addChild(po);
+		tweenList.push(po);
+		self.step ++;
+	}
+	var completeFunc = function(o){
+		var circleObj = new LSprite();
+		circleObj.alpha = 0.9;
+		circleObj.x = o.x;
+		circleObj.graphics.drawArc(1,self.filterColor,[0,0,r,0,2*Math.PI],false);
+		self.progressLayer.addChild(circleObj);
+		var shadow = new LDropShadowFilter(0,5,self.filterColor,10);
+		circleObj.filters = [shadow];
+		LTweenLite.to(circleObj,0.5,{
+			scaleX: 1.7,
+			scaleY: 1.7,
+			alpha: 0,
+			onComplete:function(s){
+				s.parent.removeChild(s);
+			}
+		});
+	};
+	for(var i=0; i<tweenList.length; i++){
+		var o = tweenList[i];
+		LTweenLite.to(o,1,{
+			scaleX: 1,
+			scaleY: 1,
+			onComplete:completeFunc
+		});
+	}
+};
+function LoadingSample7(w,h,color){
+	var self = this;
+	base(self,LSprite,[]);
+	self.progress = 0;
+	self.step = 0;
+	self.holeW = w || 10;
+	self.holeH = h || 30;
+	self.holeAmount = 10;
+	self.holesx = 8;
+	self.loadingBarWidth = self.holeW*self.holeAmount+self.holesx*(self.holeAmount-1);
+	self.loadingBarHeight = self.holeH;
+	self.progressColor = color || "#2187e7";
+	self.backLayer = new LSprite();
+	self.backLayer.graphics.drawRect(0,"",[0,0,LGlobal.width,LGlobal.height],true,"#161616");
+	self.addChild(self.backLayer);
+	self.holeLayer = new LSprite();
+	self.holeLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
+	self.holeLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
+	self.addChild(self.holeLayer);
+	self.progressLayer = new LSprite();
+	self.progressLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
+	self.progressLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
+	self.addChild(self.progressLayer);
+	self._addHole();
+}
+LoadingSample7.prototype._addHole = function(){
+	var self = this;
+	var amount=self.holeAmount,sx=self.holeW+self.holesx,w=self.holeW,h=self.holeH;
+	for(var i=0; i<amount; i++){
+		var holeObj = new LSprite();
+		holeObj.x = i*sx;
+		holeObj.graphics.drawRect(1,"#333",[1,1,self.holeW,self.holeH],false);
+		holeObj.graphics.drawRect(1,"#111",[0,0,self.holeW,self.holeH],true,"#000");
+		self.holeLayer.addChild(holeObj);
+		var grd = LGlobal.canvas.createLinearGradient(0,-h,0,h);
+		grd.addColorStop(0,"white");
+		grd.addColorStop(1,self.progressColor);
+		var progressObj = new LSprite();
+		progressObj.alpha = 0;
+		progressObj.x = i*sx;
+		progressObj.graphics.drawRect(0,"",[0,0,self.holeW,self.holeH],true,grd);
+		self.progressLayer.addChild(progressObj);
+	}
+};
+LoadingSample7.prototype.setProgress = function(value){
+	var self = this;
+	self.progress = value/100;
+	if(Math.floor(self.progress/0.1) > self.step){
+		var n = Math.ceil(self.progress/0.1);
+		if(n > 10)n = 10;
+		for(var i=0; i<n; i++){
+			var sc = self.progressLayer.childList;
+			if(sc[i].alpha > 0)continue;
+			var o = self.progressLayer.childList[i];
+			LTweenLite.to(o,1,{
+				alpha: 1
+			});
+		}
+		self.step ++;
+	}
+};
+var LBox2d = (function() {
+	function LBox2d(gravity, doSleep, drawScale) {
+		var s = this;
+		Box2D.Dynamics.b2World.prototype.LAddController = Box2D.Dynamics.b2World.prototype.AddController;
+		Box2D.Dynamics.b2World.prototype.AddController = function(c) {
+			var l = {}, k;
+			for (k in c) {
+				l[k] = c[k];
+			}
+			if (LBox2d) {
+				LBox2d.m_controllerList = l;
+			}
+			return this.LAddController(c);
+		};
+		var i, j, b = Box2D, d, a = [b.Collision, b.Common, b.Common.Math, b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
+		for (i in a) {
+			for (j in a[i]) {
+				s[j] = a[i][j];
+			}
+		}
+		if ( typeof drawScale == UNDEFINED) {
+			drawScale = 30;
+		}
+		s.stop = false;
+		s.drawScale = 30;
+		s.selectedBody = null;
+		s.mouseJoint = null;
+		s.mousePVec = null;
+		s.contactListener = null;
+		if ( typeof gravity == UNDEFINED) {
+			gravity = new s.b2Vec2(0, 9.8);
+		} else {
+			gravity = new s.b2Vec2(gravity[0], gravity[1]);
+		}
+		if ( typeof doSleep == UNDEFINED) {
+			doSleep = true;
+		}
+		s.world = new s.b2World(gravity, doSleep);
+		s.removeList = new Array();
+		if (LGlobal.traceDebug) {
+			d = new s.b2DebugDraw();
+			d.SetSprite(LGlobal.canvas);
+			d.SetLineThickness(1);
+			d.SetFillAlpha(0.5);
+			d.SetAlpha(1);
+			d.SetDrawScale(s.drawScale);
+			d.SetFlags(s.b2DebugDraw.e_shapeBit | s.b2DebugDraw.e_jointBit);
+			s.world.SetDebugDraw(d);
+		}
+		LGlobal.destroy = true;
+	}
+	LBox2d.prototype = {
+		setEvent : function(t_v, f_v) {
+			var s = this;
+			if (t_v == LEvent.ENTER_FRAME) {
+				s.ll_enterFrame = f_v;
+				return;
+			}
+			if (!s.contactListener) {
+				s.contactListener = new s.b2ContactListener();
+				s.world.SetContactListener(s.contactListener);
+			}
+			switch (t_v) {
+				case LEvent.END_CONTACT:
+					s.contactListener.EndContact = f_v;
+					break;
+				case LEvent.PRE_SOLVE:
+					s.contactListener.PreSolve = f_v;
+					break;
+				case LEvent.POST_SOLVE:
+					s.contactListener.PostSolve = f_v;
+					break;
+				case LEvent.BEGIN_CONTACT:
+				default:
+					s.contactListener.BeginContact = f_v;
+			}
+		},
+		setWeldJoint : function(A, B) {
+			var s = this;
+			var j = new s.b2WeldJointDef();
+			j.Initialize(B, A, B.GetWorldCenter());
+			return s.world.CreateJoint(j);
+		},
+		setLineJoint : function(A, B, vec, t, m) {
+			var s = this;
+			var wa = new s.b2Vec2(vec[0], vec[1]);
+			var j = new s.b2LineJointDef();
+			j.Initialize(A, B, B.GetWorldCenter(), wa);
+			if (t == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerTranslation = t[0];
+				j.upperTranslation = t[1];
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorForce = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j);
+		},
+		setGearJoint : function(A, B, ra, r, p) {
+			var s = this;
+			var j = new s.b2GearJointDef();
+			j.joint1 = r;
+			j.joint2 = p;
+			j.bodyA = A;
+			j.bodyB = B;
+			j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
+			return s.world.CreateJoint(j);
+		},
+		setPrismaticJoint : function(A, B, vec, t, m) {
+			var s = this;
+			var wa = new s.b2Vec2(vec[0], vec[1]);
+			var j = new s.b2PrismaticJointDef();
+			j.Initialize(B, A, B.GetWorldCenter(), wa);
+			if (t == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerTranslation = t[0];
+				j.upperTranslation = t[1];
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorForce = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j);
+		},
+		setRevoluteJoint : function(A, B, a, m) {
+			var s = this;
+			var j = new s.b2RevoluteJointDef();
+			j.Initialize(A, B, B.GetWorldCenter());
+			if (a == null) {
+				j.enableLimit = false;
+			} else {
+				j.lowerAngle = a[0] * s.b2Settings.b2_pi / 180;
+				j.upperAngle = a[1] * s.b2Settings.b2_pi / 180;
+				j.enableLimit = true;
+			}
+			if (m == null) {
+				j.enableMotor = false;
+			} else {
+				j.maxMotorTorque = m[0];
+				j.motorSpeed = m[1];
+				j.enableMotor = true;
+			}
+			return s.world.CreateJoint(j);
+		},
+		setDistanceJoint : function(A, B) {
+			var s = this;
+			var j = new s.b2DistanceJointDef();
+			j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
+			return s.world.CreateJoint(j);
+		},
+		setPulleyJoint : function(A, B, vA, vB, ratio) {
+			var s = this;
+			var a1 = A.GetWorldCenter();
+			var a2 = B.GetWorldCenter();
+			var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
+			var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
+			var j = new s.b2PulleyJointDef();
+			j.Initialize(A, B, g1, g2, a1, a2, ratio);
+			j.maxLengthA = vA[2] / s.drawScale;
+			j.maxLengthB = vB[2] / s.drawScale;
+			return s.world.CreateJoint(j);
+		},
+		addCircle : function(r, cx, cy, t, d, f, e) {
+			var s = this;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = t;
+			s.fixDef = new s.b2FixtureDef;
+			s.fixDef.density = d;
+			s.fixDef.friction = f;
+			s.fixDef.restitution = e;
+			s.fixDef.shape = new s.b2CircleShape(r);
+			s.bodyDef.position.x = cx;
+			s.bodyDef.position.y = cy;
+			var shape = s.world.CreateBody(s.bodyDef);
+			shape.CreateFixture(s.fixDef);
+			return shape;
+		},
+		addPolygon : function(w, h, cx, cy, type, d, f, e) {
+			var s = this;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = type;
+			s.fixDef = new s.b2FixtureDef;
+			s.fixDef.density = d;
+			s.fixDef.friction = f;
+			s.fixDef.restitution = e;
+			s.fixDef.shape = new s.b2PolygonShape;
+			s.fixDef.shape.SetAsBox(w, h);
+			s.bodyDef.position.x = cx;
+			s.bodyDef.position.y = cy;
+			var shape = s.world.CreateBody(s.bodyDef);
+			shape.CreateFixture(s.fixDef);
+			return shape;
+		},
+		addVertices : function(vertices, type, d, f, e) {
+			var s = this, i, l;
+			s.bodyDef = new s.b2BodyDef;
+			s.bodyDef.type = type;
+			var shape = s.world.CreateBody(s.bodyDef);
+			for ( i = 0, l = vertices.length; i < l; i++) {
+				s.createShapeAsArray(shape, vertices[i], type, d, f, e);
+			}
+			return shape;
+		},
+		createShapeAsArray : function(c, vertices, type, d, f, e) {
+			var s = this;
+			var shape = new s.b2PolygonShape();
+			var sv = s.createVerticesArray(vertices);
+			shape.SetAsArray(sv, 0);
+			var def = new s.b2FixtureDef();
+			def.shape = shape;
+			def.density = d;
+			def.friction = f;
+			def.restitution = e;
+			c.CreateFixture(def);
+		},
+		createVerticesArray : function(a) {
+			var s = this, i, l;
+			var v = new Array();
+			if (a.length < 3) {
+				return v;
+			}
+			for ( i = 0, l = a.length; i < l; i++) {
+				v.push(new s.b2Vec2(a[i][0] / s.drawScale, a[i][1] / s.drawScale));
+			}
+			return v;
+		},
+		getBodyAtMouse : function(mouseX, mouseY) {
+			var s = this;
+			s.mousePVec = new s.b2Vec2(mouseX, mouseY);
+			var aabb = new s.b2AABB();
+			aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
+			aabb.upperBound.Set(mouseX + 0.001, mouseY + 0.001);
+			s.selectedBody = null;
+			s.world.QueryAABB(s.getBodyCallBack, aabb);
+			return s.selectedBody;
+		},
+		getBodyCallBack : function(fixture) {
+			var s = LGlobal.box2d;
+			if (fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
+				if (fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
+					s.selectedBody = fixture.GetBody();
+					return false;
+				}
+			}
+			return true;
+		},
+		ll_show : function() {
+			var s = this, k = null;
+			for (k in s.removeList) {
+				s.world.DestroyBody(s.removeList[k]);
+			}
+			s.removeList.splice(0, s.removeList.length);
+			if (s.stop) {
+				return;
+			}
+			if (s.ll_enterFrame) {
+				s.ll_enterFrame({
+					target : s
+				});
+			}
+			s.world.Step(1 / 30, 10, 10);
+			s.world.ClearForces();
+			if (LGlobal.traceDebug) {
+				s.world.DrawDebugData();
+			}
+		},
+		synchronous : function() {
+			var s = this;
+			var parent = null, child, position = null, cx = 0, cy = 0, currentBody, joint;
+			for ( currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
+				child = currentBody.GetUserData();
+				if (child) {
+					if (position == null) {
+						parent = child.parent;
+						cx = currentBody.GetPosition().x;
+						cy = currentBody.GetPosition().y;
+					}
+					currentBody.SetPosition(new s.b2Vec2((child.x + child.rotatex + parent.x) / s.drawScale, (child.y + child.rotatey + parent.y) / s.drawScale));
+					if (position == null) {
+						position = {
+							x : (currentBody.GetPosition().x - cx),
+							y : (currentBody.GetPosition().y - cy)
+						};
+					}
+				}
+			}
+			for ( joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
+				if (joint.m_groundAnchor1) {
+					joint.m_groundAnchor1.x += position.x;
+					joint.m_groundAnchor1.y += position.y;
+				}
+				if (joint.m_groundAnchor2) {
+					joint.m_groundAnchor2.x += position.x;
+					joint.m_groundAnchor2.y += position.y;
+				}
+			}
+			if (LBox2d.m_controllerList && s.world.m_controllerList && parent) {
+				LGlobal.box2d.world.m_controllerList.offset = LBox2d.m_controllerList.offset - parent.y / LGlobal.box2d.drawScale;
+			}
+		}
+	};
+	return LBox2d;
+})();
+LSprite.prototype.setBodyMouseJoint = function(value) {
+	var s = this;
+	if (!s.box2dBody) {
+		return;
+	}
+	s.box2dBody.mouseJoint = value;
+};
+LSprite.prototype.clearBody = function(value) {
+	var s = this;
+	if (!s.box2dBody) {
+		return;
+	}
+	LGlobal.box2d.removeList.push(s.box2dBody);
+	s.box2dBody = null;
+};
+LSprite.prototype.addBodyCircle = function(radius, cx, cy, type, density, friction, restitution) {
+	var s = this;
+	s.rotatex = radius;
+	s.rotatey = radius;
+	s.box2dBody = LGlobal.box2d.addCircle(radius / LGlobal.box2d.drawScale, (s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
+	s.box2dBody.SetUserData(s);
+};
+LSprite.prototype.addBodyPolygon = function(w, h, type, density, friction, restitution) {
+	var s = this;
+	s.rotatex = w / 2;
+	s.rotatey = h / 2;
+	s.box2dBody = LGlobal.box2d.addPolygon(w * 0.5 / LGlobal.box2d.drawScale, h * 0.5 / LGlobal.box2d.drawScale, s.x / LGlobal.box2d.drawScale, s.y / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
+	s.box2dBody.SetUserData(s);
+};
+LSprite.prototype.addBodyVertices = function(vertices, cx, cy, type, density, friction, restitution) {
+	var s = this;
+	s.rotatex = 0;
+	s.rotatey = 0;
+	s.box2dBody = LGlobal.box2d.addVertices(vertices, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density, friction, restitution);
+	s.box2dBody.SetUserData(s);
+	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale));
+};
+LGlobal.mouseJoint_start = function(eve) {
+	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint || LGlobal.box2d.stop) {
+		return;
+	}
+	var mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale, b = LGlobal.box2d.getBodyAtMouse(mX, mY);
+	if (b && b.mouseJoint) {
+		var m = new LGlobal.box2d.b2MouseJointDef();
+		m.bodyA = LGlobal.box2d.world.GetGroundBody();
+		m.bodyB = b;
+		m.target.Set(mX, mY);
+		m.collideConnected = true;
+		m.maxForce = 300000.0 * b.GetMass();
+		LGlobal.box2d.mouseJoint = LGlobal.box2d.world.CreateJoint(m);
+		b.SetAwake(true);
+	};
+};
+LGlobal.mouseJoint_move = function(eve) {
+	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint) {
+		return;
+	}
+	mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale;
+	LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
+};
+LGlobal.mouseJoint_end = function() {
+	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
+		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
+		LGlobal.box2d.mouseJoint = null;
+	}
+}; 
+var LTransition = (function() {
+	function LTransition(displayObject, transObj) {
+		this.child = displayObject;
+		this.trans = transObj;
+	}
+	LTransition.prototype = {
+		startTransition : function() {
+			var self = this;
+			switch(self.trans.type) {
+				case LTransition.Blinds:
+					self.blinds();
+					break;
+				case LTransition.Fade:
+					self.fade();
+					break;
+				case LTransition.Fly:
+					self.fly();
+					break;
+				case LTransition.Iris:
+					self.iris();
+					break;
+				case LTransition.Squeeze:
+					self.squeeze();
+					break;
+				case LTransition.Wipe:
+					self.wipe();
+					break;
+				case LTransition.Zoom:
+					self.zoom();
+					break;
+				case LTransition.PixelDissolve:
+					self.pixelDissolve();
+					break;
+				case LTransition.Curtain:
+					self.curtain();
+					break;
+				default:
+					throw ("the type is not exists.");
+			}
+		},
+		blindsComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.blindsUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		blindsUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.dimension) {
+				g.add(function() {
+					c.save();
+					for (var i = 0; i < self.trans.numStrips; i++) {
+						c.rect(i * self.maxSize, 0, self.blindsSize, self.child.getHeight());
+					}
+					c.restore();
+				});
+			} else {
+				g.add(function() {
+					c.save();
+					for (var i = 0; i < self.trans.numStrips; i++) {
+						c.rect(0, 0 + i * self.maxSize, self.child.getWidth(), self.blindsSize);
+					}
+					c.restore();
+				});
+			}
+		},
+		blindsUpdate : function(self) {
+			self.blindsUpdateRun();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		blinds : function() {
+			var self = this;
+			if (!self.trans.numStrips)
+				self.trans.numStrips = 1;
+			self.blindsSize = 0;
+			if (self.trans.dimension) {
+				self.maxSize = self.child.getWidth() / self.trans.numStrips >> 0;
+			} else {
+				self.maxSize = self.child.getHeight() / self.trans.numStrips >> 0;
+			}
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.blindsSize = self.maxSize;
+				toSize = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				blindsSize : toSize,
+				onComplete : self.blindsComplete,
+				onUpdate : self.blindsUpdate,
+				ease : self.trans.easing
+			});
+		},
+		fadeComplete : function(self) {
+			self.child.alpha = self.alpha;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		fadeUpdate : function(self) {
+			self.child.alpha = self.alpha;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		fade : function() {
+			var self = this;
+			var toAlpha = 1;
+			self.alpha = 0;
+			if (self.trans.direction == LTransition.OUT) {
+				self.alpha = 1;
+				toAlpha = 0;
+			}
+			self.child.alpha = self.alpha;
+			LTweenLite.to(self, self.trans.duration, {
+				alpha : toAlpha,
+				onComplete : self.fadeComplete,
+				onUpdate : self.fadeUpdate,
+				ease : self.trans.easing
+			});
+		},
+		flyComplete : function(self) {
+			self.child.x = self.x;
+			self.child.y = self.y;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		flyUpdate : function(self) {
+			self.child.x = self.x;
+			self.child.y = self.y;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		fly : function() {
+			var self = this;
+			var toX = self.child.x;
+			var toY = self.child.y;
+			switch(self.trans.startPoint) {
+				case 1:
+					self.x = -self.child.getWidth();
+					self.y = -self.child.getHeight();
+					break;
+				case 2:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = -self.child.getHeight();
+					break;
+				case 3:
+					self.x = LGlobal.width;
+					self.y = -self.child.getHeight();
+					break;
+				case 4:
+					self.x = -self.child.getWidth();
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+					break;
+				case 6:
+					self.x = LGlobal.width;
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+					break;
+				case 7:
+					self.x = -self.child.getWidth();
+					self.y = LGlobal.height;
+					break;
+				case 8:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = LGlobal.height;
+					break;
+				case 9:
+					self.x = LGlobal.width;
+					self.y = LGlobal.height;
+					break;
+				case 5:
+				default:
+					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
+					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
+			}
+			if (self.trans.direction == LTransition.OUT) {
+				var toX = self.x;
+				var toY = self.y;
+				self.x = self.child.x;
+				self.y = self.child.y;
+			} else {
+				self.child.x = self.x;
+				self.child.y = self.y;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				x : toX,
+				y : toY,
+				onComplete : self.flyComplete,
+				onUpdate : self.flyUpdate,
+				ease : self.trans.easing
+			});
+		},
+		irisComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.irisUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		irisUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.shape == LIris.CIRCLE) {
+				g.drawArc(0, "#000000", [self.x, self.y, self.r, 0, Math.PI * 2]);
+			} else {
+				g.drawRect(0, "#000000", [self.x + self.sLeft, self.y + self.sTop, self.width, self.height]);
+			}
+		},
+		irisUpdate : function(self) {
+			self.irisUpdateRun();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		iris : function() {
+			var self = this;
+			self.sLeft = 0;
+			self.sTop = 0;
+			self.width = 0;
+			self.height = 0;
+			self.x = 0;
+			self.y = 0;
+			self.r = 0;
+			self.eWidth = self.child.getWidth();
+			self.eHeight = self.child.getHeight();
+			switch(self.trans.startPoint) {
+				case 1:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					break;
+				case 2:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth() * 0.5;
+					break;
+				case 3:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth();
+					break;
+				case 4:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.y = self.child.getHeight() * 0.5;
+					break;
+				case 6:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.x = self.child.getWidth();
+					self.y = self.child.getHeight() * 0.5;
+					break;
+				case 7:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.y = self.child.getHeight();
+					break;
+				case 8:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth() * 0.5;
+					self.y = self.child.getHeight();
+					break;
+				case 9:
+					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
+					self.x = self.child.getWidth();
+					self.y = self.child.getHeight();
+					break;
+				case 5:
+				default:
+					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + (self.eHeight * 0.5) * (self.eHeight * 0.5));
+					self.x = self.child.getWidth() * 0.5;
+					self.y = self.child.getHeight() * 0.5;
+			}
+			self.eLeft = -self.x;
+			self.eTop = -self.y;
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.sLeft = self.eLeft;
+				self.sTop = self.eTop;
+				self.eLeft = 0;
+				self.eTop = 0;
+				self.width = self.eWidth;
+				self.height = self.eHeight;
+				self.eWidth = 0;
+				self.eHeight = 0;
+				self.r = self.eR;
+				self.eR = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				width : self.eWidth,
+				height : self.eHeight,
+				sLeft : self.eLeft,
+				sTop : self.eTop,
+				r : self.eR,
+				onComplete : self.irisComplete,
+				onUpdate : self.irisUpdate,
+				ease : self.trans.easing
+			});
+		},
+		curtainComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.curtainUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		curtainUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			if (self.trans.dimension) {
+				g.add(function() {
+					c.beginPath();
+					c.save();
+					c.rect(0, 0, self.width, self.child.getHeight());
+					c.rect(self.child.getWidth() - self.width, 0, self.width, self.child.getHeight());
+					c.restore();
+				});
+			} else {
+				g.add(function() {
+					c.beginPath();
+					c.save();
+					c.rect(0, 0, self.child.getWidth(), self.height);
+					c.rect(0, self.child.getHeight() - self.height, self.child.getWidth(), self.height);
+					c.restore();
+				});
+			}
+		},
+		curtainUpdate : function(self) {
+			self.curtainUpdateRun();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		curtain : function() {
+			var self = this;
+			var eW = self.child.getWidth() * 0.5;
+			var eH = self.child.getHeight() * 0.5;
+			if (self.trans.dimension) {
+				eH = 0;
+			} else {
+				eW = 0;
+			}
+			self.width = 0;
+			self.height = 0;
+			var g = new LGraphics();
+			self.child.mask = g;
+			var toSize = self.maxSize;
+			if (self.trans.direction == LTransition.OUT) {
+				self.width = eW;
+				self.height = eH;
+				eW = 0;
+				eH = 0;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				width : eW,
+				height : eH,
+				onComplete : self.curtainComplete,
+				onUpdate : self.curtainUpdate,
+				ease : self.trans.easing
+			});
+		},
+		squeezeComplete : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		squeezeUpdate : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		squeeze : function() {
+			var self = this;
+			var toScaleX = 1, toScaleY = 1;
+			self.scaleX = 0, self.scaleY = 0;
+			if (self.trans.dimension) {
+				self.scaleX = 1;
+			} else {
+				self.scaleY = 1;
+			}
+			if (self.trans.direction == LTransition.OUT) {
+				toScaleX = self.scaleX, toScaleY = self.scaleY;
+				self.scaleX = 1, self.scaleY = 1;
+			}
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			LTweenLite.to(self, self.trans.duration, {
+				scaleX : toScaleX,
+				scaleY : toScaleY,
+				onComplete : self.squeezeComplete,
+				onUpdate : self.squeezeUpdate,
+				ease : self.trans.easing
+			});
+		},
+		zoomComplete : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		zoomUpdate : function(self) {
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		zoom : function() {
+			var self = this;
+			var toScaleX = 1, toScaleY = 1;
+			self.scaleX = 0, self.scaleY = 0;
+			if (self.trans.direction == LTransition.OUT) {
+				toScaleX = 0, toScaleY = 0;
+				self.scaleX = 1, self.scaleY = 1;
+			}
+			self.child.scaleX = self.scaleX;
+			self.child.scaleY = self.scaleY;
+			LTweenLite.to(self, self.trans.duration, {
+				scaleX : toScaleX,
+				scaleY : toScaleY,
+				onComplete : self.zoomComplete,
+				onUpdate : self.zoomUpdate,
+				ease : self.trans.easing
+			});
+		},
+		wipeComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.wipeUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		wipeUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas;
+			g.clear();
+			g.drawVertices(0, "#000000", [[self.leftTopX, self.leftTopY], [self.leftBottomX, self.leftBottomY], [self.rightBottomX, self.rightBottomY], [self.rightTopX, self.rightTopY]]);
+		},
+		wipeUpdate : function(self) {
+			self.wipeUpdateRun();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		wipe : function() {
+			var self = this, w = self.child.getWidth(), h = self.child.getHeight(), ltX = self.leftTopX = 0, ltY = self.leftTopY = 0, lbX = self.leftBottomX = 0, lbY = self.leftBottomY = h, rtX = self.rightTopX = w, rtY = self.rightTopY = 0, rbX = self.rightBottomX = w, rbY = self.rightBottomY = h;
+			switch(self.trans.startPoint) {
+				case 1:
+					ltX = self.leftTopX = -w;
+					lbX = self.leftBottomX = -w * 2;
+					self.rightTopX = 0;
+					rtX = w * 2;
+					self.rightBottomX = -w;
+					rbX = w;
+					break;
+				case 2:
+					ltY = self.leftTopY = -h;
+					self.leftBottomY = 0;
+					lbY = h;
+					rtY = self.rightTopY = -h;
+					self.rightBottomY = 0;
+					rbY = h;
+					break;
+				case 3:
+					self.leftTopX = w;
+					ltX = -w;
+					self.leftBottomX = w * 2;
+					lbX = 0;
+					rtX = self.rightTopX = w * 2;
+					rbX = self.rightBottomX = w * 3;
+					break;
+				case 4:
+					self.rightTopX = 0;
+					rtX = w;
+					self.rightBottomX = 0;
+					rbX = w;
+					break;
+				case 6:
+					self.leftTopX = w;
+					ltX = 0;
+					self.leftBottomX = w;
+					lbX = 0;
+					break;
+				case 7:
+					lbX = self.leftBottomX = -w;
+					ltX = self.leftTopX = -w * 2;
+					self.rightBottomX = 0;
+					rbX = w * 2;
+					self.rightTopX = -w;
+					rtX = w;
+					break;
+				case 8:
+					lbY = self.leftBottomY = h;
+					self.leftTopY = h;
+					ltY = 0;
+					rbY = self.rightBottomY = h;
+					self.rightTopY = h;
+					rtY = 0;
+					break;
+				case 9:
+					self.leftBottomX = w;
+					lbX = -w;
+					self.leftTopX = w * 2;
+					ltX = 0;
+					rbX = self.rightBottomX = w * 2;
+					rtX = self.rightTopX = w * 3;
+					break;
+				case 5:
+				default:
+					self.leftTopX = w * 0.5;
+					self.leftTopY = h * 0.5;
+					self.rightTopX = w * 0.5;
+					self.rightTopY = h * 0.5;
+					self.leftBottomX = w * 0.5;
+					self.leftBottomY = h * 0.5;
+					self.rightBottomX = w * 0.5;
+					self.rightBottomY = h * 0.5;
+					ltX = 0, ltY = 0;
+					lbX = 0, lbY = h;
+					rtX = w, rtY = 0;
+					rbX = w, rbY = h;
+			}
+			var g = new LGraphics();
+			self.child.mask = g;
+			if (self.trans.direction == LTransition.OUT) {
+				var oltX = ltX, oltY = ltY, olbX = lbX, olbY = lbY, ortX = rtX, ortY = rtY, orbX = rbX, orbY = rbY;
+				ltX = self.leftTopX, ltY = self.leftTopY, lbX = self.leftBottomX, lbY = self.leftBottomY, rtX = self.rightTopX, rtY = self.rightTopY, rbX = self.rightBottomX, rbY = self.rightBottomY;
+				self.leftTopX = oltX, self.leftTopY = oltY, self.leftBottomX = olbX, self.leftBottomY = olbY, self.rightTopX = ortX, self.rightTopY = ortY, self.rightBottomX = orbX, self.rightBottomY = orbY;
+			}
+			LTweenLite.to(self, self.trans.duration, {
+				leftTopX : ltX,
+				leftTopY : ltY,
+				leftBottomX : lbX,
+				leftBottomY : lbY,
+				rightTopX : rtX,
+				rightTopY : rtY,
+				rightBottomX : rbX,
+				rightBottomY : rbY,
+				onComplete : self.wipeComplete,
+				onUpdate : self.wipeUpdate,
+				ease : self.trans.easing
+			});
+		},
+		pixelDissolveComplete : function(self) {
+			if (self.trans.direction == LTransition.OUT) {
+				self.child.mask.clear();
+			} else {
+				self.pixelDissolveUpdateRun();
+			}
+			self.child.mask = null;
+			if (self.trans.onComplete) {
+				self.trans.onComplete(self.child);
+			}
+		},
+		pixelDissolveUpdateRun : function() {
+			var self = this, g = self.child.mask, c = LGlobal.canvas, list;
+			g.clear();
+			g.add(function() {
+				c.beginPath();
+				c.save();
+				for (var i = 0; i < self.index; i++) {
+					list = self.list[i];
+					c.rect(list[0] * self.w, list[1] * self.h, self.w, self.h);
+				}
+				c.restore();
+			});
+		},
+		pixelDissolveUpdate : function(self) {
+			self.pixelDissolveUpdateRun();
+			if (self.trans.onUpdate) {
+				self.trans.onUpdate(self.child);
+			}
+		},
+		pixelDissolve : function() {
+			var self = this;
+			var g = new LGraphics();
+			self.child.mask = g;
+			LGlobal.mg = g;
+			self.w = self.child.getWidth() / self.trans.xSections, self.h = self.child.getHeight() / self.trans.ySections;
+			self.list = [];
+			for (var i = 0; i < self.trans.xSections; i++) {
+				for (var j = 0; j < self.trans.ySections; j++) {
+					self.list.push([i, j]);
+				}
+			}
+			self.index = 0;
+			var to = self.trans.xSections * self.trans.ySections;
+			if (self.trans.direction == LTransition.OUT) {
+				self.index = to;
+				to = 0;
+			}
+			self.list = self.list.sort(function(a, b) {
+				return Math.random() > 0.5;
+			});
+			self.pixelDissolveUpdateRun();
+			LTweenLite.to(self, self.trans.duration, {
+				index : to,
+				onComplete : self.pixelDissolveComplete,
+				onUpdate : self.pixelDissolveUpdate,
+				ease : self.trans.easing
+			});
+		}
+	};
+	LTransition.IN = "in";
+	LTransition.OUT = "out";
+	LTransition.Blinds = 1;
+	LTransition.Fade = 2;
+	LTransition.Fly = 3;
+	LTransition.Iris = 4;
+	LTransition.Curtain = 5;
+	LTransition.PixelDissolve = 6;
+	LTransition.Squeeze = 7;
+	LTransition.Wipe = 8;
+	LTransition.Zoom = 9;
+	return LTransition;
+})();
+var LIris = (function() {
+	function LIris() {
+	}
+	LIris.SQUARE = 0;
+	LIris.CIRCLE = 1;
+	return LIris;
+})();
+var LTransitionManager = (function() {
+	function LTransitionManager(displayObject) {
+		this.child = displayObject;
+	}
+	LTransitionManager.prototype = {
+		startTransition : function(transParams) {
+			return LTransitionManager.start(this.child, transParams);
+		}
+	};
+	LTransitionManager.start = function(displayObject, transParams) {
+		var trans = new LTransition(displayObject, transParams);
+		trans.startTransition();
+		return trans;
+	};
+	return LTransitionManager;
+})(); 
+var LFlash = (function () {
+	function LFlash(){}
+	LFlash.SpriteSheetConvert = function(frames){
+		var result = [],child;
+		for(var i=0;i<frames.length;i++){
+			child = frames[i];
+			result.push({x:child.frame.x,sx:child.spriteSourceSize.x,y:child.frame.y,sy:child.spriteSourceSize.y,width:child.frame.w,height:child.frame.h});
+		}
+		return result;
+	};
+	return LFlash;
+})();
+var LString = {
+	trim:function (s){
+		return s.replace(/(^\s*)|(\s*$)|(\n)/g, "");
+	},
+	leftTrim:function (s){
+		return s.replace(/(^\s*)|(^\n)/g, "");
+	},
+	rightTrim:function (s){
+		return s.replace(/(\s*$)|(\n$)/g, "");
+	},
+	numberFormat:function (s,l){
+		if (!l || l < 1) {
+			l = 3;
+		}
+		s=String(s).split(".");
+		s[0]=s[0].replace(new RegExp('(\\d)(?=(\\d{'+l+'})+$)','ig'),"$1,");
+		return s.join(".");
+	},
+	isString:function (s){
+		var p=/^([a-z]|[A-Z])+$/;
+		return p.exec(s); 
+	},
+	isNumber:function (s){
+		var p=/^\d+\.\d+$/;
+		return p.exec(s); 
+	},
+	isInt:function (s){
+		var p=/^\d+$/;
+		return p.exec(s); 
+	}
+};
+var LMath = LString;
