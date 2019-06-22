@@ -226,6 +226,7 @@ var LEventDispatcher = (function () {
 		 * @since 1.8.0
 		 */
 		dispatchEvent : function (event) {
+			var s = this;
 			var length = this._eventList.length;
 			var ctype = (typeof event === 'string') ? event : event.eventType;
 			for (var i = 0; i < length; i++) {
@@ -235,12 +236,12 @@ var LEventDispatcher = (function () {
 				}
 				if (ctype === this._eventList[i].type) {
 					if (typeof event === 'string') {
-						child.listener.call(child._this ? child._this : this, {
-							currentTarget: this,
-							target: this,
-							eventType: ctype,
-							event_type: ctype
-						});
+						s.currentTarget = s.target = s;
+						s.eventType = s.event_type = ctype;
+						child.listener.call(child._this ? child._this : s, s);
+						delete s.currentTarget;
+						delete s.target;
+						delete s.eventType;
 					} else {
 						if (!event.target) {
 							event.target = this;
@@ -253,7 +254,6 @@ var LEventDispatcher = (function () {
 					}
 				}
 			}
-			return false;
 		},
 		/** @language chinese
 		 * <p>检查 LEventDispatcher 对象是否为特定事件类型注册了任何侦听器。这样，您就可以确定 LEventDispatcher 对象在事件流层次结构中的哪个位置改变了对事件类型的处理。</p>
