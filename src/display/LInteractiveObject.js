@@ -104,29 +104,31 @@ var LInteractiveObject = (function() {
 	}
 
 	var p = {
-		addEventListener : function(type, listener) {
+		addEventListener : function(type, listener, _this) {
 			var s = this;
-			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
-				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.addMouseEvent(s, type, listener);
+			if (type.indexOf('mouse') >= 0 || type.indexOf('touch') >= 0 || type === LMouseEvent.DOUBLE_CLICK) {
+				if (LMouseEventContainer.container[type] || ((type === LMouseEvent.MOUSE_OVER || type === LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
+					LMouseEventContainer.addMouseEvent(s, type, listener, _this);
 					return;
 				}
 				s.mouseList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			} else {
 				s._eventList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			}
 		},
-		removeEventListener : function(type, listener) {
+		removeEventListener : function(type, listener, _this) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.removeMouseEvent(s, type, listener);
+					LMouseEventContainer.removeMouseEvent(s, type, listener, _this);
 					return;
 				}
 				length = s.mouseList.length;
@@ -134,7 +136,9 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type && s.mouseList[i].listener == listener) {
+					if (type == s.mouseList[i].type 
+						&& (!listener || s.mouseList[i].listener == listener)
+						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
 						return;
 					}

@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 2.0.0.beta2
+* @version 2.0.0.beta3
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -153,57 +153,58 @@ var LMouseEventContainer = (function () {
 				}
 			}
 		},
-		addEvent : function (o, list, f) {
+		addEvent : function (o, list, f, _this) {
 			var s = this;
-			list.push({container : o, listener : f});
+			list.push({container : o, listener : f, _this});
 		},
-		removeEvent : function (o, list, f) {
+		removeEvent : function (o, list, f, _this) {
 			var s = this, i, l;
 			for (i = 0, l = list.length; i < l; i++) {
-				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)) {
+				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)
+				&& (!_this || !list[i]._this || list[i]._this.objectIndex == _this.objectIndex)) {
 					list.splice(i, 1);
 					break;
 				}
 			}
 		},
-		addMouseDownEvent : function (o, f) {
+		addMouseDownEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseDownContainer, f);
+			s.addEvent(o, s.mouseDownContainer, f, _this);
 		},
-		addMouseUpEvent : function (o, f) {
+		addMouseUpEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseUpContainer, f);
+			s.addEvent(o, s.mouseUpContainer, f, _this);
 		},
-		addMouseMoveEvent : function (o, f) {
+		addMouseMoveEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseMoveContainer, f);
+			s.addEvent(o, s.mouseMoveContainer, f, _this);
 		},
-		addMouseOverEvent : function (o, f) {
+		addMouseOverEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseOverContainer, f);
+			s.addEvent(o, s.mouseOverContainer, f, _this);
 		},
-		addMouseOutEvent : function (o, f) {
+		addMouseOutEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseOutContainer, f);
+			s.addEvent(o, s.mouseOutContainer, f, _this);
 		},
-		addMouseDblEvent : function (o, f) {
+		addMouseDblEvent : function (o, f, _this) {
 			var s = this;
-			s.addEvent(o, s.mouseDblContainer, f);
+			s.addEvent(o, s.mouseDblContainer, f, _this);
 		},
-		addMouseEvent : function (o, t, f) {
+		addMouseEvent : function (o, t, f, _this) {
 			var s = this;
-			if (t == LMouseEvent.MOUSE_DOWN) {
-				s.addMouseDownEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_UP) {
-				s.addMouseUpEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_OVER) {
-				s.addMouseOverEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_OUT) {
-				s.addMouseOutEvent(o, f);
-			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				s.addMouseMoveEvent(o, f);
+			if (t === LMouseEvent.MOUSE_DOWN) {
+				s.addMouseDownEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_UP) {
+				s.addMouseUpEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_OVER) {
+				s.addMouseOverEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_OUT) {
+				s.addMouseOutEvent(o, f, _this);
+			} else if (t === LMouseEvent.MOUSE_MOVE) {
+				s.addMouseMoveEvent(o, f, _this);
 			} else {
-				s.addMouseDblEvent(o, f);
+				s.addMouseDblEvent(o, f, _this);
 			}
 		},
 		hasEventListener : function(o, t, f){
@@ -228,44 +229,44 @@ var LMouseEventContainer = (function () {
 			}
 			return false;
 		},
-		removeMouseDownEvent : function (o, f) {
+		removeMouseDownEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseDownContainer, f);
+			s.removeEvent(o, s.mouseDownContainer, f, _this);
 		},
-		removeMouseUpEvent : function (o, f) {
+		removeMouseUpEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseUpContainer, f);
+			s.removeEvent(o, s.mouseUpContainer, f, _this);
 		},
-		removeMouseMoveEvent : function (o, f) {
+		removeMouseMoveEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseMoveContainer, f);
+			s.removeEvent(o, s.mouseMoveContainer, f, _this);
 		},
-		removeMouseOverEvent : function (o, f) {
+		removeMouseOverEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseOverContainer, f);
+			s.removeEvent(o, s.mouseOverContainer, f, _this);
 		},
-		removeMouseOutEvent : function (o, f) {
+		removeMouseOutEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseOutContainer, f);
+			s.removeEvent(o, s.mouseOutContainer, f, _this);
 		},
-		removeMouseDblEvent : function (o, f) {
+		removeMouseDblEvent : function (o, f, _this) {
 			var s = this;
-			s.removeEvent(o, s.mouseDblContainer, f);
+			s.removeEvent(o, s.mouseDblContainer, f, _this);
 		},
-		removeMouseEvent : function (o, t, f) {
+		removeMouseEvent : function (o, t, f, _this) {
 			var s = this;
 			if (t == LMouseEvent.MOUSE_DOWN) {
-				s.removeMouseDownEvent(o, f);
+				s.removeMouseDownEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_UP) {
-				s.removeMouseUpEvent(o, f);
+				s.removeMouseUpEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_OVER) {
-				s.removeMouseOverEvent(o, f);
+				s.removeMouseOverEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_OUT) {
-				s.removeMouseOutEvent(o, f);
+				s.removeMouseOutEvent(o, f, _this);
 			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				s.removeMouseMoveEvent(o, f);
+				s.removeMouseMoveEvent(o, f, _this);
 			} else {
-				s.removeMouseDblEvent(o, f);
+				s.removeMouseDblEvent(o, f, _this);
 			}
 		},
 		dispatchMouseEvent : function (event, type) {
@@ -331,7 +332,7 @@ var LMouseEventContainer = (function () {
 				event.event_type = type;
 				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
 				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
-				o.listener(event, o.sp);
+				o.listener.call(o._this ? o._this : o, event, o.sp);
 			}
 		},
 		dispatchEvent : function (event, list, type) {
@@ -358,7 +359,7 @@ var LMouseEventContainer = (function () {
 					if (type != LMouseEvent.MOUSE_UP) {
 						sp.ll_mousein = true;
 					}
-					st.push({sp : sp, co : co, listener : list[i].listener});
+					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
 				} else {
 					if (type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER) {
 						continue;
@@ -367,7 +368,7 @@ var LMouseEventContainer = (function () {
 						continue;
 					}
 					sp.ll_mousein = false;
-					st.push({sp : sp, co : co, listener : list[i].listener});
+					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
 				}
 			}
 			if (st.length == 0) {
@@ -2092,17 +2093,19 @@ var LEventDispatcher = (function () {
 		s._eventList = new Array();
 	}
 	var p = {
-		addEventListener : function (type, listener) {
-			this._eventList.push({listener : listener, type : type});
+		addEventListener : function (type, listener, _this) {
+			this._eventList.push({listener : listener, type : type, _this: _this});
 		},
-		removeEventListener : function (type, listener) {
+		removeEventListener : function (type, listener, _this) {
 			var s = this, i, length;
 			length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
-				if (type == s._eventList[i].type && (!listener || s._eventList[i].listener == listener)) {
+				if (type == s._eventList[i].type 
+					&& (!listener || s._eventList[i].listener == listener)
+					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
 					return;
 				}
@@ -2112,28 +2115,31 @@ var LEventDispatcher = (function () {
 			this._eventList = [];
 		},
 		dispatchEvent : function (event) {
-			var s = this, i, length = s._eventList.length, ctype = (typeof event == "string") ? event : event.eventType;
-			for (i = 0; i < length; i++) {
-				if (!s._eventList[i]) {
+			var s = this;
+			var length = this._eventList.length;
+			var ctype = (typeof event === 'string') ? event : event.eventType;
+			for (var i = 0; i < length; i++) {
+				var child = this._eventList[i];
+				if (!child) {
 					continue;
 				}
-				if (ctype == s._eventList[i].type) {
-					if (typeof event == "string") {
+				if (ctype === this._eventList[i].type) {
+					if (typeof event === 'string') {
 						s.currentTarget = s.target = s;
 						s.eventType = s.event_type = ctype;
-						s._eventList[i].listener(s);
+						child.listener.call(child._this ? child._this : s, s);
 						delete s.currentTarget;
 						delete s.target;
 						delete s.eventType;
-					}else{
+					} else {
 						if (!event.target) {
-							event.target = s;
+							event.target = this;
 						}
 						if (!event.currentTarget) {
 							event.currentTarget = event.target;
 						}
 						event._ll_preventDefault = false;
-						s._eventList[i].listener(event);
+						child.listener.call(child._this ? child._this : this, event);
 					}
 				}
 			}
@@ -2506,29 +2512,31 @@ var LInteractiveObject = (function() {
 		s.mouseList = new Array();
 	}
 	var p = {
-		addEventListener : function(type, listener) {
+		addEventListener : function(type, listener, _this) {
 			var s = this;
-			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
-				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.addMouseEvent(s, type, listener);
+			if (type.indexOf('mouse') >= 0 || type.indexOf('touch') >= 0 || type === LMouseEvent.DOUBLE_CLICK) {
+				if (LMouseEventContainer.container[type] || ((type === LMouseEvent.MOUSE_OVER || type === LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
+					LMouseEventContainer.addMouseEvent(s, type, listener, _this);
 					return;
 				}
 				s.mouseList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			} else {
 				s._eventList.push({
-					listener : listener,
-					type : type
+					listener: listener,
+					type: type,
+					_this: _this
 				});
 			}
 		},
-		removeEventListener : function(type, listener) {
+		removeEventListener : function(type, listener, _this) {
 			var s = this, i, length;
 			if (type.indexOf("mouse") >= 0 || type.indexOf("touch") >= 0 || type == LMouseEvent.DOUBLE_CLICK) {
 				if (LMouseEventContainer.container[type] || ((type == LMouseEvent.MOUSE_OVER || type == LMouseEvent.MOUSE_OUT) && LMouseEventContainer.container[LMouseEvent.MOUSE_MOVE])) {
-					LMouseEventContainer.removeMouseEvent(s, type, listener);
+					LMouseEventContainer.removeMouseEvent(s, type, listener, _this);
 					return;
 				}
 				length = s.mouseList.length;
@@ -2536,7 +2544,9 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type && s.mouseList[i].listener == listener) {
+					if (type == s.mouseList[i].type 
+						&& (!listener || s.mouseList[i].listener == listener)
+						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
 						return;
 					}
@@ -5860,22 +5870,8 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
-					j = 0, k = 0, m = 0;
-					for (i = 0, l = s.text.length; i < l; i++) {
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i, 1));
-						if (enter) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-						j = c.measureText(s.text.substr(k, i + 1 - k)).width;
-						if (s.wordWrap && j + c.measureText(s.text.substr(i + 1, 1)).width > s.width) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-					}
-					s.height = (m + 1) * s.wordHeight;
+					s._createCanvas();
+					s._ll_show(s._context);
 				}
 				return s.height;
 			}
@@ -6986,13 +6982,7 @@ var LLoadManage = (function () {
 					}else{
 						s.loader = new LSound();
 						LSound.addWait(s.loader, d.path);
-						setTimeout(function(){
-							s._addEvent(s.loader, d.name);
-							var event = new LEvent(LEvent.COMPLETE);
-							event.currentTarget = s.loader;
-							event.target = d.path;
-							s.loader.dispatchEvent(event);
-						});
+						s._waitLoadSound(s.loader, d);
 					}
 				} else if (d['type'] === LAtlas.TYPE_PLIST) {
 					s.loader = new LAtlas();
@@ -7010,6 +7000,16 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex++;
 			s.loadStart();
+		},
+		_waitLoadSound : function(loader, d){
+			var s = this;
+			setTimeout(function(){
+				s._addEvent(loader, d.name);
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = loader;
+				event.target = d.path;
+				loader.dispatchEvent(event);
+			});
 		},
 		_loadProgress : function (e) {
 			var loader = e.currentTarget;

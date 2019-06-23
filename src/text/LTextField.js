@@ -1754,22 +1754,8 @@ var LTextField = (function () {
 			if (s.wordWrap) {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
-					j = 0, k = 0, m = 0;
-					for (i = 0, l = s.text.length; i < l; i++) {
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(s.text.substr(i, 1));
-						if (enter) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-						j = c.measureText(s.text.substr(k, i + 1 - k)).width;
-						if (s.wordWrap && j + c.measureText(s.text.substr(i + 1, 1)).width > s.width) {
-							j = 0;
-							k = i + 1;
-							m++;
-						}
-					}
-					s.height = (m + 1) * s.wordHeight;
+					s._createCanvas();
+					s._ll_show(s._context);
 				}
 				return s.height;
 			}

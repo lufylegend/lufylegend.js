@@ -59,8 +59,8 @@ var LEventDispatcher = (function () {
 		 * @public
 		 * @since 1.8.0
 		 */
-		addEventListener : function (type, listener) {
-			this._eventList.push({listener : listener, type : type});
+		addEventListener : function (type, listener, _this) {
+			this._eventList.push({listener : listener, type : type, _this: _this});
 		},
 		/** @language chinese
 		 * <p>从 LEventDispatcher 对象中删除侦听器。如果没有向 LEventDispatcher 对象注册任何匹配的侦听器，则对此方法的调用没有任何效果。</p>
@@ -86,14 +86,16 @@ var LEventDispatcher = (function () {
 		 * @public
 		 * @since 1.8.0
 		 */
-		removeEventListener : function (type, listener) {
+		removeEventListener : function (type, listener, _this) {
 			var s = this, i, length;
 			length = s._eventList.length;
 			for (i = 0; i < length; i++) {
 				if (!s._eventList[i]) {
 					continue;
 				}
-				if (type == s._eventList[i].type && (!listener || s._eventList[i].listener == listener)) {
+				if (type == s._eventList[i].type 
+					&& (!listener || s._eventList[i].listener == listener)
+					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
 					return;
 				}
@@ -224,28 +226,31 @@ var LEventDispatcher = (function () {
 		 * @since 1.8.0
 		 */
 		dispatchEvent : function (event) {
-			var s = this, i, length = s._eventList.length, ctype = (typeof event == "string") ? event : event.eventType;
-			for (i = 0; i < length; i++) {
-				if (!s._eventList[i]) {
+			var s = this;
+			var length = this._eventList.length;
+			var ctype = (typeof event === 'string') ? event : event.eventType;
+			for (var i = 0; i < length; i++) {
+				var child = this._eventList[i];
+				if (!child) {
 					continue;
 				}
-				if (ctype == s._eventList[i].type) {
-					if (typeof event == "string") {
+				if (ctype === this._eventList[i].type) {
+					if (typeof event === 'string') {
 						s.currentTarget = s.target = s;
 						s.eventType = s.event_type = ctype;
-						s._eventList[i].listener(s);
+						child.listener.call(child._this ? child._this : s, s);
 						delete s.currentTarget;
 						delete s.target;
 						delete s.eventType;
-					}else{
+					} else {
 						if (!event.target) {
-							event.target = s;
+							event.target = this;
 						}
 						if (!event.currentTarget) {
 							event.currentTarget = event.target;
 						}
 						event._ll_preventDefault = false;
-						s._eventList[i].listener(event);
+						child.listener.call(child._this ? child._this : this, event);
 					}
 				}
 			}
