@@ -2115,6 +2115,7 @@ var LEventDispatcher = (function () {
 			this._eventList = [];
 		},
 		dispatchEvent : function (event) {
+			var s = this;
 			var length = this._eventList.length;
 			var ctype = (typeof event === 'string') ? event : event.eventType;
 			for (var i = 0; i < length; i++) {
@@ -2124,12 +2125,12 @@ var LEventDispatcher = (function () {
 				}
 				if (ctype === this._eventList[i].type) {
 					if (typeof event === 'string') {
-						child.listener.call(child._this ? child._this : this, {
-							currentTarget: this,
-							target: this,
-							eventType: ctype,
-							event_type: ctype
-						});
+						s.currentTarget = s.target = s;
+						s.eventType = s.event_type = ctype;
+						child.listener.call(child._this ? child._this : s, s);
+						delete s.currentTarget;
+						delete s.target;
+						delete s.eventType;
 					} else {
 						if (!event.target) {
 							event.target = this;
@@ -2142,7 +2143,6 @@ var LEventDispatcher = (function () {
 					}
 				}
 			}
-			return false;
 		},
 		hasEventListener : function (type, listener) {
 			var s = this, i, length = s._eventList.length;
@@ -6982,13 +6982,7 @@ var LLoadManage = (function () {
 					}else{
 						s.loader = new LSound();
 						LSound.addWait(s.loader, d.path);
-						setTimeout(function(){
-							s._addEvent(s.loader, d.name);
-							var event = new LEvent(LEvent.COMPLETE);
-							event.currentTarget = s.loader;
-							event.target = d.path;
-							s.loader.dispatchEvent(event);
-						});
+						s._waitLoadSound(s.loader, d);
 					}
 				} else if (d['type'] === LAtlas.TYPE_PLIST) {
 					s.loader = new LAtlas();
@@ -7006,6 +7000,16 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex++;
 			s.loadStart();
+		},
+		_waitLoadSound : function(loader, d){
+			var s = this;
+			setTimeout(function(){
+				s._addEvent(loader, d.name);
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = loader;
+				event.target = d.path;
+				loader.dispatchEvent(event);
+			});
 		},
 		_loadProgress : function (e) {
 			var loader = e.currentTarget;

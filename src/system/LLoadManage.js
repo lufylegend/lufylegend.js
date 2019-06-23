@@ -158,13 +158,7 @@ var LLoadManage = (function () {
 					}else{
 						s.loader = new LSound();
 						LSound.addWait(s.loader, d.path);
-						setTimeout(function(){
-							s._addEvent(s.loader, d.name);
-							var event = new LEvent(LEvent.COMPLETE);
-							event.currentTarget = s.loader;
-							event.target = d.path;
-							s.loader.dispatchEvent(event);
-						});
+						s._waitLoadSound(s.loader, d);
 					}
 				} else if (d['type'] === LAtlas.TYPE_PLIST) {
 					s.loader = new LAtlas();
@@ -182,6 +176,16 @@ var LLoadManage = (function () {
 			}
 			s.loadIndex++;
 			s.loadStart();
+		},
+		_waitLoadSound : function(loader, d){
+			var s = this;
+			setTimeout(function(){
+				s._addEvent(loader, d.name);
+				var event = new LEvent(LEvent.COMPLETE);
+				event.currentTarget = loader;
+				event.target = d.path;
+				loader.dispatchEvent(event);
+			});
 		},
 		_loadProgress : function (e) {
 			var loader = e.currentTarget;
