@@ -5871,6 +5871,7 @@ var LTextField = (function () {
 				c.font = s.weight + " " + s.size + "px " + s.font;
 				if (s.height == 0) {
 					s._createCanvas();
+					s._context.font = s.weight + " " + s.size + "px " + s.font;
 					s._ll_show(s._context);
 				}
 				return s.height;
