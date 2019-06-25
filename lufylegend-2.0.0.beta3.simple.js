@@ -5403,6 +5403,10 @@ var LTextField = (function () {
 			s._alignContext.fillStyle = c.fillStyle;
 			s._alignContext.textBaseline = c.textBaseline;
 			s._alignContext.textAlign = "left";
+			if (s.stroke) {
+				s._alignContext.strokeStyle = c.strokeStyle;
+				s._alignContext.lineWidth = c.lineWidth;  
+			}
 		},
 		_ll_show : function (ctx) {
 			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
@@ -5566,7 +5570,7 @@ var LTextField = (function () {
 					}
 					s.numLines = m;
 					j = context.measureText(s.text.substr(k, i + 1 - k)).width;
-					currentWidth = j + c.measureText(lbl.substr(i, 1)).width;
+					currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
 					if (s.wordWrap && currentWidth > s.width && !enter) {
 						j = 0;
