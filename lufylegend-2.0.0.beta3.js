@@ -5464,6 +5464,7 @@ var LTextField = (function () {
 					for (i = 0, l = text.length; i < l; i++) {
 						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
 						if (enter) {
+							currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
 							j = 0;
 							k = i + 1;
 							cx = 0;
@@ -5548,6 +5549,7 @@ var LTextField = (function () {
 				for (i = 0, l = s.text.length; i < l; i++) {
 					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
 					if (enter) {
+						currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
 						j = 0;
 						k = i + 1;
 						if(isAlignCanvas){
