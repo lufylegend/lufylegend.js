@@ -107,7 +107,7 @@ var LLoadManage = (function () {
 			s.loadStart();
 			s.reloadtime = setTimeout(s.loadInit.bind(s), 10000);
 		},
-		_addEvent(loader, name){
+		_addEvent : function(loader, name){
 			loader.parent = this;
 			loader.name = name;
 			loader.addEventListener(LEvent.PROGRESS, this._loadProgress);

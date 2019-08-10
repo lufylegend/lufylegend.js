@@ -10,9 +10,9 @@ var LAtlas = (function () {
 		load:function(path, name){
             var s = this;
             var loadData = [
-                { name: `${path}/${name}.png`, path: this.url(`${path}/${name}.png`) },
-                { name: `${path}/${name}.plist`, path: this.url(`${path}/${name}.plist` + (LGlobal.wx ? '.meta' : '')), type: 'text' },
-                { name: `${path}/${name}.json`, path: this.url(`${path}/${name}.json`), type: 'text' }
+                { name: path + "/" + name + ".png", path: this.url(path + "/" + name + ".png") },
+                { name: path + "/" + name + ".plist", path: this.url(path + "/" + name + ".plist" + (LGlobal.wx ? '.meta' : '')), type: 'text' },
+                { name: path + "/" + name + ".json", path: this.url(path + "/" + name + ".json"), type: 'text' }
             ];
             LLoadManage.load( 
                 loadData, null, function(datalist){
@@ -31,9 +31,9 @@ var LAtlas = (function () {
             var resourcesIndex = path.indexOf(resourcesPath);
             this._atlasKey = path.substring(resourcesIndex + resourcesPath.length) + '/' + name;
             LAtlas._container[this._atlasKey] = this;
-            var texture = datalist[`${path}/${name}.png`];
-            var xml = datalist[`${path}/${name}.plist`];
-            var json = JSON.parse(datalist[`${path}/${name}.json`]);
+            var texture = datalist[path + "/" + name + ".png"];
+            var xml = datalist[path + "/" + name + ".plist"];
+            var json = JSON.parse(datalist[path + "/" + name + ".json"]);
             this.set(xml, texture, json);
             var event = new LEvent(LEvent.COMPLETE);
             event.currentTarget = this;
