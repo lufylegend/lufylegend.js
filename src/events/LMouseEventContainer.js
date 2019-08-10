@@ -374,7 +374,7 @@ var LMouseEventContainer = (function () {
 		},
 		addEvent : function (o, list, f, _this) {
 			var s = this;
-			list.push({container : o, listener : f, _this});
+			list.push({container : o, listener : f, _this:_this});
 		},
 		removeEvent : function (o, list, f, _this) {
 			var s = this, i, l;
