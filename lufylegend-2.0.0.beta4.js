@@ -2915,7 +2915,7 @@ var LURLLoader = (function () {
 	return LURLLoader;
 })();
 var LFontLoader = (function () {
-	function LFontLoader () {
+	function LFontLoader() {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
 		s.type = "LFontLoader";
@@ -2924,7 +2924,7 @@ var LFontLoader = (function () {
 	LFontLoader.prototype.load = function (u, name) {
 		var s = this, font, tff, eot, a, b, d, t = "";
 		font = document.createElement("style");
-		font.onerror = function(e){
+		font.onerror = function (e) {
 			var event = new LEvent(LEvent.ERROR);
 			event.currentTarget = s;
 			event.target = e.target;
@@ -2935,27 +2935,32 @@ var LFontLoader = (function () {
 		for (var i = 0; i < a.length; i++) {
 			b = a[i].split('.');
 			d = b[b.length - 1];
-			if(d == "ttf"){
+			if (d == "ttf") {
 				tff = a[i];
-			}else if(d == "eot"){
+			} else if (d == "eot") {
 				eot = a[i];
 			}
 		}
 		t = "@font-face { font-family:'" + name + "';";
-		if(eot){
-			t += "src: url(" + eot + ");"; 
+		if (eot) {
+			t += "src: url(" + eot + ");";
 		}
-		if(tff){
-			t += "src: local('lufy'),url(" + tff + ") format('opentype');"; 
+		if (tff) {
+			t += "src: local('lufy'),url(" + tff + ") format('opentype');";
 		}
 		font.innerHTML = t;
 		document.querySelector('head').appendChild(font);
-		setTimeout(function(){
+		var callback = function () {
 			var event = new LEvent(LEvent.COMPLETE);
 			event.currentTarget = s;
 			event.target = s;
 			s.dispatchEvent(event);
-		},1);
+		};
+		if (document.fonts) {
+			new FontFace(name, "url(" + tff + ")", {}).load().then(callback);
+		} else {
+			setTimeout(callback, 1);
+		}
 	};
 	return LFontLoader;
 })();
@@ -7595,12 +7600,10 @@ var LTweenLite = (function () {
 		ll_show : function(){
 			var s = this;
 			var i, length = s.tweens.length, t;
-			for (i = 0; i < length; i++) {
+			for (i = length - 1; i >= 0; i--) {
 				t = s.tweens[i];
 				if (t && t.tween && t.tween()) {
 					s.tweens.splice(i, 1);
-					i--;
-					length = s.tweens.length;
 					if (t.keep()) {
 						s.add(t);
 					}
