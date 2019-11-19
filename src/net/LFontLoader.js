@@ -49,7 +49,7 @@ var LFontLoader = (function () {
 			s.dispatchEvent(event);
 		};
 		if (document.fonts) {
-			new FontFace(name, "url(" + tff + ")", {}).load().then(callback);
+			new FontFace(name, "url(" + (tff || eot) + ")", {}).load().then(callback);
 		} else {
 			setTimeout(callback, 1);
 		}
