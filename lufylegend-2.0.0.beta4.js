@@ -5277,7 +5277,7 @@ var LTextFormat = (function() {
 	return LTextFormat;
 })();
 var LTextField = (function () {
-	function LTextField () {
+	function LTextField() {
 		var s = this;
 		LExtends(s, LInteractiveObject, []);
 		s.type = "LTextField";
@@ -5307,18 +5307,18 @@ var LTextField = (function () {
 	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
 	LTextField.HEIGHT_MODE_BASELINE = "baseline";
 	var p = {
-		_showReady : function (c) {
+		_showReady: function (c) {
 			var s = this;
-			c.font = s.weight + " " + s.size + "px " + s.font;  
+			c.font = s.weight + " " + s.size + "px " + s.font;
 			c.textAlign = s.textAlign;
 			c.textBaseline = s.textBaseline;
 			c.fillStyle = s.color;
 			if (s.stroke) {
 				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;  
+				c.lineWidth = s.lineWidth + 1;
 			}
 		},
-		ll_getStyleSheet : function (textFormat, tabName, attribute, text) {
+		ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
 			var s = this, pattern, tf = textFormat.clone();
 			if (tabName == "font") {
 				var i = 0;
@@ -5330,7 +5330,7 @@ var LTextField = (function () {
 					if (!arr || !arr[0]) {
 						break;
 					}
-					switch(arr[2]) {
+					switch (arr[2]) {
 						case "face":
 							tf.font = arr[6];
 							break;
@@ -5351,43 +5351,43 @@ var LTextField = (function () {
 				tf.italic = true;
 			} else if (tabName == "p" && s.wordWrap) {
 				text = "\n" + text + "\n";
-			} else if(s.styleSheet){
+			} else if (s.styleSheet) {
 				var sheetObj;
-				if (tabName == "span"){
+				if (tabName == "span") {
 					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
 					var arr = pattern.exec(attribute);
 					if (arr && arr[0]) {
-						switch(arr[2]) {
+						switch (arr[2]) {
 							case "class":
 								sheetObj = s.styleSheet.getStyle("." + arr[6]);
 								break;
 						}
 					}
-				}else if(s.styleSheet.getStyle(tabName)){
+				} else if (s.styleSheet.getStyle(tabName)) {
 					sheetObj = s.styleSheet.getStyle(tabName);
 				}
-				if(sheetObj){
+				if (sheetObj) {
 					tf.setCss(sheetObj);
 				}
 			}
-			s.ll_getHtmlText(tf, text); 
+			s.ll_getHtmlText(tf, text);
 		},
-		ll_getHtmlText : function (tf, text) {
+		ll_getHtmlText: function (tf, text) {
 			if (!text) {
 				return;
 			}
 			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
 			if (!arr || !arr[0]) {
 				s.ll_htmlTexts.push({
-					textFormat : tf.clone(),
-					text : text
+					textFormat: tf.clone(),
+					text: text
 				});
 				return;
 			}
 			if (arr.index > 0) {
 				s.ll_htmlTexts.push({
-					textFormat : tf.clone(),
-					text : text.substring(0, arr.index)
+					textFormat: tf.clone(),
+					text: text.substring(0, arr.index)
 				});
 			}
 			tabName = arr[1];
@@ -5396,12 +5396,12 @@ var LTextField = (function () {
 			do {
 				end = text.indexOf("</" + tabName, end + 1);
 				start = text.indexOf("<" + tabName, start + 1);
-			} while(start > 0 && start < end);
+			} while (start > 0 && start < end);
 			content = text.substring(text.indexOf(">", arr.index) + 1, end);
 			s.ll_getStyleSheet(tf, tabName, arr[3], content);
 			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
 		},
-		_createAlignCanvas:function(c){
+		_createAlignCanvas: function (c) {
 			var s = this;
 			if (!s._alignCanvas) {
 				s._alignCanvas = document.createElement("canvas");
@@ -5414,18 +5414,18 @@ var LTextField = (function () {
 			s._alignContext.textAlign = "left";
 			if (s.stroke) {
 				s._alignContext.strokeStyle = c.strokeStyle;
-				s._alignContext.lineWidth = c.lineWidth;  
+				s._alignContext.lineWidth = c.lineWidth;
 			}
 		},
-		_ll_show : function (ctx) {
+		_ll_show: function (ctx) {
 			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
-			if(LGlobal.enableWebGL){
+			if (LGlobal.enableWebGL) {
 				s._createCanvas();
 				s._canvas.width = LGlobal.width;
 				s._canvas.height = LGlobal.height;
 				s._showReady(s._context);
 				c = s._context;
-			}else{
+			} else {
 				c = ctx;
 			}
 			if (s.texttype == LTextFieldType.INPUT) {
@@ -5437,7 +5437,7 @@ var LTextField = (function () {
 				}
 				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
 					return;
-				}else{
+				} else {
 					if (s.inputBackLayer.graphics.setList.length === 0) {
 						c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
 					}
@@ -5452,7 +5452,7 @@ var LTextField = (function () {
 					tf = new LTextFormat();
 					s.ll_htmlTexts = [];
 					s.ll_htmlText = s.htmlText;
-					if(s.styleSheet){
+					if (s.styleSheet) {
 						s.ll_style_objectIndex = s.styleSheet.objectIndex;
 						s.ll_styleIndex = s.styleSheet.styleIndex;
 					}
@@ -5460,13 +5460,13 @@ var LTextField = (function () {
 				}
 				j = 0, k = 0, m = 0, b = 0, cx = 0;
 				s._ll_height = s.wordHeight || 30;
-				if(!LTextField.underlineY){
-					LTextField.underlineY = {"alphabetic" : 0, "top" : 1, "bottom" : -0.2, "middle" : 0.4, "hanging" : 0.8};
+				if (!LTextField.underlineY) {
+					LTextField.underlineY = { "alphabetic": 0, "top": 1, "bottom": -0.2, "middle": 0.4, "hanging": 0.8 };
 				}
 				s._createAlignCanvas(c);
 				var context = c;
 				c = s._alignContext;
-				s.ll_htmlTexts.forEach(function(element){
+				s.ll_htmlTexts.forEach(function (element) {
 					var textFormat = element.textFormat, text = element.text;
 					c.font = textFormat.getFontText();
 					c.fillStyle = textFormat.color;
@@ -5477,9 +5477,9 @@ var LTextField = (function () {
 							j = 0;
 							k = i + 1;
 							cx = 0;
-							if(s.textAlign == "center"){
+							if (s.textAlign == "center") {
 								cx = -currentWidth * 0.5;
-							}else if(s.textAlign == "right"){
+							} else if (s.textAlign == "right") {
 								cx = -currentWidth;
 							}
 							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
@@ -5495,7 +5495,7 @@ var LTextField = (function () {
 								c.strokeText(text.substr(i, 1), j, s._ll_height);
 							}
 							c.fillText(text.substr(i, 1), j, s._ll_height);
-							if(textFormat.underline){
+							if (textFormat.underline) {
 								c.beginPath();
 								underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
 								c.moveTo(j, underlineY);
@@ -5510,9 +5510,9 @@ var LTextField = (function () {
 							j = 0;
 							k = i + 1;
 							cx = 0;
-							if(s.textAlign == "center"){
+							if (s.textAlign == "center") {
 								cx = -currentWidth * 0.5;
-							}else if(s.textAlign == "right"){
+							} else if (s.textAlign == "right") {
 								cx = -currentWidth;
 							}
 							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
@@ -5525,16 +5525,16 @@ var LTextField = (function () {
 					}
 					s.height = (m + 1) * s._ll_height;
 				});
-				if(currentWidth > 0){
+				if (currentWidth > 0) {
 					cx = 0;
-					if(s.textAlign == "center"){
+					if (s.textAlign == "center") {
 						cx = -currentWidth * 0.5;
-					}else if(s.textAlign == "right"){
+					} else if (s.textAlign == "right") {
 						cx = -currentWidth;
 					}
 					context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
 				}
-				if(LGlobal.enableWebGL){
+				if (LGlobal.enableWebGL) {
 					ctx.drawImage(s._canvas, 0, 0);
 				}
 				return;
@@ -5542,7 +5542,7 @@ var LTextField = (function () {
 			lbl = s.text;
 			if (s.displayAsPassword) {
 				lbl = '';
-				for (i=0, l = s.text.length; i < l; i++) {
+				for (i = 0, l = s.text.length; i < l; i++) {
 					lbl += '*';
 				}
 			}
@@ -5550,7 +5550,7 @@ var LTextField = (function () {
 				j = 0, k = 0, m = 0, b = 0, cx = 0;
 				var context = c;
 				var isAlignCanvas = s.textAlign != "left";
-				if(isAlignCanvas){
+				if (isAlignCanvas) {
 					s._createAlignCanvas(c);
 					context = s._alignContext;
 				}
@@ -5561,11 +5561,11 @@ var LTextField = (function () {
 						currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
 						j = 0;
 						k = i + 1;
-						if(isAlignCanvas){
+						if (isAlignCanvas) {
 							cx = 0;
-							if(s.textAlign == "center"){
+							if (s.textAlign == "center") {
 								cx = -currentWidth * 0.5;
-							}else if(s.textAlign == "right"){
+							} else if (s.textAlign == "right") {
 								cx = -currentWidth;
 							}
 							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
@@ -5586,11 +5586,11 @@ var LTextField = (function () {
 					if (s.wordWrap && currentWidth > s.width && !enter) {
 						j = 0;
 						k = i + 1;
-						if(isAlignCanvas){
+						if (isAlignCanvas) {
 							cx = 0;
-							if(s.textAlign == "center"){
+							if (s.textAlign == "center") {
 								cx = -currentWidth * 0.5;
-							}else if(s.textAlign == "right"){
+							} else if (s.textAlign == "right") {
 								cx = -currentWidth;
 							}
 							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
@@ -5600,11 +5600,11 @@ var LTextField = (function () {
 						m++;
 					}
 				}
-				if(isAlignCanvas && currentWidth > 0){
+				if (isAlignCanvas && currentWidth > 0) {
 					cx = 0;
-					if(s.textAlign == "center"){
+					if (s.textAlign == "center") {
 						cx = -currentWidth * 0.5;
-					}else if(s.textAlign == "right"){
+					} else if (s.textAlign == "right") {
 						cx = -currentWidth;
 					}
 					c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
@@ -5617,14 +5617,14 @@ var LTextField = (function () {
 				}
 				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
 			}
-			if(LGlobal.enableWebGL){
+			if (LGlobal.enableWebGL) {
 				ctx.drawImage(s._canvas, 0, 0);
 			}
 			if (s.windRunning) {
 				s._ll_windRun();
 			}
 		},
-		_wordHeight : function (h) {
+		_wordHeight: function (h) {
 			var s = this;
 			if (h > 0) {
 				s.wordHeight = h;
@@ -5634,21 +5634,21 @@ var LTextField = (function () {
 			}
 			s.height = 0;
 		},
-		setMultiline : function (v, h) {
+		setMultiline: function (v, h) {
 			var s = this;
 			if (v) {
 				s._wordHeight(h);
 			}
 			s.multiline = v;
 		},
-		setWordWrap : function (v, h) {
+		setWordWrap: function (v, h) {
 			var s = this;
 			if (v) {
 				s._wordHeight(h);
 			}
 			s.wordWrap = v;
 		},
-		setType : function (type, inputBackLayer) {
+		setType: function (type, inputBackLayer) {
 			var s = this;
 			if (s.texttype != type && type == LTextFieldType.INPUT) {
 				if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
@@ -5667,7 +5667,7 @@ var LTextField = (function () {
 			}
 			s.texttype = type;
 		},
-		ismouseon : function (e, cood) {
+		ismouseon: function (e, cood) {
 			var s = this;
 			if (!e) {
 				return false;
@@ -5676,7 +5676,7 @@ var LTextField = (function () {
 				return false;
 			}
 			if (!cood) {
-				cood = {x : 0, y : 0, scaleX : 1, scaleY : 1};
+				cood = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
 			}
 			if (s.mask) {
 				if (!s.mask.parent) {
@@ -5687,20 +5687,20 @@ var LTextField = (function () {
 				}
 			}
 			if (s.inputBackLayer) {
-				return s.inputBackLayer.ismouseon(e, {x : s.x * cood.scaleX + cood.x, y : s.y * cood.scaleY + cood.y, scaleX : cood.scaleX * s.scaleX, scaleY : cood.scaleY * s.scaleY});
+				return s.inputBackLayer.ismouseon(e, { x: s.x * cood.scaleX + cood.x, y: s.y * cood.scaleY + cood.y, scaleX: cood.scaleX * s.scaleX, scaleY: cood.scaleY * s.scaleY });
 			}
-			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s._getWidth(), s._getHeight()]}], e.offsetX, e.offsetY);
+			return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s._getWidth(), s._getHeight()] }], e.offsetX, e.offsetY);
 		},
-		clone : function () {
+		clone: function () {
 			var s = this, a = new s.constructor();
 			a.copyProperty(s);
 			a.texttype = null;
-			if (s.texttype ==  LTextFieldType.INPUT) {
-				a.setType( LTextFieldType.INPUT);
+			if (s.texttype == LTextFieldType.INPUT) {
+				a.setType(LTextFieldType.INPUT);
 			}
 			return a;
 		},
-		mouseEvent : function (event, type, cood) {
+		mouseEvent: function (event, type, cood) {
 			var s = this, on;
 			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
 				return;
@@ -5711,14 +5711,14 @@ var LTextField = (function () {
 			}
 			s.focus();
 		},
-		_wx_ll_getValue : function(value) {
+		_wx_ll_getValue: function (value) {
 			LGlobal.inputTextField.text = value;
 			wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
 			wx.offKeyboardComplete(this._ll_getValue);
 			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
 			LGlobal.inputTextField = null;
 		},
-		_ll_getValue : function (event) {
+		_ll_getValue: function (event) {
 			if (!LGlobal.inputTextField) {
 				return;
 			}
@@ -5729,13 +5729,13 @@ var LTextField = (function () {
 			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
 			LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
 			LGlobal.inputBox.style.display = NONE;
-			if(typeof LGlobal.inputTextField.preventDefault != UNDEFINED){
-				LGlobal.preventDefault=LGlobal.inputTextField.preventDefault;
+			if (typeof LGlobal.inputTextField.preventDefault != UNDEFINED) {
+				LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
 			}
 			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
 			LGlobal.inputTextField = null;
 		},
-		updateInput : function () {
+		updateInput: function () {
 			var s = this;
 			if (LGlobal.wx) {
 				s._wxUpdateInput();
@@ -5745,20 +5745,22 @@ var LTextField = (function () {
 				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
 			}
 		},
-		_wxUpdateInput : function() {
+		_wxUpdateInput: function () {
 			var s = this;
-			wx.hideKeyboard({ complete: function() {
-				s.focus();
-			} });
+			wx.hideKeyboard({
+				complete: function () {
+					s.focus();
+				}
+			});
 		},
-		_wx_ll_input : function(value) {
+		_wx_ll_input: function (value) {
 			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
 				var event = new LEvent(LTextEvent.TEXT_INPUT);
 				event.keyCode = value;
 				LGlobal.inputTextField.dispatchEvent(event);
 			}
 		},
-		_ll_input : function (e) {
+		_ll_input: function (e) {
 			if (LGlobal.wx) {
 				LGlobal.inputTextField._wx_ll_input(e);
 				return;
@@ -5772,7 +5774,7 @@ var LTextField = (function () {
 				e.returnValue = true;
 			}
 		},
-		focus : function () {
+		focus: function () {
 			var s = this, sc, sx;
 			if (!s.parent) {
 				return;
@@ -5819,15 +5821,11 @@ var LTextField = (function () {
 					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
 			}
-			setTimeout(function () {
-				if(LGlobal.ios){
-					s.preventDefault = LGlobal.preventDefault;
-					LGlobal.preventDefault=false;
-				}
-				LGlobal.inputTextBox.focus();
-			}, 0);
+			s.preventDefault = LGlobal.preventDefault;
+			LGlobal.preventDefault = false;
+			LGlobal.inputTextBox.focus();
 		},
-		_wxFocus : function() {
+		_wxFocus: function () {
 			LGlobal.inputTextField = this;
 			wx.showKeyboard({
 				defaultValue: this.text,
@@ -5839,19 +5837,19 @@ var LTextField = (function () {
 			wx.onKeyboardInput(this._ll_input);
 			wx.onKeyboardComplete(this._ll_getValue);
 		},
-		_getWidth : function () {
+		_getWidth: function () {
 			var s = this;
 			if (s.wordWrap) {
 				return s.width;
 			}
-			if(LGlobal.enableWebGL){
+			if (LGlobal.enableWebGL) {
 				this._createCanvas();
 			}
 			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
 			c.font = s.size + "px " + s.font;
 			return c.measureText(s.text).width;
 		},
-		getWidth : function (maskSize) {
+		getWidth: function (maskSize) {
 			var s = this, w, mx, mw;
 			w = s._getWidth() * s.scaleX;
 			if (maskSize && s.mask) {
@@ -5868,17 +5866,17 @@ var LTextField = (function () {
 			}
 			return w;
 		},
-		_startX : function (maskSize) {
+		_startX: function (maskSize) {
 			var s = this;
-			if(s.textAlign == "left"){
+			if (s.textAlign == "left") {
 				return s.x;
 			}
 			var w = s.getWidth(maskSize);
 			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
 		},
-		_getHeight : function () {
+		_getHeight: function () {
 			var s = this;
-			if(LGlobal.enableWebGL){
+			if (LGlobal.enableWebGL) {
 				this._createCanvas();
 			}
 			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
@@ -5891,14 +5889,14 @@ var LTextField = (function () {
 				}
 				return s.height;
 			}
-			c.font = s.weight + " " + s.size + "px " + s.font; 
+			c.font = s.weight + " " + s.size + "px " + s.font;
 			l = c.measureText("O").width * 1.2;
 			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
 				l = l * 1.2;
 			}
 			return l;
 		},
-		getHeight : function (maskSize) {
+		getHeight: function (maskSize) {
 			var s = this, h, my, mh;
 			h = s._getHeight() * s.scaleY;
 			if (maskSize && s.mask) {
@@ -5915,7 +5913,7 @@ var LTextField = (function () {
 			}
 			return h;
 		},
-		wind : function (listener) {
+		wind: function (listener) {
 			var s = this;
 			s.wind_over_function = listener;
 			s.windRunning = true;
@@ -5923,7 +5921,7 @@ var LTextField = (function () {
 			s.text = "";
 			s._ll_wind_length = 0;
 		},
-		_ll_windRun : function () {
+		_ll_windRun: function () {
 			var s = this;
 			if (s._speedIndex++ < s.speed) {
 				return;
@@ -5940,14 +5938,14 @@ var LTextField = (function () {
 			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
 			s._ll_wind_length++;
 		},
-		windComplete : function() {
+		windComplete: function () {
 			var s = this;
 			s._speedIndex = s.speed;
 			s.text = s._ll_wind_text;
 			s._ll_wind_length = s._ll_wind_text.length + 1;
 			s._ll_windRun();
 		},
-		die : function () {
+		die: function () {
 			LMouseEventContainer.removeInputBox(this);
 		}
 	};
