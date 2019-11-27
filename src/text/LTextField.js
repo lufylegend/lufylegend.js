@@ -1374,6 +1374,9 @@ var LTextField = (function () {
 				LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
 			}
 			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+			if (typeof LGlobal.inputTextBox.blur === 'function') {
+				LGlobal.inputTextBox.blur();
+			}
 			LGlobal.inputTextField = null;
 		},
 		/** @language chinese
