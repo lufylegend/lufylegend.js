@@ -1655,13 +1655,9 @@ var LTextField = (function () {
 					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
 				}
 			}
-			setTimeout(function () {
-				if(LGlobal.ios){
-					s.preventDefault = LGlobal.preventDefault;
-					LGlobal.preventDefault=false;
-				}
-				LGlobal.inputTextBox.focus();
-			}, 0);
+			s.preventDefault = LGlobal.preventDefault;
+			LGlobal.preventDefault=false;
+			LGlobal.inputTextBox.focus();
 		},
 		_wxFocus : function() {
 			LGlobal.inputTextField = this;
