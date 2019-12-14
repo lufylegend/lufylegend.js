@@ -21,7 +21,7 @@ if (!Array.prototype.indexOf) {
 		if (from < 0) {
 			from += len;
 		}
-		for (; from < len; from++){
+		for (; from < len; from++) {
 			if (from in this && this[from] === elt) {
 				return from;
 			}
@@ -29,8 +29,8 @@ if (!Array.prototype.indexOf) {
 		return -1;
 	};
 }
-if (!Array.isArray){
-	Array.isArray = function(value){
+if (!Array.isArray) {
+	Array.isArray = function (value) {
 		return Object.prototype.toString.apply(value) == '[object Array]';
 	};
 }
@@ -39,12 +39,12 @@ if (!Function.prototype.bind) {
 		if (typeof this !== "function") {
 			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
 		}
-		var aArgs = Array.prototype.slice.call(arguments, 1), 
-			fToBind = this, 
-			fNOP = function () {},
+		var aArgs = Array.prototype.slice.call(arguments, 1),
+			fToBind = this,
+			fNOP = function () { },
 			fBound = function () {
-			return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-        };
+				return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+			};
 		fNOP.prototype = this.prototype;
 		fBound.prototype = new fNOP();
 		return fBound;
@@ -76,7 +76,7 @@ if (!Array.prototype.findIndex) {
 		if (this == null) {
 			throw new TypeError('Array.prototype.find called on null or undefined');
 		}
-		if ( typeof predicate !== 'function') {
+		if (typeof predicate !== 'function') {
 			throw new TypeError('predicate must be a function');
 		}
 		var list = Object(this);
@@ -101,7 +101,7 @@ if (!Array.prototype.forEach) {
 		}
 		var O = Object(this);
 		var len = O.length >>> 0;
-		if ( typeof callback !== "function") {
+		if (typeof callback !== "function") {
 			throw new TypeError(callback + ' is not a function');
 		}
 		if (arguments.length > 1) {
@@ -110,7 +110,7 @@ if (!Array.prototype.forEach) {
 		k = 0;
 		while (k < len) {
 			var kValue;
-			if ( k in O) {
+			if (k in O) {
 				kValue = O[k];
 				callback.call(T, kValue, k, O);
 			}
@@ -119,7 +119,7 @@ if (!Array.prototype.forEach) {
 	};
 }
 if (!Array.prototype.every) {
-	Array.prototype.every = function(callbackfn, thisArg) {
+	Array.prototype.every = function (callbackfn, thisArg) {
 		'use strict';
 		var T, k;
 		if (this == null) {
@@ -127,7 +127,7 @@ if (!Array.prototype.every) {
 		}
 		var O = Object(this);
 		var len = O.length >>> 0;
-		if ( typeof callbackfn !== 'function') {
+		if (typeof callbackfn !== 'function') {
 			throw new TypeError();
 		}
 		if (arguments.length > 1) {
@@ -136,7 +136,7 @@ if (!Array.prototype.every) {
 		k = 0;
 		while (k < len) {
 			var kValue;
-			if ( k in O) {
+			if (k in O) {
 				kValue = O[k];
 				var testResult = callbackfn.call(T, kValue, k, O);
 				if (!testResult) {
@@ -149,20 +149,20 @@ if (!Array.prototype.every) {
 	};
 }
 if (!Array.prototype.some) {
-	Array.prototype.some = function(fun) {
+	Array.prototype.some = function (fun) {
 		'use strict';
 		if (this == null) {
 			throw new TypeError('Array.prototype.some called on null or undefined');
 		}
-		if ( typeof fun !== 'function') {
+		if (typeof fun !== 'function') {
 			throw new TypeError();
 		}
 		var t = Object(this);
 		var len = t.length >>> 0;
 		var thisArg = arguments.length >= 2 ? arguments[1] :
-		void 0;
+			void 0;
 		for (var i = 0; i < len; i++) {
-			if ( i in t && fun.call(thisArg, t[i], i, t)) {
+			if (i in t && fun.call(thisArg, t[i], i, t)) {
 				return true;
 			}
 		}
@@ -170,7 +170,7 @@ if (!Array.prototype.some) {
 	};
 }
 if (!Array.prototype.filter) {
-	Array.prototype.filter = function(fun /*, thisp */) {
+	Array.prototype.filter = function (fun /*, thisp */) {
 		"use strict";
 		if (this == null) {
 			throw new TypeError();
@@ -192,24 +192,24 @@ if (!Array.prototype.filter) {
 	};
 }
 if (!String.format) {
-	String.format = function(format) {
-	    var args = Array.prototype.slice.call(arguments, 1);
-	    return format.replace(/{(\d+)}/g, function(match, number) { 
-	      return typeof args[number] != 'undefined'
-	        ? args[number] 
-	        : match
-	      ;
-	    });
+	String.format = function (format) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return format.replace(/{(\d+)}/g, function (match, number) {
+			return typeof args[number] != 'undefined'
+				? args[number]
+				: match
+				;
+		});
 	};
 }
 if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
 	Object.defineProperty(Function.prototype, 'name', {
-		get:function() {
+		get: function () {
 			var funcNameRegex = /function\s([^(]{1,})\(/;
 			var results = (funcNameRegex).exec((this).toString());
 			return (results && results.length > 1) ? results[1].trim() : "";
 		},
-		set:function(value) {}
+		set: function (value) { }
 	});
 }
 /** @language chinese
@@ -247,43 +247,43 @@ function trace() {
 	var t = document.getElementById("traceObject"), i;
 	if (trace.arguments.length > 0 && t == null) {
 		var d = document.createElement("DIV");
-		d.position=0;
+		d.position = 0;
 		d.style.position = "absolute";
 		document.body.appendChild(d);
 		t = document.createElement("TEXTAREA");
 		t.id = "traceObject";
-		t.style.width = (window.innerWidth*0.5) + "px";
+		t.style.width = (window.innerWidth * 0.5) + "px";
 		t.style.height = "200px";
 		var b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth*0.25) + "px";
-		b.innerHTML="Hide";
+		b.style.width = (window.innerWidth * 0.25) + "px";
+		b.innerHTML = "Hide";
 		d.appendChild(b);
-		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", function(e){
-			t.style.display = (t.style.display == "none" ? "":"none");
+		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", function (e) {
+			t.style.display = (t.style.display == "none" ? "" : "none");
 		});
 		b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth*0.25) + "px";
-		b.innerHTML="position";
+		b.style.width = (window.innerWidth * 0.25) + "px";
+		b.innerHTML = "position";
 		d.appendChild(b);
-		var f = function(e){
+		var f = function (e) {
 			d.position++;
-			if(d.position == 0){
+			if (d.position == 0) {
 				d.style.top = "5px";
 				d.style.left = "5px";
-			}else if(d.position == 1){
+			} else if (d.position == 1) {
 				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
 				d.style.left = "5px";
-			}else if(d.position == 2){
+			} else if (d.position == 2) {
 				d.style.top = "5px";
 				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
-			}else{
+			} else {
 				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
 				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
 				d.position = -1;
 			}
 		};
 		f();
-		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", f);
+		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", f);
 		d.appendChild(document.createElement("BR"));
 		d.appendChild(t);
 	}
@@ -294,8 +294,8 @@ function trace() {
 }
 if (!window.console) {
 	window.console = {
-		log : trace,
-		warn : trace
+		log: trace,
+		warn: trace
 	};
 }
 
@@ -329,7 +329,7 @@ if (!window.console) {
  * @since 1.0.0
  * @public
  */
-function addChild (o) {
+function addChild(o) {
 	LGlobal.stage.addChild(o);
 }
 
@@ -366,7 +366,7 @@ function addChild (o) {
  * @since 1.0.0
  * @public
  */
-function removeChild (o) {
+function removeChild(o) {
 	LGlobal.stage.removeChild(o);
 }
 
@@ -466,7 +466,13 @@ function removeChild (o) {
  * @since 1.0.0
  * @public
  */
-function init (s, c, w, h, f, t) {
+function init(s, c, w, h, f, t) {
+	LGlobal.childList = [];
+	if (LGlobal.requestId) {
+		var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
+		cancelAnimationFrame(LGlobal.requestId);
+
+	}
 	LGlobal.speed = s;
 	var _f = function () {
 		if (LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight) {
@@ -479,43 +485,43 @@ function init (s, c, w, h, f, t) {
 		LGlobal.startTimer = (new Date()).getTime();
 	};
 	var loop;
-	if(typeof s == "function"){
-		loop = function(){
-			s(loop);
+	if (typeof s == "function") {
+		loop = function () {
+			LGlobal.requestId = s(loop);
 			LGlobal.onShow();
 		};
 		LGlobal.speed = 1000 / 60;
-	}else{
-		var _requestAF = (function() {
+	} else {
+		var _requestAF = (function () {
 			return window.requestAnimationFrame ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			window.oRequestAnimationFrame ||
-			window.msRequestAnimationFrame ||
-			function( callback,  element) {
-				window.setTimeout(callback, 1000/60);
-			};
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				function (callback, element) {
+					window.setTimeout(callback, 1000 / 60);
+				};
 		})();
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
-		loop = function(){
+		loop = function () {
 			var now = (new Date()).getTime();
-			if(now - LGlobal._now > s * 2){
+			if (now - LGlobal._now > s * 2) {
 				LGlobal._requestAFBaseTime = now - s;
 			}
 			LGlobal._now = now;
-			var check = now - LGlobal._requestAFBaseTime;	
-			if( check / s >= 0.99 ) {
+			var check = now - LGlobal._requestAFBaseTime;
+			if (check / s >= 0.99) {
 				LGlobal._requestAFBaseTime += s;
 				LGlobal.onShow();
 			}
-			_requestAF(loop, s);
+			LGlobal.requestId = _requestAF(loop, s);
 		};
 	}
 	if (document.readyState === "complete") {
 		LGlobal.setCanvas(c, w, h);
 		_f();
 		loop();
-	}else{
+	} else {
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			LGlobal.setCanvas(c, w, h);
@@ -545,10 +551,10 @@ var LInit = init;
  * @since 1.0.0
  * @public
  */
-function base (d, b, a) {
+function base(d, b, a) {
 	var p = null, o = d.constructor.prototype, h = {};
-	if(d.constructor.name == "Object"){
-		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
+	if (d.constructor.name == "Object") {
+		console.warn("When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
 	if (typeof d.__ll__parent__ == UNDEFINED) {
 		d.__ll__parent__ = [];
@@ -560,13 +566,13 @@ function base (d, b, a) {
 	}
 	for (p in b.prototype) {
 		if (!h[p]) {
-			if(p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0){
-				if(LGlobal.wx){
+			if (p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0) {
+				if (LGlobal.wx) {
 					o[p] = b.prototype[p];
-				}else{
-					o[p] = new Function('return this.callParent("'+p+'", arguments);');
+				} else {
+					o[p] = new Function('return this.callParent("' + p + '", arguments);');
 				}
-			}else{
+			} else {
 				o[p] = b.prototype[p];
 			}
 		}
@@ -686,10 +692,10 @@ var LExtends = base;
  * @since 1.0.0
  * @public
  */
-function getTimer () {
+function getTimer() {
 	return (new Date()).getTime() - LGlobal.startTimer;
 }
-function getExtension (path) {
+function getExtension(path) {
 	var r, pattern = /([^#?]+\.)([^.#?]+)/;
 	r = path.match(pattern);
 	if (r.length >= 3) {
