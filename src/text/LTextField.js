@@ -47,9 +47,9 @@
  * @public
  */
 var LTextField = (function () {
-	function LTextField() {
-		var s = this;
-		LExtends(s, LInteractiveObject, []);
+  function LTextField() {
+    var s = this;
+    LExtends(s, LInteractiveObject, []);
 		/** @language chinese
 		 * 对象的类型
 		 * @property type
@@ -74,8 +74,8 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @public
 		 */
-		s.type = "LTextField";
-		s.texttype = null;
+    s.type = "LTextField";
+    s.texttype = null;
 		/** @language chinese
 		 * 作为文本字段中当前文本的字符串。各行之间用回车符（'\n'）分隔。
 		 * @property text
@@ -97,7 +97,7 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @public
 		 */
-		s.text = "";
+    s.text = "";
 		/** @language chinese
 		 * 包含文本字段内容的 HTML 表示形式。
 		 * 目前支持以下 HTML 标签：
@@ -142,7 +142,7 @@ var LTextField = (function () {
 		 * @since 1.9.8
 		 * @public
 		 */
-		s.htmlText = "";
+    s.htmlText = "";
 		/** @language chinese
 		 * 将样式表附加到文本字段。有关创建样式表的信息，请参阅 <a href="LStyleSheet.html">LStyleSheet</a> 类
 		 * @property styleSheet
@@ -175,7 +175,7 @@ var LTextField = (function () {
 		 * @since 1.9.8
 		 * @public
 		 */
-		s.styleSheet = "";
+    s.styleSheet = "";
 		/** @language chinese
 		 * 使用此文本格式的文本的字体名称，以字符串形式表示。
 		 * @property font
@@ -224,7 +224,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/font.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.font = "Arial";
+    s.font = "Arial";
 		/** @language chinese
 		 * 使用此文本格式的文本的大小（以像素为单位）。
 		 * @property size
@@ -273,7 +273,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/size.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.size = 15;
+    s.size = 15;
 		/** @language chinese
 		 * 表示文本的颜色。
 		 * @property color
@@ -322,7 +322,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/color.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.color = "#000000";
+    s.color = "#000000";
 		/** @language chinese
 		 * 规定字体的粗细。
 		 * @property weight
@@ -371,7 +371,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/weight.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.weight = "normal";
+    s.weight = "normal";
 		/** @language chinese
 		 * 表示段落的对齐方式(水平)。
 		 * @property textAlign
@@ -396,7 +396,7 @@ var LTextField = (function () {
 		 * @default left
 		 * @public
 		 */
-		s.textAlign = "left";
+    s.textAlign = "left";
 		/** @language chinese
 		 * 表示段落的对齐方式(竖直)。
 		 * @property textBaseline
@@ -421,7 +421,7 @@ var LTextField = (function () {
 		 * @default top
 		 * @public
 		 */
-		s.textBaseline = "top";
+    s.textBaseline = "top";
 		/** @language chinese
 		 * <p>获取文字高度的时候，是否以［gjpqy］为标准。</p>
 		 * <p>可以设定的值有下面两种：</p>
@@ -435,7 +435,7 @@ var LTextField = (function () {
 		 * @default LTextField.HEIGHT_MODE_BOTTOM
 		 * @public
 		 */
-		s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
+    s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
 		/** @language chinese
 		 * 文字描边效果。
 		 * @property stroke
@@ -487,7 +487,7 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/stroke.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.stroke = false;
+    s.stroke = false;
 		/** @language chinese
 		 * 文字描边效果的线宽。
 		 * @property lineWidth
@@ -512,7 +512,7 @@ var LTextField = (function () {
 		 * @default 1
 		 * @public
 		 */
-		s.lineWidth = 1;
+    s.lineWidth = 1;
 		/** @language chinese
 		 * 文字描边效果的线的颜色。
 		 * @property lineColor
@@ -537,7 +537,7 @@ var LTextField = (function () {
 		 * @default "#000000"
 		 * @public
 		 */
-		s.lineColor = "#000000";
+    s.lineColor = "#000000";
 		/** @language chinese
 		 * 当设置换行有效(setWordWrap(true))的时候，可以通过它来设置文字宽度。
 		 * @property width
@@ -562,8 +562,8 @@ var LTextField = (function () {
 		 * @default 150
 		 * @public
 		 */
-		s.width = 150;
-		s.height = s.size;
+    s.width = 150;
+    s.height = s.size;
 		/** @language chinese
 		 * 指定文本字段是否是密码文本字段。如果此属性的值为 true，则文本字段被视为密码文本字段，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，则不会将文本字段视为密码文本字段。
 		 * @property displayAsPassword
@@ -612,9 +612,9 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/displayAsPassword.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.displayAsPassword = false;
-		s.wordWrap = false;
-		s.multiline = false;
+    s.displayAsPassword = false;
+    s.wordWrap = false;
+    s.multiline = false;
 		/** @language chinese
 		 * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
 		 * @property numLines
@@ -636,7 +636,7 @@ var LTextField = (function () {
 		 * @since 1.9.0
 		 * @public
 		 */
-		s.numLines = 1;
+    s.numLines = 1;
 		/** @language chinese
 		 * 文本逐字显示的速度
 		 * @property speed
@@ -757,341 +757,352 @@ var LTextField = (function () {
 		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">実際のサンプルを見る</a></p>
 		 * @public
 		 */
-		s.speed = 0;
-		s._speedIndex = 100;
-	}
-	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
-	LTextField.HEIGHT_MODE_BASELINE = "baseline";
-	var p = {
-		_showReady: function (c) {
-			var s = this;
-			c.font = s.weight + " " + s.size + "px " + s.font;
-			c.textAlign = s.textAlign;
-			c.textBaseline = s.textBaseline;
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;
-			}
-		},
-		ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
-			var s = this, pattern, tf = textFormat.clone();
-			if (tabName == "font") {
-				var i = 0;
-				while (attribute) {
-					if (i++ > 4)
-						break;
-					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
-					var arr = pattern.exec(attribute);
-					if (!arr || !arr[0]) {
-						break;
-					}
-					switch (arr[2]) {
-						case "face":
-							tf.font = arr[6];
-							break;
-						case "color":
-							tf.color = arr[6];
-							break;
-						case "size":
-							tf.size = arr[6];
-							break;
-					}
-					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
-				}
-			} else if (tabName == "b") {
-				tf.bold = true;
-			} else if (tabName == "u") {
-				tf.underline = true;
-			} else if (tabName == "i") {
-				tf.italic = true;
-			} else if (tabName == "p" && s.wordWrap) {
-				text = "\n" + text + "\n";
-			} else if (s.styleSheet) {
-				var sheetObj;
-				if (tabName == "span") {
-					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
-					var arr = pattern.exec(attribute);
-					if (arr && arr[0]) {
-						switch (arr[2]) {
-							case "class":
-								sheetObj = s.styleSheet.getStyle("." + arr[6]);
-								break;
-						}
-					}
-				} else if (s.styleSheet.getStyle(tabName)) {
-					sheetObj = s.styleSheet.getStyle(tabName);
-				}
-				if (sheetObj) {
-					tf.setCss(sheetObj);
-				}
-			}
-			s.ll_getHtmlText(tf, text);
-		},
-		ll_getHtmlText: function (tf, text) {
-			if (!text) {
-				return;
-			}
-			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
-			if (!arr || !arr[0]) {
-				s.ll_htmlTexts.push({
-					textFormat: tf.clone(),
-					text: text
-				});
-				return;
-			}
-			if (arr.index > 0) {
-				s.ll_htmlTexts.push({
-					textFormat: tf.clone(),
-					text: text.substring(0, arr.index)
-				});
-			}
-			tabName = arr[1];
-			start = arr.index;
-			end = start;
-			do {
-				end = text.indexOf("</" + tabName, end + 1);
-				start = text.indexOf("<" + tabName, start + 1);
-			} while (start > 0 && start < end);
+    s.speed = 0;
+    s._speedIndex = 100;
+  }
+  LTextField.HEIGHT_MODE_BOTTOM = "bottom";
+  LTextField.HEIGHT_MODE_BASELINE = "baseline";
+  var p = {
+    _showReady: function (c) {
+      var s = this;
+      c.font = s.weight + " " + s.size + "px " + s.font;
+      c.textAlign = s.textAlign;
+      c.textBaseline = s.textBaseline;
+      c.fillStyle = s.color;
+      if (s.stroke) {
+        c.strokeStyle = s.lineColor;
+        c.lineWidth = s.lineWidth + 1;
+      }
+    },
+    ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
+      var s = this, pattern, tf = textFormat.clone();
+      if (tabName == "font") {
+        var i = 0;
+        while (attribute) {
+          if (i++ > 4)
+            break;
+          pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+          var arr = pattern.exec(attribute);
+          if (!arr || !arr[0]) {
+            break;
+          }
+          switch (arr[2]) {
+            case "face":
+              tf.font = arr[6];
+              break;
+            case "color":
+              tf.color = arr[6];
+              break;
+            case "size":
+              tf.size = arr[6];
+              break;
+          }
+          attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+        }
+      } else if (tabName == "b") {
+        tf.bold = true;
+      } else if (tabName == "u") {
+        tf.underline = true;
+      } else if (tabName == "i") {
+        tf.italic = true;
+      } else if (tabName == "p" && s.wordWrap) {
+        text = "\n" + text + "\n";
+      } else if (s.styleSheet) {
+        var sheetObj;
+        if (tabName == "span") {
+          pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+          var arr = pattern.exec(attribute);
+          if (arr && arr[0]) {
+            switch (arr[2]) {
+              case "class":
+                sheetObj = s.styleSheet.getStyle("." + arr[6]);
+                break;
+            }
+          }
+        } else if (s.styleSheet.getStyle(tabName)) {
+          sheetObj = s.styleSheet.getStyle(tabName);
+        }
+        if (sheetObj) {
+          tf.setCss(sheetObj);
+        }
+      }
+      s.ll_getHtmlText(tf, text);
+    },
+    ll_getHtmlText: function (tf, text) {
+      if (!text) {
+        return;
+      }
+      var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+      if (!arr || !arr[0]) {
+        s.ll_htmlTexts.push({
+          textFormat: tf.clone(),
+          text: text
+        });
+        return;
+      }
+      if (arr.index > 0) {
+        s.ll_htmlTexts.push({
+          textFormat: tf.clone(),
+          text: text.substring(0, arr.index)
+        });
+      }
+      tabName = arr[1];
+      start = arr.index;
+      end = start;
+      do {
+        end = text.indexOf("</" + tabName, end + 1);
+        start = text.indexOf("<" + tabName, start + 1);
+      } while (start > 0 && start < end);
 
-			content = text.substring(text.indexOf(">", arr.index) + 1, end);
-			s.ll_getStyleSheet(tf, tabName, arr[3], content);
-			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
-		},
-		_createAlignCanvas: function (c) {
-			var s = this;
-			if (!s._alignCanvas) {
-				s._alignCanvas = document.createElement("canvas");
-				s._alignContext = s._alignCanvas.getContext("2d");
-			}
-			s._alignCanvas.width = s.width;
-			s._alignContext.font = c.font;
-			s._alignContext.fillStyle = c.fillStyle;
-			s._alignContext.textBaseline = c.textBaseline;
-			s._alignContext.textAlign = "left";
-			if (s.stroke) {
-				s._alignContext.strokeStyle = c.strokeStyle;
-				s._alignContext.lineWidth = c.lineWidth;
-			}
-		},
-		_ll_show: function (ctx) {
-			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
+      content = text.substring(text.indexOf(">", arr.index) + 1, end);
+      s.ll_getStyleSheet(tf, tabName, arr[3], content);
+      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+    },
+    _createAlignCanvas: function (c) {
+      var s = this;
+      if (!s._alignCanvas) {
+        s._alignCanvas = document.createElement("canvas");
+        s._alignContext = s._alignCanvas.getContext("2d");
+      }
+      s._alignCanvas.width = s.width;
+      s._alignContext.font = c.font;
+      s._alignContext.fillStyle = c.fillStyle;
+      s._alignContext.textBaseline = c.textBaseline;
+      s._alignContext.textAlign = "left";
+      if (s.stroke) {
+        s._alignContext.strokeStyle = c.strokeStyle;
+        s._alignContext.lineWidth = c.lineWidth;
+      }
+    },
+    _ll_show: function (ctx) {
+      var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 
-			if (LGlobal.enableWebGL) {
-				s._createCanvas();
-				s._canvas.width = LGlobal.width;
-				s._canvas.height = LGlobal.height;
-				s._showReady(s._context);
-				c = s._context;
-			} else {
-				c = ctx;
-			}
-			if (s.texttype == LTextFieldType.INPUT) {
-				s.inputBackLayer.ll_show(c);
-				rc = s.getRootCoordinate();
-				if (!LGlobal.wx && LGlobal.inputBox.name == "input" + s.objectIndex) {
-					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
-					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
-				}
-				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-					return;
-				} else {
-					if (s.inputBackLayer.graphics.setList.length === 0) {
-						c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
-					}
-					c.clip();
-				}
-			}
-			if (LGlobal.fpsStatus) {
-				LGlobal.fpsStatus.text++;
-			}
-			if (s.htmlText) {
-				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
-					tf = new LTextFormat();
-					s.ll_htmlTexts = [];
-					s.ll_htmlText = s.htmlText;
-					if (s.styleSheet) {
-						s.ll_style_objectIndex = s.styleSheet.objectIndex;
-						s.ll_styleIndex = s.styleSheet.styleIndex;
-					}
-					s.ll_getHtmlText(tf, s.htmlText);
-				}
-				j = 0, k = 0, m = 0, b = 0, cx = 0;
-				s._ll_height = s.wordHeight || 30;
-				if (!LTextField.underlineY) {
-					LTextField.underlineY = { "alphabetic": 0, "top": 1, "bottom": -0.2, "middle": 0.4, "hanging": 0.8 };
-				}
-				s._createAlignCanvas(c);
-				var context = c;
-				c = s._alignContext;
-				s.ll_htmlTexts.forEach(function (element) {
-					var textFormat = element.textFormat, text = element.text;
-					c.font = textFormat.getFontText();
-					c.fillStyle = textFormat.color;
-					for (i = 0, l = text.length; i < l; i++) {
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
-						if (enter) {
-							currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
-							j = 0;
-							k = i + 1;
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-							s._createAlignCanvas(context);
-							c.font = textFormat.getFontText();
-							c.fillStyle = textFormat.color;
-							currentWidth = 0;
-							m++;
-							continue;
-						} else {
-							h = c.measureText("O").width * 1.2;
-							if (s.stroke) {
-								c.strokeText(text.substr(i, 1), j, s._ll_height);
-							}
-							c.fillText(text.substr(i, 1), j, s._ll_height);
-							if (textFormat.underline) {
-								c.beginPath();
-								underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-								c.moveTo(j, underlineY);
-								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
-								c.stroke();
-							}
-						}
-						j += c.measureText(text.substr(i, 1)).width;
-						currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
-						if (s.wordWrap && currentWidth > s.width && !enter) {
-							j = 0;
-							k = i + 1;
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-							s._createAlignCanvas(context);
-							c.font = textFormat.getFontText();
-							c.fillStyle = textFormat.color;
-							currentWidth = 0;
-							m++;
-						}
-					}
-					s.height = (m + 1) * s._ll_height;
-				});
-				if (currentWidth > 0) {
-					cx = 0;
-					if (s.textAlign == "center") {
-						cx = -currentWidth * 0.5;
-					} else if (s.textAlign == "right") {
-						cx = -currentWidth;
-					}
-					context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-				}
-				if (LGlobal.enableWebGL) {
-					ctx.drawImage(s._canvas, 0, 0);
-				}
-				return;
-			}
-			lbl = s.text;
-			if (s.displayAsPassword) {
-				lbl = '';
-				for (i = 0, l = s.text.length; i < l; i++) {
-					lbl += '*';
-				}
-			}
-			if (s.wordWrap || s.multiline) {
-				j = 0, k = 0, m = 0, b = 0, cx = 0;
-				var context = c;
-				var isAlignCanvas = s.textAlign != "left";
-				if (isAlignCanvas) {
-					s._createAlignCanvas(c);
-					context = s._alignContext;
-				}
-				var currentWidth = 0;
-				for (i = 0, l = s.text.length; i < l; i++) {
-					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
-					if (enter) {
-						currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
-						j = 0;
-						k = i + 1;
-						if (isAlignCanvas) {
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-							s._createAlignCanvas(c);
-							currentWidth = 0;
-						}
-						m++;
-					} else {
-						if (s.stroke) {
-							context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
-						}
-						context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
-					}
-					s.numLines = m;
-					j = context.measureText(s.text.substr(k, i + 1 - k)).width;
-					currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
-					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
-					if (s.wordWrap && currentWidth > s.width && !enter) {
-						j = 0;
-						k = i + 1;
-						if (isAlignCanvas) {
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-							s._createAlignCanvas(c);
-							currentWidth = 0;
-						}
-						m++;
-					}
-				}
-				if (isAlignCanvas && currentWidth > 0) {
-					cx = 0;
-					if (s.textAlign == "center") {
-						cx = -currentWidth * 0.5;
-					} else if (s.textAlign == "right") {
-						cx = -currentWidth;
-					}
-					c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-				}
-				s.height = (m + 1) * s.wordHeight;
-			} else {
-				s.numLines = 1;
-				if (s.stroke) {
-					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
-				}
-				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
-			}
-			if (LGlobal.enableWebGL) {
-				ctx.drawImage(s._canvas, 0, 0);
-			}
-			if (s.windRunning) {
-				s._ll_windRun();
-			}
-		},
-		_wordHeight: function (h) {
-			var s = this;
-			if (h > 0) {
-				s.wordHeight = h;
-			} else {
-				s.wordWrap = false;
-				s.wordHeight = s.getHeight();
-			}
-			s.height = 0;
-		},
+      if (LGlobal.enableWebGL) {
+        s._createCanvas();
+        s._canvas.width = LGlobal.width;
+        s._canvas.height = LGlobal.height;
+        s._showReady(s._context);
+        c = s._context;
+      } else {
+        c = ctx;
+      }
+      if (s.texttype == LTextFieldType.INPUT) {
+        s.inputBackLayer.ll_show(c);
+        rc = s.getRootCoordinate();
+        if (!LGlobal.wx && LGlobal.inputBox.name == "input" + s.objectIndex) {
+          LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+          LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+        }
+        if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+          return;
+        } else {
+          if (s.inputBackLayer.graphics.setList.length === 0) {
+            c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
+          }
+          c.clip();
+        }
+      }
+      if (LGlobal.fpsStatus) {
+        LGlobal.fpsStatus.text++;
+      }
+      if (s.htmlText) {
+        if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
+          tf = new LTextFormat();
+          s.ll_htmlTexts = [];
+          s.ll_htmlText = s.htmlText;
+          if (s.styleSheet) {
+            s.ll_style_objectIndex = s.styleSheet.objectIndex;
+            s.ll_styleIndex = s.styleSheet.styleIndex;
+          }
+          s.ll_getHtmlText(tf, s.htmlText);
+        }
+        j = 0, k = 0, m = 0, b = 0, cx = 0;
+        s._ll_height = s.wordHeight || 30;
+        if (!LTextField.underlineY) {
+          LTextField.underlineY = { "alphabetic": 0, "top": 1, "bottom": -0.2, "middle": 0.4, "hanging": 0.8 };
+        }
+        s._createAlignCanvas(c);
+        var context = c;
+        c = s._alignContext;
+        for (var elementIndex = 0; elementIndex < s.ll_htmlTexts.length; elementIndex++) {
+          var element = s.ll_htmlTexts[elementIndex];
+          var textFormat = element.textFormat, text = element.text;
+          c.font = textFormat.getFontText();
+          c.fillStyle = textFormat.color;
+          for (i = 0, l = text.length; i < l; i++) {
+            enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+            if (enter) {
+              currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
+              j = 0;
+              k = i + 1;
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              s._createAlignCanvas(context);
+              c.font = textFormat.getFontText();
+              c.fillStyle = textFormat.color;
+              currentWidth = 0;
+              m++;
+              continue;
+            } else {
+              h = c.measureText("O").width * 1.2;
+              if (s.stroke) {
+                c.strokeText(text.substr(i, 1), j, s._ll_height);
+              }
+              c.fillText(text.substr(i, 1), j, s._ll_height);
+              if (textFormat.underline) {
+                c.beginPath();
+                underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
+                c.moveTo(j, underlineY);
+                c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+                c.stroke();
+              }
+            }
+            j += c.measureText(text.substr(i, 1)).width;
+            if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
+              nextText = s.ll_htmlTexts[elementIndex + 1].text;
+              currentWidth = j + c.measureText(nextText.substr(0, 1)).width;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
+            } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
+              currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
+              nextText = s.ll_htmlTexts[elementIndex + 1].text;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(0, 1));
+            } else {
+              currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
+            }
+            if (s.wordWrap && currentWidth > s.width && !enter) {
+              j = 0;
+              k = i + 1;
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              s._createAlignCanvas(context);
+              c.font = textFormat.getFontText();
+              c.fillStyle = textFormat.color;
+              currentWidth = 0;
+              m++;
+            }
+          }
+          s.height = (m + 1) * s._ll_height;
+        }
+        if (currentWidth > 0) {
+          cx = 0;
+          if (s.textAlign == "center") {
+            cx = -currentWidth * 0.5;
+          } else if (s.textAlign == "right") {
+            cx = -currentWidth;
+          }
+          context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+        }
+        if (LGlobal.enableWebGL) {
+          ctx.drawImage(s._canvas, 0, 0);
+        }
+        return;
+      }
+      lbl = s.text;
+      if (s.displayAsPassword) {
+        lbl = '';
+        for (i = 0, l = s.text.length; i < l; i++) {
+          lbl += '*';
+        }
+      }
+      if (s.wordWrap || s.multiline) {
+        j = 0, k = 0, m = 0, b = 0, cx = 0;
+        var context = c;
+        var isAlignCanvas = s.textAlign != "left";
+        if (isAlignCanvas) {
+          s._createAlignCanvas(c);
+          context = s._alignContext;
+        }
+        var currentWidth = 0;
+        for (i = 0, l = s.text.length; i < l; i++) {
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
+          if (enter) {
+            currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
+            j = 0;
+            k = i + 1;
+            if (isAlignCanvas) {
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              s._createAlignCanvas(c);
+              currentWidth = 0;
+            }
+            m++;
+          } else {
+            if (s.stroke) {
+              context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+            }
+            context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+          }
+          s.numLines = m;
+          j = context.measureText(s.text.substr(k, i + 1 - k)).width;
+          currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
+          if (s.wordWrap && currentWidth > s.width && !enter) {
+            j = 0;
+            k = i + 1;
+            if (isAlignCanvas) {
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              s._createAlignCanvas(c);
+              currentWidth = 0;
+            }
+            m++;
+          }
+        }
+        if (isAlignCanvas && currentWidth > 0) {
+          cx = 0;
+          if (s.textAlign == "center") {
+            cx = -currentWidth * 0.5;
+          } else if (s.textAlign == "right") {
+            cx = -currentWidth;
+          }
+          c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+        }
+        s.height = (m + 1) * s.wordHeight;
+      } else {
+        s.numLines = 1;
+        if (s.stroke) {
+          c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
+        }
+        c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+      }
+      if (LGlobal.enableWebGL) {
+        ctx.drawImage(s._canvas, 0, 0);
+      }
+      if (s.windRunning) {
+        s._ll_windRun();
+      }
+    },
+    _wordHeight: function (h) {
+      var s = this;
+      if (h > 0) {
+        s.wordHeight = h;
+      } else {
+        s.wordWrap = false;
+        s.wordHeight = s.getHeight();
+      }
+      s.height = 0;
+    },
 		/** @language chinese
 		 * 设置字段是否为多行文本字段。如果值为 true，则文本字段为多行文本字段；如果值为 false，则文本字段为单行文本字段。在类型为 LTextFieldType.INPUT 的字段中，将确定 Enter 键是否创建新行（如果值为 false，则将忽略 Enter 键）。
 		 * @method setMultiline
@@ -1140,13 +1151,13 @@ var LTextField = (function () {
 		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/setMultiline.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setMultiline: function (v, h) {
-			var s = this;
-			if (v) {
-				s._wordHeight(h);
-			}
-			s.multiline = v;
-		},
+    setMultiline: function (v, h) {
+      var s = this;
+      if (v) {
+        s._wordHeight(h);
+      }
+      s.multiline = v;
+    },
 		/** @language chinese
 		 * 表示文本字段是否自动换行。如果设置的值为 true，则该文本字段自动换行；如果值为 false，则该文本字段不自动换行。默认值为 false。
 		 * @method setWordWrap
@@ -1192,13 +1203,13 @@ var LTextField = (function () {
 		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/setWordWrap.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setWordWrap: function (v, h) {
-			var s = this;
-			if (v) {
-				s._wordHeight(h);
-			}
-			s.wordWrap = v;
-		},
+    setWordWrap: function (v, h) {
+      var s = this;
+      if (v) {
+        s._wordHeight(h);
+      }
+      s.wordWrap = v;
+    },
 		/** @language chinese
 		 * 文本字段的类型。以下 LTextFieldType 常量中的任一个：LTextFieldType.DYNAMIC（指定用户无法编辑的动态文本字段），或 LTextFieldType.INPUT（指定用户可以编辑的输入文本字段）。默认值为 dynamic。
 		 * @method setType
@@ -1244,49 +1255,49 @@ var LTextField = (function () {
 		 * 	addChild(theTextField);
 		 * @examplelink <p><a href="../../../api/LTextField/setType.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		setType: function (type, inputBackLayer) {
-			var s = this;
-			if (s.texttype != type && type == LTextFieldType.INPUT) {
-				if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
-					s.inputBackLayer = new LSprite();
-					s.inputBackLayer.graphics.drawRect(1, "#000000", [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
-				} else {
-					s.inputBackLayer = inputBackLayer;
-				}
-				s.inputBackLayer.parent = s;
-				if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
-					LMouseEventContainer.pushInputBox(s);
-				}
-			} else {
-				s.inputBackLayer = null;
-				LMouseEventContainer.removeInputBox(s);
-			}
-			s.texttype = type;
-		},
-		ismouseon: function (e, cood) {
-			var s = this;
-			if (!e) {
-				return false;
-			}
-			if (!s.visible) {
-				return false;
-			}
-			if (!cood) {
-				cood = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
-			}
-			if (s.mask) {
-				if (!s.mask.parent) {
-					s.mask.parent = s.parent;
-				}
-				if (!s.mask.ismouseon(e, cood)) {
-					return false;
-				}
-			}
-			if (s.inputBackLayer) {
-				return s.inputBackLayer.ismouseon(e, { x: s.x * cood.scaleX + cood.x, y: s.y * cood.scaleY + cood.y, scaleX: cood.scaleX * s.scaleX, scaleY: cood.scaleY * s.scaleY });
-			}
-			return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s._getWidth(), s._getHeight()] }], e.offsetX, e.offsetY);
-		},
+    setType: function (type, inputBackLayer) {
+      var s = this;
+      if (s.texttype != type && type == LTextFieldType.INPUT) {
+        if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
+          s.inputBackLayer = new LSprite();
+          s.inputBackLayer.graphics.drawRect(1, "#000000", [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
+        } else {
+          s.inputBackLayer = inputBackLayer;
+        }
+        s.inputBackLayer.parent = s;
+        if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
+          LMouseEventContainer.pushInputBox(s);
+        }
+      } else {
+        s.inputBackLayer = null;
+        LMouseEventContainer.removeInputBox(s);
+      }
+      s.texttype = type;
+    },
+    ismouseon: function (e, cood) {
+      var s = this;
+      if (!e) {
+        return false;
+      }
+      if (!s.visible) {
+        return false;
+      }
+      if (!cood) {
+        cood = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+      }
+      if (s.mask) {
+        if (!s.mask.parent) {
+          s.mask.parent = s.parent;
+        }
+        if (!s.mask.ismouseon(e, cood)) {
+          return false;
+        }
+      }
+      if (s.inputBackLayer) {
+        return s.inputBackLayer.ismouseon(e, { x: s.x * cood.scaleX + cood.x, y: s.y * cood.scaleY + cood.y, scaleX: cood.scaleX * s.scaleX, scaleY: cood.scaleY * s.scaleY });
+      }
+      return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s._getWidth(), s._getHeight()] }], e.offsetX, e.offsetY);
+    },
 		/** @language chinese
 		 * 返回一个LTextField的克隆对象。
 		 * @method clone
@@ -1332,53 +1343,53 @@ var LTextField = (function () {
 		 * 	addChild(circle2);
 		 * @examplelink <p><a href="../../../api/LTextField/clone.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		clone: function () {
-			var s = this, a = new s.constructor();
-			a.copyProperty(s);
-			a.texttype = null;
-			if (s.texttype == LTextFieldType.INPUT) {
-				a.setType(LTextFieldType.INPUT);
-			}
-			return a;
-		},
-		mouseEvent: function (event, type, cood) {
-			var s = this, on;
-			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
-				return;
-			}
-			on = s.ismouseon(event, cood);
-			if (!on) {
-				return;
-			}
-			s.focus();
-		},
-		_wx_ll_getValue: function (value) {
-			LGlobal.inputTextField.text = value;
-			wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
-			wx.offKeyboardComplete(this._ll_getValue);
-			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-			LGlobal.inputTextField = null;
-		},
-		_ll_getValue: function (event) {
-			if (!LGlobal.inputTextField) {
-				return;
-			}
-			if (LGlobal.wx) {
-				LGlobal.inputTextField._wx_ll_getValue(event.value);
-				return;
-			}
-			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
-			LGlobal.inputBox.style.display = NONE;
-			if (typeof LGlobal.inputTextField.preventDefault != UNDEFINED) {
-				LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
-			}
-			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-			if (typeof LGlobal.inputTextBox.blur === 'function') {
-				LGlobal.inputTextBox.blur();
-			}
-			LGlobal.inputTextField = null;
-		},
+    clone: function () {
+      var s = this, a = new s.constructor();
+      a.copyProperty(s);
+      a.texttype = null;
+      if (s.texttype == LTextFieldType.INPUT) {
+        a.setType(LTextFieldType.INPUT);
+      }
+      return a;
+    },
+    mouseEvent: function (event, type, cood) {
+      var s = this, on;
+      if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
+        return;
+      }
+      on = s.ismouseon(event, cood);
+      if (!on) {
+        return;
+      }
+      s.focus();
+    },
+    _wx_ll_getValue: function (value) {
+      LGlobal.inputTextField.text = value;
+      wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
+      wx.offKeyboardComplete(this._ll_getValue);
+      LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+      LGlobal.inputTextField = null;
+    },
+    _ll_getValue: function (event) {
+      if (!LGlobal.inputTextField) {
+        return;
+      }
+      if (LGlobal.wx) {
+        LGlobal.inputTextField._wx_ll_getValue(event.value);
+        return;
+      }
+      LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+      LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+      LGlobal.inputBox.style.display = NONE;
+      if (typeof LGlobal.inputTextField.preventDefault != UNDEFINED) {
+        LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
+      }
+      LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+      if (typeof LGlobal.inputTextBox.blur === 'function') {
+        LGlobal.inputTextBox.blur();
+      }
+      LGlobal.inputTextField = null;
+    },
 		/** @language chinese
 		 * 当LTextField对象设置为输入框的时候，将LTextField对象的text值反映到输入框中。
 		 * @method updateInput
@@ -1466,45 +1477,45 @@ var LTextField = (function () {
 		 * 	}, 200);
 		 * @examplelink <p><a href="../../../api/LTextField/updateInput.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		updateInput: function () {
-			var s = this;
-			if (LGlobal.wx) {
-				s._wxUpdateInput();
-				return;
-			}
-			if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
-			}
-		},
-		_wxUpdateInput: function () {
-			var s = this;
-			wx.hideKeyboard({
-				complete: function () {
-					s.focus();
-				}
-			});
-		},
-		_wx_ll_input: function (value) {
-			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
-				var event = new LEvent(LTextEvent.TEXT_INPUT);
-				event.keyCode = value;
-				LGlobal.inputTextField.dispatchEvent(event);
-			}
-		},
-		_ll_input: function (e) {
-			if (LGlobal.wx) {
-				LGlobal.inputTextField._wx_ll_input(e);
-				return;
-			}
-			var event = new LEvent(LTextEvent.TEXT_INPUT);
-			event.keyCode = e.keyCode;
-			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
-				e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
-			} else {
-				e.returnValue = true;
-			}
-		},
+    updateInput: function () {
+      var s = this;
+      if (LGlobal.wx) {
+        s._wxUpdateInput();
+        return;
+      }
+      if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+        LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
+      }
+    },
+    _wxUpdateInput: function () {
+      var s = this;
+      wx.hideKeyboard({
+        complete: function () {
+          s.focus();
+        }
+      });
+    },
+    _wx_ll_input: function (value) {
+      if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+        var event = new LEvent(LTextEvent.TEXT_INPUT);
+        event.keyCode = value;
+        LGlobal.inputTextField.dispatchEvent(event);
+      }
+    },
+    _ll_input: function (e) {
+      if (LGlobal.wx) {
+        LGlobal.inputTextField._wx_ll_input(e);
+        return;
+      }
+      var event = new LEvent(LTextEvent.TEXT_INPUT);
+      event.keyCode = e.keyCode;
+      LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+      if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+        e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
+      } else {
+        e.returnValue = true;
+      }
+    },
 		/** @language chinese
 		 * 获取焦点。
 		 * @method focus
@@ -1613,81 +1624,81 @@ var LTextField = (function () {
 		 * 	}, 200);
 		 * @examplelink <p><a href="../../../api/LTextField/focus.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		focus: function () {
-			var s = this, sc, sx;
-			if (!s.parent) {
-				return;
-			}
-			if (s.texttype != LTextFieldType.INPUT) {
-				return;
-			}
-			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
-				s._ll_getValue();
-			}
-			s.dispatchEvent(LFocusEvent.FOCUS_IN);
-			if (LGlobal.wx) {
-				s._wxFocus();
-				return;
-			}
-			sc = s.getAbsoluteScale();
-			LGlobal.inputBox.style.display = "";
-			LGlobal.inputBox.name = "input" + s.objectIndex;
-			LGlobal.inputTextField = s;
-			LGlobal.inputTextareaBoxObj.style.display = NONE;
-			LGlobal.inputTextBoxObj.style.display = NONE;
-			LGlobal.passwordBoxObj.style.display = NONE;
-			if (s.displayAsPassword) {
-				LGlobal.inputTextBox = LGlobal.passwordBoxObj;
-			} else if (s.multiline) {
-				LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
-			} else {
-				LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
-			}
-			sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width;
-			sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;
-			LGlobal.inputTextBox.style.display = "";
-			LGlobal.inputTextBox.value = s.text;
-			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
-			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
-			LGlobal.inputTextBox.style.color = s.color;
-			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
-			LGlobal.inputTextBox.style.fontFamily = s.font;
-			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
-			if (s.texttype == LTextFieldType.INPUT) {
-				rc = s.getRootCoordinate();
-				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
-					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
-					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
-				}
-			}
-			s.preventDefault = LGlobal.preventDefault;
-			LGlobal.preventDefault = false;
-			LGlobal.inputTextBox.focus();
-		},
-		_wxFocus: function () {
-			LGlobal.inputTextField = this;
-			wx.showKeyboard({
-				defaultValue: this.text,
-				maxLength: 20,
-				multiple: false,
-				confirmHold: false,
-				confirmType: 'done'
-			});
-			wx.onKeyboardInput(this._ll_input);
-			wx.onKeyboardComplete(this._ll_getValue);
-		},
-		_getWidth: function () {
-			var s = this;
-			if (s.wordWrap) {
-				return s.width;
-			}
-			if (LGlobal.enableWebGL) {
-				this._createCanvas();
-			}
-			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
-			c.font = s.size + "px " + s.font;
-			return c.measureText(s.text).width;
-		},
+    focus: function () {
+      var s = this, sc, sx;
+      if (!s.parent) {
+        return;
+      }
+      if (s.texttype != LTextFieldType.INPUT) {
+        return;
+      }
+      if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
+        s._ll_getValue();
+      }
+      s.dispatchEvent(LFocusEvent.FOCUS_IN);
+      if (LGlobal.wx) {
+        s._wxFocus();
+        return;
+      }
+      sc = s.getAbsoluteScale();
+      LGlobal.inputBox.style.display = "";
+      LGlobal.inputBox.name = "input" + s.objectIndex;
+      LGlobal.inputTextField = s;
+      LGlobal.inputTextareaBoxObj.style.display = NONE;
+      LGlobal.inputTextBoxObj.style.display = NONE;
+      LGlobal.passwordBoxObj.style.display = NONE;
+      if (s.displayAsPassword) {
+        LGlobal.inputTextBox = LGlobal.passwordBoxObj;
+      } else if (s.multiline) {
+        LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
+      } else {
+        LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
+      }
+      sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width;
+      sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;
+      LGlobal.inputTextBox.style.display = "";
+      LGlobal.inputTextBox.value = s.text;
+      LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
+      LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+      LGlobal.inputTextBox.style.color = s.color;
+      LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+      LGlobal.inputTextBox.style.fontFamily = s.font;
+      LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+      if (s.texttype == LTextFieldType.INPUT) {
+        rc = s.getRootCoordinate();
+        if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+          LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+          LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+        }
+      }
+      s.preventDefault = LGlobal.preventDefault;
+      LGlobal.preventDefault = false;
+      LGlobal.inputTextBox.focus();
+    },
+    _wxFocus: function () {
+      LGlobal.inputTextField = this;
+      wx.showKeyboard({
+        defaultValue: this.text,
+        maxLength: 20,
+        multiple: false,
+        confirmHold: false,
+        confirmType: 'done'
+      });
+      wx.onKeyboardInput(this._ll_input);
+      wx.onKeyboardComplete(this._ll_getValue);
+    },
+    _getWidth: function () {
+      var s = this;
+      if (s.wordWrap) {
+        return s.width;
+      }
+      if (LGlobal.enableWebGL) {
+        this._createCanvas();
+      }
+      var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
+      c.font = s.size + "px " + s.font;
+      return c.measureText(s.text).width;
+    },
 		/** @language chinese
 		 * 获取显示对象的宽度，以像素为单位。
 		 * @method getWidth
@@ -1727,53 +1738,53 @@ var LTextField = (function () {
 		 * 	trace(theTextField.getWidth());
 		 * @examplelink <p><a href="../../../api/LTextField/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getWidth: function (maskSize) {
-			var s = this, w, mx, mw;
-			w = s._getWidth() * s.scaleX;
-			if (maskSize && s.mask) {
-				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-				if (mx > w) {
-					return 0;
-				}
-				mw = s.mask.getWidth();
-				if (mx + mw > w) {
-					return w - mx;
-				} else {
-					return mw;
-				}
-			}
-			return w;
-		},
-		_startX: function (maskSize) {
-			var s = this;
-			if (s.textAlign == "left") {
-				return s.x;
-			}
-			var w = s.getWidth(maskSize);
-			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
-		},
-		_getHeight: function () {
-			var s = this;
-			if (LGlobal.enableWebGL) {
-				this._createCanvas();
-			}
-			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
-			if (s.wordWrap) {
-				c.font = s.weight + " " + s.size + "px " + s.font;
-				if (s.height == 0) {
-					s._createCanvas();
-					s._context.font = s.weight + " " + s.size + "px " + s.font;
-					s._ll_show(s._context);
-				}
-				return s.height;
-			}
-			c.font = s.weight + " " + s.size + "px " + s.font;
-			l = c.measureText("O").width * 1.2;
-			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
-				l = l * 1.2;
-			}
-			return l;
-		},
+    getWidth: function (maskSize) {
+      var s = this, w, mx, mw;
+      w = s._getWidth() * s.scaleX;
+      if (maskSize && s.mask) {
+        mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+        if (mx > w) {
+          return 0;
+        }
+        mw = s.mask.getWidth();
+        if (mx + mw > w) {
+          return w - mx;
+        } else {
+          return mw;
+        }
+      }
+      return w;
+    },
+    _startX: function (maskSize) {
+      var s = this;
+      if (s.textAlign == "left") {
+        return s.x;
+      }
+      var w = s.getWidth(maskSize);
+      return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
+    },
+    _getHeight: function () {
+      var s = this;
+      if (LGlobal.enableWebGL) {
+        this._createCanvas();
+      }
+      var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
+      if (s.wordWrap) {
+        c.font = s.weight + " " + s.size + "px " + s.font;
+        if (s.height == 0) {
+          s._createCanvas();
+          s._context.font = s.weight + " " + s.size + "px " + s.font;
+          s._ll_show(s._context);
+        }
+        return s.height;
+      }
+      c.font = s.weight + " " + s.size + "px " + s.font;
+      l = c.measureText("O").width * 1.2;
+      if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
+        l = l * 1.2;
+      }
+      return l;
+    },
 		/** @language chinese
 		 * 获取显示对象的高度，以像素为单位。
 		 * @method getHeight
@@ -1813,23 +1824,23 @@ var LTextField = (function () {
 		 * 	trace(theTextField.getHeight());
 		 * @examplelink <p><a href="../../../api/LTextField/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		getHeight: function (maskSize) {
-			var s = this, h, my, mh;
-			h = s._getHeight() * s.scaleY;
-			if (maskSize && s.mask) {
-				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-				if (my > h) {
-					return 0;
-				}
-				mh = s.mask.getHeight();
-				if (my + mh > h) {
-					return h - my;
-				} else {
-					return mh;
-				}
-			}
-			return h;
-		},
+    getHeight: function (maskSize) {
+      var s = this, h, my, mh;
+      h = s._getHeight() * s.scaleY;
+      if (maskSize && s.mask) {
+        my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+        if (my > h) {
+          return 0;
+        }
+        mh = s.mask.getHeight();
+        if (my + mh > h) {
+          return h - my;
+        } else {
+          return mh;
+        }
+      }
+      return h;
+    },
 		/** @language chinese
 		 * 文本逐字显示（打字机效果）。
 		 * @method wind
@@ -1944,31 +1955,31 @@ var LTextField = (function () {
 		 * 	}
 		 * @examplelink <p><a href="../../../api/LTextField/wind.html" target="_blank">実際のサンプルを見る</a></p>
 		 */
-		wind: function (listener) {
-			var s = this;
-			s.wind_over_function = listener;
-			s.windRunning = true;
-			s._ll_wind_text = s.text;
-			s.text = "";
-			s._ll_wind_length = 0;
-		},
-		_ll_windRun: function () {
-			var s = this;
-			if (s._speedIndex++ < s.speed) {
-				return;
-			}
-			s._speedIndex = 0;
-			if (s._ll_wind_length > s._ll_wind_text.length) {
-				s.windRunning = false;
-				if (s.wind_over_function) {
-					s.wind_over_function();
-				}
-				s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
-				return;
-			}
-			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
-			s._ll_wind_length++;
-		},
+    wind: function (listener) {
+      var s = this;
+      s.wind_over_function = listener;
+      s.windRunning = true;
+      s._ll_wind_text = s.text;
+      s.text = "";
+      s._ll_wind_length = 0;
+    },
+    _ll_windRun: function () {
+      var s = this;
+      if (s._speedIndex++ < s.speed) {
+        return;
+      }
+      s._speedIndex = 0;
+      if (s._ll_wind_length > s._ll_wind_text.length) {
+        s.windRunning = false;
+        if (s.wind_over_function) {
+          s.wind_over_function();
+        }
+        s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
+        return;
+      }
+      s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
+      s._ll_wind_length++;
+    },
 		/** @language chinese
 		 * <p>结束文本逐字显示。</p>
 		 * @method windComplete
@@ -1987,13 +1998,13 @@ var LTextField = (function () {
 		 * @since 1.10.2
 		 * @public
 		 */
-		windComplete: function () {
-			var s = this;
-			s._speedIndex = s.speed;
-			s.text = s._ll_wind_text;
-			s._ll_wind_length = s._ll_wind_text.length + 1;
-			s._ll_windRun();
-		},
+    windComplete: function () {
+      var s = this;
+      s._speedIndex = s.speed;
+      s.text = s._ll_wind_text;
+      s._ll_wind_length = s._ll_wind_text.length + 1;
+      s._ll_windRun();
+    },
 		/** @language chinese
 		 * <p>清空所使用的内存。</p>
 		 * @method die
@@ -2012,14 +2023,14 @@ var LTextField = (function () {
 		 * @since 1.0.0
 		 * @public
 		 */
-		die: function () {
-			LMouseEventContainer.removeInputBox(this);
-		}
-	};
-	for (var k in p) {
-		LTextField.prototype[k] = p[k];
-	}
-	return LTextField;
+    die: function () {
+      LMouseEventContainer.removeInputBox(this);
+    }
+  };
+  for (var k in p) {
+    LTextField.prototype[k] = p[k];
+  }
+  return LTextField;
 })();
 /** @language chinese
  * LTextField对象获得焦点后调度。
