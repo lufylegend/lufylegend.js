@@ -832,7 +832,7 @@ var LTextField = (function () {
       if (!text) {
         return;
       }
-      var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
+      var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>([\s\S]*?)<\/\1>/g, arr = pattern.exec(text);
       if (!arr || !arr[0]) {
         s.ll_htmlTexts.push({
           textFormat: tf.clone(),
