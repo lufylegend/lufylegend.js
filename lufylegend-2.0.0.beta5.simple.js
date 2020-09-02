@@ -1,6 +1,6 @@
 /**
 * lufylegend
-* @version 2.0.0.beta4
+* @version 2.0.0.beta5
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
 * @blog http://blog.csdn.net/lufy_Legend
@@ -527,7 +527,7 @@ var LGlobal = ( function () {
 			LGlobal.os = OS_IPOD;
 			LGlobal.canTouch = true;
 			LGlobal.ios = true;
-		} else if (n.indexOf(OS_IPAD) > 0) {
+		} else if ((n.indexOf(OS_IPAD) > 0 || n.indexOf('Macintosh') > 0) && 'ontouchend' in document) {
 			LGlobal.os = OS_IPAD;
 			LGlobal.ios = true;
 			LGlobal.canTouch = true;
@@ -548,7 +548,7 @@ var LGlobal = ( function () {
 		}
 		if(LGlobal.ios){
 			var v = n.match(/OS\s(\d+)_(\d+)_?(\d+)?/);
-			LGlobal.iOSversion = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+			LGlobal.iOSversion = v ? [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)] : [];
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
@@ -1368,7 +1368,7 @@ if (!Array.prototype.indexOf) {
 		if (from < 0) {
 			from += len;
 		}
-		for (; from < len; from++){
+		for (; from < len; from++) {
 			if (from in this && this[from] === elt) {
 				return from;
 			}
@@ -1376,8 +1376,8 @@ if (!Array.prototype.indexOf) {
 		return -1;
 	};
 }
-if (!Array.isArray){
-	Array.isArray = function(value){
+if (!Array.isArray) {
+	Array.isArray = function (value) {
 		return Object.prototype.toString.apply(value) == '[object Array]';
 	};
 }
@@ -1386,12 +1386,12 @@ if (!Function.prototype.bind) {
 		if (typeof this !== "function") {
 			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
 		}
-		var aArgs = Array.prototype.slice.call(arguments, 1), 
-			fToBind = this, 
-			fNOP = function () {},
+		var aArgs = Array.prototype.slice.call(arguments, 1),
+			fToBind = this,
+			fNOP = function () { },
 			fBound = function () {
-			return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-        };
+				return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+			};
 		fNOP.prototype = this.prototype;
 		fBound.prototype = new fNOP();
 		return fBound;
@@ -1423,7 +1423,7 @@ if (!Array.prototype.findIndex) {
 		if (this == null) {
 			throw new TypeError('Array.prototype.find called on null or undefined');
 		}
-		if ( typeof predicate !== 'function') {
+		if (typeof predicate !== 'function') {
 			throw new TypeError('predicate must be a function');
 		}
 		var list = Object(this);
@@ -1447,7 +1447,7 @@ if (!Array.prototype.forEach) {
 		}
 		var O = Object(this);
 		var len = O.length >>> 0;
-		if ( typeof callback !== "function") {
+		if (typeof callback !== "function") {
 			throw new TypeError(callback + ' is not a function');
 		}
 		if (arguments.length > 1) {
@@ -1456,7 +1456,7 @@ if (!Array.prototype.forEach) {
 		k = 0;
 		while (k < len) {
 			var kValue;
-			if ( k in O) {
+			if (k in O) {
 				kValue = O[k];
 				callback.call(T, kValue, k, O);
 			}
@@ -1465,7 +1465,7 @@ if (!Array.prototype.forEach) {
 	};
 }
 if (!Array.prototype.every) {
-	Array.prototype.every = function(callbackfn, thisArg) {
+	Array.prototype.every = function (callbackfn, thisArg) {
 		'use strict';
 		var T, k;
 		if (this == null) {
@@ -1473,7 +1473,7 @@ if (!Array.prototype.every) {
 		}
 		var O = Object(this);
 		var len = O.length >>> 0;
-		if ( typeof callbackfn !== 'function') {
+		if (typeof callbackfn !== 'function') {
 			throw new TypeError();
 		}
 		if (arguments.length > 1) {
@@ -1482,7 +1482,7 @@ if (!Array.prototype.every) {
 		k = 0;
 		while (k < len) {
 			var kValue;
-			if ( k in O) {
+			if (k in O) {
 				kValue = O[k];
 				var testResult = callbackfn.call(T, kValue, k, O);
 				if (!testResult) {
@@ -1495,20 +1495,20 @@ if (!Array.prototype.every) {
 	};
 }
 if (!Array.prototype.some) {
-	Array.prototype.some = function(fun) {
+	Array.prototype.some = function (fun) {
 		'use strict';
 		if (this == null) {
 			throw new TypeError('Array.prototype.some called on null or undefined');
 		}
-		if ( typeof fun !== 'function') {
+		if (typeof fun !== 'function') {
 			throw new TypeError();
 		}
 		var t = Object(this);
 		var len = t.length >>> 0;
 		var thisArg = arguments.length >= 2 ? arguments[1] :
-		void 0;
+			void 0;
 		for (var i = 0; i < len; i++) {
-			if ( i in t && fun.call(thisArg, t[i], i, t)) {
+			if (i in t && fun.call(thisArg, t[i], i, t)) {
 				return true;
 			}
 		}
@@ -1516,7 +1516,7 @@ if (!Array.prototype.some) {
 	};
 }
 if (!Array.prototype.filter) {
-	Array.prototype.filter = function(fun ) {
+	Array.prototype.filter = function (fun ) {
 		"use strict";
 		if (this == null) {
 			throw new TypeError();
@@ -1538,24 +1538,24 @@ if (!Array.prototype.filter) {
 	};
 }
 if (!String.format) {
-	String.format = function(format) {
-	    var args = Array.prototype.slice.call(arguments, 1);
-	    return format.replace(/{(\d+)}/g, function(match, number) { 
-	      return typeof args[number] != 'undefined'
-	        ? args[number] 
-	        : match
-	      ;
-	    });
+	String.format = function (format) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return format.replace(/{(\d+)}/g, function (match, number) {
+			return typeof args[number] != 'undefined'
+				? args[number]
+				: match
+				;
+		});
 	};
 }
 if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
 	Object.defineProperty(Function.prototype, 'name', {
-		get:function() {
+		get: function () {
 			var funcNameRegex = /function\s([^(]{1,})\(/;
 			var results = (funcNameRegex).exec((this).toString());
 			return (results && results.length > 1) ? results[1].trim() : "";
 		},
-		set:function(value) {}
+		set: function (value) { }
 	});
 }
 function trace() {
@@ -1563,43 +1563,43 @@ function trace() {
 	var t = document.getElementById("traceObject"), i;
 	if (trace.arguments.length > 0 && t == null) {
 		var d = document.createElement("DIV");
-		d.position=0;
+		d.position = 0;
 		d.style.position = "absolute";
 		document.body.appendChild(d);
 		t = document.createElement("TEXTAREA");
 		t.id = "traceObject";
-		t.style.width = (window.innerWidth*0.5) + "px";
+		t.style.width = (window.innerWidth * 0.5) + "px";
 		t.style.height = "200px";
 		var b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth*0.25) + "px";
-		b.innerHTML="Hide";
+		b.style.width = (window.innerWidth * 0.25) + "px";
+		b.innerHTML = "Hide";
 		d.appendChild(b);
-		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", function(e){
-			t.style.display = (t.style.display == "none" ? "":"none");
+		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", function (e) {
+			t.style.display = (t.style.display == "none" ? "" : "none");
 		});
 		b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth*0.25) + "px";
-		b.innerHTML="position";
+		b.style.width = (window.innerWidth * 0.25) + "px";
+		b.innerHTML = "position";
 		d.appendChild(b);
-		var f = function(e){
+		var f = function (e) {
 			d.position++;
-			if(d.position == 0){
+			if (d.position == 0) {
 				d.style.top = "5px";
 				d.style.left = "5px";
-			}else if(d.position == 1){
+			} else if (d.position == 1) {
 				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
 				d.style.left = "5px";
-			}else if(d.position == 2){
+			} else if (d.position == 2) {
 				d.style.top = "5px";
 				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
-			}else{
+			} else {
 				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
 				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
 				d.position = -1;
 			}
 		};
 		f();
-		LEvent.addEventListener(b,LGlobal.mobile ? "touchstart":"click", f);
+		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", f);
 		d.appendChild(document.createElement("BR"));
 		d.appendChild(t);
 	}
@@ -1610,17 +1610,22 @@ function trace() {
 }
 if (!window.console) {
 	window.console = {
-		log : trace,
-		warn : trace
+		log: trace,
+		warn: trace
 	};
 }
-function addChild (o) {
+function addChild(o) {
 	LGlobal.stage.addChild(o);
 }
-function removeChild (o) {
+function removeChild(o) {
 	LGlobal.stage.removeChild(o);
 }
-function init (s, c, w, h, f, t) {
+function init(s, c, w, h, f, t) {
+	LGlobal.childList = [];
+	if (LGlobal.requestId) {
+		var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
+		cancelAnimationFrame(LGlobal.requestId);
+	}
 	LGlobal.speed = s;
 	var _f = function () {
 		if (LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight) {
@@ -1633,43 +1638,43 @@ function init (s, c, w, h, f, t) {
 		LGlobal.startTimer = (new Date()).getTime();
 	};
 	var loop;
-	if(typeof s == "function"){
-		loop = function(){
-			s(loop);
+	if (typeof s == "function") {
+		loop = function () {
+			LGlobal.requestId = s(loop);
 			LGlobal.onShow();
 		};
 		LGlobal.speed = 1000 / 60;
-	}else{
-		var _requestAF = (function() {
+	} else {
+		var _requestAF = (function () {
 			return window.requestAnimationFrame ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			window.oRequestAnimationFrame ||
-			window.msRequestAnimationFrame ||
-			function( callback,  element) {
-				window.setTimeout(callback, 1000/60);
-			};
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				function (callback, element) {
+					window.setTimeout(callback, 1000 / 60);
+				};
 		})();
 		LGlobal._requestAFBaseTime = (new Date()).getTime();
-		loop = function(){
+		loop = function () {
 			var now = (new Date()).getTime();
-			if(now - LGlobal._now > s * 2){
+			if (now - LGlobal._now > s * 2) {
 				LGlobal._requestAFBaseTime = now - s;
 			}
 			LGlobal._now = now;
-			var check = now - LGlobal._requestAFBaseTime;	
-			if( check / s >= 0.99 ) {
+			var check = now - LGlobal._requestAFBaseTime;
+			if (check / s >= 0.99) {
 				LGlobal._requestAFBaseTime += s;
 				LGlobal.onShow();
 			}
-			_requestAF(loop, s);
+			LGlobal.requestId = _requestAF(loop, s);
 		};
 	}
 	if (document.readyState === "complete") {
 		LGlobal.setCanvas(c, w, h);
 		_f();
 		loop();
-	}else{
+	} else {
 		LEvent.addEventListener(window, "load", function () {
 			LGlobal._requestAFBaseTime = (new Date()).getTime();
 			LGlobal.setCanvas(c, w, h);
@@ -1679,10 +1684,10 @@ function init (s, c, w, h, f, t) {
 	}
 }
 var LInit = init;
-function base (d, b, a) {
+function base(d, b, a) {
 	var p = null, o = d.constructor.prototype, h = {};
-	if(d.constructor.name == "Object"){
-		console.warn( "When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
+	if (d.constructor.name == "Object") {
+		console.warn("When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
 	}
 	if (typeof d.__ll__parent__ == UNDEFINED) {
 		d.__ll__parent__ = [];
@@ -1694,13 +1699,13 @@ function base (d, b, a) {
 	}
 	for (p in b.prototype) {
 		if (!h[p]) {
-			if(p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0){
-				if(LGlobal.wx){
+			if (p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0) {
+				if (LGlobal.wx) {
 					o[p] = b.prototype[p];
-				}else{
-					o[p] = new Function('return this.callParent("'+p+'", arguments);');
+				} else {
+					o[p] = new Function('return this.callParent("' + p + '", arguments);');
 				}
-			}else{
+			} else {
 				o[p] = b.prototype[p];
 			}
 		}
@@ -1711,10 +1716,10 @@ function base (d, b, a) {
 	b.apply(d, a);
 }
 var LExtends = base;
-function getTimer () {
+function getTimer() {
 	return (new Date()).getTime() - LGlobal.startTimer;
 }
-function getExtension (path) {
+function getExtension(path) {
 	var r, pattern = /([^#?]+\.)([^.#?]+)/;
 	r = path.match(pattern);
 	if (r.length >= 3) {
@@ -5277,685 +5282,696 @@ var LTextFormat = (function() {
 	return LTextFormat;
 })();
 var LTextField = (function () {
-	function LTextField() {
-		var s = this;
-		LExtends(s, LInteractiveObject, []);
-		s.type = "LTextField";
-		s.texttype = null;
-		s.text = "";
-		s.htmlText = "";
-		s.styleSheet = "";
-		s.font = "Arial";
-		s.size = 15;
-		s.color = "#000000";
-		s.weight = "normal";
-		s.textAlign = "left";
-		s.textBaseline = "top";
-		s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
-		s.stroke = false;
-		s.lineWidth = 1;
-		s.lineColor = "#000000";
-		s.width = 150;
-		s.height = s.size;
-		s.displayAsPassword = false;
-		s.wordWrap = false;
-		s.multiline = false;
-		s.numLines = 1;
-		s.speed = 0;
-		s._speedIndex = 100;
-	}
-	LTextField.HEIGHT_MODE_BOTTOM = "bottom";
-	LTextField.HEIGHT_MODE_BASELINE = "baseline";
-	var p = {
-		_showReady: function (c) {
-			var s = this;
-			c.font = s.weight + " " + s.size + "px " + s.font;
-			c.textAlign = s.textAlign;
-			c.textBaseline = s.textBaseline;
-			c.fillStyle = s.color;
-			if (s.stroke) {
-				c.strokeStyle = s.lineColor;
-				c.lineWidth = s.lineWidth + 1;
-			}
-		},
-		ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
-			var s = this, pattern, tf = textFormat.clone();
-			if (tabName == "font") {
-				var i = 0;
-				while (attribute) {
-					if (i++ > 4)
-						break;
-					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
-					var arr = pattern.exec(attribute);
-					if (!arr || !arr[0]) {
-						break;
-					}
-					switch (arr[2]) {
-						case "face":
-							tf.font = arr[6];
-							break;
-						case "color":
-							tf.color = arr[6];
-							break;
-						case "size":
-							tf.size = arr[6];
-							break;
-					}
-					attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
-				}
-			} else if (tabName == "b") {
-				tf.bold = true;
-			} else if (tabName == "u") {
-				tf.underline = true;
-			} else if (tabName == "i") {
-				tf.italic = true;
-			} else if (tabName == "p" && s.wordWrap) {
-				text = "\n" + text + "\n";
-			} else if (s.styleSheet) {
-				var sheetObj;
-				if (tabName == "span") {
-					pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
-					var arr = pattern.exec(attribute);
-					if (arr && arr[0]) {
-						switch (arr[2]) {
-							case "class":
-								sheetObj = s.styleSheet.getStyle("." + arr[6]);
-								break;
-						}
-					}
-				} else if (s.styleSheet.getStyle(tabName)) {
-					sheetObj = s.styleSheet.getStyle(tabName);
-				}
-				if (sheetObj) {
-					tf.setCss(sheetObj);
-				}
-			}
-			s.ll_getHtmlText(tf, text);
-		},
-		ll_getHtmlText: function (tf, text) {
-			if (!text) {
-				return;
-			}
-			var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>(.*?)<\/\1>/g, arr = pattern.exec(text);
-			if (!arr || !arr[0]) {
-				s.ll_htmlTexts.push({
-					textFormat: tf.clone(),
-					text: text
-				});
-				return;
-			}
-			if (arr.index > 0) {
-				s.ll_htmlTexts.push({
-					textFormat: tf.clone(),
-					text: text.substring(0, arr.index)
-				});
-			}
-			tabName = arr[1];
-			start = arr.index;
-			end = start;
-			do {
-				end = text.indexOf("</" + tabName, end + 1);
-				start = text.indexOf("<" + tabName, start + 1);
-			} while (start > 0 && start < end);
-			content = text.substring(text.indexOf(">", arr.index) + 1, end);
-			s.ll_getStyleSheet(tf, tabName, arr[3], content);
-			s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
-		},
-		_createAlignCanvas: function (c) {
-			var s = this;
-			if (!s._alignCanvas) {
-				s._alignCanvas = document.createElement("canvas");
-				s._alignContext = s._alignCanvas.getContext("2d");
-			}
-			s._alignCanvas.width = s.width;
-			s._alignContext.font = c.font;
-			s._alignContext.fillStyle = c.fillStyle;
-			s._alignContext.textBaseline = c.textBaseline;
-			s._alignContext.textAlign = "left";
-			if (s.stroke) {
-				s._alignContext.strokeStyle = c.strokeStyle;
-				s._alignContext.lineWidth = c.lineWidth;
-			}
-		},
-		_ll_show: function (ctx) {
-			var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
-			if (LGlobal.enableWebGL) {
-				s._createCanvas();
-				s._canvas.width = LGlobal.width;
-				s._canvas.height = LGlobal.height;
-				s._showReady(s._context);
-				c = s._context;
-			} else {
-				c = ctx;
-			}
-			if (s.texttype == LTextFieldType.INPUT) {
-				s.inputBackLayer.ll_show(c);
-				rc = s.getRootCoordinate();
-				if (!LGlobal.wx && LGlobal.inputBox.name == "input" + s.objectIndex) {
-					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
-					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
-				}
-				if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-					return;
-				} else {
-					if (s.inputBackLayer.graphics.setList.length === 0) {
-						c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
-					}
-					c.clip();
-				}
-			}
-			if (LGlobal.fpsStatus) {
-				LGlobal.fpsStatus.text++;
-			}
-			if (s.htmlText) {
-				if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
-					tf = new LTextFormat();
-					s.ll_htmlTexts = [];
-					s.ll_htmlText = s.htmlText;
-					if (s.styleSheet) {
-						s.ll_style_objectIndex = s.styleSheet.objectIndex;
-						s.ll_styleIndex = s.styleSheet.styleIndex;
-					}
-					s.ll_getHtmlText(tf, s.htmlText);
-				}
-				j = 0, k = 0, m = 0, b = 0, cx = 0;
-				s._ll_height = s.wordHeight || 30;
-				if (!LTextField.underlineY) {
-					LTextField.underlineY = { "alphabetic": 0, "top": 1, "bottom": -0.2, "middle": 0.4, "hanging": 0.8 };
-				}
-				s._createAlignCanvas(c);
-				var context = c;
-				c = s._alignContext;
-				s.ll_htmlTexts.forEach(function (element) {
-					var textFormat = element.textFormat, text = element.text;
-					c.font = textFormat.getFontText();
-					c.fillStyle = textFormat.color;
-					for (i = 0, l = text.length; i < l; i++) {
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
-						if (enter) {
-							currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
-							j = 0;
-							k = i + 1;
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-							s._createAlignCanvas(context);
-							c.font = textFormat.getFontText();
-							c.fillStyle = textFormat.color;
-							currentWidth = 0;
-							m++;
-							continue;
-						} else {
-							h = c.measureText("O").width * 1.2;
-							if (s.stroke) {
-								c.strokeText(text.substr(i, 1), j, s._ll_height);
-							}
-							c.fillText(text.substr(i, 1), j, s._ll_height);
-							if (textFormat.underline) {
-								c.beginPath();
-								underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-								c.moveTo(j, underlineY);
-								c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
-								c.stroke();
-							}
-						}
-						j += c.measureText(text.substr(i, 1)).width;
-						currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-						enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
-						if (s.wordWrap && currentWidth > s.width && !enter) {
-							j = 0;
-							k = i + 1;
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-							s._createAlignCanvas(context);
-							c.font = textFormat.getFontText();
-							c.fillStyle = textFormat.color;
-							currentWidth = 0;
-							m++;
-						}
-					}
-					s.height = (m + 1) * s._ll_height;
-				});
-				if (currentWidth > 0) {
-					cx = 0;
-					if (s.textAlign == "center") {
-						cx = -currentWidth * 0.5;
-					} else if (s.textAlign == "right") {
-						cx = -currentWidth;
-					}
-					context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-				}
-				if (LGlobal.enableWebGL) {
-					ctx.drawImage(s._canvas, 0, 0);
-				}
-				return;
-			}
-			lbl = s.text;
-			if (s.displayAsPassword) {
-				lbl = '';
-				for (i = 0, l = s.text.length; i < l; i++) {
-					lbl += '*';
-				}
-			}
-			if (s.wordWrap || s.multiline) {
-				j = 0, k = 0, m = 0, b = 0, cx = 0;
-				var context = c;
-				var isAlignCanvas = s.textAlign != "left";
-				if (isAlignCanvas) {
-					s._createAlignCanvas(c);
-					context = s._alignContext;
-				}
-				var currentWidth = 0;
-				for (i = 0, l = s.text.length; i < l; i++) {
-					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
-					if (enter) {
-						currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
-						j = 0;
-						k = i + 1;
-						if (isAlignCanvas) {
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-							s._createAlignCanvas(c);
-							currentWidth = 0;
-						}
-						m++;
-					} else {
-						if (s.stroke) {
-							context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
-						}
-						context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
-					}
-					s.numLines = m;
-					j = context.measureText(s.text.substr(k, i + 1 - k)).width;
-					currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
-					enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
-					if (s.wordWrap && currentWidth > s.width && !enter) {
-						j = 0;
-						k = i + 1;
-						if (isAlignCanvas) {
-							cx = 0;
-							if (s.textAlign == "center") {
-								cx = -currentWidth * 0.5;
-							} else if (s.textAlign == "right") {
-								cx = -currentWidth;
-							}
-							c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-							s._createAlignCanvas(c);
-							currentWidth = 0;
-						}
-						m++;
-					}
-				}
-				if (isAlignCanvas && currentWidth > 0) {
-					cx = 0;
-					if (s.textAlign == "center") {
-						cx = -currentWidth * 0.5;
-					} else if (s.textAlign == "right") {
-						cx = -currentWidth;
-					}
-					c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-				}
-				s.height = (m + 1) * s.wordHeight;
-			} else {
-				s.numLines = 1;
-				if (s.stroke) {
-					c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
-				}
-				c.fillText(lbl, 0, 0, c.measureText(lbl).width);
-			}
-			if (LGlobal.enableWebGL) {
-				ctx.drawImage(s._canvas, 0, 0);
-			}
-			if (s.windRunning) {
-				s._ll_windRun();
-			}
-		},
-		_wordHeight: function (h) {
-			var s = this;
-			if (h > 0) {
-				s.wordHeight = h;
-			} else {
-				s.wordWrap = false;
-				s.wordHeight = s.getHeight();
-			}
-			s.height = 0;
-		},
-		setMultiline: function (v, h) {
-			var s = this;
-			if (v) {
-				s._wordHeight(h);
-			}
-			s.multiline = v;
-		},
-		setWordWrap: function (v, h) {
-			var s = this;
-			if (v) {
-				s._wordHeight(h);
-			}
-			s.wordWrap = v;
-		},
-		setType: function (type, inputBackLayer) {
-			var s = this;
-			if (s.texttype != type && type == LTextFieldType.INPUT) {
-				if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
-					s.inputBackLayer = new LSprite();
-					s.inputBackLayer.graphics.drawRect(1, "#000000", [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
-				} else {
-					s.inputBackLayer = inputBackLayer;
-				}
-				s.inputBackLayer.parent = s;
-				if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
-					LMouseEventContainer.pushInputBox(s);
-				}
-			} else {
-				s.inputBackLayer = null;
-				LMouseEventContainer.removeInputBox(s);
-			}
-			s.texttype = type;
-		},
-		ismouseon: function (e, cood) {
-			var s = this;
-			if (!e) {
-				return false;
-			}
-			if (!s.visible) {
-				return false;
-			}
-			if (!cood) {
-				cood = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
-			}
-			if (s.mask) {
-				if (!s.mask.parent) {
-					s.mask.parent = s.parent;
-				}
-				if (!s.mask.ismouseon(e, cood)) {
-					return false;
-				}
-			}
-			if (s.inputBackLayer) {
-				return s.inputBackLayer.ismouseon(e, { x: s.x * cood.scaleX + cood.x, y: s.y * cood.scaleY + cood.y, scaleX: cood.scaleX * s.scaleX, scaleY: cood.scaleY * s.scaleY });
-			}
-			return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s._getWidth(), s._getHeight()] }], e.offsetX, e.offsetY);
-		},
-		clone: function () {
-			var s = this, a = new s.constructor();
-			a.copyProperty(s);
-			a.texttype = null;
-			if (s.texttype == LTextFieldType.INPUT) {
-				a.setType(LTextFieldType.INPUT);
-			}
-			return a;
-		},
-		mouseEvent: function (event, type, cood) {
-			var s = this, on;
-			if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
-				return;
-			}
-			on = s.ismouseon(event, cood);
-			if (!on) {
-				return;
-			}
-			s.focus();
-		},
-		_wx_ll_getValue: function (value) {
-			LGlobal.inputTextField.text = value;
-			wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
-			wx.offKeyboardComplete(this._ll_getValue);
-			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-			LGlobal.inputTextField = null;
-		},
-		_ll_getValue: function (event) {
-			if (!LGlobal.inputTextField) {
-				return;
-			}
-			if (LGlobal.wx) {
-				LGlobal.inputTextField._wx_ll_getValue(event.value);
-				return;
-			}
-			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
-			LGlobal.inputBox.style.display = NONE;
-			if (typeof LGlobal.inputTextField.preventDefault != UNDEFINED) {
-				LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
-			}
-			LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
-			if (typeof LGlobal.inputTextBox.blur === 'function') {
-				LGlobal.inputTextBox.blur();
-			}
-			LGlobal.inputTextField = null;
-		},
-		updateInput: function () {
-			var s = this;
-			if (LGlobal.wx) {
-				s._wxUpdateInput();
-				return;
-			}
-			if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
-				LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
-			}
-		},
-		_wxUpdateInput: function () {
-			var s = this;
-			wx.hideKeyboard({
-				complete: function () {
-					s.focus();
-				}
-			});
-		},
-		_wx_ll_input: function (value) {
-			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
-				var event = new LEvent(LTextEvent.TEXT_INPUT);
-				event.keyCode = value;
-				LGlobal.inputTextField.dispatchEvent(event);
-			}
-		},
-		_ll_input: function (e) {
-			if (LGlobal.wx) {
-				LGlobal.inputTextField._wx_ll_input(e);
-				return;
-			}
-			var event = new LEvent(LTextEvent.TEXT_INPUT);
-			event.keyCode = e.keyCode;
-			LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
-			if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
-				e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
-			} else {
-				e.returnValue = true;
-			}
-		},
-		focus: function () {
-			var s = this, sc, sx;
-			if (!s.parent) {
-				return;
-			}
-			if (s.texttype != LTextFieldType.INPUT) {
-				return;
-			}
-			if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
-				s._ll_getValue();
-			}
-			s.dispatchEvent(LFocusEvent.FOCUS_IN);
-			if (LGlobal.wx) {
-				s._wxFocus();
-				return;
-			}
-			sc = s.getAbsoluteScale();
-			LGlobal.inputBox.style.display = "";
-			LGlobal.inputBox.name = "input" + s.objectIndex;
-			LGlobal.inputTextField = s;
-			LGlobal.inputTextareaBoxObj.style.display = NONE;
-			LGlobal.inputTextBoxObj.style.display = NONE;
-			LGlobal.passwordBoxObj.style.display = NONE;
-			if (s.displayAsPassword) {
-				LGlobal.inputTextBox = LGlobal.passwordBoxObj;
-			} else if (s.multiline) {
-				LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
-			} else {
-				LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
-			}
-			sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width;
-			sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;
-			LGlobal.inputTextBox.style.display = "";
-			LGlobal.inputTextBox.value = s.text;
-			LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
-			LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
-			LGlobal.inputTextBox.style.color = s.color;
-			LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
-			LGlobal.inputTextBox.style.fontFamily = s.font;
-			LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
-			if (s.texttype == LTextFieldType.INPUT) {
-				rc = s.getRootCoordinate();
-				if (LGlobal.inputBox.name == "input" + s.objectIndex) {
-					LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
-					LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
-				}
-			}
-			s.preventDefault = LGlobal.preventDefault;
-			LGlobal.preventDefault = false;
-			LGlobal.inputTextBox.focus();
-		},
-		_wxFocus: function () {
-			LGlobal.inputTextField = this;
-			wx.showKeyboard({
-				defaultValue: this.text,
-				maxLength: 20,
-				multiple: false,
-				confirmHold: false,
-				confirmType: 'done'
-			});
-			wx.onKeyboardInput(this._ll_input);
-			wx.onKeyboardComplete(this._ll_getValue);
-		},
-		_getWidth: function () {
-			var s = this;
-			if (s.wordWrap) {
-				return s.width;
-			}
-			if (LGlobal.enableWebGL) {
-				this._createCanvas();
-			}
-			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
-			c.font = s.size + "px " + s.font;
-			return c.measureText(s.text).width;
-		},
-		getWidth: function (maskSize) {
-			var s = this, w, mx, mw;
-			w = s._getWidth() * s.scaleX;
-			if (maskSize && s.mask) {
-				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-				if (mx > w) {
-					return 0;
-				}
-				mw = s.mask.getWidth();
-				if (mx + mw > w) {
-					return w - mx;
-				} else {
-					return mw;
-				}
-			}
-			return w;
-		},
-		_startX: function (maskSize) {
-			var s = this;
-			if (s.textAlign == "left") {
-				return s.x;
-			}
-			var w = s.getWidth(maskSize);
-			return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
-		},
-		_getHeight: function () {
-			var s = this;
-			if (LGlobal.enableWebGL) {
-				this._createCanvas();
-			}
-			var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
-			if (s.wordWrap) {
-				c.font = s.weight + " " + s.size + "px " + s.font;
-				if (s.height == 0) {
-					s._createCanvas();
-					s._context.font = s.weight + " " + s.size + "px " + s.font;
-					s._ll_show(s._context);
-				}
-				return s.height;
-			}
-			c.font = s.weight + " " + s.size + "px " + s.font;
-			l = c.measureText("O").width * 1.2;
-			if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
-				l = l * 1.2;
-			}
-			return l;
-		},
-		getHeight: function (maskSize) {
-			var s = this, h, my, mh;
-			h = s._getHeight() * s.scaleY;
-			if (maskSize && s.mask) {
-				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-				if (my > h) {
-					return 0;
-				}
-				mh = s.mask.getHeight();
-				if (my + mh > h) {
-					return h - my;
-				} else {
-					return mh;
-				}
-			}
-			return h;
-		},
-		wind: function (listener) {
-			var s = this;
-			s.wind_over_function = listener;
-			s.windRunning = true;
-			s._ll_wind_text = s.text;
-			s.text = "";
-			s._ll_wind_length = 0;
-		},
-		_ll_windRun: function () {
-			var s = this;
-			if (s._speedIndex++ < s.speed) {
-				return;
-			}
-			s._speedIndex = 0;
-			if (s._ll_wind_length > s._ll_wind_text.length) {
-				s.windRunning = false;
-				if (s.wind_over_function) {
-					s.wind_over_function();
-				}
-				s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
-				return;
-			}
-			s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
-			s._ll_wind_length++;
-		},
-		windComplete: function () {
-			var s = this;
-			s._speedIndex = s.speed;
-			s.text = s._ll_wind_text;
-			s._ll_wind_length = s._ll_wind_text.length + 1;
-			s._ll_windRun();
-		},
-		die: function () {
-			LMouseEventContainer.removeInputBox(this);
-		}
-	};
-	for (var k in p) {
-		LTextField.prototype[k] = p[k];
-	}
-	return LTextField;
+  function LTextField() {
+    var s = this;
+    LExtends(s, LInteractiveObject, []);
+    s.type = "LTextField";
+    s.texttype = null;
+    s.text = "";
+    s.htmlText = "";
+    s.styleSheet = "";
+    s.font = "Arial";
+    s.size = 15;
+    s.color = "#000000";
+    s.weight = "normal";
+    s.textAlign = "left";
+    s.textBaseline = "top";
+    s.heightMode = LTextField.HEIGHT_MODE_BOTTOM;
+    s.stroke = false;
+    s.lineWidth = 1;
+    s.lineColor = "#000000";
+    s.width = 150;
+    s.height = s.size;
+    s.displayAsPassword = false;
+    s.wordWrap = false;
+    s.multiline = false;
+    s.numLines = 1;
+    s.speed = 0;
+    s._speedIndex = 100;
+  }
+  LTextField.HEIGHT_MODE_BOTTOM = "bottom";
+  LTextField.HEIGHT_MODE_BASELINE = "baseline";
+  var p = {
+    _showReady: function (c) {
+      var s = this;
+      c.font = s.weight + " " + s.size + "px " + s.font;
+      c.textAlign = s.textAlign;
+      c.textBaseline = s.textBaseline;
+      c.fillStyle = s.color;
+      if (s.stroke) {
+        c.strokeStyle = s.lineColor;
+        c.lineWidth = s.lineWidth + 1;
+      }
+    },
+    ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
+      var s = this, pattern, tf = textFormat.clone();
+      if (tabName == "font") {
+        var i = 0;
+        while (attribute) {
+          if (i++ > 4)
+            break;
+          pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+          var arr = pattern.exec(attribute);
+          if (!arr || !arr[0]) {
+            break;
+          }
+          switch (arr[2]) {
+            case "face":
+              tf.font = arr[6];
+              break;
+            case "color":
+              tf.color = arr[6];
+              break;
+            case "size":
+              tf.size = arr[6];
+              break;
+          }
+          attribute = attribute.replace(arr[0], "").replace(/(^\s*)|(\s*$)|(\n)/g, "");
+        }
+      } else if (tabName == "b") {
+        tf.bold = true;
+      } else if (tabName == "u") {
+        tf.underline = true;
+      } else if (tabName == "i") {
+        tf.italic = true;
+      } else if (tabName == "p" && s.wordWrap) {
+        text = "\n" + text + "\n";
+      } else if (s.styleSheet) {
+        var sheetObj;
+        if (tabName == "span") {
+          pattern = /(([^\s]*?)(\s*)=(\s*)("|')(.*?)\5)*/g;
+          var arr = pattern.exec(attribute);
+          if (arr && arr[0]) {
+            switch (arr[2]) {
+              case "class":
+                sheetObj = s.styleSheet.getStyle("." + arr[6]);
+                break;
+            }
+          }
+        } else if (s.styleSheet.getStyle(tabName)) {
+          sheetObj = s.styleSheet.getStyle(tabName);
+        }
+        if (sheetObj) {
+          tf.setCss(sheetObj);
+        }
+      }
+      s.ll_getHtmlText(tf, text);
+    },
+    ll_getHtmlText: function (tf, text) {
+      if (!text) {
+        return;
+      }
+      var s = this, tabName, content, start, end, pattern = /<(.*?)(\s*)(.*?)>([\s\S]*?)<\/\1>/g, arr = pattern.exec(text);
+      if (!arr || !arr[0]) {
+        s.ll_htmlTexts.push({
+          textFormat: tf.clone(),
+          text: text
+        });
+        return;
+      }
+      if (arr.index > 0) {
+        s.ll_htmlTexts.push({
+          textFormat: tf.clone(),
+          text: text.substring(0, arr.index)
+        });
+      }
+      tabName = arr[1];
+      start = arr.index;
+      end = start;
+      do {
+        end = text.indexOf("</" + tabName, end + 1);
+        start = text.indexOf("<" + tabName, start + 1);
+      } while (start > 0 && start < end);
+      content = text.substring(text.indexOf(">", arr.index) + 1, end);
+      s.ll_getStyleSheet(tf, tabName, arr[3], content);
+      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+    },
+    _createAlignCanvas: function (c) {
+      var s = this;
+      if (!s._alignCanvas) {
+        s._alignCanvas = document.createElement("canvas");
+        s._alignContext = s._alignCanvas.getContext("2d");
+      }
+      s._alignCanvas.width = s.width;
+      s._alignContext.font = c.font;
+      s._alignContext.fillStyle = c.fillStyle;
+      s._alignContext.textBaseline = c.textBaseline;
+      s._alignContext.textAlign = "left";
+      if (s.stroke) {
+        s._alignContext.strokeStyle = c.strokeStyle;
+        s._alignContext.lineWidth = c.lineWidth;
+      }
+    },
+    _ll_show: function (ctx) {
+      var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
+      if (LGlobal.enableWebGL) {
+        s._createCanvas();
+        s._canvas.width = LGlobal.width;
+        s._canvas.height = LGlobal.height;
+        s._showReady(s._context);
+        c = s._context;
+      } else {
+        c = ctx;
+      }
+      if (s.texttype == LTextFieldType.INPUT) {
+        s.inputBackLayer.ll_show(c);
+        rc = s.getRootCoordinate();
+        if (!LGlobal.wx && LGlobal.inputBox.name == "input" + s.objectIndex) {
+          LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+          LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+        }
+        if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+          return;
+        } else {
+          if (s.inputBackLayer.graphics.setList.length === 0) {
+            c.rect(0, 0, s.inputBackLayer.getWidth(), s.inputBackLayer.getHeight());
+          }
+          c.clip();
+        }
+      }
+      if (LGlobal.fpsStatus) {
+        LGlobal.fpsStatus.text++;
+      }
+      if (s.htmlText) {
+        if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
+          tf = new LTextFormat();
+          s.ll_htmlTexts = [];
+          s.ll_htmlText = s.htmlText;
+          if (s.styleSheet) {
+            s.ll_style_objectIndex = s.styleSheet.objectIndex;
+            s.ll_styleIndex = s.styleSheet.styleIndex;
+          }
+          s.ll_getHtmlText(tf, s.htmlText);
+        }
+        j = 0, k = 0, m = 0, b = 0, cx = 0;
+        s._ll_height = s.wordHeight || 30;
+        if (!LTextField.underlineY) {
+          LTextField.underlineY = { "alphabetic": 0, "top": 1, "bottom": -0.2, "middle": 0.4, "hanging": 0.8 };
+        }
+        s._createAlignCanvas(c);
+        var context = c;
+        c = s._alignContext;
+        for (var elementIndex = 0; elementIndex < s.ll_htmlTexts.length; elementIndex++) {
+          var element = s.ll_htmlTexts[elementIndex];
+          var textFormat = element.textFormat, text = element.text;
+          c.font = textFormat.getFontText();
+          c.fillStyle = textFormat.color;
+          for (i = 0, l = text.length; i < l; i++) {
+            enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+            if (enter) {
+              currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
+              j = 0;
+              k = i + 1;
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              s._createAlignCanvas(context);
+              c.font = textFormat.getFontText();
+              c.fillStyle = textFormat.color;
+              currentWidth = 0;
+              m++;
+              continue;
+            } else {
+              h = c.measureText("O").width * 1.2;
+              if (s.stroke) {
+                c.strokeText(text.substr(i, 1), j, s._ll_height);
+              }
+              c.fillText(text.substr(i, 1), j, s._ll_height);
+              if (textFormat.underline) {
+                c.beginPath();
+                underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
+                c.moveTo(j, underlineY);
+                c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+                c.stroke();
+              }
+            }
+            j += c.measureText(text.substr(i, 1)).width;
+            if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
+              nextText = s.ll_htmlTexts[elementIndex + 1].text;
+              currentWidth = j + c.measureText(nextText.substr(0, 1)).width;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
+            } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
+              currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
+              nextText = s.ll_htmlTexts[elementIndex + 1].text;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(0, 1));
+            } else {
+              currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
+            }
+            if (s.wordWrap && currentWidth > s.width && !enter) {
+              j = 0;
+              k = i + 1;
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              s._createAlignCanvas(context);
+              c.font = textFormat.getFontText();
+              c.fillStyle = textFormat.color;
+              currentWidth = 0;
+              m++;
+            }
+          }
+          s.height = (m + 1) * s._ll_height;
+        }
+        if (currentWidth > 0) {
+          cx = 0;
+          if (s.textAlign == "center") {
+            cx = -currentWidth * 0.5;
+          } else if (s.textAlign == "right") {
+            cx = -currentWidth;
+          }
+          context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+        }
+        if (LGlobal.enableWebGL) {
+          ctx.drawImage(s._canvas, 0, 0);
+        }
+        return;
+      }
+      lbl = s.text;
+      if (s.displayAsPassword) {
+        lbl = '';
+        for (i = 0, l = s.text.length; i < l; i++) {
+          lbl += '*';
+        }
+      }
+      if (s.wordWrap || s.multiline) {
+        j = 0, k = 0, m = 0, b = 0, cx = 0;
+        var context = c;
+        var isAlignCanvas = s.textAlign != "left";
+        if (isAlignCanvas) {
+          s._createAlignCanvas(c);
+          context = s._alignContext;
+        }
+        var currentWidth = 0;
+        for (i = 0, l = s.text.length; i < l; i++) {
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
+          if (enter) {
+            currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
+            j = 0;
+            k = i + 1;
+            if (isAlignCanvas) {
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              s._createAlignCanvas(c);
+              currentWidth = 0;
+            }
+            m++;
+          } else {
+            if (s.stroke) {
+              context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+            }
+            context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+          }
+          s.numLines = m;
+          j = context.measureText(s.text.substr(k, i + 1 - k)).width;
+          currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
+          if (s.wordWrap && currentWidth > s.width && !enter) {
+            j = 0;
+            k = i + 1;
+            if (isAlignCanvas) {
+              cx = 0;
+              if (s.textAlign == "center") {
+                cx = -currentWidth * 0.5;
+              } else if (s.textAlign == "right") {
+                cx = -currentWidth;
+              }
+              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              s._createAlignCanvas(c);
+              currentWidth = 0;
+            }
+            m++;
+          }
+        }
+        if (isAlignCanvas && currentWidth > 0) {
+          cx = 0;
+          if (s.textAlign == "center") {
+            cx = -currentWidth * 0.5;
+          } else if (s.textAlign == "right") {
+            cx = -currentWidth;
+          }
+          c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+        }
+        s.height = (m + 1) * s.wordHeight;
+      } else {
+        s.numLines = 1;
+        if (s.stroke) {
+          c.strokeText(lbl, 0, 0, c.measureText(lbl).width);
+        }
+        c.fillText(lbl, 0, 0, c.measureText(lbl).width);
+      }
+      if (LGlobal.enableWebGL) {
+        ctx.drawImage(s._canvas, 0, 0);
+      }
+      if (s.windRunning) {
+        s._ll_windRun();
+      }
+    },
+    _wordHeight: function (h) {
+      var s = this;
+      if (h > 0) {
+        s.wordHeight = h;
+      } else {
+        s.wordWrap = false;
+        s.wordHeight = s.getHeight();
+      }
+      s.height = 0;
+    },
+    setMultiline: function (v, h) {
+      var s = this;
+      if (v) {
+        s._wordHeight(h);
+      }
+      s.multiline = v;
+    },
+    setWordWrap: function (v, h) {
+      var s = this;
+      if (v) {
+        s._wordHeight(h);
+      }
+      s.wordWrap = v;
+    },
+    setType: function (type, inputBackLayer) {
+      var s = this;
+      if (s.texttype != type && type == LTextFieldType.INPUT) {
+        if (inputBackLayer == null || inputBackLayer.type != "LSprite") {
+          s.inputBackLayer = new LSprite();
+          s.inputBackLayer.graphics.drawRect(1, "#000000", [0, -s.getHeight() * 0.4, s.width, s.getHeight() * 1.5]);
+        } else {
+          s.inputBackLayer = inputBackLayer;
+        }
+        s.inputBackLayer.parent = s;
+        if (LMouseEventContainer.container[LMouseEvent.MOUSE_DOWN]) {
+          LMouseEventContainer.pushInputBox(s);
+        }
+      } else {
+        s.inputBackLayer = null;
+        LMouseEventContainer.removeInputBox(s);
+      }
+      s.texttype = type;
+    },
+    ismouseon: function (e, cood) {
+      var s = this;
+      if (!e) {
+        return false;
+      }
+      if (!s.visible) {
+        return false;
+      }
+      if (!cood) {
+        cood = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+      }
+      if (s.mask) {
+        if (!s.mask.parent) {
+          s.mask.parent = s.parent;
+        }
+        if (!s.mask.ismouseon(e, cood)) {
+          return false;
+        }
+      }
+      if (s.inputBackLayer) {
+        return s.inputBackLayer.ismouseon(e, { x: s.x * cood.scaleX + cood.x, y: s.y * cood.scaleY + cood.y, scaleX: cood.scaleX * s.scaleX, scaleY: cood.scaleY * s.scaleY });
+      }
+      return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s._getWidth(), s._getHeight()] }], e.offsetX, e.offsetY);
+    },
+    clone: function () {
+      var s = this, a = new s.constructor();
+      a.copyProperty(s);
+      a.texttype = null;
+      if (s.texttype == LTextFieldType.INPUT) {
+        a.setType(LTextFieldType.INPUT);
+      }
+      return a;
+    },
+    mouseEvent: function (event, type, cood) {
+      var s = this, on;
+      if (s.inputBackLayer == null || type != LMouseEvent.MOUSE_DOWN) {
+        return;
+      }
+      on = s.ismouseon(event, cood);
+      if (!on) {
+        return;
+      }
+      s.focus();
+    },
+    _wx_ll_getValue: function (value) {
+      LGlobal.inputTextField.text = value;
+      wx.offKeyboardInput(LGlobal.inputTextField._ll_input);
+      wx.offKeyboardComplete(this._ll_getValue);
+      LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+      LGlobal.inputTextField = null;
+    },
+    _ll_getValue: function (event) {
+      if (!LGlobal.inputTextField) {
+        return;
+      }
+      if (LGlobal.wx) {
+        LGlobal.inputTextField._wx_ll_getValue(event.value);
+        return;
+      }
+      LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+      LEvent.removeEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+      LGlobal.inputBox.style.display = NONE;
+      if (typeof LGlobal.inputTextField.preventDefault != UNDEFINED) {
+        LGlobal.preventDefault = LGlobal.inputTextField.preventDefault;
+      }
+      LGlobal.inputTextField.dispatchEvent(LFocusEvent.FOCUS_OUT);
+      if (typeof LGlobal.inputTextBox.blur === 'function') {
+        LGlobal.inputTextBox.blur();
+      }
+      LGlobal.inputTextField = null;
+    },
+    updateInput: function () {
+      var s = this;
+      if (LGlobal.wx) {
+        s._wxUpdateInput();
+        return;
+      }
+      if (s.texttype == LTextFieldType.INPUT && LGlobal.inputTextField.objectIndex == s.objectIndex) {
+        LGlobal.inputTextBox.value = LGlobal.inputTextField.text;
+      }
+    },
+    _wxUpdateInput: function () {
+      var s = this;
+      wx.hideKeyboard({
+        complete: function () {
+          s.focus();
+        }
+      });
+    },
+    _wx_ll_input: function (value) {
+      if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+        var event = new LEvent(LTextEvent.TEXT_INPUT);
+        event.keyCode = value;
+        LGlobal.inputTextField.dispatchEvent(event);
+      }
+    },
+    _ll_input: function (e) {
+      if (LGlobal.wx) {
+        LGlobal.inputTextField._wx_ll_input(e);
+        return;
+      }
+      var event = new LEvent(LTextEvent.TEXT_INPUT);
+      event.keyCode = e.keyCode;
+      LGlobal.inputTextField.text = LGlobal.inputTextBox.value;
+      if (LGlobal.inputTextField.hasEventListener(LTextEvent.TEXT_INPUT)) {
+        e.returnValue = LGlobal.inputTextField.dispatchEvent(event);
+      } else {
+        e.returnValue = true;
+      }
+    },
+    focus: function () {
+      var s = this, sc, sx;
+      if (!s.parent) {
+        return;
+      }
+      if (s.texttype != LTextFieldType.INPUT) {
+        return;
+      }
+      if (LGlobal.inputTextField && LGlobal.inputTextField.objectIndex != s.objectIndex) {
+        s._ll_getValue();
+      }
+      s.dispatchEvent(LFocusEvent.FOCUS_IN);
+      if (LGlobal.wx) {
+        s._wxFocus();
+        return;
+      }
+      sc = s.getAbsoluteScale();
+      LGlobal.inputBox.style.display = "";
+      LGlobal.inputBox.name = "input" + s.objectIndex;
+      LGlobal.inputTextField = s;
+      LGlobal.inputTextareaBoxObj.style.display = NONE;
+      LGlobal.inputTextBoxObj.style.display = NONE;
+      LGlobal.passwordBoxObj.style.display = NONE;
+      if (s.displayAsPassword) {
+        LGlobal.inputTextBox = LGlobal.passwordBoxObj;
+      } else if (s.multiline) {
+        LGlobal.inputTextBox = LGlobal.inputTextareaBoxObj;
+      } else {
+        LGlobal.inputTextBox = LGlobal.inputTextBoxObj;
+      }
+      sx = parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width;
+      sy = parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height;
+      LGlobal.inputTextBox.style.display = "";
+      LGlobal.inputTextBox.value = s.text;
+      LGlobal.inputTextBox.style.height = s.inputBackLayer.getHeight() * sc.scaleY * s.scaleY * sy + "px";
+      LGlobal.inputTextBox.style.width = s.inputBackLayer.getWidth() * sc.scaleX * s.scaleX * sx + "px";
+      LGlobal.inputTextBox.style.color = s.color;
+      LGlobal.inputTextBox.style.fontSize = ((s.size * parseFloat(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >> 0) + "px";
+      LGlobal.inputTextBox.style.fontFamily = s.font;
+      LEvent.addEventListener(LGlobal.inputTextBox, LKeyboardEvent.KEY_DOWN, LGlobal.inputTextField._ll_input);
+      if (s.texttype == LTextFieldType.INPUT) {
+        rc = s.getRootCoordinate();
+        if (LGlobal.inputBox.name == "input" + s.objectIndex) {
+          LGlobal.inputBox.style.marginTop = (parseInt(LGlobal.canvasObj.style.marginTop) + (((rc.y + s.inputBackLayer.startY()) * parseInt(LGlobal.canvasObj.style.height) / LGlobal.canvasObj.height) >>> 0)) + "px";
+          LGlobal.inputBox.style.marginLeft = (parseInt(LGlobal.canvasObj.style.marginLeft) + (((rc.x + s.inputBackLayer.startX()) * parseInt(LGlobal.canvasObj.style.width) / LGlobal.canvasObj.width) >>> 0)) + "px";
+        }
+      }
+      s.preventDefault = LGlobal.preventDefault;
+      LGlobal.preventDefault = false;
+      LGlobal.inputTextBox.focus();
+    },
+    _wxFocus: function () {
+      LGlobal.inputTextField = this;
+      wx.showKeyboard({
+        defaultValue: this.text,
+        maxLength: 20,
+        multiple: false,
+        confirmHold: false,
+        confirmType: 'done'
+      });
+      wx.onKeyboardInput(this._ll_input);
+      wx.onKeyboardComplete(this._ll_getValue);
+    },
+    _getWidth: function () {
+      var s = this;
+      if (s.wordWrap) {
+        return s.width;
+      }
+      if (LGlobal.enableWebGL) {
+        this._createCanvas();
+      }
+      var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
+      c.font = s.size + "px " + s.font;
+      return c.measureText(s.text).width;
+    },
+    getWidth: function (maskSize) {
+      var s = this, w, mx, mw;
+      w = s._getWidth() * s.scaleX;
+      if (maskSize && s.mask) {
+        mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+        if (mx > w) {
+          return 0;
+        }
+        mw = s.mask.getWidth();
+        if (mx + mw > w) {
+          return w - mx;
+        } else {
+          return mw;
+        }
+      }
+      return w;
+    },
+    _startX: function (maskSize) {
+      var s = this;
+      if (s.textAlign == "left") {
+        return s.x;
+      }
+      var w = s.getWidth(maskSize);
+      return s.x + (s.textAlign == "right" ? -w : -w * 0.5);
+    },
+    _getHeight: function () {
+      var s = this;
+      if (LGlobal.enableWebGL) {
+        this._createCanvas();
+      }
+      var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas, i, l, j, k, m, enter;
+      if (s.wordWrap) {
+        c.font = s.weight + " " + s.size + "px " + s.font;
+        if (s.height == 0) {
+          s._createCanvas();
+          s._context.font = s.weight + " " + s.size + "px " + s.font;
+          s._ll_show(s._context);
+        }
+        return s.height;
+      }
+      c.font = s.weight + " " + s.size + "px " + s.font;
+      l = c.measureText("O").width * 1.2;
+      if (s.heightMode == LTextField.HEIGHT_MODE_BASELINE) {
+        l = l * 1.2;
+      }
+      return l;
+    },
+    getHeight: function (maskSize) {
+      var s = this, h, my, mh;
+      h = s._getHeight() * s.scaleY;
+      if (maskSize && s.mask) {
+        my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+        if (my > h) {
+          return 0;
+        }
+        mh = s.mask.getHeight();
+        if (my + mh > h) {
+          return h - my;
+        } else {
+          return mh;
+        }
+      }
+      return h;
+    },
+    wind: function (listener) {
+      var s = this;
+      s.wind_over_function = listener;
+      s.windRunning = true;
+      s._ll_wind_text = s.text;
+      s.text = "";
+      s._ll_wind_length = 0;
+    },
+    _ll_windRun: function () {
+      var s = this;
+      if (s._speedIndex++ < s.speed) {
+        return;
+      }
+      s._speedIndex = 0;
+      if (s._ll_wind_length > s._ll_wind_text.length) {
+        s.windRunning = false;
+        if (s.wind_over_function) {
+          s.wind_over_function();
+        }
+        s.dispatchEvent(new LEvent(LTextEvent.WIND_COMPLETE));
+        return;
+      }
+      s.text = s._ll_wind_text.substring(0, s._ll_wind_length);
+      s._ll_wind_length++;
+    },
+    windComplete: function () {
+      var s = this;
+      s._speedIndex = s.speed;
+      s.text = s._ll_wind_text;
+      s._ll_wind_length = s._ll_wind_text.length + 1;
+      s._ll_windRun();
+    },
+    die: function () {
+      LMouseEventContainer.removeInputBox(this);
+    }
+  };
+  for (var k in p) {
+    LTextField.prototype[k] = p[k];
+  }
+  return LTextField;
 })();
 var LBitmap = (function () {
 	function LBitmap (bitmapdata) {
@@ -7979,1670 +7995,3 @@ var FPS = (function () {
 	};
 	return FPS;
 })();
-var LQuadTree = (function() {
-	function LQuadTree(rect) {
-		var s = this;
-		LExtends (s, LObject, []);
-		s.q1 = null;
-		s.q2 = null;
-		s.q3 = null;
-		s.q4 = null;
-		s.parent = null;
-		s.data = [];
-		s.rect = rect;
-		s.root = s;
-	}
-	var p = {
-		createChildren : function(deep) {
-			if (deep == 0) {
-				return;
-			}
-			var s = this;
-			var hw = s.rect.width / 2, hh = s.rect.height / 2;
-			s.q1 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y, hw, hh));
-			s.q2 = new LQuadTree(new LRectangle(s.rect.x + hw, s.rect.y + hh, hw, hh));
-			s.q3 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y + hh, hw, hh));
-			s.q4 = new LQuadTree(new LRectangle(s.rect.x, s.rect.y, hw, hh));
-			s.q1.parent = s.q2.parent = s.q3.parent = s.q4.parent = s;
-			s.q1.root = s.q2.root = s.q3.root = s.q4.root = s.root;
-			s.q1.createChildren(deep - 1);
-			s.q2.createChildren(deep - 1);
-			s.q3.createChildren(deep - 1);
-			s.q4.createChildren(deep - 1);
-		},
-		hasChildren : function() {
-			var s = this;
-			return s.q1 && s.q2 && s.q3 && s.q4;
-		},
-		clear : function() {
-			var s = this;
-			if (s.hasChildren()) {
-				return s.q1.clear() || s.q2.clear() || s.q3.clear() || s.q4.clear();
-			} else {
-				s.q1 = null;
-				s.q2 = null;
-				s.q3 = null;
-				s.q4 = null;
-				s.parent = null;
-				s.data = [];
-				return s;
-			}
-		},
-		add : function(v, x, y) {
-			var s = this;
-			if (!s.isIn(x, y)) {
-				return null;
-			}
-			if (s.hasChildren()) {
-				return s.q1.add(v, x, y) || s.q2.add(v, x, y) || s.q3.add(v, x, y) || s.q4.add(v, x, y);
-			} else {
-				s.data.push(v);
-				return s;
-			}
-		},
-		remove : function(v, x, y) {
-			var s = this;
-			if (!s.isIn(x, y)) {
-				return null;
-			}
-			if (s.hasChildren()) {
-				return s.q1.remove(v, x, y) || s.q2.remove(v, x, y) || s.q3.remove(v, x, y) || s.q4.remove(v, x, y);
-			} else {
-				var index = s.data.indexOf(v);
-				if (index != -1) {
-					s.data.splice(index, 1);
-					return s;
-				} else {
-					return null;
-				}
-			}
-		},
-		isIn : function(x, y) {
-			var s = this;
-			return ( typeof x == UNDEFINED || (x >= s.rect.x && x < s.rect.right)) && ( typeof y == UNDEFINED || (y >= s.rect.y && y < s.rect.bottom));
-		},
-		getDataInRect : function(rect) {
-			var s = this;
-			if (!s.rect.intersects(rect)) {
-				return [];
-			}
-			var r = s.data.concat();
-			if (s.hasChildren()) {
-				r.push.apply(r, s.q1.getDataInRect(rect));
-				r.push.apply(r, s.q2.getDataInRect(rect));
-				r.push.apply(r, s.q3.getDataInRect(rect));
-				r.push.apply(r, s.q4.getDataInRect(rect));
-			}
-			return r;
-		}
-	};
-	for (var k in p) {
-		LQuadTree.prototype[k] = p[k];
-	}
-	return LQuadTree;
-})();
-var LoadingSample1 = (function() {
-	function LoadingSample1(step, b, c) {
-		base(this, LSprite, []);
-		var s = this;
-		s.numberList = new Array([1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0], [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1]);
-		s.backgroundColor = b == null ? "#000000" : b;
-		s.color = c == null ? "#ffffff" : c;
-		s.progress = 0;
-		s.step = step == null ? LGlobal.width * 0.5 / 15 : step;
-		s.back = new LSprite();
-		s.addChild(s.back);
-		s.num = new LSprite();
-		s.addChild(s.num);
-		s.num.mask = new LSprite();
-		s.screenX = (LGlobal.width - s.step * 15) / 2;
-		s.screenY = (LGlobal.height - s.step * 5) / 2;
-		s.num.x = s.screenX;
-		s.num.y = s.screenY;
-		s.setProgress(s.progress);
-	}
-	LoadingSample1.prototype.setProgress = function(value) {
-		var s = this, c = LGlobal.canvas;
-		value = Math.floor(value);
-		var num_0 = "", num_1, num_2, i;
-		var s_x = s.step;
-		if (value >= 100) {
-			num_0 = s.getNumber(1);
-			num_1 = s.getNumber(0);
-			num_2 = s.getNumber(0);
-			s_x = s.step * 3;
-		} else if (value >= 10) {
-			num_1 = s.getNumber(Math.floor(value / 10));
-			num_2 = s.getNumber(value % 10);
-		} else {
-			num_1 = s.getNumber(0);
-			num_2 = s.getNumber(value);
-		}
-		s.back.graphics.clear();
-		s.back.graphics.add(function() {
-			c.beginPath();
-			c.fillStyle = s.backgroundColor;
-			c.fillRect(0, 0, LGlobal.width, LGlobal.height);
-			c.closePath();
-			c.fillStyle = s.color;
-			if (value >= 100) {
-				for ( i = 0; i < num_0.length; i++) {
-					if (num_0[i] == 0) {
-						continue;
-					}
-					c.fillRect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-				}
-			}
-			for ( i = 0; i < num_1.length; i++) {
-				if (num_1[i] == 0) {
-					continue;
-				}
-				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-			}
-			for ( i = 0; i < num_2.length; i++) {
-				if (num_2[i] == 0) {
-					continue;
-				}
-				c.fillRect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-			}
-			c.moveTo(s.screenX + s_x + s.step * 9.7, s.screenY);
-			c.lineTo(s.screenX + s_x + s.step * 10.5, s.screenY);
-			c.lineTo(s.screenX + s_x + s.step * 9.3, s.screenY + s.step * 5);
-			c.lineTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step * 5);
-			c.lineTo(s.screenX + s_x + s.step * 9.7, s.screenY);
-			c.fill();
-			c.moveTo(s.screenX + s_x + s.step * 8.5, s.screenY + s.step);
-			c.arc(s.screenX + s_x + s.step * 8.5, s.screenY + s.step, s.step * 0.6, 0, 360 + Math.PI / 180);
-			c.moveTo(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4);
-			c.arc(s.screenX + s_x + s.step * 10.5, s.screenY + s.step * 4, s.step * 0.6, 0, 360 + Math.PI / 180);
-			c.fill();
-		});
-		s.num.mask.graphics.clear();
-		s.num.mask.graphics.add(function() {
-			if (value >= 100) {
-				for ( i = 0; i < num_0.length; i++) {
-					if (num_0[i] == 0) {
-						continue;
-					}
-					c.rect(s.screenX + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-				}
-			}
-			for (var i = 0; i < num_1.length; i++) {
-				if (num_1[i] == 0) {
-					continue;
-				}
-				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-			}
-			for (var i = 0; i < num_2.length; i++) {
-				if (num_2[i] == 0) {
-					continue;
-				}
-				c.rect(s.screenX + s_x + Math.floor(i % 3) * s.step + s.step * 4, s.screenY + Math.floor(i / 3) * s.step, s.step, s.step);
-			}
-		});
-		c.fillStyle = LGlobal._create_loading_color();
-		s.num.graphics.clear();
-		s.num.graphics.drawRect(1, c.fillStyle, [0, s.step * 5 * (100 - value) * 0.01, LGlobal.width, LGlobal.height], true, c.fillStyle);
-	};
-	LoadingSample1.prototype.getNumber = function(value) {
-		return this.numberList[value];
-	};
-	return LoadingSample1;
-})();
-function LoadingSample2(size,background,color){
-	base(this,LSprite,[]);
-	var s = this,c = LGlobal.canvas,t = "Loading...",l;
-	s.backgroundColor = background==null?"#000000":background;
-	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
-	if(color==null)color = LGlobal._create_loading_color();
-	s.color = color;
-	s.progress = 0;
-	s.size = size==null?LGlobal.height*0.2:size;
-	l = new LTextField();
-	l.text = t;
-	l.size = s.size;
-	l.color = "#ffffff";
-	l.x = (LGlobal.width - l.getWidth())/2;
-	l.y = (LGlobal.height - s.size)/2;
-	s.addChild(l);
-	s.backLabel = l;
-	l = new LTextField();
-	l.text = "***%";
-	l.size = s.size*0.3;
-	l.color = color;
-	l.x = (LGlobal.width - l.getWidth())/2;
-	l.y = (LGlobal.height - s.size)/2 - s.size*0.4;
-	s.addChild(l);
-	s.progressLabel = l;
-	l = new LTextField();
-	l.text = t;
-	l.size = s.size;
-	l.color = s.color;
-	l.x = (LGlobal.width - l.getWidth())/2;
-	l.y = (LGlobal.height - s.size)/2;
-	l.mask = new LGraphics();
-	s.screenX = l.x;
-	s.screenY = l.y;
-	s.screenWidth = l.getWidth();
-	s.addChild(l);
-	s.showLabel=l;
-	c.shadowOffsetX = 2;  
-	c.shadowOffsetY = 2;
-	c.shadowColor = "blue"; 
-	s.setProgress(s.progress);
-}
-LoadingSample2.prototype.setProgress = function (value){
-	var s = this,c = LGlobal.canvas;
-	s.progressLabel.text = value + "%";
-	s.showLabel.mask.clear();
-	s.showLabel.mask.drawRect(0,"#000000",[s.screenX,0,s.screenWidth*value*0.01,LGlobal.height]);
-	if(value >= 100){
-		c.shadowOffsetX = 0;
-		c.shadowOffsetY = 0;
-	}
-};
-function LoadingSample3(height,background,color){
-	base(this,LSprite,[]);
-	var s = this,c = LGlobal.canvas;
-	s.backgroundColor = background==null?"#000000":background;
-	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
-	if(color==null)color = LGlobal._create_loading_color();
-	s.color = color;
-	s.progress = 0;
-	s.screenWidth = LGlobal.width*0.75;
-	s.screenHeight = height==null?LGlobal.height*0.1:height;
-	if(s.screenHeight > 5)s.screenHeight=5;
-	s.screenX = (LGlobal.width - s.screenWidth)/2;
-	s.screenY = (LGlobal.height - s.screenHeight)/2;
-	s.back = new LSprite();
-	s.addChild(s.back);
-	s.label = new LTextField();
-	s.label.color="#ffffff";
-	s.label.weight="bolder";
-	s.label.size = s.screenHeight * 2;
-	s.label.x = s.screenX + (s.screenWidth - s.label.getWidth())*0.5;
-	s.label.y = s.screenY - s.screenHeight * 4;
-	s.addChild(s.label);
-	s.star = new Array();
-	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
-	s.setProgress(s.progress);
-}
-LoadingSample3.prototype.onframe = function(s){
-	var i,star,l;
-	if(s.progress>=100){
-		if(s.star.length > 0){
-			for(i=0,l=s.star.length;i<l;i++){
-				s.removeChild(s.star[i]);
-			}
-			s.star.length = 0;
-		}
-		return;
-	}
-	for(i=0,l=s.star.length;i<l;i++){
-		star = s.star[i];
-		star.alpha -= 0.1;
-		star.x += star.speedx;
-		star.y += star.speedy;
-		if(star.alpha <= 0){
-			s.star.splice(i,1);
-			s.removeChild(star);
-			i--,l--;
-		}
-	}
-	if(s.star.length < 10)s.addStar();
-};
-LoadingSample3.prototype.addStar = function(){
-	var s = this,c = LGlobal.canvas;
-	var star = new LSprite();
-	var step = 1 + Math.floor(Math.random()*4);
-	star.graphics.add(function (){
-		c.beginPath();
-		c.fillStyle = "#ffffff";
-		c.lineTo(step*2,step);
-		c.lineTo(step*4,0);
-		c.lineTo(step*3,step*2);
-		c.lineTo(step*4,step*4);
-		c.lineTo(step*2,step*3);
-		c.lineTo(0,step*4);
-		c.lineTo(step,step*2);
-		c.lineTo(0,0);
-		c.fill();
-	});
-	star.x = s.screenX + s.screenWidth*s.progress*0.01;
-	star.y=s.screenY;
-	star.speedx = 4 - 8*Math.random();
-	star.speedy = 4 - 8*Math.random();
-	s.star.push(star);
-	s.addChild(star);
-};
-LoadingSample3.prototype.setProgress = function (value){
-	var s = this,c = LGlobal.canvas;
-	if(value > 100)value=100;
-	s.progress = value;
-	s.back.graphics.clear();
-	s.back.graphics.add(function (){
-		c.beginPath();
-		c.fillStyle = "#00FFFF";
-		c.rect(s.screenX - 3, s.screenY - 3, s.screenWidth + 6, s.screenHeight + 6);
-		c.fill();
-		c.beginPath();
-		c.fillStyle = "#990033";
-		c.rect(s.screenX, s.screenY, s.screenWidth, s.screenHeight);
-		c.fill();
-		c.beginPath();
-		c.fillStyle = s.color;
-		c.rect(s.screenX, s.screenY, s.screenWidth*value*0.01, s.screenHeight);
-		c.fill();
-	});
-	s.label.text = value + "%";
-};
-function LoadingSample4(height,background,color){
-	base(this,LSprite,[]);
-	var s = this,c = LGlobal.canvas;
-	s.backgroundColor = background==null?"#000000":background;
-	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
-	if(color==null)color = "#FFFFFF";
-	s.arc = new LSprite();
-	s.arc.x = LGlobal.width*0.5;
-	s.arc.y = LGlobal.height*0.5;
-	s.addChild(s.arc);
-	for(var i=0;i<360;i++){
-		s.arc.graphics.drawArc(1+i/36,color,[0,0,50,(2*Math.PI/360)*i,(2*Math.PI/360)*(i+2)]);
-	}
-	s.progress = 0;
-	s.label = new LTextField();
-	s.label.color=color;
-	s.label.weight="bolder";
-	s.label.size = 18;
-	s.label.x = LGlobal.width*0.5;
-	s.label.y = LGlobal.height*0.5-s.label.getHeight()*0.5;
-	s.addChild(s.label);
-	var shadow = new LDropShadowFilter(0,0,"#FFFFFF",30);
-	s.arc.filters = [shadow];
-	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
-	s.setProgress(s.progress);
-}
-LoadingSample4.prototype.onframe = function(event){
-	event.target.arc.rotate += 20;
-};
-LoadingSample4.prototype.setProgress = function (value){
-	var s = this;
-	if(value > 100)value=100;
-	s.progress = value;
-	s.label.text = value + "%";
-	s.label.x = LGlobal.width*0.5-s.label.getWidth()*0.5;
-};
-function LoadingSample5(height,background,color){
-	base(this,LSprite,[]);
-	var s = this,c = LGlobal.canvas;
-	s.backgroundColor = background==null?"#000000":background;
-	s.graphics.drawRect(1,s.backgroundColor,[0,0,LGlobal.width,LGlobal.height],true,s.backgroundColor);
-	if(color==null)color = "#FFFFFF";
-	s.arc = new LSprite();
-	s.arc.x = LGlobal.width*0.5;
-	s.arc.y = LGlobal.height*0.5;
-	s.addChild(s.arc);
-	var r = 50;
-	for(var i=0;i<360;i+=30){
-		var child = new LSprite();
-		child.graphics.drawArc(0,color,[r,0,7,0,2*Math.PI],true,color);
-		child.rotate = i;
-		child.alpha = 0.1+i/360;
-		s.arc.addChild(child);
-	}
-	s.index = 0;
-	s.max = 3;
-	s.progress = 0;
-	s.label = new LTextField();
-	s.label.color="#FFFFFF";
-	s.label.weight="bolder";
-	s.label.size = 18;
-	s.label.x = LGlobal.width*0.5;
-	s.label.y = LGlobal.height*0.5-s.label.getHeight()*0.5;
-	s.addChild(s.label);
-	var shadow = new LDropShadowFilter(0,0,"#FFFFFF",30);
-	s.arc.filters = [shadow];
-	s.addEventListener(LEvent.ENTER_FRAME,s.onframe);
-	s.setProgress(s.progress);
-}
-LoadingSample5.prototype.onframe = function(event){
-	var s = event.target;
-	if(s.index++ < s.max)return;
-	s.index = 0;
-	s.arc.rotate += 30;
-};
-LoadingSample5.prototype.setProgress = function (value){
-	var s = this;
-	if(value > 100)value=100;
-	s.progress = value;
-	s.label.text = value + "%";
-	s.label.x = LGlobal.width*0.5-s.label.getWidth()*0.5;
-};
-function LoadingSample6(r,color,filterColor){
-	var self = this;
-	base(self,LSprite,[]);
-	self.progress = 0;
-	self.step = 0;
-	self.holeR = r || 10;
-	self.holeAmount = 5;
-	self.holesx = 20;
-	self.loadingBarWidth = self.holeR*2*self.holeAmount+self.holesx*(self.holeAmount-1);
-	self.loadingBarHeight = self.holeR*2;
-	self.progressColor = color || "#2187e7";
-	self.filterColor = filterColor || "#00c6ff";
-	self.backLayer = new LSprite();
-	self.backLayer.graphics.drawRect(0,"",[0,0,LGlobal.width,LGlobal.height],true,"#161616");
-	self.addChild(self.backLayer);
-	self.holeLayer = new LSprite();
-	self.holeLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
-	self.holeLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
-	self.addChild(self.holeLayer);
-	self.progressLayer = new LSprite();
-	self.progressLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
-	self.progressLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
-	self.addChild(self.progressLayer);
-	self._addHole();
-}
-LoadingSample6.prototype._addHole = function(){
-	var self = this;
-	var amount=self.holeAmount,sx=self.holeR*2+self.holesx,r=self.holeR;
-	for(var i=0; i<amount; i++){
-		var holeObj = new LSprite();
-		holeObj.x = i*sx;
-		holeObj.graphics.drawArc(1,"#111",[0,0,r,0,2*Math.PI],true,"#000");
-		holeObj.graphics.drawArc(1,"#333",[0,0,r,1.7*Math.PI,0.7*Math.PI],false);
-		self.holeLayer.addChild(holeObj);
-	}
-};
-LoadingSample6.prototype.setProgress = function(value){
-	var self = this;
-	var sx=self.holeR*2+self.holesx,r=self.holeR;
-	self.progress = value/100;
-	var tweenList = new Array();
-	while(Math.floor(self.progress/0.2) > self.step){
-		var cw = r*2;
-		var ch = cw;
-		var grd = LGlobal.canvas.createLinearGradient(0,-ch*2,0,ch);
-		grd.addColorStop(0,"white");
-		grd.addColorStop(1,self.progressColor);
-		var po = new LSprite();
-		po.x = self.step*sx;
-		po.scaleX = 0;
-		po.scaleY = 0;
-		po.graphics.drawArc(0,"",[0,0,r,0,2*Math.PI],true,grd);
-		self.progressLayer.addChild(po);
-		tweenList.push(po);
-		self.step ++;
-	}
-	var completeFunc = function(o){
-		var circleObj = new LSprite();
-		circleObj.alpha = 0.9;
-		circleObj.x = o.x;
-		circleObj.graphics.drawArc(1,self.filterColor,[0,0,r,0,2*Math.PI],false);
-		self.progressLayer.addChild(circleObj);
-		var shadow = new LDropShadowFilter(0,5,self.filterColor,10);
-		circleObj.filters = [shadow];
-		LTweenLite.to(circleObj,0.5,{
-			scaleX: 1.7,
-			scaleY: 1.7,
-			alpha: 0,
-			onComplete:function(s){
-				s.parent.removeChild(s);
-			}
-		});
-	};
-	for(var i=0; i<tweenList.length; i++){
-		var o = tweenList[i];
-		LTweenLite.to(o,1,{
-			scaleX: 1,
-			scaleY: 1,
-			onComplete:completeFunc
-		});
-	}
-};
-function LoadingSample7(w,h,color){
-	var self = this;
-	base(self,LSprite,[]);
-	self.progress = 0;
-	self.step = 0;
-	self.holeW = w || 10;
-	self.holeH = h || 30;
-	self.holeAmount = 10;
-	self.holesx = 8;
-	self.loadingBarWidth = self.holeW*self.holeAmount+self.holesx*(self.holeAmount-1);
-	self.loadingBarHeight = self.holeH;
-	self.progressColor = color || "#2187e7";
-	self.backLayer = new LSprite();
-	self.backLayer.graphics.drawRect(0,"",[0,0,LGlobal.width,LGlobal.height],true,"#161616");
-	self.addChild(self.backLayer);
-	self.holeLayer = new LSprite();
-	self.holeLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
-	self.holeLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
-	self.addChild(self.holeLayer);
-	self.progressLayer = new LSprite();
-	self.progressLayer.x = (LGlobal.width - self.loadingBarWidth)*0.5;
-	self.progressLayer.y = (LGlobal.height - self.loadingBarHeight)*0.5;
-	self.addChild(self.progressLayer);
-	self._addHole();
-}
-LoadingSample7.prototype._addHole = function(){
-	var self = this;
-	var amount=self.holeAmount,sx=self.holeW+self.holesx,w=self.holeW,h=self.holeH;
-	for(var i=0; i<amount; i++){
-		var holeObj = new LSprite();
-		holeObj.x = i*sx;
-		holeObj.graphics.drawRect(1,"#333",[1,1,self.holeW,self.holeH],false);
-		holeObj.graphics.drawRect(1,"#111",[0,0,self.holeW,self.holeH],true,"#000");
-		self.holeLayer.addChild(holeObj);
-		var grd = LGlobal.canvas.createLinearGradient(0,-h,0,h);
-		grd.addColorStop(0,"white");
-		grd.addColorStop(1,self.progressColor);
-		var progressObj = new LSprite();
-		progressObj.alpha = 0;
-		progressObj.x = i*sx;
-		progressObj.graphics.drawRect(0,"",[0,0,self.holeW,self.holeH],true,grd);
-		self.progressLayer.addChild(progressObj);
-	}
-};
-LoadingSample7.prototype.setProgress = function(value){
-	var self = this;
-	self.progress = value/100;
-	if(Math.floor(self.progress/0.1) > self.step){
-		var n = Math.ceil(self.progress/0.1);
-		if(n > 10)n = 10;
-		for(var i=0; i<n; i++){
-			var sc = self.progressLayer.childList;
-			if(sc[i].alpha > 0)continue;
-			var o = self.progressLayer.childList[i];
-			LTweenLite.to(o,1,{
-				alpha: 1
-			});
-		}
-		self.step ++;
-	}
-};
-var LBox2d = (function() {
-	function LBox2d(gravity, doSleep, drawScale) {
-		var s = this;
-		Box2D.Dynamics.b2World.prototype.LAddController = Box2D.Dynamics.b2World.prototype.AddController;
-		Box2D.Dynamics.b2World.prototype.AddController = function(c) {
-			var l = {}, k;
-			for (k in c) {
-				l[k] = c[k];
-			}
-			if (LBox2d) {
-				LBox2d.m_controllerList = l;
-			}
-			return this.LAddController(c);
-		};
-		var i, j, b = Box2D, d, a = [b.Collision, b.Common, b.Common.Math, b.Dynamics, b.Dynamics.Contacts, b.Dynamics.Controllers, b.Dynamics.Joints, b.Collision.Shapes];
-		for (i in a) {
-			for (j in a[i]) {
-				s[j] = a[i][j];
-			}
-		}
-		if ( typeof drawScale == UNDEFINED) {
-			drawScale = 30;
-		}
-		s.stop = false;
-		s.drawScale = 30;
-		s.selectedBody = null;
-		s.mouseJoint = null;
-		s.mousePVec = null;
-		s.contactListener = null;
-		if ( typeof gravity == UNDEFINED) {
-			gravity = new s.b2Vec2(0, 9.8);
-		} else {
-			gravity = new s.b2Vec2(gravity[0], gravity[1]);
-		}
-		if ( typeof doSleep == UNDEFINED) {
-			doSleep = true;
-		}
-		s.world = new s.b2World(gravity, doSleep);
-		s.removeList = new Array();
-		if (LGlobal.traceDebug) {
-			d = new s.b2DebugDraw();
-			d.SetSprite(LGlobal.canvas);
-			d.SetLineThickness(1);
-			d.SetFillAlpha(0.5);
-			d.SetAlpha(1);
-			d.SetDrawScale(s.drawScale);
-			d.SetFlags(s.b2DebugDraw.e_shapeBit | s.b2DebugDraw.e_jointBit);
-			s.world.SetDebugDraw(d);
-		}
-		LGlobal.destroy = true;
-	}
-	LBox2d.prototype = {
-		setEvent : function(t_v, f_v) {
-			var s = this;
-			if (t_v == LEvent.ENTER_FRAME) {
-				s.ll_enterFrame = f_v;
-				return;
-			}
-			if (!s.contactListener) {
-				s.contactListener = new s.b2ContactListener();
-				s.world.SetContactListener(s.contactListener);
-			}
-			switch (t_v) {
-				case LEvent.END_CONTACT:
-					s.contactListener.EndContact = f_v;
-					break;
-				case LEvent.PRE_SOLVE:
-					s.contactListener.PreSolve = f_v;
-					break;
-				case LEvent.POST_SOLVE:
-					s.contactListener.PostSolve = f_v;
-					break;
-				case LEvent.BEGIN_CONTACT:
-				default:
-					s.contactListener.BeginContact = f_v;
-			}
-		},
-		setWeldJoint : function(A, B) {
-			var s = this;
-			var j = new s.b2WeldJointDef();
-			j.Initialize(B, A, B.GetWorldCenter());
-			return s.world.CreateJoint(j);
-		},
-		setLineJoint : function(A, B, vec, t, m) {
-			var s = this;
-			var wa = new s.b2Vec2(vec[0], vec[1]);
-			var j = new s.b2LineJointDef();
-			j.Initialize(A, B, B.GetWorldCenter(), wa);
-			if (t == null) {
-				j.enableLimit = false;
-			} else {
-				j.lowerTranslation = t[0];
-				j.upperTranslation = t[1];
-				j.enableLimit = true;
-			}
-			if (m == null) {
-				j.enableMotor = false;
-			} else {
-				j.maxMotorForce = m[0];
-				j.motorSpeed = m[1];
-				j.enableMotor = true;
-			}
-			return s.world.CreateJoint(j);
-		},
-		setGearJoint : function(A, B, ra, r, p) {
-			var s = this;
-			var j = new s.b2GearJointDef();
-			j.joint1 = r;
-			j.joint2 = p;
-			j.bodyA = A;
-			j.bodyB = B;
-			j.ratio = ra * s.b2Settings.b2_pi / (300 / s.drawScale);
-			return s.world.CreateJoint(j);
-		},
-		setPrismaticJoint : function(A, B, vec, t, m) {
-			var s = this;
-			var wa = new s.b2Vec2(vec[0], vec[1]);
-			var j = new s.b2PrismaticJointDef();
-			j.Initialize(B, A, B.GetWorldCenter(), wa);
-			if (t == null) {
-				j.enableLimit = false;
-			} else {
-				j.lowerTranslation = t[0];
-				j.upperTranslation = t[1];
-				j.enableLimit = true;
-			}
-			if (m == null) {
-				j.enableMotor = false;
-			} else {
-				j.maxMotorForce = m[0];
-				j.motorSpeed = m[1];
-				j.enableMotor = true;
-			}
-			return s.world.CreateJoint(j);
-		},
-		setRevoluteJoint : function(A, B, a, m) {
-			var s = this;
-			var j = new s.b2RevoluteJointDef();
-			j.Initialize(A, B, B.GetWorldCenter());
-			if (a == null) {
-				j.enableLimit = false;
-			} else {
-				j.lowerAngle = a[0] * s.b2Settings.b2_pi / 180;
-				j.upperAngle = a[1] * s.b2Settings.b2_pi / 180;
-				j.enableLimit = true;
-			}
-			if (m == null) {
-				j.enableMotor = false;
-			} else {
-				j.maxMotorTorque = m[0];
-				j.motorSpeed = m[1];
-				j.enableMotor = true;
-			}
-			return s.world.CreateJoint(j);
-		},
-		setDistanceJoint : function(A, B) {
-			var s = this;
-			var j = new s.b2DistanceJointDef();
-			j.Initialize(A, B, A.GetWorldCenter(), B.GetWorldCenter());
-			return s.world.CreateJoint(j);
-		},
-		setPulleyJoint : function(A, B, vA, vB, ratio) {
-			var s = this;
-			var a1 = A.GetWorldCenter();
-			var a2 = B.GetWorldCenter();
-			var g1 = new s.b2Vec2(a1.x + (vA[0] / s.drawScale), a1.y + (vA[1] / s.drawScale));
-			var g2 = new s.b2Vec2(a2.x + (vB[0] / s.drawScale), a2.y + (vB[1] / s.drawScale));
-			var j = new s.b2PulleyJointDef();
-			j.Initialize(A, B, g1, g2, a1, a2, ratio);
-			j.maxLengthA = vA[2] / s.drawScale;
-			j.maxLengthB = vB[2] / s.drawScale;
-			return s.world.CreateJoint(j);
-		},
-		addCircle : function(r, cx, cy, t, d, f, e) {
-			var s = this;
-			s.bodyDef = new s.b2BodyDef;
-			s.bodyDef.type = t;
-			s.fixDef = new s.b2FixtureDef;
-			s.fixDef.density = d;
-			s.fixDef.friction = f;
-			s.fixDef.restitution = e;
-			s.fixDef.shape = new s.b2CircleShape(r);
-			s.bodyDef.position.x = cx;
-			s.bodyDef.position.y = cy;
-			var shape = s.world.CreateBody(s.bodyDef);
-			shape.CreateFixture(s.fixDef);
-			return shape;
-		},
-		addPolygon : function(w, h, cx, cy, type, d, f, e) {
-			var s = this;
-			s.bodyDef = new s.b2BodyDef;
-			s.bodyDef.type = type;
-			s.fixDef = new s.b2FixtureDef;
-			s.fixDef.density = d;
-			s.fixDef.friction = f;
-			s.fixDef.restitution = e;
-			s.fixDef.shape = new s.b2PolygonShape;
-			s.fixDef.shape.SetAsBox(w, h);
-			s.bodyDef.position.x = cx;
-			s.bodyDef.position.y = cy;
-			var shape = s.world.CreateBody(s.bodyDef);
-			shape.CreateFixture(s.fixDef);
-			return shape;
-		},
-		addVertices : function(vertices, type, d, f, e) {
-			var s = this, i, l;
-			s.bodyDef = new s.b2BodyDef;
-			s.bodyDef.type = type;
-			var shape = s.world.CreateBody(s.bodyDef);
-			for ( i = 0, l = vertices.length; i < l; i++) {
-				s.createShapeAsArray(shape, vertices[i], type, d, f, e);
-			}
-			return shape;
-		},
-		createShapeAsArray : function(c, vertices, type, d, f, e) {
-			var s = this;
-			var shape = new s.b2PolygonShape();
-			var sv = s.createVerticesArray(vertices);
-			shape.SetAsArray(sv, 0);
-			var def = new s.b2FixtureDef();
-			def.shape = shape;
-			def.density = d;
-			def.friction = f;
-			def.restitution = e;
-			c.CreateFixture(def);
-		},
-		createVerticesArray : function(a) {
-			var s = this, i, l;
-			var v = new Array();
-			if (a.length < 3) {
-				return v;
-			}
-			for ( i = 0, l = a.length; i < l; i++) {
-				v.push(new s.b2Vec2(a[i][0] / s.drawScale, a[i][1] / s.drawScale));
-			}
-			return v;
-		},
-		getBodyAtMouse : function(mouseX, mouseY) {
-			var s = this;
-			s.mousePVec = new s.b2Vec2(mouseX, mouseY);
-			var aabb = new s.b2AABB();
-			aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
-			aabb.upperBound.Set(mouseX + 0.001, mouseY + 0.001);
-			s.selectedBody = null;
-			s.world.QueryAABB(s.getBodyCallBack, aabb);
-			return s.selectedBody;
-		},
-		getBodyCallBack : function(fixture) {
-			var s = LGlobal.box2d;
-			if (fixture.GetBody().GetType() != s.b2Body.b2_staticBody) {
-				if (fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), s.mousePVec)) {
-					s.selectedBody = fixture.GetBody();
-					return false;
-				}
-			}
-			return true;
-		},
-		ll_show : function() {
-			var s = this, k = null;
-			for (k in s.removeList) {
-				s.world.DestroyBody(s.removeList[k]);
-			}
-			s.removeList.splice(0, s.removeList.length);
-			if (s.stop) {
-				return;
-			}
-			if (s.ll_enterFrame) {
-				s.ll_enterFrame({
-					target : s
-				});
-			}
-			s.world.Step(1 / 30, 10, 10);
-			s.world.ClearForces();
-			if (LGlobal.traceDebug) {
-				s.world.DrawDebugData();
-			}
-		},
-		synchronous : function() {
-			var s = this;
-			var parent = null, child, position = null, cx = 0, cy = 0, currentBody, joint;
-			for ( currentBody = s.world.GetBodyList(); currentBody; currentBody = currentBody.GetNext()) {
-				child = currentBody.GetUserData();
-				if (child) {
-					if (position == null) {
-						parent = child.parent;
-						cx = currentBody.GetPosition().x;
-						cy = currentBody.GetPosition().y;
-					}
-					currentBody.SetPosition(new s.b2Vec2((child.x + child.rotatex + parent.x) / s.drawScale, (child.y + child.rotatey + parent.y) / s.drawScale));
-					if (position == null) {
-						position = {
-							x : (currentBody.GetPosition().x - cx),
-							y : (currentBody.GetPosition().y - cy)
-						};
-					}
-				}
-			}
-			for ( joint = s.world.GetJointList(); joint; joint = joint.GetNext()) {
-				if (joint.m_groundAnchor1) {
-					joint.m_groundAnchor1.x += position.x;
-					joint.m_groundAnchor1.y += position.y;
-				}
-				if (joint.m_groundAnchor2) {
-					joint.m_groundAnchor2.x += position.x;
-					joint.m_groundAnchor2.y += position.y;
-				}
-			}
-			if (LBox2d.m_controllerList && s.world.m_controllerList && parent) {
-				LGlobal.box2d.world.m_controllerList.offset = LBox2d.m_controllerList.offset - parent.y / LGlobal.box2d.drawScale;
-			}
-		}
-	};
-	return LBox2d;
-})();
-LSprite.prototype.setBodyMouseJoint = function(value) {
-	var s = this;
-	if (!s.box2dBody) {
-		return;
-	}
-	s.box2dBody.mouseJoint = value;
-};
-LSprite.prototype.clearBody = function(value) {
-	var s = this;
-	if (!s.box2dBody) {
-		return;
-	}
-	LGlobal.box2d.removeList.push(s.box2dBody);
-	s.box2dBody = null;
-};
-LSprite.prototype.addBodyCircle = function(radius, cx, cy, type, density, friction, restitution) {
-	var s = this;
-	s.rotatex = radius;
-	s.rotatey = radius;
-	s.box2dBody = LGlobal.box2d.addCircle(radius / LGlobal.box2d.drawScale, (s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
-	s.box2dBody.SetUserData(s);
-};
-LSprite.prototype.addBodyPolygon = function(w, h, type, density, friction, restitution) {
-	var s = this;
-	s.rotatex = w / 2;
-	s.rotatey = h / 2;
-	s.box2dBody = LGlobal.box2d.addPolygon(w * 0.5 / LGlobal.box2d.drawScale, h * 0.5 / LGlobal.box2d.drawScale, s.x / LGlobal.box2d.drawScale, s.y / LGlobal.box2d.drawScale, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density == null ? 0.5 : density, friction == null ? 0.4 : friction, restitution == null ? 0.8 : restitution);
-	s.box2dBody.SetUserData(s);
-};
-LSprite.prototype.addBodyVertices = function(vertices, cx, cy, type, density, friction, restitution) {
-	var s = this;
-	s.rotatex = 0;
-	s.rotatey = 0;
-	s.box2dBody = LGlobal.box2d.addVertices(vertices, (type == 1) ? LGlobal.box2d.b2Body.b2_dynamicBody : LGlobal.box2d.b2Body.b2_staticBody, density, friction, restitution);
-	s.box2dBody.SetUserData(s);
-	s.box2dBody.SetPosition(new LGlobal.box2d.b2Vec2((s.x + cx) / LGlobal.box2d.drawScale, (s.y + cy) / LGlobal.box2d.drawScale));
-};
-LGlobal.mouseJoint_start = function(eve) {
-	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || LGlobal.box2d.mouseJoint || LGlobal.box2d.stop) {
-		return;
-	}
-	var mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale, b = LGlobal.box2d.getBodyAtMouse(mX, mY);
-	if (b && b.mouseJoint) {
-		var m = new LGlobal.box2d.b2MouseJointDef();
-		m.bodyA = LGlobal.box2d.world.GetGroundBody();
-		m.bodyB = b;
-		m.target.Set(mX, mY);
-		m.collideConnected = true;
-		m.maxForce = 300000.0 * b.GetMass();
-		LGlobal.box2d.mouseJoint = LGlobal.box2d.world.CreateJoint(m);
-		b.SetAwake(true);
-	};
-};
-LGlobal.mouseJoint_move = function(eve) {
-	if (!LGlobal.IS_MOUSE_DOWN || !LGlobal.box2d || !LGlobal.box2d.mouseJoint) {
-		return;
-	}
-	mX = eve.offsetX / LGlobal.box2d.drawScale, mY = eve.offsetY / LGlobal.box2d.drawScale;
-	LGlobal.box2d.mouseJoint.SetTarget(new LGlobal.box2d.b2Vec2(mX, mY));
-};
-LGlobal.mouseJoint_end = function() {
-	if (LGlobal.box2d != null && LGlobal.box2d.mouseJoint) {
-		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
-		LGlobal.box2d.mouseJoint = null;
-	}
-}; 
-var LTransition = (function() {
-	function LTransition(displayObject, transObj) {
-		this.child = displayObject;
-		this.trans = transObj;
-	}
-	LTransition.prototype = {
-		startTransition : function() {
-			var self = this;
-			switch(self.trans.type) {
-				case LTransition.Blinds:
-					self.blinds();
-					break;
-				case LTransition.Fade:
-					self.fade();
-					break;
-				case LTransition.Fly:
-					self.fly();
-					break;
-				case LTransition.Iris:
-					self.iris();
-					break;
-				case LTransition.Squeeze:
-					self.squeeze();
-					break;
-				case LTransition.Wipe:
-					self.wipe();
-					break;
-				case LTransition.Zoom:
-					self.zoom();
-					break;
-				case LTransition.PixelDissolve:
-					self.pixelDissolve();
-					break;
-				case LTransition.Curtain:
-					self.curtain();
-					break;
-				default:
-					throw ("the type is not exists.");
-			}
-		},
-		blindsComplete : function(self) {
-			if (self.trans.direction == LTransition.OUT) {
-				self.child.mask.clear();
-			} else {
-				self.blindsUpdateRun();
-			}
-			self.child.mask = null;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		blindsUpdateRun : function() {
-			var self = this, g = self.child.mask, c = LGlobal.canvas;
-			g.clear();
-			if (self.trans.dimension) {
-				g.add(function() {
-					c.save();
-					for (var i = 0; i < self.trans.numStrips; i++) {
-						c.rect(i * self.maxSize, 0, self.blindsSize, self.child.getHeight());
-					}
-					c.restore();
-				});
-			} else {
-				g.add(function() {
-					c.save();
-					for (var i = 0; i < self.trans.numStrips; i++) {
-						c.rect(0, 0 + i * self.maxSize, self.child.getWidth(), self.blindsSize);
-					}
-					c.restore();
-				});
-			}
-		},
-		blindsUpdate : function(self) {
-			self.blindsUpdateRun();
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		blinds : function() {
-			var self = this;
-			if (!self.trans.numStrips)
-				self.trans.numStrips = 1;
-			self.blindsSize = 0;
-			if (self.trans.dimension) {
-				self.maxSize = self.child.getWidth() / self.trans.numStrips >> 0;
-			} else {
-				self.maxSize = self.child.getHeight() / self.trans.numStrips >> 0;
-			}
-			var g = new LGraphics();
-			self.child.mask = g;
-			var toSize = self.maxSize;
-			if (self.trans.direction == LTransition.OUT) {
-				self.blindsSize = self.maxSize;
-				toSize = 0;
-			}
-			LTweenLite.to(self, self.trans.duration, {
-				blindsSize : toSize,
-				onComplete : self.blindsComplete,
-				onUpdate : self.blindsUpdate,
-				ease : self.trans.easing
-			});
-		},
-		fadeComplete : function(self) {
-			self.child.alpha = self.alpha;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		fadeUpdate : function(self) {
-			self.child.alpha = self.alpha;
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		fade : function() {
-			var self = this;
-			var toAlpha = 1;
-			self.alpha = 0;
-			if (self.trans.direction == LTransition.OUT) {
-				self.alpha = 1;
-				toAlpha = 0;
-			}
-			self.child.alpha = self.alpha;
-			LTweenLite.to(self, self.trans.duration, {
-				alpha : toAlpha,
-				onComplete : self.fadeComplete,
-				onUpdate : self.fadeUpdate,
-				ease : self.trans.easing
-			});
-		},
-		flyComplete : function(self) {
-			self.child.x = self.x;
-			self.child.y = self.y;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		flyUpdate : function(self) {
-			self.child.x = self.x;
-			self.child.y = self.y;
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		fly : function() {
-			var self = this;
-			var toX = self.child.x;
-			var toY = self.child.y;
-			switch(self.trans.startPoint) {
-				case 1:
-					self.x = -self.child.getWidth();
-					self.y = -self.child.getHeight();
-					break;
-				case 2:
-					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
-					self.y = -self.child.getHeight();
-					break;
-				case 3:
-					self.x = LGlobal.width;
-					self.y = -self.child.getHeight();
-					break;
-				case 4:
-					self.x = -self.child.getWidth();
-					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
-					break;
-				case 6:
-					self.x = LGlobal.width;
-					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
-					break;
-				case 7:
-					self.x = -self.child.getWidth();
-					self.y = LGlobal.height;
-					break;
-				case 8:
-					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
-					self.y = LGlobal.height;
-					break;
-				case 9:
-					self.x = LGlobal.width;
-					self.y = LGlobal.height;
-					break;
-				case 5:
-				default:
-					self.x = (LGlobal.width - self.child.getWidth()) * 0.5;
-					self.y = (LGlobal.height - self.child.getHeight()) * 0.5;
-			}
-			if (self.trans.direction == LTransition.OUT) {
-				var toX = self.x;
-				var toY = self.y;
-				self.x = self.child.x;
-				self.y = self.child.y;
-			} else {
-				self.child.x = self.x;
-				self.child.y = self.y;
-			}
-			LTweenLite.to(self, self.trans.duration, {
-				x : toX,
-				y : toY,
-				onComplete : self.flyComplete,
-				onUpdate : self.flyUpdate,
-				ease : self.trans.easing
-			});
-		},
-		irisComplete : function(self) {
-			if (self.trans.direction == LTransition.OUT) {
-				self.child.mask.clear();
-			} else {
-				self.irisUpdateRun();
-			}
-			self.child.mask = null;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		irisUpdateRun : function() {
-			var self = this, g = self.child.mask, c = LGlobal.canvas;
-			g.clear();
-			if (self.trans.shape == LIris.CIRCLE) {
-				g.drawArc(0, "#000000", [self.x, self.y, self.r, 0, Math.PI * 2]);
-			} else {
-				g.drawRect(0, "#000000", [self.x + self.sLeft, self.y + self.sTop, self.width, self.height]);
-			}
-		},
-		irisUpdate : function(self) {
-			self.irisUpdateRun();
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		iris : function() {
-			var self = this;
-			self.sLeft = 0;
-			self.sTop = 0;
-			self.width = 0;
-			self.height = 0;
-			self.x = 0;
-			self.y = 0;
-			self.r = 0;
-			self.eWidth = self.child.getWidth();
-			self.eHeight = self.child.getHeight();
-			switch(self.trans.startPoint) {
-				case 1:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
-					break;
-				case 2:
-					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
-					self.x = self.child.getWidth() * 0.5;
-					break;
-				case 3:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
-					self.x = self.child.getWidth();
-					break;
-				case 4:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
-					self.y = self.child.getHeight() * 0.5;
-					break;
-				case 6:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + (self.eHeight * 0.5) * (self.eHeight * 0.5));
-					self.x = self.child.getWidth();
-					self.y = self.child.getHeight() * 0.5;
-					break;
-				case 7:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
-					self.y = self.child.getHeight();
-					break;
-				case 8:
-					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + self.eHeight * self.eHeight);
-					self.x = self.child.getWidth() * 0.5;
-					self.y = self.child.getHeight();
-					break;
-				case 9:
-					self.eR = Math.sqrt(self.eWidth * self.eWidth + self.eHeight * self.eHeight);
-					self.x = self.child.getWidth();
-					self.y = self.child.getHeight();
-					break;
-				case 5:
-				default:
-					self.eR = Math.sqrt((self.eWidth * 0.5) * (self.eWidth * 0.5) + (self.eHeight * 0.5) * (self.eHeight * 0.5));
-					self.x = self.child.getWidth() * 0.5;
-					self.y = self.child.getHeight() * 0.5;
-			}
-			self.eLeft = -self.x;
-			self.eTop = -self.y;
-			var g = new LGraphics();
-			self.child.mask = g;
-			var toSize = self.maxSize;
-			if (self.trans.direction == LTransition.OUT) {
-				self.sLeft = self.eLeft;
-				self.sTop = self.eTop;
-				self.eLeft = 0;
-				self.eTop = 0;
-				self.width = self.eWidth;
-				self.height = self.eHeight;
-				self.eWidth = 0;
-				self.eHeight = 0;
-				self.r = self.eR;
-				self.eR = 0;
-			}
-			LTweenLite.to(self, self.trans.duration, {
-				width : self.eWidth,
-				height : self.eHeight,
-				sLeft : self.eLeft,
-				sTop : self.eTop,
-				r : self.eR,
-				onComplete : self.irisComplete,
-				onUpdate : self.irisUpdate,
-				ease : self.trans.easing
-			});
-		},
-		curtainComplete : function(self) {
-			if (self.trans.direction == LTransition.OUT) {
-				self.child.mask.clear();
-			} else {
-				self.curtainUpdateRun();
-			}
-			self.child.mask = null;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		curtainUpdateRun : function() {
-			var self = this, g = self.child.mask, c = LGlobal.canvas;
-			g.clear();
-			if (self.trans.dimension) {
-				g.add(function() {
-					c.beginPath();
-					c.save();
-					c.rect(0, 0, self.width, self.child.getHeight());
-					c.rect(self.child.getWidth() - self.width, 0, self.width, self.child.getHeight());
-					c.restore();
-				});
-			} else {
-				g.add(function() {
-					c.beginPath();
-					c.save();
-					c.rect(0, 0, self.child.getWidth(), self.height);
-					c.rect(0, self.child.getHeight() - self.height, self.child.getWidth(), self.height);
-					c.restore();
-				});
-			}
-		},
-		curtainUpdate : function(self) {
-			self.curtainUpdateRun();
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		curtain : function() {
-			var self = this;
-			var eW = self.child.getWidth() * 0.5;
-			var eH = self.child.getHeight() * 0.5;
-			if (self.trans.dimension) {
-				eH = 0;
-			} else {
-				eW = 0;
-			}
-			self.width = 0;
-			self.height = 0;
-			var g = new LGraphics();
-			self.child.mask = g;
-			var toSize = self.maxSize;
-			if (self.trans.direction == LTransition.OUT) {
-				self.width = eW;
-				self.height = eH;
-				eW = 0;
-				eH = 0;
-			}
-			LTweenLite.to(self, self.trans.duration, {
-				width : eW,
-				height : eH,
-				onComplete : self.curtainComplete,
-				onUpdate : self.curtainUpdate,
-				ease : self.trans.easing
-			});
-		},
-		squeezeComplete : function(self) {
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		squeezeUpdate : function(self) {
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		squeeze : function() {
-			var self = this;
-			var toScaleX = 1, toScaleY = 1;
-			self.scaleX = 0, self.scaleY = 0;
-			if (self.trans.dimension) {
-				self.scaleX = 1;
-			} else {
-				self.scaleY = 1;
-			}
-			if (self.trans.direction == LTransition.OUT) {
-				toScaleX = self.scaleX, toScaleY = self.scaleY;
-				self.scaleX = 1, self.scaleY = 1;
-			}
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			LTweenLite.to(self, self.trans.duration, {
-				scaleX : toScaleX,
-				scaleY : toScaleY,
-				onComplete : self.squeezeComplete,
-				onUpdate : self.squeezeUpdate,
-				ease : self.trans.easing
-			});
-		},
-		zoomComplete : function(self) {
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		zoomUpdate : function(self) {
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		zoom : function() {
-			var self = this;
-			var toScaleX = 1, toScaleY = 1;
-			self.scaleX = 0, self.scaleY = 0;
-			if (self.trans.direction == LTransition.OUT) {
-				toScaleX = 0, toScaleY = 0;
-				self.scaleX = 1, self.scaleY = 1;
-			}
-			self.child.scaleX = self.scaleX;
-			self.child.scaleY = self.scaleY;
-			LTweenLite.to(self, self.trans.duration, {
-				scaleX : toScaleX,
-				scaleY : toScaleY,
-				onComplete : self.zoomComplete,
-				onUpdate : self.zoomUpdate,
-				ease : self.trans.easing
-			});
-		},
-		wipeComplete : function(self) {
-			if (self.trans.direction == LTransition.OUT) {
-				self.child.mask.clear();
-			} else {
-				self.wipeUpdateRun();
-			}
-			self.child.mask = null;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		wipeUpdateRun : function() {
-			var self = this, g = self.child.mask, c = LGlobal.canvas;
-			g.clear();
-			g.drawVertices(0, "#000000", [[self.leftTopX, self.leftTopY], [self.leftBottomX, self.leftBottomY], [self.rightBottomX, self.rightBottomY], [self.rightTopX, self.rightTopY]]);
-		},
-		wipeUpdate : function(self) {
-			self.wipeUpdateRun();
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		wipe : function() {
-			var self = this, w = self.child.getWidth(), h = self.child.getHeight(), ltX = self.leftTopX = 0, ltY = self.leftTopY = 0, lbX = self.leftBottomX = 0, lbY = self.leftBottomY = h, rtX = self.rightTopX = w, rtY = self.rightTopY = 0, rbX = self.rightBottomX = w, rbY = self.rightBottomY = h;
-			switch(self.trans.startPoint) {
-				case 1:
-					ltX = self.leftTopX = -w;
-					lbX = self.leftBottomX = -w * 2;
-					self.rightTopX = 0;
-					rtX = w * 2;
-					self.rightBottomX = -w;
-					rbX = w;
-					break;
-				case 2:
-					ltY = self.leftTopY = -h;
-					self.leftBottomY = 0;
-					lbY = h;
-					rtY = self.rightTopY = -h;
-					self.rightBottomY = 0;
-					rbY = h;
-					break;
-				case 3:
-					self.leftTopX = w;
-					ltX = -w;
-					self.leftBottomX = w * 2;
-					lbX = 0;
-					rtX = self.rightTopX = w * 2;
-					rbX = self.rightBottomX = w * 3;
-					break;
-				case 4:
-					self.rightTopX = 0;
-					rtX = w;
-					self.rightBottomX = 0;
-					rbX = w;
-					break;
-				case 6:
-					self.leftTopX = w;
-					ltX = 0;
-					self.leftBottomX = w;
-					lbX = 0;
-					break;
-				case 7:
-					lbX = self.leftBottomX = -w;
-					ltX = self.leftTopX = -w * 2;
-					self.rightBottomX = 0;
-					rbX = w * 2;
-					self.rightTopX = -w;
-					rtX = w;
-					break;
-				case 8:
-					lbY = self.leftBottomY = h;
-					self.leftTopY = h;
-					ltY = 0;
-					rbY = self.rightBottomY = h;
-					self.rightTopY = h;
-					rtY = 0;
-					break;
-				case 9:
-					self.leftBottomX = w;
-					lbX = -w;
-					self.leftTopX = w * 2;
-					ltX = 0;
-					rbX = self.rightBottomX = w * 2;
-					rtX = self.rightTopX = w * 3;
-					break;
-				case 5:
-				default:
-					self.leftTopX = w * 0.5;
-					self.leftTopY = h * 0.5;
-					self.rightTopX = w * 0.5;
-					self.rightTopY = h * 0.5;
-					self.leftBottomX = w * 0.5;
-					self.leftBottomY = h * 0.5;
-					self.rightBottomX = w * 0.5;
-					self.rightBottomY = h * 0.5;
-					ltX = 0, ltY = 0;
-					lbX = 0, lbY = h;
-					rtX = w, rtY = 0;
-					rbX = w, rbY = h;
-			}
-			var g = new LGraphics();
-			self.child.mask = g;
-			if (self.trans.direction == LTransition.OUT) {
-				var oltX = ltX, oltY = ltY, olbX = lbX, olbY = lbY, ortX = rtX, ortY = rtY, orbX = rbX, orbY = rbY;
-				ltX = self.leftTopX, ltY = self.leftTopY, lbX = self.leftBottomX, lbY = self.leftBottomY, rtX = self.rightTopX, rtY = self.rightTopY, rbX = self.rightBottomX, rbY = self.rightBottomY;
-				self.leftTopX = oltX, self.leftTopY = oltY, self.leftBottomX = olbX, self.leftBottomY = olbY, self.rightTopX = ortX, self.rightTopY = ortY, self.rightBottomX = orbX, self.rightBottomY = orbY;
-			}
-			LTweenLite.to(self, self.trans.duration, {
-				leftTopX : ltX,
-				leftTopY : ltY,
-				leftBottomX : lbX,
-				leftBottomY : lbY,
-				rightTopX : rtX,
-				rightTopY : rtY,
-				rightBottomX : rbX,
-				rightBottomY : rbY,
-				onComplete : self.wipeComplete,
-				onUpdate : self.wipeUpdate,
-				ease : self.trans.easing
-			});
-		},
-		pixelDissolveComplete : function(self) {
-			if (self.trans.direction == LTransition.OUT) {
-				self.child.mask.clear();
-			} else {
-				self.pixelDissolveUpdateRun();
-			}
-			self.child.mask = null;
-			if (self.trans.onComplete) {
-				self.trans.onComplete(self.child);
-			}
-		},
-		pixelDissolveUpdateRun : function() {
-			var self = this, g = self.child.mask, c = LGlobal.canvas, list;
-			g.clear();
-			g.add(function() {
-				c.beginPath();
-				c.save();
-				for (var i = 0; i < self.index; i++) {
-					list = self.list[i];
-					c.rect(list[0] * self.w, list[1] * self.h, self.w, self.h);
-				}
-				c.restore();
-			});
-		},
-		pixelDissolveUpdate : function(self) {
-			self.pixelDissolveUpdateRun();
-			if (self.trans.onUpdate) {
-				self.trans.onUpdate(self.child);
-			}
-		},
-		pixelDissolve : function() {
-			var self = this;
-			var g = new LGraphics();
-			self.child.mask = g;
-			LGlobal.mg = g;
-			self.w = self.child.getWidth() / self.trans.xSections, self.h = self.child.getHeight() / self.trans.ySections;
-			self.list = [];
-			for (var i = 0; i < self.trans.xSections; i++) {
-				for (var j = 0; j < self.trans.ySections; j++) {
-					self.list.push([i, j]);
-				}
-			}
-			self.index = 0;
-			var to = self.trans.xSections * self.trans.ySections;
-			if (self.trans.direction == LTransition.OUT) {
-				self.index = to;
-				to = 0;
-			}
-			self.list = self.list.sort(function(a, b) {
-				return Math.random() > 0.5;
-			});
-			self.pixelDissolveUpdateRun();
-			LTweenLite.to(self, self.trans.duration, {
-				index : to,
-				onComplete : self.pixelDissolveComplete,
-				onUpdate : self.pixelDissolveUpdate,
-				ease : self.trans.easing
-			});
-		}
-	};
-	LTransition.IN = "in";
-	LTransition.OUT = "out";
-	LTransition.Blinds = 1;
-	LTransition.Fade = 2;
-	LTransition.Fly = 3;
-	LTransition.Iris = 4;
-	LTransition.Curtain = 5;
-	LTransition.PixelDissolve = 6;
-	LTransition.Squeeze = 7;
-	LTransition.Wipe = 8;
-	LTransition.Zoom = 9;
-	return LTransition;
-})();
-var LIris = (function() {
-	function LIris() {
-	}
-	LIris.SQUARE = 0;
-	LIris.CIRCLE = 1;
-	return LIris;
-})();
-var LTransitionManager = (function() {
-	function LTransitionManager(displayObject) {
-		this.child = displayObject;
-	}
-	LTransitionManager.prototype = {
-		startTransition : function(transParams) {
-			return LTransitionManager.start(this.child, transParams);
-		}
-	};
-	LTransitionManager.start = function(displayObject, transParams) {
-		var trans = new LTransition(displayObject, transParams);
-		trans.startTransition();
-		return trans;
-	};
-	return LTransitionManager;
-})(); 
-var LFlash = (function () {
-	function LFlash(){}
-	LFlash.SpriteSheetConvert = function(frames){
-		var result = [],child;
-		for(var i=0;i<frames.length;i++){
-			child = frames[i];
-			result.push({x:child.frame.x,sx:child.spriteSourceSize.x,y:child.frame.y,sy:child.spriteSourceSize.y,width:child.frame.w,height:child.frame.h});
-		}
-		return result;
-	};
-	return LFlash;
-})();
-var LString = {
-	trim:function (s){
-		return s.replace(/(^\s*)|(\s*$)|(\n)/g, "");
-	},
-	leftTrim:function (s){
-		return s.replace(/(^\s*)|(^\n)/g, "");
-	},
-	rightTrim:function (s){
-		return s.replace(/(\s*$)|(\n$)/g, "");
-	},
-	numberFormat:function (s,l){
-		if (!l || l < 1) {
-			l = 3;
-		}
-		s=String(s).split(".");
-		s[0]=s[0].replace(new RegExp('(\\d)(?=(\\d{'+l+'})+$)','ig'),"$1,");
-		return s.join(".");
-	},
-	isString:function (s){
-		var p=/^([a-z]|[A-Z])+$/;
-		return p.exec(s); 
-	},
-	isNumber:function (s){
-		var p=/^\d+\.\d+$/;
-		return p.exec(s); 
-	},
-	isInt:function (s){
-		var p=/^\d+$/;
-		return p.exec(s); 
-	}
-};
-var LMath = LString;
