@@ -715,7 +715,7 @@ var LGlobal = ( function () {
 			LGlobal.os = OS_IPOD;
 			LGlobal.canTouch = true;
 			LGlobal.ios = true;
-		} else if (n.indexOf(OS_IPAD) > 0) {
+		} else if ((n.indexOf(OS_IPAD) > 0 || n.indexOf('Macintosh') > 0) && 'ontouchend' in document) {
 			LGlobal.os = OS_IPAD;
 			LGlobal.ios = true;
 			LGlobal.canTouch = true;
@@ -736,7 +736,7 @@ var LGlobal = ( function () {
 		}
 		if(LGlobal.ios){
 			var v = n.match(/OS\s(\d+)_(\d+)_?(\d+)?/);
-			LGlobal.iOSversion = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+			LGlobal.iOSversion = v ? [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)] : [];
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
