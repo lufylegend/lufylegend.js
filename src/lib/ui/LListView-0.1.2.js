@@ -239,6 +239,9 @@ var LListView = (function () {
     var length = self._ll_items.length;
     var startX = self.clipping.x / self.cellWidth >> 0;
     var startY = self.clipping.y / self.cellHeight >> 0;
+    self._ll_items.forEach(function (item) {
+      item._ll_showFlag = false;
+    });
     var addX;
     var addY;
     addX = addY = 1;
@@ -254,6 +257,7 @@ var LListView = (function () {
           var item = self._ll_items[index];
           var x = (index % self.maxPerLine) * self.cellWidth;
           var y = (index / self.maxPerLine >>> 0) * self.cellHeight;
+          item._ll_showFlag = true;
           item.updateView(self.bitmap, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
         }
       }
@@ -269,6 +273,7 @@ var LListView = (function () {
           var item = self._ll_items[index];
           var y = (index % self.maxPerLine) * self.cellHeight;
           var x = (index / self.maxPerLine >>> 0) * self.cellWidth;
+          item._ll_showFlag = true;
           item.updateView(self.bitmap, new LRectangle(0, 0, self.cellWidth, self.cellHeight), new LPoint(x - self.clipping.x, y - self.clipping.y));
         }
       }
@@ -276,6 +281,11 @@ var LListView = (function () {
     self.setScrollBarsPositon();
     self._ll_x = self.clipping.x;
     self._ll_y = self.clipping.y;
+    self._ll_items.forEach(function (item) {
+      if (!item._ll_showFlag) {
+        item.cacheAsBitmap(false);
+      }
+    });
   };
   LListView.prototype.clickOnChild = function (selfX, selfY, type) {
     var self = this;
@@ -544,9 +554,6 @@ var LListChildView = (function () {
   };
   LListChildView.prototype.updateView = function (bitmap, rectangle, point) {
     var self = this;
-    if (!self._ll_cacheAsBitmap) {
-      self.cacheAsBitmap(true);
-    }
     if (bitmap) {
       self.ll_baseBitmap = bitmap;
       self.ll_baseRectangle = rectangle;
@@ -556,6 +563,9 @@ var LListChildView = (function () {
       return;
     }
     if (self.ll_basePoint.x > self.ll_baseBitmap.bitmapData.width || self.ll_basePoint.y > self.ll_baseBitmap.bitmapData.height || self.ll_basePoint.x + self.ll_baseRectangle.width < 0 || self.ll_basePoint.y + self.ll_baseRectangle.height < 0) {
+      if (self._ll_cacheAsBitmap) {
+        self.cacheAsBitmap(false);
+      }
       return;
     }
     if (!bitmap) {
@@ -568,6 +578,9 @@ var LListChildView = (function () {
         }
       }
       if (index < 0) {
+        if (self._ll_cacheAsBitmap) {
+          self.cacheAsBitmap(false);
+        }
         return;
       }
       if (listView.arrangement == LListView.Direction.Horizontal) {
@@ -579,11 +592,17 @@ var LListChildView = (function () {
       }
       var isIn = (listView.clipping.x <= x && listView.clipping.x + listView.clipping.width > x && listView.clipping.y - listView.cellHeight <= y && listView.clipping.y + listView.clipping.height > y);
       if (!isIn) {
+        if (self._ll_cacheAsBitmap) {
+          self.cacheAsBitmap(false);
+        }
         return;
       }
       self.ll_basePoint.x = x - listView.clipping.x;
       self.ll_basePoint.y = y - listView.clipping.y;
       self.ll_baseBitmap.bitmapData.clear(new LRectangle(self.ll_basePoint.x, self.ll_basePoint.y, self.ll_baseRectangle.width, self.ll_baseRectangle.height));
+    }
+    if (!self._ll_cacheAsBitmap) {
+      self.cacheAsBitmap(true);
     }
     self.ll_baseBitmap.bitmapData.copyPixels(self._ll_cacheAsBitmap.bitmapData, self.ll_baseRectangle, self.ll_basePoint);
   };
