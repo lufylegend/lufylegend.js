@@ -1361,371 +1361,375 @@ var LGlobal = ( function () {
 var LSystem = LGlobal;
 var LStage = LGlobal;
 if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function (elt) {
-		var len = this.length >>> 0;
-		var from = Number(arguments[1]) || 0;
-		from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-		if (from < 0) {
-			from += len;
-		}
-		for (; from < len; from++) {
-			if (from in this && this[from] === elt) {
-				return from;
-			}
-		}
-		return -1;
-	};
+  Array.prototype.indexOf = function (elt) {
+    var len = this.length >>> 0;
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+    if (from < 0) {
+      from += len;
+    }
+    for (; from < len; from++) {
+      if (from in this && this[from] === elt) {
+        return from;
+      }
+    }
+    return -1;
+  };
 }
 if (!Array.isArray) {
-	Array.isArray = function (value) {
-		return Object.prototype.toString.apply(value) == '[object Array]';
-	};
+  Array.isArray = function (value) {
+    return Object.prototype.toString.apply(value) == '[object Array]';
+  };
 }
 if (!Function.prototype.bind) {
-	Function.prototype.bind = function (oThis) {
-		if (typeof this !== "function") {
-			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-		}
-		var aArgs = Array.prototype.slice.call(arguments, 1),
-			fToBind = this,
-			fNOP = function () { },
-			fBound = function () {
-				return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-			};
-		fNOP.prototype = this.prototype;
-		fBound.prototype = new fNOP();
-		return fBound;
-	};
+  Function.prototype.bind = function (oThis) {
+    if (typeof this !== "function") {
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+    var aArgs = Array.prototype.slice.call(arguments, 1),
+      fToBind = this,
+      fNOP = function () { },
+      fBound = function () {
+        return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+      };
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+    return fBound;
+  };
 }
 if (!Array.prototype.find) {
-	Array.prototype.find = function (predicate) {
-		if (this == null) {
-			throw new TypeError('Array.prototype.find called on null or undefined');
-		}
-		if (typeof predicate !== 'function') {
-			throw new TypeError('predicate must be a function');
-		}
-		var list = Object(this);
-		var length = list.length >>> 0;
-		var thisArg = arguments[1];
-		var value;
-		for (var i = 0; i < length; i++) {
-			value = list[i];
-			if (predicate.call(thisArg, value, i, list)) {
-				return value;
-			}
-		}
-		return undefined;
-	};
+  Array.prototype.find = function (predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return value;
+      }
+    }
+    return undefined;
+  };
 }
 if (!Array.prototype.findIndex) {
-	Array.prototype.findIndex = function (predicate) {
-		if (this == null) {
-			throw new TypeError('Array.prototype.find called on null or undefined');
-		}
-		if (typeof predicate !== 'function') {
-			throw new TypeError('predicate must be a function');
-		}
-		var list = Object(this);
-		var length = list.length >>> 0;
-		var thisArg = arguments[1];
-		var value;
-		for (var i = 0; i < length; i++) {
-			value = list[i];
-			if (predicate.call(thisArg, value, i, list)) {
-				return i;
-			}
-		}
-		return -1;
-	};
+  Array.prototype.findIndex = function (predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return i;
+      }
+    }
+    return -1;
+  };
 }
 if (!Array.prototype.forEach) {
-	Array.prototype.forEach = function (callback, thisArg) {
-		var T, k;
-		if (this == null) {
-			throw new TypeError(' this is null or not defined');
-		}
-		var O = Object(this);
-		var len = O.length >>> 0;
-		if (typeof callback !== "function") {
-			throw new TypeError(callback + ' is not a function');
-		}
-		if (arguments.length > 1) {
-			T = thisArg;
-		}
-		k = 0;
-		while (k < len) {
-			var kValue;
-			if (k in O) {
-				kValue = O[k];
-				callback.call(T, kValue, k, O);
-			}
-			k++;
-		}
-	};
+  Array.prototype.forEach = function (callback, thisArg) {
+    var T, k;
+    if (this == null) {
+      throw new TypeError(' this is null or not defined');
+    }
+    var O = Object(this);
+    var len = O.length >>> 0;
+    if (typeof callback !== "function") {
+      throw new TypeError(callback + ' is not a function');
+    }
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+    k = 0;
+    while (k < len) {
+      var kValue;
+      if (k in O) {
+        kValue = O[k];
+        callback.call(T, kValue, k, O);
+      }
+      k++;
+    }
+  };
 }
 if (!Array.prototype.every) {
-	Array.prototype.every = function (callbackfn, thisArg) {
-		'use strict';
-		var T, k;
-		if (this == null) {
-			throw new TypeError('this is null or not defined');
-		}
-		var O = Object(this);
-		var len = O.length >>> 0;
-		if (typeof callbackfn !== 'function') {
-			throw new TypeError();
-		}
-		if (arguments.length > 1) {
-			T = thisArg;
-		}
-		k = 0;
-		while (k < len) {
-			var kValue;
-			if (k in O) {
-				kValue = O[k];
-				var testResult = callbackfn.call(T, kValue, k, O);
-				if (!testResult) {
-					return false;
-				}
-			}
-			k++;
-		}
-		return true;
-	};
+  Array.prototype.every = function (callbackfn, thisArg) {
+    'use strict';
+    var T, k;
+    if (this == null) {
+      throw new TypeError('this is null or not defined');
+    }
+    var O = Object(this);
+    var len = O.length >>> 0;
+    if (typeof callbackfn !== 'function') {
+      throw new TypeError();
+    }
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+    k = 0;
+    while (k < len) {
+      var kValue;
+      if (k in O) {
+        kValue = O[k];
+        var testResult = callbackfn.call(T, kValue, k, O);
+        if (!testResult) {
+          return false;
+        }
+      }
+      k++;
+    }
+    return true;
+  };
 }
 if (!Array.prototype.some) {
-	Array.prototype.some = function (fun) {
-		'use strict';
-		if (this == null) {
-			throw new TypeError('Array.prototype.some called on null or undefined');
-		}
-		if (typeof fun !== 'function') {
-			throw new TypeError();
-		}
-		var t = Object(this);
-		var len = t.length >>> 0;
-		var thisArg = arguments.length >= 2 ? arguments[1] :
-			void 0;
-		for (var i = 0; i < len; i++) {
-			if (i in t && fun.call(thisArg, t[i], i, t)) {
-				return true;
-			}
-		}
-		return false;
-	};
+  Array.prototype.some = function (fun) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError('Array.prototype.some called on null or undefined');
+    }
+    if (typeof fun !== 'function') {
+      throw new TypeError();
+    }
+    var t = Object(this);
+    var len = t.length >>> 0;
+    var thisArg = arguments.length >= 2 ? arguments[1] :
+      void 0;
+    for (var i = 0; i < len; i++) {
+      if (i in t && fun.call(thisArg, t[i], i, t)) {
+        return true;
+      }
+    }
+    return false;
+  };
 }
 if (!Array.prototype.filter) {
-	Array.prototype.filter = function (fun ) {
-		"use strict";
-		if (this == null) {
-			throw new TypeError();
-		}
-		var t = Object(this), len = t.length >>> 0;
-		if (typeof fun != "function") {
-			throw new TypeError();
-		}
-		var res = [], thisp = arguments[1];
-		for (var i = 0; i < len; i++) {
-			if (i in t) {
-				var val = t[i];
-				if (fun.call(thisp, val, i, t)) {
-					res.push(val);
-				}
-			}
-		}
-		return res;
-	};
+  Array.prototype.filter = function (fun ) {
+    "use strict";
+    if (this == null) {
+      throw new TypeError();
+    }
+    var t = Object(this), len = t.length >>> 0;
+    if (typeof fun != "function") {
+      throw new TypeError();
+    }
+    var res = [], thisp = arguments[1];
+    for (var i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i];
+        if (fun.call(thisp, val, i, t)) {
+          res.push(val);
+        }
+      }
+    }
+    return res;
+  };
 }
 if (!String.format) {
-	String.format = function (format) {
-		var args = Array.prototype.slice.call(arguments, 1);
-		return format.replace(/{(\d+)}/g, function (match, number) {
-			return typeof args[number] != 'undefined'
-				? args[number]
-				: match
-				;
-		});
-	};
+  String.format = function (format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function (match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+        ;
+    });
+  };
 }
 if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
-	Object.defineProperty(Function.prototype, 'name', {
-		get: function () {
-			var funcNameRegex = /function\s([^(]{1,})\(/;
-			var results = (funcNameRegex).exec((this).toString());
-			return (results && results.length > 1) ? results[1].trim() : "";
-		},
-		set: function (value) { }
-	});
+  Object.defineProperty(Function.prototype, 'name', {
+    get: function () {
+      var funcNameRegex = /function\s([^(]{1,})\(/;
+      var results = (funcNameRegex).exec((this).toString());
+      return (results && results.length > 1) ? results[1].trim() : "";
+    },
+    set: function (value) { }
+  });
 }
 function trace() {
-	if (!LGlobal.traceDebug) return;
-	var t = document.getElementById("traceObject"), i;
-	if (trace.arguments.length > 0 && t == null) {
-		var d = document.createElement("DIV");
-		d.position = 0;
-		d.style.position = "absolute";
-		document.body.appendChild(d);
-		t = document.createElement("TEXTAREA");
-		t.id = "traceObject";
-		t.style.width = (window.innerWidth * 0.5) + "px";
-		t.style.height = "200px";
-		var b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth * 0.25) + "px";
-		b.innerHTML = "Hide";
-		d.appendChild(b);
-		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", function (e) {
-			t.style.display = (t.style.display == "none" ? "" : "none");
-		});
-		b = document.createElement("BUTTON");
-		b.style.width = (window.innerWidth * 0.25) + "px";
-		b.innerHTML = "position";
-		d.appendChild(b);
-		var f = function (e) {
-			d.position++;
-			if (d.position == 0) {
-				d.style.top = "5px";
-				d.style.left = "5px";
-			} else if (d.position == 1) {
-				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
-				d.style.left = "5px";
-			} else if (d.position == 2) {
-				d.style.top = "5px";
-				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
-			} else {
-				d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
-				d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
-				d.position = -1;
-			}
-		};
-		f();
-		LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", f);
-		d.appendChild(document.createElement("BR"));
-		d.appendChild(t);
-	}
-	for (i = 0; i < trace.arguments.length; i++) {
-		t.value = t.value + trace.arguments[i] + "\r\n";
-		t.scrollTop = t.scrollHeight;
-	}
+  if (!LGlobal.traceDebug) return;
+  var t = document.getElementById("traceObject"), i;
+  if (trace.arguments.length > 0 && t == null) {
+    var d = document.createElement("DIV");
+    d.position = 0;
+    d.style.position = "absolute";
+    document.body.appendChild(d);
+    t = document.createElement("TEXTAREA");
+    t.id = "traceObject";
+    t.style.width = (window.innerWidth * 0.5) + "px";
+    t.style.height = "200px";
+    var b = document.createElement("BUTTON");
+    b.style.width = (window.innerWidth * 0.25) + "px";
+    b.innerHTML = "Hide";
+    d.appendChild(b);
+    LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", function (e) {
+      t.style.display = (t.style.display == "none" ? "" : "none");
+    });
+    b = document.createElement("BUTTON");
+    b.style.width = (window.innerWidth * 0.25) + "px";
+    b.innerHTML = "position";
+    d.appendChild(b);
+    var f = function (e) {
+      d.position++;
+      if (d.position == 0) {
+        d.style.top = "5px";
+        d.style.left = "5px";
+      } else if (d.position == 1) {
+        d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
+        d.style.left = "5px";
+      } else if (d.position == 2) {
+        d.style.top = "5px";
+        d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
+      } else {
+        d.style.top = (window.innerHeight - 20 - parseInt(t.style.height)) + "px";
+        d.style.left = (window.innerWidth - parseInt(t.style.width)) + "px";
+        d.position = -1;
+      }
+    };
+    f();
+    LEvent.addEventListener(b, LGlobal.mobile ? "touchstart" : "click", f);
+    d.appendChild(document.createElement("BR"));
+    d.appendChild(t);
+  }
+  for (i = 0; i < trace.arguments.length; i++) {
+    t.value = t.value + trace.arguments[i] + "\r\n";
+    t.scrollTop = t.scrollHeight;
+  }
 }
 if (!window.console) {
-	window.console = {
-		log: trace,
-		warn: trace
-	};
+  window.console = {
+    log: trace,
+    warn: trace
+  };
 }
 function addChild(o) {
-	LGlobal.stage.addChild(o);
+  LGlobal.stage.addChild(o);
 }
 function removeChild(o) {
-	LGlobal.stage.removeChild(o);
+  LGlobal.stage.removeChild(o);
 }
 function init(s, c, w, h, f, t) {
-	LGlobal.childList = [];
-	if (LGlobal.requestId) {
-		var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
-		cancelAnimationFrame(LGlobal.requestId);
-	}
-	LGlobal.speed = s;
-	var _f = function () {
-		if (LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight) {
-			LGlobal.horizontalError();
-		} else if (LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight) {
-			LGlobal.verticalError();
-		} else {
-			setTimeout(f, 100);
-		}
-		LGlobal.startTimer = (new Date()).getTime();
-	};
-	var loop;
-	if (typeof s == "function") {
-		loop = function () {
-			LGlobal.requestId = s(loop);
-			LGlobal.onShow();
-		};
-		LGlobal.speed = 1000 / 60;
-	} else {
-		var _requestAF = (function () {
-			return window.requestAnimationFrame ||
-				window.webkitRequestAnimationFrame ||
-				window.mozRequestAnimationFrame ||
-				window.oRequestAnimationFrame ||
-				window.msRequestAnimationFrame ||
-				function (callback, element) {
-					window.setTimeout(callback, 1000 / 60);
-				};
-		})();
-		LGlobal._requestAFBaseTime = (new Date()).getTime();
-		loop = function () {
-			var now = (new Date()).getTime();
-			if (now - LGlobal._now > s * 2) {
-				LGlobal._requestAFBaseTime = now - s;
-			}
-			LGlobal._now = now;
-			var check = now - LGlobal._requestAFBaseTime;
-			if (check / s >= 0.99) {
-				LGlobal._requestAFBaseTime += s;
-				LGlobal.onShow();
-			}
-			LGlobal.requestId = _requestAF(loop, s);
-		};
-	}
-	if (document.readyState === "complete") {
-		LGlobal.setCanvas(c, w, h);
-		_f();
-		loop();
-	} else {
-		LEvent.addEventListener(window, "load", function () {
-			LGlobal._requestAFBaseTime = (new Date()).getTime();
-			LGlobal.setCanvas(c, w, h);
-			_f();
-			loop();
-		});
-	}
+  if (LGlobal._childListLength) {
+    LGlobal.childList.length = LGlobal._childListLength;
+  } else {
+    LGlobal._childListLength = LGlobal.childList.length;
+  }
+  if (LGlobal.requestId) {
+    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
+    cancelAnimationFrame(LGlobal.requestId);
+  }
+  LGlobal.speed = s;
+  var _f = function () {
+    if (LGlobal.canTouch && LGlobal.aspectRatio == LANDSCAPE && window.innerWidth < window.innerHeight) {
+      LGlobal.horizontalError();
+    } else if (LGlobal.canTouch && LGlobal.aspectRatio == PORTRAIT && window.innerWidth > window.innerHeight) {
+      LGlobal.verticalError();
+    } else {
+      setTimeout(f, 100);
+    }
+    LGlobal.startTimer = (new Date()).getTime();
+  };
+  var loop;
+  if (typeof s == "function") {
+    loop = function () {
+      LGlobal.requestId = s(loop);
+      LGlobal.onShow();
+    };
+    LGlobal.speed = 1000 / 60;
+  } else {
+    var _requestAF = (function () {
+      return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (callback, element) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+    })();
+    LGlobal._requestAFBaseTime = (new Date()).getTime();
+    loop = function () {
+      var now = (new Date()).getTime();
+      if (now - LGlobal._now > s * 2) {
+        LGlobal._requestAFBaseTime = now - s;
+      }
+      LGlobal._now = now;
+      var check = now - LGlobal._requestAFBaseTime;
+      if (check / s >= 0.99) {
+        LGlobal._requestAFBaseTime += s;
+        LGlobal.onShow();
+      }
+      LGlobal.requestId = _requestAF(loop, s);
+    };
+  }
+  if (document.readyState === "complete") {
+    LGlobal.setCanvas(c, w, h);
+    _f();
+    loop();
+  } else {
+    LEvent.addEventListener(window, "load", function () {
+      LGlobal._requestAFBaseTime = (new Date()).getTime();
+      LGlobal.setCanvas(c, w, h);
+      _f();
+      loop();
+    });
+  }
 }
 var LInit = init;
 function base(d, b, a) {
-	var p = null, o = d.constructor.prototype, h = {};
-	if (d.constructor.name == "Object") {
-		console.warn("When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
-	}
-	if (typeof d.__ll__parent__ == UNDEFINED) {
-		d.__ll__parent__ = [];
-		d.__ll__parent__ = [];
-	}
-	d.__ll__parent__.push(b.prototype);
-	for (p in o) {
-		h[p] = 1;
-	}
-	for (p in b.prototype) {
-		if (!h[p]) {
-			if (p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0) {
-				if (LGlobal.wx) {
-					o[p] = b.prototype[p];
-				} else {
-					o[p] = new Function('return this.callParent("' + p + '", arguments);');
-				}
-			} else {
-				o[p] = b.prototype[p];
-			}
-		}
-	}
-	if (o.toString == Object.prototype.toString) {
-		o.toString = LObject.prototype.toString;
-	}
-	b.apply(d, a);
+  var p = null, o = d.constructor.prototype, h = {};
+  if (d.constructor.name == "Object") {
+    console.warn("When you use the extends. You must make a method like 'XX.prototype.xxx=function(){}'. but not 'XX.prototype={xxx:function(){}}'.");
+  }
+  if (typeof d.__ll__parent__ == UNDEFINED) {
+    d.__ll__parent__ = [];
+    d.__ll__parent__ = [];
+  }
+  d.__ll__parent__.push(b.prototype);
+  for (p in o) {
+    h[p] = 1;
+  }
+  for (p in b.prototype) {
+    if (!h[p]) {
+      if (p != "callParent" && b.prototype[p].toString().indexOf("callParent") > 0) {
+        if (LGlobal.wx) {
+          o[p] = b.prototype[p];
+        } else {
+          o[p] = new Function('return this.callParent("' + p + '", arguments);');
+        }
+      } else {
+        o[p] = b.prototype[p];
+      }
+    }
+  }
+  if (o.toString == Object.prototype.toString) {
+    o.toString = LObject.prototype.toString;
+  }
+  b.apply(d, a);
 }
 var LExtends = base;
 function getTimer() {
-	return (new Date()).getTime() - LGlobal.startTimer;
+  return (new Date()).getTime() - LGlobal.startTimer;
 }
 function getExtension(path) {
-	var r, pattern = /([^#?]+\.)([^.#?]+)/;
-	r = path.match(pattern);
-	if (r.length >= 3) {
-		return r[2].toLowerCase();
-	}
-	return null;
+  var r, pattern = /([^#?]+\.)([^.#?]+)/;
+  r = path.match(pattern);
+  if (r.length >= 3) {
+    return r[2].toLowerCase();
+  }
+  return null;
 }
 var LObject = (function () {
 	function LObject () {
@@ -2170,343 +2174,358 @@ var LEventDispatcher = (function () {
 	return LEventDispatcher;
 })();
 var LDisplayObject = (function () {
-	function LDisplayObject () {
-		var s = this;
-		LExtends(s, LEventDispatcher, []);
-		s.name = "instance" + s.objectIndex;
-		s.x = 0;
-		s.y = 0;
-		s.width = 0;
-		s.height = 0;
-		s.scaleX = 1;
-		s.scaleY = 1;
-		s.alpha = 1;
-		s.visible = true;
-		s.rotate = 0;
-		s.mask = null;
-		s.blendMode = null;
-		s.filters = null;
-		s.transform = new LTransform();
-		s.parent = null;
-	}
-	var p = {
-		_createCanvas:function(){
-			var s = this;
-			if (!s._canvas) {
-				s._canvas = document.createElement("canvas");
-				s._context = s._canvas.getContext("2d");
-			}
-		},
-		ll_show : function (c) {
-			var s = this;
-			c = c || LGlobal.canvas;
-			if (!s._canShow()) {
-				return;
-			}
-			s._ll_trans = false;
-			if (!LGlobal.box2d && typeof s._ll_loopframe == "function") {
-				s._ll_loopframe();
-			}
-			c.save();
-			s._showReady(c);
-			if (s.blendMode) {
-				c.globalCompositeOperation = s.blendMode;
-			}
-			if (s.filters) {
-				s._ll_setFilters(c);
-			}
-			s._rotateReady();
-			if (s.mask != null && s.mask.ll_show && !s._ll_cacheAsBitmap) {
-				s.mask.ll_show(c);
-				c.clip();
-			}
-			s._transformRotate(c);
-			s._transformScale(c);
-			s._coordinate(c);
-			if (s.transform.matrix) {
-				s.transform.matrix.transform(c);
-			}
-			if (s.alpha < 1) {
-				s._ll_trans = true;
-				c.globalAlpha *= s.alpha;
-			}
-			if (LGlobal.fpsStatus) {
-				LGlobal.fpsStatus.display++;
-				if (s._ll_trans) {
-					LGlobal.fpsStatus.transform++;
-				}
-			}
-			if(s._ll_cacheAsBitmap){
-				s._ll_cacheAsBitmap._ll_show(c);
-			}else{
-				s._ll_show(c);
-			}
-			c.restore();
-			if (LGlobal.box2d != null && typeof s._ll_loopframe == "function") {
-				s._ll_loopframe();
-			}
-		},
-		_canShow : function () {
-			return this.visible;
-		},
-		_coordinate : function (c) {
-			var s = this;
-			if (s.x != 0 || s.y != 0) {
-				s._ll_trans = true;
-				c.transform(1, 0, 0, 1, s.x, s.y);
-			}
-		},
-		_rotateReady : function () {},
-		_showReady : function (c) {},
-		_ll_show : function (c) {},
-		_ll_setFilters : function (c) {
-			var s = this, f = s.filters, i, l;
-			if (!f) {
-				return;
-			}
-			for (i = 0, l = f.length; i < l; i++) {
-				f[i].ll_show(s, c);
-			}
-		},
-		startX : function(){return 0;},
-		startY : function(){return 0;},
-		getWidth : function(maskSize){return 1;},
-		getHeight : function(maskSize){return 1;},
-		_transformRotate : function (c) {
-			var s = this;
-			c = c || LGlobal.canvas;
-			if (s.rotate == 0) {
-				return;
-			}
-			s._ll_trans = true;
-			var rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
-			if ((typeof s.rotatex) == UNDEFINED) {
-				s.rotatex = 0;
-				s.rotatey = 0;
-			}
-			if (s.box2dBody) {
-				rotateFlag = 1;
-			}
-			rotateObj.a = Math.cos(s.rotate * rotateFlag);
-			rotateObj.b = Math.sin(s.rotate * rotateFlag);
-			rotateObj.c = -rotateObj.b;
-			rotateObj.d = rotateObj.a;
-			rotateObj.tx = s.x + s.rotatex;
-			rotateObj.ty = s.y + s.rotatey;
-			rotateObj.transform(c).setTo(1, 0, 0, 1, -rotateObj.tx, -rotateObj.ty).transform(c);
-		},
-		_transformScale : function (c) {
-			var s = this, scaleObj;
-			c = c || LGlobal.canvas;
-			if (s.scaleX == 1 && s.scaleY == 1) {
-				return;
-			}
-			s._ll_trans = true;
-			scaleObj = new LMatrix();
-			if (s.scaleX != 1) {
-				scaleObj.tx = s.x;
-			}
-			if (s.scaleY != 1) {
-				scaleObj.ty = s.y;
-			}
-			scaleObj.a = s.scaleX;
-			scaleObj.d = s.scaleY;
-			scaleObj.transform(c).setTo(1, 0, 0, 1, -scaleObj.tx, -scaleObj.ty).transform(c);
-		},
-		getAbsoluteScale : function () {
-			var s = this, sX, sY, p;
-			sX = s.scaleX;
-			sY = s.scaleY;
-			p = s.parent;
-			while (p && p != "root") {
-				sX *= p.scaleX;
-				sY *= p.scaleY;
-				p = p.parent;
-			}
-			return {scaleX : sX, scaleY : sY};
-		},
-		getRootCoordinate : function () {
-			return this.localToGlobal(new LPoint(0,0));
-		},
-		localToGlobal : function (point) {
-			var s = this, x, y, p, m;
-			m = s.getRootMatrix();
-			p = m.toArray([point.x, point.y, 1]);
-			return new LPoint(p[0], p[1]);
-		},
-		globalToLocal : function (point) {
-			var s = this, x, y, p;
-			m = s.getLocalMatrix();
-			p = m.toArray([point.x, point.y, 1]);
-			return new LPoint(p[0], p[1]);
-		},
-		getBounds : function (d) {
-			if (typeof d == UNDEFINED) {
-				return new LRectangle(0, 0, 0, 0);
-			}
-			var s = this, x = 0, y = 0, w = 0, h = 0, sp, dp;
-			if (s.objectIndex != d.objectIndex) {
-				sp = s.getRootCoordinate();
-				dp = d.getRootCoordinate();
-				x = sp.x - dp.x;
-				y = sp.y - dp.y;
-			}
-			w = s.getWidth(true);
-			h = s.getHeight(true);
-			return new LRectangle(x, y, w, h);
-		},
-		cacheAsBitmap : function (value) {
-			var s = this;
-			if(!value){
-				s._ll_cacheAsBitmap = null;
-				return;
-			}
-			var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
-			var data = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
-			var b = new LBitmapData(data, 0, 0, null, null, LBitmapData.DATA_CANVAS);
-			var cache = new LBitmap(b);
-			cache.x = -sx;
-			cache.y = -sy;
-			s._ll_cacheAsBitmap = cache;
-		},
-		getDataCanvas : function (x,y,w,h) {
-			var s = this, _o, o, _c, c, _x, _y;
-			s._createCanvas();
-			_x = s.x;
-			_y = s.y;
-			s.x = x || 0;
-			s.y = y || 0;
-			s.width = w || s.getWidth();
-			s.height = h || s.getHeight();
-			s._canvas.width = s.width;
-			s._canvas.height = s.height;
-			var mx, my;
-			if(s.mask){
-				mx = s.mask.x;
-				my = s.mask.y;
-				s.mask.x += (s.x - _x);
-				s.mask.y += (s.y - _y);
-			}
-			s.ll_show(s._context);
-			s.x = _x;
-			s.y = _y;
-			if(s.mask){
-				s.mask.x = mx;
-				s.mask.y = my;
-			}
-			return s._canvas;
-		},
-		getDataURL : function () {
-			var s = this;
-			var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
-			var r = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
-			return r.toDataURL.apply(r, arguments);
-		},
-		getParentByConstructor : function (value) {
-			var parent = this.parent;
-			while(typeof parent == "object"){
-				if(parent instanceof value){
-					return parent;
-				}
-				parent = parent.parent;
-			}
-			return null;
-		},
-		ismouseonShapes : function (shapes, mx, my) {
-			var s = this, parent = s, m, child, j, v, arg;
-			if (typeof shapes == UNDEFINED) {
-				shapes = s.shapes;
-			}
-			m = s.getRootMatrix();
-			for (j = shapes.length - 1; j >= 0; j--) {
-				child = shapes[j];
-				arg = child.arg;
-				v = s._changeShape(child.type, arg, m);
-				if (child.type == LShape.VERTICES) {
-					if (LGlobal.hitPolygon(v, mx, my)) {
-						return true;
-					}
-				} else if (child.type == LShape.RECT) {
-					if (LGlobal.hitPolygon(v, mx, my)) {
-						return true;
-					}
-				} else if (child.type == LShape.ARC) {
-					if ((v[0] - mx) * (v[0] - mx) + (v[1] - my) * (v[1] - my) < v[3]) {
-						return true;
-					}
-				}
-			}
-			return false;
-		},
-		_changeShape : function (type, arg, m) {
-			var v, arg = arg, r2, i, l, v1, v2;
-			if (type == LShape.VERTICES) {
-				v = [];
-				for (i = 0, l = arg.length; i < l; i++) {
-					v[i] = m.toArray([arg[i][0], arg[i][1], 1]);
-				}
-			} else if (type == LShape.RECT) {
-				v = [[arg[0], arg[1]], [arg[0] + arg[2], arg[1]], [arg[0] + arg[2], arg[1] + arg[3]], [arg[0], arg[1] + arg[3]]];
-				for (i = 0, l = v.length; i < l; i++) {
-					v[i] = m.toArray([v[i][0], v[i][1],1]);
-				}
-			} else if (type == LShape.ARC) {
-				v1 = m.toArray([arg[0], arg[1], 1]);
-				v2 = m.toArray([arg[0] + arg[2], arg[1], 1]);
-				r2 = (v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]);
-				v = [v1[0], v1[1], Math.sqrt(r2), r2];
-			}
-			return v;
-		},
-		getRootMatrix : function () {
-			var parent = this, m = new LMatrix();
-			while (parent && parent != "root") {
-				if (parent.scaleX != 1 || parent.scaleY != 1) {
-					m.scale(parent.scaleX, parent.scaleY);
-				}
-				if (parent.rotate != 0) {
-					m.rotate(parent.rotate);
-				}
-				if (parent.x != 0 || parent.y != 0) {
-					m.translate(parent.x, parent.y);
-				}
-				parent = parent.parent;
-			}
-			return m;
-		},
-		getLocalMatrix : function () {
-			var parent = this, m = new LMatrix(), list = [];
-			while (parent && parent != "root") {
-				list.push(parent);
-				parent = parent.parent;
-			}
-			for (var i = list.length - 1; i >= 0; i--) {
-				parent = list[i];
-				if (parent.x != 0 || parent.y != 0) {
-					m.translate(-parent.x, -parent.y);
-				}
-				if (parent.rotate != 0) {
-					m.rotate(-parent.rotate);
-				}
-				if (parent.scaleX != 1 || parent.scaleY != 1) {
-					m.scale(1/parent.scaleX, 1/parent.scaleY);
-				}
-			}
-			return m;
-		},
-		remove : function () {
-			var s = this, p = s.parent;
-			if (!p || p == "root") {
-				return;
-			}
-			p.removeChild(s);
-			s._ll_removeFromSelf = true;
-		}
-	};
-	for (var k in p) {
-		LDisplayObject.prototype[k] = p[k];
-	}
-	return LDisplayObject;
+  function LDisplayObject() {
+    var s = this;
+    LExtends(s, LEventDispatcher, []);
+    s.name = "instance" + s.objectIndex;
+    s.x = 0;
+    s.y = 0;
+    s.width = 0;
+    s.height = 0;
+    s.scaleX = 1;
+    s.scaleY = 1;
+    s.alpha = 1;
+    s.visible = true;
+    s.rotate = 0;
+    s.mask = null;
+    s.blendMode = null;
+    s.filters = null;
+    s.transform = new LTransform();
+    s.parent = null;
+  }
+  var p = {
+    _createCanvas: function () {
+      var s = this;
+      if (!s._canvas) {
+        s._canvas = document.createElement("canvas");
+        s._context = s._canvas.getContext("2d");
+      }
+    },
+    ll_show: function (c) {
+      var s = this;
+      c = c || LGlobal.canvas;
+      if (!s._canShow()) {
+        return;
+      }
+      s._ll_trans = false;
+      if (!LGlobal.box2d && typeof s._ll_loopframe == "function") {
+        s._ll_loopframe();
+      }
+      c.save();
+      s._showReady(c);
+      if (s.blendMode) {
+        c.globalCompositeOperation = s.blendMode;
+      }
+      if (s.filters) {
+        s._ll_setFilters(c);
+      }
+      s._rotateReady();
+      if (s.mask != null && s.mask.ll_show && !s._ll_cacheAsBitmap) {
+        s.mask.ll_show(c);
+        c.clip();
+      }
+      s._transformRotate(c);
+      s._transformScale(c);
+      s._coordinate(c);
+      if (s.transform.matrix) {
+        s.transform.matrix.transform(c);
+      }
+      if (s.alpha < 1) {
+        s._ll_trans = true;
+        c.globalAlpha *= s.alpha;
+      }
+      if (LGlobal.fpsStatus) {
+        LGlobal.fpsStatus.display++;
+        if (s._ll_trans) {
+          LGlobal.fpsStatus.transform++;
+        }
+      }
+      if (s._ll_cacheAsBitmap) {
+        s._ll_cacheAsBitmap._ll_show(c);
+      } else {
+        s._ll_show(c);
+      }
+      c.restore();
+      if (LGlobal.box2d != null && typeof s._ll_loopframe == "function") {
+        s._ll_loopframe();
+      }
+    },
+    _canShow: function () {
+      return this.visible;
+    },
+    _coordinate: function (c) {
+      var s = this;
+      if (s.x != 0 || s.y != 0) {
+        s._ll_trans = true;
+        c.transform(1, 0, 0, 1, s.x, s.y);
+      }
+    },
+    _rotateReady: function () { },
+    _showReady: function (c) { },
+    _ll_show: function (c) { },
+    _ll_setFilters: function (c) {
+      var s = this, f = s.filters, i, l;
+      if (!f) {
+        return;
+      }
+      for (i = 0, l = f.length; i < l; i++) {
+        f[i].ll_show(s, c);
+      }
+    },
+    startX: function () { return 0; },
+    startY: function () { return 0; },
+    getWidth: function (maskSize) { return 1; },
+    getHeight: function (maskSize) { return 1; },
+    _transformRotate: function (c) {
+      var s = this;
+      c = c || LGlobal.canvas;
+      if (s.rotate == 0) {
+        return;
+      }
+      s._ll_trans = true;
+      var rotateFlag = Math.PI / 180, rotateObj = new LMatrix();
+      if ((typeof s.rotatex) == UNDEFINED) {
+        s.rotatex = 0;
+        s.rotatey = 0;
+      }
+      if (s.box2dBody) {
+        rotateFlag = 1;
+      }
+      rotateObj.a = Math.cos(s.rotate * rotateFlag);
+      rotateObj.b = Math.sin(s.rotate * rotateFlag);
+      rotateObj.c = -rotateObj.b;
+      rotateObj.d = rotateObj.a;
+      rotateObj.tx = s.x + s.rotatex;
+      rotateObj.ty = s.y + s.rotatey;
+      rotateObj.transform(c).setTo(1, 0, 0, 1, -rotateObj.tx, -rotateObj.ty).transform(c);
+    },
+    _transformScale: function (c) {
+      var s = this, scaleObj;
+      c = c || LGlobal.canvas;
+      if (s.scaleX == 1 && s.scaleY == 1) {
+        return;
+      }
+      s._ll_trans = true;
+      scaleObj = new LMatrix();
+      if (s.scaleX != 1) {
+        scaleObj.tx = s.x;
+      }
+      if (s.scaleY != 1) {
+        scaleObj.ty = s.y;
+      }
+      scaleObj.a = s.scaleX;
+      scaleObj.d = s.scaleY;
+      scaleObj.transform(c).setTo(1, 0, 0, 1, -scaleObj.tx, -scaleObj.ty).transform(c);
+    },
+    getAbsoluteScale: function () {
+      var s = this, sX, sY, p;
+      sX = s.scaleX;
+      sY = s.scaleY;
+      p = s.parent;
+      while (p && p != "root") {
+        sX *= p.scaleX;
+        sY *= p.scaleY;
+        p = p.parent;
+      }
+      return { scaleX: sX, scaleY: sY };
+    },
+    getRootCoordinate: function () {
+      return this.localToGlobal(new LPoint(0, 0));
+    },
+    localToGlobal: function (point) {
+      var s = this, x, y, p, m;
+      m = s.getRootMatrix();
+      p = m.toArray([point.x, point.y, 1]);
+      return new LPoint(p[0], p[1]);
+    },
+    globalToLocal: function (point) {
+      var s = this, x, y, p;
+      m = s.getLocalMatrix();
+      p = m.toArray([point.x, point.y, 1]);
+      return new LPoint(p[0], p[1]);
+    },
+    getBounds: function (d) {
+      if (typeof d == UNDEFINED) {
+        return new LRectangle(0, 0, 0, 0);
+      }
+      var s = this, x = 0, y = 0, w = 0, h = 0, sp, dp;
+      if (s.objectIndex != d.objectIndex) {
+        sp = s.getRootCoordinate();
+        dp = d.getRootCoordinate();
+        x = sp.x - dp.x;
+        y = sp.y - dp.y;
+      }
+      w = s.getWidth(true);
+      h = s.getHeight(true);
+      return new LRectangle(x, y, w, h);
+    },
+    cacheAsBitmap: function (value) {
+      var s = this;
+      if (!value) {
+        if (s._ll_cacheAsBitmap) {
+          s._ll_cacheAsBitmap.die();
+        }
+        s._ll_cacheAsBitmap = null;
+        return;
+      }
+      var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
+      var data = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
+      var b = new LBitmapData(data, 0, 0, null, null, LBitmapData.DATA_CANVAS);
+      var cache = new LBitmap(b);
+      cache.x = -sx;
+      cache.y = -sy;
+      s._ll_cacheAsBitmap = cache;
+    },
+    die: function () {
+      var s = this;
+      if (s._canvas) {
+        s._canvas.width = 0;
+        s._canvas.height = 0;
+        delete s._canvas;
+        delete s._context;
+      }
+      if (s._ll_cacheAsBitmap) {
+        s._ll_cacheAsBitmap.die();
+      }
+    },
+    getDataCanvas: function (x, y, w, h) {
+      var s = this, _o, o, _c, c, _x, _y;
+      s._createCanvas();
+      _x = s.x;
+      _y = s.y;
+      s.x = x || 0;
+      s.y = y || 0;
+      s.width = w || s.getWidth();
+      s.height = h || s.getHeight();
+      s._canvas.width = s.width;
+      s._canvas.height = s.height;
+      var mx, my;
+      if (s.mask) {
+        mx = s.mask.x;
+        my = s.mask.y;
+        s.mask.x += (s.x - _x);
+        s.mask.y += (s.y - _y);
+      }
+      s.ll_show(s._context);
+      s.x = _x;
+      s.y = _y;
+      if (s.mask) {
+        s.mask.x = mx;
+        s.mask.y = my;
+      }
+      return s._canvas;
+    },
+    getDataURL: function () {
+      var s = this;
+      var sx = s.x - s.startX(true), sy = s.y - s.startY(true);
+      var r = s.getDataCanvas(sx, sy, s.getWidth(true), s.getHeight(true));
+      return r.toDataURL.apply(r, arguments);
+    },
+    getParentByConstructor: function (value) {
+      var parent = this.parent;
+      while (typeof parent == "object") {
+        if (parent instanceof value) {
+          return parent;
+        }
+        parent = parent.parent;
+      }
+      return null;
+    },
+    ismouseonShapes: function (shapes, mx, my) {
+      var s = this, parent = s, m, child, j, v, arg;
+      if (typeof shapes == UNDEFINED) {
+        shapes = s.shapes;
+      }
+      m = s.getRootMatrix();
+      for (j = shapes.length - 1; j >= 0; j--) {
+        child = shapes[j];
+        arg = child.arg;
+        v = s._changeShape(child.type, arg, m);
+        if (child.type == LShape.VERTICES) {
+          if (LGlobal.hitPolygon(v, mx, my)) {
+            return true;
+          }
+        } else if (child.type == LShape.RECT) {
+          if (LGlobal.hitPolygon(v, mx, my)) {
+            return true;
+          }
+        } else if (child.type == LShape.ARC) {
+          if ((v[0] - mx) * (v[0] - mx) + (v[1] - my) * (v[1] - my) < v[3]) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+    _changeShape: function (type, arg, m) {
+      var v, arg = arg, r2, i, l, v1, v2;
+      if (type == LShape.VERTICES) {
+        v = [];
+        for (i = 0, l = arg.length; i < l; i++) {
+          v[i] = m.toArray([arg[i][0], arg[i][1], 1]);
+        }
+      } else if (type == LShape.RECT) {
+        v = [[arg[0], arg[1]], [arg[0] + arg[2], arg[1]], [arg[0] + arg[2], arg[1] + arg[3]], [arg[0], arg[1] + arg[3]]];
+        for (i = 0, l = v.length; i < l; i++) {
+          v[i] = m.toArray([v[i][0], v[i][1], 1]);
+        }
+      } else if (type == LShape.ARC) {
+        v1 = m.toArray([arg[0], arg[1], 1]);
+        v2 = m.toArray([arg[0] + arg[2], arg[1], 1]);
+        r2 = (v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]);
+        v = [v1[0], v1[1], Math.sqrt(r2), r2];
+      }
+      return v;
+    },
+    getRootMatrix: function () {
+      var parent = this, m = new LMatrix();
+      while (parent && parent != "root") {
+        if (parent.scaleX != 1 || parent.scaleY != 1) {
+          m.scale(parent.scaleX, parent.scaleY);
+        }
+        if (parent.rotate != 0) {
+          m.rotate(parent.rotate);
+        }
+        if (parent.x != 0 || parent.y != 0) {
+          m.translate(parent.x, parent.y);
+        }
+        parent = parent.parent;
+      }
+      return m;
+    },
+    getLocalMatrix: function () {
+      var parent = this, m = new LMatrix(), list = [];
+      while (parent && parent != "root") {
+        list.push(parent);
+        parent = parent.parent;
+      }
+      for (var i = list.length - 1; i >= 0; i--) {
+        parent = list[i];
+        if (parent.x != 0 || parent.y != 0) {
+          m.translate(-parent.x, -parent.y);
+        }
+        if (parent.rotate != 0) {
+          m.rotate(-parent.rotate);
+        }
+        if (parent.scaleX != 1 || parent.scaleY != 1) {
+          m.scale(1 / parent.scaleX, 1 / parent.scaleY);
+        }
+      }
+      return m;
+    },
+    remove: function () {
+      var s = this, p = s.parent;
+      if (!p || p == "root") {
+        return;
+      }
+      p.removeChild(s);
+      s._ll_removeFromSelf = true;
+    }
+  };
+  for (var k in p) {
+    LDisplayObject.prototype[k] = p[k];
+  }
+  return LDisplayObject;
 })();
 var LInteractiveObject = (function() {
 	function LInteractiveObject() {
@@ -4483,425 +4502,426 @@ var LShape = (function () {
 	return LShape;
 })();
 var LSprite = (function () {
-	function LSprite () {
-		var s = this;
-		LExtends(s, LDisplayObjectContainer, []);
-		s.type = "LSprite";
-		s.rotatex;
-		s.rotatey;
-		s.graphics = new LGraphics();
-		s.graphics.parent = s;
-		s.box2dBody = null;
-		s.shapes = new Array();
-		s.dragRange = null;
-		s.useCursor = null;
-	}
-	var p = {
-		setRotate : function (angle) {
-			var s = this;
-			if (s.box2dBody) {
-				s.box2dBody.SetAngle(angle);
-			} else {
-				s.rotate = angle;
-			}
-		},
-		_rotateReady : function () {
-			var s = this;
-			if (s.box2dBody) {
-				if ((typeof s.rotatex) == UNDEFINED) {
-					s.getRotateXY();
-				}
-				s.x = s.box2dBody.GetPosition().x * LGlobal.box2d.drawScale - s.parent.x - s.rotatex;
-				s.y = s.box2dBody.GetPosition().y * LGlobal.box2d.drawScale - s.parent.y - s.rotatey;
-				s.rotate = s.box2dBody.GetAngle();
-			}
-		},
-		_ll_show : function (c) {
-			var s = this;
-			s.graphics.ll_show(c);
-			LGlobal.show(s.childList, c);
-			s._ll_debugShape(c);
-		},
-		startDrag : function (touchPointID) {
-			var s = this;
-			if (s.ll_dragStart) {
-				return;
-			}
-			s.ll_touchPointID = touchPointID;
-			s.ll_dragGlobalPoint = s.parent.localToGlobal(new LPoint(s.x, s.y));
-			s.ll_dragMX = mouseX;
-			s.ll_dragMY = mouseY;
-			s.ll_dragStart = true;
-			LGlobal.dragList.push(s);
-		},
-		stopDrag : function () {
-			var s = this, i, l;
-			for (i = 0, l = LGlobal.dragList.length; i < l; i++) {
-				if (s.objectIndex == LGlobal.dragList[i].objectIndex) {
-					s.ll_dragStart = false;
-					LGlobal.dragList.splice(i, 1);
-					break;
-				}
-			}
-		},
-		getRotateXY : function (w, h) {
-			var s = this;
-			if (!w || !h) {
-				w = s.getWidth();
-				h = s.getHeight();
-			}
-			s.rotatex = w / 2;
-			s.rotatey = h / 2;
-		},
-		getWidth : function (maskSize) {
-			var s = this, i, l, o, a, b, mx, mw,
-			left = s.graphics.startX(), right = left + s.graphics.getWidth();
-			for (i = 0, l = s.childList.length; i < l; i++) {
-				o = s.childList[i];
-				if (typeof o.visible == UNDEFINED || !o.visible) {
-					continue;
-				}
-				a = o.x;
-				if (typeof o._startX == "function") {
-					a=o._startX(maskSize);
-				}
-				b = a + o.getWidth(maskSize);
-				if (a < left) {
-					left = a;
-				}
-				if (b > right) {
-					right = b;
-				}
-			}
-			if (maskSize && s.mask) {
-				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-				mw = s.mask.getWidth();
-				if (left < mx) {
-					left = mx;
-				}
-				if (right > mx + mw) {
-					right = mx + mw;
-				}
-				s.ll_left = left;
-				s.ll_right = right;
-			}else{
-				s.ll_left = s.x + left;
-				s.ll_right = s.x + right;
-			}
-			return (right - left) * s.scaleX;
-		},
-		getHeight : function (maskSize) {
-			var s = this, i, l, o, a, b, my, mh,
-			top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
-			for (i = 0, l = s.childList.length; i < l; i++) {
-				o = s.childList[i];
-				if (typeof o.visible == UNDEFINED || !o.visible) {
-					continue;
-				}
-				a = o.y;
-				if (typeof o._startY == "function") {
-					a=o._startY(maskSize);
-				}
-				b = a + o.getHeight(maskSize);
-				if (a < top) {
-					top = a;
-				}
-				if (b > bottom) {
-					bottom = b;
-				}
-			}
-			if (maskSize && s.mask) {
-				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-				mh = s.mask.getHeight();
-				if (top < my) {
-					top = my;
-				}
-				if (bottom > my + mh) {
-					bottom = my + mh;
-				}
-				s.ll_top = top;
-				s.ll_bottom = bottom;
-			}else{
-				s.ll_top = s.y + top;
-				s.ll_bottom = s.y + bottom;
-			}
-			return (bottom - top) * s.scaleY;
-		},
-		_startX : function (maskSize) {
-			var s = this;
-			s.getWidth(maskSize);
-			return s.ll_left;
-		},
-		startX : function (maskSize) {
-			var s = this;
-			return s._startX(maskSize) * s.scaleX;
-		},
-		_startY : function (maskSize) {
-			var s = this;
-			s.getHeight(maskSize);
-			return s.ll_top;
-		},
-		startY : function (maskSize) {
-			var s = this;
-			return s._startY(maskSize) * s.scaleY;
-		},
-		_ll_loopframe : function () {
-			this.dispatchEvent(LEvent.ENTER_FRAME);
-		},
-		clone : function () {
-			var s = this, a = new LSprite(), c, o, i, l;
-			a.copyProperty(s);
-			a.graphics = s.graphics.clone();
-			a.graphics.parent = a;
-			a.childList.length = 0;
-			for (i = 0, l = s.childList.length; i < l; i++) {
-				c = s.childList[i];
-				if (c.clone) {
-					o = c.clone();
-					o.parent = a;
-					a.childList.push(o);
-				}
-			}
-			return a;
-		},
-		_mevent : function (type) {
-			var s = this, k;
-			for (k = 0; k < s.mouseList.length; k++) {
-				var o = s.mouseList[k];
-				if (o.type == type) {
-					return true;
-				}
-			}
-			return false;
-		},
-		ll_dispatchMouseEvent : function (type, e, cd, ox, oy) {
-			var s = this;
-			if (!s.mouseEnabled) {
-				return;
-			}
-			for (k = 0; k < s.mouseList.length; k++) {
-				var o = s.mouseList[k];
-				if (o.type == type) {
-					e.selfX = (ox - (s.x * cd.scaleX + cd.x)) / (cd.scaleX * s.scaleX);
-					e.selfY = (oy - (s.y * cd.scaleY + cd.y)) / (cd.scaleY * s.scaleY);
-					e.currentTarget = e.clickTarget = s;
-					if (!e.target) {
-						e.target = s;
-					}
-					o.listener(e, s);
-				}
-			}
-		},
-		ll_mouseout : function (e, type, cd, ox, oy) {
-			var s = this;
-			if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
-				s.ll_mousein = false;
-				if (s._mevent(LMouseEvent.MOUSE_OUT)) {
-					s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
-				}
-				if (s.mouseChildren) {
-					for (var k = s.childList.length - 1; k >= 0; k--) {
-						if (s.childList[k].mouseEvent && s.childList[k].ll_mouseout) {
-							s.childList[k].ll_mouseout(e, type, cd, ox, oy);
-						}
-					}
-				}
-			}
-		},
-		mouseEvent : function (e, type, cd) {
-			if (!e) {
-				return false;
-			}
-			var s = this, i, k, ox = e.offsetX, oy = e.offsetY, on, mc;
-			if (!s.visible) {
-				return false;
-			}
-			if (cd == null) {
-				cd = {x : 0, y : 0, scaleX : 1, scaleY : 1};
-			}
-			on = s.ismouseon(e, cd);
-			if (on) {
-				if(LGlobal.os == OS_PC && s.useCursor && type == LMouseEvent.MOUSE_MOVE){
-					LGlobal.cursor = s.useCursor;
-				}
-				if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
-					s.ll_mousein = true;
-					if (s._mevent(LMouseEvent.MOUSE_OVER)) {
-						s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER, e, cd, ox, oy);
-					}
-				}
-				if (s.mouseChildren) {
-					mc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
-					for (k = s.childList.length - 1; k >= 0; k--) {
-						if (s.childList[k].mouseEvent) {
-							i = s.childList[k].mouseEvent(e, type, mc);
-							if (i) {
-								e.target = s.childList[k];
-								if (type != LMouseEvent.MOUSE_MOVE) {
-									break;
-								}
-							}
-						}
-					}
-					if (s._mevent(type)) {
-						s.ll_dispatchMouseEvent(type, e, cd, ox, oy);
-					}
-				}
-				return true;
-			} else {
-				s.ll_mouseout(e, type, cd, ox, oy);
-			}
-			return false;
-		},
-		hitTestPoint : function (x, y) {
-			var s = this, shapes = s.shapes;
-			if (!shapes || shapes.length == 0) {
-				s.getWidth();
-				s.getHeight();
-				shapes = [{"type" : LShape.RECT, "arg" : [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top]}];
-			}
-			return s.ismouseonShapes(shapes, x, y);
-		},
-		hitTestObject : function (obj) {
-			var s = this, shapes = s.shapes, shapes1 = obj.shapes, m, m1, j, child, j1, child1, vo1, v1;
-			if (!shapes || shapes.length == 0) {
-				s.getWidth();
-				s.getHeight();
-				shapes = [{"type" : LShape.RECT, "arg" : [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top]}];
-			}
-			if (!shapes1 || shapes1.length == 0) {
-				obj.getWidth();
-				obj.getHeight();
-				shapes1 = [{"type" : LShape.RECT, "arg" : [obj.ll_left - obj.x, obj.ll_top - obj.y, obj.ll_right - obj.ll_left, obj.ll_bottom - obj.ll_top]}];
-			}
-			m = s.getRootMatrix();
-			m1 = obj.getRootMatrix();
-			for (j = shapes.length - 1; j >= 0; j--) {
-				child = shapes[j];
-				v1 = s._changeShape(child.type, child.arg, m);
-				for (j1 = shapes1.length - 1; j1 >= 0; j1--) {
-					child1 = shapes1[j1];
-					vo1 = obj._changeShape(child1.type, child1.arg, m1);
-					if (child.type == LShape.VERTICES || child.type == LShape.RECT) {
-						if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
-							if (LGlobal.hitTestPolygon(v1, vo1)) {
-								return true;
-							}
-						} else if (child1.type == LShape.ARC) {
-							if(LGlobal.hitTestPolygonArc(v1, vo1)) {
-								return true;
-							}
-						}
-					} else {
-						if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
-							if (LGlobal.hitTestPolygonArc(vo1, v1)) {
-								return true;
-							}
-						} else if (child1.type == LShape.ARC) {
-							if (Math.sqrt((v1[0] - vo1[0]) * (v1[0] - vo1[0]) + (v1[1] - vo1[1]) * (v1[1] - vo1[1])) < v1[2] + vo1[2]) {
-								return true;
-							}
-						}
-					}
-				}
-			}
-			return false;
-		},
-		addShape : function (type, arg) {
-			var s = this;
-			if (type == LShape.VERTICES && arg.length < 3) {
-				return;
-			}
-			s.shapes.push({"type" : type, "arg" : arg});
-			return s.shapes;
-		},
-		addShapes : function (shapes) {
-			var s = this;
-			if(s.shapes.length == 0){
-				s.shapes = shapes;
-			}else{
-				s.shapes = s.shapes.concat(shapes);
-			}
-		},
-		clearShape : function () {
-			this.shapes = [];
-		},
-		_ll_debugShape : function (c) {
-			var s = this, i, l, child, arg, j, ll;
-			if (!LGlobal.traceDebug || !s.shapes || s.shapes.length == 0) {
-				return;
-			}
-			for (i = 0, l = s.shapes.length; i < l; i++) {
-				child = s.shapes[i];
-				c = c || LGlobal.canvas;
-				arg = child.arg;
-				c.beginPath();
-				if (child.type == LShape.RECT) {
-					c.rect(arg[0], arg[1], arg[2], arg[3]);
-				}else if (child.type == LShape.ARC) {
-					c.arc(arg[0], arg[1], arg[2], 0, 2*Math.PI);
-				}else if (child.type == LShape.VERTICES) {
-					c.moveTo(arg[0][0], arg[0][1]);
-					for (j = 1, ll = arg.length; j < ll; j++) {
-						c.lineTo(arg[j][0], arg[j][1]);
-					};
-					c.lineTo(arg[0][0], arg[0][1]);
-				}
-				c.closePath();
-				c.strokeStyle = "#00FF00";
-				c.stroke();
-			}
-		},
-		ismouseon : function (e, cd) {
-			var s = this;
-			if (!s.visible || e==null) {
-				return false;
-			}
-			if (s.mask) {
-				if (!s.mask.parent) {
-					s.mask.parent = s.parent;
-				}
-				if (!s.mask.ismouseon(e, cd)) {
-					return false;
-				}
-			}
-			if(s.shapes && s.shapes.length > 0){
-				return s.ismouseonShapes(s.shapes, e.offsetX, e.offsetY);
-			}
-			var k, i = false, l = s.childList, sc = {x : s.x * cd.scaleX + cd.x, y : s.y * cd.scaleY + cd.y, scaleX : cd.scaleX * s.scaleX, scaleY : cd.scaleY * s.scaleY};
-			for (k = l.length - 1; k >= 0; k--) {
-				if (l[k].ismouseon) {
-					i = l[k].ismouseon(e, sc);
-				}
-				if (i) {
-					e.target = s.childList[k];
-					break;
-				}
-			}
-			if (!i) {
-				i = s.graphics.ismouseon(e, sc);
-			}
-			return i;
-		},
-		die : function () {
-			var s = this, i, c, l;
-			s.graphics.clear();
-			s.removeAllEventListener();
-			s.stopDrag();
-			if (s.box2dBody) {
-				s.clearBody();
-			}
-			for (i = 0, c = s.childList, l = c.length; i < l; i++) {
-				if (c[i].die) {
-					c[i].die();
-				}
-			}
-		}
-	};
-	for (var k in p) {
-		LSprite.prototype[k] = p[k];
-	}
-	return LSprite;
+  function LSprite() {
+    var s = this;
+    LExtends(s, LDisplayObjectContainer, []);
+    s.type = "LSprite";
+    s.rotatex;
+    s.rotatey;
+    s.graphics = new LGraphics();
+    s.graphics.parent = s;
+    s.box2dBody = null;
+    s.shapes = new Array();
+    s.dragRange = null;
+    s.useCursor = null;
+  }
+  var p = {
+    setRotate: function (angle) {
+      var s = this;
+      if (s.box2dBody) {
+        s.box2dBody.SetAngle(angle);
+      } else {
+        s.rotate = angle;
+      }
+    },
+    _rotateReady: function () {
+      var s = this;
+      if (s.box2dBody) {
+        if ((typeof s.rotatex) == UNDEFINED) {
+          s.getRotateXY();
+        }
+        s.x = s.box2dBody.GetPosition().x * LGlobal.box2d.drawScale - s.parent.x - s.rotatex;
+        s.y = s.box2dBody.GetPosition().y * LGlobal.box2d.drawScale - s.parent.y - s.rotatey;
+        s.rotate = s.box2dBody.GetAngle();
+      }
+    },
+    _ll_show: function (c) {
+      var s = this;
+      s.graphics.ll_show(c);
+      LGlobal.show(s.childList, c);
+      s._ll_debugShape(c);
+    },
+    startDrag: function (touchPointID) {
+      var s = this;
+      if (s.ll_dragStart) {
+        return;
+      }
+      s.ll_touchPointID = touchPointID;
+      s.ll_dragGlobalPoint = s.parent.localToGlobal(new LPoint(s.x, s.y));
+      s.ll_dragMX = mouseX;
+      s.ll_dragMY = mouseY;
+      s.ll_dragStart = true;
+      LGlobal.dragList.push(s);
+    },
+    stopDrag: function () {
+      var s = this, i, l;
+      for (i = 0, l = LGlobal.dragList.length; i < l; i++) {
+        if (s.objectIndex == LGlobal.dragList[i].objectIndex) {
+          s.ll_dragStart = false;
+          LGlobal.dragList.splice(i, 1);
+          break;
+        }
+      }
+    },
+    getRotateXY: function (w, h) {
+      var s = this;
+      if (!w || !h) {
+        w = s.getWidth();
+        h = s.getHeight();
+      }
+      s.rotatex = w / 2;
+      s.rotatey = h / 2;
+    },
+    getWidth: function (maskSize) {
+      var s = this, i, l, o, a, b, mx, mw,
+        left = s.graphics.startX(), right = left + s.graphics.getWidth();
+      for (i = 0, l = s.childList.length; i < l; i++) {
+        o = s.childList[i];
+        if (typeof o.visible == UNDEFINED || !o.visible) {
+          continue;
+        }
+        a = o.x;
+        if (typeof o._startX == "function") {
+          a = o._startX(maskSize);
+        }
+        b = a + o.getWidth(maskSize);
+        if (a < left) {
+          left = a;
+        }
+        if (b > right) {
+          right = b;
+        }
+      }
+      if (maskSize && s.mask) {
+        mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+        mw = s.mask.getWidth();
+        if (left < mx) {
+          left = mx;
+        }
+        if (right > mx + mw) {
+          right = mx + mw;
+        }
+        s.ll_left = left;
+        s.ll_right = right;
+      } else {
+        s.ll_left = s.x + left;
+        s.ll_right = s.x + right;
+      }
+      return (right - left) * s.scaleX;
+    },
+    getHeight: function (maskSize) {
+      var s = this, i, l, o, a, b, my, mh,
+        top = s.graphics.startY(), bottom = top + s.graphics.getHeight();
+      for (i = 0, l = s.childList.length; i < l; i++) {
+        o = s.childList[i];
+        if (typeof o.visible == UNDEFINED || !o.visible) {
+          continue;
+        }
+        a = o.y;
+        if (typeof o._startY == "function") {
+          a = o._startY(maskSize);
+        }
+        b = a + o.getHeight(maskSize);
+        if (a < top) {
+          top = a;
+        }
+        if (b > bottom) {
+          bottom = b;
+        }
+      }
+      if (maskSize && s.mask) {
+        my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+        mh = s.mask.getHeight();
+        if (top < my) {
+          top = my;
+        }
+        if (bottom > my + mh) {
+          bottom = my + mh;
+        }
+        s.ll_top = top;
+        s.ll_bottom = bottom;
+      } else {
+        s.ll_top = s.y + top;
+        s.ll_bottom = s.y + bottom;
+      }
+      return (bottom - top) * s.scaleY;
+    },
+    _startX: function (maskSize) {
+      var s = this;
+      s.getWidth(maskSize);
+      return s.ll_left;
+    },
+    startX: function (maskSize) {
+      var s = this;
+      return s._startX(maskSize) * s.scaleX;
+    },
+    _startY: function (maskSize) {
+      var s = this;
+      s.getHeight(maskSize);
+      return s.ll_top;
+    },
+    startY: function (maskSize) {
+      var s = this;
+      return s._startY(maskSize) * s.scaleY;
+    },
+    _ll_loopframe: function () {
+      this.dispatchEvent(LEvent.ENTER_FRAME);
+    },
+    clone: function () {
+      var s = this, a = new LSprite(), c, o, i, l;
+      a.copyProperty(s);
+      a.graphics = s.graphics.clone();
+      a.graphics.parent = a;
+      a.childList.length = 0;
+      for (i = 0, l = s.childList.length; i < l; i++) {
+        c = s.childList[i];
+        if (c.clone) {
+          o = c.clone();
+          o.parent = a;
+          a.childList.push(o);
+        }
+      }
+      return a;
+    },
+    _mevent: function (type) {
+      var s = this, k;
+      for (k = 0; k < s.mouseList.length; k++) {
+        var o = s.mouseList[k];
+        if (o.type == type) {
+          return true;
+        }
+      }
+      return false;
+    },
+    ll_dispatchMouseEvent: function (type, e, cd, ox, oy) {
+      var s = this;
+      if (!s.mouseEnabled) {
+        return;
+      }
+      for (k = 0; k < s.mouseList.length; k++) {
+        var o = s.mouseList[k];
+        if (o.type == type) {
+          e.selfX = (ox - (s.x * cd.scaleX + cd.x)) / (cd.scaleX * s.scaleX);
+          e.selfY = (oy - (s.y * cd.scaleY + cd.y)) / (cd.scaleY * s.scaleY);
+          e.currentTarget = e.clickTarget = s;
+          if (!e.target) {
+            e.target = s;
+          }
+          o.listener(e, s);
+        }
+      }
+    },
+    ll_mouseout: function (e, type, cd, ox, oy) {
+      var s = this;
+      if (type == LMouseEvent.MOUSE_MOVE && s.ll_mousein) {
+        s.ll_mousein = false;
+        if (s._mevent(LMouseEvent.MOUSE_OUT)) {
+          s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OUT, e, cd, ox, oy);
+        }
+        if (s.mouseChildren) {
+          for (var k = s.childList.length - 1; k >= 0; k--) {
+            if (s.childList[k].mouseEvent && s.childList[k].ll_mouseout) {
+              s.childList[k].ll_mouseout(e, type, cd, ox, oy);
+            }
+          }
+        }
+      }
+    },
+    mouseEvent: function (e, type, cd) {
+      if (!e) {
+        return false;
+      }
+      var s = this, i, k, ox = e.offsetX, oy = e.offsetY, on, mc;
+      if (!s.visible) {
+        return false;
+      }
+      if (cd == null) {
+        cd = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+      }
+      on = s.ismouseon(e, cd);
+      if (on) {
+        if (LGlobal.os == OS_PC && s.useCursor && type == LMouseEvent.MOUSE_MOVE) {
+          LGlobal.cursor = s.useCursor;
+        }
+        if (type == LMouseEvent.MOUSE_MOVE && !s.ll_mousein) {
+          s.ll_mousein = true;
+          if (s._mevent(LMouseEvent.MOUSE_OVER)) {
+            s.ll_dispatchMouseEvent(LMouseEvent.MOUSE_OVER, e, cd, ox, oy);
+          }
+        }
+        if (s.mouseChildren) {
+          mc = { x: s.x * cd.scaleX + cd.x, y: s.y * cd.scaleY + cd.y, scaleX: cd.scaleX * s.scaleX, scaleY: cd.scaleY * s.scaleY };
+          for (k = s.childList.length - 1; k >= 0; k--) {
+            if (s.childList[k].mouseEvent) {
+              i = s.childList[k].mouseEvent(e, type, mc);
+              if (i) {
+                e.target = s.childList[k];
+                if (type != LMouseEvent.MOUSE_MOVE) {
+                  break;
+                }
+              }
+            }
+          }
+          if (s._mevent(type)) {
+            s.ll_dispatchMouseEvent(type, e, cd, ox, oy);
+          }
+        }
+        return true;
+      } else {
+        s.ll_mouseout(e, type, cd, ox, oy);
+      }
+      return false;
+    },
+    hitTestPoint: function (x, y) {
+      var s = this, shapes = s.shapes;
+      if (!shapes || shapes.length == 0) {
+        s.getWidth();
+        s.getHeight();
+        shapes = [{ "type": LShape.RECT, "arg": [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top] }];
+      }
+      return s.ismouseonShapes(shapes, x, y);
+    },
+    hitTestObject: function (obj) {
+      var s = this, shapes = s.shapes, shapes1 = obj.shapes, m, m1, j, child, j1, child1, vo1, v1;
+      if (!shapes || shapes.length == 0) {
+        s.getWidth();
+        s.getHeight();
+        shapes = [{ "type": LShape.RECT, "arg": [s.ll_left - s.x, s.ll_top - s.y, s.ll_right - s.ll_left, s.ll_bottom - s.ll_top] }];
+      }
+      if (!shapes1 || shapes1.length == 0) {
+        obj.getWidth();
+        obj.getHeight();
+        shapes1 = [{ "type": LShape.RECT, "arg": [obj.ll_left - obj.x, obj.ll_top - obj.y, obj.ll_right - obj.ll_left, obj.ll_bottom - obj.ll_top] }];
+      }
+      m = s.getRootMatrix();
+      m1 = obj.getRootMatrix();
+      for (j = shapes.length - 1; j >= 0; j--) {
+        child = shapes[j];
+        v1 = s._changeShape(child.type, child.arg, m);
+        for (j1 = shapes1.length - 1; j1 >= 0; j1--) {
+          child1 = shapes1[j1];
+          vo1 = obj._changeShape(child1.type, child1.arg, m1);
+          if (child.type == LShape.VERTICES || child.type == LShape.RECT) {
+            if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
+              if (LGlobal.hitTestPolygon(v1, vo1)) {
+                return true;
+              }
+            } else if (child1.type == LShape.ARC) {
+              if (LGlobal.hitTestPolygonArc(v1, vo1)) {
+                return true;
+              }
+            }
+          } else {
+            if (child1.type == LShape.VERTICES || child1.type == LShape.RECT) {
+              if (LGlobal.hitTestPolygonArc(vo1, v1)) {
+                return true;
+              }
+            } else if (child1.type == LShape.ARC) {
+              if (Math.sqrt((v1[0] - vo1[0]) * (v1[0] - vo1[0]) + (v1[1] - vo1[1]) * (v1[1] - vo1[1])) < v1[2] + vo1[2]) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    },
+    addShape: function (type, arg) {
+      var s = this;
+      if (type == LShape.VERTICES && arg.length < 3) {
+        return;
+      }
+      s.shapes.push({ "type": type, "arg": arg });
+      return s.shapes;
+    },
+    addShapes: function (shapes) {
+      var s = this;
+      if (s.shapes.length == 0) {
+        s.shapes = shapes;
+      } else {
+        s.shapes = s.shapes.concat(shapes);
+      }
+    },
+    clearShape: function () {
+      this.shapes = [];
+    },
+    _ll_debugShape: function (c) {
+      var s = this, i, l, child, arg, j, ll;
+      if (!LGlobal.traceDebug || !s.shapes || s.shapes.length == 0) {
+        return;
+      }
+      for (i = 0, l = s.shapes.length; i < l; i++) {
+        child = s.shapes[i];
+        c = c || LGlobal.canvas;
+        arg = child.arg;
+        c.beginPath();
+        if (child.type == LShape.RECT) {
+          c.rect(arg[0], arg[1], arg[2], arg[3]);
+        } else if (child.type == LShape.ARC) {
+          c.arc(arg[0], arg[1], arg[2], 0, 2 * Math.PI);
+        } else if (child.type == LShape.VERTICES) {
+          c.moveTo(arg[0][0], arg[0][1]);
+          for (j = 1, ll = arg.length; j < ll; j++) {
+            c.lineTo(arg[j][0], arg[j][1]);
+          };
+          c.lineTo(arg[0][0], arg[0][1]);
+        }
+        c.closePath();
+        c.strokeStyle = "#00FF00";
+        c.stroke();
+      }
+    },
+    ismouseon: function (e, cd) {
+      var s = this;
+      if (!s.visible || e == null) {
+        return false;
+      }
+      if (s.mask) {
+        if (!s.mask.parent) {
+          s.mask.parent = s.parent;
+        }
+        if (!s.mask.ismouseon(e, cd)) {
+          return false;
+        }
+      }
+      if (s.shapes && s.shapes.length > 0) {
+        return s.ismouseonShapes(s.shapes, e.offsetX, e.offsetY);
+      }
+      var k, i = false, l = s.childList, sc = { x: s.x * cd.scaleX + cd.x, y: s.y * cd.scaleY + cd.y, scaleX: cd.scaleX * s.scaleX, scaleY: cd.scaleY * s.scaleY };
+      for (k = l.length - 1; k >= 0; k--) {
+        if (l[k].ismouseon) {
+          i = l[k].ismouseon(e, sc);
+        }
+        if (i) {
+          e.target = s.childList[k];
+          break;
+        }
+      }
+      if (!i) {
+        i = s.graphics.ismouseon(e, sc);
+      }
+      return i;
+    },
+    die: function () {
+      var s = this, i, c, l;
+      s.graphics.clear();
+      s.removeAllEventListener();
+      s.stopDrag();
+      if (s.box2dBody) {
+        s.clearBody();
+      }
+      for (i = 0, c = s.childList, l = c.length; i < l; i++) {
+        if (c[i].die) {
+          c[i].die();
+        }
+      }
+      s.callParent("die", arguments);
+    }
+  };
+  for (var k in p) {
+    LSprite.prototype[k] = p[k];
+  }
+  return LSprite;
 })();
 var LAtlasSprite = (function () {
 	function LAtlasSprite (texture, setting, data, atlasType) {
@@ -5965,7 +5985,15 @@ var LTextField = (function () {
       s._ll_windRun();
     },
     die: function () {
-      LMouseEventContainer.removeInputBox(this);
+      var s = this;
+      LMouseEventContainer.removeInputBox(s);
+      if (s._alignCanvas) {
+        s._alignCanvas.width = 0;
+        s._alignCanvas.height = 0;
+        delete s._alignCanvas;
+        delete s._alignContext;
+      }
+      s.callParent("die", arguments);
     }
   };
   for (var k in p) {
@@ -5974,453 +6002,465 @@ var LTextField = (function () {
   return LTextField;
 })();
 var LBitmap = (function () {
-	function LBitmap (bitmapdata) {
-		var s = this;
-		LExtends(s, LDisplayObject, []);
-		s.type = "LBitmap";
-		s.rotateCenter = true;
-		s.bitmapData = bitmapdata; 
-		if (s.bitmapData) {
-			s.width = s.bitmapData.width;
-			s.height = s.bitmapData.height;
-		}
-	}
-	var p = {
-		_canShow : function () {
-			return (this.visible && this.bitmapData);
-		},
-		_rotateReady : function () {
-			var s = this;
-			if (s.rotate != 0 && s.rotateCenter) {
-				s.rotatex = s.getWidth() * 0.5;
-				s.rotatey = s.getHeight() * 0.5;
-			} else {
-				s.rotatex = s.rotatey = 0;
-			}
-		},
-		_coordinate : function (c) {},
-		_ll_show : function (c) {
-			this.ll_draw(c);
-		},
-		ll_draw : function (c) {
-			var s = this;
-			if (LGlobal.fpsStatus) {
-				LGlobal.fpsStatus.bitmapData++;
-			}
-			c.drawImage(s.bitmapData.image,
-				s.bitmapData.x,
-				s.bitmapData.y,
-				s.bitmapData.width,
-				s.bitmapData.height,
-				s.x,
-				s.y,
-				s.bitmapData.width,
-				s.bitmapData.height
-			);
-		},
-		clone : function () {
-			var s = this, a = new LBitmap(s.bitmapData.clone());
-			a.copyProperty(s);
-			a.rotateCenter = s.rotateCenter;
-			return a;
-		},
-		ismouseon : function (e, cood) {
-			var s = this;
-			if (!e) {
-				return false;
-			}
-			if (!s.visible || !s.bitmapData) {
-				return false;
-			}
-			if (s.mask) {
-				if (!s.mask.parent) {
-					s.mask.parent = s.parent;
-				}
-				if (!s.mask.ismouseon(e, cood)) {
-					return false;
-				}
-			}
-			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s.bitmapData.width, s.bitmapData.height]}], e.offsetX, e.offsetY);
-		},
-		getWidth : function (maskSize) {
-			var s = this, w, mx, mw;
-			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
-			if (maskSize && s.mask) {
-				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-				if (mx > w) {
-					return 0;
-				}
-				mw = s.mask.getWidth();
-				if (mx + mw > w) {
-					return w - mx;
-				}else{
-					return mw;
-				}
-			}
-			return w;
-		},
-		getHeight : function (maskSize) {
-			var s = this, h, my, mh;
-			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
-			if (maskSize && s.mask) {
-				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-				if (my > h) {
-					return 0;
-				}
-				mh = s.mask.getHeight();
-				if (my + mh > h) {
-					return h - my;
-				}else{
-					return mh;
-				}
-			}
-			return h;
-		},
-		startX : function () {
-			return this.x;
-		},
-		startY : function () {
-			return this.y;
-		},
-		die : function () {}
-	};
-	for (var k in p) {
-		LBitmap.prototype[k] = p[k];
-	}
-	return LBitmap;
+  function LBitmap(bitmapdata) {
+    var s = this;
+    LExtends(s, LDisplayObject, []);
+    s.type = "LBitmap";
+    s.rotateCenter = true;
+    s.bitmapData = bitmapdata;
+    if (s.bitmapData) {
+      s.width = s.bitmapData.width;
+      s.height = s.bitmapData.height;
+    }
+  }
+  var p = {
+    _canShow: function () {
+      return (this.visible && this.bitmapData);
+    },
+    _rotateReady: function () {
+      var s = this;
+      if (s.rotate != 0 && s.rotateCenter) {
+        s.rotatex = s.getWidth() * 0.5;
+        s.rotatey = s.getHeight() * 0.5;
+      } else {
+        s.rotatex = s.rotatey = 0;
+      }
+    },
+    _coordinate: function (c) { },
+    _ll_show: function (c) {
+      this.ll_draw(c);
+    },
+    ll_draw: function (c) {
+      var s = this;
+      if (LGlobal.fpsStatus) {
+        LGlobal.fpsStatus.bitmapData++;
+      }
+      c.drawImage(s.bitmapData.image,
+        s.bitmapData.x,
+        s.bitmapData.y,
+        s.bitmapData.width,
+        s.bitmapData.height,
+        s.x,
+        s.y,
+        s.bitmapData.width,
+        s.bitmapData.height
+      );
+    },
+    clone: function () {
+      var s = this, a = new LBitmap(s.bitmapData.clone());
+      a.copyProperty(s);
+      a.rotateCenter = s.rotateCenter;
+      return a;
+    },
+    ismouseon: function (e, cood) {
+      var s = this;
+      if (!e) {
+        return false;
+      }
+      if (!s.visible || !s.bitmapData) {
+        return false;
+      }
+      if (s.mask) {
+        if (!s.mask.parent) {
+          s.mask.parent = s.parent;
+        }
+        if (!s.mask.ismouseon(e, cood)) {
+          return false;
+        }
+      }
+      return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s.bitmapData.width, s.bitmapData.height] }], e.offsetX, e.offsetY);
+    },
+    getWidth: function (maskSize) {
+      var s = this, w, mx, mw;
+      w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+      if (maskSize && s.mask) {
+        mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+        if (mx > w) {
+          return 0;
+        }
+        mw = s.mask.getWidth();
+        if (mx + mw > w) {
+          return w - mx;
+        } else {
+          return mw;
+        }
+      }
+      return w;
+    },
+    getHeight: function (maskSize) {
+      var s = this, h, my, mh;
+      h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+      if (maskSize && s.mask) {
+        my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+        if (my > h) {
+          return 0;
+        }
+        mh = s.mask.getHeight();
+        if (my + mh > h) {
+          return h - my;
+        } else {
+          return mh;
+        }
+      }
+      return h;
+    },
+    startX: function () {
+      return this.x;
+    },
+    startY: function () {
+      return this.y;
+    },
+    die: function () {
+      if (this.bitmapData) {
+        this.bitmapData.die();
+      }
+    }
+  };
+  for (var k in p) {
+    LBitmap.prototype[k] = p[k];
+  }
+  return LBitmap;
 })();
-var LBitmapData = (function() {
-	function LBitmapData(image, x, y, width, height, dataType) {
-		var s = this;
-		LExtends(s, LObject, []);
-		s.type = "LBitmapData";
-		if ( typeof dataType == UNDEFINED) {
-			dataType = LBitmapData.DATA_IMAGE;
-		}
-		s.oncomplete = null;
-		s._locked = false;
-		s._setPixel = false;
-		s.x = (x == null ? 0 : x);
-		s.y = (y == null ? 0 : y);
-		s.width = 0;
-		s.height = 0;
-		s.dataType = null;
-		if (image && typeof image == "object") {
-			s.image = image;
-			s.dataType = LBitmapData.DATA_IMAGE;
-			s.width = (width == null ? s.image.width : width);
-			s.height = (height == null ? s.image.height : height);
-			s._setDataType(dataType);
-		} else {
-			s._createCanvas();
-			s.dataType = LBitmapData.DATA_CANVAS;
-			s._canvas.width = s.width = (width ? width : 1);
-			s._canvas.height = s.height = (height ? height : 1);
-			if ( typeof image == "string") {
-				s._context.fillStyle = image;
-				s._context.fillRect(0, 0, s.width, s.height);
-			}else if ( typeof image == "number") {
-				var d = s._context.createImageData(s.width, s.height);
-				for (var i = 0; i < d.data.length; i += 4) {
-					d.data[i + 0] = image >> 16 & 0xFF;
-					d.data[i + 1] = image >> 8 & 0xFF;
-					d.data[i + 2] = image & 0xFF;
-					d.data[i + 3] = 255;
-				}
-				s._context.putImageData(d, 0, 0);
-			}
-			s.image = s._canvas;
-			if (dataType == LBitmapData.DATA_IMAGE) {
-				s._setDataType(dataType);
-			}
-		}
-		s.resize();
-	}
-	LBitmapData.DATA_IMAGE = "data_image";
-	LBitmapData.DATA_CANVAS = "data_canvas";
-	var p = {
-		_setDataType : function(dataType) {
-			var s = this;
-			if (s.dataType == dataType) {
-				return;
-			}
-			if (dataType == LBitmapData.DATA_CANVAS) {
-				s._createCanvas();
-				s._canvas.width = s.image.width;
-				s._canvas.height = s.image.height;
-				s._context.clearRect(0, 0, s._canvas.width, s._canvas.height);
-				s._context.drawImage(s.image, 0, 0);
-				s.image = s._canvas;
-			} else if (dataType == LBitmapData.DATA_IMAGE) {
-				s.image = new Image();
-				s.image.width = s._canvas.width;
-				s.image.height = s._canvas.height;
-				s.image.src = s._canvas.toDataURL();
-			}
-			s.dataType = dataType;
-		},
-		_createCanvas : function() {
-			var s = this;
-			if (!s._canvas) {
-				s._canvas = document.createElement("canvas");
-				s._context = s._canvas.getContext("2d");
-			}
-		},
-		clear : function(rectangle) {
-			var s = this;
-			s._createCanvas();
-			if(rectangle){
-				s._context.clearRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-			}else{
-				s._canvas.width = s.image.width;
-			}
-			if (s.dataType == LBitmapData.DATA_IMAGE) {
-				s.image.src = s._canvas.toDataURL();
-			}
-		},
-		setProperties : function(x, y, width, height) {
-			var s = this;
-			s.x = x;
-			s.y = y;
-			s.width = width;
-			s.height = height;
-			s.resize();
-		},
-		setCoordinate : function(x, y) {
-			var s = this;
-			s.x = x;
-			s.y = y;
-			s.resize();
-		},
-		clone : function() {
-			var s = this;
-			return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
-		},
-		_ready : function() {
-			var s = this;
-			s._dataType = s.dataType;
-			s._setDataType(LBitmapData.DATA_CANVAS);
-			s._data = s._context.getImageData(s.x, s.y, s.width, s.height);
-		},
-		_update : function() {
-			var s = this;
-			s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
-			s._setDataType(s._dataType);
-			s._data = null;
-		},
-		applyFilter : function(sourceBitmapData, sourceRect, destPoint, filter, c) {
-			var s = this;
-			var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
-			var data = filter.filter(r,sourceRect.width, c);
-			s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
-		},
-		getPixel : function(x, y, colorType) {
-			var s = this, i, d;
-			x = x >> 0;
-			y = y >> 0;
-			if (!s._locked) {
-				s._ready();
-			}
-			i = s.width * 4 * y + x * 4;
-			d = s._data.data;
-			if (!s._locked) {
-				s._update();
-			}
-			if (colorType == "number") {
-				return d[i] << 16 | d[i + 1] << 8 | d[i + 2];
-			} else {
-				return [d[i], d[i + 1], d[i + 2], d[i + 3]];
-			}
-		},
-		setPixel : function(x, y, data) {
-			var s = this;
-			x = x >> 0;
-			y = y >> 0;
-			if (!s._locked) {
-				s._ready();
-			}
-			var d = s._data, i = s.width * 4 * y + x * 4;
-			if ( typeof data == "object") {
-				d.data[i + 0] = data[0];
-				d.data[i + 1] = data[1];
-				d.data[i + 2] = data[2];
-				d.data[i + 3] = data[3];
-			} else {
-				if ( typeof data == "string") {
-					data = parseInt(data.replace("#", "0x"));
-				}
-				d.data[i + 0] = data >> 16 & 0xFF;
-				d.data[i + 1] = data >> 8 & 0xFF;
-				d.data[i + 2] = data & 0xFF;
-				d.data[i + 3] = 255;
-			}
-			if (!s._locked) {
-				s._update();
-			}
-		},
-		getPixels : function(rect) {
-			var s = this, r;
-			if (!s._locked) {
-				s._ready();
-			}
-			r = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
-			if (!s._locked) {
-				s._update();
-			}
-			return r;
-		},
-		setPixels : function(rect, data) {
-			var s = this, i, j, d, w, sd, x, y;
-			if (!s._locked) {
-				s._ready();
-			}
-			d = s._data;
-			if ( typeof data == "object") {
-				w = s._canvas.width;
-				for ( x = rect.x; x < rect.right; x++) {
-					for ( y = rect.y; y < rect.bottom; y++) {
-						i = w * 4 * (s.y + y) + (s.x + x) * 4;
-						j = data.width * 4 * (y - rect.y) + (x - rect.x) * 4;
-						d.data[i + 0] = data.data[j + 0];
-						d.data[i + 1] = data.data[j + 1];
-						d.data[i + 2] = data.data[j + 2];
-						d.data[i + 3] = data.data[j + 3];
-					}
-				}
-			} else {
-				if ( typeof data == "string") {
-					data = parseInt(data.replace("#", "0x"));
-				}
-				data = [data >> 16 & 0xFF, data >> 8 & 0xFF, data & 0xFF];
-				w = s._canvas.width;
-				for ( x = rect.x; x < rect.right; x++) {
-					for ( y = rect.y; y < rect.bottom; y++) {
-						i = w * 4 * (s.y + y) + (s.x + x) * 4;
-						d.data[i + 0] = data[0];
-						d.data[i + 1] = data[1];
-						d.data[i + 2] = data[2];
-						d.data[i + 3] = 255;
-					}
-				}
-			}
-			if (!s._locked) {
-				s._update();
-			}
-		},
-		putPixels : function(rect, data) {
-			var s = this;
-			if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
-				return;
-			}
-			s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
-		},
-		lock : function() {
-			var s = this;
-			s._locked = true;
-			s._ready();
-		},
-		unlock : function() {
-			var s = this;
-			s._locked = false;
-			s._update();
-		},
-		draw : function(source, matrix, colorTransform, blendMode, clipRect) {
-			var s = this, c, bd = source, x, y, w, h, save = false;
-			var _dataType = s.dataType;
-			s._setDataType(LBitmapData.DATA_CANVAS);
-			if (matrix || colorTransform || blendMode || clipRect) {
-				s._context.save();
-				save = true;
-			}
-			if (clipRect) {
-				if (!( bd instanceof LBitmapData)) {
-					x = y = 0;
-				} else {
-					x = bd.x;
-					y = bd.y;
-				}
-				bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
-			}
-			w = bd.getWidth() >>> 0;
-			h = bd.getHeight() >>> 0;
-			if (w == 0 || h == 0) {
-				s._setDataType(_dataType);
-				return;
-			}
-			c = bd.getDataCanvas();
-			if (colorTransform) {
-				bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
-				c = bd.image;
-			}
-			if (matrix) {
-				s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-			}
-			if (blendMode) {
-				s._context.globalCompositeOperation = blendMode;
-			}
-			s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
-			if (save) {
-				s._context.restore();
-			}
-			s._setDataType(_dataType);
-			s.resize();
-		},
-		getDataCanvas : function() {
-			var s = this;
-			var _dataType = s.dataType;
-			s._setDataType(LBitmapData.DATA_CANVAS);
-			s._setDataType(_dataType);
-			return s._canvas;
-		},
-		getWidth : function() {
-			return this.width;
-		},
-		getHeight : function() {
-			return this.height;
-		},
-		resize : function() {
-			var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
-			s.width = s.width < w ? s.width : w;
-			s.height = s.height < h ? s.height : h;
-		},
-		colorTransform : function(rect, colorTransform) {
-			var s = this;
-			if (s.dataType != LBitmapData.DATA_CANVAS) {
-				return;
-			}
-			var x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
-			var img = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
-			var data = img.data;
-			for (var i = 0, l = data.length; i < l; i += 4) {
-				var r = i, g = i + 1, b = i + 2, a = i + 3;
-				data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
-				data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
-				data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
-				data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
-			}
-			s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
-		},
-		copyPixels : function(sourceBitmapData, sourceRect, destPoint) {
-			var s = this, left, top, width, height, bd = sourceBitmapData;
-			if (s.dataType != LBitmapData.DATA_CANVAS) {
-				return;
-			}
-			left = bd.x;
-			top = bd.y;
-			width = bd.width;
-			height = bd.height;
-			bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
-			s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
-			bd.x = left;
-			bd.y = top;
-			bd.width = width;
-			bd.height = height;
-		}
-	};
-	for (var k in p) {
-		LBitmapData.prototype[k] = p[k];
-	}
-	return LBitmapData;
+var LBitmapData = (function () {
+  function LBitmapData(image, x, y, width, height, dataType) {
+    var s = this;
+    LExtends(s, LObject, []);
+    s.type = "LBitmapData";
+    if (typeof dataType == UNDEFINED) {
+      dataType = LBitmapData.DATA_IMAGE;
+    }
+    s.oncomplete = null;
+    s._locked = false;
+    s._setPixel = false;
+    s.x = (x == null ? 0 : x);
+    s.y = (y == null ? 0 : y);
+    s.width = 0;
+    s.height = 0;
+    s.dataType = null;
+    if (image && typeof image == "object") {
+      s.image = image;
+      s.dataType = LBitmapData.DATA_IMAGE;
+      s.width = (width == null ? s.image.width : width);
+      s.height = (height == null ? s.image.height : height);
+      s._setDataType(dataType);
+    } else {
+      s._createCanvas();
+      s.dataType = LBitmapData.DATA_CANVAS;
+      s._canvas.width = s.width = (width ? width : 1);
+      s._canvas.height = s.height = (height ? height : 1);
+      if (typeof image == "string") {
+        s._context.fillStyle = image;
+        s._context.fillRect(0, 0, s.width, s.height);
+      } else if (typeof image == "number") {
+        var d = s._context.createImageData(s.width, s.height);
+        for (var i = 0; i < d.data.length; i += 4) {
+          d.data[i + 0] = image >> 16 & 0xFF;
+          d.data[i + 1] = image >> 8 & 0xFF;
+          d.data[i + 2] = image & 0xFF;
+          d.data[i + 3] = 255;
+        }
+        s._context.putImageData(d, 0, 0);
+      }
+      s.image = s._canvas;
+      if (dataType == LBitmapData.DATA_IMAGE) {
+        s._setDataType(dataType);
+      }
+    }
+    s.resize();
+  }
+  LBitmapData.DATA_IMAGE = "data_image";
+  LBitmapData.DATA_CANVAS = "data_canvas";
+  var p = {
+    _setDataType: function (dataType) {
+      var s = this;
+      if (s.dataType == dataType) {
+        return;
+      }
+      if (dataType == LBitmapData.DATA_CANVAS) {
+        s._createCanvas();
+        s._canvas.width = s.image.width;
+        s._canvas.height = s.image.height;
+        s._context.clearRect(0, 0, s._canvas.width, s._canvas.height);
+        s._context.drawImage(s.image, 0, 0);
+        s.image = s._canvas;
+      } else if (dataType == LBitmapData.DATA_IMAGE) {
+        s.image = new Image();
+        s.image.width = s._canvas.width;
+        s.image.height = s._canvas.height;
+        s.image.src = s._canvas.toDataURL();
+      }
+      s.dataType = dataType;
+    },
+    _createCanvas: function () {
+      var s = this;
+      if (!s._canvas) {
+        s._canvas = document.createElement("canvas");
+        s._context = s._canvas.getContext("2d");
+      }
+    },
+    clear: function (rectangle) {
+      var s = this;
+      s._createCanvas();
+      if (rectangle) {
+        s._context.clearRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+      } else {
+        s._canvas.width = s.image.width;
+      }
+      if (s.dataType == LBitmapData.DATA_IMAGE) {
+        s.image.src = s._canvas.toDataURL();
+      }
+    },
+    setProperties: function (x, y, width, height) {
+      var s = this;
+      s.x = x;
+      s.y = y;
+      s.width = width;
+      s.height = height;
+      s.resize();
+    },
+    setCoordinate: function (x, y) {
+      var s = this;
+      s.x = x;
+      s.y = y;
+      s.resize();
+    },
+    clone: function () {
+      var s = this;
+      return new LBitmapData(s.image, s.x, s.y, s.width, s.height, s.dataType);
+    },
+    _ready: function () {
+      var s = this;
+      s._dataType = s.dataType;
+      s._setDataType(LBitmapData.DATA_CANVAS);
+      s._data = s._context.getImageData(s.x, s.y, s.width, s.height);
+    },
+    _update: function () {
+      var s = this;
+      s._context.putImageData(s._data, s.x, s.y, 0, 0, s.width, s.height);
+      s._setDataType(s._dataType);
+      s._data = null;
+    },
+    applyFilter: function (sourceBitmapData, sourceRect, destPoint, filter, c) {
+      var s = this;
+      var r = s._context.getImageData(s.x + sourceRect.x, s.y + sourceRect.y, sourceRect.width, sourceRect.height);
+      var data = filter.filter(r, sourceRect.width, c);
+      s.putPixels(new LRectangle(destPoint.x, destPoint.y, sourceRect.width, sourceRect.height), data);
+    },
+    getPixel: function (x, y, colorType) {
+      var s = this, i, d;
+      x = x >> 0;
+      y = y >> 0;
+      if (!s._locked) {
+        s._ready();
+      }
+      i = s.width * 4 * y + x * 4;
+      d = s._data.data;
+      if (!s._locked) {
+        s._update();
+      }
+      if (colorType == "number") {
+        return d[i] << 16 | d[i + 1] << 8 | d[i + 2];
+      } else {
+        return [d[i], d[i + 1], d[i + 2], d[i + 3]];
+      }
+    },
+    setPixel: function (x, y, data) {
+      var s = this;
+      x = x >> 0;
+      y = y >> 0;
+      if (!s._locked) {
+        s._ready();
+      }
+      var d = s._data, i = s.width * 4 * y + x * 4;
+      if (typeof data == "object") {
+        d.data[i + 0] = data[0];
+        d.data[i + 1] = data[1];
+        d.data[i + 2] = data[2];
+        d.data[i + 3] = data[3];
+      } else {
+        if (typeof data == "string") {
+          data = parseInt(data.replace("#", "0x"));
+        }
+        d.data[i + 0] = data >> 16 & 0xFF;
+        d.data[i + 1] = data >> 8 & 0xFF;
+        d.data[i + 2] = data & 0xFF;
+        d.data[i + 3] = 255;
+      }
+      if (!s._locked) {
+        s._update();
+      }
+    },
+    getPixels: function (rect) {
+      var s = this, r;
+      if (!s._locked) {
+        s._ready();
+      }
+      r = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
+      if (!s._locked) {
+        s._update();
+      }
+      return r;
+    },
+    setPixels: function (rect, data) {
+      var s = this, i, j, d, w, sd, x, y;
+      if (!s._locked) {
+        s._ready();
+      }
+      d = s._data;
+      if (typeof data == "object") {
+        w = s._canvas.width;
+        for (x = rect.x; x < rect.right; x++) {
+          for (y = rect.y; y < rect.bottom; y++) {
+            i = w * 4 * (s.y + y) + (s.x + x) * 4;
+            j = data.width * 4 * (y - rect.y) + (x - rect.x) * 4;
+            d.data[i + 0] = data.data[j + 0];
+            d.data[i + 1] = data.data[j + 1];
+            d.data[i + 2] = data.data[j + 2];
+            d.data[i + 3] = data.data[j + 3];
+          }
+        }
+      } else {
+        if (typeof data == "string") {
+          data = parseInt(data.replace("#", "0x"));
+        }
+        data = [data >> 16 & 0xFF, data >> 8 & 0xFF, data & 0xFF];
+        w = s._canvas.width;
+        for (x = rect.x; x < rect.right; x++) {
+          for (y = rect.y; y < rect.bottom; y++) {
+            i = w * 4 * (s.y + y) + (s.x + x) * 4;
+            d.data[i + 0] = data[0];
+            d.data[i + 1] = data[1];
+            d.data[i + 2] = data[2];
+            d.data[i + 3] = 255;
+          }
+        }
+      }
+      if (!s._locked) {
+        s._update();
+      }
+    },
+    putPixels: function (rect, data) {
+      var s = this;
+      if (s.dataType != LBitmapData.DATA_CANVAS || typeof data != "object") {
+        return;
+      }
+      s._context.putImageData(data, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
+    },
+    lock: function () {
+      var s = this;
+      s._locked = true;
+      s._ready();
+    },
+    unlock: function () {
+      var s = this;
+      s._locked = false;
+      s._update();
+    },
+    draw: function (source, matrix, colorTransform, blendMode, clipRect) {
+      var s = this, c, bd = source, x, y, w, h, save = false;
+      var _dataType = s.dataType;
+      s._setDataType(LBitmapData.DATA_CANVAS);
+      if (matrix || colorTransform || blendMode || clipRect) {
+        s._context.save();
+        save = true;
+      }
+      if (clipRect) {
+        if (!(bd instanceof LBitmapData)) {
+          x = y = 0;
+        } else {
+          x = bd.x;
+          y = bd.y;
+        }
+        bd = new LBitmapData(bd.getDataCanvas(), x + clipRect.x, y + clipRect.y, clipRect.width, clipRect.height, LBitmapData.DATA_CANVAS);
+      }
+      w = bd.getWidth() >>> 0;
+      h = bd.getHeight() >>> 0;
+      if (w == 0 || h == 0) {
+        s._setDataType(_dataType);
+        return;
+      }
+      c = bd.getDataCanvas();
+      if (colorTransform) {
+        bd.colorTransform(new LRectangle(0, 0, w, h), colorTransform);
+        c = bd.image;
+      }
+      if (matrix) {
+        s._context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+      }
+      if (blendMode) {
+        s._context.globalCompositeOperation = blendMode;
+      }
+      s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
+      if (save) {
+        s._context.restore();
+      }
+      s._setDataType(_dataType);
+      s.resize();
+    },
+    getDataCanvas: function () {
+      var s = this;
+      var _dataType = s.dataType;
+      s._setDataType(LBitmapData.DATA_CANVAS);
+      s._setDataType(_dataType);
+      return s._canvas;
+    },
+    getWidth: function () {
+      return this.width;
+    },
+    getHeight: function () {
+      return this.height;
+    },
+    resize: function () {
+      var s = this, w = s.image.width - s.x, h = s.image.height - s.y;
+      s.width = s.width < w ? s.width : w;
+      s.height = s.height < h ? s.height : h;
+    },
+    colorTransform: function (rect, colorTransform) {
+      var s = this;
+      if (s.dataType != LBitmapData.DATA_CANVAS) {
+        return;
+      }
+      var x = rect.x >> 0, y = rect.y >> 0, w = rect.width >> 0, h = rect.height >> 0;
+      var img = s._context.getImageData(s.x + rect.x, s.y + rect.y, rect.width, rect.height);
+      var data = img.data;
+      for (var i = 0, l = data.length; i < l; i += 4) {
+        var r = i, g = i + 1, b = i + 2, a = i + 3;
+        data[r] = data[r] * colorTransform.redMultiplier + colorTransform.redOffset;
+        data[g] = data[g] * colorTransform.greenMultiplier + colorTransform.greenOffset;
+        data[b] = data[b] * colorTransform.blueMultiplier + colorTransform.blueOffset;
+        data[a] = data[a] * colorTransform.alphaMultiplier + colorTransform.alphaOffset;
+      }
+      s._context.putImageData(img, s.x + rect.x, s.y + rect.y, 0, 0, rect.width, rect.height);
+    },
+    copyPixels: function (sourceBitmapData, sourceRect, destPoint) {
+      var s = this, left, top, width, height, bd = sourceBitmapData;
+      if (s.dataType != LBitmapData.DATA_CANVAS) {
+        return;
+      }
+      left = bd.x;
+      top = bd.y;
+      width = bd.width;
+      height = bd.height;
+      bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
+      s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
+      bd.x = left;
+      bd.y = top;
+      bd.width = width;
+      bd.height = height;
+    },
+    die: function () {
+      if (this._canvas) {
+        this._canvas.width = 0;
+        this._canvas.height = 0;
+        delete this._canvas;
+        delete this._context;
+      }
+    }
+  };
+  for (var k in p) {
+    LBitmapData.prototype[k] = p[k];
+  }
+  return LBitmapData;
 })(); 
 var LBitmapFilter = (function () {
 	function LBitmapFilter () {
