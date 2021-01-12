@@ -283,7 +283,7 @@ var LListView = (function () {
     self._ll_y = self.clipping.y;
     self._ll_items.forEach(function (item) {
       if (!item._ll_showFlag) {
-        item.cacheAsBitmap(false);
+        item.noDraw();
       }
     });
   };
@@ -626,6 +626,9 @@ var LListChildView = (function () {
    */
   LListChildView.prototype.onClick = function (event) { };
   LListChildView.prototype.onTouch = function (event) { };
+  LListChildView.prototype.noDraw = function () {
+    this.cacheAsBitmap(false);
+  };
   return LListChildView;
 })();
 var LListViewDragObject = (function () {
