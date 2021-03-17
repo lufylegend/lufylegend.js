@@ -95,349 +95,349 @@ var LFocusEvent = function (){throw "LFocusEvent cannot be instantiated";};
 LFocusEvent.FOCUS_IN = "focusIn";
 LFocusEvent.FOCUS_OUT = "focusOut";
 var LMouseEventContainer = (function () {
-	function MouseEventContainer(){
-		var s = this;
-		s.container = {};
-		s.dispatchAllEvent = false;
-		s.mouseDownContainer = [];
-		s.mouseUpContainer = [];
-		s.mouseMoveContainer = [];
-		s.mouseOverContainer = [];
-		s.mouseOutContainer = [];
-		s.mouseDblContainer = [];
-		s.textFieldInputContainer = [];
-		s.buttonContainer = [];
-	};
-	MouseEventContainer.prototype = {
-		pushInputBox : function (d) {
-			var s  = this, c = s.textFieldInputContainer, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					return;
-				}
-			}
-			s.textFieldInputContainer.push(d);
-		},
-		removeInputBox : function (d) {
-			var s  = this, c = s.textFieldInputContainer, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					s.textFieldInputContainer.splice(i, 1);
-					break;
-				}
-			}
-		},
-		pushButton : function (d) {
-			var s  = this, c = s.buttonContainer, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					return;
-				}
-			}
-			s.buttonContainer.push(d);
-		},
-		removeButton : function (d) {
-			var s  = this, c = s.buttonContainer, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					s.buttonContainer.splice(i, 1);
-					break;
-				}
-			}
-		},
-		dispatchEventButton : function (e) {
-			var s  = this, c = s.buttonContainer, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (typeof s.buttonContainer[i].ll_button_mode == "function") {
-					s.buttonContainer[i].ll_button_mode(e);
-				}
-			}
-		},
-		addEvent : function (o, list, f, _this) {
-			var s = this;
-			list.push({container : o, listener : f, _this:_this});
-		},
-		removeEvent : function (o, list, f, _this) {
-			var s = this, i, l;
-			for (i = 0, l = list.length; i < l; i++) {
-				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)
-				&& (!_this || !list[i]._this || list[i]._this.objectIndex == _this.objectIndex)) {
-					list.splice(i, 1);
-					break;
-				}
-			}
-		},
-		addMouseDownEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseDownContainer, f, _this);
-		},
-		addMouseUpEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseUpContainer, f, _this);
-		},
-		addMouseMoveEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseMoveContainer, f, _this);
-		},
-		addMouseOverEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseOverContainer, f, _this);
-		},
-		addMouseOutEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseOutContainer, f, _this);
-		},
-		addMouseDblEvent : function (o, f, _this) {
-			var s = this;
-			s.addEvent(o, s.mouseDblContainer, f, _this);
-		},
-		addMouseEvent : function (o, t, f, _this) {
-			var s = this;
-			if (t === LMouseEvent.MOUSE_DOWN) {
-				s.addMouseDownEvent(o, f, _this);
-			} else if (t === LMouseEvent.MOUSE_UP) {
-				s.addMouseUpEvent(o, f, _this);
-			} else if (t === LMouseEvent.MOUSE_OVER) {
-				s.addMouseOverEvent(o, f, _this);
-			} else if (t === LMouseEvent.MOUSE_OUT) {
-				s.addMouseOutEvent(o, f, _this);
-			} else if (t === LMouseEvent.MOUSE_MOVE) {
-				s.addMouseMoveEvent(o, f, _this);
-			} else {
-				s.addMouseDblEvent(o, f, _this);
-			}
-		},
-		hasEventListener : function(o, t, f){
-			var s = this, list;
-			if (t == LMouseEvent.MOUSE_DOWN) {
-				list = s.mouseDownContainer;
-			} else if (t == LMouseEvent.MOUSE_UP) {
-				list = s.mouseUpContainer;
-			} else if (t == LMouseEvent.MOUSE_OVER) {
-				list = s.mouseOverContainer;
-			} else if (t == LMouseEvent.MOUSE_OUT) {
-				list = s.mouseOutContainer;
-			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				list = s.mouseMoveContainer;
-			} else {
-				list = s.mouseDblContainer;
-			}
-			for (var i = 0, l = list.length; i < l; i++) {
-				if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)) {
-					return true;
-				}
-			}
-			return false;
-		},
-		removeMouseDownEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseDownContainer, f, _this);
-		},
-		removeMouseUpEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseUpContainer, f, _this);
-		},
-		removeMouseMoveEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseMoveContainer, f, _this);
-		},
-		removeMouseOverEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseOverContainer, f, _this);
-		},
-		removeMouseOutEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseOutContainer, f, _this);
-		},
-		removeMouseDblEvent : function (o, f, _this) {
-			var s = this;
-			s.removeEvent(o, s.mouseDblContainer, f, _this);
-		},
-		removeMouseEvent : function (o, t, f, _this) {
-			var s = this;
-			if (t == LMouseEvent.MOUSE_DOWN) {
-				s.removeMouseDownEvent(o, f, _this);
-			} else if (t == LMouseEvent.MOUSE_UP) {
-				s.removeMouseUpEvent(o, f, _this);
-			} else if (t == LMouseEvent.MOUSE_OVER) {
-				s.removeMouseOverEvent(o, f, _this);
-			} else if (t == LMouseEvent.MOUSE_OUT) {
-				s.removeMouseOutEvent(o, f, _this);
-			} else if (t == LMouseEvent.MOUSE_MOVE) {
-				s.removeMouseMoveEvent(o, f, _this);
-			} else {
-				s.removeMouseDblEvent(o, f, _this);
-			}
-		},
-		dispatchMouseEvent : function (event, type) {
-			var s = this;
-			if (type == LMouseEvent.MOUSE_DOWN) {
-				s.dispatchEvent(event, s.mouseDownContainer, LMouseEvent.MOUSE_DOWN);
-				s.dispatchEvent(event, s.textFieldInputContainer);
-			} else if (type == LMouseEvent.MOUSE_UP) {
-				s.dispatchEvent(event, s.mouseUpContainer, LMouseEvent.MOUSE_UP);
-			} else if (type == LMouseEvent.DOUBLE_CLICK) {
-				s.dispatchEvent(event, s.mouseDblContainer, LMouseEvent.DOUBLE_CLICK);
-			} else {
-				s.dispatchEventButton(event);
-				s.dispatchEvent(event, s.mouseOutContainer, LMouseEvent.MOUSE_OUT);
-				s.dispatchEvent(event, s.mouseOverContainer, LMouseEvent.MOUSE_OVER);
-				s.dispatchEvent(event, s.mouseMoveContainer, LMouseEvent.MOUSE_MOVE);
-			}
-		},
-		getRootParams : function (s) {
-			var p = s.parent, r = {x : 0, y : 0, scaleX : 1, scaleY : 1};
-			while (p && p != "root") {
-				r.x *= p.scaleX;
-				r.y *= p.scaleY;
-				r.x += p.x;
-				r.y += p.y;
-				r.scaleX *= p.scaleX;
-				r.scaleY *= p.scaleY;
-				p = p.parent;
-			}
-			return r;
-		},
-		_mouseEnabled : function (sp) {
-			var self = this;
-			if (!sp || !sp.parent) {
-				return false;
-			}
-			if (!sp.visible || (typeof sp.mouseEnabled != UNDEFINED && !sp.mouseEnabled)) {
-				return false;
-			}
-			var p = sp.parent;
-			while (p && p != "root") {
-				if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
-					return false;
-				}
-				p = p.parent;
-				if (!p) {
-					return false;
-				}
-			}
-			return true;
-		},
-		_dispatchEvent : function(event, type, st, index, fromIndex, endIndex) {
-			var self = this, i, j, o, l = st.length;
-			for (i = fromIndex; i <= endIndex && i < l; i++) {
-				o = st[i];
-				if (o.sp.objectIndex != index) {
-					continue;
-				}
-				event.currentTarget = event.clickTarget = o.sp;
-				if (!event.target) {
-					event.target = o.sp;
-				}
-				event.event_type = type;
-				event.selfX = (event.offsetX - o.co.x - o.sp.x) / (o.co.scaleX * o.sp.scaleX);
-				event.selfY = (event.offsetY - o.co.y - o.sp.y) / (o.co.scaleY * o.sp.scaleY);
-				o.listener.call(o._this ? o._this : o, event, o.sp);
-			}
-		},
-		dispatchEvent : function (event, list, type) {
-			var self = this, sp, co, st = [], o, i, l;
-			for (i = 0, l = list.length; i < l; i++) {
-				sp = list[i].container || list[i];
-				if (!self._mouseEnabled(sp)) {
-					continue;
-				}
-				co = self.getRootParams(sp);
-				if (!type && sp.mouseEvent) {
-					sp.mouseEvent(event, LMouseEvent.MOUSE_DOWN, co);
-					continue;
-				}
-				if (sp.ismouseon(event, co)) {
-					if (type == LMouseEvent.MOUSE_OUT) {
-						continue;
-					}
-					if (type == LMouseEvent.MOUSE_OVER) {
-						if (sp.ll_mousein) {
-							continue;
-						}
-					}
-					if (type != LMouseEvent.MOUSE_UP) {
-						sp.ll_mousein = true;
-					}
-					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
-				} else {
-					if (type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER) {
-						continue;
-					}
-					if (!sp.ll_mousein) {
-						continue;
-					}
-					sp.ll_mousein = false;
-					st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
-				}
-			}
-			if (st.length == 0) {
-				return;
-			}
-			if (st.length > 1) {
-				st = st.sort(self._sort.bind(self));
-			}
-			l = st.length;
-			for (i = 0; i < l; i++) {
-				o = st[i];
-				self._dispatchEvent(event, type, st, o.sp.objectIndex, i, self.dispatchAllEvent ? l - 1 : i);
-				if (i < st.length - 1 && o.sp.objectIndex == st[i+1].sp.objectIndex){
-					st.splice(i, 1);
-					i--;
-					continue;
-				}
-				var p;
-				while (true) {
-					if (!p) {
-						p = o.sp.parent;
-						event.target = o.sp;
-					}
-					if (!p || p == "root") {
-						break;
-					}
-					self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
-					event.target = p;
-					p = p.parent;
-					if (!p || p == "root") {
-						break;
-					}
-				}
-				if (!self.dispatchAllEvent) {
-					break;
-				} else {
-					continue;
-				}
-			}
-		},
-		set : function (t, v) {
-			this.container[t] = v;
-		},
-		_sort : function (a, b) {
-			var s = this, o1, o2, al = s._getSort(a.sp), bl = s._getSort(b.sp), i, l1, l2;
-			for (i = 0, l1 = al.length, l2 = bl.length; i < l1 && i < l2; i++) {
-				o1 = al[i];
-				o2 = bl[i];
-				if (o1.objectIndex == o2.objectIndex) {
-					continue;
-				}
-				return o2.parent.getChildIndex(o2) - o1.parent.getChildIndex(o1);
-			}
-			return bl.length - al.length;
-		},
-		_getSort : function (layer) {
-			var p = layer.parent, list = [layer];
-			while (p && p != "root") {
-				list.unshift(p);
-				p = p.parent;
-			}
-			return list;
-		}
-	};
-	var container = new MouseEventContainer();
-	container.set(LMouseEvent.MOUSE_DOWN,true);
-	container.set(LMouseEvent.MOUSE_UP,true);
-	container.set(LMouseEvent.MOUSE_MOVE,true);
-	return container;
+  function MouseEventContainer() {
+    var s = this;
+    s.container = {};
+    s.dispatchAllEvent = false;
+    s.mouseDownContainer = [];
+    s.mouseUpContainer = [];
+    s.mouseMoveContainer = [];
+    s.mouseOverContainer = [];
+    s.mouseOutContainer = [];
+    s.mouseDblContainer = [];
+    s.textFieldInputContainer = [];
+    s.buttonContainer = [];
+  };
+  MouseEventContainer.prototype = {
+    pushInputBox: function (d) {
+      var s = this, c = s.textFieldInputContainer, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (d.objectIndex == c[i].objectIndex) {
+          return;
+        }
+      }
+      s.textFieldInputContainer.push(d);
+    },
+    removeInputBox: function (d) {
+      var s = this, c = s.textFieldInputContainer, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (d.objectIndex == c[i].objectIndex) {
+          s.textFieldInputContainer.splice(i, 1);
+          break;
+        }
+      }
+    },
+    pushButton: function (d) {
+      var s = this, c = s.buttonContainer, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (d.objectIndex == c[i].objectIndex) {
+          return;
+        }
+      }
+      s.buttonContainer.push(d);
+    },
+    removeButton: function (d) {
+      var s = this, c = s.buttonContainer, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (d.objectIndex == c[i].objectIndex) {
+          s.buttonContainer.splice(i, 1);
+          break;
+        }
+      }
+    },
+    dispatchEventButton: function (e) {
+      var s = this, c = s.buttonContainer, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (typeof s.buttonContainer[i].ll_button_mode == "function") {
+          s.buttonContainer[i].ll_button_mode(e);
+        }
+      }
+    },
+    addEvent: function (o, list, f, _this) {
+      var s = this;
+      list.push({ container: o, listener: f, _this: _this });
+    },
+    removeEvent: function (o, list, f, _this) {
+      var s = this, i, l;
+      for (i = 0, l = list.length; i < l; i++) {
+        if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)
+          && (!_this || !list[i]._this || list[i]._this.objectIndex == _this.objectIndex)) {
+          list.splice(i, 1);
+          break;
+        }
+      }
+    },
+    addMouseDownEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseDownContainer, f, _this);
+    },
+    addMouseUpEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseUpContainer, f, _this);
+    },
+    addMouseMoveEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseMoveContainer, f, _this);
+    },
+    addMouseOverEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseOverContainer, f, _this);
+    },
+    addMouseOutEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseOutContainer, f, _this);
+    },
+    addMouseDblEvent: function (o, f, _this) {
+      var s = this;
+      s.addEvent(o, s.mouseDblContainer, f, _this);
+    },
+    addMouseEvent: function (o, t, f, _this) {
+      var s = this;
+      if (t === LMouseEvent.MOUSE_DOWN) {
+        s.addMouseDownEvent(o, f, _this);
+      } else if (t === LMouseEvent.MOUSE_UP) {
+        s.addMouseUpEvent(o, f, _this);
+      } else if (t === LMouseEvent.MOUSE_OVER) {
+        s.addMouseOverEvent(o, f, _this);
+      } else if (t === LMouseEvent.MOUSE_OUT) {
+        s.addMouseOutEvent(o, f, _this);
+      } else if (t === LMouseEvent.MOUSE_MOVE) {
+        s.addMouseMoveEvent(o, f, _this);
+      } else {
+        s.addMouseDblEvent(o, f, _this);
+      }
+    },
+    hasEventListener: function (o, t, f) {
+      var s = this, list;
+      if (t == LMouseEvent.MOUSE_DOWN) {
+        list = s.mouseDownContainer;
+      } else if (t == LMouseEvent.MOUSE_UP) {
+        list = s.mouseUpContainer;
+      } else if (t == LMouseEvent.MOUSE_OVER) {
+        list = s.mouseOverContainer;
+      } else if (t == LMouseEvent.MOUSE_OUT) {
+        list = s.mouseOutContainer;
+      } else if (t == LMouseEvent.MOUSE_MOVE) {
+        list = s.mouseMoveContainer;
+      } else {
+        list = s.mouseDblContainer;
+      }
+      for (var i = 0, l = list.length; i < l; i++) {
+        if (list[i].container.objectIndex === o.objectIndex && (!f || list[i].listener == f)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    removeMouseDownEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseDownContainer, f, _this);
+    },
+    removeMouseUpEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseUpContainer, f, _this);
+    },
+    removeMouseMoveEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseMoveContainer, f, _this);
+    },
+    removeMouseOverEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseOverContainer, f, _this);
+    },
+    removeMouseOutEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseOutContainer, f, _this);
+    },
+    removeMouseDblEvent: function (o, f, _this) {
+      var s = this;
+      s.removeEvent(o, s.mouseDblContainer, f, _this);
+    },
+    removeMouseEvent: function (o, t, f, _this) {
+      var s = this;
+      if (t == LMouseEvent.MOUSE_DOWN) {
+        s.removeMouseDownEvent(o, f, _this);
+      } else if (t == LMouseEvent.MOUSE_UP) {
+        s.removeMouseUpEvent(o, f, _this);
+      } else if (t == LMouseEvent.MOUSE_OVER) {
+        s.removeMouseOverEvent(o, f, _this);
+      } else if (t == LMouseEvent.MOUSE_OUT) {
+        s.removeMouseOutEvent(o, f, _this);
+      } else if (t == LMouseEvent.MOUSE_MOVE) {
+        s.removeMouseMoveEvent(o, f, _this);
+      } else {
+        s.removeMouseDblEvent(o, f, _this);
+      }
+    },
+    dispatchMouseEvent: function (event, type) {
+      var s = this;
+      if (type == LMouseEvent.MOUSE_DOWN) {
+        s.dispatchEvent(event, s.mouseDownContainer, LMouseEvent.MOUSE_DOWN);
+        s.dispatchEvent(event, s.textFieldInputContainer);
+      } else if (type == LMouseEvent.MOUSE_UP) {
+        s.dispatchEvent(event, s.mouseUpContainer, LMouseEvent.MOUSE_UP);
+      } else if (type == LMouseEvent.DOUBLE_CLICK) {
+        s.dispatchEvent(event, s.mouseDblContainer, LMouseEvent.DOUBLE_CLICK);
+      } else {
+        s.dispatchEventButton(event);
+        s.dispatchEvent(event, s.mouseOutContainer, LMouseEvent.MOUSE_OUT);
+        s.dispatchEvent(event, s.mouseOverContainer, LMouseEvent.MOUSE_OVER);
+        s.dispatchEvent(event, s.mouseMoveContainer, LMouseEvent.MOUSE_MOVE);
+      }
+    },
+    getRootParams: function (s) {
+      var p = s.parent, r = { x: 0, y: 0, scaleX: 1, scaleY: 1 };
+      while (p && p != "root") {
+        r.x *= p.scaleX;
+        r.y *= p.scaleY;
+        r.x += p.x;
+        r.y += p.y;
+        r.scaleX *= p.scaleX;
+        r.scaleY *= p.scaleY;
+        p = p.parent;
+      }
+      return r;
+    },
+    _mouseEnabled: function (sp) {
+      var self = this;
+      if (!sp || !sp.parent) {
+        return false;
+      }
+      if (!sp.visible || (typeof sp.mouseEnabled != UNDEFINED && !sp.mouseEnabled)) {
+        return false;
+      }
+      var p = sp.parent;
+      while (p && p != "root") {
+        if (!p.mouseEnabled || !p.mouseChildren || !p.visible) {
+          return false;
+        }
+        p = p.parent;
+        if (!p) {
+          return false;
+        }
+      }
+      return true;
+    },
+    _dispatchEvent: function (event, type, st, index, fromIndex, endIndex) {
+      var self = this, i, j, o, l = st.length;
+      for (i = fromIndex; i <= endIndex && i < l; i++) {
+        o = st[i];
+        if (o.sp.objectIndex != index) {
+          continue;
+        }
+        event.currentTarget = event.clickTarget = o.sp;
+        if (!event.target) {
+          event.target = o.sp;
+        }
+        event.event_type = type;
+        event.selfX = event.offsetX / (o.co.scaleX * o.sp.scaleX) - o.co.x - o.sp.x;
+        event.selfY = event.offsetY / (o.co.scaleY * o.sp.scaleY) - o.co.y - o.sp.y;
+        o.listener.call(o._this ? o._this : o, event, o.sp);
+      }
+    },
+    dispatchEvent: function (event, list, type) {
+      var self = this, sp, co, st = [], o, i, l;
+      for (i = 0, l = list.length; i < l; i++) {
+        sp = list[i].container || list[i];
+        if (!self._mouseEnabled(sp)) {
+          continue;
+        }
+        co = self.getRootParams(sp);
+        if (!type && sp.mouseEvent) {
+          sp.mouseEvent(event, LMouseEvent.MOUSE_DOWN, co);
+          continue;
+        }
+        if (sp.ismouseon(event, co)) {
+          if (type == LMouseEvent.MOUSE_OUT) {
+            continue;
+          }
+          if (type == LMouseEvent.MOUSE_OVER) {
+            if (sp.ll_mousein) {
+              continue;
+            }
+          }
+          if (type != LMouseEvent.MOUSE_UP) {
+            sp.ll_mousein = true;
+          }
+          st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
+        } else {
+          if (type != LMouseEvent.MOUSE_OUT && type != LMouseEvent.MOUSE_OVER) {
+            continue;
+          }
+          if (!sp.ll_mousein) {
+            continue;
+          }
+          sp.ll_mousein = false;
+          st.push({ sp: sp, co: co, listener: list[i].listener, _this: list[i]._this });
+        }
+      }
+      if (st.length == 0) {
+        return;
+      }
+      if (st.length > 1) {
+        st = st.sort(self._sort.bind(self));
+      }
+      l = st.length;
+      for (i = 0; i < l; i++) {
+        o = st[i];
+        self._dispatchEvent(event, type, st, o.sp.objectIndex, i, self.dispatchAllEvent ? l - 1 : i);
+        if (i < st.length - 1 && o.sp.objectIndex == st[i + 1].sp.objectIndex) {
+          st.splice(i, 1);
+          i--;
+          continue;
+        }
+        var p;
+        while (true) {
+          if (!p) {
+            p = o.sp.parent;
+            event.target = o.sp;
+          }
+          if (!p || p == "root") {
+            break;
+          }
+          self._dispatchEvent(event, type, st, p.objectIndex, i + 1, l);
+          event.target = p;
+          p = p.parent;
+          if (!p || p == "root") {
+            break;
+          }
+        }
+        if (!self.dispatchAllEvent) {
+          break;
+        } else {
+          continue;
+        }
+      }
+    },
+    set: function (t, v) {
+      this.container[t] = v;
+    },
+    _sort: function (a, b) {
+      var s = this, o1, o2, al = s._getSort(a.sp), bl = s._getSort(b.sp), i, l1, l2;
+      for (i = 0, l1 = al.length, l2 = bl.length; i < l1 && i < l2; i++) {
+        o1 = al[i];
+        o2 = bl[i];
+        if (o1.objectIndex == o2.objectIndex) {
+          continue;
+        }
+        return o2.parent.getChildIndex(o2) - o1.parent.getChildIndex(o1);
+      }
+      return bl.length - al.length;
+    },
+    _getSort: function (layer) {
+      var p = layer.parent, list = [layer];
+      while (p && p != "root") {
+        list.unshift(p);
+        p = p.parent;
+      }
+      return list;
+    }
+  };
+  var container = new MouseEventContainer();
+  container.set(LMouseEvent.MOUSE_DOWN, true);
+  container.set(LMouseEvent.MOUSE_UP, true);
+  container.set(LMouseEvent.MOUSE_MOVE, true);
+  return container;
 })();
 var LKeyboardEvent = function () {throw "LKeyboardEvent cannot be instantiated";};
 LKeyboardEvent.KEY_DOWN = "keydown";
@@ -5508,7 +5508,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              try {
+                context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
@@ -5532,6 +5536,7 @@ var LTextField = (function () {
             j += c.measureText(text.substr(i, 1)).width;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
+              currentWidth = j + c.measureText(nextText.substr(0, 1)).width;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
@@ -5550,7 +5555,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              try {
+                context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
@@ -5567,10 +5576,18 @@ var LTextField = (function () {
           } else if (s.textAlign == "right") {
             cx = -currentWidth;
           }
-          context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+          try {
+            context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         if (LGlobal.enableWebGL) {
-          ctx.drawImage(s._canvas, 0, 0);
+          try {
+            ctx.drawImage(s._canvas, 0, 0);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         return;
       }
@@ -5603,7 +5620,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              try {
+                c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(c);
               currentWidth = 0;
             }
@@ -5628,7 +5649,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              try {
+                c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(c);
               currentWidth = 0;
             }
@@ -5642,7 +5667,11 @@ var LTextField = (function () {
           } else if (s.textAlign == "right") {
             cx = -currentWidth;
           }
-          c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+          try {
+            c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         s.height = (m + 1) * s.wordHeight;
       } else {
@@ -5653,7 +5682,11 @@ var LTextField = (function () {
         c.fillText(lbl, 0, 0, c.measureText(lbl).width);
       }
       if (LGlobal.enableWebGL) {
-        ctx.drawImage(s._canvas, 0, 0);
+        try {
+          ctx.drawImage(s._canvas, 0, 0);
+        } catch (error) {
+          console && console.error(error);
+        }
       }
       if (s.windRunning) {
         s._ll_windRun();
@@ -6034,16 +6067,20 @@ var LBitmap = (function () {
       if (LGlobal.fpsStatus) {
         LGlobal.fpsStatus.bitmapData++;
       }
-      c.drawImage(s.bitmapData.image,
-        s.bitmapData.x,
-        s.bitmapData.y,
-        s.bitmapData.width,
-        s.bitmapData.height,
-        s.x,
-        s.y,
-        s.bitmapData.width,
-        s.bitmapData.height
-      );
+      try {
+        c.drawImage(s.bitmapData.image,
+          s.bitmapData.x,
+          s.bitmapData.y,
+          s.bitmapData.width,
+          s.bitmapData.height,
+          s.x,
+          s.y,
+          s.bitmapData.width,
+          s.bitmapData.height
+        );
+      } catch (error) {
+        console && console.error(error);
+      }
     },
     clone: function () {
       var s = this, a = new LBitmap(s.bitmapData.clone());
@@ -6180,7 +6217,11 @@ var LBitmapData = (function () {
         s._canvas.width = s.image.width;
         s._canvas.height = s.image.height;
         s._context.clearRect(0, 0, s._canvas.width, s._canvas.height);
-        s._context.drawImage(s.image, 0, 0);
+        try {
+          s._context.drawImage(s.image, 0, 0);
+        } catch (error) {
+          console && console.error(error);
+        }
         s.image = s._canvas;
       } else if (dataType == LBitmapData.DATA_IMAGE) {
         s.image = new Image();
@@ -6389,7 +6430,11 @@ var LBitmapData = (function () {
       if (blendMode) {
         s._context.globalCompositeOperation = blendMode;
       }
-      s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
+      try {
+        s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
+      } catch (error) {
+        console && console.error(error);
+      }
       if (save) {
         s._context.restore();
       }
@@ -6441,7 +6486,11 @@ var LBitmapData = (function () {
       width = bd.width;
       height = bd.height;
       bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
-      s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
+      try {
+        s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
+      } catch (error) {
+        console && console.error(error);
+      }
       bd.x = left;
       bd.y = top;
       bd.width = width;

@@ -941,7 +941,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              try {
+                context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
@@ -984,7 +988,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              try {
+                context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
@@ -1001,10 +1009,18 @@ var LTextField = (function () {
           } else if (s.textAlign == "right") {
             cx = -currentWidth;
           }
-          context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+          try {
+            context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         if (LGlobal.enableWebGL) {
-          ctx.drawImage(s._canvas, 0, 0);
+          try {
+            ctx.drawImage(s._canvas, 0, 0);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         return;
       }
@@ -1037,7 +1053,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              try {
+                c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(c);
               currentWidth = 0;
             }
@@ -1062,7 +1082,11 @@ var LTextField = (function () {
               } else if (s.textAlign == "right") {
                 cx = -currentWidth;
               }
-              c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              try {
+                c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+              } catch (error) {
+                console && console.error(error);
+              }
               s._createAlignCanvas(c);
               currentWidth = 0;
             }
@@ -1076,7 +1100,11 @@ var LTextField = (function () {
           } else if (s.textAlign == "right") {
             cx = -currentWidth;
           }
-          c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+          try {
+            c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+          } catch (error) {
+            console && console.error(error);
+          }
         }
         s.height = (m + 1) * s.wordHeight;
       } else {
@@ -1087,7 +1115,11 @@ var LTextField = (function () {
         c.fillText(lbl, 0, 0, c.measureText(lbl).width);
       }
       if (LGlobal.enableWebGL) {
-        ctx.drawImage(s._canvas, 0, 0);
+        try {
+          ctx.drawImage(s._canvas, 0, 0);
+        } catch (error) {
+          console && console.error(error);
+        }
       }
       if (s.windRunning) {
         s._ll_windRun();

@@ -185,16 +185,20 @@ var LBitmap = (function () {
       if (LGlobal.fpsStatus) {
         LGlobal.fpsStatus.bitmapData++;
       }
-      c.drawImage(s.bitmapData.image,
-        s.bitmapData.x,
-        s.bitmapData.y,
-        s.bitmapData.width,
-        s.bitmapData.height,
-        s.x,
-        s.y,
-        s.bitmapData.width,
-        s.bitmapData.height
-      );
+      try {
+        c.drawImage(s.bitmapData.image,
+          s.bitmapData.x,
+          s.bitmapData.y,
+          s.bitmapData.width,
+          s.bitmapData.height,
+          s.x,
+          s.y,
+          s.bitmapData.width,
+          s.bitmapData.height
+        );
+      } catch (error) {
+        console && console.error(error);
+      }
     },
     /** @language chinese
      * 返回一个LBitmap的克隆对象。

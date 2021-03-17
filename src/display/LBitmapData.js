@@ -312,7 +312,11 @@ var LBitmapData = (function () {
         s._canvas.width = s.image.width;
         s._canvas.height = s.image.height;
         s._context.clearRect(0, 0, s._canvas.width, s._canvas.height);
-        s._context.drawImage(s.image, 0, 0);
+        try {
+          s._context.drawImage(s.image, 0, 0);
+        } catch (error) {
+          console && console.error(error);
+        }
         s.image = s._canvas;
       } else if (dataType == LBitmapData.DATA_IMAGE) {
         s.image = new Image();
@@ -1289,7 +1293,11 @@ var LBitmapData = (function () {
       if (blendMode) {
         s._context.globalCompositeOperation = blendMode;
       }
-      s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
+      try {
+        s._context.drawImage(c, bd.x, bd.y, w, h, 0, 0, w, h);
+      } catch (error) {
+        console && console.error(error);
+      }
       if (save) {
         s._context.restore();
       }
@@ -1512,7 +1520,11 @@ var LBitmapData = (function () {
       width = bd.width;
       height = bd.height;
       bd.setProperties(sourceRect.x + bd.x, sourceRect.y + bd.y, sourceRect.width, sourceRect.height);
-      s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
+      try {
+        s._context.drawImage(bd.image, bd.x, bd.y, bd.width, bd.height, destPoint.x, destPoint.y, bd.width, bd.height);
+      } catch (error) {
+        console && console.error(error);
+      }
       bd.x = left;
       bd.y = top;
       bd.width = width;
