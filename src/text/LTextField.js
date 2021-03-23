@@ -969,7 +969,9 @@ var LTextField = (function () {
             j += c.measureText(text.substr(i, 1)).width;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
-              currentWidth = j + c.measureText(nextText.substr(0, 1)).width;
+              if (typeof currentWidth === UNDEFINED) {
+                currentWidth = j;
+              }
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
