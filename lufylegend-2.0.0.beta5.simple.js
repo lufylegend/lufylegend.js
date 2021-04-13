@@ -2622,150 +2622,152 @@ var LInteractiveObject = (function() {
 	return LInteractiveObject;
 })(); 
 var LDisplayObjectContainer = (function () {
-	function LDisplayObjectContainer () {
-		var s = this;
-		LExtends(s, LInteractiveObject, []);
-		s.childList = new Array();
-		s.numChildren = 0;
-		s.mouseChildren = true;
-	}
-	LDisplayObjectContainer.destroy = function (d) {
-		if (!LGlobal.destroy) {
-			return;
-		}
-		if (d.die) {
-			d.die();
-		}
-		if (d.removeAllChild) {
-			d.removeAllChild();
-		}
-	};
-	var p = {
-		addChild : function (d) {
-			var s  = this,t;
-			if (d.parent) {
-				t = LGlobal.destroy;
-				LGlobal.destroy = false;
-				d.parent.removeChild(d);
-				LGlobal.destroy = t;
-			}
-			d.parent = s;
-			s.childList.push(d);
-			s.numChildren = s.childList.length;
-			d._ll_removeFromSelf = false;
-			return d;
-		},
-		addChildAt : function (d, i) {
-			var s = this,t;
-			if (i < 0 || i > s.childList.length) {
-				return;
-			}
-			if (typeof d.remove == "function") {
-				t = LGlobal.destroy;
-				LGlobal.destroy = false;
-				d.remove();
-				LGlobal.destroy = t;
-			}
-			d.parent = s;
-			s.childList.splice(i, 0, d);
-			s.numChildren = s.childList.length;
-			d._ll_removeFromSelf = false;
-			return d;
-		},
-		removeChild : function (d) {
-			var s  = this, c = s.childList, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (d.objectIndex == c[i].objectIndex) {
-					LDisplayObjectContainer.destroy(d);
-					s.childList.splice(i, 1);
-					break;
-				}
-			}
-			s.numChildren = s.childList.length;
-			delete d.parent;
-			LTweenLite.removeTarget(d);
-		},
-		getChildAt : function (i) {
-			var s  = this, c = s.childList;
-			if (c.length == 0 || c.length <= i) {
-				return null;
-			}
-			return c[i];
-		},
-		getChildByName : function (n) {
-			var s  = this, c = s.childList, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				if (!c[i]) {
-					continue;
-				}
-				if (c[i].name == n) {
-					return c[i];
-				}
-			}
-			return null;
-		},
-		removeChildAt : function (i) {
-			var s  = this, c = s.childList, d;
-			if (c.length <= i || i < 0) {
-				return;
-			}
-			d = c[i];
-			LDisplayObjectContainer.destroy(d);
-			s.childList.splice(i, 1);
-			delete d.parent;
-			LTweenLite.removeTarget(d);
-			s.numChildren = s.childList.length;
-			return d;
-		},
-		getChildIndex : function (child) {
-			if (!child) {
-				return -1;
-			}
-			var s = this, c = s.childList, i, l = c.length;
-			for (i = 0; i < l; i++) {
-				if (c[i].objectIndex == child.objectIndex) {
-					return i;
-				}
-			}
-			return -1;
-		},
-		setChildIndex : function (child, index) {
-			var s = this, c = s.childList, i, l = c.length;
-			if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
-				return -1;
-			}
-			for (i = 0; i < l; i++) {
-				if(c[i].objectIndex == child.objectIndex){
-					break;
-				}
-			}
-			s.childList.splice(i,1);
-			s.childList.splice(index, 0, child);
-			return index;
-		},
-		resize : function () {
-			var s  = this;
-			s.width = s.getWidth();
-			s.height = s.getHeight();
-		},
-		removeAllChild : function () {
-			var s  = this, c = s.childList, i, l;
-			for (i = 0, l = c.length; i < l; i++) {
-				var d = c[i];
-				LDisplayObjectContainer.destroy(d);
-				delete d.parent;
-				LTweenLite.removeTarget(d);
-			}
-			s.childList.length = 0;
-			s.width = 0;
-			s.height = 0;
-			s.numChildren = 0;
-		}
-	};
-	for (var k in p) {
-		LDisplayObjectContainer.prototype[k] = p[k];
-	}
-	return LDisplayObjectContainer;
+  function LDisplayObjectContainer() {
+    var s = this;
+    LExtends(s, LInteractiveObject, []);
+    s.childList = new Array();
+    s.numChildren = 0;
+    s.mouseChildren = true;
+  }
+  LDisplayObjectContainer.destroy = function (d) {
+    if (!LGlobal.destroy) {
+      return;
+    }
+    if (d.die) {
+      d.die();
+    }
+    if (d.removeAllChild) {
+      d.removeAllChild();
+    }
+  };
+  var p = {
+    addChild: function (d) {
+      var s = this, t;
+      if (d.parent) {
+        t = LGlobal.destroy;
+        LGlobal.destroy = false;
+        d.parent.removeChild(d);
+        LGlobal.destroy = t;
+      }
+      d.parent = s;
+      s.childList.push(d);
+      s.numChildren = s.childList.length;
+      d._ll_removeFromSelf = false;
+      return d;
+    },
+    addChildAt: function (d, i) {
+      var s = this, t;
+      if (i < 0 || i > s.childList.length) {
+        return;
+      }
+      if (typeof d.remove == "function") {
+        t = LGlobal.destroy;
+        LGlobal.destroy = false;
+        d.remove();
+        LGlobal.destroy = t;
+      }
+      d.parent = s;
+      s.childList.splice(i, 0, d);
+      s.numChildren = s.childList.length;
+      d._ll_removeFromSelf = false;
+      return d;
+    },
+    removeChild: function (d) {
+      var s = this, c = s.childList, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (d.objectIndex == c[i].objectIndex) {
+          LDisplayObjectContainer.destroy(d);
+          s.childList.splice(i, 1);
+          d._ll_removeFromSelf = true;
+          break;
+        }
+      }
+      s.numChildren = s.childList.length;
+      delete d.parent;
+      LTweenLite.removeTarget(d);
+    },
+    getChildAt: function (i) {
+      var s = this, c = s.childList;
+      if (c.length == 0 || c.length <= i) {
+        return null;
+      }
+      return c[i];
+    },
+    getChildByName: function (n) {
+      var s = this, c = s.childList, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        if (!c[i]) {
+          continue;
+        }
+        if (c[i].name == n) {
+          return c[i];
+        }
+      }
+      return null;
+    },
+    removeChildAt: function (i) {
+      var s = this, c = s.childList, d;
+      if (c.length <= i || i < 0) {
+        return;
+      }
+      d = c[i];
+      LDisplayObjectContainer.destroy(d);
+      s.childList.splice(i, 1);
+      d._ll_removeFromSelf = true;
+      delete d.parent;
+      LTweenLite.removeTarget(d);
+      s.numChildren = s.childList.length;
+      return d;
+    },
+    getChildIndex: function (child) {
+      if (!child) {
+        return -1;
+      }
+      var s = this, c = s.childList, i, l = c.length;
+      for (i = 0; i < l; i++) {
+        if (c[i].objectIndex == child.objectIndex) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    setChildIndex: function (child, index) {
+      var s = this, c = s.childList, i, l = c.length;
+      if (child.parent == "root" || child.parent.objectIndex != s.objectIndex || index < 0 || index >= l) {
+        return -1;
+      }
+      for (i = 0; i < l; i++) {
+        if (c[i].objectIndex == child.objectIndex) {
+          break;
+        }
+      }
+      s.childList.splice(i, 1);
+      s.childList.splice(index, 0, child);
+      return index;
+    },
+    resize: function () {
+      var s = this;
+      s.width = s.getWidth();
+      s.height = s.getHeight();
+    },
+    removeAllChild: function () {
+      var s = this, c = s.childList, i, l;
+      for (i = 0, l = c.length; i < l; i++) {
+        var d = c[i];
+        LDisplayObjectContainer.destroy(d);
+        delete d.parent;
+        LTweenLite.removeTarget(d);
+      }
+      s.childList.length = 0;
+      s.width = 0;
+      s.height = 0;
+      s.numChildren = 0;
+    }
+  };
+  for (var k in p) {
+    LDisplayObjectContainer.prototype[k] = p[k];
+  }
+  return LDisplayObjectContainer;
 })();
 var LLoader = (function () {
 	function LLoader () {
