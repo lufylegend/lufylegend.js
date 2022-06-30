@@ -5475,7 +5475,7 @@ var LTextField = (function () {
         LGlobal.fpsStatus.text++;
       }
       if (s.htmlText) {
-        if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex == s.styleSheet.styleIndex))) {
+        if (s.ll_htmlText != s.htmlText || (s.styleSheet && (s.ll_style_objectIndex != s.styleSheet.objectIndex || s.ll_styleIndex != s.styleSheet.styleIndex))) {
           tf = new LTextFormat();
           s.ll_htmlTexts = [];
           s.ll_htmlText = s.htmlText;
@@ -5538,9 +5538,7 @@ var LTextField = (function () {
             j += c.measureText(text.substr(i, 1)).width;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
-              if (typeof currentWidth === UNDEFINED) {
-                currentWidth = j;
-              }
+              currentWidth = j;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
@@ -5959,8 +5957,10 @@ var LTextField = (function () {
         c.font = s.weight + " " + s.size + "px " + s.font;
         if (s.height == 0) {
           s._createCanvas();
-          s._context.font = s.weight + " " + s.size + "px " + s.font;
-          s._ll_show(s._context);
+          if (s._context) {
+            s._context.font = s.weight + " " + s.size + "px " + s.font;
+            s._ll_show(s._context);
+          }
         }
         return s.height;
       }
