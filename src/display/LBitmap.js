@@ -80,318 +80,326 @@
  * @public
  */
 var LBitmap = (function () {
-	function LBitmap (bitmapdata) {
-		var s = this;
-		LExtends(s, LDisplayObject, []);
-		/** @language chinese
-		 * 对象的类型
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * type of the object
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * オブジェクトのタイプ
-		 * @property type
-		 * @type String
-		 * @default LBitmap
-		 * @since 1.0.0
-		 * @public
-		 */
-		s.type = "LBitmap";
-		/** @language chinese
-		 * LBitmap对象的旋转中心设置为对象的中心，此属性默认值为true，如果对象发生旋转时，会导致该对象相关的鼠标点击以及碰撞失效。如果需要使该对象旋转后依然保持鼠标事件有效的话，需要将它的值设置为false。
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
-		/** @language english
-		 * Set the LBitmap object's center of rotation .
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
-		/** @language japanese
-		 * LBitmapオブジェクトの回転する中心を自身の中心に有効する。回転すると、マウスイベントや当たり判定が無効になります。マウスイベントや当たり判定を有効にするため、falseに設定しなければなりません。
-		 * @property rotateCenter
-		 * @type Boolean
-		 * @default true
-		 * @since 1.8.0
-		 * @public
-		 */
-		s.rotateCenter = true;
-		/** @language chinese
-		 * 被引用的 LBitmapData 对象
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language english
-		 * The LBitmapData object being referenced.
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
-		/** @language japanese
-		 * LBitmapData オブジェクトが参照されます
-		 * @property bitmapData
-		 * @type LBitmapData
-		 * @default true
-		 * @since 1.0.0
-		 * @public
-		 */
-		s.bitmapData = bitmapdata; 
-		if (s.bitmapData) {
-			s.width = s.bitmapData.width;
-			s.height = s.bitmapData.height;
-		}
-	}
-	var p = {
-		_canShow : function () {
-			return (this.visible && this.bitmapData);
-		},
-		_rotateReady : function () {
-			var s = this;
-			if (s.rotate != 0 && s.rotateCenter) {
-				s.rotatex = s.getWidth() * 0.5;
-				s.rotatey = s.getHeight() * 0.5;
-			} else {
-				s.rotatex = s.rotatey = 0;
-			}
-		},
-		_coordinate : function (c) {},
-		_ll_show : function (c) {
-			this.ll_draw(c);
-		},
-		ll_draw : function (c) {
-			var s = this;
-			if (LGlobal.fpsStatus) {
-				LGlobal.fpsStatus.bitmapData++;
-			}
-			c.drawImage(s.bitmapData.image,
-				s.bitmapData.x,
-				s.bitmapData.y,
-				s.bitmapData.width,
-				s.bitmapData.height,
-				s.x,
-				s.y,
-				s.bitmapData.width,
-				s.bitmapData.height
-			);
-		},
-		/** @language chinese
-		 * 返回一个LBitmap的克隆对象。
-		 * @method clone
-		 * @return {LBitmap} 一个新的 LBitmap 对象，它与原始对象相同.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
-		 * @method clone
-		 * @return {LBitmap} A new LSprite object that is identical to the original.
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 新しい LBitmap オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
-		 * @method clone
-		 * @return {LBitmap} 元のオブジェクトと同一の新しい LBitmap オブジェクトです。
-		 * @since 1.8.2
-		 * @public
-		 * @example
-		 * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
-		 * 	var bm1 = new LBitmap(bmd);
-		 * 	addChild(bm1);
-		 * 	
-		 * 	var bm2 = bm1.clone();
-		 * 	bm2.x = 120;
-		 * 	addChild(bm2);
-		 * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		clone : function () {
-			var s = this, a = new LBitmap(s.bitmapData.clone());
-			a.copyProperty(s);
-			a.rotateCenter = s.rotateCenter;
-			return a;
-		},
-		ismouseon : function (e, cood) {
-			var s = this;
-			if (!e) {
-				return false;
-			}
-			if (!s.visible || !s.bitmapData) {
-				return false;
-			}
-			if (s.mask) {
-				if (!s.mask.parent) {
-					s.mask.parent = s.parent;
-				}
-				if (!s.mask.ismouseon(e, cood)) {
-					return false;
-				}
-			}
-			return s.ismouseonShapes([{type : LShape.RECT, arg : [0, 0, s.bitmapData.width, s.bitmapData.height]}], e.offsetX, e.offsetY);
-		},
-		/** @language chinese
-		 * 获取显示对象的宽度，以像素为单位。
-		 * @method getWidth
-		 * @return {float} 显示对象的宽度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the width of the display object, in pixels.
-		 * @method getWidth
-		 * @return {float} the width of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの幅を取得します（ピクセル単位）。
-		 * @method getWidth
-		 * @return {float} オブジェクトの幅。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("width : " + bitmap.getWidth());
-		 * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		getWidth : function (maskSize) {
-			var s = this, w, mx, mw;
-			w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
-			if (maskSize && s.mask) {
-				mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
-				if (mx > w) {
-					return 0;
-				}
-				mw = s.mask.getWidth();
-				if (mx + mw > w) {
-					return w - mx;
-				}else{
-					return mw;
-				}
-			}
-			return w;
-		},
-		/** @language chinese
-		 * 获取显示对象的高度，以像素为单位。
-		 * @method getHeight
-		 * @return {float} 显示对象的高度。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">测试链接</a></p>
-		 */
-		/** @language english
-		 * Get the height of the display object, in pixels.
-		 * @method getHeight
-		 * @return {float} the height of the display object.
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">Try it »</a></p>
-		 */
-		/** @language japanese
-		 * 表示オブジェクトの高さを取得します（ピクセル単位）。
-		 * @method getHeight
-		 * @return {float} オブジェクトの高さ。
-		 * @since 1.0.0
-		 * @public
-		 * @example
-		 * 	var bitmapdata = new LBitmapData(event.target);  
-		 * 	var bitmap = new LBitmap(bitmapdata);
-		 * 	addChild(bitmap);
-		 * 	trace("height : " + bitmap.getHeight());
-		 * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
-		 */
-		getHeight : function (maskSize) {
-			var s = this, h, my, mh;
-			h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
-			if (maskSize && s.mask) {
-				my = s.mask._startY ? s.mask._startY() : s.mask.startY();
-				if (my > h) {
-					return 0;
-				}
-				mh = s.mask.getHeight();
-				if (my + mh > h) {
-					return h - my;
-				}else{
-					return mh;
-				}
-			}
-			return h;
-		},
-		startX : function () {
-			return this.x;
-		},
-		startY : function () {
-			return this.y;
-		},
-		die : function () {}
-	};
-	for (var k in p) {
-		LBitmap.prototype[k] = p[k];
-	}
-	return LBitmap;
+  function LBitmap(bitmapdata) {
+    var s = this;
+    LExtends(s, LDisplayObject, []);
+    /** @language chinese
+     * 对象的类型
+     * @property type
+     * @type String
+     * @default LBitmap
+     * @since 1.0.0
+     * @public
+     */
+    /** @language english
+     * type of the object
+     * @property type
+     * @type String
+     * @default LBitmap
+     * @since 1.0.0
+     * @public
+     */
+    /** @language japanese
+     * オブジェクトのタイプ
+     * @property type
+     * @type String
+     * @default LBitmap
+     * @since 1.0.0
+     * @public
+     */
+    s.type = "LBitmap";
+    /** @language chinese
+     * LBitmap对象的旋转中心设置为对象的中心，此属性默认值为true，如果对象发生旋转时，会导致该对象相关的鼠标点击以及碰撞失效。如果需要使该对象旋转后依然保持鼠标事件有效的话，需要将它的值设置为false。
+     * @property rotateCenter
+     * @type Boolean
+     * @default true
+     * @since 1.8.0
+     * @public
+     */
+    /** @language english
+     * Set the LBitmap object's center of rotation .
+     * @property rotateCenter
+     * @type Boolean
+     * @default true
+     * @since 1.8.0
+     * @public
+     */
+    /** @language japanese
+     * LBitmapオブジェクトの回転する中心を自身の中心に有効する。回転すると、マウスイベントや当たり判定が無効になります。マウスイベントや当たり判定を有効にするため、falseに設定しなければなりません。
+     * @property rotateCenter
+     * @type Boolean
+     * @default true
+     * @since 1.8.0
+     * @public
+     */
+    s.rotateCenter = true;
+    /** @language chinese
+     * 被引用的 LBitmapData 对象
+     * @property bitmapData
+     * @type LBitmapData
+     * @default true
+     * @since 1.0.0
+     * @public
+     */
+    /** @language english
+     * The LBitmapData object being referenced.
+     * @property bitmapData
+     * @type LBitmapData
+     * @default true
+     * @since 1.0.0
+     * @public
+     */
+    /** @language japanese
+     * LBitmapData オブジェクトが参照されます
+     * @property bitmapData
+     * @type LBitmapData
+     * @default true
+     * @since 1.0.0
+     * @public
+     */
+    s.bitmapData = bitmapdata;
+    if (s.bitmapData) {
+      s.width = s.bitmapData.width;
+      s.height = s.bitmapData.height;
+    }
+  }
+  var p = {
+    _canShow: function () {
+      return (this.visible && this.bitmapData);
+    },
+    _rotateReady: function () {
+      var s = this;
+      if (s.rotate != 0 && s.rotateCenter) {
+        s.rotatex = s.getWidth() * 0.5;
+        s.rotatey = s.getHeight() * 0.5;
+      } else {
+        s.rotatex = s.rotatey = 0;
+      }
+    },
+    _coordinate: function (c) { },
+    _ll_show: function (c) {
+      this.ll_draw(c);
+    },
+    ll_draw: function (c) {
+      var s = this;
+      if (LGlobal.fpsStatus) {
+        LGlobal.fpsStatus.bitmapData++;
+      }
+      try {
+        c.drawImage(s.bitmapData.image,
+          s.bitmapData.x,
+          s.bitmapData.y,
+          s.bitmapData.width,
+          s.bitmapData.height,
+          s.x,
+          s.y,
+          s.bitmapData.width,
+          s.bitmapData.height
+        );
+      } catch (error) {
+        console && console.error(error);
+      }
+    },
+    /** @language chinese
+     * 返回一个LBitmap的克隆对象。
+     * @method clone
+     * @return {LBitmap} 一个新的 LBitmap 对象，它与原始对象相同.
+     * @since 1.8.2
+     * @public
+     * @example
+     * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+     * 	var bm1 = new LBitmap(bmd);
+     * 	addChild(bm1);
+     * 	
+     * 	var bm2 = bm1.clone();
+     * 	bm2.x = 120;
+     * 	addChild(bm2);
+     * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">测试链接</a></p>
+     */
+    /** @language english
+     * Returns a new LBitmap object that is a clone of the original instance with an exact copy of the contained bitmap.
+     * @method clone
+     * @return {LBitmap} A new LSprite object that is identical to the original.
+     * @since 1.8.2
+     * @public
+     * @example
+     * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+     * 	var bm1 = new LBitmap(bmd);
+     * 	addChild(bm1);
+     * 	
+     * 	var bm2 = bm1.clone();
+     * 	bm2.x = 120;
+     * 	addChild(bm2);
+     * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">Try it »</a></p>
+     */
+    /** @language japanese
+     * 新しい LBitmap オブジェクトとして、元のインスタンスのクローンを返します。含まれるビットマップはまったく同じコピーになります。
+     * @method clone
+     * @return {LBitmap} 元のオブジェクトと同一の新しい LBitmap オブジェクトです。
+     * @since 1.8.2
+     * @public
+     * @example
+     * 	var bmd = new LBitmapData("#FF0000", 0, 0, 100, 100);
+     * 	var bm1 = new LBitmap(bmd);
+     * 	addChild(bm1);
+     * 	
+     * 	var bm2 = bm1.clone();
+     * 	bm2.x = 120;
+     * 	addChild(bm2);
+     * @examplelink <p><a href="../../../api/LBitmap/clone.html" target="_blank">実際のサンプルを見る</a></p>
+     */
+    clone: function () {
+      var s = this, a = new LBitmap(s.bitmapData.clone());
+      a.copyProperty(s);
+      a.rotateCenter = s.rotateCenter;
+      return a;
+    },
+    ismouseon: function (e, cood) {
+      var s = this;
+      if (!e) {
+        return false;
+      }
+      if (!s.visible || !s.bitmapData) {
+        return false;
+      }
+      if (s.mask) {
+        if (!s.mask.parent) {
+          s.mask.parent = s.parent;
+        }
+        if (!s.mask.ismouseon(e, cood)) {
+          return false;
+        }
+      }
+      return s.ismouseonShapes([{ type: LShape.RECT, arg: [0, 0, s.bitmapData.width, s.bitmapData.height] }], e.offsetX, e.offsetY);
+    },
+    /** @language chinese
+     * 获取显示对象的宽度，以像素为单位。
+     * @method getWidth
+     * @return {float} 显示对象的宽度。
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("width : " + bitmap.getWidth());
+     * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">测试链接</a></p>
+     */
+    /** @language english
+     * Get the width of the display object, in pixels.
+     * @method getWidth
+     * @return {float} the width of the display object.
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("width : " + bitmap.getWidth());
+     * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">Try it »</a></p>
+     */
+    /** @language japanese
+     * 表示オブジェクトの幅を取得します（ピクセル単位）。
+     * @method getWidth
+     * @return {float} オブジェクトの幅。
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("width : " + bitmap.getWidth());
+     * @examplelink <p><a href="../../../api/LBitmap/getWidth.html" target="_blank">実際のサンプルを見る</a></p>
+     */
+    getWidth: function (maskSize) {
+      var s = this, w, mx, mw;
+      w = s.bitmapData != null ? s.bitmapData.width * (s.scaleX > 0 ? s.scaleX : -s.scaleX) : 0;
+      if (maskSize && s.mask) {
+        mx = s.mask._startX ? s.mask._startX() : s.mask.startX();
+        if (mx > w) {
+          return 0;
+        }
+        mw = s.mask.getWidth();
+        if (mx + mw > w) {
+          return w - mx;
+        } else {
+          return mw;
+        }
+      }
+      return w;
+    },
+    /** @language chinese
+     * 获取显示对象的高度，以像素为单位。
+     * @method getHeight
+     * @return {float} 显示对象的高度。
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("height : " + bitmap.getHeight());
+     * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">测试链接</a></p>
+     */
+    /** @language english
+     * Get the height of the display object, in pixels.
+     * @method getHeight
+     * @return {float} the height of the display object.
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("height : " + bitmap.getHeight());
+     * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">Try it »</a></p>
+     */
+    /** @language japanese
+     * 表示オブジェクトの高さを取得します（ピクセル単位）。
+     * @method getHeight
+     * @return {float} オブジェクトの高さ。
+     * @since 1.0.0
+     * @public
+     * @example
+     * 	var bitmapdata = new LBitmapData(event.target);  
+     * 	var bitmap = new LBitmap(bitmapdata);
+     * 	addChild(bitmap);
+     * 	trace("height : " + bitmap.getHeight());
+     * @examplelink <p><a href="../../../api/LBitmap/getHeight.html" target="_blank">実際のサンプルを見る</a></p>
+     */
+    getHeight: function (maskSize) {
+      var s = this, h, my, mh;
+      h = s.bitmapData != null ? s.bitmapData.height * (s.scaleY > 0 ? s.scaleY : -s.scaleY) : 0;
+      if (maskSize && s.mask) {
+        my = s.mask._startY ? s.mask._startY() : s.mask.startY();
+        if (my > h) {
+          return 0;
+        }
+        mh = s.mask.getHeight();
+        if (my + mh > h) {
+          return h - my;
+        } else {
+          return mh;
+        }
+      }
+      return h;
+    },
+    startX: function () {
+      return this.x;
+    },
+    startY: function () {
+      return this.y;
+    },
+    die: function () {
+      if (this.bitmapData) {
+        this.bitmapData.die();
+      }
+    }
+  };
+  for (var k in p) {
+    LBitmap.prototype[k] = p[k];
+  }
+  return LBitmap;
 })();
 /** @language chinese
  * 不可用。

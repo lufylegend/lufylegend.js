@@ -17,6 +17,9 @@ lufylegend是一个HTML5开源引擎， 它实现了利用仿ActionScript3.0的�
 ### 
 *2.0.0.beta版并未支持webgl，而是修复了一些非常重要的bug
 
+## 关于webgl
+虽然准备在2.0.0正式版发布的时候支持，但是目前看来相关功能需要优化的空间非常大，而本人的时间也越来越有限了，要把这部分内容做完，不知道要何年何月了，所以暂时先把已知的bug更新，发布一个2.0.0.beta版本，方便依然在使用引擎的朋友们继续使用
+
 ## 新版API地址
 
 中文版 <a target='_blank' href="http://lufylegend.com/api/zh_CN/out/index.html">http://lufylegend.com/api/zh_CN/out/index.html</a>

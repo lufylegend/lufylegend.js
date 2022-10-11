@@ -92,21 +92,18 @@
  * @public
  */
 var LVideo = (function () {
-	function LVideo (u) {
+	function LVideo(u) {
 		var s = this;
 		LExtends(s, LMedia, []);
 		s.type = "LVideo";
 		s._type = "video";
 		s.rotatex = 0;
 		s.rotatey = 0;
-		var strTag = "";
-		if(LGlobal.os == OS_IPHONE && LGlobal.iOSversion[0] >= 10){
-			s.sound = new LSound();
-			strTag = " muted playsinline ";
-		}
+		s.sound = new LSound();
+		var strTag = " muted playsinline ";
 		var div = document.createElement("div");
 		div.id = "div_video_" + s.objectIndex;
-		div.innerHTML = '<video id="video_'+s.objectIndex+'" '+strTag+' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
+		div.innerHTML = '<video id="video_' + s.objectIndex + '" ' + strTag + ' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
 		document.body.appendChild(div);
 		s.data = document.getElementById("video_" + s.objectIndex);
 		s.data.loop = false;
@@ -116,64 +113,59 @@ var LVideo = (function () {
 		}
 	}
 	var p = {
-		_ll_show : function (c) {
+		_ll_show: function (c) {
 			var s = this;
+			s.data.currentTime = s.sound.getCurrentTime();
 			c.drawImage(s.data, s.x, s.y);
 		},
-		load : function(u){
+		load: function (u) {
 			var s = this;
-			s.callParent("load", arguments);
-			if(s.sound){
-				s.sound.load(u);
-			}
+			s.sound.load(u);
+			LAjax.responseType = LAjax.ARRAY_BUFFER;
+			LAjax.get(u, {}, function (arrayBuffer) {
+				var blob = new Blob([arrayBuffer]);
+				s.data.src = URL.createObjectURL(blob);
+				s.onload();
+			});
 		},
-		play : function (c, l, to) {
+		play: function (c, l, to) {
 			var s = this;
-			s.callParent("play", arguments);
-			if(s.sound){
-				s.sound.play(c, l, to);
-			}
+			s.sound.play(c, l, to);
 		},
-		stop : function () {
+		stop: function () {
 			var s = this;
-			s.callParent("stop", arguments);
-			if(s.sound){
-				s.sound.stop();
-			}
+			s.sound.stop();
 		},
-		setVolume : function (v) {
+		setVolume: function (v) {
 			var s = this;
-			if(s.sound){
-				s.sound.setVolume(v);
-			}else{
-				s.callParent("setVolume", arguments);
-			}
+			s.sound.setVolume(v);
 		},
-		getVolume : function () {
+		getVolume: function () {
 			var s = this;
-			if(s.sound){
-				return s.sound.getVolume();
-			}else{
-				return s.callParent("getVolume", arguments);
-			}
+			return s.sound.getVolume();
 		},
-		close : function () {
+		getCurrentTime: function () {
 			var s = this;
-			s.callParent("close", arguments);
-			if(s.sound){
-				s.sound.close();
-			}
+			return s.sound.getCurrentTime();
 		},
-		die : function () {
+		setCurrentTime: function (v) {
+			var s = this;
+			s.sound.data.currentTime = v;
+		},
+		close: function () {
+			var s = this;
+			s.sound.close();
+		},
+		die: function () {
 			var s = this;
 			document.body.removeChild(document.getElementById("div_video_" + s.objectIndex));
 			delete s.data;
 			delete s.sound;
 		},
-		getWidth : function () {
+		getWidth: function () {
 			return this.data.width;
 		},
-		getHeight : function () {
+		getHeight: function () {
 			return this.data.height;
 		}
 	};

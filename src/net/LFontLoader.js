@@ -7,7 +7,7 @@
  * @public
  */
 var LFontLoader = (function () {
-	function LFontLoader () {
+	function LFontLoader() {
 		var s = this;
 		LExtends(s, LEventDispatcher, []);
 		s.type = "LFontLoader";
@@ -16,7 +16,7 @@ var LFontLoader = (function () {
 	LFontLoader.prototype.load = function (u, name) {
 		var s = this, font, tff, eot, a, b, d, t = "";
 		font = document.createElement("style");
-		font.onerror = function(e){
+		font.onerror = function (e) {
 			var event = new LEvent(LEvent.ERROR);
 			event.currentTarget = s;
 			event.target = e.target;
@@ -27,27 +27,36 @@ var LFontLoader = (function () {
 		for (var i = 0; i < a.length; i++) {
 			b = a[i].split('.');
 			d = b[b.length - 1];
-			if(d == "ttf"){
+			if (d == "ttf") {
 				tff = a[i];
-			}else if(d == "eot"){
+			} else if (d == "eot") {
 				eot = a[i];
 			}
 		}
 		t = "@font-face { font-family:'" + name + "';";
-		if(eot){
-			t += "src: url(" + eot + ");"; 
+		if (eot) {
+			t += "src: url(" + eot + ");";
 		}
-		if(tff){
-			t += "src: local('lufy'),url(" + tff + ") format('opentype');"; 
+		if (tff) {
+			t += "src: local('lufy'),url(" + tff + ") format('opentype');";
 		}
 		font.innerHTML = t;
 		document.querySelector('head').appendChild(font);
-		setTimeout(function(){
+		var callback = function () {
 			var event = new LEvent(LEvent.COMPLETE);
 			event.currentTarget = s;
 			event.target = s;
 			s.dispatchEvent(event);
-		},1);
+		};
+		if (document.fonts) {
+			try {
+				new FontFace(name, "url(" + (tff || eot) + ")", {}).load().then(callback);
+			} catch (error) {
+				setTimeout(callback, 1);
+			}
+		} else {
+			setTimeout(callback, 1);
+		}
 	};
 	return LFontLoader;
 })();

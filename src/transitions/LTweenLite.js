@@ -306,12 +306,10 @@ var LTweenLite = (function () {
 		ll_show : function(){
 			var s = this;
 			var i, length = s.tweens.length, t;
-			for (i = 0; i < length; i++) {
+			for (i = length - 1; i >= 0; i--) {
 				t = s.tweens[i];
 				if (t && t.tween && t.tween()) {
 					s.tweens.splice(i, 1);
-					i--;
-					length = s.tweens.length;
 					if (t.keep()) {
 						s.add(t);
 					}
