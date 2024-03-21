@@ -930,9 +930,10 @@ var LTextField = (function () {
           c.font = textFormat.getFontText();
           c.fillStyle = textFormat.color;
           for (i = 0, l = text.length; i < l; i++) {
-            enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+            var word = text.substr(i, 1);
+            enter = /(?:\r\n|\r|\n|¥n)/.exec(word);
             if (enter) {
-              currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
+              currentWidth -= i > 0 ? c.measureText(word).width : 0;
               j = 0;
               k = i + 1;
               cx = 0;
@@ -954,19 +955,23 @@ var LTextField = (function () {
               continue;
             } else {
               h = c.measureText("O").width * 1.2;
-              if (s.stroke) {
-                c.strokeText(text.substr(i, 1), j, s._ll_height);
+              if (/[\uD800-\uDBFF]/.test(word) && i + 1 < l && /[\uDC00-\uDFFF]/.test(text.substr(i + 1, 1))) {
+                word = text.substr(i, 2);
+                i++;
               }
-              c.fillText(text.substr(i, 1), j, s._ll_height);
+              if (s.stroke) {
+                c.strokeText(word, j, s._ll_height);
+              }
+              c.fillText(word, j, s._ll_height);
               if (textFormat.underline) {
                 c.beginPath();
                 underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
                 c.moveTo(j, underlineY);
-                c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+                c.lineTo(j + c.measureText(word).width, underlineY);
                 c.stroke();
               }
             }
-            j += c.measureText(text.substr(i, 1)).width;
+            j += c.measureText(word).width;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
               currentWidth = j;
