@@ -5547,8 +5547,7 @@ var LTextField = (function () {
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-              nextText = s.ll_htmlTexts[elementIndex + 1].text;
-              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(0, 1));
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             } else {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
