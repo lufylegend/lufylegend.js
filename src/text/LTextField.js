@@ -774,7 +774,7 @@ var LTextField = (function () {
         c.lineWidth = s.lineWidth + 1;
       }
     },
-    ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
+    ll_getStyleSheet: function (textFormat, tabName, attribute, text, lastTabName) {
       var s = this, pattern, tf = textFormat.clone();
       if (tabName == "font") {
         var i = 0;
@@ -806,7 +806,7 @@ var LTextField = (function () {
       } else if (tabName == "i") {
         tf.italic = true;
       } else if (tabName == "p" && s.wordWrap) {
-        text = "\n" + text + "\n";
+        text = (lastTabName === "p" ? "" : "\n") + text + "\n";
       } else if (s.styleSheet) {
         var sheetObj;
         if (tabName == "span") {
@@ -826,9 +826,9 @@ var LTextField = (function () {
           tf.setCss(sheetObj);
         }
       }
-      s.ll_getHtmlText(tf, text);
+      s.ll_getHtmlText(tf, text, "p");
     },
-    ll_getHtmlText: function (tf, text) {
+    ll_getHtmlText: function (tf, text, lastTabName) {
       if (!text) {
         return;
       }
@@ -855,8 +855,8 @@ var LTextField = (function () {
       } while (start > 0 && start < end);
 
       content = text.substring(text.indexOf(">", arr.index) + 1, end);
-      s.ll_getStyleSheet(tf, tabName, arr[3], content);
-      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+      s.ll_getStyleSheet(tf, tabName, arr[3], content, arr.index === 0 ? lastTabName : undefined);
+      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3), tabName);
     },
     _createAlignCanvas: function (c) {
       var s = this;
@@ -914,7 +914,7 @@ var LTextField = (function () {
             s.ll_style_objectIndex = s.styleSheet.objectIndex;
             s.ll_styleIndex = s.styleSheet.styleIndex;
           }
-          s.ll_getHtmlText(tf, s.htmlText);
+          s.ll_getHtmlText(tf, s.htmlText, "p");
         }
         j = 0, k = 0, m = 0, b = 0, cx = 0;
         s._ll_height = s.wordHeight || 30;
@@ -981,7 +981,7 @@ var LTextField = (function () {
               enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             } else {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             }
             if (s.wordWrap && currentWidth > s.width && !enter) {
               j = 0;
