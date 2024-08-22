@@ -509,17 +509,18 @@ function init(s, c, w, h, f, t) {
     LGlobal._requestAFBaseTime = (new Date()).getTime();
     loop = function () {
       var now = (new Date()).getTime();
-      if (now - LGlobal._now > s * 2) {
-        LGlobal._requestAFBaseTime = now - s;
+      if (now - LGlobal._now > LGlobal.speed * 2) {
+        LGlobal._requestAFBaseTime = now - LGlobal.speed;
       }
       LGlobal._now = now;
       var check = now - LGlobal._requestAFBaseTime;
-      if (check / s >= 0.99) {
-        LGlobal._requestAFBaseTime += s;
+      if (check / LGlobal.speed >= 0.99) {
+        LGlobal._requestAFBaseTime += LGlobal.speed;
         LGlobal.onShow();
       }
-      LGlobal.requestId = _requestAF(loop, s);
+      LGlobal.requestId = _requestAF(loop, LGlobal.speed);
     };
+    LGlobal._setFrameRate = loop;
   }
   if (document.readyState === "complete") {
     LGlobal.setCanvas(c, w, h);
