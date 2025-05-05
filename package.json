@@ -1,0 +1,21 @@
+{
+  "name": "lufylegend.js",
+  "version": "2.0.0",
+  "description": "html5 canvas library",
+  "main": "lufylegend-2.0.0.beta5.js",
+  "bin": {
+    "lufylegend.js": "bin/bundle.js"
+  },
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "node bin/bundle.js"
+  },
+  "author": "lufy",
+  "license": "ISC",
+  "dependencies": {
+    "terser": "^5.39.0"
+  }
+}

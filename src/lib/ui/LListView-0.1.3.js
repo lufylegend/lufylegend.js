@@ -23,6 +23,8 @@ var LListView = (function () {
     var bitmapData = new LBitmapData(null, 0, 0, 100, 100, LBitmapData.DATA_CANVAS);
     self.bitmap = new LBitmap(bitmapData);
     self.addChild(self.bitmap);
+    self.scrollBarVerticalOffset = 0;
+    self.scrollBarHorizontalOffset = 0;
     /** @language chinese
      * LListView列表的可视范围，即大小。
      * @property clipping
@@ -180,8 +182,8 @@ var LListView = (function () {
     bitmapData.image.width = bitmapData.width = w;
     self.clipping.width = w;
     self.clipping.height = h;
-    self.scrollBarVertical.x = self.clipping.width;
-    self.scrollBarHorizontal.y = self.clipping.height;
+    self.scrollBarVertical.x = self.clipping.width - self.scrollBarVerticalOffset;
+    self.scrollBarHorizontal.y = self.clipping.height - self.scrollBarHorizontalOffset;
     self.scrollBarVertical.resizeHeight(self.clipping.height);
     self.scrollBarHorizontal.resizeWidth(self.clipping.width);
     self.resizeScrollBar();

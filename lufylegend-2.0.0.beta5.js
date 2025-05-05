@@ -1,13 +1,3 @@
-/**
-* lufylegend
-* @version 2.0.0.beta5
-* @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
-* @author lufy(lufy_legend)
-* @blog http://blog.csdn.net/lufy_Legend
-* @email lufy.legend@gmail.com
-* @homepage http://lufylegend.com/lufylegend
-* @github https://github.com/lufylegend/lufylegend.js
-*/
 var OS_PC = "pc",
 OS_IPHONE = "iPhone",
 OS_IPOD = "iPod",
@@ -1777,7 +1767,7 @@ var LObject = (function () {
 					s[k] = a[k];
 				} else if (Array.isArray(a[k])) {
 					s[k] = a[k].slice();
-				} 
+				}
 			}
 			if (a.mask) {
 				s.mask = a.mask.clone();
@@ -2117,7 +2107,7 @@ var LEventDispatcher = (function () {
 				if (!s._eventList[i]) {
 					continue;
 				}
-				if (type == s._eventList[i].type 
+				if (type == s._eventList[i].type
 					&& (!listener || s._eventList[i].listener == listener)
 					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
@@ -2573,7 +2563,7 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type 
+					if (type == s.mouseList[i].type
 						&& (!listener || s.mouseList[i].listener == listener)
 						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
@@ -2625,7 +2615,7 @@ var LInteractiveObject = (function() {
 		LInteractiveObject.prototype[k] = p[k];
 	}
 	return LInteractiveObject;
-})(); 
+})();
 var LDisplayObjectContainer = (function () {
   function LDisplayObjectContainer() {
     var s = this;
@@ -3544,7 +3534,7 @@ var LSound = (function () {
 		add : function (obj) {
 			if (LSound.Container.list.indexOf(obj) >= 0) {
 				return;
-			} 
+			}
 			LSound.Container.list.push(obj);
 		},
 		remove : function (obj) {
@@ -3569,21 +3559,18 @@ var LSound = (function () {
 	return LSound;
 })();
 var LVideo = (function () {
-	function LVideo (u) {
+	function LVideo(u) {
 		var s = this;
 		LExtends(s, LMedia, []);
 		s.type = "LVideo";
 		s._type = "video";
 		s.rotatex = 0;
 		s.rotatey = 0;
-		var strTag = "";
-		if(LGlobal.os == OS_IPHONE && LGlobal.iOSversion[0] >= 10){
-			s.sound = new LSound();
-			strTag = " muted playsinline ";
-		}
+		s.sound = new LSound();
+		var strTag = " muted playsinline ";
 		var div = document.createElement("div");
 		div.id = "div_video_" + s.objectIndex;
-		div.innerHTML = '<video id="video_'+s.objectIndex+'" '+strTag+' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
+		div.innerHTML = '<video id="video_' + s.objectIndex + '" ' + strTag + ' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
 		document.body.appendChild(div);
 		s.data = document.getElementById("video_" + s.objectIndex);
 		s.data.loop = false;
@@ -3593,64 +3580,59 @@ var LVideo = (function () {
 		}
 	}
 	var p = {
-		_ll_show : function (c) {
+		_ll_show: function (c) {
 			var s = this;
+			s.data.currentTime = s.sound.getCurrentTime();
 			c.drawImage(s.data, s.x, s.y);
 		},
-		load : function(u){
+		load: function (u) {
 			var s = this;
-			s.callParent("load", arguments);
-			if(s.sound){
-				s.sound.load(u);
-			}
+			s.sound.load(u);
+			LAjax.responseType = LAjax.ARRAY_BUFFER;
+			LAjax.get(u, {}, function (arrayBuffer) {
+				var blob = new Blob([arrayBuffer]);
+				s.data.src = URL.createObjectURL(blob);
+				s.onload();
+			});
 		},
-		play : function (c, l, to) {
+		play: function (c, l, to) {
 			var s = this;
-			s.callParent("play", arguments);
-			if(s.sound){
-				s.sound.play(c, l, to);
-			}
+			s.sound.play(c, l, to);
 		},
-		stop : function () {
+		stop: function () {
 			var s = this;
-			s.callParent("stop", arguments);
-			if(s.sound){
-				s.sound.stop();
-			}
+			s.sound.stop();
 		},
-		setVolume : function (v) {
+		setVolume: function (v) {
 			var s = this;
-			if(s.sound){
-				s.sound.setVolume(v);
-			}else{
-				s.callParent("setVolume", arguments);
-			}
+			s.sound.setVolume(v);
 		},
-		getVolume : function () {
+		getVolume: function () {
 			var s = this;
-			if(s.sound){
-				return s.sound.getVolume();
-			}else{
-				return s.callParent("getVolume", arguments);
-			}
+			return s.sound.getVolume();
 		},
-		close : function () {
+		getCurrentTime: function () {
 			var s = this;
-			s.callParent("close", arguments);
-			if(s.sound){
-				s.sound.close();
-			}
+			return s.sound.getCurrentTime();
 		},
-		die : function () {
+		setCurrentTime: function (v) {
+			var s = this;
+			s.sound.data.currentTime = v;
+		},
+		close: function () {
+			var s = this;
+			s.sound.close();
+		},
+		die: function () {
 			var s = this;
 			document.body.removeChild(document.getElementById("div_video_" + s.objectIndex));
 			delete s.data;
 			delete s.sound;
 		},
-		getWidth : function () {
+		getWidth: function () {
 			return this.data.width;
 		},
-		getHeight : function () {
+		getHeight: function () {
 			return this.data.height;
 		}
 	};
@@ -3981,7 +3963,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4014,7 +3996,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4044,7 +4026,7 @@ var LGraphics = (function () {
 							s.bitmap.width, s.bitmap.height,
 							0, 0,
 							s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4086,7 +4068,7 @@ var LGraphics = (function () {
 							s.bitmap.width, s.bitmap.height,
 							0, 0,
 							s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4123,7 +4105,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -5119,7 +5101,7 @@ var LButton = (function () {
 			}
 			s.upState.visible = false;
 			s.overState.visible = false;
-			s.downState.visible = true;	
+			s.downState.visible = true;
 			s._tweenOver = s.ll_modeOver;
 			onComplete = function(obj){
 				var s = obj.parent;
@@ -6522,7 +6504,7 @@ var LBitmapData = (function () {
     LBitmapData.prototype[k] = p[k];
   }
   return LBitmapData;
-})(); 
+})();
 var LBitmapFilter = (function () {
 	function LBitmapFilter () {
 		var s = this;
@@ -6930,7 +6912,7 @@ var LAnimationTimeline = (function() {
 		LAnimationTimeline.prototype[k] = p[k];
 	}
 	return LAnimationTimeline;
-})(); 
+})();
 var LSpriteAtlasType = {
     SIMPLE: 'simple',
     SLICED: 'sliced'
@@ -6950,7 +6932,7 @@ var LAtlas = (function () {
                 { name: path + "/" + name + ".plist", path: this.url(path + "/" + name + ".plist" + (LGlobal.wx ? '.meta' : '')), type: 'text' },
                 { name: path + "/" + name + ".json", path: this.url(path + "/" + name + ".json"), type: 'text' }
             ];
-            LLoadManage.load( 
+            LLoadManage.load(
                 loadData, null, function(datalist){
                     s._loadComplete(datalist, path, name);
                 }
@@ -7438,7 +7420,7 @@ var LEasing = {
 		easeInOut : function (t, b, c, d, s) {
 			if (typeof s == UNDEFINED) {
 				s = 1.70158;
-			} 
+			}
 			if ((t /= d / 2) < 1) {
 				return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
 			}
@@ -7827,10 +7809,10 @@ var WxLocalRequest = (function () {
 		send:function(body){
             var s = this;
             var option = {
-                filePath: this.url, 
+                filePath: this.url,
                 success: function(event) {
                     s._onreadystatechange(event);
-                }, 
+                },
                 fail: function(event) {
                     s._onerror(event);
                 }
@@ -7876,7 +7858,7 @@ var LAjax = (function () {
 			if (d) {
 				for (k in d) {
 					data += (a + k + "=" + d[k]);
-					a = "&";	
+					a = "&";
 				}
 			}
 			if (t.toLowerCase() == "get" && data.length > 0) {
@@ -7955,7 +7937,7 @@ var LAjax = (function () {
 			}
 			if (typeof XMLHttpRequest != UNDEFINED) {
 				return new XMLHttpRequest();
-			}  
+			}
 			try {
 				return new ActiveXObject("Msxml2.XMLHTTP");
 			} catch (e) {
@@ -8080,10 +8062,10 @@ var FPS = (function () {
 		if(t - s.fpsTime < 1000)return;
 		s.fps[0].text = "FPS : " + Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10;
 		f = LGlobal.fpsStatus;
-		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b; 
-		s.fps[2].text = "Draw image : " + f.a; 
-		s.fps[3].text = "Draw graphics : " + f.d; 
-		s.fps[4].text = "Draw text : " + f.e; 
+		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b;
+		s.fps[2].text = "Draw image : " + f.a;
+		s.fps[3].text = "Draw graphics : " + f.d;
+		s.fps[4].text = "Draw text : " + f.e;
 		s.fpsTime = t;
 		s.fpsCount = 0;
 		s.back.graphics.clear();
@@ -8343,9 +8325,9 @@ function LoadingSample2(size,background,color){
 	s.screenWidth = l.getWidth();
 	s.addChild(l);
 	s.showLabel=l;
-	c.shadowOffsetX = 2;  
+	c.shadowOffsetX = 2;
 	c.shadowOffsetY = 2;
-	c.shadowColor = "blue"; 
+	c.shadowColor = "blue";
 	s.setProgress(s.progress);
 }
 LoadingSample2.prototype.setProgress = function (value){
@@ -9057,7 +9039,7 @@ LGlobal.mouseJoint_end = function() {
 		LGlobal.box2d.world.DestroyJoint(LGlobal.box2d.mouseJoint);
 		LGlobal.box2d.mouseJoint = null;
 	}
-}; 
+};
 var LTransition = (function() {
 	function LTransition(displayObject, transObj) {
 		this.child = displayObject;
@@ -9718,7 +9700,7 @@ var LTransitionManager = (function() {
 		return trans;
 	};
 	return LTransitionManager;
-})(); 
+})();
 var LFlash = (function () {
 	function LFlash(){}
 	LFlash.SpriteSheetConvert = function(frames){
@@ -9751,15 +9733,15 @@ var LString = {
 	},
 	isString:function (s){
 		var p=/^([a-z]|[A-Z])+$/;
-		return p.exec(s); 
+		return p.exec(s);
 	},
 	isNumber:function (s){
 		var p=/^\d+\.\d+$/;
-		return p.exec(s); 
+		return p.exec(s);
 	},
 	isInt:function (s){
 		var p=/^\d+$/;
-		return p.exec(s); 
+		return p.exec(s);
 	}
 };
 var LMath = LString;
