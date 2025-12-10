@@ -21,12 +21,12 @@ const version = "2.0.0.beta5";
 const uiVersion = "0.18.0";
 const ex = `/**
 * lufylegend
-* @version ".$v."
+* @version ${version}
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
-* @blog http://blog.csdn.net/lufy_Legend
+* @blog https://blog.csdn.net/lufy_Legend
 * @email lufy.legend@gmail.com
-* @homepage http://lufylegend.com/lufylegend
+* @homepage https://lufylegend.com/#about
 * @github https://github.com/lufylegend/lufylegend.js
 */
 `;
@@ -217,20 +217,20 @@ function removeCommentsAndExtraLines(code) {
     .filter(line => line.trim() !== '')     // 去掉空行
     .join('\n');                            // 重新拼接
 }
-fs.writeFileSync(fullName, removeCommentsAndExtraLines(fullCombinedCode), 'utf-8');
+fs.writeFileSync(fullName, ex + removeCommentsAndExtraLines(fullCombinedCode), 'utf-8');
 minify(fullCombinedCode, {
   compress: true,
   mangle: false
 }).then(result => {
-  fs.writeFileSync(fullMinName, result.code, 'utf-8');
+  fs.writeFileSync(fullMinName, ex + result.code, 'utf-8');
   console.log(`打包完成: ${fullMinName}`);
-  fs.writeFileSync(simpleName, removeCommentsAndExtraLines(simpleCombinedCode), 'utf-8');
+  fs.writeFileSync(simpleName, ex + removeCommentsAndExtraLines(simpleCombinedCode), 'utf-8');
   return minify(simpleCombinedCode, {
     compress: true,
     mangle: false
   });
 }).then(result => {
-  fs.writeFileSync(simpleMinName, result.code, 'utf-8');
+  fs.writeFileSync(simpleMinName, ex + result.code, 'utf-8');
   console.log(`打包完成: ${simpleMinName}`);
   return minify(uiCombinedCode, {
     compress: true,

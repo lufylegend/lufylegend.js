@@ -190,10 +190,11 @@ var LListView = (function () {
   };
   LListView.prototype._ll_ondown = function (event) {
     var self = event.currentTarget;
-    var dragObject = new LListViewDragObject(self, event.selfX, event.selfY);
+    var point = self.globalToLocal(new LPoint(event.offsetX, event.offsetY));
+    var dragObject = new LListViewDragObject(self, point.x, point.y);
     LGlobal.stage.addChild(dragObject);
     dragObject.startDrag(event.touchPointID);
-    self.clickOnChild(event.selfX, event.selfY, "touch");
+    self.clickOnChild(point.x, point.y, 'touch');
   };
   /** @language chinese
    * 刷新LListView 列表
@@ -380,6 +381,8 @@ var LListView = (function () {
           }
           y += height;
         }
+        x = selfX;
+        y = selfY - (y - self.clipping.y);
       } else {
         for (var i = 0; i < length; i++) {
           var item = self._ll_items[i];
@@ -390,9 +393,9 @@ var LListView = (function () {
           }
           x += width;
         }
+        x = selfX - (x - self.clipping.x);
+        y = selfY;
       }
-      x += selfX;
-      y += selfY;
     } else {
       x = self.clipping.x + selfX;
       y = self.clipping.y + selfY;

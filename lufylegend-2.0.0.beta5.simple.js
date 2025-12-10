@@ -1,3 +1,13 @@
+/**
+* lufylegend
+* @version 2.0.0.beta5
+* @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
+* @author lufy(lufy_legend)
+* @blog https://blog.csdn.net/lufy_Legend
+* @email lufy.legend@gmail.com
+* @homepage https://lufylegend.com/#about
+* @github https://github.com/lufylegend/lufylegend.js
+*/
 var OS_PC = "pc",
 OS_IPHONE = "iPhone",
 OS_IPOD = "iPod",
@@ -5421,7 +5431,7 @@ var LTextField = (function () {
         s._alignCanvas = document.createElement("canvas");
         s._alignContext = s._alignCanvas.getContext("2d");
       }
-      s._alignCanvas.width = s.width;
+      s._alignCanvas.width = Math.max(s.width, 1024);
       s._alignContext.font = c.font;
       s._alignContext.fillStyle = c.fillStyle;
       s._alignContext.textBaseline = c.textBaseline;
@@ -5562,6 +5572,7 @@ var LTextField = (function () {
           }
           s.height = (m + 1) * s._ll_height;
         }
+        s._ll_width = j;
         if (currentWidth > 0) {
           cx = 0;
           if (s.textAlign == "center") {
@@ -5908,6 +5919,12 @@ var LTextField = (function () {
       }
       if (LGlobal.enableWebGL) {
         this._createCanvas();
+      }
+      if (s.htmlText) {
+        if (s.ll_htmlText != s.htmlText) {
+          s._ll_show(LGlobal.canvas);
+        }
+        return s._ll_width;
       }
       var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
       c.font = s.size + "px " + s.font;
@@ -7829,130 +7846,133 @@ var WxLocalRequest = (function () {
 	return WxLocalRequest;
 })();
 var LAjax = (function () {
-	function LAjax () {
-		this.responseType = null;
-		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
-		this.canUseBlob = window.Blob || window.BlobBuilder;
-		var protocol = location.protocol;
-		this.local = !(protocol == "http:" || protocol == "https:");
-	}
-	LAjax.prototype = {
-		TEXT : "text",
-		JSON : "json",
-		ARRAY_BUFFER : "arraybuffer",
-		BLOB : "blob",
-		get : function (url, data, oncomplete, onerror) {
-			this.getRequest("GET", url, data, oncomplete, onerror);
-		},
-		post : function (url, data, oncomplete, onerror) {
-			this.getRequest("POST", url, data, oncomplete, onerror);
-		},
-		getRequest : function (t, url, d, oncomplete, err) {
-			var s = this, k, data = "", a = "";
-			s.err = err;
-			var isLocalUrl = url.indexOf('http') < 0;
-			var ajax = s.getHttp(isLocalUrl);
-			if (!ajax) {
-				return;
-			}
-			if (d) {
-				for (k in d) {
-					data += (a + k + "=" + d[k]);
-					a = "&";
-				}
-			}
-			if (t.toLowerCase() == "get" && data.length > 0) {
-				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
-				data = null;
-			}
-			ajax.onerror = function(e){
-				if(err){
-					err(e);
-					err = null;
-				}
-			};
-			var progress = s.progress;
-			s.progress = null;
-			if (!ajax.addEventListener) {
-				ajax.addEventListener = function(key, fun) {
-					ajax['on' + key] = fun;
-				};
-			}
-			ajax.addEventListener("progress", function(e){
-				if(e.currentTarget.status == 404){
-					if (err) {
-						err(e.currentTarget);
-						err = null;
-					}
-				}else if(e.currentTarget.status == 200){
-					if(progress){
-						progress(e);
-					}
-				}
-			}, false);
-			ajax.open(t, url, true);
-			if (s.responseType) {
-				if(s.responseType == s.JSON){
-					try{
-						ajax.responseType = s.responseType;
-					}catch(e){
-						ajax.responseType = s.TEXT;
-						ajax._responseType = "json";
-					}
-				}else{
-					ajax.responseType = s.responseType;
-				}
-				s.responseType = s.TEXT;
-			}
-			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			ajax.onreadystatechange = function (e) {
-				var request = e.currentTarget;
-				if (request.readyState == 4) {
-					if (request.status >= 200 && request.status < 300 || request.status === 304) {
-						if (oncomplete) {
-							if(request._responseType == s.JSON){
-								request._responseType = s.TEXT;
-								oncomplete(JSON.parse(request.responseText));
-							}else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
-								oncomplete(request.response);
-							} else if (request.responseText.length > 0) {
-								oncomplete(request.responseText);
-							} else {
-								oncomplete(null);
-							}
-						}
-					} else {
-						if (err) {
-							err(request);
-							err = null;
-						}
-					}
-		 		}
-			};
-			ajax.send(data);
-		},
-		getHttp : function (isLocalUrl) {
-			if (LGlobal.wx && isLocalUrl) {
-				return new WxLocalRequest();
-			}
-			if (typeof XMLHttpRequest != UNDEFINED) {
-				return new XMLHttpRequest();
-			}
-			try {
-				return new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-				try {
-					return new ActiveXObject("Microsoft.XMLHTTP");
-				} catch (e) {
-					if (!this.err) {
-						this.err(e);
-					}
-				}
-			}
-			return false;
-		}
-	};
-	return new LAjax();
+  function LAjax() {
+    this.responseType = null;
+    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+    this.canUseBlob = window.Blob || window.BlobBuilder;
+    var protocol = location.protocol;
+    this.local = !(protocol == "http:" || protocol == "https:");
+  }
+  LAjax.prototype = {
+    TEXT: "text",
+    JSON: "json",
+    ARRAY_BUFFER: "arraybuffer",
+    BLOB: "blob",
+    get: function (url, data, oncomplete, onerror) {
+      this.getRequest("GET", url, data, oncomplete, onerror);
+    },
+    post: function (url, data, oncomplete, onerror) {
+      this.getRequest("POST", url, data, oncomplete, onerror);
+    },
+    getRequest: function (t, url, d, oncomplete, err) {
+      var s = this, k, data = "", a = "";
+      s.err = err;
+      var isLocalUrl = url.indexOf('http') < 0;
+      var ajax = s.getHttp(isLocalUrl);
+      if (!ajax) {
+        return;
+      }
+      if (d && Array.isArray(d)) {
+        for (k in d) {
+          data += (a + k + "=" + d[k]);
+          a = "&";
+        }
+      } else {
+        data = d;
+      }
+      if (t.toLowerCase() == "get" && data.length > 0) {
+        url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
+        data = null;
+      }
+      ajax.onerror = function (e) {
+        if (err) {
+          err(e);
+          err = null;
+        }
+      };
+      var progress = s.progress;
+      s.progress = null;
+      if (!ajax.addEventListener) {
+        ajax.addEventListener = function (key, fun) {
+          ajax['on' + key] = fun;
+        };
+      }
+      ajax.addEventListener("progress", function (e) {
+        if (e.currentTarget.status == 404) {
+          if (err) {
+            err(e.currentTarget);
+            err = null;
+          }
+        } else if (e.currentTarget.status == 200) {
+          if (progress) {
+            progress(e);
+          }
+        }
+      }, false);
+      ajax.open(t, url, true);
+      if (s.responseType) {
+        if (s.responseType == s.JSON) {
+          try {
+            ajax.responseType = s.responseType;
+          } catch (e) {
+            ajax.responseType = s.TEXT;
+            ajax._responseType = "json";
+          }
+        } else {
+          ajax.responseType = s.responseType;
+        }
+        s.responseType = s.TEXT;
+      }
+      ajax.setRequestHeader("Content-Type", this.contentType || "application/x-www-form-urlencoded");
+      this.contentType = null;
+      ajax.onreadystatechange = function (e) {
+        var request = e.currentTarget;
+        if (request.readyState == 4) {
+          if (request.status >= 200 && request.status < 300 || request.status === 304) {
+            if (oncomplete) {
+              if (request._responseType == s.JSON) {
+                request._responseType = s.TEXT;
+                oncomplete(JSON.parse(request.responseText));
+              } else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
+                oncomplete(request.response);
+              } else if (request.responseText.length > 0) {
+                oncomplete(request.responseText);
+              } else {
+                oncomplete(null);
+              }
+            }
+          } else {
+            if (err) {
+              err(request);
+              err = null;
+            }
+          }
+        }
+      };
+      ajax.send(data);
+    },
+    getHttp: function (isLocalUrl) {
+      if (LGlobal.wx && isLocalUrl) {
+        return new WxLocalRequest();
+      }
+      if (typeof XMLHttpRequest != UNDEFINED) {
+        return new XMLHttpRequest();
+      }
+      try {
+        return new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (e) {
+        try {
+          return new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+          if (!this.err) {
+            this.err(e);
+          }
+        }
+      }
+      return false;
+    }
+  };
+  return new LAjax();
 })();
 var LStageWebView = (function () {
 	function LStageWebView () {

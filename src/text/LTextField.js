@@ -864,7 +864,7 @@ var LTextField = (function () {
         s._alignCanvas = document.createElement("canvas");
         s._alignContext = s._alignCanvas.getContext("2d");
       }
-      s._alignCanvas.width = s.width;
+      s._alignCanvas.width = Math.max(s.width, 1024);
       s._alignContext.font = c.font;
       s._alignContext.fillStyle = c.fillStyle;
       s._alignContext.textBaseline = c.textBaseline;
@@ -1006,6 +1006,7 @@ var LTextField = (function () {
           }
           s.height = (m + 1) * s._ll_height;
         }
+        s._ll_width = j;
         if (currentWidth > 0) {
           cx = 0;
           if (s.textAlign == "center") {
@@ -1730,6 +1731,12 @@ var LTextField = (function () {
       }
       if (LGlobal.enableWebGL) {
         this._createCanvas();
+      }
+      if (s.htmlText) {
+        if (s.ll_htmlText != s.htmlText) {
+          s._ll_show(LGlobal.canvas);
+        }
+        return s._ll_width;
       }
       var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
       c.font = s.size + "px " + s.font;
