@@ -1,6 +1,6 @@
 /** @language chinese
  * Ajax 操作函数。允许我们在不刷新浏览器的情况下从服务器加载数据。
- * @class LAjax	
+ * @class LAjax
  * @constructor
  * @since 1.7.1
  * @public
@@ -49,7 +49,11 @@ var LAjax = (function () {
      * @public
      */
     this.responseType = null;
-    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+    window.BlobBuilder =
+      window.BlobBuilder ||
+      window.WebKitBlobBuilder ||
+      window.MozBlobBuilder ||
+      window.MSBlobBuilder;
     this.canUseBlob = window.Blob || window.BlobBuilder;
     var protocol = location.protocol;
     this.local = !(protocol == "http:" || protocol == "https:");
@@ -306,23 +310,26 @@ var LAjax = (function () {
       this.getRequest("POST", url, data, oncomplete, onerror);
     },
     getRequest: function (t, url, d, oncomplete, err) {
-      var s = this, k, data = "", a = "";
+      var s = this,
+        k,
+        data = "",
+        a = "";
       s.err = err;
-      var isLocalUrl = url.indexOf('http') < 0;
+      var isLocalUrl = url.indexOf("http") < 0;
       var ajax = s.getHttp(isLocalUrl);
       if (!ajax) {
         return;
       }
-      if (d && Array.isArray(d)) {
+      if (d && typeof d === "object") {
         for (k in d) {
-          data += (a + k + "=" + d[k]);
+          data += a + k + "=" + d[k];
           a = "&";
         }
       } else {
         data = d;
       }
       if (t.toLowerCase() == "get" && data.length > 0) {
-        url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
+        url += (url.indexOf("?") >= 0 ? "&" : "?") + data;
         data = null;
       }
       ajax.onerror = function (e) {
@@ -335,21 +342,25 @@ var LAjax = (function () {
       s.progress = null;
       if (!ajax.addEventListener) {
         ajax.addEventListener = function (key, fun) {
-          ajax['on' + key] = fun;
+          ajax["on" + key] = fun;
         };
       }
-      ajax.addEventListener("progress", function (e) {
-        if (e.currentTarget.status == 404) {
-          if (err) {
-            err(e.currentTarget);
-            err = null;
+      ajax.addEventListener(
+        "progress",
+        function (e) {
+          if (e.currentTarget.status == 404) {
+            if (err) {
+              err(e.currentTarget);
+              err = null;
+            }
+          } else if (e.currentTarget.status == 200) {
+            if (progress) {
+              progress(e);
+            }
           }
-        } else if (e.currentTarget.status == 200) {
-          if (progress) {
-            progress(e);
-          }
-        }
-      }, false);
+        },
+        false
+      );
       ajax.open(t, url, true);
       if (s.responseType) {
         if (s.responseType == s.JSON) {
@@ -364,17 +375,27 @@ var LAjax = (function () {
         }
         s.responseType = s.TEXT;
       }
-      ajax.setRequestHeader("Content-Type", this.contentType || "application/x-www-form-urlencoded");
+      ajax.setRequestHeader(
+        "Content-Type",
+        this.contentType || "application/x-www-form-urlencoded"
+      );
       this.contentType = null;
       ajax.onreadystatechange = function (e) {
         var request = e.currentTarget;
         if (request.readyState == 4) {
-          if (request.status >= 200 && request.status < 300 || request.status === 304) {
+          if (
+            (request.status >= 200 && request.status < 300) ||
+            request.status === 304
+          ) {
             if (oncomplete) {
               if (request._responseType == s.JSON) {
                 request._responseType = s.TEXT;
                 oncomplete(JSON.parse(request.responseText));
-              } else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
+              } else if (
+                request.responseType == s.ARRAY_BUFFER ||
+                request.responseType == s.BLOB ||
+                request.responseType == s.JSON
+              ) {
                 oncomplete(request.response);
               } else if (request.responseText.length > 0) {
                 oncomplete(request.responseText);
@@ -411,7 +432,7 @@ var LAjax = (function () {
         }
       }
       return false;
-    }
+    },
   };
   return new LAjax();
 })();
