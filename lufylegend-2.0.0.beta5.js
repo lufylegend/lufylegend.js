@@ -5922,7 +5922,8 @@ var LTextField = (function () {
       }
       if (s.htmlText) {
         if (s.ll_htmlText != s.htmlText) {
-          s._ll_show(LGlobal.canvas);
+          s._createCanvas();
+          s._ll_show(s._context);
         }
         return s._ll_width;
       }
