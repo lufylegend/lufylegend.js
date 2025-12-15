@@ -524,12 +524,14 @@ var LListView = (function () {
           var height = item.staticHeight || self.cellHeight;
           h += height;
         }
+        w = self.cellWidth * (length > self.maxPerLine ? self.maxPerLine : length);
       } else {
         for (var i = 0; i < length; i++) {
           var item = self._ll_items[i];
           var width = item.staticWidth || self.cellWidth;
           w += width;
         }
+        h = self.cellHeight * (length > self.maxPerLine ? self.maxPerLine : length);
       }
     } else {
       if (self.arrangement == LListView.Direction.Horizontal) {
