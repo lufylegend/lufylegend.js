@@ -320,13 +320,17 @@ var LAjax = (function () {
       if (!ajax) {
         return;
       }
-      if (d && typeof d === "object") {
-        for (k in d) {
-          data += a + k + "=" + d[k];
-          a = "&";
+      if (d) {
+        if (d instanceof Uint8Array) {
+          data = d;
+        } else if (typeof d === "object") {
+          for (k in d) {
+            data += a + k + "=" + d[k];
+            a = "&";
+          }
+        } else {
+          data = d;
         }
-      } else {
-        data = d;
       }
       if (t.toLowerCase() == "get" && data.length > 0) {
         url += (url.indexOf("?") >= 0 ? "&" : "?") + data;
