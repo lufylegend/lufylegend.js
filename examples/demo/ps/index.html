@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>HTML5图片修饰</title>
+	<script type="text/javascript" src="https://lufylegend.com/js/lufylegend-2.0.0.beta5.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=0.65,minimum-scale=0.65, maximum-scale=0.65, user-scalable=yes">
+</head>
+<body>
+	<div id="legend"></div>
+<script>
+init(30,"legend",480,480,main);
+var vertices;
+var indices;
+var uvtData;
+var stageLayer,backLayer;
+var bitmapData;
+var imgData = [
+	{name:"face",path:"./face.jpg"},
+	{name:"icon01",path:"./icon01.png"},
+	{name:"icon02",path:"./icon02.png"},
+	{name:"icon03",path:"./icon03.png"},
+	{name:"icon04",path:"./icon04.png"}
+];
+var selectIcon = null;
+var imglist;
+var pointList=[];
+var mouseX,mouseY;
+var mouseObj,toHidden;
+function main(){
+	LLoadManage.load(imgData,null,gameInit);
+}
+function gameInit(result){
+	LGlobal.preventDefault = false;
+	imglist = result;
+	bitmapData = new LBitmapData(imglist["face"]);
+	
+	stageLayer = new LSprite();
+	stageLayer.graphics.drawRect(1,"#000000",[0,0,LGlobal.width,LGlobal.height],true,"#000000");
+	addChild(stageLayer);
+	
+	backLayer = new LSprite();
+	backLayer.x = 100;
+	backLayer.y = 100;
+	stageLayer.addChild(backLayer);
+	LGlobal.setDebug(true);
+	cut();
+	stageLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
+	stageLayer.addEventListener(LMouseEvent.MOUSE_DOWN,down);
+	stageLayer.addEventListener(LMouseEvent.MOUSE_UP,up);
+	stageLayer.addEventListener(LMouseEvent.MOUSE_MOVE,move);
+}	
+function pointHidden(){
+	if (toHidden != "hidden") {
+		toHidden = "hidden";
+	}else{
+		toHidden = "";
+	}
+	for(i = 0;i < pointList.length;i++){
+		obj = pointList[i];
+		if (toHidden == "hidden") {
+			obj.alpha = 0;
+		}else{
+			obj.alpha = 1;
+		}
+	}
+}
+function cut(){
+	backLayer.removeAllChild();
+	var num = parseInt(document.getElementById('row').value);
+	var width = bitmapData.width / num;
+	var height = bitmapData.height / num;
+	var i,j,obj;
+	vertices = new Array();
+	for(i=0;i<=num;i++){
+		for(j=0;j<=num;j++){
+			vertices.push(i*height,j*width);
+		}
+	}
+	pointList = new Array();
+	for(i = 0;i < vertices.length;i+=2){
+		obj = new LSprite();
+		obj.x = vertices[i];
+		obj.y = vertices[i+1];
+		obj.graphics.drawArc(1,"#ff0000",[0,0,10,0,2*Math.PI],true,"#ff0000");
+		backLayer.addChild(obj);
+		pointList.push(obj);
+	}
+	indices = new Array();
+	for(i=0;i<num;i++){
+		for(j=0;j<num;j++){
+			indices.push(i*(num+1)+j,(i+1)*(num+1)+j,i*(num+1)+j+1);
+			indices.push((i+1)*(num+1)+j,i*(num+1)+j+1,(i+1)*(num+1)+j+1);
+		}
+	}
+	uvtData = new Array();
+	for(i=0;i<=num;i++){
+		for(j=0;j<=num;j++){
+			uvtData.push(i/num, j/num);
+		}
+	}
+	backLayer.graphics.clear();
+	backLayer.graphics.beginBitmapFill(bitmapData);
+	backLayer.graphics.drawTriangles(vertices, indices, uvtData);
+}
+function onframe(){
+	if (toHidden == "hidden")return;
+	var i,obj;
+	for(i = 0;i < pointList.length;i++){
+		obj = pointList[i];
+		obj.alpha = 1;
+		if(Math.pow(obj.x-mouseX,2)+Math.pow(obj.y-mouseY,2) < Math.pow(20,2)){
+			obj.alpha = 0.5;
+		}
+	}
+}
+function down(event){
+	if(selectIcon)return;
+	if(mouseObj)return;
+	mouseX = event.offsetX - backLayer.x;
+	mouseY = event.offsetY - backLayer.y;
+	var i,obj;
+	for(i = 0;i < pointList.length;i++){
+		obj = pointList[i];
+		if(Math.pow(obj.x-mouseX,2)+Math.pow(obj.y-mouseY,2) < Math.pow(20,2)){
+			mouseObj = obj;
+			mouseObj.index = i*2;
+			mouseObj.mouseX = mouseX;
+			mouseObj.mouseY = mouseY;
+			mouseObj.saveX = mouseObj.x;
+			mouseObj.saveY = mouseObj.y;
+			break;
+		}
+	}
+	
+}
+function up(event){
+	mouseObj = null;
+	if(selectIcon){
+		var img = new LBitmap(new LBitmapData(imglist["icon"+selectIcon]));
+		img.x = event.offsetX - 40;
+		img.y = event.offsetY - 40;
+		stageLayer.addChild(img);
+	}
+}
+function move(event){
+	mouseX = event.offsetX - backLayer.x;
+	mouseY = event.offsetY - backLayer.y;
+	if(mouseObj){
+		mouseObj.x = mouseX - mouseObj.mouseX + mouseObj.saveX;
+		mouseObj.y = mouseY - mouseObj.mouseY + mouseObj.saveY;
+		vertices[mouseObj.index] = mouseObj.x;
+		vertices[mouseObj.index + 1] = mouseObj.y;
+	}
+}
+</script>
+<div id="mylegend1" style="position:absolute;top:480px;width:480px;height:220px;z-index:1;color: #ffffff;background-color:#ffffff;">
+<select id="row" style="width:90px;">
+	<option value="2">4</option>
+	<option value="4">16</option>
+	<option value="8">32</option>
+</select>
+<input type="button" value="分割" onclick="cut();" />
+<input type="button" value="删除操作点" onclick="this.value=this.value=='删除操作点'?'显示操作点':'删除操作点';pointHidden();" />
+<br />
+<input type="button" style="width:200px;height:60px;" value="生成图片" onclick="window.open(backLayer.getDataURL());" />
+<br />
+<input type="button" style="width:200px;height:60px;" value="添加装饰" onclick="document.getElementById('mylegend1').style.display = 'none';document.getElementById('mylegend2').style.display = '';" />
+</div>
+<div id="mylegend2" style="position:absolute;top:480px;width:480px;height:220px;z-index:1;color: #ffffff;background-color:#ffffff;display:none;">
+<a href="javascript:void(0)" onclick="selectIcon='01';"><img src="/images/html5/lufylegend/ps/icon01.png" /></a>
+<a href="javascript:void(0)" onclick="selectIcon='02';"><img src="/images/html5/lufylegend/ps/icon02.png" /></a>
+<a href="javascript:void(0)" onclick="selectIcon='03';"><img src="/images/html5/lufylegend/ps/icon03.png" /></a>
+<a href="javascript:void(0)" onclick="selectIcon='04';"><img src="/images/html5/lufylegend/ps/icon04.png" /></a>
+
+<input type="button" value="关闭装饰" onclick="selectIcon=null,document.getElementById('mylegend2').style.display = 'none';document.getElementById('mylegend1').style.display = '';" />
+</div>
+	</body>
+</html>

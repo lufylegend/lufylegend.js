@@ -7,5 +7,4 @@ Thumbs.db
 
 .vscode/
 node_modules/
-tool/package-lock.json
-tool/package.json
+package-lock.json

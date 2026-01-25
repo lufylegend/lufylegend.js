@@ -3,9 +3,9 @@
 * @version 2.0.0.beta5
 * @Explain lufylegend是一个HTML5开源引擎，利用它可以快速方便的进行HTML5的开发
 * @author lufy(lufy_legend)
-* @blog http://blog.csdn.net/lufy_Legend
+* @blog https://blog.csdn.net/lufy_Legend
 * @email lufy.legend@gmail.com
-* @homepage http://lufylegend.com/lufylegend
+* @homepage https://lufylegend.com/#about
 * @github https://github.com/lufylegend/lufylegend.js
 */
 var OS_PC = "pc",
@@ -462,8 +462,8 @@ LStageScaleMode.EXACT_FIT = "exactFit";
 LStageScaleMode.SHOW_ALL = "showAll";
 LStageScaleMode.NO_BORDER = "noBorder";
 LStageScaleMode.NO_SCALE = "noScale";
-var LGlobal = ( function () {
-	function LGlobal () {
+var LGlobal = (function () {
+	function LGlobal() {
 		throw "LGlobal cannot be instantiated";
 	}
 	LGlobal.FULL_SCREEN = "full_screen";
@@ -490,7 +490,7 @@ var LGlobal = ( function () {
 	LGlobal.align = "M";
 	LGlobal.mobile = false;
 	LGlobal.canTouch = false;
-    LGlobal.wx = false;
+	LGlobal.wx = false;
 	LGlobal.os = OS_PC;
 	LGlobal.ios = false;
 	LGlobal.android = false;
@@ -503,15 +503,15 @@ var LGlobal = ( function () {
 	LGlobal.keepClear = true;
 	LGlobal.top = 0;
 	LGlobal.left = 0;
-	LGlobal.enableWebGL = (function(){
+	LGlobal.enableWebGL = (function () {
 		return typeof enableWebGLCanvas !== UNDEFINED;
 	})();
 	LGlobal.window = window;
 	(function (n) {
-        if (typeof wx !== 'undefined' && typeof GameGlobal !== 'undefined') {
-            LGlobal.wx = true;
-        }
-		LGlobal.isOldFirefox = (function(un){
+		if (typeof wx !== 'undefined' && typeof GameGlobal !== 'undefined') {
+			LGlobal.wx = true;
+		}
+		LGlobal.isOldFirefox = (function (un) {
 			var i = un.toLowerCase().indexOf('firefox');
 			if (i < 0) {
 				return false;
@@ -536,7 +536,7 @@ var LGlobal = ( function () {
 			LGlobal.canTouch = true;
 			LGlobal.android = true;
 			var i = n.indexOf(OS_ANDROID);
-			if(parseInt(n.substr(i + 8, 1)) > 3){
+			if (parseInt(n.substr(i + 8, 1)) > 3) {
 				LGlobal.android_new = true;
 			}
 		} else if (n.indexOf(OS_WINDOWS_PHONE) > 0) {
@@ -546,61 +546,61 @@ var LGlobal = ( function () {
 			LGlobal.os = OS_BLACK_BERRY;
 			LGlobal.canTouch = true;
 		}
-		if(LGlobal.ios){
+		if (LGlobal.ios) {
 			var v = n.match(/OS\s(\d+)_(\d+)_?(\d+)?/);
 			LGlobal.iOSversion = v ? [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)] : [];
 		}
 		LGlobal.mobile = LGlobal.canTouch;
 	})(navigator.userAgent);
 	LGlobal.setDebug = function (v) {
-		LGlobal.traceDebug = v; 
+		LGlobal.traceDebug = v;
 	};
 	LGlobal.setCanvas = function (id, w, h) {
 		LGlobal.ll_createCanvas(id, w, h);
 		LGlobal.ll_createStage();
-		if(LGlobal.displayState == LStage.FULL_SCREEN){
+		if (LGlobal.displayState == LStage.FULL_SCREEN) {
 			LGlobal.resize();
-		}else if(typeof LGlobal.displayState == "number"){
+		} else if (typeof LGlobal.displayState == "number") {
 			LGlobal.resize(LGlobal.canvasObj.width * LGlobal.displayState, LGlobal.canvasObj.height * LGlobal.displayState);
 		}
 		if (LGlobal.canTouch) {
 			LGlobal.ll_clicks = 0;
 			LGlobal.ll_prev_clickTime = 0;
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.TOUCH_START, LGlobal.ll_touchStart);
 			LEvent.addEventListener(document, LMouseEvent.TOUCH_END, LGlobal.ll_touchEnd);
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.TOUCH_MOVE, LGlobal.ll_touchMove);
 		} else {
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_DOWN, LGlobal.ll_mouseDown);
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_MOVE, LGlobal.ll_mouseMove);
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_UP, LGlobal.ll_mouseUp);
-			LEvent.addEventListener(LGlobal.canvasObj,LMouseEvent.MOUSE_OUT, LGlobal.ll_mouseOut);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.DOUBLE_CLICK, LGlobal.ll_mouseDbclick);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_DOWN, LGlobal.ll_mouseDown);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_MOVE, LGlobal.ll_mouseMove);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_UP, LGlobal.ll_mouseUp);
+			LEvent.addEventListener(LGlobal.canvasObj, LMouseEvent.MOUSE_OUT, LGlobal.ll_mouseOut);
 		}
 	};
 	LGlobal.ll_createCanvas = function (id, w, h) {
 		LGlobal.id = id;
-        if (LGlobal.wx) {
-            LGlobal.canvasObj = document.getElementsByTagName('canvas')[0];
-            LGlobal.object = {
-                style: {
-                    left: 0, top: 0
-                }
-            };
-            LGlobal.canvasObj.style = {
-                marginLeft: 0, marginTop: 0
-            };
-        } else {
+		if (LGlobal.wx) {
+			LGlobal.canvasObj = document.getElementsByTagName('canvas')[0];
+			LGlobal.object = {
+				style: {
+					left: 0, top: 0
+				}
+			};
+			LGlobal.canvasObj.style = {
+				marginLeft: 0, marginTop: 0
+			};
+		} else {
 			LGlobal.object = document.getElementById(id);
 			LGlobal.object.innerHTML = '<div style="position:absolute;margin:0;padding:0;overflow:visible;-webkit-transform: translateZ(0);z-index:0;">' +
-			'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:' + w + 'px;height:' + h + 'px;">' +
-			'<div id="noCanvas">' +
-			"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>" + 
-			'</div>' +  
-			'</canvas></div>' +
-			'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">' +
-			'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>' +
-			'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />' +
-			'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
+				'<canvas id="' + LGlobal.id + '_canvas" style="margin:0;padding:0;width:' + w + 'px;height:' + h + 'px;">' +
+				'<div id="noCanvas">' +
+				"<p>Hey there, it looks like you're using Microsoft's Internet Explorer. Microsoft hates the Web and doesn't support HTML5 :(</p>" +
+				'</div>' +
+				'</canvas></div>' +
+				'<div id="' + LGlobal.id + '_InputText" style="position:absolute;margin:0;padding:0;z-index:10;display:none;">' +
+				'<textarea rows="1" id="' + LGlobal.id + '_InputTextareaBox" style="resize:none;background:transparent;border:0px;"></textarea>' +
+				'<input type="text" id="' + LGlobal.id + '_InputTextBox"  style="background:transparent;border:0px;" />' +
+				'<input type="password" id="' + LGlobal.id + '_passwordBox"  style="background:transparent;border:0px;" /></div>';
 			LGlobal.canvasObj = document.getElementById(LGlobal.id + "_canvas");
 			LGlobal.inputBox = document.getElementById(LGlobal.id + '_InputText');
 			LGlobal.inputTextareaBoxObj = document.getElementById(LGlobal.id + '_InputTextareaBox');
@@ -610,30 +610,30 @@ var LGlobal = ( function () {
 		LGlobal._canvas = document.createElement("canvas");
 		LGlobal._context = LGlobal._canvas.getContext("2d");
 		if (LGlobal._context) {
-			LGlobal.canvasObj.innerHTML="";
+			LGlobal.canvasObj.innerHTML = "";
 		}
 		LGlobal.inputTextField = null;
-        if(LGlobal.wx){
-            LGlobal._content_width = w;
-            LGlobal._content_height = h;
-            if(LGlobal.canvasObj.width / LGlobal.canvasObj.height > w / h){
-                w = LGlobal.canvasObj.width * h / LGlobal.canvasObj.height;
-            }else{
-                h = LGlobal.canvasObj.height * w / LGlobal.canvasObj.width;
-            }
-        }
-        LGlobal.canvasObj.width = w;
-        LGlobal.canvasObj.height = h;
+		if (LGlobal.wx) {
+			LGlobal._content_width = w;
+			LGlobal._content_height = h;
+			if (LGlobal.canvasObj.width / LGlobal.canvasObj.height > w / h) {
+				w = LGlobal.canvasObj.width * h / LGlobal.canvasObj.height;
+			} else {
+				h = LGlobal.canvasObj.height * w / LGlobal.canvasObj.width;
+			}
+		}
+		LGlobal.canvasObj.width = w;
+		LGlobal.canvasObj.height = h;
 		LGlobal.width = LGlobal._content_width || w;
 		LGlobal.height = LGlobal._content_height || h;
 		LGlobal.canvasStyleWidth = LGlobal.canvasObj.width;
 		LGlobal.canvasStyleHeight = LGlobal.canvasObj.height;
-        LGlobal.canvas = (function() {
-            if (LGlobal.enableWebGL && typeof enableWebGLCanvas === 'function') {
-                return enableWebGLCanvas(LGlobal.canvasObj);
-            }
-            return LGlobal.canvasObj.getContext('2d');
-        })();
+		LGlobal.canvas = (function () {
+			if (LGlobal.enableWebGL && typeof enableWebGLCanvas === 'function') {
+				return enableWebGLCanvas(LGlobal.canvasObj);
+			}
+			return LGlobal.canvasObj.getContext('2d');
+		})();
 		LGlobal.offsetX = mouseX = 0;
 		LGlobal.offsetY = mouseY = 0;
 	};
@@ -641,24 +641,24 @@ var LGlobal = ( function () {
 		LGlobal.stage = new LSprite();
 		LGlobal.stage.parent = "root";
 		LGlobal.childList.push(LGlobal.stage);
-        if(LGlobal.wx){
-            LGlobal.stageMask = new LSprite();
-            LGlobal.childList.push(LGlobal.stageMask);
-        }
+		if (LGlobal.wx) {
+			LGlobal.stageMask = new LSprite();
+			LGlobal.childList.push(LGlobal.stageMask);
+		}
 		LGlobal.stage.baseAddEvent = LGlobal.stage.addEventListener;
 		LGlobal.stage.baseRemoveEvent = LGlobal.stage.removeEventListener;
 		LGlobal.stage.addEventListener = function (type, listener) {
 			if (type == LEvent.WINDOW_RESIZE || type == LEvent.WINDOW_ORIENTATIONCHANGE) {
-				if(type == LEvent.WINDOW_RESIZE){
+				if (type == LEvent.WINDOW_RESIZE) {
 					LGlobal.stage.onresizeListener = listener;
-				}else{
+				} else {
 					LGlobal.stage.onorientationchangeListener = listener;
 				}
-				if(!LGlobal.stage.onresize){
+				if (!LGlobal.stage.onresize) {
 					LGlobal.stage.onresize = function (e) {
 						LGlobal.stage.onresizeEvent = e;
 					};
-					LEvent.addEventListener(LGlobal.window, type,LGlobal.stage.onresize);
+					LEvent.addEventListener(LGlobal.window, type, LGlobal.stage.onresize);
 				}
 			} else if (type == LKeyboardEvent.KEY_DOWN || type == LKeyboardEvent.KEY_UP || type == LKeyboardEvent.KEY_PRESS) {
 				LEvent.addEventListener(LGlobal.window, type, listener);
@@ -668,14 +668,14 @@ var LGlobal = ( function () {
 		};
 		LGlobal.stage.removeEventListener = function (type, listener) {
 			if (type == LEvent.WINDOW_RESIZE || type == LEvent.WINDOW_ORIENTATIONCHANGE) {
-				if(type == LEvent.WINDOW_RESIZE){
+				if (type == LEvent.WINDOW_RESIZE) {
 					delete LGlobal.stage.onresizeListener;
-					if(LGlobal.stage.onorientationchangeListener){
+					if (LGlobal.stage.onorientationchangeListener) {
 						return;
 					}
-				}else{
+				} else {
 					delete LGlobal.stage.onorientationchangeListener;
-					if(LGlobal.stage.onresizeListener){
+					if (LGlobal.stage.onresizeListener) {
 						return;
 					}
 				}
@@ -689,7 +689,7 @@ var LGlobal = ( function () {
 		};
 		LGlobal.innerWidth = window.innerWidth;
 		LGlobal.innerHeight = window.innerHeight;
-		LEvent.addEventListener(LGlobal.window, "blur", function(){
+		LEvent.addEventListener(LGlobal.window, "blur", function () {
 			LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 		});
 	};
@@ -706,8 +706,8 @@ var LGlobal = ( function () {
 		if (LMultitouch.inputMode == LMultitouchInputMode.NONE) {
 			eve = LGlobal.ll_touchStartEvent(event, 0, canvasX, canvasY);
 		} else if (LMultitouch.inputMode == LMultitouchInputMode.TOUCH_POINT) {
-			for (var i = 0,l = event.touches.length; i < l; i++) {
-				if(!LMultitouch.touchs["touch" + event.touches[i].identifier]){
+			for (var i = 0, l = event.touches.length; i < l; i++) {
+				if (!LMultitouch.touchs["touch" + event.touches[i].identifier]) {
 					eve = LGlobal.ll_touchStartEvent(event, i, canvasX, canvasY);
 				}
 			}
@@ -726,14 +726,16 @@ var LGlobal = ( function () {
 		LGlobal.touchHandler(event);
 		LSound.startLoad();
 	};
-	LGlobal.ll_touchStartEvent = function (event,eveIndex,canvasX,canvasY) {
-		var eve = {offsetX : (event.touches[eveIndex].pageX - canvasX),
-		offsetY : (event.touches[eveIndex].pageY - canvasY),
-		touchPointID : event.touches[eveIndex].identifier,
-		force : event.touches[eveIndex].force,
-		rotationAngle : event.touches[eveIndex].rotationAngle,
-		radiusX : event.touches[eveIndex].radiusX,
-		radiusY : event.touches[eveIndex].radiusY};
+	LGlobal.ll_touchStartEvent = function (event, eveIndex, canvasX, canvasY) {
+		var eve = {
+			offsetX: (event.touches[eveIndex].pageX - canvasX),
+			offsetY: (event.touches[eveIndex].pageY - canvasY),
+			touchPointID: event.touches[eveIndex].identifier,
+			force: event.touches[eveIndex].force,
+			rotationAngle: event.touches[eveIndex].rotationAngle,
+			radiusX: event.touches[eveIndex].radiusX,
+			radiusY: event.touches[eveIndex].radiusY
+		};
 		eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
 		eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 		mouseX = LGlobal.offsetX = eve.offsetX;
@@ -750,7 +752,7 @@ var LGlobal = ( function () {
 			for (k in LMultitouch.touchs) {
 				e = LMultitouch.touchs[k];
 				h = false;
-				for (i = 0,l = event.touches.length; i < l; i++) {
+				for (i = 0, l = event.touches.length; i < l; i++) {
 					if (event.touches[i].identifier == e.touchPointID) {
 						h = true;
 						break;
@@ -764,7 +766,7 @@ var LGlobal = ( function () {
 			}
 		}
 		if (!eve) {
-			eve = {offsetX : LGlobal.offsetX, offsetY : LGlobal.offsetY};
+			eve = { offsetX: LGlobal.offsetX, offsetY: LGlobal.offsetY };
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_UP);
 		}
 		LGlobal.touchHandler(event);
@@ -782,21 +784,21 @@ var LGlobal = ( function () {
 			ll = 1;
 		}
 		for (var i = 0, l = e.touches.length; i < l && i < ll; i++) {
-			eve = {offsetX : (e.touches[i].pageX - cX), offsetY : (e.touches[i].pageY - cY), touchPointID : e.touches[i].identifier};
+			eve = { offsetX: (e.touches[i].pageX - cX), offsetY: (e.touches[i].pageY - cY), touchPointID: e.touches[i].identifier };
 			eve.offsetX = LGlobal.ll_scaleX(eve.offsetX);
 			eve.offsetY = LGlobal.ll_scaleY(eve.offsetY);
 			mouseX = LGlobal.offsetX = eve.offsetX;
 			mouseY = LGlobal.offsetY = eve.offsetY;
-			if (LMultitouch.touchs["touch" + eve.touchPointID] && 
-				LMultitouch.touchs["touch" + eve.touchPointID].offsetX == eve.offsetX && 
-				LMultitouch.touchs["touch" + eve.touchPointID].offsetY == eve.offsetY){
-				continue;	
+			if (LMultitouch.touchs["touch" + eve.touchPointID] &&
+				LMultitouch.touchs["touch" + eve.touchPointID].offsetX == eve.offsetX &&
+				LMultitouch.touchs["touch" + eve.touchPointID].offsetY == eve.offsetY) {
+				continue;
 			}
 			LGlobal.buttonStatusEvent = eve;
 			LMultitouch.touchs["touch" + eve.touchPointID] = eve;
-			if(eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.canvasObj.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.canvasObj.height){
+			if (eve.offsetX <= 0 || eve.offsetX >= LGlobal.innerWidth || eve.offsetX >= LGlobal.canvasObj.width || eve.offsetY <= 0 || eve.offsetY >= LGlobal.innerHeight || eve.offsetY >= LGlobal.canvasObj.height) {
 				LGlobal._outStageCheckCount = 0;
-			}else{
+			} else {
 				LGlobal._outStageCheckCount = 1;
 			}
 			LGlobal.mouseEvent(eve, LMouseEvent.MOUSE_MOVE);
@@ -811,7 +813,7 @@ var LGlobal = ( function () {
 			e.offsetX = e.layerX;
 			e.offsetY = e.layerY;
 		}
-		var event = {button : e.button};
+		var event = { button: e.button };
 		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.DOUBLE_CLICK);
@@ -824,7 +826,7 @@ var LGlobal = ( function () {
 		if (LGlobal.inputTextField) {
 			LGlobal.inputTextField._ll_getValue();
 		}
-		var event = {button : e.button};
+		var event = { button: e.button };
 		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_DOWN);
@@ -846,13 +848,13 @@ var LGlobal = ( function () {
 		mouseX = LGlobal.offsetX = event.offsetX;
 		mouseY = LGlobal.offsetY = event.offsetY;
 		LGlobal.cursor = "default";
-		if(mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.canvasObj.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.canvasObj.height){
-			if(LGlobal._outStageCheckCount){
+		if (mouseX <= 0 || mouseX >= LGlobal.innerWidth || mouseX >= LGlobal.canvasObj.width || mouseY <= 0 || mouseY >= LGlobal.innerHeight || mouseY >= LGlobal.canvasObj.height) {
+			if (LGlobal._outStageCheckCount) {
 				LGlobal._outStageCheckCount = 0;
 				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 			}
-		}else{
-			if(!LGlobal._outStageCheckCount){
+		} else {
+			if (!LGlobal._outStageCheckCount) {
 				LGlobal._outStageCheckCount = 1;
 				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_IN));
 			}
@@ -868,7 +870,7 @@ var LGlobal = ( function () {
 			e.offsetX = e.layerX;
 			e.offsetY = e.layerY;
 		}
-		var event = {button : e.button};
+		var event = { button: e.button };
 		event.offsetX = LGlobal.ll_scaleX(e.offsetX);
 		event.offsetY = LGlobal.ll_scaleY(e.offsetY);
 		LGlobal.mouseEvent(event, LMouseEvent.MOUSE_UP);
@@ -916,7 +918,7 @@ var LGlobal = ( function () {
 	};
 	LGlobal.dragHandler = function (e) {
 		var i, s, c, d = LGlobal.dragList;
-		for(i = d.length - 1; i >= 0; i--) {
+		for (i = d.length - 1; i >= 0; i--) {
 			s = d[i];
 			if (LGlobal.canTouch && s.ll_touchPointID != e.touchPointID) {
 				continue;
@@ -927,12 +929,12 @@ var LGlobal = ( function () {
 			if (s.dragRange) {
 				if (s.x < s.dragRange.left) {
 					s.x = s.dragRange.left;
-				} else if(s.x > s.dragRange.right){
+				} else if (s.x > s.dragRange.right) {
 					s.x = s.dragRange.right;
 				}
 				if (s.y < s.dragRange.top) {
 					s.y = s.dragRange.top;
-				} else if(s.y > s.dragRange.bottom){
+				} else if (s.y > s.dragRange.bottom) {
 					s.y = s.dragRange.bottom;
 				}
 			}
@@ -940,12 +942,12 @@ var LGlobal = ( function () {
 		}
 	};
 	LGlobal._ll_mobile = function () {
-		var w1 = LGlobal.canvasObj.width * 0.3, h1 = w1 * 1.5, s = LGlobal.canvasObj.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15, 
-		sx = w1 * 0.3, sh = h1 * 0.20, c = '#cccccc', d = '#000000', f = '#ffffff', h = '#ff0000', b, w1, h1, m, m1, n, v;
+		var w1 = LGlobal.canvasObj.width * 0.3, h1 = w1 * 1.5, s = LGlobal.canvasObj.width * 0.05, ss = w1 * 0.05, sm = w1 * 0.15,
+			sx = w1 * 0.3, sh = h1 * 0.20, c = '#cccccc', d = '#000000', f = '#ffffff', h = '#ff0000', b, w1, h1, m, m1, n, v;
 		b = new LSprite();
 		addChild(b);
 		w1 = LGlobal.canvasObj.width * 0.3, h1 = w1 * 1.5;
-		b.graphics.drawRoundRect(1, d, [s, s, w1, h1, s],true,c);
+		b.graphics.drawRoundRect(1, d, [s, s, w1, h1, s], true, c);
 		b.graphics.drawRoundRect(1, d, [s + ss, s + ss, w1 - ss * 2, h1 - ss * 2, s], true, d);
 		b.graphics.drawRect(1, f, [s + sm, s + sh, w1 - sm * 2, h1 - sh * 2], true, f);
 		b.graphics.drawArc(1, f, [s + w1 * 0.5, s + h1 - ss * 3.5, ss * 1.5, 0, 2 * Math.PI]);
@@ -966,7 +968,7 @@ var LGlobal = ( function () {
 		n.addChild(m1);
 		b.addChild(n);
 		v = new LSprite();
-		v.graphics.drawVertices(2, d, [[0, 0], [sm, sm ], [0, sm * 2]], true, c);
+		v.graphics.drawVertices(2, d, [[0, 0], [sm, sm], [0, sm * 2]], true, c);
 		v.x = s * 1.5 + h1;
 		v.y = s * 1.5 + h1 * 0.5;
 		addChild(v);
@@ -1005,13 +1007,13 @@ var LGlobal = ( function () {
 		if (LGlobal.canvas == null) {
 			return;
 		}
-		if(LGlobal.enableWebGL){
+		if (LGlobal.enableWebGL) {
 			LGlobal.canvas.start2D();
 			LGlobal.canvas.globalAlpha = 1;
 		}
-		if(LGlobal._outStageCheckCount <= 0){
+		if (LGlobal._outStageCheckCount <= 0) {
 			LGlobal._outStageCheckCount--;
-			if(LGlobal._outStageCheckCount < -2){
+			if (LGlobal._outStageCheckCount < -2) {
 				LGlobal.stage.dispatchEvent(new LEvent(LFocusEvent.FOCUS_OUT));
 				LGlobal._outStageCheckCount = 1;
 			}
@@ -1020,11 +1022,11 @@ var LGlobal = ( function () {
 			LGlobal.fpsStatus.reset();
 		}
 		if (LGlobal.stage.onresizeEvent) {
-			if(LGlobal.stage.onresizeListener){
+			if (LGlobal.stage.onresizeListener) {
 				LGlobal.stage.onresizeListener(LGlobal.stage.onresizeEvent);
 			}
-			if(LGlobal.stage.onorientationchangeListener){
-				LGlobal.stage.onorientationchangeListener({orientation:(window.innerWidth > window.innerHeight ? LANDSCAPE : PORTRAIT)});
+			if (LGlobal.stage.onorientationchangeListener) {
+				LGlobal.stage.onorientationchangeListener({ orientation: (window.innerWidth > window.innerHeight ? LANDSCAPE : PORTRAIT) });
 			}
 			delete LGlobal.stage.onresizeEvent;
 		}
@@ -1048,7 +1050,7 @@ var LGlobal = ( function () {
 			}
 		}
 		LGlobal.show(LGlobal.childList, LGlobal.canvas);
-		if(LGlobal.enableWebGL){
+		if (LGlobal.enableWebGL) {
 			LGlobal.canvas.finish2D();
 		}
 	};
@@ -1058,7 +1060,7 @@ var LGlobal = ( function () {
 			c = s[i];
 			if (c && c.ll_show) {
 				c.ll_show(ctx);
-				if(c._ll_removeFromSelf){
+				if (c._ll_removeFromSelf) {
 					i--;
 					l--;
 				}
@@ -1070,20 +1072,20 @@ var LGlobal = ( function () {
 		for (i = 0; i < row; i++) {
 			c = [];
 			for (j = 0; j < col; j++) {
-				c.push({x : cw * j, y : ch * i, width : cw, height : ch});
+				c.push({ x: cw * j, y: ch * i, width: cw, height: ch });
 			}
 			r.push(c);
 		}
 		return r;
 	};
 	LGlobal._create_loading_color = function () {
-		var co = LGlobal.canvas.createRadialGradient(LGlobal.canvasObj.width / 2, LGlobal.canvasObj.height, 0, LGlobal.canvasObj.width / 2, 0, LGlobal.canvasObj.height);  
-		co.addColorStop(0, "red");  
-		co.addColorStop(0.3, "orange");  
-		co.addColorStop(0.4, "yellow");  
-		co.addColorStop(0.5, "green");  
-		co.addColorStop(0.8, "blue");  
-		co.addColorStop(1, "violet");  
+		var co = LGlobal.canvas.createRadialGradient(LGlobal.canvasObj.width / 2, LGlobal.canvasObj.height, 0, LGlobal.canvasObj.width / 2, 0, LGlobal.canvasObj.height);
+		co.addColorStop(0, "red");
+		co.addColorStop(0.3, "orange");
+		co.addColorStop(0.4, "yellow");
+		co.addColorStop(0.5, "green");
+		co.addColorStop(0.8, "blue");
+		co.addColorStop(1, "violet");
 		return co;
 	};
 	LGlobal.hitPolygon = function (list, x, y) {
@@ -1098,7 +1100,7 @@ var LGlobal = ( function () {
 						c += (b0y ? -1 : 1);
 					}
 				} else {
-					if (x <= (p0[0] + (p1[0] - p0[0]) * (y - p0[1] ) / (p1[1] - p0[1]))) {
+					if (x <= (p0[0] + (p1[0] - p0[0]) * (y - p0[1]) / (p1[1] - p0[1]))) {
 						c += (b0y ? -1 : 1);
 					}
 				}
@@ -1159,11 +1161,11 @@ var LGlobal = ( function () {
 	};
 	LGlobal.hitTestArc = function (objA, objB, objAR, objBR) {
 		var rA = objA.getWidth() * 0.5
-		,rB = objB.getWidth() * 0.5
-		,xA = objA._startX ? objA._startX() : objA.startX()
-		,xB = objB._startX ? objB._startX() : objB.startX()
-		,yA = objA._startY ? objA._startY() : objA.startY()
-		,yB = objB._startY ? objB._startY() : objB.startY();
+			, rB = objB.getWidth() * 0.5
+			, xA = objA._startX ? objA._startX() : objA.startX()
+			, xB = objB._startX ? objB._startX() : objB.startX()
+			, yA = objA._startY ? objA._startY() : objA.startY()
+			, yB = objB._startY ? objB._startY() : objB.startY();
 		if (typeof objAR != UNDEFINED) {
 			xA += (rA - objAR);
 			yA += (rA - objAR);
@@ -1175,18 +1177,18 @@ var LGlobal = ( function () {
 			rB = objBR;
 		}
 		var disx = xA + rA - xB - rB
-		,disy = yA + rA - yB - rB;
+			, disy = yA + rA - yB - rB;
 		return disx * disx + disy * disy < (rA + rB) * (rA + rB);
 	};
 	LGlobal.hitTestRect = function (objA, objB, vecA, vecB) {
 		var wA = objA.getWidth()
-		,wB = objB.getWidth()
-		,hA = objA.getHeight()
-		,hB = objB.getHeight()
-		,xA = objA._startX ? objA._startX() : objA.startX()
-		,xB = objB._startX ? objB._startX() : objB.startX()
-		,yA = objA._startY ? objA._startY() : objA.startY()
-		,yB = objB._startY ? objB._startY() : objB.startY();
+			, wB = objB.getWidth()
+			, hA = objA.getHeight()
+			, hB = objB.getHeight()
+			, xA = objA._startX ? objA._startX() : objA.startX()
+			, xB = objB._startX ? objB._startX() : objB.startX()
+			, yA = objA._startY ? objA._startY() : objA.startY()
+			, yB = objB._startY ? objB._startY() : objB.startY();
 		if (typeof vecA != UNDEFINED) {
 			xA += (wA - vecA[0]) * 0.5;
 			yA += (hA - vecA[1]) * 0.5;
@@ -1200,37 +1202,39 @@ var LGlobal = ( function () {
 			hB = vecB[1];
 		}
 		var minx = xA > xB ? xA : xB
-		,miny = yA > yB ? yA : yB
-		,maxx = (xA + wA) > (xB + wB) ? (xB + wB) : (xA + wA)
-		,maxy = (yA + hA) > (yB + hB) ? (yB + hB) : (yA + hA);
+			, miny = yA > yB ? yA : yB
+			, maxx = (xA + wA) > (xB + wB) ? (xB + wB) : (xA + wA)
+			, maxy = (yA + hA) > (yB + hB) ? (yB + hB) : (yA + hA);
 		return minx <= maxx && miny <= maxy;
 	};
 	LGlobal.hitTest = LGlobal.hitTestRect;
 	LGlobal.setFrameRate = function (s) {
-		if (LGlobal.frameRate) {
-			clearInterval(LGlobal.frameRate);
+		if (!LGlobal._setFrameRate) {
+			return;
+		}
+		if (LGlobal.requestId) {
+			var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
+			cancelAnimationFrame(LGlobal.requestId);
 		}
 		LGlobal.speed = s;
-		LGlobal.frameRate = setInterval(function () {
-			LGlobal.onShow();
-		}, s);
+		LGlobal._setFrameRate(s);
 	};
 	LGlobal.ll_scaleX = function (v) {
-		return (v - LGlobal.left) * LGlobal.canvasObj.width/LGlobal.canvasStyleWidth;
+		return (v - LGlobal.left) * LGlobal.canvasObj.width / LGlobal.canvasStyleWidth;
 	};
 	LGlobal.ll_scaleY = function (v) {
 		return (v - LGlobal.top) * LGlobal.canvasObj.height / LGlobal.canvasStyleHeight;
 	};
 	LGlobal.ll_setStageSize = function (w, h) {
-		w =  Math.ceil(w);
-		h =  Math.ceil(h);
+		w = Math.ceil(w);
+		h = Math.ceil(h);
 		LGlobal.canvasObj.style.width = w + "px";
 		LGlobal.canvasObj.style.height = h + "px";
 		LGlobal.canvasStyleWidth = w;
 		LGlobal.canvasStyleHeight = h;
 	};
 	LGlobal.resize = function (canvasW, canvasH) {
-        LGlobal.resizeWx(canvasW, canvasH);
+		LGlobal.resizeWx(canvasW, canvasH);
 		var w, h, t = 0, l = 0, ww = window.innerWidth, wh = window.innerHeight;
 		LGlobal.innerWidth = ww;
 		LGlobal.innerHeight = wh;
@@ -1245,61 +1249,61 @@ var LGlobal = ( function () {
 			h = canvasH || LGlobal.canvasObj.height;
 		}
 		switch (LGlobal.stageScale) {
-		case "exactFit":
-			w = canvasW || ww;
-			h = canvasH || wh;
-			break;
-		case "noBorder":
-			w = canvasW || ww;
-			h = canvasH || LGlobal.canvasObj.height*ww/LGlobal.canvasObj.width;
-			switch (LGlobal.align) {
-			case LStageAlign.BOTTOM:
-			case LStageAlign.BOTTOM_LEFT:
-			case LStageAlign.BOTTOM_RIGHT:
-			case LStageAlign.BOTTOM_MIDDLE:
-				t = wh - h;
-				break;
-			}
-		break;
-		case "showAll":
-			if (ww / wh > LGlobal.canvasObj.width / LGlobal.canvasObj.height) {
+			case "exactFit":
+				w = canvasW || ww;
 				h = canvasH || wh;
-				w = canvasW || LGlobal.canvasObj.width * wh / LGlobal.canvasObj.height;
-			} else {
+				break;
+			case "noBorder":
 				w = canvasW || ww;
 				h = canvasH || LGlobal.canvasObj.height * ww / LGlobal.canvasObj.width;
-			}
-		case "noScale":
-		default:
-			switch (LGlobal.align) {
-			case LStageAlign.BOTTOM:
-			case LStageAlign.BOTTOM_LEFT:
-				t = wh - h;
+				switch (LGlobal.align) {
+					case LStageAlign.BOTTOM:
+					case LStageAlign.BOTTOM_LEFT:
+					case LStageAlign.BOTTOM_RIGHT:
+					case LStageAlign.BOTTOM_MIDDLE:
+						t = wh - h;
+						break;
+				}
 				break;
-			case LStageAlign.RIGHT:
-			case LStageAlign.TOP_RIGHT:
-				l = ww - w;
-				break;
-			case LStageAlign.TOP_MIDDLE:
-				l = (ww - w) * 0.5;
-				break;
-			case LStageAlign.BOTTOM_RIGHT:
-				t = wh - h;
-				l = ww - w;
-				break;
-			case LStageAlign.BOTTOM_MIDDLE:
-				t = wh - h;
-				l = (ww - w) * 0.5;
-				break;
-			case LStageAlign.MIDDLE:
-				t = (wh - h) * 0.5;
-				l = (ww - w) * 0.5;
-				break;
-			case LStageAlign.TOP:
-			case LStageAlign.LEFT:
-			case LStageAlign.TOP_LEFT:
+			case "showAll":
+				if (ww / wh > LGlobal.canvasObj.width / LGlobal.canvasObj.height) {
+					h = canvasH || wh;
+					w = canvasW || LGlobal.canvasObj.width * wh / LGlobal.canvasObj.height;
+				} else {
+					w = canvasW || ww;
+					h = canvasH || LGlobal.canvasObj.height * ww / LGlobal.canvasObj.width;
+				}
+			case "noScale":
 			default:
-			}
+				switch (LGlobal.align) {
+					case LStageAlign.BOTTOM:
+					case LStageAlign.BOTTOM_LEFT:
+						t = wh - h;
+						break;
+					case LStageAlign.RIGHT:
+					case LStageAlign.TOP_RIGHT:
+						l = ww - w;
+						break;
+					case LStageAlign.TOP_MIDDLE:
+						l = (ww - w) * 0.5;
+						break;
+					case LStageAlign.BOTTOM_RIGHT:
+						t = wh - h;
+						l = ww - w;
+						break;
+					case LStageAlign.BOTTOM_MIDDLE:
+						t = wh - h;
+						l = (ww - w) * 0.5;
+						break;
+					case LStageAlign.MIDDLE:
+						t = (wh - h) * 0.5;
+						l = (ww - w) * 0.5;
+						break;
+					case LStageAlign.TOP:
+					case LStageAlign.LEFT:
+					case LStageAlign.TOP_LEFT:
+					default:
+				}
 		}
 		LGlobal.canvasObj.style.marginTop = t + "px";
 		LGlobal.canvasObj.style.marginLeft = l + "px";
@@ -1310,41 +1314,41 @@ var LGlobal = ( function () {
 		LGlobal.ll_setStageSize(w, h);
 	};
 	LGlobal.resizeWx = function (canvasW, canvasH) {
-        if(!LGlobal.wx){
-            return;
-        }
-        LGlobal.stageMask.removeAllChild();
-        canvasW = canvasW || LGlobal._content_width;
-        canvasH = canvasH || LGlobal._content_height;
-        if(LGlobal.stageScale === "exactFit"){
-            LGlobal.canvasObj.width = LGlobal._content_width;
-            LGlobal.canvasObj.height = LGlobal._content_height;
-        }else if(LGlobal.stageScale === "showAll"){
-            LGlobal.stage.x = (LGlobal.canvasObj.width - LGlobal._content_width) * 0.5;
-            LGlobal.stage.y = (LGlobal.canvasObj.height - LGlobal._content_height) * 0.5;
-        }
+		if (!LGlobal.wx) {
+			return;
+		}
+		LGlobal.stageMask.removeAllChild();
+		canvasW = canvasW || LGlobal._content_width;
+		canvasH = canvasH || LGlobal._content_height;
+		if (LGlobal.stageScale === "exactFit") {
+			LGlobal.canvasObj.width = LGlobal._content_width;
+			LGlobal.canvasObj.height = LGlobal._content_height;
+		} else if (LGlobal.stageScale === "showAll") {
+			LGlobal.stage.x = (LGlobal.canvasObj.width - LGlobal._content_width) * 0.5;
+			LGlobal.stage.y = (LGlobal.canvasObj.height - LGlobal._content_height) * 0.5;
+		}
 		var shape;
-        if(LGlobal.stage.x > 0){
-            shape = new LShape();
-            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
-            LGlobal.stageMask.addChild(shape);
-            shape = new LShape();
-            shape.x = LGlobal.canvasObj.width - LGlobal.stage.x;
-            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
-            LGlobal.stageMask.addChild(shape);
-        }else if(LGlobal.stage.y > 0){
-            shape = new LShape();
-            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
-            LGlobal.stageMask.addChild(shape);
-            shape = new LShape();
-            shape.x = LGlobal.canvasObj.height - LGlobal.stage.y;
-            shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
-            LGlobal.stageMask.addChild(shape);
-        }
+		if (LGlobal.stage.x > 0) {
+			shape = new LShape();
+			shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
+			LGlobal.stageMask.addChild(shape);
+			shape = new LShape();
+			shape.x = LGlobal.canvasObj.width - LGlobal.stage.x;
+			shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.stage.x, LGlobal.canvasObj.height], true, "#000000");
+			LGlobal.stageMask.addChild(shape);
+		} else if (LGlobal.stage.y > 0) {
+			shape = new LShape();
+			shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
+			LGlobal.stageMask.addChild(shape);
+			shape = new LShape();
+			shape.x = LGlobal.canvasObj.height - LGlobal.stage.y;
+			shape.graphics.drawRect(1, "#000000", [0, 0, LGlobal.canvasObj.width, LGlobal.stage.y], true, "#000000");
+			LGlobal.stageMask.addChild(shape);
+		}
 	};
 	LGlobal.sleep = function (s) {
-		var d = new Date();   
-		while ((new Date().getTime() - d.getTime()) < s) {}
+		var d = new Date();
+		while ((new Date().getTime() - d.getTime()) < s) { }
 	};
 	LGlobal.screen = function (a) {
 		LGlobal.displayState = a;
@@ -1662,17 +1666,18 @@ function init(s, c, w, h, f, t) {
     LGlobal._requestAFBaseTime = (new Date()).getTime();
     loop = function () {
       var now = (new Date()).getTime();
-      if (now - LGlobal._now > s * 2) {
-        LGlobal._requestAFBaseTime = now - s;
+      if (now - LGlobal._now > LGlobal.speed * 2) {
+        LGlobal._requestAFBaseTime = now - LGlobal.speed;
       }
       LGlobal._now = now;
       var check = now - LGlobal._requestAFBaseTime;
-      if (check / s >= 0.99) {
-        LGlobal._requestAFBaseTime += s;
+      if (check / LGlobal.speed >= 0.99) {
+        LGlobal._requestAFBaseTime += LGlobal.speed;
         LGlobal.onShow();
       }
-      LGlobal.requestId = _requestAF(loop, s);
+      LGlobal.requestId = _requestAF(loop, LGlobal.speed);
     };
+    LGlobal._setFrameRate = loop;
   }
   if (document.readyState === "complete") {
     LGlobal.setCanvas(c, w, h);
@@ -1772,7 +1777,7 @@ var LObject = (function () {
 					s[k] = a[k];
 				} else if (Array.isArray(a[k])) {
 					s[k] = a[k].slice();
-				} 
+				}
 			}
 			if (a.mask) {
 				s.mask = a.mask.clone();
@@ -2112,7 +2117,7 @@ var LEventDispatcher = (function () {
 				if (!s._eventList[i]) {
 					continue;
 				}
-				if (type == s._eventList[i].type 
+				if (type == s._eventList[i].type
 					&& (!listener || s._eventList[i].listener == listener)
 					&& (!_this || !s._eventList[i]._this || s._eventList[i]._this.objectIndex == _this.objectIndex)) {
 					s._eventList.splice(i, 1);
@@ -2568,7 +2573,7 @@ var LInteractiveObject = (function() {
 					if (!s.mouseList[i]) {
 						continue;
 					}
-					if (type == s.mouseList[i].type 
+					if (type == s.mouseList[i].type
 						&& (!listener || s.mouseList[i].listener == listener)
 						&& (!_this || !s.mouseList[i]._this || s.mouseList[i]._this.objectIndex == _this.objectIndex)) {
 						s.mouseList.splice(i, 1);
@@ -2620,7 +2625,7 @@ var LInteractiveObject = (function() {
 		LInteractiveObject.prototype[k] = p[k];
 	}
 	return LInteractiveObject;
-})(); 
+})();
 var LDisplayObjectContainer = (function () {
   function LDisplayObjectContainer() {
     var s = this;
@@ -3539,7 +3544,7 @@ var LSound = (function () {
 		add : function (obj) {
 			if (LSound.Container.list.indexOf(obj) >= 0) {
 				return;
-			} 
+			}
 			LSound.Container.list.push(obj);
 		},
 		remove : function (obj) {
@@ -3564,21 +3569,18 @@ var LSound = (function () {
 	return LSound;
 })();
 var LVideo = (function () {
-	function LVideo (u) {
+	function LVideo(u) {
 		var s = this;
 		LExtends(s, LMedia, []);
 		s.type = "LVideo";
 		s._type = "video";
 		s.rotatex = 0;
 		s.rotatey = 0;
-		var strTag = "";
-		if(LGlobal.os == OS_IPHONE && LGlobal.iOSversion[0] >= 10){
-			s.sound = new LSound();
-			strTag = " muted playsinline ";
-		}
+		s.sound = new LSound();
+		var strTag = " muted playsinline ";
 		var div = document.createElement("div");
 		div.id = "div_video_" + s.objectIndex;
-		div.innerHTML = '<video id="video_'+s.objectIndex+'" '+strTag+' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
+		div.innerHTML = '<video id="video_' + s.objectIndex + '" ' + strTag + ' style="opacity: 1;width:0px;height:0px;position:absolute;index-z:-999;">';
 		document.body.appendChild(div);
 		s.data = document.getElementById("video_" + s.objectIndex);
 		s.data.loop = false;
@@ -3588,64 +3590,59 @@ var LVideo = (function () {
 		}
 	}
 	var p = {
-		_ll_show : function (c) {
+		_ll_show: function (c) {
 			var s = this;
+			s.data.currentTime = s.sound.getCurrentTime();
 			c.drawImage(s.data, s.x, s.y);
 		},
-		load : function(u){
+		load: function (u) {
 			var s = this;
-			s.callParent("load", arguments);
-			if(s.sound){
-				s.sound.load(u);
-			}
+			s.sound.load(u);
+			LAjax.responseType = LAjax.ARRAY_BUFFER;
+			LAjax.get(u, {}, function (arrayBuffer) {
+				var blob = new Blob([arrayBuffer]);
+				s.data.src = URL.createObjectURL(blob);
+				s.onload();
+			});
 		},
-		play : function (c, l, to) {
+		play: function (c, l, to) {
 			var s = this;
-			s.callParent("play", arguments);
-			if(s.sound){
-				s.sound.play(c, l, to);
-			}
+			s.sound.play(c, l, to);
 		},
-		stop : function () {
+		stop: function () {
 			var s = this;
-			s.callParent("stop", arguments);
-			if(s.sound){
-				s.sound.stop();
-			}
+			s.sound.stop();
 		},
-		setVolume : function (v) {
+		setVolume: function (v) {
 			var s = this;
-			if(s.sound){
-				s.sound.setVolume(v);
-			}else{
-				s.callParent("setVolume", arguments);
-			}
+			s.sound.setVolume(v);
 		},
-		getVolume : function () {
+		getVolume: function () {
 			var s = this;
-			if(s.sound){
-				return s.sound.getVolume();
-			}else{
-				return s.callParent("getVolume", arguments);
-			}
+			return s.sound.getVolume();
 		},
-		close : function () {
+		getCurrentTime: function () {
 			var s = this;
-			s.callParent("close", arguments);
-			if(s.sound){
-				s.sound.close();
-			}
+			return s.sound.getCurrentTime();
 		},
-		die : function () {
+		setCurrentTime: function (v) {
+			var s = this;
+			s.sound.data.currentTime = v;
+		},
+		close: function () {
+			var s = this;
+			s.sound.close();
+		},
+		die: function () {
 			var s = this;
 			document.body.removeChild(document.getElementById("div_video_" + s.objectIndex));
 			delete s.data;
 			delete s.sound;
 		},
-		getWidth : function () {
+		getWidth: function () {
 			return this.data.width;
 		},
-		getHeight : function () {
+		getHeight: function () {
 			return this.data.height;
 		}
 	};
@@ -3976,7 +3973,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4009,7 +4006,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4039,7 +4036,7 @@ var LGraphics = (function () {
 							s.bitmap.width, s.bitmap.height,
 							0, 0,
 							s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4081,7 +4078,7 @@ var LGraphics = (function () {
 							s.bitmap.width, s.bitmap.height,
 							0, 0,
 							s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -4118,7 +4115,7 @@ var LGraphics = (function () {
 					c.drawImage(s.bitmap.image,
 							s.bitmap.x, s.bitmap.y, s.bitmap.width, s.bitmap.height,
 							0, 0, s.bitmap.width, s.bitmap.height);
-					c.restore(); 
+					c.restore();
 					s.bitmap = null;
 					return;
 				}
@@ -5114,7 +5111,7 @@ var LButton = (function () {
 			}
 			s.upState.visible = false;
 			s.overState.visible = false;
-			s.downState.visible = true;	
+			s.downState.visible = true;
 			s._tweenOver = s.ll_modeOver;
 			onComplete = function(obj){
 				var s = obj.parent;
@@ -5327,12 +5324,46 @@ var LTextField = (function () {
     s.displayAsPassword = false;
     s.wordWrap = false;
     s.multiline = false;
+    s.wordBoundaryMode = LTextField.WordBoundaryMode.None;
     s.numLines = 1;
     s.speed = 0;
     s._speedIndex = 100;
   }
   LTextField.HEIGHT_MODE_BOTTOM = "bottom";
   LTextField.HEIGHT_MODE_BASELINE = "baseline";
+  LTextField.WordBoundaryMode = {
+    None: "none",
+    NewLine: "newLine",
+    NewLineMark: "newLineMark"
+  };
+  function findWordBoundary(text, startPos, lineStartPos) {
+    if (startPos <= lineStartPos || startPos < 0 || startPos > text.length) {
+      return startPos;
+    }
+    var wordCharPattern = /[a-zA-Z0-9\-']/;
+    var searchStart = Math.max(lineStartPos, startPos - 100);
+    for (var i = startPos - 1; i >= searchStart; i--) {
+      var char = text.charAt(i);
+      if (char === ' ' || char === '\t') {
+        var boundary = i + 1;
+        while (boundary < text.length && (text.charAt(boundary) === ' ' || text.charAt(boundary) === '\t')) {
+          boundary++;
+        }
+        return boundary;
+      }
+      if (/[\u4e00-\u9fa5]/.test(char)) {
+        return i + 1;
+      }
+      if (i + 1 < startPos) {
+        var currentIsWord = wordCharPattern.test(char);
+        var nextIsWord = wordCharPattern.test(text.charAt(i + 1));
+        if (!currentIsWord && nextIsWord) {
+          return i + 1;
+        }
+      }
+    }
+    return startPos;
+  }
   var p = {
     _showReady: function (c) {
       var s = this;
@@ -5345,7 +5376,7 @@ var LTextField = (function () {
         c.lineWidth = s.lineWidth + 1;
       }
     },
-    ll_getStyleSheet: function (textFormat, tabName, attribute, text) {
+    ll_getStyleSheet: function (textFormat, tabName, attribute, text, lastTabName) {
       var s = this, pattern, tf = textFormat.clone();
       if (tabName == "font") {
         var i = 0;
@@ -5377,7 +5408,7 @@ var LTextField = (function () {
       } else if (tabName == "i") {
         tf.italic = true;
       } else if (tabName == "p" && s.wordWrap) {
-        text = "\n" + text + "\n";
+        text = (lastTabName === "p" ? "" : "\n") + text + "\n";
       } else if (s.styleSheet) {
         var sheetObj;
         if (tabName == "span") {
@@ -5397,9 +5428,9 @@ var LTextField = (function () {
           tf.setCss(sheetObj);
         }
       }
-      s.ll_getHtmlText(tf, text);
+      s.ll_getHtmlText(tf, text, "p");
     },
-    ll_getHtmlText: function (tf, text) {
+    ll_getHtmlText: function (tf, text, lastTabName) {
       if (!text) {
         return;
       }
@@ -5425,8 +5456,8 @@ var LTextField = (function () {
         start = text.indexOf("<" + tabName, start + 1);
       } while (start > 0 && start < end);
       content = text.substring(text.indexOf(">", arr.index) + 1, end);
-      s.ll_getStyleSheet(tf, tabName, arr[3], content);
-      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3));
+      s.ll_getStyleSheet(tf, tabName, arr[3], content, arr.index === 0 ? lastTabName : undefined);
+      s.ll_getHtmlText(tf, text.substring(end + tabName.length + 3), tabName);
     },
     _createAlignCanvas: function (c) {
       var s = this;
@@ -5434,7 +5465,7 @@ var LTextField = (function () {
         s._alignCanvas = document.createElement("canvas");
         s._alignContext = s._alignCanvas.getContext("2d");
       }
-      s._alignCanvas.width = s.width;
+      s._alignCanvas.width = Math.max(s.width, 1024);
       s._alignContext.font = c.font;
       s._alignContext.fillStyle = c.fillStyle;
       s._alignContext.textBaseline = c.textBaseline;
@@ -5483,7 +5514,7 @@ var LTextField = (function () {
             s.ll_style_objectIndex = s.styleSheet.objectIndex;
             s.ll_styleIndex = s.styleSheet.styleIndex;
           }
-          s.ll_getHtmlText(tf, s.htmlText);
+          s.ll_getHtmlText(tf, s.htmlText, "p");
         }
         j = 0, k = 0, m = 0, b = 0, cx = 0;
         s._ll_height = s.wordHeight || 30;
@@ -5499,9 +5530,10 @@ var LTextField = (function () {
           c.font = textFormat.getFontText();
           c.fillStyle = textFormat.color;
           for (i = 0, l = text.length; i < l; i++) {
-            enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i, 1));
+            var word = text.substr(i, 1);
+            enter = /(?:\r\n|\r|\n|¥n)/.exec(word);
             if (enter) {
-              currentWidth -= i > 0 ? c.measureText(text.substr(i, 1)).width : 0;
+              currentWidth -= i > 0 ? c.measureText(word).width : 0;
               j = 0;
               k = i + 1;
               cx = 0;
@@ -5523,30 +5555,157 @@ var LTextField = (function () {
               continue;
             } else {
               h = c.measureText("O").width * 1.2;
-              if (s.stroke) {
-                c.strokeText(text.substr(i, 1), j, s._ll_height);
+              if (/[\uD800-\uDBFF]/.test(word) && i + 1 < l && /[\uDC00-\uDFFF]/.test(text.substr(i + 1, 1))) {
+                word = text.substr(i, 2);
+                i++;
               }
-              c.fillText(text.substr(i, 1), j, s._ll_height);
+              var currentCharWidth = c.measureText(word).width;
+              var testWidth = j + currentCharWidth;
+              if (testWidth + 50 > s.width && i + 1 < l) {
+                var nextCharWidth = c.measureText(text.substr(i + 1, 1)).width;
+                testWidth += nextCharWidth;
+              }
+              if (s.wordWrap && testWidth > s.width) {
+                if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
+                  var wordCharPattern = /[a-zA-Z0-9\-']/;
+                  var searchStart = i;
+                  if (wordCharPattern.test(word)) {
+                    var wordStart = i;
+                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
+                      wordStart--;
+                    }
+                    searchStart = wordStart;
+                  }
+                  var wrapPos = findWordBoundary(text, searchStart, k);
+                  if (wrapPos < i && wrapPos > k) {
+                    s._createAlignCanvas(context);
+                    c.font = textFormat.getFontText();
+                    c.fillStyle = textFormat.color;
+                    if (s.stroke) {
+                      c.strokeStyle = s.lineColor;
+                      c.lineWidth = s.lineWidth + 1;
+                    }
+                    j = 0;
+                    for (var backI = k; backI < wrapPos; backI++) {
+                      var backWord = text.substr(backI, 1);
+                      if (/[\uD800-\uDBFF]/.test(backWord) && backI + 1 < l && /[\uDC00-\uDFFF]/.test(text.substr(backI + 1, 1))) {
+                        backWord = text.substr(backI, 2);
+                        backI++;
+                      }
+                      if (s.stroke) {
+                        c.strokeText(backWord, j, s._ll_height);
+                      }
+                      c.fillText(backWord, j, s._ll_height);
+                      if (textFormat.underline) {
+                        c.beginPath();
+                        underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
+                        c.moveTo(j, underlineY);
+                        c.lineTo(j + c.measureText(backWord).width, underlineY);
+                        c.stroke();
+                      }
+                      j += c.measureText(backWord).width;
+                    }
+                    var boundaryWidth = j;
+                    cx = 0;
+                    if (s.textAlign == "center") {
+                      cx = -boundaryWidth * 0.5;
+                    } else if (s.textAlign == "right") {
+                      cx = -boundaryWidth;
+                    }
+                    try {
+                      context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+                    } catch (error) {
+                      console && console.error(error);
+                    }
+                    s._createAlignCanvas(context);
+                    c.font = textFormat.getFontText();
+                    c.fillStyle = textFormat.color;
+                    if (s.stroke) {
+                      c.strokeStyle = s.lineColor;
+                      c.lineWidth = s.lineWidth + 1;
+                    }
+                    j = 0;
+                    k = wrapPos;
+                    currentWidth = 0;
+                    i = wrapPos - 1;
+                    m++;
+                    continue;
+                  }
+                } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
+                  var wordCharPattern = /[a-zA-Z0-9\-']/;
+                  var isInWord = wordCharPattern.test(word);
+                  if (isInWord) {
+                    var wordStart = i;
+                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
+                      wordStart--;
+                    }
+                    if (wordStart >= k) {
+                      var hyphenWidth = c.measureText("-").width;
+                      var newJ = j + hyphenWidth;
+                      if (newJ <= s.width) {
+                        if (s.stroke) {
+                          c.strokeText("-", j, s._ll_height);
+                        }
+                        c.fillText("-", j, s._ll_height);
+                        if (textFormat.underline) {
+                          c.beginPath();
+                          underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
+                          c.moveTo(j, underlineY);
+                          c.lineTo(j + hyphenWidth, underlineY);
+                          c.stroke();
+                        }
+                        j = newJ;
+                      }
+                      var boundaryWidth = j;
+                      cx = 0;
+                      if (s.textAlign == "center") {
+                        cx = -boundaryWidth * 0.5;
+                      } else if (s.textAlign == "right") {
+                        cx = -boundaryWidth;
+                      }
+                      try {
+                        context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
+                      } catch (error) {
+                        console && console.error(error);
+                      }
+                      s._createAlignCanvas(context);
+                      c.font = textFormat.getFontText();
+                      c.fillStyle = textFormat.color;
+                      if (s.stroke) {
+                        c.strokeStyle = s.lineColor;
+                        c.lineWidth = s.lineWidth + 1;
+                      }
+                      j = 0;
+                      k = i;
+                      currentWidth = 0;
+                      m++;
+                    }
+                  }
+                }
+              }
+              if (s.stroke) {
+                c.strokeText(word, j, s._ll_height);
+              }
+              c.fillText(word, j, s._ll_height);
               if (textFormat.underline) {
                 c.beginPath();
                 underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
                 c.moveTo(j, underlineY);
-                c.lineTo(j + c.measureText(text.substr(i, 1)).width, underlineY);
+                c.lineTo(j + c.measureText(word).width, underlineY);
                 c.stroke();
               }
             }
-            j += c.measureText(text.substr(i, 1)).width;
+            j += c.measureText(word).width;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
               currentWidth = j;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-              nextText = s.ll_htmlTexts[elementIndex + 1].text;
-              enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(0, 1));
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             } else {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
-              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 2, 1));
+              enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             }
             if (s.wordWrap && currentWidth > s.width && !enter) {
               j = 0;
@@ -5565,12 +5724,17 @@ var LTextField = (function () {
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
+              if (s.stroke) {
+                c.strokeStyle = s.lineColor;
+                c.lineWidth = s.lineWidth + 1;
+              }
               currentWidth = 0;
               m++;
             }
           }
           s.height = (m + 1) * s._ll_height;
         }
+        s._ll_width = j;
         if (currentWidth > 0) {
           cx = 0;
           if (s.textAlign == "center") {
@@ -5603,7 +5767,7 @@ var LTextField = (function () {
       if (s.wordWrap || s.multiline) {
         j = 0, k = 0, m = 0, b = 0, cx = 0;
         var context = c;
-        var isAlignCanvas = s.textAlign != "left";
+        var isAlignCanvas = s.textAlign != "left" || s.wordBoundaryMode != LTextField.WordBoundaryMode.None;
         if (isAlignCanvas) {
           s._createAlignCanvas(c);
           context = s._alignContext;
@@ -5632,6 +5796,133 @@ var LTextField = (function () {
             }
             m++;
           } else {
+            var currentChar = lbl.substr(i, 1);
+            var currentCharWidth = context.measureText(currentChar).width;
+            var testWidth = j + currentCharWidth;
+            if (testWidth + 50 > s.width && i + 1 < l) {
+              var nextCharWidth = c.measureText(lbl.substr(i + 1, 1)).width;
+              testWidth += nextCharWidth;
+            }
+            if (s.wordWrap && testWidth > s.width) {
+              if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
+                var wordCharPattern = /[a-zA-Z0-9\-']/;
+                var searchStart = i;
+                if (wordCharPattern.test(currentChar)) {
+                  var wordStart = i;
+                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
+                    wordStart--;
+                  }
+                  searchStart = wordStart;
+                }
+                var wrapPos = findWordBoundary(s.text, searchStart, k);
+                if (wrapPos < i && wrapPos > k) {
+                  if (isAlignCanvas) {
+                    s._createAlignCanvas(c);
+                    context = s._alignContext;
+                    context.font = c.font;
+                    context.fillStyle = c.fillStyle;
+                    context.textBaseline = c.textBaseline;
+                    context.textAlign = "left";
+                    if (s.stroke) {
+                      context.strokeStyle = c.strokeStyle;
+                      context.lineWidth = c.lineWidth;
+                    }
+                    j = 0;
+                    for (var backI = k; backI < wrapPos; backI++) {
+                      var backChar = lbl.substr(backI, 1);
+                      if (s.stroke) {
+                        context.strokeText(backChar, j, 0);
+                      }
+                      context.fillText(backChar, j, 0);
+                      j += context.measureText(backChar).width;
+                    }
+                    var boundaryWidth = j;
+                    cx = 0;
+                    if (s.textAlign == "center") {
+                      cx = -boundaryWidth * 0.5;
+                    } else if (s.textAlign == "right") {
+                      cx = -boundaryWidth;
+                    }
+                    try {
+                      c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+                    } catch (error) {
+                      console && console.error(error);
+                    }
+                    s._createAlignCanvas(c);
+                    context = s._alignContext;
+                    context.font = c.font;
+                    context.fillStyle = c.fillStyle;
+                    context.textBaseline = c.textBaseline;
+                    context.textAlign = "left";
+                    if (s.stroke) {
+                      context.strokeStyle = c.strokeStyle;
+                      context.lineWidth = c.lineWidth;
+                    }
+                    j = 0;
+                    k = wrapPos;
+                    currentWidth = 0;
+                    i = wrapPos - 1;
+                    m++;
+                    continue;
+                  } else {
+                    j = 0;
+                    k = wrapPos;
+                    currentWidth = 0;
+                    i = wrapPos - 1;
+                    m++;
+                    continue;
+                  }
+                }
+              } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
+                var wordCharPattern = /[a-zA-Z0-9\-']/;
+                var isInWord = wordCharPattern.test(currentChar);
+                if (isInWord) {
+                  var wordStart = i;
+                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
+                    wordStart--;
+                  }
+                  if (wordStart >= k) {
+                    var hyphenWidth = context.measureText("-").width;
+                    var newJ = j + hyphenWidth;
+                    if (newJ <= s.width) {
+                      if (s.stroke) {
+                        context.strokeText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
+                      }
+                      context.fillText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
+                      j = newJ;
+                    }
+                    var boundaryWidth = j;
+                    if (isAlignCanvas) {
+                      cx = 0;
+                      if (s.textAlign == "center") {
+                        cx = -boundaryWidth * 0.5;
+                      } else if (s.textAlign == "right") {
+                        cx = -boundaryWidth;
+                      }
+                      try {
+                        c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
+                      } catch (error) {
+                        console && console.error(error);
+                      }
+                      s._createAlignCanvas(c);
+                      context = s._alignContext;
+                      context.font = c.font;
+                      context.fillStyle = c.fillStyle;
+                      context.textBaseline = c.textBaseline;
+                      context.textAlign = "left";
+                      if (s.stroke) {
+                        context.strokeStyle = c.strokeStyle;
+                        context.lineWidth = c.lineWidth;
+                      }
+                    }
+                    j = 0;
+                    k = i;
+                    currentWidth = 0;
+                    m++;
+                  }
+                }
+              }
+            }
             if (s.stroke) {
               context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
             }
@@ -5917,6 +6208,13 @@ var LTextField = (function () {
       }
       if (LGlobal.enableWebGL) {
         this._createCanvas();
+      }
+      if (s.htmlText) {
+        if (s.ll_htmlText != s.htmlText) {
+          s._createCanvas();
+          s._ll_show(s._context);
+        }
+        return s._ll_width;
       }
       var c = LGlobal.enableWebGL ? s._context : LGlobal.canvas;
       c.font = s.size + "px " + s.font;
@@ -6513,7 +6811,7 @@ var LBitmapData = (function () {
     LBitmapData.prototype[k] = p[k];
   }
   return LBitmapData;
-})(); 
+})();
 var LBitmapFilter = (function () {
 	function LBitmapFilter () {
 		var s = this;
@@ -6921,7 +7219,7 @@ var LAnimationTimeline = (function() {
 		LAnimationTimeline.prototype[k] = p[k];
 	}
 	return LAnimationTimeline;
-})(); 
+})();
 var LSpriteAtlasType = {
     SIMPLE: 'simple',
     SLICED: 'sliced'
@@ -6941,7 +7239,7 @@ var LAtlas = (function () {
                 { name: path + "/" + name + ".plist", path: this.url(path + "/" + name + ".plist" + (LGlobal.wx ? '.meta' : '')), type: 'text' },
                 { name: path + "/" + name + ".json", path: this.url(path + "/" + name + ".json"), type: 'text' }
             ];
-            LLoadManage.load( 
+            LLoadManage.load(
                 loadData, null, function(datalist){
                     s._loadComplete(datalist, path, name);
                 }
@@ -7429,7 +7727,7 @@ var LEasing = {
 		easeInOut : function (t, b, c, d, s) {
 			if (typeof s == UNDEFINED) {
 				s = 1.70158;
-			} 
+			}
 			if ((t /= d / 2) < 1) {
 				return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
 			}
@@ -7818,10 +8116,10 @@ var WxLocalRequest = (function () {
 		send:function(body){
             var s = this;
             var option = {
-                filePath: this.url, 
+                filePath: this.url,
                 success: function(event) {
                     s._onreadystatechange(event);
-                }, 
+                },
                 fail: function(event) {
                     s._onerror(event);
                 }
@@ -7838,130 +8136,158 @@ var WxLocalRequest = (function () {
 	return WxLocalRequest;
 })();
 var LAjax = (function () {
-	function LAjax () {
-		this.responseType = null;
-		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
-		this.canUseBlob = window.Blob || window.BlobBuilder;
-		var protocol = location.protocol;
-		this.local = !(protocol == "http:" || protocol == "https:");
-	}
-	LAjax.prototype = {
-		TEXT : "text",
-		JSON : "json",
-		ARRAY_BUFFER : "arraybuffer",
-		BLOB : "blob",
-		get : function (url, data, oncomplete, onerror) {
-			this.getRequest("GET", url, data, oncomplete, onerror);
-		},
-		post : function (url, data, oncomplete, onerror) {
-			this.getRequest("POST", url, data, oncomplete, onerror);
-		},
-		getRequest : function (t, url, d, oncomplete, err) {
-			var s = this, k, data = "", a = "";
-			s.err = err;
-			var isLocalUrl = url.indexOf('http') < 0;
-			var ajax = s.getHttp(isLocalUrl);
-			if (!ajax) {
-				return;
-			}
-			if (d) {
-				for (k in d) {
-					data += (a + k + "=" + d[k]);
-					a = "&";	
-				}
-			}
-			if (t.toLowerCase() == "get" && data.length > 0) {
-				url += ((url.indexOf('?') >= 0 ? '&' : '?') + data);
-				data = null;
-			}
-			ajax.onerror = function(e){
-				if(err){
-					err(e);
-					err = null;
-				}
-			};
-			var progress = s.progress;
-			s.progress = null;
-			if (!ajax.addEventListener) {
-				ajax.addEventListener = function(key, fun) {
-					ajax['on' + key] = fun;
-				};
-			}
-			ajax.addEventListener("progress", function(e){
-				if(e.currentTarget.status == 404){
-					if (err) {
-						err(e.currentTarget);
-						err = null;
-					}
-				}else if(e.currentTarget.status == 200){
-					if(progress){
-						progress(e);
-					}
-				}
-			}, false);
-			ajax.open(t, url, true);
-			if (s.responseType) {
-				if(s.responseType == s.JSON){
-					try{
-						ajax.responseType = s.responseType;
-					}catch(e){
-						ajax.responseType = s.TEXT;
-						ajax._responseType = "json";
-					}
-				}else{
-					ajax.responseType = s.responseType;
-				}
-				s.responseType = s.TEXT;
-			}
-			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			ajax.onreadystatechange = function (e) {
-				var request = e.currentTarget;
-				if (request.readyState == 4) {
-					if (request.status >= 200 && request.status < 300 || request.status === 304) {
-						if (oncomplete) {
-							if(request._responseType == s.JSON){
-								request._responseType = s.TEXT;
-								oncomplete(JSON.parse(request.responseText));
-							}else if (request.responseType == s.ARRAY_BUFFER || request.responseType == s.BLOB || request.responseType == s.JSON) {
-								oncomplete(request.response);
-							} else if (request.responseText.length > 0) {
-								oncomplete(request.responseText);
-							} else {
-								oncomplete(null);
-							}
-						}
-					} else {
-						if (err) {
-							err(request);
-							err = null;
-						}
-					}
-		 		}
-			};
-			ajax.send(data);
-		},
-		getHttp : function (isLocalUrl) {
-			if (LGlobal.wx && isLocalUrl) {
-				return new WxLocalRequest();
-			}
-			if (typeof XMLHttpRequest != UNDEFINED) {
-				return new XMLHttpRequest();
-			}  
-			try {
-				return new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-				try {
-					return new ActiveXObject("Microsoft.XMLHTTP");
-				} catch (e) {
-					if (!this.err) {
-						this.err(e);
-					}
-				}
-			}
-			return false;
-		}
-	};
-	return new LAjax();
+  function LAjax() {
+    this.responseType = null;
+    window.BlobBuilder =
+      window.BlobBuilder ||
+      window.WebKitBlobBuilder ||
+      window.MozBlobBuilder ||
+      window.MSBlobBuilder;
+    this.canUseBlob = window.Blob || window.BlobBuilder;
+    var protocol = location.protocol;
+    this.local = !(protocol == "http:" || protocol == "https:");
+  }
+  LAjax.prototype = {
+    TEXT: "text",
+    JSON: "json",
+    ARRAY_BUFFER: "arraybuffer",
+    BLOB: "blob",
+    get: function (url, data, oncomplete, onerror) {
+      this.getRequest("GET", url, data, oncomplete, onerror);
+    },
+    post: function (url, data, oncomplete, onerror) {
+      this.getRequest("POST", url, data, oncomplete, onerror);
+    },
+    getRequest: function (t, url, d, oncomplete, err) {
+      var s = this,
+        k,
+        data = "",
+        a = "";
+      s.err = err;
+      var isLocalUrl = url.indexOf("http") < 0;
+      var ajax = s.getHttp(isLocalUrl);
+      if (!ajax) {
+        return;
+      }
+      if (d) {
+        if (d instanceof Uint8Array) {
+          data = d;
+        } else if (typeof d === "object") {
+          for (k in d) {
+            data += a + k + "=" + d[k];
+            a = "&";
+          }
+        } else {
+          data = d;
+        }
+      }
+      if (t.toLowerCase() == "get" && data.length > 0) {
+        url += (url.indexOf("?") >= 0 ? "&" : "?") + data;
+        data = null;
+      }
+      ajax.onerror = function (e) {
+        if (err) {
+          err(e);
+          err = null;
+        }
+      };
+      var progress = s.progress;
+      s.progress = null;
+      if (!ajax.addEventListener) {
+        ajax.addEventListener = function (key, fun) {
+          ajax["on" + key] = fun;
+        };
+      }
+      ajax.addEventListener(
+        "progress",
+        function (e) {
+          if (e.currentTarget.status == 404) {
+            if (err) {
+              err(e.currentTarget);
+              err = null;
+            }
+          } else if (e.currentTarget.status == 200) {
+            if (progress) {
+              progress(e);
+            }
+          }
+        },
+        false
+      );
+      ajax.open(t, url, true);
+      if (s.responseType) {
+        if (s.responseType == s.JSON) {
+          try {
+            ajax.responseType = s.responseType;
+          } catch (e) {
+            ajax.responseType = s.TEXT;
+            ajax._responseType = "json";
+          }
+        } else {
+          ajax.responseType = s.responseType;
+        }
+        s.responseType = s.TEXT;
+      }
+      ajax.setRequestHeader(
+        "Content-Type",
+        this.contentType || "application/x-www-form-urlencoded"
+      );
+      this.contentType = null;
+      ajax.onreadystatechange = function (e) {
+        var request = e.currentTarget;
+        if (request.readyState == 4) {
+          if (
+            (request.status >= 200 && request.status < 300) ||
+            request.status === 304
+          ) {
+            if (oncomplete) {
+              if (request._responseType == s.JSON) {
+                request._responseType = s.TEXT;
+                oncomplete(JSON.parse(request.responseText));
+              } else if (
+                request.responseType == s.ARRAY_BUFFER ||
+                request.responseType == s.BLOB ||
+                request.responseType == s.JSON
+              ) {
+                oncomplete(request.response);
+              } else if (request.responseText.length > 0) {
+                oncomplete(request.responseText);
+              } else {
+                oncomplete(null);
+              }
+            }
+          } else {
+            if (err) {
+              err(request);
+              err = null;
+            }
+          }
+        }
+      };
+      ajax.send(data);
+    },
+    getHttp: function (isLocalUrl) {
+      if (LGlobal.wx && isLocalUrl) {
+        return new WxLocalRequest();
+      }
+      if (typeof XMLHttpRequest != UNDEFINED) {
+        return new XMLHttpRequest();
+      }
+      try {
+        return new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (e) {
+        try {
+          return new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+          if (!this.err) {
+            this.err(e);
+          }
+        }
+      }
+      return false;
+    },
+  };
+  return new LAjax();
 })();
 var LStageWebView = (function () {
 	function LStageWebView () {
@@ -8071,10 +8397,10 @@ var FPS = (function () {
 		if(t - s.fpsTime < 1000)return;
 		s.fps[0].text = "FPS : " + Math.round(s.fpsCount*10000 / (t-s.fpsTime))/10;
 		f = LGlobal.fpsStatus;
-		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b; 
-		s.fps[2].text = "Draw image : " + f.a; 
-		s.fps[3].text = "Draw graphics : " + f.d; 
-		s.fps[4].text = "Draw text : " + f.e; 
+		s.fps[1].text = "DisplayObject : " + f.c + "/" + f.b;
+		s.fps[2].text = "Draw image : " + f.a;
+		s.fps[3].text = "Draw graphics : " + f.d;
+		s.fps[4].text = "Draw text : " + f.e;
 		s.fpsTime = t;
 		s.fpsCount = 0;
 		s.back.graphics.clear();
