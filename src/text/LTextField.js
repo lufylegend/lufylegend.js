@@ -616,52 +616,6 @@ var LTextField = (function () {
     s.wordWrap = false;
     s.multiline = false;
     /** @language chinese
-     * 单词边界换行模式。控制换行时如何处理单词边界。
-     * LTextField.WordBoundaryMode.None: 不判断单词，使用简单换行（可能在单词中间断开）
-     * LTextField.WordBoundaryMode.NewLine: 在单词边界处换行，避免在单词中间断开
-     * LTextField.WordBoundaryMode.NewLineMark: 单词不换行，但在破坏单词时在当前行末尾添加"-"号
-     * @property wordBoundaryMode
-     * @type String
-     * @default LTextField.WordBoundaryMode.None
-     * @since 1.0.0
-     * @public
-     * @example
-     * 	var theTextField = new LTextField();
-     * 	theTextField.setWordWrap(true, 100);
-     * 	theTextField.wordBoundaryMode = LTextField.WordBoundaryMode.NewLine; // 在单词边界处换行
-     * 	theTextField.text = "This is a long text that will wrap at word boundaries.";
-     * 	addChild(theTextField);
-     */
-    /** @language english
-     * Word boundary wrapping mode. Controls how word boundaries are handled when wrapping lines.
-     * LTextField.WordBoundaryMode.None: Do not check word boundaries, use simple wrapping (may break in the middle of words)
-     * LTextField.WordBoundaryMode.NewLine: Wrap at word boundaries, avoiding breaking in the middle of words
-     * LTextField.WordBoundaryMode.NewLineMark: Words do not wrap, but when a word is broken, add a "-" at the end of the current line
-     * @property wordBoundaryMode
-     * @type String
-     * @default LTextField.WordBoundaryMode.None
-     * @since 1.0.0
-     * @public
-     * @example
-     * 	var theTextField = new LTextField();
-     * 	theTextField.setWordWrap(true, 100);
-     * 	theTextField.wordBoundaryMode = LTextField.WordBoundaryMode.NewLine; // Wrap at word boundaries
-     * 	theTextField.text = "This is a long text that will wrap at word boundaries.";
-     * 	addChild(theTextField);
-     */
-    /** @language japanese
-     * 単語境界での改行モード。行を折り返す際に単語境界をどのように処理するかを制御します。
-     * LTextField.WordBoundaryMode.None: 単語境界をチェックせず、簡単な改行を使用します（単語の途中で改行される可能性があります）
-     * LTextField.WordBoundaryMode.NewLine: 単語境界で改行し、単語の途中で改行しないようにします
-     * LTextField.WordBoundaryMode.NewLineMark: 単語は改行しませんが、単語が破壊される場合、現在の行の末尾に「-」を追加します
-     * @property wordBoundaryMode
-     * @type String
-     * @default LTextField.WordBoundaryMode.None
-     * @since 1.0.0
-     * @public
-     */
-    s.wordBoundaryMode = LTextField.WordBoundaryMode.None;
-    /** @language chinese
      * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
      * @property numLines
      * @type int
@@ -808,59 +762,6 @@ var LTextField = (function () {
   }
   LTextField.HEIGHT_MODE_BOTTOM = "bottom";
   LTextField.HEIGHT_MODE_BASELINE = "baseline";
-  LTextField.WordBoundaryMode = {
-    None: "none",
-    NewLine: "newLine",
-    NewLineMark: "newLineMark"
-  };
-
-  // 查找单词边界的辅助函数
-  // 从startPos向前查找最近的单词边界（空格、中文字符等）
-  // 返回找到的边界位置，如果没找到则返回startPos
-  function findWordBoundary(text, startPos, lineStartPos) {
-    if (startPos <= lineStartPos || startPos < 0 || startPos > text.length) {
-      return startPos;
-    }
-
-    // 定义单词字符（字母、数字、连字符、撇号等）
-    var wordCharPattern = /[a-zA-Z0-9\-']/;
-
-    // 从startPos-1开始向前查找，最多查找100个字符
-    var searchStart = Math.max(lineStartPos, startPos - 100);
-
-    // 向前查找最近的空格或中文字符
-    for (var i = startPos - 1; i >= searchStart; i--) {
-      var char = text.charAt(i);
-
-      // 找到空格或制表符，返回空格后面的位置
-      if (char === ' ' || char === '\t') {
-        var boundary = i + 1;
-        // 跳过连续的空格
-        while (boundary < text.length && (text.charAt(boundary) === ' ' || text.charAt(boundary) === '\t')) {
-          boundary++;
-        }
-        return boundary;
-      }
-
-      // 找到中文字符，返回中文字符后面的位置
-      if (/[\u4e00-\u9fa5]/.test(char)) {
-        return i + 1;
-      }
-
-      // 如果当前位置不是单词字符，且下一个位置是单词字符，则当前位置是边界
-      if (i + 1 < startPos) {
-        var currentIsWord = wordCharPattern.test(char);
-        var nextIsWord = wordCharPattern.test(text.charAt(i + 1));
-        if (!currentIsWord && nextIsWord) {
-          return i + 1;
-        }
-      }
-    }
-
-    // 没找到边界，返回startPos（允许在单词中间断开）
-    return startPos;
-  }
-
   var p = {
     _showReady: function (c) {
       var s = this;
@@ -1058,164 +959,6 @@ var LTextField = (function () {
                 word = text.substr(i, 2);
                 i++;
               }
-
-              // 在渲染字符之前，先检查是否需要换行（避免重复渲染）
-              // 优化：只检查当前字符宽度，避免每次都测量下一个字符
-              var currentCharWidth = c.measureText(word).width;
-              var testWidth = j + currentCharWidth;
-              // 只在接近边界时才检查下一个字符
-              if (testWidth + 50 > s.width && i + 1 < l) {
-                var nextCharWidth = c.measureText(text.substr(i + 1, 1)).width;
-                testWidth += nextCharWidth;
-              }
-
-              // 检查是否需要换行
-              if (s.wordWrap && testWidth > s.width) {
-                // 根据单词边界模式处理换行
-                if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
-                  // 查找单词边界，避免在单词中间断开
-                  // 如果当前字符是单词字符，先找到单词的开始位置
-                  var wordCharPattern = /[a-zA-Z0-9\-']/;
-                  var searchStart = i;
-                  if (wordCharPattern.test(word)) {
-                    // 找到当前单词的开始位置
-                    var wordStart = i;
-                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
-                      wordStart--;
-                    }
-                    searchStart = wordStart;
-                  }
-
-                  // 查找单词边界
-                  var wrapPos = findWordBoundary(text, searchStart, k);
-
-                  // 如果找到边界且边界在当前位置之前，在边界处换行
-                  if (wrapPos < i && wrapPos > k) {
-                    // 需要重新渲染当前行，只渲染到边界位置（不包括边界位置之后的字符）
-                    // 重新创建canvas，只渲染从k到wrapPos的内容
-                    s._createAlignCanvas(context);
-                    c.font = textFormat.getFontText();
-                    c.fillStyle = textFormat.color;
-                    if (s.stroke) {
-                      c.strokeStyle = s.lineColor;
-                      c.lineWidth = s.lineWidth + 1;
-                    }
-                    j = 0;
-                    // 重新渲染从k到wrapPos的内容
-                    for (var backI = k; backI < wrapPos; backI++) {
-                      var backWord = text.substr(backI, 1);
-                      if (/[\uD800-\uDBFF]/.test(backWord) && backI + 1 < l && /[\uDC00-\uDFFF]/.test(text.substr(backI + 1, 1))) {
-                        backWord = text.substr(backI, 2);
-                        backI++;
-                      }
-                      if (s.stroke) {
-                        c.strokeText(backWord, j, s._ll_height);
-                      }
-                      c.fillText(backWord, j, s._ll_height);
-                      if (textFormat.underline) {
-                        c.beginPath();
-                        underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-                        c.moveTo(j, underlineY);
-                        c.lineTo(j + c.measureText(backWord).width, underlineY);
-                        c.stroke();
-                      }
-                      j += c.measureText(backWord).width;
-                    }
-
-                    // 计算边界位置的宽度
-                    var boundaryWidth = j;
-
-                    // 绘制当前行（到边界位置）
-                    cx = 0;
-                    if (s.textAlign == "center") {
-                      cx = -boundaryWidth * 0.5;
-                    } else if (s.textAlign == "right") {
-                      cx = -boundaryWidth;
-                    }
-                    try {
-                      context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-                    } catch (error) {
-                      console && console.error(error);
-                    }
-
-                    // 准备下一行，从边界位置开始
-                    s._createAlignCanvas(context);
-                    c.font = textFormat.getFontText();
-                    c.fillStyle = textFormat.color;
-                    if (s.stroke) {
-                      c.strokeStyle = s.lineColor;
-                      c.lineWidth = s.lineWidth + 1;
-                    }
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1; // 回退到边界位置，下次循环会从边界位置的下一个字符开始
-                    m++;
-                    continue; // 跳过当前字符的渲染，因为已经在边界位置了
-                  }
-                } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
-                  // NewLineMark 模式：单词不换行，但在破坏单词时在行末加"-"
-                  var wordCharPattern = /[a-zA-Z0-9\-']/;
-                  var isInWord = wordCharPattern.test(word);
-                  if (isInWord) {
-                    // 检查当前字符是否在单词中间
-                    var wordStart = i;
-                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
-                      wordStart--;
-                    }
-                    // 如果单词开始位置在当前行，说明单词会被拆分
-                    if (wordStart >= k) {
-                      // 在当前行末尾添加"-"（如果空间足够）
-                      var hyphenWidth = c.measureText("-").width;
-                      var newJ = j + hyphenWidth;
-                      if (newJ <= s.width) {
-                        if (s.stroke) {
-                          c.strokeText("-", j, s._ll_height);
-                        }
-                        c.fillText("-", j, s._ll_height);
-                        if (textFormat.underline) {
-                          c.beginPath();
-                          underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-                          c.moveTo(j, underlineY);
-                          c.lineTo(j + hyphenWidth, underlineY);
-                          c.stroke();
-                        }
-                        j = newJ;
-                      }
-                      // 换行
-                      var boundaryWidth = j;
-                      cx = 0;
-                      if (s.textAlign == "center") {
-                        cx = -boundaryWidth * 0.5;
-                      } else if (s.textAlign == "right") {
-                        cx = -boundaryWidth;
-                      }
-                      try {
-                        context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-                      } catch (error) {
-                        console && console.error(error);
-                      }
-                      s._createAlignCanvas(context);
-                      c.font = textFormat.getFontText();
-                      c.fillStyle = textFormat.color;
-                      if (s.stroke) {
-                        c.strokeStyle = s.lineColor;
-                        c.lineWidth = s.lineWidth + 1;
-                      }
-                      j = 0;
-                      k = i;
-                      currentWidth = 0;
-                      m++;
-                      // 继续渲染当前字符到新行（不 continue，让后面的代码渲染）
-                    }
-                  }
-                  // 如果未找到边界，使用原来的简单换行逻辑
-                }
-                // 如果模式为 None，或未找到边界，使用原来的简单换行逻辑
-                // 这里不处理，让后面的代码处理（原来的换行逻辑）
-              }
-
-              // 正常渲染当前字符
               if (s.stroke) {
                 c.strokeText(word, j, s._ll_height);
               }
@@ -1241,7 +984,6 @@ var LTextField = (function () {
               enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             }
             if (s.wordWrap && currentWidth > s.width && !enter) {
-              // 没找到合适的边界，在当前位置换行（单词太长或已经是边界）
               j = 0;
               k = i + 1;
               cx = 0;
@@ -1258,10 +1000,6 @@ var LTextField = (function () {
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
-              if (s.stroke) {
-                c.strokeStyle = s.lineColor;
-                c.lineWidth = s.lineWidth + 1;
-              }
               currentWidth = 0;
               m++;
             }
@@ -1301,7 +1039,7 @@ var LTextField = (function () {
       if (s.wordWrap || s.multiline) {
         j = 0, k = 0, m = 0, b = 0, cx = 0;
         var context = c;
-        var isAlignCanvas = s.textAlign != "left" || s.wordBoundaryMode != LTextField.WordBoundaryMode.None;
+        var isAlignCanvas = s.textAlign != "left";
         if (isAlignCanvas) {
           s._createAlignCanvas(c);
           context = s._alignContext;
@@ -1330,167 +1068,6 @@ var LTextField = (function () {
             }
             m++;
           } else {
-            // 在渲染字符之前，先检查是否需要换行（避免重复渲染）
-            // 优化：只检查当前字符宽度，避免每次都测量下一个字符
-            var currentChar = lbl.substr(i, 1);
-            var currentCharWidth = context.measureText(currentChar).width;
-            var testWidth = j + currentCharWidth;
-            // 只在接近边界时才检查下一个字符
-            if (testWidth + 50 > s.width && i + 1 < l) {
-              var nextCharWidth = c.measureText(lbl.substr(i + 1, 1)).width;
-              testWidth += nextCharWidth;
-            }
-
-            // 检查是否需要换行
-            if (s.wordWrap && testWidth > s.width) {
-              // 根据单词边界模式处理换行
-              if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
-                // 查找单词边界，避免在单词中间断开
-                // 如果当前字符是单词字符，先找到单词的开始位置
-                var wordCharPattern = /[a-zA-Z0-9\-']/;
-                var searchStart = i;
-                if (wordCharPattern.test(currentChar)) {
-                  // 找到当前单词的开始位置
-                  var wordStart = i;
-                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
-                    wordStart--;
-                  }
-                  searchStart = wordStart;
-                }
-
-                // 查找单词边界
-                var wrapPos = findWordBoundary(s.text, searchStart, k);
-
-                // 如果找到边界且边界在当前位置之前，在边界处换行
-                if (wrapPos < i && wrapPos > k) {
-                  // 需要回退：清除从边界位置到当前位置已渲染的内容
-                  if (isAlignCanvas) {
-                    // 重新创建canvas，只渲染到边界位置
-                    s._createAlignCanvas(c);
-                    context = s._alignContext;
-                    context.font = c.font;
-                    context.fillStyle = c.fillStyle;
-                    context.textBaseline = c.textBaseline;
-                    context.textAlign = "left";
-                    if (s.stroke) {
-                      context.strokeStyle = c.strokeStyle;
-                      context.lineWidth = c.lineWidth;
-                    }
-                    j = 0;
-                    // 重新渲染从k到wrapPos的内容
-                    for (var backI = k; backI < wrapPos; backI++) {
-                      var backChar = lbl.substr(backI, 1);
-                      if (s.stroke) {
-                        context.strokeText(backChar, j, 0);
-                      }
-                      context.fillText(backChar, j, 0);
-                      j += context.measureText(backChar).width;
-                    }
-
-                    // 计算边界位置的宽度
-                    var boundaryWidth = j;
-
-                    // 绘制当前行（到边界位置）
-                    cx = 0;
-                    if (s.textAlign == "center") {
-                      cx = -boundaryWidth * 0.5;
-                    } else if (s.textAlign == "right") {
-                      cx = -boundaryWidth;
-                    }
-                    try {
-                      c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-                    } catch (error) {
-                      console && console.error(error);
-                    }
-
-                    // 准备下一行，从边界位置开始
-                    s._createAlignCanvas(c);
-                    context = s._alignContext;
-                    context.font = c.font;
-                    context.fillStyle = c.fillStyle;
-                    context.textBaseline = c.textBaseline;
-                    context.textAlign = "left";
-                    if (s.stroke) {
-                      context.strokeStyle = c.strokeStyle;
-                      context.lineWidth = c.lineWidth;
-                    }
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1; // 回退到边界位置，下次循环会从边界位置的下一个字符开始
-                    m++;
-                    continue; // 跳过当前字符的渲染，因为已经在边界位置了
-                  } else {
-                    // 非对齐canvas模式，直接回退
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1;
-                    m++;
-                    continue; // 跳过当前字符的渲染，因为已经在边界位置了
-                  }
-                }
-              } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
-                // NewLineMark 模式：单词不换行，但在破坏单词时在行末加"-"
-                var wordCharPattern = /[a-zA-Z0-9\-']/;
-                var isInWord = wordCharPattern.test(currentChar);
-                if (isInWord) {
-                  // 检查当前字符是否在单词中间
-                  var wordStart = i;
-                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
-                    wordStart--;
-                  }
-                  // 如果单词开始位置在当前行，说明单词会被拆分
-                  if (wordStart >= k) {
-                    // 在当前行末尾添加"-"（如果空间足够）
-                    var hyphenWidth = context.measureText("-").width;
-                    var newJ = j + hyphenWidth;
-                    if (newJ <= s.width) {
-                      if (s.stroke) {
-                        context.strokeText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
-                      }
-                      context.fillText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
-                      j = newJ;
-                    }
-                    // 换行
-                    var boundaryWidth = j;
-                    if (isAlignCanvas) {
-                      cx = 0;
-                      if (s.textAlign == "center") {
-                        cx = -boundaryWidth * 0.5;
-                      } else if (s.textAlign == "right") {
-                        cx = -boundaryWidth;
-                      }
-                      try {
-                        c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-                      } catch (error) {
-                        console && console.error(error);
-                      }
-                      s._createAlignCanvas(c);
-                      context = s._alignContext;
-                      context.font = c.font;
-                      context.fillStyle = c.fillStyle;
-                      context.textBaseline = c.textBaseline;
-                      context.textAlign = "left";
-                      if (s.stroke) {
-                        context.strokeStyle = c.strokeStyle;
-                        context.lineWidth = c.lineWidth;
-                      }
-                    }
-                    j = 0;
-                    k = i;
-                    currentWidth = 0;
-                    m++;
-                    // 继续渲染当前字符到新行（不 continue，让后面的代码渲染）
-                  }
-                }
-                // 如果未找到边界，使用原来的简单换行逻辑
-              }
-              // 如果模式为 None，或未找到边界，使用原来的简单换行逻辑
-              // 这里不处理，让后面的代码处理（原来的换行逻辑）
-            }
-
-            // 正常渲染当前字符
             if (s.stroke) {
               context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
             }
@@ -1501,7 +1078,6 @@ var LTextField = (function () {
           currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
           enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
           if (s.wordWrap && currentWidth > s.width && !enter) {
-            // 没找到合适的边界，在当前位置换行（单词太长或已经是边界）
             j = 0;
             k = i + 1;
             if (isAlignCanvas) {
