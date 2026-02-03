@@ -5336,34 +5336,6 @@ var LTextField = (function () {
     NewLine: "newLine",
     NewLineMark: "newLineMark"
   };
-  function findWordBoundary(text, startPos, lineStartPos) {
-    if (startPos <= lineStartPos || startPos < 0 || startPos > text.length) {
-      return startPos;
-    }
-    var wordCharPattern = /[a-zA-Z0-9\-']/;
-    var searchStart = Math.max(lineStartPos, startPos - 100);
-    for (var i = startPos - 1; i >= searchStart; i--) {
-      var char = text.charAt(i);
-      if (char === ' ' || char === '\t') {
-        var boundary = i + 1;
-        while (boundary < text.length && (text.charAt(boundary) === ' ' || text.charAt(boundary) === '\t')) {
-          boundary++;
-        }
-        return boundary;
-      }
-      if (/[\u4e00-\u9fa5]/.test(char)) {
-        return i + 1;
-      }
-      if (i + 1 < startPos) {
-        var currentIsWord = wordCharPattern.test(char);
-        var nextIsWord = wordCharPattern.test(text.charAt(i + 1));
-        if (!currentIsWord && nextIsWord) {
-          return i + 1;
-        }
-      }
-    }
-    return startPos;
-  }
   var p = {
     _showReady: function (c) {
       var s = this;
@@ -5475,6 +5447,10 @@ var LTextField = (function () {
         s._alignContext.lineWidth = c.lineWidth;
       }
     },
+    _isWordChar: function (char) {
+      var wordCharPattern = /[a-zA-Z0-9\-']/;
+      return wordCharPattern.test(char);
+    },
     _ll_show: function (ctx) {
       var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
       if (LGlobal.enableWebGL) {
@@ -5559,130 +5535,6 @@ var LTextField = (function () {
                 word = text.substr(i, 2);
                 i++;
               }
-              var currentCharWidth = c.measureText(word).width;
-              var testWidth = j + currentCharWidth;
-              if (testWidth + 50 > s.width && i + 1 < l) {
-                var nextCharWidth = c.measureText(text.substr(i + 1, 1)).width;
-                testWidth += nextCharWidth;
-              }
-              if (s.wordWrap && testWidth > s.width) {
-                if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
-                  var wordCharPattern = /[a-zA-Z0-9\-']/;
-                  var searchStart = i;
-                  if (wordCharPattern.test(word)) {
-                    var wordStart = i;
-                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
-                      wordStart--;
-                    }
-                    searchStart = wordStart;
-                  }
-                  var wrapPos = findWordBoundary(text, searchStart, k);
-                  if (wrapPos < i && wrapPos > k) {
-                    s._createAlignCanvas(context);
-                    c.font = textFormat.getFontText();
-                    c.fillStyle = textFormat.color;
-                    if (s.stroke) {
-                      c.strokeStyle = s.lineColor;
-                      c.lineWidth = s.lineWidth + 1;
-                    }
-                    j = 0;
-                    for (var backI = k; backI < wrapPos; backI++) {
-                      var backWord = text.substr(backI, 1);
-                      if (/[\uD800-\uDBFF]/.test(backWord) && backI + 1 < l && /[\uDC00-\uDFFF]/.test(text.substr(backI + 1, 1))) {
-                        backWord = text.substr(backI, 2);
-                        backI++;
-                      }
-                      if (s.stroke) {
-                        c.strokeText(backWord, j, s._ll_height);
-                      }
-                      c.fillText(backWord, j, s._ll_height);
-                      if (textFormat.underline) {
-                        c.beginPath();
-                        underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-                        c.moveTo(j, underlineY);
-                        c.lineTo(j + c.measureText(backWord).width, underlineY);
-                        c.stroke();
-                      }
-                      j += c.measureText(backWord).width;
-                    }
-                    var boundaryWidth = j;
-                    cx = 0;
-                    if (s.textAlign == "center") {
-                      cx = -boundaryWidth * 0.5;
-                    } else if (s.textAlign == "right") {
-                      cx = -boundaryWidth;
-                    }
-                    try {
-                      context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-                    } catch (error) {
-                      console && console.error(error);
-                    }
-                    s._createAlignCanvas(context);
-                    c.font = textFormat.getFontText();
-                    c.fillStyle = textFormat.color;
-                    if (s.stroke) {
-                      c.strokeStyle = s.lineColor;
-                      c.lineWidth = s.lineWidth + 1;
-                    }
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1;
-                    m++;
-                    continue;
-                  }
-                } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
-                  var wordCharPattern = /[a-zA-Z0-9\-']/;
-                  var isInWord = wordCharPattern.test(word);
-                  if (isInWord) {
-                    var wordStart = i;
-                    while (wordStart > k && wordCharPattern.test(text.charAt(wordStart - 1))) {
-                      wordStart--;
-                    }
-                    if (wordStart >= k) {
-                      var hyphenWidth = c.measureText("-").width;
-                      var newJ = j + hyphenWidth;
-                      if (newJ <= s.width) {
-                        if (s.stroke) {
-                          c.strokeText("-", j, s._ll_height);
-                        }
-                        c.fillText("-", j, s._ll_height);
-                        if (textFormat.underline) {
-                          c.beginPath();
-                          underlineY = s._ll_height + h * LTextField.underlineY[s.textBaseline];
-                          c.moveTo(j, underlineY);
-                          c.lineTo(j + hyphenWidth, underlineY);
-                          c.stroke();
-                        }
-                        j = newJ;
-                      }
-                      var boundaryWidth = j;
-                      cx = 0;
-                      if (s.textAlign == "center") {
-                        cx = -boundaryWidth * 0.5;
-                      } else if (s.textAlign == "right") {
-                        cx = -boundaryWidth;
-                      }
-                      try {
-                        context.drawImage(s._alignCanvas, cx, m * s._ll_height - s._ll_height);
-                      } catch (error) {
-                        console && console.error(error);
-                      }
-                      s._createAlignCanvas(context);
-                      c.font = textFormat.getFontText();
-                      c.fillStyle = textFormat.color;
-                      if (s.stroke) {
-                        c.strokeStyle = s.lineColor;
-                        c.lineWidth = s.lineWidth + 1;
-                      }
-                      j = 0;
-                      k = i;
-                      currentWidth = 0;
-                      m++;
-                    }
-                  }
-                }
-              }
               if (s.stroke) {
                 c.strokeText(word, j, s._ll_height);
               }
@@ -5696,6 +5548,7 @@ var LTextField = (function () {
               }
             }
             j += c.measureText(word).width;
+            var hasNext = i + 1 < l || elementIndex + 1 < s.ll_htmlTexts.length;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
               currentWidth = j;
@@ -5706,6 +5559,81 @@ var LTextField = (function () {
             } else {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
+            }
+            var currentChar = word;
+            if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && hasNext) {
+              currentWidth = j;
+              var font = c.font;
+              var fillStyle = c.fillStyle;
+              var elementI = elementIndex;
+              var lbl = text;
+              var ii = i + 1;
+              while (hasNext) {
+                var nextChar = lbl.substr(ii, 1);
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                currentWidth = currentWidth + c.measureText(lbl.substr(ii, 1)).width;
+                ii++;
+                if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                  var element = s.ll_htmlTexts[elementI + 1];
+                  var textFormat = element.textFormat, lbl = element.text;
+                  c.font = textFormat.getFontText();
+                  c.fillStyle = textFormat.color;
+                  elementI++;
+                  ii = 0;
+                }
+                hasNext = ii < lbl.length || elementI + 1 < s.ll_htmlTexts.length;
+              }
+              c.font = font;
+              c.fillStyle = fillStyle;
+            }
+            if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && hasNext) {
+              currentWidth = j;
+              var font = c.font;
+              var fillStyle = c.fillStyle;
+              var elementI = elementIndex;
+              var lbl = text;
+              var nextChar = '';
+              var nnextChar = '';
+              var ii = i + 1;
+              while (hasNext) {
+                if (!nextChar) {
+                  nextChar = lbl.substr(ii, 1);
+                } else {
+                  nnextChar = nextChar = lbl.substr(ii, 1);
+                }
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                currentWidth = currentWidth + c.measureText(lbl.substr(ii, 1)).width;
+                if (nnextChar) {
+                  break;
+                }
+                ii++;
+                if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                  var element = s.ll_htmlTexts[elementI + 1];
+                  var textFormat = element.textFormat, lbl = element.text;
+                  c.font = textFormat.getFontText();
+                  c.fillStyle = textFormat.color;
+                  elementI++;
+                  ii = 0;
+                }
+                hasNext = ii < lbl.length || elementI + 1 < s.ll_htmlTexts.length;
+              }
+              if (s._isWordChar(nextChar) && i + 2 < lbl.length) {
+                var nnextChar = lbl.substr(i + 2, 1);
+                if (s._isWordChar(nnextChar)) {
+                  var nextWidth = j + c.measureText(lbl.substr(i + 1, 2)).width;
+                  if (nextWidth > s.width) {
+                    currentWidth = nextWidth;
+                    if (s.stroke) {
+                      context.strokeText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                    }
+                    context.fillText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                  }
+                }
+              }
             }
             if (s.wordWrap && currentWidth > s.width && !enter) {
               j = 0;
@@ -5724,10 +5652,6 @@ var LTextField = (function () {
               s._createAlignCanvas(context);
               c.font = textFormat.getFontText();
               c.fillStyle = textFormat.color;
-              if (s.stroke) {
-                c.strokeStyle = s.lineColor;
-                c.lineWidth = s.lineWidth + 1;
-              }
               currentWidth = 0;
               m++;
             }
@@ -5767,14 +5691,16 @@ var LTextField = (function () {
       if (s.wordWrap || s.multiline) {
         j = 0, k = 0, m = 0, b = 0, cx = 0;
         var context = c;
-        var isAlignCanvas = s.textAlign != "left" || s.wordBoundaryMode != LTextField.WordBoundaryMode.None;
+        var isAlignCanvas = s.textAlign != "left";
         if (isAlignCanvas) {
           s._createAlignCanvas(c);
           context = s._alignContext;
         }
         var currentWidth = 0;
         for (i = 0, l = s.text.length; i < l; i++) {
-          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
+          var currentChar = lbl.substr(i, 1);
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(currentChar);
+          var currentEnter = enter;
           if (enter) {
             currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
             j = 0;
@@ -5796,142 +5722,45 @@ var LTextField = (function () {
             }
             m++;
           } else {
-            var currentChar = lbl.substr(i, 1);
-            var currentCharWidth = context.measureText(currentChar).width;
-            var testWidth = j + currentCharWidth;
-            if (testWidth + 50 > s.width && i + 1 < l) {
-              var nextCharWidth = c.measureText(lbl.substr(i + 1, 1)).width;
-              testWidth += nextCharWidth;
-            }
-            if (s.wordWrap && testWidth > s.width) {
-              if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLine) {
-                var wordCharPattern = /[a-zA-Z0-9\-']/;
-                var searchStart = i;
-                if (wordCharPattern.test(currentChar)) {
-                  var wordStart = i;
-                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
-                    wordStart--;
-                  }
-                  searchStart = wordStart;
-                }
-                var wrapPos = findWordBoundary(s.text, searchStart, k);
-                if (wrapPos < i && wrapPos > k) {
-                  if (isAlignCanvas) {
-                    s._createAlignCanvas(c);
-                    context = s._alignContext;
-                    context.font = c.font;
-                    context.fillStyle = c.fillStyle;
-                    context.textBaseline = c.textBaseline;
-                    context.textAlign = "left";
-                    if (s.stroke) {
-                      context.strokeStyle = c.strokeStyle;
-                      context.lineWidth = c.lineWidth;
-                    }
-                    j = 0;
-                    for (var backI = k; backI < wrapPos; backI++) {
-                      var backChar = lbl.substr(backI, 1);
-                      if (s.stroke) {
-                        context.strokeText(backChar, j, 0);
-                      }
-                      context.fillText(backChar, j, 0);
-                      j += context.measureText(backChar).width;
-                    }
-                    var boundaryWidth = j;
-                    cx = 0;
-                    if (s.textAlign == "center") {
-                      cx = -boundaryWidth * 0.5;
-                    } else if (s.textAlign == "right") {
-                      cx = -boundaryWidth;
-                    }
-                    try {
-                      c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-                    } catch (error) {
-                      console && console.error(error);
-                    }
-                    s._createAlignCanvas(c);
-                    context = s._alignContext;
-                    context.font = c.font;
-                    context.fillStyle = c.fillStyle;
-                    context.textBaseline = c.textBaseline;
-                    context.textAlign = "left";
-                    if (s.stroke) {
-                      context.strokeStyle = c.strokeStyle;
-                      context.lineWidth = c.lineWidth;
-                    }
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1;
-                    m++;
-                    continue;
-                  } else {
-                    j = 0;
-                    k = wrapPos;
-                    currentWidth = 0;
-                    i = wrapPos - 1;
-                    m++;
-                    continue;
-                  }
-                }
-              } else if (s.wordBoundaryMode == LTextField.WordBoundaryMode.NewLineMark) {
-                var wordCharPattern = /[a-zA-Z0-9\-']/;
-                var isInWord = wordCharPattern.test(currentChar);
-                if (isInWord) {
-                  var wordStart = i;
-                  while (wordStart > k && wordCharPattern.test(s.text.charAt(wordStart - 1))) {
-                    wordStart--;
-                  }
-                  if (wordStart >= k) {
-                    var hyphenWidth = context.measureText("-").width;
-                    var newJ = j + hyphenWidth;
-                    if (newJ <= s.width) {
-                      if (s.stroke) {
-                        context.strokeText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
-                      }
-                      context.fillText("-", j, isAlignCanvas ? 0 : m * s.wordHeight);
-                      j = newJ;
-                    }
-                    var boundaryWidth = j;
-                    if (isAlignCanvas) {
-                      cx = 0;
-                      if (s.textAlign == "center") {
-                        cx = -boundaryWidth * 0.5;
-                      } else if (s.textAlign == "right") {
-                        cx = -boundaryWidth;
-                      }
-                      try {
-                        c.drawImage(s._alignCanvas, cx, m * s.wordHeight);
-                      } catch (error) {
-                        console && console.error(error);
-                      }
-                      s._createAlignCanvas(c);
-                      context = s._alignContext;
-                      context.font = c.font;
-                      context.fillStyle = c.fillStyle;
-                      context.textBaseline = c.textBaseline;
-                      context.textAlign = "left";
-                      if (s.stroke) {
-                        context.strokeStyle = c.strokeStyle;
-                        context.lineWidth = c.lineWidth;
-                      }
-                    }
-                    j = 0;
-                    k = i;
-                    currentWidth = 0;
-                    m++;
-                  }
-                }
-              }
-            }
             if (s.stroke) {
-              context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+              context.strokeText(currentChar, j, isAlignCanvas ? 0 : m * s.wordHeight);
             }
-            context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+            context.fillText(currentChar, j, isAlignCanvas ? 0 : m * s.wordHeight);
           }
           s.numLines = m;
           j = context.measureText(s.text.substr(k, i + 1 - k)).width;
           currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
           enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && i + 1 < l) {
+            var nextChar = lbl.substr(i + 1, 1);
+            if (s._isWordChar(nextChar)) {
+              var ii = i + 1;
+              while (ii < l) {
+                var nextChar = lbl.substr(ii, 1);
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                ii++;
+              }
+              currentWidth = j + c.measureText(lbl.substr(i + 1, ii - i)).width;
+            }
+          }
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && i + 1 < l) {
+            var nextChar = lbl.substr(i + 1, 1);
+            if (s._isWordChar(nextChar) && i + 2 < l) {
+              var nnextChar = lbl.substr(i + 2, 1);
+              if (s._isWordChar(nnextChar)) {
+                var nextWidth = j + c.measureText(lbl.substr(i + 1, 2)).width;
+                if (nextWidth > s.width) {
+                  currentWidth = nextWidth;
+                  if (s.stroke) {
+                    context.strokeText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                  }
+                  context.fillText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                }
+              }
+            }
+          }
           if (s.wordWrap && currentWidth > s.width && !enter) {
             j = 0;
             k = i + 1;

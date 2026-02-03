@@ -615,6 +615,7 @@ var LTextField = (function () {
     s.displayAsPassword = false;
     s.wordWrap = false;
     s.multiline = false;
+    s.wordBoundaryMode = LTextField.WordBoundaryMode.None;
     /** @language chinese
      * [只读]定义多行文本字段中的文本行数。如果 setWordWrap(true)，则在文本自动换行时会增加行数。
      * @property numLines
@@ -762,6 +763,11 @@ var LTextField = (function () {
   }
   LTextField.HEIGHT_MODE_BOTTOM = "bottom";
   LTextField.HEIGHT_MODE_BASELINE = "baseline";
+  LTextField.WordBoundaryMode = {
+    None: "none",
+    NewLine: "newLine",
+    NewLineMark: "newLineMark"
+  };
   var p = {
     _showReady: function (c) {
       var s = this;
@@ -874,6 +880,10 @@ var LTextField = (function () {
         s._alignContext.lineWidth = c.lineWidth;
       }
     },
+    _isWordChar: function (char) {
+      var wordCharPattern = /[a-zA-Z0-9\-']/;
+      return wordCharPattern.test(char);
+    },
     _ll_show: function (ctx) {
       var s = this, c, d, lbl, i, rc, j, l, k, m, b, h, enter, tf, underlineY;
 
@@ -972,6 +982,7 @@ var LTextField = (function () {
               }
             }
             j += c.measureText(word).width;
+            var hasNext = i + 1 < l || elementIndex + 1 < s.ll_htmlTexts.length;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
               currentWidth = j;
@@ -983,6 +994,84 @@ var LTextField = (function () {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(text.substr(i + 1, 1));
             }
+            var currentChar = word;
+            if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && hasNext) {
+              currentWidth = j;
+              var font = c.font;
+              var fillStyle = c.fillStyle;
+              var elementI = elementIndex;
+              var lbl = text;
+              //var nextChar = lbl.substr(i + 1, 1);
+              var ii = i + 1;
+              while (hasNext) {
+                var nextChar = lbl.substr(ii, 1);
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                currentWidth = currentWidth + c.measureText(lbl.substr(ii, 1)).width;
+                ii++;
+                if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                  var element = s.ll_htmlTexts[elementI + 1];
+                  var textFormat = element.textFormat, lbl = element.text;
+                  c.font = textFormat.getFontText();
+                  c.fillStyle = textFormat.color;
+                  elementI++;
+                  ii = 0;
+                }
+                hasNext = ii < lbl.length || elementI + 1 < s.ll_htmlTexts.length;
+              }
+              c.font = font;
+              c.fillStyle = fillStyle;
+            }
+            if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && hasNext) {
+              currentWidth = j;
+              var font = c.font;
+              var fillStyle = c.fillStyle;
+              var elementI = elementIndex;
+              var lbl = text;
+              var nextChar = '';
+              var nnextChar = '';
+              var ii = i + 1;
+              while (hasNext) {
+                if (!nextChar) {
+                  nextChar = lbl.substr(ii, 1);
+                } else {
+                  nnextChar = nextChar = lbl.substr(ii, 1);
+                }
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                currentWidth = currentWidth + c.measureText(lbl.substr(ii, 1)).width;
+                if (nnextChar) {
+                  break;
+                }
+                ii++;
+                if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                  var element = s.ll_htmlTexts[elementI + 1];
+                  var textFormat = element.textFormat, lbl = element.text;
+                  c.font = textFormat.getFontText();
+                  c.fillStyle = textFormat.color;
+                  elementI++;
+                  ii = 0;
+                }
+                hasNext = ii < lbl.length || elementI + 1 < s.ll_htmlTexts.length;
+              }
+
+              if (s._isWordChar(nextChar) && i + 2 < lbl.length) {
+                var nnextChar = lbl.substr(i + 2, 1);
+                if (s._isWordChar(nnextChar)) {
+                  var nextWidth = j + c.measureText(lbl.substr(i + 1, 2)).width;
+                  if (nextWidth > s.width) {
+                    currentWidth = nextWidth;
+                    if (s.stroke) {
+                      context.strokeText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                    }
+                    context.fillText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                  }
+                }
+              }
+            }
+
             if (s.wordWrap && currentWidth > s.width && !enter) {
               j = 0;
               k = i + 1;
@@ -1046,7 +1135,9 @@ var LTextField = (function () {
         }
         var currentWidth = 0;
         for (i = 0, l = s.text.length; i < l; i++) {
-          enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i, 1));
+          var currentChar = lbl.substr(i, 1);
+          enter = /(?:\r\n|\r|\n|¥n)/.exec(currentChar);
+          var currentEnter = enter;
           if (enter) {
             currentWidth = i > 0 ? context.measureText(s.text.substr(k, i - k)).width : 0;
             j = 0;
@@ -1069,14 +1160,44 @@ var LTextField = (function () {
             m++;
           } else {
             if (s.stroke) {
-              context.strokeText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+              context.strokeText(currentChar, j, isAlignCanvas ? 0 : m * s.wordHeight);
             }
-            context.fillText(lbl.substr(i, 1), j, isAlignCanvas ? 0 : m * s.wordHeight);
+            context.fillText(currentChar, j, isAlignCanvas ? 0 : m * s.wordHeight);
           }
           s.numLines = m;
           j = context.measureText(s.text.substr(k, i + 1 - k)).width;
           currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
           enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && i + 1 < l) {
+            var nextChar = lbl.substr(i + 1, 1);
+            if (s._isWordChar(nextChar)) {
+              var ii = i + 1;
+              while (ii < l) {
+                var nextChar = lbl.substr(ii, 1);
+                if (!s._isWordChar(nextChar)) {
+                  break;
+                }
+                ii++;
+              }
+              currentWidth = j + c.measureText(lbl.substr(i + 1, ii - i)).width;
+            }
+          }
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && i + 1 < l) {
+            var nextChar = lbl.substr(i + 1, 1);
+            if (s._isWordChar(nextChar) && i + 2 < l) {
+              var nnextChar = lbl.substr(i + 2, 1);
+              if (s._isWordChar(nnextChar)) {
+                var nextWidth = j + c.measureText(lbl.substr(i + 1, 2)).width;
+                if (nextWidth > s.width) {
+                  currentWidth = nextWidth;
+                  if (s.stroke) {
+                    context.strokeText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                  }
+                  context.fillText('-', j, isAlignCanvas ? 0 : m * s.wordHeight);
+                }
+              }
+            }
+          }
           if (s.wordWrap && currentWidth > s.width && !enter) {
             j = 0;
             k = i + 1;
