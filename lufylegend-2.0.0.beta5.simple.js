@@ -5603,6 +5603,14 @@ var LTextField = (function () {
               var nextChar = '';
               var nnextChar = '';
               var ii = i + 1;
+              if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                var element = s.ll_htmlTexts[elementI + 1];
+                var textFormat = element.textFormat, lbl = element.text;
+                c.font = textFormat.getFontText();
+                c.fillStyle = textFormat.color;
+                elementI++;
+                ii = 0;
+              }
               while (hasNext) {
                 if (!nextChar) {
                   nextChar = lbl.substr(ii, 1);
@@ -5640,6 +5648,8 @@ var LTextField = (function () {
                   }
                 }
               }
+              c.font = font;
+              c.fillStyle = fillStyle;
             }
             if (s.wordWrap && currentWidth > s.width && !enter) {
               j = 0;
@@ -5655,9 +5665,11 @@ var LTextField = (function () {
               } catch (error) {
                 console && console.error(error);
               }
+              var font = c.font;
+              var fillStyle = c.fillStyle;
               s._createAlignCanvas(context);
-              c.font = textFormat.getFontText();
-              c.fillStyle = textFormat.color;
+              c.font = font;
+              c.fillStyle = fillStyle;
               currentWidth = 0;
               m++;
             }
