@@ -5551,7 +5551,7 @@ var LTextField = (function () {
             var hasNext = i + 1 < l || elementIndex + 1 < s.ll_htmlTexts.length;
             if (i + 1 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               nextText = s.ll_htmlTexts[elementIndex + 1].text;
-              currentWidth = j;
+              currentWidth = j + c.measureText(nextText.substr(0, 1)).width;
               enter = /(?:\r\n|\r|\n|¥n)/.exec(nextText.substr(1, 1));
             } else if (i + 2 >= l && elementIndex + 1 < s.ll_htmlTexts.length) {
               currentWidth = j + c.measureText(text.substr(i + 1, 1)).width;
@@ -5562,12 +5562,19 @@ var LTextField = (function () {
             }
             var currentChar = word;
             if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && hasNext) {
-              currentWidth = j;
               var font = c.font;
               var fillStyle = c.fillStyle;
               var elementI = elementIndex;
               var lbl = text;
               var ii = i + 1;
+              if (ii >= lbl.length && elementI + 1 < s.ll_htmlTexts.length) {
+                var element = s.ll_htmlTexts[elementI + 1];
+                var textFormat = element.textFormat, lbl = element.text;
+                c.font = textFormat.getFontText();
+                c.fillStyle = textFormat.color;
+                elementI++;
+                ii = 0;
+              }
               while (hasNext) {
                 var nextChar = lbl.substr(ii, 1);
                 if (!s._isWordChar(nextChar)) {
@@ -5589,7 +5596,6 @@ var LTextField = (function () {
               c.fillStyle = fillStyle;
             }
             if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && hasNext) {
-              currentWidth = j;
               var font = c.font;
               var fillStyle = c.fillStyle;
               var elementI = elementIndex;
@@ -5731,26 +5737,29 @@ var LTextField = (function () {
           j = context.measureText(s.text.substr(k, i + 1 - k)).width;
           currentWidth = j + (i + 1 < l ? c.measureText(lbl.substr(i + 1, 1)).width : 0);
           enter = /(?:\r\n|\r|\n|¥n)/.exec(lbl.substr(i + 1, 1));
-          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && i + 1 < l) {
-            var nextChar = lbl.substr(i + 1, 1);
+          var nl = s.windRunning ? s._ll_wind_text.length : l;
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLine && !s._isWordChar(currentChar) && !currentEnter && i + 1 < nl) {
+            var nlbl = s._ll_wind_text ? s._ll_wind_text : lbl;
+            var nextChar = nlbl.substr(i + 1, 1);
             if (s._isWordChar(nextChar)) {
               var ii = i + 1;
-              while (ii < l) {
-                var nextChar = lbl.substr(ii, 1);
+              while (ii < nl) {
+                var nextChar = nlbl.substr(ii, 1);
                 if (!s._isWordChar(nextChar)) {
                   break;
                 }
                 ii++;
               }
-              currentWidth = j + c.measureText(lbl.substr(i + 1, ii - i)).width;
+              currentWidth = j + c.measureText(nlbl.substr(i + 1, ii - i)).width;
             }
           }
-          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && i + 1 < l) {
-            var nextChar = lbl.substr(i + 1, 1);
+          if (s.wordWrap && s.wordBoundaryMode === LTextField.WordBoundaryMode.NewLineMark && s._isWordChar(currentChar) && !enter && i + 1 < nl) {
+            var nlbl = s._ll_wind_text ? s._ll_wind_text : lbl;
+            var nextChar = nlbl.substr(i + 1, 1);
             if (s._isWordChar(nextChar) && i + 2 < l) {
-              var nnextChar = lbl.substr(i + 2, 1);
+              var nnextChar = nlbl.substr(i + 2, 1);
               if (s._isWordChar(nnextChar)) {
-                var nextWidth = j + c.measureText(lbl.substr(i + 1, 2)).width;
+                var nextWidth = j + c.measureText(nlbl.substr(i + 1, 2)).width;
                 if (nextWidth > s.width) {
                   currentWidth = nextWidth;
                   if (s.stroke) {
